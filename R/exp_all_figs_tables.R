@@ -3,6 +3,10 @@
 #' Export all figures and tables to Rda files within one function.
 #'
 #' @inheritParams plot_recruitment
+#' @param recruitment_scale_amount A number describing how much to scale down
+#' the recruitment quantities shown on the y axis. For example,
+#' recruitment_scale_amount = 100 would scale down a value from 500,000 -->
+#' 5,000. This scale will be reflected in the y axis label.
 #' @param recruitment_unit_label Units for recruitment
 #' @param ref_line A string specifying the type of reference you want to
 #' compare biomass to. The default is `"target"`, which looks for
@@ -15,9 +19,13 @@
 #' for the reference point as specified in the output file. Please use this
 #' option if the ref_line cannot find your desired point. Indicate the
 #' reference point in the form c("label" = value).
+#' @param biomass_scale_amount A number describing how much to scale down the
+#' biomass quantities shown on the y axis. See `recruitment_scale_amount`.
 #' @param landings_unit_label Units for landings
 #' @param biomass_unit_label Units for biomass
 #' @param spawning_biomass_label Units for spawning biomass
+#' @param spawning_biomass_scale_amount  A number describing how much to scale down the
+#' spawning biomass quantities shown on the y axis. See `recruitment_scale_amount`.
 #' @param ref_line_sb Identical definition as `ref_line`, but this argument is
 #' applied to plot_spawning_biomass.
 #' @param ref_point_sb Identical definition as `ref_point`, but this argument is
@@ -41,7 +49,7 @@ exp_all_figs_tables <- function(
   # imported from plot_recruitment
   dat,
   recruitment_unit_label = "mt", # changed from unit_label to recruitment_unit_label for specificity
-  scale_amount = 1,
+  recruitment_scale_amount = 1,
   end_year = NULL,
   n_projected_years = 10,
   relative = FALSE,
@@ -50,6 +58,7 @@ exp_all_figs_tables <- function(
   # imported from plot_biomass
   ref_line = c("target", "MSY", "msy", "unfished"),
   ref_point = NULL,
+  biomass_scale_amount = 1,
 
   # imported from plot_landings
   landings_unit_label = "mt",
@@ -58,6 +67,7 @@ exp_all_figs_tables <- function(
 
   # imported from plot_spawn_recruitment
   spawning_biomass_label = "mt",
+  spawning_biomass_scale_amount = 1,
 
   # imported from plot_spawning_biomass
   ref_line_sb = c("target", "MSY", "msy", "unfished"),
@@ -88,7 +98,7 @@ exp_all_figs_tables <- function(
     satf::plot_recruitment(
       dat,
       unit_label = recruitment_unit_label,
-      scale_amount,
+      scale_amount = recruitment_scale_amount,
       end_year,
       n_projected_years,
       relative,
@@ -108,7 +118,7 @@ exp_all_figs_tables <- function(
     satf::plot_biomass(
       dat,
       unit_label = biomass_unit_label,
-      scale_amount,
+      scale_amount = biomass_scale_amount,
       ref_line,
       ref_point,
       end_year,
@@ -160,7 +170,7 @@ exp_all_figs_tables <- function(
     satf::plot_spawning_biomass(
       dat,
       unit_label = spawning_biomass_label,
-      scale_amount,
+      scale_amount = spawning_biomass_scale_amount,
       ref_line = ref_line_sb,
       ref_point = ref_point_sb,
       end_year,

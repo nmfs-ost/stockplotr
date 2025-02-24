@@ -22,7 +22,9 @@ plot_spawning_biomass(
 
 \item{unit_label}{units for spawning_biomass}
 
-\item{scale_amount}{indicate the exact amount of scale (i.e. 1000)}
+\item{scale_amount}{A number describing how much to scale down the quantities
+shown on the y axis. For example, scale_amount = 100 would scale down a value
+from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
 
 \item{ref_line}{A string specifying the type of reference you want to
 compare spawning biomass to. The default is `"target"`, which looks for
