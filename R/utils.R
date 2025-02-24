@@ -2,7 +2,8 @@
 # General utility functions
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-# substitute in more key quantities (units, end_years, reference points) to captions/alt text
+# substitute in more key quantities (units, end_years, reference points, and more)
+# to captions/alt text
 add_more_key_quants <- function(
     topic = topic_label,
     fig_or_table = fig_or_table,
@@ -96,8 +97,16 @@ add_more_key_quants <- function(
       B.min <- B.min / scaling
       B.max <- B.max / scaling
     }
-    # TODO: add these into csv
-  }
+
+    # replace B.min and B.max placeholders within topic_cap_alt
+    topic_cap_alt <- topic_cap_alt |>
+      dplyr::mutate(alt_text = stringr::str_replace_all(alt_text,
+                                                        "B.min",
+                                                        as.character(B.min))) |>
+      dplyr::mutate(alt_text = stringr::str_replace_all(alt_text,
+                                                        "B.max",
+                                                        as.character(B.max)))
+      }
 
   ## spawning biomass
   if (topic_cap_alt$label == "spawning.biomass") {
@@ -138,8 +147,16 @@ add_more_key_quants <- function(
       sr.ssb.min <- sr.ssb.min / scaling
       sr.ssb.max <- sr.ssb.max / scaling
     }
-    # TODO: add these into csv
-  }
+
+    # replace sr.ssb.min and sr.ssb.max placeholders within topic_cap_alt
+    topic_cap_alt <- topic_cap_alt |>
+      dplyr::mutate(alt_text = stringr::str_replace_all(alt_text,
+                                                        "sr.ssb.min",
+                                                        as.character(sr.ssb.min))) |>
+      dplyr::mutate(alt_text = stringr::str_replace_all(alt_text,
+                                                        "sr.ssb.max",
+                                                        as.character(sr.ssb.max)))
+      }
 
   ## recruitment
   if (topic_cap_alt$label == "recruitment") {
@@ -180,8 +197,17 @@ add_more_key_quants <- function(
       sr.min <- sr.min / scaling
       sr.max <- sr.max / scaling
     }
-    # TODO: add these into csv
-  }
+
+    # replace sr.min and sr.max placeholders within topic_cap_alt
+    topic_cap_alt <- topic_cap_alt |>
+      dplyr::mutate(alt_text = stringr::str_replace_all(alt_text,
+                                                        "sr.min",
+                                                        as.character(sr.min))) |>
+      dplyr::mutate(alt_text = stringr::str_replace_all(alt_text,
+                                                        "sr.max",
+                                                        as.character(sr.max)))
+
+      }
 
 
   # replace placeholders (e.g., if "end.year" is found in topic_alt, replace it with end_year)
@@ -209,6 +235,7 @@ add_more_key_quants <- function(
     magnitude <- floor(log10(scaling))
     if (magnitude == 0){
       units <- units
+      unit_mag <- ""
     } else if (magnitude > 0 & magnitude < 10) {
       scale_unit <- c("tens of ",
                       "hundreds of ",
