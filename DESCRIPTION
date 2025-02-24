@@ -1,6 +1,6 @@
-Package: satf
+Package: stockplotr
 Type: Package
-Title: Stock Assessment Tables and Figures
+Title: Tables and Figures for Stock Assessments
 Version: 0.1.0
 Author: Samantha Schiano, Bai Li, Steve Saul, Kelli F. Johnson, & Megumi Oshima
 Maintainer: Samantha Schiano <samantha.schiano@noaa.gov>
