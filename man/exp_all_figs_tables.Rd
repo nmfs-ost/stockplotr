@@ -7,15 +7,17 @@
 exp_all_figs_tables(
   dat,
   recruitment_unit_label = "mt",
-  scale_amount = 1,
+  recruitment_scale_amount = 1,
   end_year = NULL,
   n_projected_years = 10,
   relative = FALSE,
   rda_dir = getwd(),
   ref_line = c("target", "MSY", "msy", "unfished"),
   ref_point = NULL,
+  biomass_scale_amount = 1,
   landings_unit_label = "mt",
   spawning_biomass_label = "mt",
+  spawning_biomass_scale_amount = 1,
   ref_line_sb = c("target", "MSY", "msy", "unfished"),
   ref_point_sb = NULL,
   indices_unit_label = NULL,
@@ -28,7 +30,7 @@ exp_all_figs_tables(
 
 \item{recruitment_unit_label}{Units for recruitment}
 
-\item{scale_amount}{indicate the exact amount of scale (i.e. 1000)}
+\item{recruitment_scale_amount}{The exact amount of scale for recruitment (i.e. 1000)}
 
 \item{end_year}{last year of assessment}
 
@@ -56,9 +58,14 @@ for the reference point as specified in the output file. Please use this
 option if the ref_line cannot find your desired point. Indicate the
 reference point in the form c("label" = value).}
 
+\item{biomass_scale_amount}{The exact amount of scale for biomass (i.e. 1000)}
+
 \item{landings_unit_label}{Units for landings}
 
 \item{spawning_biomass_label}{Units for spawning biomass}
+
+\item{spawning_biomass_scale_amount}{The exact amount of scale for spawning
+biomass (i.e. 1000)}
 
 \item{ref_line_sb}{Identical definition as `ref_line`, but this argument is
 applied to plot_spawning_biomass.}
