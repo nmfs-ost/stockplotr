@@ -3,6 +3,8 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
+***Previously named 'satf'***
+
 The goal of stockplotr is to create a centralized package that contains all of the figures and tables that are used when analyzing stock assessment model outputs, writing a report, and other various procedures performed during the stock assessment workflow. There are multiple current packages that perform a similar function, but they are typically region and/or model dependent. Across the US, there are multiple packages that create plots that are directly used in a stock assessment report used for management. For example, an analyst that uses Stock Synthesis (SS3) to assess a stock will utilize [`r4ss`](https://github.com/r4ss/r4ss/), a package that reads outputs, plots key parameters, and more to increase throughput and reduce tedious tasks for an analyst.
 
 Please note that this package is still in development. As such, some functions are still in development, such as the functions that create indices figures (i.e., `plot_indices`) and landings tables (i.e., `table_landings`).
