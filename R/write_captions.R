@@ -84,27 +84,10 @@ write_captions <- function(dat, # converted model output object
     # units of B (plural)
     # B.units : added with add_more_key_quants
 
-    # minimum B
-    B.min <- dat |>
-      dplyr::filter(label == "biomass",
-                    module_name == "TIME_SERIES" | module_name == "t.series", # SS3 and BAM target module names
-                    is.na(fleet),
-                    is.na(age)) |>
-      dplyr::slice(which.min(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
+    # minimum B : added with add_more_key_quants
 
-    # maximum B
-    B.max <- dat |>
-      dplyr::filter(label == "biomass",
-                    module_name == "TIME_SERIES" | module_name == "t.series", # SS3 and BAM target module names
-                    is.na(fleet),
-                    is.na(age)) |>
-      dplyr::slice(which.max(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
+    # maximum B : added with add_more_key_quants
+
 
     # TODO: uncomment and recode once we get clarity about how to extract this value properly
     # R0
@@ -496,73 +479,16 @@ write_captions <- function(dat, # converted model output object
     # ssb units (plural)
     # sr.ssb.units : added with add_more_key_quants
 
-    # minimum ssb
-    sr.ssb.min <- dat |>
-    dplyr::filter(label == "spawning_biomass",
-                  module_name == "TIME_SERIES" | module_name == "t.series",
-                  !is.na(year),
-                  is.na(fleet) | length(unique(fleet)) <= 1,
-                  is.na(sex) | length(unique(sex)) <= 1,
-                  is.na(area) | length(unique(area)) <= 1,
-                  is.na(growth_pattern) | length(unique(growth_pattern)) <= 1,
-                  !year %in% year_exclusions
-    ) |> # SS3 and BAM target module names
-      dplyr::slice(which.min(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
+    # minimum ssb : added with add_more_key_quants
 
-    # maximum ssb
-    sr.ssb.max <- dat |>
-      dplyr::filter(label == "spawning_biomass",
-                    module_name == "TIME_SERIES" | module_name == "t.series",
-                    !is.na(year),
-                    is.na(fleet) | length(unique(fleet)) <= 1,
-                    is.na(sex) | length(unique(sex)) <= 1,
-                    is.na(area) | length(unique(area)) <= 1,
-                    is.na(growth_pattern) | length(unique(growth_pattern)) <= 1,
-                    !year %in% year_exclusions
-      ) |> # SS3 and BAM target module names
-      dplyr::slice(which.max(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
+    # maximum ssb : added with add_more_key_quants
 
     # recruitment units (plural)
     # sr.units : added with add_more_key_quants
 
-    # minimum recruitment
-    sr.min <- dat |>
-    dplyr::filter(label == "recruitment",
-                  module_name == "TIME_SERIES" | module_name == "t.series",
-                  !is.na(year),
-                  is.na(fleet) | length(unique(fleet)) <= 1,
-                  is.na(sex) | length(unique(sex)) <= 1,
-                  is.na(area) | length(unique(area)) <= 1,
-                  is.na(growth_pattern) | length(unique(growth_pattern)) <= 1,
-                  !year %in% year_exclusions
-    ) |> # SS3 and BAM target module names
-      dplyr::slice(which.min(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
+    # minimum recruitment : added with add_more_key_quants
 
-    # maximum recruitment
-    sr.max <- dat |>
-      dplyr::filter(label == "recruitment",
-                    module_name == "TIME_SERIES" | module_name == "t.series",
-                    !is.na(year),
-                    is.na(fleet) | length(unique(fleet)) <= 1,
-                    is.na(sex) | length(unique(sex)) <= 1,
-                    is.na(area) | length(unique(area)) <= 1,
-                    is.na(growth_pattern) | length(unique(growth_pattern)) <= 1,
-                    !year %in% year_exclusions
-      ) |> # SS3 and BAM target module names
-      dplyr::slice(which.max(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
-
+    # maximum recruitment: added with add_more_key_quants
 
     ## recruitment ts
     # recruitment units (plural) - numbers of fish, in thousands
@@ -842,8 +768,6 @@ write_captions <- function(dat, # converted model output object
 
      ## Biomass plot
      'B.start.year' = as.character(B.start.year),
-     'B.min' = as.character(B.min),
-     'B.max' = as.character(B.max),
     # 'R0' = as.character(R0),
      # 'Bend' = as.character(Bend),
     # 'Btarg' = as.character(Btarg),
@@ -952,10 +876,6 @@ write_captions <- function(dat, # converted model output object
 
      ## estimated stock recruitment (aka spawning stock biomass)
      # 'sr.age.min' = as.character(sr.age.min),
-     'sr.ssb.min' = as.character(sr.ssb.min),
-     'sr.ssb.max' = as.character(sr.ssb.max),
-     'sr.min' = as.character(sr.min),
-     'sr.max' = as.character(sr.max),
 
      # relative recruitment ts
      # NOTE: moving this above recruitment so rel.recruitment.min isn't changed

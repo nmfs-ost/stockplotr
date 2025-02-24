@@ -188,12 +188,14 @@ plot_spawning_biomass <- function(
 
     # add more key quantities included as arguments in this fxn
     add_more_key_quants(
+      dat,
       topic = topic_label,
       fig_or_table = fig_or_table,
       dir = rda_dir,
       end_year = end_year,
       units = unit_label,
-      ref_pt = ref_point
+      ref_pt = ref_point,
+      scaling = scale_amount
     )
 
     # extract this plot's caption and alt text

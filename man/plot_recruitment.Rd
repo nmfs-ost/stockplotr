@@ -20,7 +20,9 @@ plot_recruitment(
 
 \item{unit_label}{units for recruitment}
 
-\item{scale_amount}{indicate the exact amount of scale (i.e. 1000)}
+\item{scale_amount}{A number describing how much to scale down the quantities
+shown on the y axis. For example, scale_amount = 100 would scale down a value
+from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
 
 \item{end_year}{last year of assessment}
 
