@@ -33,8 +33,7 @@ test_that("write_captions() function replaces placeholder text with key quantiti
               dplyr::filter(label == "biomass",
                             type == "figure") |>
               dplyr::select(alt_text) |>
-              as.character() |>
-              substr( 74, 102)
+              as.character()
 
             # expected alt text from end of biomass figure
             expected_alt_text_substring <- "spans from 2021 to B.end.year"

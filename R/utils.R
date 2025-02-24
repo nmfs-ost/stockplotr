@@ -16,7 +16,7 @@ add_more_key_quants <- function(
     scaling = NULL){
 
   # import csv
-  caps_alt_df <- read.csv(fs::path(getwd(), "captions_alt_text.csv"))
+  caps_alt_df <- utils::read.csv(fs::path(dir, "captions_alt_text.csv"))
 
   # make year character if not null
   if (!is.null(end_year)){
@@ -68,6 +68,10 @@ add_more_key_quants <- function(
 
 
   # calculate key quantities that rely on scaling for calculation
+  # TODO: pull the relative forms of these three KQs (B, R, SSB) from write_captions,
+  # write analogous code for each in this section, and remove placeholders from
+  # the end of write_captions (once we get clarity about how to extract Btarg,
+  # ssbtarg, and R0)
   ## biomass
   if (topic_cap_alt$label == "biomass") {
 
