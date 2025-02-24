@@ -2,7 +2,9 @@
 #'
 #' @param dat A data frame returned from `asar::convert_output()`.
 #' @param unit_label units for recruitment
-#' @param scale_amount indicate the exact amount of scale (i.e. 1000)
+#' @param scale_amount A number describing how much to scale down the quantities
+#' shown on the y axis. For example, scale_amount = 100 would scale down a value
+#' from 500,000 --> 5,000. This scale will be reflected in the y axis label.
 #' @param end_year last year of assessment
 #' @param n_projected_years Number of years spawning biomass is projected for.
 #' By default this number is set to 10

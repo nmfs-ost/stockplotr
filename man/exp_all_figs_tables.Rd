@@ -30,7 +30,10 @@ exp_all_figs_tables(
 
 \item{recruitment_unit_label}{Units for recruitment}
 
-\item{recruitment_scale_amount}{The exact amount of scale for recruitment (i.e. 1000)}
+\item{recruitment_scale_amount}{A number describing how much to scale down
+the recruitment quantities shown on the y axis. For example,
+recruitment_scale_amount = 100 would scale down a value from 500,000 -->
+5,000. This scale will be reflected in the y axis label.}
 
 \item{end_year}{last year of assessment}
 
@@ -58,14 +61,15 @@ for the reference point as specified in the output file. Please use this
 option if the ref_line cannot find your desired point. Indicate the
 reference point in the form c("label" = value).}
 
-\item{biomass_scale_amount}{The exact amount of scale for biomass (i.e. 1000)}
+\item{biomass_scale_amount}{A number describing how much to scale down the
+biomass quantities shown on the y axis. See `recruitment_scale_amount`.}
 
 \item{landings_unit_label}{Units for landings}
 
 \item{spawning_biomass_label}{Units for spawning biomass}
 
-\item{spawning_biomass_scale_amount}{The exact amount of scale for spawning
-biomass (i.e. 1000)}
+\item{spawning_biomass_scale_amount}{A number describing how much to scale down the
+spawning biomass quantities shown on the y axis. See `recruitment_scale_amount`.}
 
 \item{ref_line_sb}{Identical definition as `ref_line`, but this argument is
 applied to plot_spawning_biomass.}

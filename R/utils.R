@@ -41,36 +41,40 @@ add_more_key_quants <- function(
   ## terminal fishing mortality
   if (topic_cap_alt$label == "fishing.mortality") {
 
-    F.end.year <- dat |>
-      dplyr::filter(
-        c(label == 'fishing_mortality' &
-            year == end_year) |
-          c(label == 'terminal_fishing_mortality' & is.na(year))
-      ) |>
-      dplyr::pull(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
+    if (is.null(dat)){
+      message("Some key quantities associated with fishing mortality were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).")
+    } else {
+      F.end.year <- dat |>
+        dplyr::filter(
+          c(label == 'fishing_mortality' &
+              year == end_year) |
+            c(label == 'terminal_fishing_mortality' & is.na(year))
+        ) |>
+        dplyr::pull(estimate) |>
+        as.numeric() |>
+        round(digits = 2)
 
-    # COMMENTING OUT THESE LINES because the current alt text/captions csv
-    # doesn't include Ftarg or F.Ftarg. If we alter them to include them,
-    # then uncomment these lines and add code that would substitute the key
-    # quantities into the df, like at the bottom of write_captions.
-    #
-    # # recalculate Ftarg for F.Ftarg, below
-    # Ftarg <- dat |>
-    #   dplyr::filter(grepl('f_target', label) |
-    #                   grepl('f_msy', label) |
-    #                   c(grepl('fishing_mortality_msy', label) &
-    #                       is.na(year))) |>
-    #   dplyr::pull(estimate) |>
-    #   as.numeric() |>
-    #   round(digits = 2)
-    #
-    # # Terminal year F respective to F target
-    # F.Ftarg <- F.end.year / Ftarg
+      # COMMENTING OUT THESE LINES because the current alt text/captions csv
+      # doesn't include Ftarg or F.Ftarg. If we alter them to include them,
+      # then uncomment these lines and add code that would substitute the key
+      # quantities into the df, like at the bottom of write_captions.
+      #
+      # # recalculate Ftarg for F.Ftarg, below
+      # Ftarg <- dat |>
+      #   dplyr::filter(grepl('f_target', label) |
+      #                   grepl('f_msy', label) |
+      #                   c(grepl('fishing_mortality_msy', label) &
+      #                       is.na(year))) |>
+      #   dplyr::pull(estimate) |>
+      #   as.numeric() |>
+      #   round(digits = 2)
+      #
+      # # Terminal year F respective to F target
+      # F.Ftarg <- F.end.year / Ftarg
 
-    if (!is.null(F.end.year)){
-      end_year <- as.character(F.end.year)
+      if (!is.null(F.end.year)){
+        end_year <- as.character(F.end.year)
+      }
     }
   }
 
@@ -82,7 +86,9 @@ add_more_key_quants <- function(
   # ssbtarg, and R0)
   ## biomass
   if (topic_cap_alt$label == "biomass") {
-
+    if (is.null(dat)){
+      message("Some key quantities associated with biomass were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).")
+    } else {
     # minimum biomass
     B.min <- dat |>
       dplyr::filter(label == "biomass",
@@ -91,6 +97,7 @@ add_more_key_quants <- function(
                     is.na(age)) |>
       dplyr::slice(which.min(estimate)) |>
       dplyr::select(estimate) |>
+      dplyr::mutate(estimate = estimate/scaling) |>
       as.numeric() |>
       round(digits = 2)
 
@@ -102,13 +109,9 @@ add_more_key_quants <- function(
                     is.na(age)) |>
       dplyr::slice(which.max(estimate)) |>
       dplyr::select(estimate) |>
+      dplyr::mutate(estimate = estimate/scaling) |>
       as.numeric() |>
       round(digits = 2)
-
-    if (!is.null(scaling)){
-      B.min <- B.min / scaling
-      B.max <- B.max / scaling
-    }
 
     # replace B.min and B.max placeholders within topic_cap_alt
     topic_cap_alt <- topic_cap_alt |>
@@ -119,10 +122,13 @@ add_more_key_quants <- function(
                                                         "B.max",
                                                         as.character(B.max)))
       }
+    }
 
   ## spawning biomass
   if (topic_cap_alt$label == "spawning.biomass") {
-
+    if (is.null(dat)){
+      message("Some key quantities associated with spawning biomass were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).")
+    } else {
     # minimum ssb
     sr.ssb.min <- dat |>
       dplyr::filter(label == "spawning_biomass",
@@ -136,6 +142,7 @@ add_more_key_quants <- function(
       ) |> # SS3 and BAM target module names
       dplyr::slice(which.min(estimate)) |>
       dplyr::select(estimate) |>
+      dplyr::mutate(estimate = estimate/scaling) |>
       as.numeric() |>
       round(digits = 2)
 
@@ -152,13 +159,9 @@ add_more_key_quants <- function(
       ) |> # SS3 and BAM target module names
       dplyr::slice(which.max(estimate)) |>
       dplyr::select(estimate) |>
+      dplyr::mutate(estimate = estimate/scaling) |>
       as.numeric() |>
       round(digits = 2)
-
-    if (!is.null(scaling)){
-      sr.ssb.min <- sr.ssb.min / scaling
-      sr.ssb.max <- sr.ssb.max / scaling
-    }
 
     # replace sr.ssb.min and sr.ssb.max placeholders within topic_cap_alt
     topic_cap_alt <- topic_cap_alt |>
@@ -169,10 +172,13 @@ add_more_key_quants <- function(
                                                         "sr.ssb.max",
                                                         as.character(sr.ssb.max)))
       }
+    }
 
   ## recruitment
   if (topic_cap_alt$label == "recruitment") {
-
+    if (is.null(dat)){
+      message("Some key quantities associated with recruitment were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).")
+    } else {
     # minimum recruitment
     sr.min <- dat |>
       dplyr::filter(label == "recruitment",
@@ -186,6 +192,7 @@ add_more_key_quants <- function(
       ) |> # SS3 and BAM target module names
       dplyr::slice(which.min(estimate)) |>
       dplyr::select(estimate) |>
+      dplyr::mutate(estimate = estimate/scaling) |>
       as.numeric() |>
       round(digits = 2)
 
@@ -202,13 +209,9 @@ add_more_key_quants <- function(
       ) |> # SS3 and BAM target module names
       dplyr::slice(which.max(estimate)) |>
       dplyr::select(estimate) |>
+      dplyr::mutate(estimate = estimate/scaling) |>
       as.numeric() |>
       round(digits = 2)
-
-    if (!is.null(scaling)){
-      sr.min <- sr.min / scaling
-      sr.max <- sr.max / scaling
-    }
 
     # replace sr.min and sr.max placeholders within topic_cap_alt
     topic_cap_alt <- topic_cap_alt |>
@@ -220,7 +223,7 @@ add_more_key_quants <- function(
                                                         as.character(sr.max)))
 
       }
-
+}
 
   # replace placeholders (e.g., if "end.year" is found in topic_alt, replace it with end_year)
   ## end_year-----

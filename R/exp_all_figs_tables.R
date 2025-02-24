@@ -3,7 +3,10 @@
 #' Export all figures and tables to Rda files within one function.
 #'
 #' @inheritParams plot_recruitment
-#' @param recruitment_scale_amount The exact amount of scale for recruitment (i.e. 1000)
+#' @param recruitment_scale_amount A number describing how much to scale down
+#' the recruitment quantities shown on the y axis. For example,
+#' recruitment_scale_amount = 100 would scale down a value from 500,000 -->
+#' 5,000. This scale will be reflected in the y axis label.
 #' @param recruitment_unit_label Units for recruitment
 #' @param ref_line A string specifying the type of reference you want to
 #' compare biomass to. The default is `"target"`, which looks for
@@ -16,12 +19,13 @@
 #' for the reference point as specified in the output file. Please use this
 #' option if the ref_line cannot find your desired point. Indicate the
 #' reference point in the form c("label" = value).
-#' @param biomass_scale_amount The exact amount of scale for biomass (i.e. 1000)
+#' @param biomass_scale_amount A number describing how much to scale down the
+#' biomass quantities shown on the y axis. See `recruitment_scale_amount`.
 #' @param landings_unit_label Units for landings
 #' @param biomass_unit_label Units for biomass
 #' @param spawning_biomass_label Units for spawning biomass
-#' @param spawning_biomass_scale_amount The exact amount of scale for spawning
-#' biomass (i.e. 1000)
+#' @param spawning_biomass_scale_amount  A number describing how much to scale down the
+#' spawning biomass quantities shown on the y axis. See `recruitment_scale_amount`.
 #' @param ref_line_sb Identical definition as `ref_line`, but this argument is
 #' applied to plot_spawning_biomass.
 #' @param ref_point_sb Identical definition as `ref_point`, but this argument is
