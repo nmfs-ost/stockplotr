@@ -27,7 +27,7 @@ install.packages("remotes")
 remotes::install_github("nmfs-ost/stockplotr")
 ```
 
-Occassionally, the package can not be installed using the `remotes` package. If this is the case for you and the other two installation options don't work please try:
+Occasionally, the package can not be installed using the `remotes` package. If this is the case for you and the other two installation options don't work please try:
 
 ```r
 install.packages("pak")
