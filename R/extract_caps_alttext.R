@@ -1,7 +1,7 @@
 #' Extract captions and alternative texts
 #'
 #' Extract a figure or table's caption and alternative text for usage when
-#' generating a figure or table. Typically used before satf::export_rda().
+#' generating a figure or table. Typically used before stockplotr::export_rda().
 #'
 #' @param topic_label A string that describes a figure or table's label. These
 #' labels are found in the "label" column of the "captions_alt_text.csv" file

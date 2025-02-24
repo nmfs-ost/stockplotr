@@ -1,12 +1,12 @@
 #' Export a figure or table to rda
 #'
 #' Export a figure/table, and its caption and alternative text, to an rda object.
-#' Typically used after satf::extract_caps_alttext().
+#' Typically used after stockplotr::extract_caps_alttext().
 #'
 #' @param final The final figure (ggplot) or table (flextable) object.
 #' @param caps_alttext The object containing a figure's caption and alternative
 #' text, in a list, or a table's caption, likely generated with
-#' satf::extract_caps_alttext().
+#' stockplotr::extract_caps_alttext().
 #' @param rda_dir If the user has already created a folder containing .rda
 #' files with figures, tables, alt text, and captions, rda_dir represents
 #' the location of the folder containing these .rda files ("rda_files").

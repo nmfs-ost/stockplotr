@@ -1,4 +1,4 @@
-url: nmfs-ost.github.io/satf/
+url: nmfs-ost.github.io/stockplotr/
 
 navbar:
 
@@ -15,7 +15,7 @@ navbar:
     issue:
       text: Issues
       icon: fas fa-question-circle fa-lg
-      href: https://github.com/nmfs-ost/satf/issues
+      href: https://github.com/nmfs-ost/stockplotr/issues
 
     articles:
       text: Articles

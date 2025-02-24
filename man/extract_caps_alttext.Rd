@@ -20,7 +20,7 @@ A figure's caption and alternative text, in a list, or a table's caption.
 }
 \description{
 Extract a figure or table's caption and alternative text for usage when
-generating a figure or table. Typically used before satf::export_rda().
+generating a figure or table. Typically used before stockplotr::export_rda().
 }
 \examples{
 \dontrun{

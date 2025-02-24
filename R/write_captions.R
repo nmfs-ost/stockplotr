@@ -27,7 +27,7 @@ write_captions <- function(dat, # converted model output object
     # for key quantities (e.g., 'start_year' is the placeholder for the
     # assessment's start year)
     caps_alttext <- utils::read.csv(
-      system.file("resources", "captions_alt_text_template.csv", package = "satf")
+      system.file("resources", "captions_alt_text_template.csv", package = "stockplotr")
     )
 
     dat <- dat |>

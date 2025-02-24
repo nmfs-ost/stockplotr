@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(satf)
+library(stockplotr)
 
-test_check("satf")
+test_check("stockplotr")

@@ -95,7 +95,7 @@ exp_all_figs_tables <- function(
   # figures
 
   tryCatch({
-    satf::plot_recruitment(
+    stockplotr::plot_recruitment(
       dat,
       unit_label = recruitment_unit_label,
       scale_amount = recruitment_scale_amount,
@@ -115,7 +115,7 @@ exp_all_figs_tables <- function(
 
 
   tryCatch({
-    satf::plot_biomass(
+    stockplotr::plot_biomass(
       dat,
       unit_label = biomass_unit_label,
       scale_amount = biomass_scale_amount,
@@ -136,7 +136,7 @@ exp_all_figs_tables <- function(
 
 
   tryCatch({
-    satf::plot_landings(dat, unit_label = landings_unit_label, make_rda, rda_dir) |> suppressWarnings() |> invisible()
+    stockplotr::plot_landings(dat, unit_label = landings_unit_label, make_rda, rda_dir) |> suppressWarnings() |> invisible()
 
     message("Exported plot_landings")
 
@@ -146,7 +146,7 @@ exp_all_figs_tables <- function(
   })
 
   tryCatch({
-    satf::plot_recruitment_deviations(dat, end_year, n_projected_years, make_rda, rda_dir) |> suppressWarnings() |> invisible()
+    stockplotr::plot_recruitment_deviations(dat, end_year, n_projected_years, make_rda, rda_dir) |> suppressWarnings() |> invisible()
 
     message("Exported plot_recruitment_deviations")
 
@@ -157,7 +157,7 @@ exp_all_figs_tables <- function(
     print(e)
   })
 
-  # satf::plot_spawn_recruitment(dat,
+  # stockplotr::plot_spawn_recruitment(dat,
   #                        spawning_biomass_label,
   #                        recruitment_label = recruitment_unit_label,
   #                        end_year,
@@ -167,7 +167,7 @@ exp_all_figs_tables <- function(
   # message("Exported plot_spawn_recruitment")
 
   tryCatch({
-    satf::plot_spawning_biomass(
+    stockplotr::plot_spawning_biomass(
       dat,
       unit_label = spawning_biomass_label,
       scale_amount = spawning_biomass_scale_amount,
@@ -190,7 +190,7 @@ exp_all_figs_tables <- function(
   })
 
   # uncomment when this is working properly
-  # satf::plot_indices(dat,
+  # stockplotr::plot_indices(dat,
   #                    unit_label = indices_unit_label,
   #                    make_rda,
   #                    rda_dir) |> suppressWarnings() |> invisible()
@@ -199,7 +199,7 @@ exp_all_figs_tables <- function(
 
   # tables
   tryCatch({
-    satf::table_bnc(dat,
+    stockplotr::table_bnc(dat,
                     end_year,
                     biomass_unit_label,
                     catch_unit_label,
@@ -214,7 +214,7 @@ exp_all_figs_tables <- function(
   })
 
   tryCatch({
-    satf::table_indices(dat, make_rda, rda_dir) |> suppressWarnings() |> invisible()
+    stockplotr::table_indices(dat, make_rda, rda_dir) |> suppressWarnings() |> invisible()
 
     message("Exported table_indices")
 
@@ -224,7 +224,7 @@ exp_all_figs_tables <- function(
   })
 
   # uncomment when finished
-  # satf::table_landings(dat) |> suppressWarnings() |> invisible()
+  # stockplotr::table_landings(dat) |> suppressWarnings() |> invisible()
   #
   # message("Exported table_landings")
   #

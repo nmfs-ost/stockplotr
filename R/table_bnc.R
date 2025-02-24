@@ -132,7 +132,7 @@ table_bnc <- function(
   if (!file.exists(
     fs::path(getwd(), "captions_alt_text.csv"))
   ) {
-    satf::write_captions(dat = dat,
+    stockplotr::write_captions(dat = dat,
                          dir = rda_dir,
                          year = NULL)
   }

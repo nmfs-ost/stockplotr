@@ -22,7 +22,7 @@ This manual is a work in progress. In the meantime, please read the function doc
 
 ## Updating alternative text and captions
 
-When a plotting function (e.g., `plot_biomass()`, `table_indices()`, `exp_all_figs_tables()`) is run, placeholders within the plot's associated alternative text and captions are replaced with key quantities (see the [`asar` package's Accessibility vignette](https://nmfs-ost.github.io/asar/articles/accessibility_guide.html) and/or the [`satf::write_captions()` function](https://github.com/nmfs-ost/satf/blob/master/R/write_captions.R) for more details).
+When a plotting function (e.g., `plot_biomass()`, `table_indices()`, `exp_all_figs_tables()`) is run, placeholders within the plot's associated alternative text and captions are replaced with key quantities (see the [`asar` package's Accessibility vignette](https://nmfs-ost.github.io/asar/articles/accessibility_guide.html) and/or the [`stockplotr::write_captions()` function](https://github.com/nmfs-ost/stockplotr/blob/master/R/write_captions.R) for more details).
 
 As stated in the [Accessibility vignette's "Your to-do list" section](https://nmfs-ost.github.io/asar/articles/accessibility_guide.html#your-to-do-list), **you should always:**
 
@@ -30,7 +30,7 @@ As stated in the [Accessibility vignette's "Your to-do list" section](https://nm
 
 **2. Write the final component of each figure’s alt text.**
 
-Here's how to alter the alternative text and/or captions in `satf`, depending on what you wish to change:
+Here's how to alter the alternative text and/or captions in `stockplotr`, depending on what you wish to change:
 
 ### Add or Remove Text
 
