@@ -2,17 +2,17 @@ test_that("plot_spawn_recruitment generates plots without errors", {
 
   # read in sample dataset
   dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "satf")
+    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
   )
 
   # expect error-free plot with minimal arguments
   expect_no_error(
-    satf::plot_spawn_recruitment(dat)
+    stockplotr::plot_spawn_recruitment(dat)
   )
 
   # expect error-free plot with many arguments
   expect_no_error(
-    satf::plot_spawn_recruitment(
+    stockplotr::plot_spawn_recruitment(
       dat,
       spawning_biomass_label = "mt",
       recruitment_label = "mt",
@@ -25,7 +25,7 @@ test_that("plot_spawn_recruitment generates plots without errors", {
 
   # expect ggplot object is returned
   expect_s3_class(
-    satf::plot_spawn_recruitment(
+    stockplotr::plot_spawn_recruitment(
       dat,
       spawning_biomass_label = "mt",
       recruitment_label = "mt",
@@ -42,7 +42,7 @@ test_that("rda file made when indicated",{
 
   # read in sample dataset
   dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "satf")
+    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
   )
 
   # export rda

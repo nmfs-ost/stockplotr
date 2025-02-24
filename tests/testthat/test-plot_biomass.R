@@ -2,22 +2,22 @@ test_that("plot_biomass generates plots without errors", {
 
   # read in sample dataset
   dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "satf")
+    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
   )
 
   # expect error-free plot with minimal arguments
   expect_no_error(
-    satf::plot_biomass(dat)
+    stockplotr::plot_biomass(dat)
   )
 
   # expect plot with warnings if ref_point not indicated
   expect_warning(
-    satf::plot_biomass(dat)
+    stockplotr::plot_biomass(dat)
   )
 
   # expect error-free plot with many arguments
   expect_no_error(
-    satf::plot_biomass(
+    stockplotr::plot_biomass(
       dat,
       ref_point = 18000,
       unit_label = "metric tons",
@@ -31,7 +31,7 @@ test_that("plot_biomass generates plots without errors", {
 
   # expect error-free plot when setting relative to T
   expect_no_error(
-    satf::plot_biomass(
+    stockplotr::plot_biomass(
       dat,
       ref_point = 18000,
       unit_label = "metric tons",
@@ -45,7 +45,7 @@ test_that("plot_biomass generates plots without errors", {
 
   # expect ggplot object is returned
   expect_s3_class(
-    satf::plot_biomass(
+    stockplotr::plot_biomass(
       dat,
       ref_point = 18000,
       unit_label = "metric tons",
@@ -64,7 +64,7 @@ test_that("plot_biomass plots contain reference point when indicated", {
 
   # read in sample dataset
   dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "satf")
+    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
   )
 
 
@@ -72,14 +72,14 @@ test_that("plot_biomass plots contain reference point when indicated", {
   # plot w/o ref pt contains only 3 layers
 
   # make b plot with reference point
-  b_ref <- satf::plot_biomass(dat,
+  b_ref <- stockplotr::plot_biomass(dat,
                               ref_point = 18000)
   # extract number of layers (should be 4)
   b_ref_layers <- b_ref[["layers"]] |>
     length()
 
   # make b plot without reference point
-  b_no_ref <- satf::plot_biomass(dat)
+  b_no_ref <- stockplotr::plot_biomass(dat)
   # extract number of layers (should be 3)
   b_no_ref_layers <- b_no_ref[["layers"]] |>
     length()
@@ -94,7 +94,7 @@ test_that("rda file made when indicated",{
 
   # read in sample dataset
   dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "satf")
+    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
   )
 
   # export rda

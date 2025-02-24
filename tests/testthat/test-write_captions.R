@@ -2,7 +2,7 @@ test_that("write_captions() function imports alt text/captions template
           as a data frame",
           {
             # import pre-written captions and alt text template
-            caps_alttext <- utils::read.csv(system.file("resources", "captions_alt_text_template.csv", package = "satf"))
+            caps_alttext <- utils::read.csv(system.file("resources", "captions_alt_text_template.csv", package = "stockplotr"))
 
             expect_s3_class(caps_alttext, "data.frame")
 
@@ -18,7 +18,7 @@ test_that("write_captions() function replaces placeholder text with key quantiti
                 "resources",
                 "sample_data",
                 "petrale_sole-after_2020.csv",
-                package = "satf"
+                package = "stockplotr"
               )
             )
 

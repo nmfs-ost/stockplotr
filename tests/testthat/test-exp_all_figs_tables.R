@@ -2,10 +2,10 @@ test_that("exp_all_figs_tables works when all figures/tables are plotted", {
 
   # read in sample dataset
   dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "satf")
+    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
   )
 
-  satf::exp_all_figs_tables(  dat,
+  stockplotr::exp_all_figs_tables(  dat,
                               end_year = 2022,
                               ref_line = "unfished",
                               ref_line_sb = "target",
@@ -38,11 +38,11 @@ test_that("exp_all_figs_tables works when some figures/tables are not plotted", 
 
   # read in sample dataset
   dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "satf")
+    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
   )
 
   # plot all figs/tables except for plot_biomass
-  satf::exp_all_figs_tables(  dat,
+  stockplotr::exp_all_figs_tables(  dat,
                               end_year = 2022,
                               # add an unreal ref_line so plot_biomass doesn't work
                               ref_line = "not_a_real_ref_line",

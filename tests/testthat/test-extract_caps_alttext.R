@@ -2,14 +2,14 @@ test_that("extract_caps_alttext works for figures", {
 
   # read in sample dataset
   dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "satf")
+    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
   )
 
   topic_label <- "biomass"
   fig_or_table <- "figure"
 
   # run write_captions.R
-  satf::write_captions(dat = dat,
+  stockplotr::write_captions(dat = dat,
                        dir = getwd(),
                        year = 2022)
 
@@ -37,14 +37,14 @@ test_that("extract_caps_alttext works for tables", {
 
   # read in sample dataset
   dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "satf")
+    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
   )
 
   topic_label <- "bnc"
   fig_or_table <- "table"
 
   # run write_captions.R
-  satf::write_captions(dat = dat,
+  stockplotr::write_captions(dat = dat,
                        dir = getwd(),
                        year = 2022)
 

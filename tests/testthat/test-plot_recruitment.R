@@ -2,18 +2,18 @@ test_that("plot_recruitment generates plots without errors", {
 
   # read in sample dataset
   dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "satf")
+    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
   )
 
   # expect error-free plot with minimal arguments
   expect_no_error(
-    satf::plot_recruitment(dat,
+    stockplotr::plot_recruitment(dat,
                            end_year = 2022)
   )
 
   # expect error-free plot with many arguments
   expect_no_error(
-    satf::plot_recruitment(
+    stockplotr::plot_recruitment(
       dat,
       unit_label = "mt",
       scale_amount = 10,
@@ -27,7 +27,7 @@ test_that("plot_recruitment generates plots without errors", {
 
   # expect error-free plot when setting relative to T
   expect_no_error(
-    satf::plot_recruitment(
+    stockplotr::plot_recruitment(
       dat,
       unit_label = "mt",
       scale_amount = 10,
@@ -41,7 +41,7 @@ test_that("plot_recruitment generates plots without errors", {
 
   # expect ggplot object is returned
   expect_s3_class(
-    satf::plot_recruitment(
+    stockplotr::plot_recruitment(
       dat,
       unit_label = "mt",
       scale_amount = 10,
@@ -60,7 +60,7 @@ test_that("rda file made when indicated",{
 
   # read in sample dataset
   dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "satf")
+    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
   )
 
   # export rda

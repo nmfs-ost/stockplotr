@@ -2,18 +2,18 @@ test_that("table_bnc generates plots without errors", {
 
   # read in sample dataset
   dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "satf")
+    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
   )
 
   # expect error-free plot with minimal arguments
   expect_no_error(
-    satf::table_bnc(dat,
+    stockplotr::table_bnc(dat,
                            end_year = 2022)
   )
 
   # expect error-free plot with many arguments
   expect_no_error(
-    satf::table_bnc(
+    stockplotr::table_bnc(
       dat,
       end_year = 2025,
       biomass_unit_label = "mt",
@@ -26,7 +26,7 @@ test_that("table_bnc generates plots without errors", {
 
   # expect flextable object is returned
   expect_s3_class(
-    satf::table_bnc(
+    stockplotr::table_bnc(
       dat,
       end_year = 2025,
       biomass_unit_label = "mt",
@@ -43,7 +43,7 @@ test_that("rda file made when indicated",{
 
   # read in sample dataset
   dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "satf")
+    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
   )
 
   # export rda

@@ -2,17 +2,17 @@ test_that("table_indices generates plots without errors", {
 
   # read in sample dataset
   dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "satf")
+    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
   )
 
   # expect error-free plot with minimal arguments
   expect_no_error(
-    satf::table_indices(dat)
+    stockplotr::table_indices(dat)
   )
 
   # expect error-free plot with many arguments
   expect_no_error(
-    satf::table_indices(
+    stockplotr::table_indices(
       dat,
       make_rda = FALSE,
       rda_dir = getwd()
@@ -22,7 +22,7 @@ test_that("table_indices generates plots without errors", {
 
   # expect flextable object is returned
   expect_s3_class(
-    satf::table_indices(
+    stockplotr::table_indices(
       dat,
       make_rda = FALSE,
       rda_dir = getwd()
@@ -36,7 +36,7 @@ test_that("rda file made when indicated",{
 
   # read in sample dataset
   dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "satf")
+    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
   )
 
   # export rda

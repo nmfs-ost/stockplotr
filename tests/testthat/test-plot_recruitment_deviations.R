@@ -2,18 +2,18 @@ test_that("plot_recruitment_deviations generates plots without errors", {
 
   # read in sample dataset
   dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "satf")
+    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
   )
 
   # expect error-free plot with minimal arguments
   expect_no_error(
-    satf::plot_recruitment_deviations(dat,
+    stockplotr::plot_recruitment_deviations(dat,
                            end_year = 2022)
   )
 
   # expect error-free plot with many arguments
   expect_no_error(
-    satf::plot_recruitment_deviations(
+    stockplotr::plot_recruitment_deviations(
       dat,
       end_year = 2022,
       n_projected_years = 5,
@@ -24,7 +24,7 @@ test_that("plot_recruitment_deviations generates plots without errors", {
 
   # expect ggplot object is returned
   expect_s3_class(
-    satf::plot_recruitment_deviations(
+    stockplotr::plot_recruitment_deviations(
       dat,
       end_year = 2022,
       n_projected_years = 5,
@@ -40,7 +40,7 @@ test_that("rda file made when indicated",{
 
   # read in sample dataset
   dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "satf")
+    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
   )
 
   # export rda

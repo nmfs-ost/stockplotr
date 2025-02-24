@@ -5,7 +5,7 @@ test_that("export_rda works for figures", {
       "resources",
       "sample_data",
       "petrale_sole-after_2020.csv",
-      package = "satf"
+      package = "stockplotr"
     )
   )
 
@@ -13,7 +13,7 @@ test_that("export_rda works for figures", {
   fig_or_table <- "figure"
 
   # run write_captions.R
-  satf::write_captions(dat = dat,
+  stockplotr::write_captions(dat = dat,
                        dir = getwd(),
                        year = 2022)
 
@@ -55,7 +55,7 @@ test_that("export_rda works for tables", {
       "resources",
       "sample_data",
       "petrale_sole-after_2020.csv",
-      package = "satf"
+      package = "stockplotr"
     )
   )
 
@@ -63,7 +63,7 @@ test_that("export_rda works for tables", {
   fig_or_table <- "table"
 
   # run write_captions.R
-  satf::write_captions(dat = dat,
+  stockplotr::write_captions(dat = dat,
                        dir = getwd(),
                        year = 2022)
 

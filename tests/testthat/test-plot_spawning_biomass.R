@@ -2,22 +2,22 @@ test_that("plot_spawning_biomass generates plots without errors", {
 
   # read in sample dataset
   dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "satf")
+    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
   )
 
   # expect error-free plot with minimal arguments
   expect_no_error(
-    satf::plot_spawning_biomass(dat)
+    stockplotr::plot_spawning_biomass(dat)
   )
 
   # expect plot with warnings if ref_point not indicated
   expect_warning(
-    satf::plot_spawning_biomass(dat)
+    stockplotr::plot_spawning_biomass(dat)
   )
 
   # expect error-free plot with many arguments
   expect_no_error(
-    satf::plot_spawning_biomass(
+    stockplotr::plot_spawning_biomass(
       dat,
       unit_label = "metric tons",
       scale_amount = 1,
@@ -28,7 +28,7 @@ test_that("plot_spawning_biomass generates plots without errors", {
 
   # expect error-free plot when setting relative to T
   expect_no_error(
-    satf::plot_spawning_biomass(
+    stockplotr::plot_spawning_biomass(
       dat,
       unit_label = "metric tons",
       scale_amount = 1,
@@ -40,7 +40,7 @@ test_that("plot_spawning_biomass generates plots without errors", {
 
   # expect ggplot object is returned
   expect_s3_class(
-    satf::plot_spawning_biomass(
+    stockplotr::plot_spawning_biomass(
       dat,
       unit_label = "metric tons",
       scale_amount = 1,
@@ -57,7 +57,7 @@ test_that("plot_spawning_biomass plots contain reference point when indicated", 
 
   # read in sample dataset
   dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "satf")
+    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
   )
 
 
@@ -65,14 +65,14 @@ test_that("plot_spawning_biomass plots contain reference point when indicated", 
   # plot w/o ref pt contains only 3 layers
 
   # make sb plot with reference point
-  sb_ref <- satf::plot_spawning_biomass(dat,
+  sb_ref <- stockplotr::plot_spawning_biomass(dat,
                               ref_point = 18000)
   # extract number of layers (should be 4)
   sb_ref_layers <- sb_ref[["layers"]] |>
     length()
 
   # make sb plot without reference point
-  sb_no_ref <- satf::plot_spawning_biomass(dat)
+  sb_no_ref <- stockplotr::plot_spawning_biomass(dat)
   # extract number of layers (should be 3)
   sb_no_ref_layers <- sb_no_ref[["layers"]] |>
     length()
@@ -87,7 +87,7 @@ test_that("rda file made when indicated",{
 
   # read in sample dataset
   dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "satf")
+    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
   )
 
   # export rda
