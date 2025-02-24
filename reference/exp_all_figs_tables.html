@@ -76,15 +76,17 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">exp_all_figs_tables</span><span class="op">(</span></span>
 <span>  <span class="va">dat</span>,</span>
 <span>  recruitment_unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
-<span>  scale_amount <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  recruitment_scale_amount <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  end_year <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  n_projected_years <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  relative <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  rda_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  ref_line <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"target"</span>, <span class="st">"MSY"</span>, <span class="st">"msy"</span>, <span class="st">"unfished"</span><span class="op">)</span>,</span>
 <span>  ref_point <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  biomass_scale_amount <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  landings_unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
 <span>  spawning_biomass_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
+<span>  spawning_biomass_scale_amount <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  ref_line_sb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"target"</span>, <span class="st">"MSY"</span>, <span class="st">"msy"</span>, <span class="st">"unfished"</span><span class="op">)</span>,</span>
 <span>  ref_point_sb <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  indices_unit_label <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -105,8 +107,11 @@
 <dd><p>Units for recruitment</p></dd>
 
 
-<dt id="arg-scale-amount">scale_amount<a class="anchor" aria-label="anchor" href="#arg-scale-amount"></a></dt>
-<dd><p>indicate the exact amount of scale (i.e. 1000)</p></dd>
+<dt id="arg-recruitment-scale-amount">recruitment_scale_amount<a class="anchor" aria-label="anchor" href="#arg-recruitment-scale-amount"></a></dt>
+<dd><p>A number describing how much to scale down
+the recruitment quantities shown on the y axis. For example,
+recruitment_scale_amount = 100 would scale down a value from 500,000 –&gt;
+5,000. This scale will be reflected in the y axis label.</p></dd>
 
 
 <dt id="arg-end-year">end_year<a class="anchor" aria-label="anchor" href="#arg-end-year"></a></dt>
@@ -147,12 +152,22 @@ option if the ref_line cannot find your desired point. Indicate the
 reference point in the form c("label" = value).</p></dd>
 
 
+<dt id="arg-biomass-scale-amount">biomass_scale_amount<a class="anchor" aria-label="anchor" href="#arg-biomass-scale-amount"></a></dt>
+<dd><p>A number describing how much to scale down the
+biomass quantities shown on the y axis. See `recruitment_scale_amount`.</p></dd>
+
+
 <dt id="arg-landings-unit-label">landings_unit_label<a class="anchor" aria-label="anchor" href="#arg-landings-unit-label"></a></dt>
 <dd><p>Units for landings</p></dd>
 
 
 <dt id="arg-spawning-biomass-label">spawning_biomass_label<a class="anchor" aria-label="anchor" href="#arg-spawning-biomass-label"></a></dt>
 <dd><p>Units for spawning biomass</p></dd>
+
+
+<dt id="arg-spawning-biomass-scale-amount">spawning_biomass_scale_amount<a class="anchor" aria-label="anchor" href="#arg-spawning-biomass-scale-amount"></a></dt>
+<dd><p>A number describing how much to scale down the
+spawning biomass quantities shown on the y axis. See `recruitment_scale_amount`.</p></dd>
 
 
 <dt id="arg-ref-line-sb">ref_line_sb<a class="anchor" aria-label="anchor" href="#arg-ref-line-sb"></a></dt>
