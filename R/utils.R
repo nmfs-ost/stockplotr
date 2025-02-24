@@ -5,6 +5,7 @@
 # substitute in more key quantities (units, end_years, reference points, and more)
 # to captions/alt text
 add_more_key_quants <- function(
+    dat = NULL,
     topic = topic_label,
     fig_or_table = fig_or_table,
     dir = NULL,
@@ -27,6 +28,13 @@ add_more_key_quants <- function(
   topic_cap_alt <- caps_alt_df |>
     dplyr::filter(label == topic,
                   type == fig_or_table)
+
+  if (!is.null(dat)){
+    dat <- dat |>
+      dplyr::mutate(estimate = as.numeric(estimate),
+                    year = as.numeric(year),
+                    age = as.numeric(age))
+  }
 
 
   # calculate key quantities that rely on end_year for calculation

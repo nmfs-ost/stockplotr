@@ -181,6 +181,7 @@ plot_biomass <- function(
 
     # add more key quantities included as arguments in this fxn
     add_more_key_quants(
+      dat,
       topic = topic_label,
       fig_or_table = fig_or_table,
       dir = rda_dir,
