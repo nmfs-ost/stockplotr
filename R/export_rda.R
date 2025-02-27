@@ -23,35 +23,41 @@
 #' @export
 #'
 #' @examples
-#'\dontrun{
-#' export_rda(final = final_table_object,
-#' caps_alttext = caps_alttext_object,
-#' rda_dir = here::here(),
-#' topic_label = "bnc",
-#' fig_or_table = "table")
+#' \dontrun{
+#' export_rda(
+#'   final = final_table_object,
+#'   caps_alttext = caps_alttext_object,
+#'   rda_dir = here::here(),
+#'   topic_label = "bnc",
+#'   fig_or_table = "table"
+#' )
 #'
-#' export_rda(final = final_figure_object,
-#' caps_alttext = another_caps_alttext_object,
-#' rda_dir = "my_rda_dir",
-#' topic_label = "landings",
-#' fig_or_table = "figure")
-#'}
-
+#' export_rda(
+#'   final = final_figure_object,
+#'   caps_alttext = another_caps_alttext_object,
+#'   rda_dir = "my_rda_dir",
+#'   topic_label = "landings",
+#'   fig_or_table = "figure"
+#' )
+#' }
 export_rda <- function(final = NULL,
                        caps_alttext = NULL,
                        rda_dir = NULL,
                        topic_label = NULL,
-                       fig_or_table = NULL){
-
+                       fig_or_table = NULL) {
   # make rda for figures
   if (fig_or_table == "figure") {
-    rda <- list("figure" = final,
-                "cap" = caps_alttext[[1]],
-                "alt_text" = caps_alttext[[2]])
+    rda <- list(
+      "figure" = final,
+      "cap" = caps_alttext[[1]],
+      "alt_text" = caps_alttext[[2]]
+    )
     # make rda for tables
-  } else if (fig_or_table == "table"){
-    rda <- list("table" = final,
-                "cap" = caps_alttext[[1]])
+  } else if (fig_or_table == "table") {
+    rda <- list(
+      "table" = final,
+      "cap" = caps_alttext[[1]]
+    )
   }
 
   # check if an rda_files folder already exists; if not, make one
@@ -61,7 +67,10 @@ export_rda <- function(final = NULL,
 
   # export rda
   save(rda,
-       file = fs::path(rda_dir,
-                       "rda_files",
-                       paste0(topic_label, "_", fig_or_table, ".rda")))
+    file = fs::path(
+      rda_dir,
+      "rda_files",
+      paste0(topic_label, "_", fig_or_table, ".rda")
+    )
+  )
 }

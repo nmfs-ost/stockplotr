@@ -26,12 +26,10 @@ plot_biomass <- function(
     end_year = NULL,
     relative = FALSE,
     make_rda = FALSE,
-    rda_dir = getwd()
-){
-
+    rda_dir = getwd()) {
   if (!is.null(ref_point)) {
     ref_line <- names(ref_point)
-  } else if(length(ref_line)>1){
+  } else if (length(ref_line) > 1) {
     ref_line <- "target"
   } else {
     ref_line <- match.arg(ref_line, several.ok = FALSE)
@@ -49,7 +47,7 @@ plot_biomass <- function(
   if (!is.null(ref_point)) {
     ref_line_val <- as.numeric(ref_point)
   } else {
-    if ( inherits( try( solve(as.numeric(dat[
+    if (inherits(try(solve(as.numeric(dat[
       grep(
         pattern = glue::glue("^biomass.*{tolower(ref_line)}$"),
         x = dat[["label"]]
@@ -89,20 +87,24 @@ plot_biomass <- function(
   }
 
   b <- dat |>
-    dplyr::filter(label == "biomass",
-                  module_name == "TIME_SERIES" | module_name == "t.series", # SS3 and BAM target module names
-                  is.na(fleet),
-                  is.na(age)) |>
-    dplyr::mutate(estimate = as.numeric(estimate),
-                  estimate_y = estimate / ifelse(relative, ref_line_val, scale_amount),
-                  year = as.numeric(year),
-                  estimate_lower = estimate - 1.96 * uncertainty /
-                    ifelse(relative, ref_line_val, scale_amount),
-                  estimate_upper = estimate + 1.96 * uncertainty /
-                    ifelse(relative, ref_line_val, scale_amount))
+    dplyr::filter(
+      label == "biomass",
+      module_name == "TIME_SERIES" | module_name == "t.series", # SS3 and BAM target module names
+      is.na(fleet),
+      is.na(age)
+    ) |>
+    dplyr::mutate(
+      estimate = as.numeric(estimate),
+      estimate_y = estimate / ifelse(relative, ref_line_val, scale_amount),
+      year = as.numeric(year),
+      estimate_lower = estimate - 1.96 * uncertainty /
+        ifelse(relative, ref_line_val, scale_amount),
+      estimate_upper = estimate + 1.96 * uncertainty /
+        ifelse(relative, ref_line_val, scale_amount)
+    )
 
   # get end year if not defined
-  if (is.null(end_year)){
+  if (is.null(end_year)) {
     end_year <- max(b$year)
   }
 
@@ -110,32 +112,39 @@ plot_biomass <- function(
   x_n_breaks <- round(length(b[["year"]]) / 10)
   if (x_n_breaks <= 5) {
     x_n_breaks <- round(length(b[["year"]]) / 5)
-  } else if (x_n_breaks > 10){
+  } else if (x_n_breaks > 10) {
     x_n_breaks <- round(length(b[["year"]]) / 15)
   }
 
   # plot
-  plt <- ggplot2::ggplot(data = subset(b, year<=end_year)) +
+  plt <- ggplot2::ggplot(data = subset(b, year <= end_year)) +
     ggplot2::geom_line(
       ggplot2::aes(
         x = year,
         y = estimate_y
       ),
-      linewidth = 1) +
+      linewidth = 1
+    ) +
     ggplot2::geom_ribbon(
       ggplot2::aes(
         x = year,
         ymin = estimate_lower,
-        ymax = estimate_upper),
+        ymax = estimate_upper
+      ),
       colour = "grey",
-      alpha = 0.3) +
-    {if(!is.null(ref_line_val)) ggplot2::geom_hline(yintercept = ref_line_val / ifelse(relative, ref_line_val, scale_amount),linetype = 2)} +
+      alpha = 0.3
+    ) +
+    {
+      if (!is.null(ref_line_val)) ggplot2::geom_hline(yintercept = ref_line_val / ifelse(relative, ref_line_val, scale_amount), linetype = 2)
+    } +
     ggplot2::labs(
       x = "Year",
-      y = biomass_label) +
+      y = biomass_label
+    ) +
     ggplot2::scale_x_continuous(
       n.breaks = x_n_breaks,
-      guide = ggplot2::guide_axis(minor.ticks = TRUE)) +
+      guide = ggplot2::guide_axis(minor.ticks = TRUE)
+    ) +
     ggplot2::annotate(
       geom = "text",
       x = end_year + 0.05,
@@ -144,21 +153,21 @@ plot_biomass <- function(
       parse = TRUE,
       fill = "white"
     )
-    # ggtext::geom_richtext(
-    #   ggplot2::aes(
-    #     x = end_year,
-    #     y = ref_line_val / ifelse(relative, ref_line_val, scale_amount)
-    #     ),
-    #   nudge_x = 0.05,
-    #   nudge_y = 10,
-    #   label.padding = 0.5,
-    #   label.margin = 3
-    # )
+  # ggtext::geom_richtext(
+  #   ggplot2::aes(
+  #     x = end_year,
+  #     y = ref_line_val / ifelse(relative, ref_line_val, scale_amount)
+  #     ),
+  #   nudge_x = 0.05,
+  #   nudge_y = 10,
+  #   label.padding = 0.5,
+  #   label.margin = 3
+  # )
 
   final <- add_theme(plt)
 
   # export figure to rda if argument = T
-  if (make_rda == TRUE){
+  if (make_rda == TRUE) {
     # create plot-specific variables to use throughout fxn for naming and IDing
     # Indicate if biomass is relative or not
     if (relative) {
@@ -172,11 +181,14 @@ plot_biomass <- function(
 
     # run write_captions.R if its output doesn't exist
     if (!file.exists(
-      fs::path(getwd(), "captions_alt_text.csv"))
+      fs::path(getwd(), "captions_alt_text.csv")
+    )
     ) {
-      stockplotr::write_captions(dat = dat,
-                           dir = rda_dir,
-                           year = end_year)
+      stockplotr::write_captions(
+        dat = dat,
+        dir = rda_dir,
+        year = end_year
+      )
     }
 
     # add more key quantities included as arguments in this fxn
@@ -192,16 +204,19 @@ plot_biomass <- function(
     )
 
     # extract this plot's caption and alt text
-    caps_alttext <- extract_caps_alttext(topic_label = topic_label,
-                                         fig_or_table = fig_or_table,
-                                         dir = rda_dir)
+    caps_alttext <- extract_caps_alttext(
+      topic_label = topic_label,
+      fig_or_table = fig_or_table,
+      dir = rda_dir
+    )
 
-    export_rda(final = final,
-               caps_alttext = caps_alttext,
-               rda_dir = rda_dir,
-               topic_label = topic_label,
-               fig_or_table = fig_or_table)
-
-    }
+    export_rda(
+      final = final,
+      caps_alttext = caps_alttext,
+      rda_dir = rda_dir,
+      topic_label = topic_label,
+      fig_or_table = fig_or_table
+    )
+  }
   return(final)
 }

@@ -91,7 +91,9 @@ Export all figures and tables to Rda files within one function.
 }
 \examples{
 \dontrun{
-exp_all_figs_tables(dat, end_year = 2022, ref_line = "unfished", ref_point = 13000,
-ref_point_sb = 13000, ref_line_sb = "target", indices_unit_label = "CPUE")
+exp_all_figs_tables(dat,
+  end_year = 2022, ref_line = "unfished", ref_point = 13000,
+  ref_point_sb = 13000, ref_line_sb = "target", indices_unit_label = "CPUE"
+)
 }
 }

@@ -11,7 +11,7 @@
 plot_landings <- function(dat,
                           unit_label = "metric tons",
                           make_rda = FALSE,
-                          rda_dir = getwd()){
+                          rda_dir = getwd()) {
   # Units
   # TODO: fix unit label is scaling
   land_label <- glue::glue("Landings ({unit_label})")
@@ -22,22 +22,22 @@ plot_landings <- function(dat,
       c(module_name == "t.series" & grepl("landings_observed", label)) | c(module_name == "CATCH" & grepl("ret_bio", label)),
       # t.series is associated with a conversion from BAM output and CATCH with SS3 converted output
       !is.na(fleet)
-      ) |>
+    ) |>
     dplyr::mutate(
       estimate = as.numeric(estimate),
       year = as.numeric(year),
       fleet = as.character(fleet)
-      ) |>
+    ) |>
     suppressWarnings() |>
     dplyr::filter(
       !is.na(year)
     )
 
-  #Check number of areas and season - if any are >1 then need to use alternative plot (or summarize)
+  # Check number of areas and season - if any are >1 then need to use alternative plot (or summarize)
   narea <- length(unique(land$area))
   nseas <- length(unique(land$season))
 
-  if(narea > 1) {
+  if (narea > 1) {
     factors <- TRUE
     # will need facet if TRUE
   } else {
@@ -57,10 +57,12 @@ plot_landings <- function(dat,
       ggplot2::aes(
         x = year,
         y = estimate,
-        fill = fleet)) +
+        fill = fleet
+      )
+    ) +
     # ggplot2::facet_wrap(~label)
-  # Apply std NOAA theme
-  # add_theme(plt)
+    # Apply std NOAA theme
+    # add_theme(plt)
     ggplot2::labs(
       x = "Year",
       y = land_label,
@@ -77,11 +79,14 @@ plot_landings <- function(dat,
 
   # run write_captions.R if its output doesn't exist
   if (!file.exists(
-    fs::path(getwd(), "captions_alt_text.csv"))
+    fs::path(getwd(), "captions_alt_text.csv")
+  )
   ) {
-    stockplotr::write_captions(dat = dat,
-                         dir = rda_dir,
-                         year = NULL)
+    stockplotr::write_captions(
+      dat = dat,
+      dir = rda_dir,
+      year = NULL
+    )
   }
 
   # add more key quantities included as arguments in this fxn
@@ -93,18 +98,21 @@ plot_landings <- function(dat,
   )
 
   # extract this plot's caption and alt text
-  caps_alttext <- extract_caps_alttext(topic_label = topic_label,
-                                       fig_or_table = fig_or_table,
-                                       dir = rda_dir)
+  caps_alttext <- extract_caps_alttext(
+    topic_label = topic_label,
+    fig_or_table = fig_or_table,
+    dir = rda_dir
+  )
 
   # export figure to rda if argument = T
-  if (make_rda == TRUE){
-    export_rda(final = final,
-               caps_alttext = caps_alttext,
-               rda_dir = rda_dir,
-               topic_label = topic_label,
-               fig_or_table = fig_or_table)
+  if (make_rda == TRUE) {
+    export_rda(
+      final = final,
+      caps_alttext = caps_alttext,
+      rda_dir = rda_dir,
+      topic_label = topic_label,
+      fig_or_table = fig_or_table
+    )
   }
   return(final)
 }
-

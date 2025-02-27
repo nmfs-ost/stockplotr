@@ -14,20 +14,22 @@
 #' @export
 #'
 #' @examples
-#'\dontrun{
-#'extract_caps_alttext(topic_label = "biomass",
-#'                     fig_or_table = "figure",
-#'                     dir = here::here())
+#' \dontrun{
+#' extract_caps_alttext(
+#'   topic_label = "biomass",
+#'   fig_or_table = "figure",
+#'   dir = here::here()
+#' )
 #'
-#'extract_caps_alttext(topic_label = "bnc",
-#'                     fig_or_table = "table",
-#'                     dir = getwd())
-#'}
-
+#' extract_caps_alttext(
+#'   topic_label = "bnc",
+#'   fig_or_table = "table",
+#'   dir = getwd()
+#' )
+#' }
 extract_caps_alttext <- function(topic_label = NULL,
                                  fig_or_table = NULL,
-                                 dir = getwd()){
-
+                                 dir = getwd()) {
   # import csv with captions and alt text
   captions_alttext_df <- utils::read.csv(
     fs::path(dir, "captions_alt_text.csv")
@@ -35,20 +37,26 @@ extract_caps_alttext <- function(topic_label = NULL,
 
   # extract plot or table's caption and alt text
   cap <- captions_alttext_df |>
-    dplyr::filter(label == topic_label,
-                  type == fig_or_table) |>
+    dplyr::filter(
+      label == topic_label,
+      type == fig_or_table
+    ) |>
     dplyr::select(caption) |>
     as.character()
 
-  if (fig_or_table == "figure"){
+  if (fig_or_table == "figure") {
     alt_text <- captions_alttext_df |>
-      dplyr::filter(label == topic_label,
-                    type == "figure") |>
+      dplyr::filter(
+        label == topic_label,
+        type == "figure"
+      ) |>
       dplyr::select(alt_text) |>
       as.character()
 
-    caps_alttext_list <- list(cap,
-                              alt_text)
+    caps_alttext_list <- list(
+      cap,
+      alt_text
+    )
   } else {
     caps_alttext_list <- list(cap)
   }

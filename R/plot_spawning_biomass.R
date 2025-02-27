@@ -23,20 +23,19 @@
 #' @export
 #'
 plot_spawning_biomass <- function(
-  dat,
-  unit_label = "metric ton",
-  scale_amount = 1,
-  ref_line = c("target", "unfished", "msy"),
-  ref_point = NULL,
-  end_year = NULL,
-  relative = FALSE,
-  n_projected_years = 10,
-  make_rda = FALSE,
-  rda_dir = getwd()
-) {
+    dat,
+    unit_label = "metric ton",
+    scale_amount = 1,
+    ref_line = c("target", "unfished", "msy"),
+    ref_point = NULL,
+    end_year = NULL,
+    relative = FALSE,
+    n_projected_years = 10,
+    make_rda = FALSE,
+    rda_dir = getwd()) {
   if (!is.null(ref_point)) {
     ref_line <- names(ref_point)
-  } else if(length(ref_line)>1){
+  } else if (length(ref_line) > 1) {
     ref_line <- "target"
   } else {
     ref_line <- match.arg(ref_line, several.ok = FALSE)
@@ -65,7 +64,7 @@ plot_spawning_biomass <- function(
   if (!is.null(ref_point)) {
     ref_line_val <- as.numeric(ref_point)
   } else {
-    if ( inherits( try( solve(as.numeric(dat[
+    if (inherits(try(solve(as.numeric(dat[
       grep(
         pattern = glue::glue("^spawning_biomass.*{tolower(ref_line)}$"),
         x = dat[["label"]]
@@ -134,7 +133,9 @@ plot_spawning_biomass <- function(
       ),
       linewidth = 1
     ) +
-    {if(!is.null(ref_line_val)) ggplot2::geom_hline(yintercept = ref_line_val / ifelse(relative, ref_line_val, scale_amount),linetype = 2)} +
+    {
+      if (!is.null(ref_line_val)) ggplot2::geom_hline(yintercept = ref_line_val / ifelse(relative, ref_line_val, scale_amount), linetype = 2)
+    } +
     # Only add confidence intervals for the non NA estimates
     # which allows for no warnings if uncertainty = NA
     ggplot2::geom_ribbon(
@@ -179,11 +180,14 @@ plot_spawning_biomass <- function(
 
     # run write_captions.R if its output doesn't exist
     if (!file.exists(
-      fs::path(getwd(), "captions_alt_text.csv"))
+      fs::path(getwd(), "captions_alt_text.csv")
+    )
     ) {
-      stockplotr::write_captions(dat = dat,
-                           dir = rda_dir,
-                           year = end_year)
+      stockplotr::write_captions(
+        dat = dat,
+        dir = rda_dir,
+        year = end_year
+      )
     }
 
     # add more key quantities included as arguments in this fxn
@@ -199,15 +203,19 @@ plot_spawning_biomass <- function(
     )
 
     # extract this plot's caption and alt text
-    caps_alttext <- extract_caps_alttext(topic_label = topic_label,
-                                         fig_or_table = fig_or_table,
-                                         dir = rda_dir)
+    caps_alttext <- extract_caps_alttext(
+      topic_label = topic_label,
+      fig_or_table = fig_or_table,
+      dir = rda_dir
+    )
 
-    export_rda(final = final,
-               caps_alttext = caps_alttext,
-               rda_dir = rda_dir,
-              topic_label = topic_label,
-              fig_or_table = fig_or_table)
+    export_rda(
+      final = final,
+      caps_alttext = caps_alttext,
+      rda_dir = rda_dir,
+      topic_label = topic_label,
+      fig_or_table = fig_or_table
+    )
   }
   return(final)
 }

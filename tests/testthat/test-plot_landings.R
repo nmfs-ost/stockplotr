@@ -1,5 +1,4 @@
 test_that("plot_landings generates plots without errors", {
-
   # read in sample dataset
   dat <- utils::read.csv(
     system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
@@ -13,15 +12,12 @@ test_that("plot_landings generates plots without errors", {
 
   # expect ggplot object is returned
   expect_s3_class(
-    stockplotr::plot_landings(dat)
-    ,
+    stockplotr::plot_landings(dat),
     "gg"
   )
-
 })
 
-test_that("rda file made when indicated",{
-
+test_that("rda file made when indicated", {
   # read in sample dataset
   dat <- utils::read.csv(
     system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
@@ -29,9 +25,10 @@ test_that("rda file made when indicated",{
 
   # export rda
   plot_landings(dat,
-                make_rda = TRUE,
-                unit_label = "metric tons",
-                rda_dir = getwd())
+    make_rda = TRUE,
+    unit_label = "metric tons",
+    rda_dir = getwd()
+  )
 
   # expect that both rda_files dir and the landings_figure.rda file exist
   expect_true(dir.exists(fs::path(getwd(), "rda_files")))
@@ -40,5 +37,4 @@ test_that("rda file made when indicated",{
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
   unlink(fs::path(getwd(), "rda_files"), recursive = T)
-
 })

@@ -1,6 +1,5 @@
 table_landings <- function(
-    dat
-) {
+    dat) {
   # read standard data file and extract target quantity
   land <- dat |>
     dplyr::filter(

@@ -12,11 +12,10 @@
 add_theme <- function(x) {
   # this is bad coding practice, but what I have for now
   if (class(x)[1] == "flextable") {
-    FitFlextableToPage <- function(ft, pgwidth = 6){
-
+    FitFlextableToPage <- function(ft, pgwidth = 6) {
       ft_out <- ft |> flextable::autofit()
 
-      ft_out <- flextable::width(ft_out, width = dim(ft_out)$widths*pgwidth /(flextable::flextable_dim(ft_out)$widths))
+      ft_out <- flextable::width(ft_out, width = dim(ft_out)$widths * pgwidth / (flextable::flextable_dim(ft_out)$widths))
       return(ft_out)
     }
     theme_obj <- x |>
@@ -28,14 +27,12 @@ add_theme <- function(x) {
       flextable::add_header_lines(top = FALSE) |>
       flextable::align(align = "center", part = "body") |>
       flextable::autofit()
-      # FitFlextableToPage()
+    # FitFlextableToPage()
   } else if (class(x)[1] == "gt_tbl") {
     theme_obj <- x
     # gt object
-
   } else if (class(x)[1] == "kableExtra" | as.character(class(x)[2]) == "knitr_kable") {
     theme_obj <- x
-
   } else if (class(x)[1] == "gg" | class(x)[2] == "ggplot") { #  - removed bc wouldn't work with only 1 entry in the class for other object classes
     theme_obj <- x +
       ggplot2::theme(

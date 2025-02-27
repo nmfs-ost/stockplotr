@@ -1,5 +1,4 @@
 test_that("plot_biomass generates plots without errors", {
-
   # read in sample dataset
   dat <- utils::read.csv(
     system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
@@ -57,11 +56,9 @@ test_that("plot_biomass generates plots without errors", {
     ),
     "gg"
   )
-
 })
 
 test_that("plot_biomass plots contain reference point when indicated", {
-
   # read in sample dataset
   dat <- utils::read.csv(
     system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
@@ -73,7 +70,8 @@ test_that("plot_biomass plots contain reference point when indicated", {
 
   # make b plot with reference point
   b_ref <- stockplotr::plot_biomass(dat,
-                              ref_point = 18000)
+    ref_point = 18000
+  )
   # extract number of layers (should be 4)
   b_ref_layers <- b_ref[["layers"]] |>
     length()
@@ -84,14 +82,13 @@ test_that("plot_biomass plots contain reference point when indicated", {
   b_no_ref_layers <- b_no_ref[["layers"]] |>
     length()
 
-  expect_equal((b_ref_layers - 1),
-               b_no_ref_layers)
-
-
+  expect_equal(
+    (b_ref_layers - 1),
+    b_no_ref_layers
+  )
 })
 
-test_that("rda file made when indicated",{
-
+test_that("rda file made when indicated", {
   # read in sample dataset
   dat <- utils::read.csv(
     system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
@@ -113,5 +110,4 @@ test_that("rda file made when indicated",{
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
   unlink(fs::path(getwd(), "rda_files"), recursive = T)
-
 })

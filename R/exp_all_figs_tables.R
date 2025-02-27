@@ -40,122 +40,126 @@
 #'
 #' @examples
 #' \dontrun{
-#' exp_all_figs_tables(dat, end_year = 2022, ref_line = "unfished", ref_point = 13000,
-#' ref_point_sb = 13000, ref_line_sb = "target", indices_unit_label = "CPUE")
+#' exp_all_figs_tables(dat,
+#'   end_year = 2022, ref_line = "unfished", ref_point = 13000,
+#'   ref_point_sb = 13000, ref_line_sb = "target", indices_unit_label = "CPUE"
+#' )
 #' }
-
 exp_all_figs_tables <- function(
-
-  # imported from plot_recruitment
-  dat,
-  recruitment_unit_label = "mt", # changed from unit_label to recruitment_unit_label for specificity
-  recruitment_scale_amount = 1,
-  end_year = NULL,
-  n_projected_years = 10,
-  relative = FALSE,
-  rda_dir = getwd(),
-
-  # imported from plot_biomass
-  ref_line = c("target", "MSY", "msy", "unfished"),
-  ref_point = NULL,
-  biomass_scale_amount = 1,
-
-  # imported from plot_landings
-  landings_unit_label = "mt",
-
-  # imported from plot_recruitment_deviations- zero unique arguments
-
-  # imported from plot_spawn_recruitment
-  spawning_biomass_label = "mt",
-  spawning_biomass_scale_amount = 1,
-
-  # imported from plot_spawning_biomass
-  ref_line_sb = c("target", "MSY", "msy", "unfished"),
-  ref_point_sb = NULL,
-
-  # imported from plot_indices
-  indices_unit_label = NULL,
-
-  # imported from table_afsc_tier- add potential unique arguments after dev
-
-  # imported from table_bnc
-  biomass_unit_label = "mt",
-  catch_unit_label = "mt"
-
-  # imported from table_harvest_projection- add potential unique arguments after dev
-
-  # imported from table_indices- zero unique arguments
-
-) {
-
+    # imported from plot_recruitment
+    dat,
+    recruitment_unit_label = "mt", # changed from unit_label to recruitment_unit_label for specificity
+    recruitment_scale_amount = 1,
+    end_year = NULL,
+    n_projected_years = 10,
+    relative = FALSE,
+    rda_dir = getwd(),
+    # imported from plot_biomass
+    ref_line = c("target", "MSY", "msy", "unfished"),
+    ref_point = NULL,
+    biomass_scale_amount = 1,
+    # imported from plot_landings
+    landings_unit_label = "mt",
+    # imported from plot_recruitment_deviations- zero unique arguments
+    # imported from plot_spawn_recruitment
+    spawning_biomass_label = "mt",
+    spawning_biomass_scale_amount = 1,
+    # imported from plot_spawning_biomass
+    ref_line_sb = c("target", "MSY", "msy", "unfished"),
+    ref_point_sb = NULL,
+    # imported from plot_indices
+    indices_unit_label = NULL,
+    # imported from table_afsc_tier- add potential unique arguments after dev
+    # imported from table_bnc
+    biomass_unit_label = "mt",
+    catch_unit_label = "mt"
+    # imported from table_harvest_projection- add potential unique arguments after dev
+    # imported from table_indices- zero unique arguments
+    ) {
   make_rda <- TRUE
 
   message("Starting export of figures and tables:")
 
   # figures
 
-  tryCatch({
-    stockplotr::plot_recruitment(
-      dat,
-      unit_label = recruitment_unit_label,
-      scale_amount = recruitment_scale_amount,
-      end_year,
-      n_projected_years,
-      relative,
-      make_rda,
-      rda_dir
-    ) |> suppressWarnings() |> invisible()
+  tryCatch(
+    {
+      stockplotr::plot_recruitment(
+        dat,
+        unit_label = recruitment_unit_label,
+        scale_amount = recruitment_scale_amount,
+        end_year,
+        n_projected_years,
+        relative,
+        make_rda,
+        rda_dir
+      ) |>
+        suppressWarnings() |>
+        invisible()
 
-    message("Exported plot_recruitment")
-
-  }, error = function(e) {
-    message('Failed to export plot_recruitment. Tip: check that your arguments are correct.')
-    print(e)
-  })
-
-
-  tryCatch({
-    stockplotr::plot_biomass(
-      dat,
-      unit_label = biomass_unit_label,
-      scale_amount = biomass_scale_amount,
-      ref_line,
-      ref_point,
-      end_year,
-      relative,
-      make_rda,
-      rda_dir
-    ) |> suppressWarnings() |> invisible()
-
-    message("Exported plot_biomass")
-
-  }, error = function(e) {
-    message('Failed to export plot_biomass Tip: check that your arguments are correct.')
-    print(e)
-  })
+      message("Exported plot_recruitment")
+    },
+    error = function(e) {
+      message("Failed to export plot_recruitment. Tip: check that your arguments are correct.")
+      print(e)
+    }
+  )
 
 
-  tryCatch({
-    stockplotr::plot_landings(dat, unit_label = landings_unit_label, make_rda, rda_dir) |> suppressWarnings() |> invisible()
+  tryCatch(
+    {
+      stockplotr::plot_biomass(
+        dat,
+        unit_label = biomass_unit_label,
+        scale_amount = biomass_scale_amount,
+        ref_line,
+        ref_point,
+        end_year,
+        relative,
+        make_rda,
+        rda_dir
+      ) |>
+        suppressWarnings() |>
+        invisible()
 
-    message("Exported plot_landings")
+      message("Exported plot_biomass")
+    },
+    error = function(e) {
+      message("Failed to export plot_biomass Tip: check that your arguments are correct.")
+      print(e)
+    }
+  )
 
-  }, error = function(e) {
-    message('Failed to export plot_landings. Tip: check that your arguments are correct.')
-    print(e)
-  })
 
-  tryCatch({
-    stockplotr::plot_recruitment_deviations(dat, end_year, n_projected_years, make_rda, rda_dir) |> suppressWarnings() |> invisible()
+  tryCatch(
+    {
+      stockplotr::plot_landings(dat, unit_label = landings_unit_label, make_rda, rda_dir) |>
+        suppressWarnings() |>
+        invisible()
 
-    message("Exported plot_recruitment_deviations")
+      message("Exported plot_landings")
+    },
+    error = function(e) {
+      message("Failed to export plot_landings. Tip: check that your arguments are correct.")
+      print(e)
+    }
+  )
 
-  }, error = function(e) {
-    message(
-      'Failed to export plot_recruitment_deviations. Tip: check that your arguments are correct.'
-    )
-    print(e)
-  })
+  tryCatch(
+    {
+      stockplotr::plot_recruitment_deviations(dat, end_year, n_projected_years, make_rda, rda_dir) |>
+        suppressWarnings() |>
+        invisible()
+
+      message("Exported plot_recruitment_deviations")
+    },
+    error = function(e) {
+      message(
+        "Failed to export plot_recruitment_deviations. Tip: check that your arguments are correct."
+      )
+      print(e)
+    }
+  )
 
   # stockplotr::plot_spawn_recruitment(dat,
   #                        spawning_biomass_label,
@@ -166,28 +170,30 @@ exp_all_figs_tables <- function(
   #
   # message("Exported plot_spawn_recruitment")
 
-  tryCatch({
-    stockplotr::plot_spawning_biomass(
-      dat,
-      unit_label = spawning_biomass_label,
-      scale_amount = spawning_biomass_scale_amount,
-      ref_line = ref_line_sb,
-      ref_point = ref_point_sb,
-      end_year,
-      relative,
-      n_projected_years,
-      make_rda,
-      rda_dir
-    ) |>
-      suppressWarnings() |>
-      invisible()
+  tryCatch(
+    {
+      stockplotr::plot_spawning_biomass(
+        dat,
+        unit_label = spawning_biomass_label,
+        scale_amount = spawning_biomass_scale_amount,
+        ref_line = ref_line_sb,
+        ref_point = ref_point_sb,
+        end_year,
+        relative,
+        n_projected_years,
+        make_rda,
+        rda_dir
+      ) |>
+        suppressWarnings() |>
+        invisible()
 
-    message("Exported plot_spawning_biomass")
-
-  }, error = function(e) {
-    message('Failed to export plot_spawning_biomass. Tip: check that your arguments are correct.')
-    print(e)
-  })
+      message("Exported plot_spawning_biomass")
+    },
+    error = function(e) {
+      message("Failed to export plot_spawning_biomass. Tip: check that your arguments are correct.")
+      print(e)
+    }
+  )
 
   # uncomment when this is working properly
   # stockplotr::plot_indices(dat,
@@ -198,30 +204,40 @@ exp_all_figs_tables <- function(
   # message("Exported plot_indices")
 
   # tables
-  tryCatch({
-    stockplotr::table_bnc(dat,
-                    end_year,
-                    biomass_unit_label,
-                    catch_unit_label,
-                    make_rda,
-                    rda_dir) |> suppressWarnings() |> invisible()
+  tryCatch(
+    {
+      stockplotr::table_bnc(
+        dat,
+        end_year,
+        biomass_unit_label,
+        catch_unit_label,
+        make_rda,
+        rda_dir
+      ) |>
+        suppressWarnings() |>
+        invisible()
 
-    message("Exported table_bnc")
+      message("Exported table_bnc")
+    },
+    error = function(e) {
+      message("Failed to export table_bnc. Tip: check that your arguments are correct.")
+      print(e)
+    }
+  )
 
-  }, error = function(e) {
-    message('Failed to export table_bnc. Tip: check that your arguments are correct.')
-    print(e)
-  })
+  tryCatch(
+    {
+      stockplotr::table_indices(dat, make_rda, rda_dir) |>
+        suppressWarnings() |>
+        invisible()
 
-  tryCatch({
-    stockplotr::table_indices(dat, make_rda, rda_dir) |> suppressWarnings() |> invisible()
-
-    message("Exported table_indices")
-
-  }, error = function(e) {
-    message('Failed to export table_indices. Tip: check that your arguments are correct.')
-    print(e)
-  })
+      message("Exported table_indices")
+    },
+    error = function(e) {
+      message("Failed to export table_indices. Tip: check that your arguments are correct.")
+      print(e)
+    }
+  )
 
   # uncomment when finished
   # stockplotr::table_landings(dat) |> suppressWarnings() |> invisible()
@@ -232,5 +248,4 @@ exp_all_figs_tables <- function(
   # table_afsc_tier() |> suppressWarnings() |> invisible()
   # table_harvest_projection() |> suppressWarnings() |> invisible()
   message("Finished export of figures and tables.")
-
 }

@@ -1,17 +1,17 @@
-#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 # Utility functions to read and support SS3
-#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 # Before converted development
 
-SS3_extract_df <- function(dat, label){
+SS3_extract_df <- function(dat, label) {
   # Read SS3 report file
 
   # Locate the row containing the specified value from the df
   value_row <- which(apply(dat, 1, function(row) any(row == label)))[2]
 
   # If the parameter value is not found, return NA
-  if(length(value_row) == 0){
+  if (length(value_row) == 0) {
     message("Label not found in data frame.")
     return(NA)
   }
@@ -22,9 +22,9 @@ SS3_extract_df <- function(dat, label){
   rows <- c(value_row, next_blank)
 
   # Extract the metric using the rows from above as a guide and clean up empty columns
-  clean_df <- dat[rows[1]:(rows[2]-1),] |>
-    naniar::replace_with_na_all(condition = ~.x == "")
-  clean_df <- Filter(function(x)!all(is.na(x)), clean_df)
+  clean_df <- dat[rows[1]:(rows[2] - 1), ] |>
+    naniar::replace_with_na_all(condition = ~ .x == "")
+  clean_df <- Filter(function(x) !all(is.na(x)), clean_df)
 
   return(clean_df)
 }
@@ -41,8 +41,8 @@ SS3_extract_bio_info <- function(
   # Convert SS3 output to table
   get_ncol <- function(file, skip = 0) {
     nummax <- max(utils::count.fields(file,
-                                      skip = skip, quote = "",
-                                      comment.char = ""
+      skip = skip, quote = "",
+      comment.char = ""
     )) + 1
     return(nummax)
   }
@@ -54,12 +54,12 @@ SS3_extract_bio_info <- function(
   )
 
   # Extract derived quantities specifically
-  bio_info <- SS3_extract_df(output, "DERIVED_QUANTITIES")[-c(1:4),]
-  colnames(bio_info) <- bio_info[1,]
-  bio_info <- bio_info[-1,] |>
+  bio_info <- SS3_extract_df(output, "DERIVED_QUANTITIES")[-c(1:4), ]
+  colnames(bio_info) <- bio_info[1, ]
+  bio_info <- bio_info[-1, ] |>
     tidyr::separate_wider_delim(cols = Label, delim = "_", names = c("label", "year")) |>
     dplyr::filter(label == parameter)
-  bio_info <- Filter(function(x)!all(is.na(x)), bio_info)
+  bio_info <- Filter(function(x) !all(is.na(x)), bio_info)
 
   if (isTRUE(reference.points)) {
 

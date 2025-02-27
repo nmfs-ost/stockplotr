@@ -32,12 +32,11 @@ plot_recruitment <- function(
     n_projected_years = 10,
     relative = FALSE,
     make_rda = FALSE,
-    rda_dir = getwd()
-) {
+    rda_dir = getwd()) {
   # Find R0
   R0 <- dat |>
     dplyr::filter(c(grepl("recruitment", label) & age == 0) |
-                  c(grepl("recruitment_virgin", label))) |>
+      c(grepl("recruitment_virgin", label))) |>
     dplyr::summarise(estimate = max(as.numeric(estimate))) |>
     dplyr::pull(estimate)
   # Units
@@ -49,22 +48,25 @@ plot_recruitment <- function(
   )
   # Extract recruitment
   rec <- dat |>
-    dplyr::filter(label == "recruitment",
-                  module_name == "TIME_SERIES" | module_name == "t.series",
-                  !is.na(year),
-                  is.na(fleet) | length(unique(fleet)) <= 1,
-                  is.na(sex) | length(unique(sex)) <= 1,
-                  is.na(area) | length(unique(area)) <= 1,
-                  is.na(growth_pattern) | length(unique(growth_pattern)) <= 1,
-                  !year %in% year_exclusions
+    dplyr::filter(
+      label == "recruitment",
+      module_name == "TIME_SERIES" | module_name == "t.series",
+      !is.na(year),
+      is.na(fleet) | length(unique(fleet)) <= 1,
+      is.na(sex) | length(unique(sex)) <= 1,
+      is.na(area) | length(unique(area)) <= 1,
+      is.na(growth_pattern) | length(unique(growth_pattern)) <= 1,
+      !year %in% year_exclusions
     ) |> # SS3 and BAM target module names
-    dplyr::mutate(estimate = as.numeric(estimate),
-                  year = as.numeric(year),
-                  estimate_y = estimate / ifelse(relative, R0, scale_amount)) # |>
-    # dplyr::rename(recruitment = estimate) |>
-    # dplyr::select(-c(module_name, label))
+    dplyr::mutate(
+      estimate = as.numeric(estimate),
+      year = as.numeric(year),
+      estimate_y = estimate / ifelse(relative, R0, scale_amount)
+    ) # |>
+  # dplyr::rename(recruitment = estimate) |>
+  # dplyr::select(-c(module_name, label))
 
-  if (is.null(end_year)){
+  if (is.null(end_year)) {
     endyr <- max(rec$year) - n_projected_years
   } else {
     endyr <- end_year
@@ -78,53 +80,58 @@ plot_recruitment <- function(
   }
 
   plt <- ggplot2::ggplot(data = rec) +
-     ggplot2::geom_point(
-        ggplot2::aes(
-          x = year,
-          y = estimate_y
-          )
-        ) +
-      ggplot2::geom_line(
-        ggplot2::aes(
-          x = year,
-          y = estimate_y
-          ),
-        linewidth = 1) +
-      ggplot2::labs(x = "Year",
-                    y = recruitment_label
-                    ) +
-      ggplot2::theme(
-        legend.position = "none"
-        ) +
-      ggplot2::scale_x_continuous(
-        n.breaks = x_n_breaks,
-        guide = ggplot2::guide_axis(
-          minor.ticks = TRUE
-          )
-        )
+    ggplot2::geom_point(
+      ggplot2::aes(
+        x = year,
+        y = estimate_y
+      )
+    ) +
+    ggplot2::geom_line(
+      ggplot2::aes(
+        x = year,
+        y = estimate_y
+      ),
+      linewidth = 1
+    ) +
+    ggplot2::labs(
+      x = "Year",
+      y = recruitment_label
+    ) +
+    ggplot2::theme(
+      legend.position = "none"
+    ) +
+    ggplot2::scale_x_continuous(
+      n.breaks = x_n_breaks,
+      guide = ggplot2::guide_axis(
+        minor.ticks = TRUE
+      )
+    )
 
   final <- suppressWarnings(add_theme(plt))
 
   # export figure to rda if argument = T
-  if (make_rda == TRUE){
+  if (make_rda == TRUE) {
     # create plot-specific variables to use throughout fxn for naming and IDing
-      # Indicate if recruitment is relative or not
-      if (relative) {
-          topic_label <- "relative.recruitment"
-      } else {
-          topic_label <- "recruitment"
-      }
+    # Indicate if recruitment is relative or not
+    if (relative) {
+      topic_label <- "relative.recruitment"
+    } else {
+      topic_label <- "recruitment"
+    }
 
     # identify output
     fig_or_table <- "figure"
 
     # run write_captions.R if its output doesn't exist
     if (!file.exists(
-      fs::path(getwd(), "captions_alt_text.csv"))
+      fs::path(getwd(), "captions_alt_text.csv")
+    )
     ) {
-      stockplotr::write_captions(dat = dat,
-                           dir = rda_dir,
-                           year = end_year)
+      stockplotr::write_captions(
+        dat = dat,
+        dir = rda_dir,
+        year = end_year
+      )
     }
 
     # add more key quantities included as arguments in this fxn
@@ -139,15 +146,19 @@ plot_recruitment <- function(
     )
 
     # extract this plot's caption and alt text
-    caps_alttext <- extract_caps_alttext(topic_label = topic_label,
-                                         fig_or_table = fig_or_table,
-                                         dir = rda_dir)
+    caps_alttext <- extract_caps_alttext(
+      topic_label = topic_label,
+      fig_or_table = fig_or_table,
+      dir = rda_dir
+    )
 
-    export_rda(final = final,
-               caps_alttext = caps_alttext,
-               rda_dir = rda_dir,
-               topic_label = topic_label,
-               fig_or_table = fig_or_table)
+    export_rda(
+      final = final,
+      caps_alttext = caps_alttext,
+      rda_dir = rda_dir,
+      topic_label = topic_label,
+      fig_or_table = fig_or_table
+    )
   }
   return(final)
 }

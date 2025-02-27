@@ -41,16 +41,20 @@ Typically used after stockplotr::extract_caps_alttext().
 }
 \examples{
 \dontrun{
-export_rda(final = final_table_object,
-caps_alttext = caps_alttext_object,
-rda_dir = here::here(),
-topic_label = "bnc",
-fig_or_table = "table")
+export_rda(
+  final = final_table_object,
+  caps_alttext = caps_alttext_object,
+  rda_dir = here::here(),
+  topic_label = "bnc",
+  fig_or_table = "table"
+)
 
-export_rda(final = final_figure_object,
-caps_alttext = another_caps_alttext_object,
-rda_dir = "my_rda_dir",
-topic_label = "landings",
-fig_or_table = "figure")
+export_rda(
+  final = final_figure_object,
+  caps_alttext = another_caps_alttext_object,
+  rda_dir = "my_rda_dir",
+  topic_label = "landings",
+  fig_or_table = "figure"
+)
 }
 }

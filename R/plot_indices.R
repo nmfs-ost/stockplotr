@@ -11,8 +11,7 @@ plot_indices <- function(
     dat,
     unit_label = NULL,
     make_rda = TRUE,
-    rda_dir = NULL
-) {
+    rda_dir = NULL) {
   # Set cpue unit label for plot
   u_units <- glue::glue("Estimated CPUE ({unit_label})")
 
@@ -20,16 +19,16 @@ plot_indices <- function(
   output <- dat |>
     dplyr::filter(module_name == "INDEX_2" | module_name == "t.series")
   # Check for U
-  if (any(unique(output$module_name=="INDEX_2"))) {
+  if (any(unique(output$module_name == "INDEX_2"))) {
     output <- output |>
       dplyr::filter(grepl("expected_indices", label)) # grepl("input_indices", label) |
-  } else if (any(unique(output$module_name=="t.series"))) {
+  } else if (any(unique(output$module_name == "t.series"))) {
     output <- output |>
       dplyr::filter(grepl("cpue", label))
   }
   # Extract fleet names
   fleet_names <- unique(as.character(output$fleet))
-  factors <- c("year", "fleet", "fleet_name", "age", "sex", "area", "seas", "season", "time", "era", "subseas", "subseason", "platoon", "platoo","growth_pattern", "gp")
+  factors <- c("year", "fleet", "fleet_name", "age", "sex", "area", "seas", "season", "time", "era", "subseas", "subseason", "platoon", "platoo", "growth_pattern", "gp")
   # re-structure df for table
   indices <- output |>
     tidyr::pivot_wider(
@@ -41,7 +40,7 @@ plot_indices <- function(
 
   # na.omit()
   # check if uncertainty is a measure in the df
-  if(all(is.na(indices$uncertainty))){
+  if (all(is.na(indices$uncertainty))) {
     indices <- indices |>
       dplyr::select(-c(uncertainty_label, uncertainty))
   } else {
@@ -57,7 +56,7 @@ plot_indices <- function(
   }
 
   # rename columns to remove cpue/effort
-  if(any(grep("_indices", colnames(indices)))){
+  if (any(grep("_indices", colnames(indices)))) {
     colnames(indices) <- stringr::str_replace_all(colnames(indices), "_indices", "")
   } else {
     colnames(indices) <- stringr::str_replace_all(colnames(indices), "cpue_", "")
@@ -67,16 +66,16 @@ plot_indices <- function(
   if (any(grep("predicted", colnames(indices)))) {
     indices <- indices |>
       dplyr::filter(!is.na(predicted)) # |>
-      # dplyr::rename(estimated = predicted)
+    # dplyr::rename(estimated = predicted)
   }
   if (any(grep("expected", colnames(indices)))) {
     indices <- indices |>
       dplyr::filter(!is.na(expected)) # |>
-      # dplyr::rename(estimated = predicted)
+    # dplyr::rename(estimated = predicted)
   }
 
   # Check for correct number of columns in dataframe
-  if (4 < ncol(indices)| ncol(indices) > 4) stop("Incorrect number of columns. Additional factor present.")
+  if (4 < ncol(indices) | ncol(indices) > 4) stop("Incorrect number of columns. Additional factor present.")
   # Check for error type to present to user
   # Double check this warning is correct
   # if (grep("cv", colnames(indices)[4])) warning("Confidence Intervals were calculated using cv rather than se. Please use caution interpreting of the output plot.")
@@ -94,10 +93,14 @@ plot_indices <- function(
   # Final data set for plotting
   indices2 <- indices |>
     dplyr::mutate(
-      estimate_lower = dplyr::case_when(err_val ~ estimate - ((estimate * uncertainty) * 1.96),
-                                        TRUE ~ (estimate - 1.96 * uncertainty)),
-      estimate_upper = dplyr::case_when(err_val ~ estimate + ((estimate * uncertainty) * 1.96),
-                                        TRUE ~ (estimate + 1.96 * uncertainty)),
+      estimate_lower = dplyr::case_when(
+        err_val ~ estimate - ((estimate * uncertainty) * 1.96),
+        TRUE ~ (estimate - 1.96 * uncertainty)
+      ),
+      estimate_upper = dplyr::case_when(
+        err_val ~ estimate + ((estimate * uncertainty) * 1.96),
+        TRUE ~ (estimate + 1.96 * uncertainty)
+      ),
       fleet = as.character(fleet),
       year = as.numeric(year)
     )
@@ -119,11 +122,11 @@ plot_indices <- function(
       x = "Year",
       y = u_units
     ) +
-    ggplot2::facet_wrap(~ fleet) # +
-    # ggplot2::scale_x_continuous(
-    #   n.breaks = x_n_breaks,
-    #   guide = ggplot2::guide_axis(minor.ticks = TRUE)
-    # )
+    ggplot2::facet_wrap(~fleet) # +
+  # ggplot2::scale_x_continuous(
+  #   n.breaks = x_n_breaks,
+  #   guide = ggplot2::guide_axis(minor.ticks = TRUE)
+  # )
 
   final <- suppressWarnings(add_theme(plt))
 
@@ -136,11 +139,14 @@ plot_indices <- function(
 
     # run write_captions.R if its output doesn't exist
     if (!file.exists(
-      fs::path(getwd(), "captions_alt_text.csv"))
+      fs::path(getwd(), "captions_alt_text.csv")
+    )
     ) {
-      stockplotr::write_captions(dat = dat,
-                           dir = rda_dir,
-                           year = end_year)
+      stockplotr::write_captions(
+        dat = dat,
+        dir = rda_dir,
+        year = end_year
+      )
     }
 
     # add more key quantities included as arguments in this fxn
@@ -152,15 +158,19 @@ plot_indices <- function(
     )
 
     # extract this plot's caption and alt text
-    caps_alttext <- extract_caps_alttext(topic_label = topic_label,
-                                         fig_or_table = fig_or_table,
-                                         dir = rda_dir)
+    caps_alttext <- extract_caps_alttext(
+      topic_label = topic_label,
+      fig_or_table = fig_or_table,
+      dir = rda_dir
+    )
 
-    export_rda(final = final,
-               caps_alttext = caps_alttext,
-               rda_dir = rda_dir,
-               topic_label = topic_label,
-               fig_or_table = fig_or_table)
+    export_rda(
+      final = final,
+      caps_alttext = caps_alttext,
+      rda_dir = rda_dir,
+      topic_label = topic_label,
+      fig_or_table = fig_or_table
+    )
   }
   return(final)
 }
