@@ -1,25 +1,27 @@
-Package: stockplotr
 Type: Package
+Package: stockplotr
 Title: Tables and Figures for Stock Assessments
 Version: 0.1.0
-Author: Samantha Schiano, Bai Li, Steve Saul, Kelli F. Johnson, & Megumi Oshima
+Author: Samantha Schiano, Bai Li, Steve Saul, Kelli F. Johnson, & Megumi
+    Oshima
 Maintainer: Samantha Schiano <samantha.schiano@noaa.gov>
-Description: Creates exploratory and finished tables and figures for stock assessment 
-  documents from U.S. stock assessment model outputs. This packages addresses 
-  parts of the stock assessment workflow that interprets outputs of stock 
-  assessment models as well as allows the analyst to create report ready tables 
-  and figures, reducing the need to create their own and format then when adding 
-  into a report. This package is intended to be used in conjuction with `asar`, 
-  a partially automated template for writing various stock assessment reports.    
-  Throughout development, we will be creating a set of standardized figures and 
-  tables for a stock assessment report, developing functions to produce a variety 
-  of diagonostic plots, and other helpful materials. The advantage of using this 
-  package over others is that it applies to a range of stock assessment model outputs 
-  and standardizes them.
+Description: Creates exploratory and finished tables and figures for stock
+    assessment documents from U.S. stock assessment model outputs. This
+    packages addresses parts of the stock assessment workflow that
+    interprets outputs of stock assessment models as well as allows the
+    analyst to create report ready tables and figures, reducing the need
+    to create their own and format then when adding into a report. This
+    package is intended to be used in conjuction with `asar`, a partially
+    automated template for writing various stock assessment reports.
+    Throughout development, we will be creating a set of standardized
+    figures and tables for a stock assessment report, developing functions
+    to produce a variety of diagonostic plots, and other helpful
+    materials. The advantage of using this package over others is that it
+    applies to a range of stock assessment model outputs and standardizes
+    them.
 License: MIT + file LICENSE
-Encoding: UTF-8
-LazyData: true
-RoxygenNote: 7.3.2
+Depends: 
+    R (>= 2.10)
 Imports: 
     data.table,
     dplyr,
@@ -39,14 +41,16 @@ Imports:
     tidyr,
     tidyselect,
     utils
-Remotes:
-    nmfs-fish-tools/nmfspalette
-Depends: 
-    R (>= 2.10)
 Suggests: 
     rmarkdown,
     testthat (>= 3.0.0)
+VignetteBuilder: 
+    knitr
+Remotes:
+    nmfs-fish-tools/nmfspalette
 Config/testthat/edition: 3
 Config/testthat/parallel: false
+Encoding: UTF-8
 Language: en-US
-VignetteBuilder: knitr
+LazyData: true
+RoxygenNote: 7.3.2

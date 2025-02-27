@@ -1,5 +1,4 @@
 test_that("table_bnc generates plots without errors", {
-
   # read in sample dataset
   dat <- utils::read.csv(
     system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
@@ -8,7 +7,8 @@ test_that("table_bnc generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
     stockplotr::table_bnc(dat,
-                           end_year = 2022)
+      end_year = 2022
+    )
   )
 
   # expect error-free plot with many arguments
@@ -36,11 +36,9 @@ test_that("table_bnc generates plots without errors", {
     ),
     "flextable"
   )
-
 })
 
-test_that("rda file made when indicated",{
-
+test_that("rda file made when indicated", {
   # read in sample dataset
   dat <- utils::read.csv(
     system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
@@ -63,6 +61,4 @@ test_that("rda file made when indicated",{
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
   unlink(fs::path(getwd(), "rda_files"), recursive = T)
-
-
 })

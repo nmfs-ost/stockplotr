@@ -1,6 +1,5 @@
 # AFSC Tier Table
 table_afsc_tier <- function() {
-
   # REMINDERS: add in code that
   # -adds make_rda and rda_dir as arguments
   # -defines topic_label, fig_or_table; and
@@ -13,11 +12,14 @@ table_afsc_tier <- function() {
 
   # run write_captions.R if its output doesn't exist
   if (!file.exists(
-    fs::path(getwd(), "captions_alt_text.csv"))
+    fs::path(getwd(), "captions_alt_text.csv")
+  )
   ) {
-    stockplotr::write_captions(dat = dat,
-                         dir = rda_dir,
-                         year = NULL)
+    stockplotr::write_captions(
+      dat = dat,
+      dir = rda_dir,
+      year = NULL
+    )
   }
   level <- c(
     "Level 1: Normal",

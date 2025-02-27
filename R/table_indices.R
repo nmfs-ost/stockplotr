@@ -8,23 +8,23 @@
 table_indices <- function(
     dat,
     make_rda = FALSE,
-    rda_dir = getwd()
-) {
+    rda_dir = getwd()) {
   # Load data
   output <- dat |>
     dplyr::filter(module_name == "INDEX_2" | module_name == "t.series")
   # Check for U
-  if (any(unique(output$module_name=="INDEX_2"))) {
+  if (any(unique(output$module_name == "INDEX_2"))) {
     output <- output |>
       dplyr::filter(
-        grepl("expected_indices", label) | grepl("indices_predicted", label)) # grepl("input_indices", label) |
-  } else if (any(unique(output$module_name=="t.series"))) {
+        grepl("expected_indices", label) | grepl("indices_predicted", label)
+      ) # grepl("input_indices", label) |
+  } else if (any(unique(output$module_name == "t.series"))) {
     output <- output |>
       dplyr::filter(grepl("cpue", label))
   }
   # Extract fleet names
   fleet_names <- unique(as.character(output$fleet))
-  factors <- c("year", "fleet", "fleet_name", "age", "sex", "area", "seas", "season", "time", "era", "subseas", "subseason", "platoon", "platoo","growth_pattern", "gp")
+  factors <- c("year", "fleet", "fleet_name", "age", "sex", "area", "seas", "season", "time", "era", "subseas", "subseason", "platoon", "platoo", "growth_pattern", "gp")
   # re-structure df for table
   indices <- output |>
     tidyr::pivot_wider(
@@ -34,9 +34,9 @@ table_indices <- function(
     ) |>
     dplyr::select(year, fleet, unique(output$label), uncertainty, uncertainty_label) # |>
 
-    # na.omit()
+  # na.omit()
   # check if uncertainty is a measure in the df
-  if(all(is.na(indices$uncertainty))){
+  if (all(is.na(indices$uncertainty))) {
     indices <- indices |>
       dplyr::select(-c(uncertainty_label, uncertainty))
   } else {
@@ -52,7 +52,7 @@ table_indices <- function(
   }
 
   # rename columns to remove cpue/effort
-  if(any(grep("_indices", colnames(indices)))){
+  if (any(grep("_indices", colnames(indices)))) {
     colnames(indices) <- stringr::str_replace_all(colnames(indices), "_indices", "")
   } else if (any(grep("indices_", colnames(indices)))) {
     colnames(indices) <- stringr::str_replace_all(colnames(indices), "indices_", "")
@@ -74,25 +74,26 @@ table_indices <- function(
   indices2 <- indices |>
     tidyr::pivot_wider(
       names_from = fleet,
-      values_from = colnames(indices)[! colnames(indices) %in% c("year", "fleet")]
+      values_from = colnames(indices)[!colnames(indices) %in% c("year", "fleet")]
     ) |>
     dplyr::select(year, dplyr::ends_with(fleet_names))
 
-  fleet_col_names <- stringr::str_extract(colnames(indices2)[colnames(indices2)!="year"], "[^_]+$")
-  if(any(grepl("[0-9]+", fleet_col_names))) {
+  fleet_col_names <- stringr::str_extract(colnames(indices2)[colnames(indices2) != "year"], "[^_]+$")
+  if (any(grepl("[0-9]+", fleet_col_names))) {
     fleet_header_lab <- ""
     fleet_col_names <- paste("Fleet ", fleet_col_names)
   } else {
-    fleet_header_lab <-  "Fleet"
+    fleet_header_lab <- "Fleet"
   }
 
   tab <- indices2 |>
     dplyr::mutate(dplyr::across(where(is.numeric), ~ round(.x, 2)),
-                  year = as.character(year)) |>
+      year = as.character(year)
+    ) |>
     flextable::flextable() |>
     flextable::set_header_labels(
       # TODO: set uncertainty to the actual value instead of word uncertainty
-      values = c("Year", rep(c("Estimated CPUE", "Uncertainty"), (ncol(indices2)-1)/2))
+      values = c("Year", rep(c("Estimated CPUE", "Uncertainty"), (ncol(indices2) - 1) / 2))
     ) |>
     flextable::add_header_row(
       values = c(fleet_header_lab, fleet_col_names)
@@ -103,33 +104,40 @@ table_indices <- function(
   final <- suppressWarnings(add_theme(tab))
 
   # export table to rda if argument = T
-  if (make_rda){
+  if (make_rda) {
     # create plot-specific variables to use throughout fxn for naming and IDing
     topic_label <- "indices.abundance"
 
 
     # run write_captions.R if its output doesn't exist
     if (!file.exists(
-      fs::path(getwd(), "captions_alt_text.csv"))
+      fs::path(getwd(), "captions_alt_text.csv")
+    )
     ) {
-      stockplotr::write_captions(dat = dat,
-                           dir = rda_dir,
-                           year = NULL)
+      stockplotr::write_captions(
+        dat = dat,
+        dir = rda_dir,
+        year = NULL
+      )
     }
     # identify output
     fig_or_table <- "table"
 
     # extract this plot's caption and alt text
-    caps_alttext <- extract_caps_alttext(topic_label = topic_label,
-                                         fig_or_table = fig_or_table,
-                                         dir = rda_dir)
+    caps_alttext <- extract_caps_alttext(
+      topic_label = topic_label,
+      fig_or_table = fig_or_table,
+      dir = rda_dir
+    )
 
 
-    export_rda(final = final,
-               caps_alttext = caps_alttext,
-               rda_dir = rda_dir,
-               topic_label = topic_label,
-               fig_or_table = fig_or_table)
+    export_rda(
+      final = final,
+      caps_alttext = caps_alttext,
+      rda_dir = rda_dir,
+      topic_label = topic_label,
+      fig_or_table = fig_or_table
+    )
   }
   return(final)
 }

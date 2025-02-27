@@ -24,12 +24,16 @@ generating a figure or table. Typically used before stockplotr::export_rda().
 }
 \examples{
 \dontrun{
-extract_caps_alttext(topic_label = "biomass",
-                    fig_or_table = "figure",
-                    dir = here::here())
+extract_caps_alttext(
+  topic_label = "biomass",
+  fig_or_table = "figure",
+  dir = here::here()
+)
 
-extract_caps_alttext(topic_label = "bnc",
-                    fig_or_table = "table",
-                    dir = getwd())
+extract_caps_alttext(
+  topic_label = "bnc",
+  fig_or_table = "table",
+  dir = getwd()
+)
 }
 }

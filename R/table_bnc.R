@@ -16,24 +16,25 @@ table_bnc <- function(
     biomass_unit_label = "mt",
     catch_unit_label = "mt",
     make_rda = FALSE,
-    rda_dir = getwd()
-    ) {
-
+    rda_dir = getwd()) {
   biomass_label <- glue::glue("Biomass ({biomass_unit_label})")
   catch_label <- glue::glue("Catch ({catch_unit_label})")
 
-  if (is.null(end_year)){
-    end_year <- {max(as.numeric(dat$year), na.rm = TRUE) - 10} |> suppressWarnings()
+  if (is.null(end_year)) {
+    end_year <-
+      {
+        max(as.numeric(dat$year), na.rm = TRUE) - 10
+      } |> suppressWarnings()
   }
 
-  dat <- dplyr::filter(dat, year<=end_year)
+  dat <- dplyr::filter(dat, year <= end_year)
 
   biomass <- dat |>
     dplyr::filter(
       # SS3 params
       label == "biomass",
       !is.na(year),
-      module_name %in% c("TIME_SERIES","t.series"),
+      module_name %in% c("TIME_SERIES", "t.series"),
       is.na(fleet), is.na(sex), is.na(area), is.na(growth_pattern),
       module_name != "DERIVED_QUANTITIES"
     ) |>
@@ -41,7 +42,7 @@ table_bnc <- function(
     dplyr::rename(biomass = estimate) |>
     dplyr::select(year, biomass)
 
-  if (length(unique(biomass$year)) != nrow(biomass)){
+  if (length(unique(biomass$year)) != nrow(biomass)) {
     stop("Duplicate years found in biomass df.")
   }
 
@@ -63,7 +64,7 @@ table_bnc <- function(
   } else {
     catch <- catch |>
       # dplyr::filter(!is.na(estimate)) |>
-      dplyr::group_by(year) |> #, fleet
+      dplyr::group_by(year) |> # , fleet
       dplyr::summarise(total_catch = sum(estimate, na.rm = TRUE))
     # if  ("fleet" %in% colnames(catch)) {
     #   catch <- catch |>
@@ -78,16 +79,16 @@ table_bnc <- function(
   abundance <- dat |>
     dplyr::filter(
       # SS3 params
-      grepl("mature_abundance", label)| grepl("^abundance", label),
+      grepl("mature_abundance", label) | grepl("^abundance", label),
       !is.na(year),
-      module_name %in% c("TIME_SERIES","t.series"),
+      module_name %in% c("TIME_SERIES", "t.series"),
       # is.na(fleet), is.na(sex), is.na(area), is.na(growth_pattern),
       module_name != "DERIVED_QUANTITIES"
     )
   # Check if there is more than one year aka the values are factored
   # TODO: Review that sum is OK to use in these cases - otherwise what are
   #       the alternatives?
-  if(length(unique(abundance$year) != nrow(abundance))) {
+  if (length(unique(abundance$year) != nrow(abundance))) {
     abundance <- abundance |>
       dplyr::group_by(year) |>
       dplyr::summarise(estimate = sum(as.numeric(estimate)))
@@ -121,32 +122,39 @@ table_bnc <- function(
   final <- suppressWarnings(add_theme(bnc))
 
   # export figure to rda if argument = T
-  if (make_rda == TRUE){
-  # create plot-specific variables to use throughout fxn for naming and IDing
-  topic_label <- "bnc"
+  if (make_rda == TRUE) {
+    # create plot-specific variables to use throughout fxn for naming and IDing
+    topic_label <- "bnc"
 
-  # identify output
-  fig_or_table <- "table"
+    # identify output
+    fig_or_table <- "table"
 
-  # run write_captions.R if its output doesn't exist
-  if (!file.exists(
-    fs::path(getwd(), "captions_alt_text.csv"))
-  ) {
-    stockplotr::write_captions(dat = dat,
-                         dir = rda_dir,
-                         year = NULL)
-  }
+    # run write_captions.R if its output doesn't exist
+    if (!file.exists(
+      fs::path(getwd(), "captions_alt_text.csv")
+    )
+    ) {
+      stockplotr::write_captions(
+        dat = dat,
+        dir = rda_dir,
+        year = NULL
+      )
+    }
 
-  # extract this plot's caption and alt text
-  caps_alttext <- extract_caps_alttext(topic_label = topic_label,
-                                       fig_or_table = fig_or_table,
-                                       dir = rda_dir)
+    # extract this plot's caption and alt text
+    caps_alttext <- extract_caps_alttext(
+      topic_label = topic_label,
+      fig_or_table = fig_or_table,
+      dir = rda_dir
+    )
 
-  export_rda(final = final,
-               caps_alttext = caps_alttext,
-               rda_dir = rda_dir,
-               topic_label = topic_label,
-               fig_or_table = fig_or_table)
+    export_rda(
+      final = final,
+      caps_alttext = caps_alttext,
+      rda_dir = rda_dir,
+      topic_label = topic_label,
+      fig_or_table = fig_or_table
+    )
   }
   # Return finished table
   return(final)

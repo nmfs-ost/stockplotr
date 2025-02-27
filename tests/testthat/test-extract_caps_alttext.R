@@ -1,5 +1,4 @@
 test_that("extract_caps_alttext works for figures", {
-
   # read in sample dataset
   dat <- utils::read.csv(
     system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
@@ -9,14 +8,18 @@ test_that("extract_caps_alttext works for figures", {
   fig_or_table <- "figure"
 
   # run write_captions.R
-  stockplotr::write_captions(dat = dat,
-                       dir = getwd(),
-                       year = 2022)
+  stockplotr::write_captions(
+    dat = dat,
+    dir = getwd(),
+    year = 2022
+  )
 
   # extract this plot's caption and alt text
-  caps_alttext <- extract_caps_alttext(topic_label = topic_label,
-                                       fig_or_table = fig_or_table,
-                                       dir = getwd())
+  caps_alttext <- extract_caps_alttext(
+    topic_label = topic_label,
+    fig_or_table = fig_or_table,
+    dir = getwd()
+  )
 
 
   # expect that the caps_alttext is a list with two objects (caption, alt text)
@@ -30,11 +33,9 @@ test_that("extract_caps_alttext works for figures", {
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-
 })
 
 test_that("extract_caps_alttext works for tables", {
-
   # read in sample dataset
   dat <- utils::read.csv(
     system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
@@ -44,14 +45,18 @@ test_that("extract_caps_alttext works for tables", {
   fig_or_table <- "table"
 
   # run write_captions.R
-  stockplotr::write_captions(dat = dat,
-                       dir = getwd(),
-                       year = 2022)
+  stockplotr::write_captions(
+    dat = dat,
+    dir = getwd(),
+    year = 2022
+  )
 
   # extract this plot's caption and alt text
-  caps_alttext <- extract_caps_alttext(topic_label = topic_label,
-                                       fig_or_table = fig_or_table,
-                                       dir = getwd())
+  caps_alttext <- extract_caps_alttext(
+    topic_label = topic_label,
+    fig_or_table = fig_or_table,
+    dir = getwd()
+  )
 
 
   # expect that the caps_alttext is a list with one object (caption)
@@ -62,5 +67,4 @@ test_that("extract_caps_alttext works for tables", {
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-
 })
