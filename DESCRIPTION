@@ -2,8 +2,17 @@ Type: Package
 Package: stockplotr
 Title: Tables and Figures for Stock Assessments
 Version: 0.1.0
-Author: Samantha Schiano, Bai Li, Steve Saul, Kelli F. Johnson, & Megumi
-    Oshima
+Authors@R: c(
+    person("Samantha", "Schiano", , "samantha.schiano@noaa.gov", role = c("aut", "cre"),
+           comment = c(ORCID = "0009-0003-3744-6428")),
+    person("Sophie", "Breitbart", , "sophie.breitbart@noaa.gov", role = c("aut", "ctb"),
+           comment = c(ORCID = "0000-0001-9641-9786")),
+    person("Steve", "Saul", , "steven.saul@noaa.gov", role = "aut"),
+    person("Kelli", "Johnson", , "kelli.johnson@noaa.gov", role = "ctb",
+           comment = c(ORCID = "0000-0002-5149-451X")),
+    person("Oshima", "Megumi", , "megumi.oshima@noaa.gov", role = "ctb",
+           comment = c(ORCID = "0000-0002-8249-1442"))
+  )
 Maintainer: Samantha Schiano <samantha.schiano@noaa.gov>
 Description: Creates exploratory and finished tables and figures for stock
     assessment documents from U.S. stock assessment model outputs. This
