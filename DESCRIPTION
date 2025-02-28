@@ -10,7 +10,7 @@ Authors@R: c(
     person("Steve", "Saul", , "steven.saul@noaa.gov", role = "aut"),
     person("Kelli", "Johnson", , "kelli.johnson@noaa.gov", role = "ctb",
            comment = c(ORCID = "0000-0002-5149-451X")),
-    person("Oshima", "Megumi", , "megumi.oshima@noaa.gov", role = "ctb",
+    person("Megumi", "Oshima", , "megumi.oshima@noaa.gov", role = "ctb",
            comment = c(ORCID = "0000-0002-8249-1442"))
   )
 Maintainer: Samantha Schiano <samantha.schiano@noaa.gov>
