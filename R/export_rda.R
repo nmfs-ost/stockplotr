@@ -65,12 +65,38 @@ export_rda <- function(final = NULL,
     dir.create(fs::path(rda_dir, "rda_files"))
   }
 
-  # export rda
-  save(rda,
-    file = fs::path(
-      rda_dir,
-      "rda_files",
-      paste0(topic_label, "_", fig_or_table, ".rda")
-    )
-  )
+  output_file_name <- paste0(topic_label, "_", fig_or_table, ".rda")
+
+  # check if rda is already present. If so, check it should be overwritten
+  if (file.exists(fs::path(rda_dir,
+                           "rda_files",
+                           output_file_name))) {
+    question1 <- readline(
+      paste0(
+      "The ",
+      output_file_name,
+      " already exists within ",
+      fs::path(rda_dir, "rda_files"),
+      ". Would you like to overwrite this file? (Y/N)"))
+
+    if (regexpr(question1, "y", ignore.case = TRUE) == 1) {
+      # export rda
+      save(rda,
+        file = fs::path(
+          rda_dir,
+          "rda_files",
+          output_file_name
+        )
+      )
+      message(
+        paste0(
+          output_file_name,
+          " was regenerated and overwrote the previous version."
+        )
+      )
+    } else {
+      warning(
+        paste0(output_file_name, " was not regenerated."))
+    }
+  }
 }

@@ -93,15 +93,16 @@ exp_all_figs_tables <- function(
         relative,
         make_rda,
         rda_dir
-      ) |>
-        suppressWarnings() |>
-        invisible()
-
-      message("Exported plot_recruitment")
+      ) #|>
+       # suppressWarnings() |>
+       # invisible()
     },
     error = function(e) {
-      message("Failed to export plot_recruitment. Tip: check that your arguments are correct.")
+      message("plot_recruitment failed to run. Tip: check that your arguments are correct.")
       print(e)
+    },
+    warning = function(w) {
+      message("plot_recruitment did not run and the existing file was not overwritten.")
     }
   )
 
@@ -118,46 +119,54 @@ exp_all_figs_tables <- function(
         relative,
         make_rda,
         rda_dir
-      ) |>
-        suppressWarnings() |>
-        invisible()
+      ) #|>
+        # suppressWarnings() |>
+        # invisible()
 
-      message("Exported plot_biomass")
     },
     error = function(e) {
-      message("Failed to export plot_biomass Tip: check that your arguments are correct.")
+      message("plot_biomass failed to run. Tip: check that your arguments are correct.")
       print(e)
+    },
+    warning = function(w) {
+      message("plot_biomass did not run and the existing file was not overwritten.")
     }
   )
 
 
   tryCatch(
     {
-      stockplotr::plot_landings(dat, unit_label = landings_unit_label, make_rda, rda_dir) |>
-        suppressWarnings() |>
-        invisible()
+      stockplotr::plot_landings(dat,
+                                unit_label = landings_unit_label,
+                                make_rda, rda_dir) # |>
+       # suppressWarnings() |>
+       # invisible()
 
-      message("Exported plot_landings")
     },
     error = function(e) {
-      message("Failed to export plot_landings. Tip: check that your arguments are correct.")
+      message("plot_landings failed to run. Tip: check that your arguments are correct.")
       print(e)
+    },
+    warning = function(w) {
+      message("plot_landings did not run and the existing file was not overwritten.")
     }
   )
 
   tryCatch(
     {
-      stockplotr::plot_recruitment_deviations(dat, end_year, n_projected_years, make_rda, rda_dir) |>
-        suppressWarnings() |>
-        invisible()
+      stockplotr::plot_recruitment_deviations(dat, end_year, n_projected_years, make_rda, rda_dir) #|>
+       # suppressWarnings() |>
+       # invisible()
 
-      message("Exported plot_recruitment_deviations")
     },
     error = function(e) {
       message(
-        "Failed to export plot_recruitment_deviations. Tip: check that your arguments are correct."
+        "plot_recruitment_deviations failed to run. Tip: check that your arguments are correct."
       )
       print(e)
+    },
+    warning = function(w) {
+      message("plot_recruitment_deviations did not run and the existing file was not overwritten.")
     }
   )
 
@@ -166,9 +175,7 @@ exp_all_figs_tables <- function(
   #                        recruitment_label = recruitment_unit_label,
   #                        end_year,
   #                        make_rda,
-  #                        rda_dir) |> suppressWarnings() |> invisible()
-  #
-  # message("Exported plot_spawn_recruitment")
+  #                        rda_dir)# |> suppressWarnings() |> invisible()
 
   tryCatch(
     {
@@ -183,15 +190,16 @@ exp_all_figs_tables <- function(
         n_projected_years,
         make_rda,
         rda_dir
-      ) |>
-        suppressWarnings() |>
-        invisible()
-
-      message("Exported plot_spawning_biomass")
+      )# |>
+       # suppressWarnings() |>
+       # invisible()
     },
     error = function(e) {
-      message("Failed to export plot_spawning_biomass. Tip: check that your arguments are correct.")
+      message("plot_spawning_biomass failed to run. Tip: check that your arguments are correct.")
       print(e)
+    },
+    warning = function(w) {
+      message("plot_spawning_biomass did not run and the existing file was not overwritten.")
     }
   )
 
@@ -199,9 +207,7 @@ exp_all_figs_tables <- function(
   # stockplotr::plot_indices(dat,
   #                    unit_label = indices_unit_label,
   #                    make_rda,
-  #                    rda_dir) |> suppressWarnings() |> invisible()
-  #
-  # message("Exported plot_indices")
+  #                    rda_dir)# |> suppressWarnings() |> invisible()
 
   # tables
   tryCatch(
@@ -213,39 +219,39 @@ exp_all_figs_tables <- function(
         catch_unit_label,
         make_rda,
         rda_dir
-      ) |>
-        suppressWarnings() |>
-        invisible()
-
-      message("Exported table_bnc")
+      )# |>
+       # suppressWarnings() |>
+       # invisible()
     },
     error = function(e) {
-      message("Failed to export table_bnc. Tip: check that your arguments are correct.")
+      message("table_bnc failed to run. Tip: check that your arguments are correct.")
       print(e)
+    },
+    warning = function(w) {
+      message("table_bnc did not run and the existing file was not overwritten.")
     }
   )
 
   tryCatch(
     {
-      stockplotr::table_indices(dat, make_rda, rda_dir) |>
-        suppressWarnings() |>
-        invisible()
-
-      message("Exported table_indices")
+      stockplotr::table_indices(dat, make_rda, rda_dir)# |>
+       # suppressWarnings() |>
+       # invisible()
     },
     error = function(e) {
-      message("Failed to export table_indices. Tip: check that your arguments are correct.")
+      message("table_indices failed to run. Tip: check that your arguments are correct.")
       print(e)
+    },
+    warning = function(w) {
+      message("table_indices did not run and the existing file was not overwritten.")
     }
   )
 
   # uncomment when finished
-  # stockplotr::table_landings(dat) |> suppressWarnings() |> invisible()
-  #
-  # message("Exported table_landings")
+  # stockplotr::table_landings(dat)# |> suppressWarnings() |> invisible()
   #
   # undeveloped tables - add arguments after more development
-  # table_afsc_tier() |> suppressWarnings() |> invisible()
-  # table_harvest_projection() |> suppressWarnings() |> invisible()
+  # table_afsc_tier() #|> suppressWarnings() |> invisible()
+  # table_harvest_projection() #|> suppressWarnings() |> invisible()
   message("Finished export of figures and tables.")
 }
