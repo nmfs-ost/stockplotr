@@ -70,7 +70,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/nmfs-ost/stockplotr/issues" class="external-link">
+  <a href="https://github.com/nmfs-ost/satf/issues" class="external-link">
     <span class="fas fa-question-circle fa-lg"></span>
 
     Issues
@@ -96,20 +96,20 @@
 <div class="callout-note">
 <p><strong><em>Previously named ‘satf’</em></strong></p>
 </div>
-<p>The goal of stockplotr is to create a centralized package that contains all of the figures and tables that are used when analyzing stock assessment model outputs, writing a report, and other various procedures performed during the stock assessment workflow. There are multiple current packages that perform a similar function, but they are typically region and/or model dependent. Across the US, there are multiple packages that create plots that are directly used in a stock assessment report used for management. For example, an analyst that uses Stock Synthesis (SS3) to assess a stock will utilize <a href="https://github.com/r4ss/r4ss/" class="external-link"><code>r4ss</code></a>, a package that reads outputs, plots key parameters, and more to increase throughput and reduce tedious tasks for an analyst.</p>
+<p>The goal of <code>stockplotr</code> is to create a centralized package that contains all of the figures and tables that are used when analyzing stock assessment model outputs, writing a report, and other various procedures performed during the stock assessment workflow. There are multiple current packages that perform a similar function, but they are typically region and/or model dependent. Across the US, there are multiple packages that create plots that are directly used in a stock assessment report used for management. For example, an analyst that uses Stock Synthesis (SS3) to assess a stock will utilize <a href="https://github.com/r4ss/r4ss/" class="external-link"><code>r4ss</code></a>, a package that reads outputs, plots key parameters, and more to increase throughput and reduce tedious tasks for an analyst.</p>
 <p>Please note that this package is still in development. As such, some functions are still in development, such as the functions that create indices figures (i.e., <code>plot_indices</code>) and landings tables (i.e., <code>table_landings</code>).</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of stockplotr from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>You can install the development version of <code>stockplotr</code> from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"nmfs-ost/stockplotr"</span><span class="op">)</span></span></code></pre></div>
-<p>Alternatively, you can install stockplotr using the <code>remotes</code> package:</p>
+<p>Alternatively, you can install <code>stockplotr</code> using the <code>remotes</code> package:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"nmfs-ost/stockplotr"</span><span class="op">)</span></span></code></pre></div>
-<p>Occasionally, the package can not be installed using the <code>remotes</code> package. If this is the case for you and the other two installation options don’t work please try:</p>
+<p>Occassionally, the package can not be installed using the <code>remotes</code> package. If this is the case for you and the other two installation options don’t work please try:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"nmfs-ost/stockplotr"</span><span class="op">)</span></span></code></pre></div>
@@ -150,10 +150,7 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Samantha Schiano <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0009-0003-3744-6428" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Sophie Breitbart <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0001-9641-9786" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Steve Saul <br><small class="roles"> Author </small>  </li>
-<li><a href="authors.html">More about authors...</a></li>
+<li>Samantha Schiano <br><small class="roles"> Maintainer </small>  </li>
 </ul>
 </div>
 
@@ -165,7 +162,7 @@
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Samantha Schiano, Sophie Breitbart, Steve Saul.</p>
+<p>Developed by Samantha Schiano.</p>
 </div>
 
 <div class="pkgdown">
