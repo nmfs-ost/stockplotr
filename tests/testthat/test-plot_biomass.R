@@ -95,7 +95,7 @@ test_that("rda file made when indicated", {
   )
 
   # export rda
-  plot_biomass(
+  stockplotr::plot_biomass(
     dat,
     rda_dir = getwd(),
     make_rda = TRUE,

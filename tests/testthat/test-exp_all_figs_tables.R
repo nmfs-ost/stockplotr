@@ -4,9 +4,14 @@ test_that("exp_all_figs_tables works when all figures/tables are plotted", {
     system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
   )
 
-  stockplotr::exp_all_figs_tables(dat,
+  stockplotr::exp_all_figs_tables(
+    dat,
     end_year = 2022,
+    n_projected_years = 3,
+    recruitment_unit_label = "mt",
+    recruitment_scale_amount = 1,
     ref_line = "unfished",
+    ref_point = 1000,
     ref_line_sb = "target",
     indices_unit_label = "CPUE",
     rda_dir = getwd()
