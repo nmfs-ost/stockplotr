@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   manual: manual.html
-last_built: 2025-03-03T14:55Z
+last_built: 2025-03-04T15:24Z
 urls:
   reference: nmfs-ost.github.io/stockplotr/reference
   article: nmfs-ost.github.io/stockplotr/articles
