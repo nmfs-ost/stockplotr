@@ -59,18 +59,18 @@ export_rda <- function(final = NULL,
       "cap" = caps_alttext[[1]]
     )
   }
+  output_file_name <- paste0(topic_label, "_", fig_or_table, ".rda")
 
   # check if an rda_files folder already exists; if not, make one
   if (!dir.exists(fs::path(rda_dir, "rda_files"))) {
     dir.create(fs::path(rda_dir, "rda_files"))
   }
 
-  output_file_name <- paste0(topic_label, "_", fig_or_table, ".rda")
-
   # check if rda is already present. If so, check it should be overwritten
   if (file.exists(fs::path(rda_dir,
                            "rda_files",
                            output_file_name))) {
+
     question1 <- readline(
       paste0(
       "The ",
@@ -98,5 +98,24 @@ export_rda <- function(final = NULL,
       warning(
         paste0(output_file_name, " was not regenerated."))
     }
+  } else {
+
+    message(paste0(output_file_name, " will be newly created."))
+
+    # export rda
+    save(rda,
+         file = fs::path(
+           rda_dir,
+           "rda_files",
+           output_file_name
+         )
+    )
+
+    message(
+      paste0(
+        output_file_name,
+        " was exported."
+      )
+    )
   }
 }

@@ -85,24 +85,21 @@ exp_all_figs_tables <- function(
   tryCatch(
     {
       stockplotr::plot_recruitment(
-        dat,
+        dat = dat,
         unit_label = recruitment_unit_label,
         scale_amount = recruitment_scale_amount,
-        end_year,
-        n_projected_years,
-        relative,
-        make_rda,
-        rda_dir
+        end_year = end_year,
+        n_projected_years = n_projected_years,
+        relative = relative,
+        make_rda = TRUE,
+        rda_dir = rda_dir
       ) #|>
        # suppressWarnings() |>
        # invisible()
-    },
+       },
     error = function(e) {
       message("plot_recruitment failed to run. Tip: check that your arguments are correct.")
       print(e)
-    },
-    warning = function(w) {
-      message("plot_recruitment did not run and the existing file was not overwritten.")
     }
   )
 
@@ -127,9 +124,6 @@ exp_all_figs_tables <- function(
     error = function(e) {
       message("plot_biomass failed to run. Tip: check that your arguments are correct.")
       print(e)
-    },
-    warning = function(w) {
-      message("plot_biomass did not run and the existing file was not overwritten.")
     }
   )
 
@@ -138,7 +132,8 @@ exp_all_figs_tables <- function(
     {
       stockplotr::plot_landings(dat,
                                 unit_label = landings_unit_label,
-                                make_rda, rda_dir) # |>
+                                make_rda,
+                                rda_dir) # |>
        # suppressWarnings() |>
        # invisible()
 
@@ -146,15 +141,16 @@ exp_all_figs_tables <- function(
     error = function(e) {
       message("plot_landings failed to run. Tip: check that your arguments are correct.")
       print(e)
-    },
-    warning = function(w) {
-      message("plot_landings did not run and the existing file was not overwritten.")
     }
   )
 
   tryCatch(
     {
-      stockplotr::plot_recruitment_deviations(dat, end_year, n_projected_years, make_rda, rda_dir) #|>
+      stockplotr::plot_recruitment_deviations(dat,
+                                              end_year,
+                                              n_projected_years,
+                                              make_rda,
+                                              rda_dir) #|>
        # suppressWarnings() |>
        # invisible()
 
@@ -164,9 +160,6 @@ exp_all_figs_tables <- function(
         "plot_recruitment_deviations failed to run. Tip: check that your arguments are correct."
       )
       print(e)
-    },
-    warning = function(w) {
-      message("plot_recruitment_deviations did not run and the existing file was not overwritten.")
     }
   )
 
@@ -197,9 +190,6 @@ exp_all_figs_tables <- function(
     error = function(e) {
       message("plot_spawning_biomass failed to run. Tip: check that your arguments are correct.")
       print(e)
-    },
-    warning = function(w) {
-      message("plot_spawning_biomass did not run and the existing file was not overwritten.")
     }
   )
 
@@ -226,9 +216,6 @@ exp_all_figs_tables <- function(
     error = function(e) {
       message("table_bnc failed to run. Tip: check that your arguments are correct.")
       print(e)
-    },
-    warning = function(w) {
-      message("table_bnc did not run and the existing file was not overwritten.")
     }
   )
 
@@ -241,9 +228,6 @@ exp_all_figs_tables <- function(
     error = function(e) {
       message("table_indices failed to run. Tip: check that your arguments are correct.")
       print(e)
-    },
-    warning = function(w) {
-      message("table_indices did not run and the existing file was not overwritten.")
     }
   )
 
