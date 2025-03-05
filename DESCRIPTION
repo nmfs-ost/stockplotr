@@ -32,6 +32,7 @@ License: MIT + file LICENSE
 Depends: 
     R (>= 2.10)
 Imports: 
+    asar,
     data.table,
     dplyr,
     flextable,
@@ -45,6 +46,7 @@ Imports:
     naniar,
     nmfspalette,
     officer,
+    quarto,
     stringr,
     tibble,
     tidyr,
@@ -57,6 +59,7 @@ VignetteBuilder:
     knitr
 Remotes:
     nmfs-fish-tools/nmfspalette
+    nmfs-ost/asar
 Config/testthat/edition: 3
 Config/testthat/parallel: false
 Encoding: UTF-8
