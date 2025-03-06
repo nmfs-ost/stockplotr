@@ -94,9 +94,9 @@ exp_all_figs_tables <- function(
         make_rda = TRUE,
         rda_dir = rda_dir
       ) #|>
-       # suppressWarnings() |>
-       # invisible()
-       },
+      # suppressWarnings() |>
+      # invisible()
+    },
     error = function(e) {
       message("plot_recruitment failed to run. Tip: check that your arguments are correct.")
       print(e)
@@ -117,9 +117,8 @@ exp_all_figs_tables <- function(
         make_rda,
         rda_dir
       ) #|>
-        # suppressWarnings() |>
-        # invisible()
-
+      # suppressWarnings() |>
+      # invisible()
     },
     error = function(e) {
       message("plot_biomass failed to run. Tip: check that your arguments are correct.")
@@ -131,12 +130,12 @@ exp_all_figs_tables <- function(
   tryCatch(
     {
       stockplotr::plot_landings(dat,
-                                unit_label = landings_unit_label,
-                                make_rda,
-                                rda_dir) # |>
-       # suppressWarnings() |>
-       # invisible()
-
+        unit_label = landings_unit_label,
+        make_rda,
+        rda_dir
+      ) # |>
+      # suppressWarnings() |>
+      # invisible()
     },
     error = function(e) {
       message("plot_landings failed to run. Tip: check that your arguments are correct.")
@@ -146,14 +145,15 @@ exp_all_figs_tables <- function(
 
   tryCatch(
     {
-      stockplotr::plot_recruitment_deviations(dat,
-                                              end_year,
-                                              n_projected_years,
-                                              make_rda,
-                                              rda_dir) #|>
-       # suppressWarnings() |>
-       # invisible()
-
+      stockplotr::plot_recruitment_deviations(
+        dat,
+        end_year,
+        n_projected_years,
+        make_rda,
+        rda_dir
+      ) #|>
+      # suppressWarnings() |>
+      # invisible()
     },
     error = function(e) {
       message(
@@ -183,9 +183,9 @@ exp_all_figs_tables <- function(
         n_projected_years,
         make_rda,
         rda_dir
-      )# |>
-       # suppressWarnings() |>
-       # invisible()
+      ) # |>
+      # suppressWarnings() |>
+      # invisible()
     },
     error = function(e) {
       message("plot_spawning_biomass failed to run. Tip: check that your arguments are correct.")
@@ -209,9 +209,9 @@ exp_all_figs_tables <- function(
         catch_unit_label,
         make_rda,
         rda_dir
-      )# |>
-       # suppressWarnings() |>
-       # invisible()
+      ) # |>
+      # suppressWarnings() |>
+      # invisible()
     },
     error = function(e) {
       message("table_bnc failed to run. Tip: check that your arguments are correct.")
@@ -221,9 +221,9 @@ exp_all_figs_tables <- function(
 
   tryCatch(
     {
-      stockplotr::table_indices(dat, make_rda, rda_dir)# |>
-       # suppressWarnings() |>
-       # invisible()
+      stockplotr::table_indices(dat, make_rda, rda_dir) # |>
+      # suppressWarnings() |>
+      # invisible()
     },
     error = function(e) {
       message("table_indices failed to run. Tip: check that your arguments are correct.")
