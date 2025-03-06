@@ -26,12 +26,14 @@ html_all_figs_tables <- function(rda_dir = getwd()) {
   } else {
     # indicate to proceed with function
     question1 <- "y"
-    # create new folder for the html and qmd files
-    dir.create(fs::path(rda_dir, "all_tables_figures"))
-    doc_path <- fs::path(rda_dir, "all_tables_figures")
   }
 
   if (regexpr(question1, "y", ignore.case = TRUE) == 1) {
+
+    # create new folder for the html and qmd files
+    doc_path <- fs::path(rda_dir, "all_tables_figures")
+    dir.create(doc_path)
+
     asar::create_tables_doc(
       subdir = tempdir() ,
       include_all = TRUE,
