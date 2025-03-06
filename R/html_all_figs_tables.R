@@ -62,13 +62,16 @@ format:
 
     writeLines(new_html_qmd,
                 fs::path(rda_dir, "all_tables_figures.qmd"))
-    quarto::quarto_render(
-      input = fs::path(rda_dir, "all_tables_figures.qmd"),
-      output_file = "all_tables_figures.html"
-    )
+
+    withr::with_dir(
+      rda_dir,
+      quarto::quarto_render(
+        input = fs::path(rda_dir, "all_tables_figures.qmd"),
+        output_file = fs::path("all_tables_figures.html"))
+      )
 
     file.rename(
-      from = fs::path("all_tables_figures.html"),
+      from = fs::path(rda_dir, "all_tables_figures.html"),
       to = fs::path(
         doc_path,
         "all_tables_figures.html"
@@ -76,7 +79,7 @@ format:
     )
 
     file.rename(
-      from = fs::path("all_tables_figures.qmd"),
+      from = fs::path(rda_dir, "all_tables_figures.qmd"),
       to = fs::path(
         doc_path,
         "all_tables_figures.qmd"

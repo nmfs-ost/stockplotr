@@ -51,7 +51,8 @@ Imports:
     tibble,
     tidyr,
     tidyselect,
-    utils
+    utils,
+    withr
 Suggests: 
     rmarkdown,
     testthat (>= 3.0.0)

@@ -38,27 +38,31 @@ test_that("html_all_figs_tables makes qmd and html files with non-default rda_di
     system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
   )
 
-  dir.create(fs::path(getwd(), "data"))
+  rda_path <- fs::path(getwd(), "data")
+  dir.create(rda_path)
 
-  stockplotr::exp_all_figs_tables(
-    dat,
-    end_year = 2030,
-    n_projected_years = 3,
-    recruitment_unit_label = "mt",
-    recruitment_scale_amount = 1,
-    ref_line = "unfished",
-    ref_point = 1000,
-    ref_line_sb = "msy",
-    indices_unit_label = "CPUE",
-    rda_dir = fs::path(getwd(), "data")
-  ) |>
+  withr::with_dir(
+    rda_path,
+    stockplotr::exp_all_figs_tables(
+      dat,
+      end_year = 2030,
+      n_projected_years = 3,
+      recruitment_unit_label = "mt",
+      recruitment_scale_amount = 1,
+      ref_line = "unfished",
+      ref_point = 1000,
+      ref_line_sb = "msy",
+      indices_unit_label = "CPUE",
+      rda_dir = getwd()
+    ) |>
     suppressWarnings()
+  )
 
-  html_all_figs_tables(rda_dir = fs::path(getwd(), "data"))
+  html_all_figs_tables(rda_dir = rda_path)
 
-  testthat::expect(file.exists(fs::path(getwd(), "all_tables_figures", "all_tables_figures.qmd")),
+  testthat::expect(file.exists(fs::path(rda_path, "all_tables_figures", "all_tables_figures.qmd")),
                    failure_message = "Test fail: 'all_tables_figures.qmd' does not exist")
-  testthat::expect(file.exists(fs::path(getwd(), "all_tables_figures", "all_tables_figures.html")),
+  testthat::expect(file.exists(fs::path(rda_path, "all_tables_figures", "all_tables_figures.html")),
                    failure_message = "Test fail: 'all_tables_figures.html' does not exist")
 
   # erase temporary testing files
@@ -89,7 +93,7 @@ test_that("html_all_figs_tables triggers message (question) when all_tables_figu
 
   dir.create(fs::path(getwd(), "all_tables_figures"))
 
-  testthat::expect_message(html_all_figs_tables())
+  testthat::expect_warning(html_all_figs_tables())
 
   # erase temporary testing files
   unlink(fs::path(getwd(), "all_tables_figures"), recursive = T)
