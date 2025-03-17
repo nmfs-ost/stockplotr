@@ -51,3 +51,16 @@ This function, which is located in the [utils.R file](https://github.com/nmfs-os
 ## Connecting the tables & figures with the captions & alternative text
 
 Lastly, the [`extract_caps_alttext`](https://github.com/nmfs-ost/stockplotr/blob/main/R/extract_caps_alttext.R) function selects the appropriate captions and alternative text from captions_alt_text.csv when a figure or table is being plotted with the argument `make_rda = TRUE`. The [`export_rda`](https://github.com/nmfs-ost/stockplotr/blob/main/R/export_rda.R) function exports an rda containing 1) a table and caption, or 2) a figure, caption, and alternative text.
+
+# Expected outcomes
+
+## Single plot functions
+
+When using functions that produce one table or figure at a time, like `plot_biomass()`, only certain key quantities will be substituted into the placeholders. For instance,
+
+* `write_captions()` will substitute as many key quantities as possible, regardless of whether those quantities are associated with biomass.
+* `add_more_key_quants()` will only substitute additional key quantities that are associated with biomass because only those quantities will be specified by the user. For example, if a user specifies the unit label argument in the `plot_biomass()` as "metric tons", then `add_more_key_quants()` will replace the placeholder associated with biomass units (B.units will changed to metric tons). However, no other placeholder associated with landings units, recruitment deviations units, etc. will be substituted, and those placeholders will remain in the captions_alt_text.csv file.
+
+## Multi-plot functions 
+
+When using `exp_all_figs_tables()`, the `stockplotr` function that exports all figures and tables, all key quantities (or, as many key quantities as possible) will be substituted into the placeholders. As opposed to single-plot functions, `exp_all_figs_tables()` allows for the user to specify all arguments needed to substitute all key quantities.
