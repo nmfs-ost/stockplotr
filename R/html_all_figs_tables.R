@@ -29,13 +29,12 @@ html_all_figs_tables <- function(rda_dir = getwd()) {
   }
 
   if (regexpr(question1, "y", ignore.case = TRUE) == 1) {
-
     # create new folder for the html and qmd files
     doc_path <- fs::path(rda_dir, "all_tables_figures")
     dir.create(doc_path)
 
     asar::create_tables_doc(
-      subdir = tempdir() ,
+      subdir = tempdir(),
       include_all = TRUE,
       rda_dir = rda_dir
     )
@@ -49,7 +48,7 @@ html_all_figs_tables <- function(rda_dir = getwd()) {
     tabs_figs_text <- c(readLines(fs::path(tempdir(), "08_tables.qmd")), readLines(fs::path(tempdir(), "09_figures.qmd")))
 
     yaml_text <-
-"---
+      "---
 title: 'All Tables & Figures'
 format:
   html:
@@ -60,15 +59,18 @@ format:
 
     new_html_qmd <- c(yaml_text, tabs_figs_text)
 
-    writeLines(new_html_qmd,
-                fs::path(rda_dir, "all_tables_figures.qmd"))
+    writeLines(
+      new_html_qmd,
+      fs::path(rda_dir, "all_tables_figures.qmd")
+    )
 
     withr::with_dir(
       rda_dir,
       quarto::quarto_render(
         input = fs::path(rda_dir, "all_tables_figures.qmd"),
-        output_file = fs::path("all_tables_figures.html"))
+        output_file = fs::path("all_tables_figures.html")
       )
+    )
 
     file.rename(
       from = fs::path(rda_dir, "all_tables_figures.html"),
@@ -89,7 +91,6 @@ format:
     message(
       "The html and qmd with all tables and figures were generated and overwrote the previous versions."
     )
-
   } else {
     warning("The html and qmd with all tables and figures were not generated.")
   }
