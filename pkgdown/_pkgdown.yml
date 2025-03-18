@@ -23,6 +23,8 @@ navbar:
       menu:
       - text: Manual
         href: articles/manual.html
+      - text: How captions and alternative text are generated
+        href: articles/how-caps-alttext-are-made.html
 
   structure:
     left: [home, reference, sourcecode, articles, news]
