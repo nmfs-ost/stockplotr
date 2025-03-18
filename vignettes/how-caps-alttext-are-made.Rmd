@@ -1,0 +1,66 @@
+---
+title: "How captions and alternative text are generated"
+output:
+  html_document:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{How captions and alternative text are generated}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# How captions and alternative text are generated
+
+If you create tables and/or figures with this package, you will notice that captions and alternative text will be automatically generated. This vignette explains how these texts are created.
+
+## Templates
+
+The ['captions_alt_text_template.csv' file](https://github.com/nmfs-ost/stockplotr/blob/main/inst/resources/captions_alt_text_template.csv) contains the templates for each table or figure's caption/alternative text. Tables have captions, and figures have captions and alternative text. Please refer to [the `asar` package's accessibility vignette](https://nmfs-ost.github.io/asar/articles/accessibility_guide.html) to learn more about how we aimed to construct clear and comprehensive alternative text.
+
+As *templates*, these texts are the *starting point* for the final captions and alternative text (again, we encourage users to read the [the `asar` package's accessibility vignette](https://nmfs-ost.github.io/asar/articles/accessibility_guide.html) to learn how and why they should check the accuracy and write the final component of each figure's alternative text). Specifically, there are placeholders throughout the texts (e.g., B.ref.pt, B.min, B.max). If the model results are parsed successfully, these placeholders will eventually be replaced with key quantities from the model results. For example, B.ref.pt will be replaced with the biomass figure's reference point, and B.min and B.max will be replaced with the minimum and maximum biomass.
+
+The file is set up like this:
+
+-   Column 1 ("label") is a shorthand label for your figure or table. Labels are somewhat short and exclude spaces. Examples include "kobe", "relative.biomass", and "fishing.mortality".
+-   Column 2 ("type") contains "figure" or "table".
+-   Column 3 ("caption") contains the caption.
+-   Column 4 ("alt_text") contains alternative text for figures. For tables, this column is blank.
+
++-------------+------------+-----------------------------+--------------------------------------+
+| label       | type       | caption                     | alt_text                             |
++=============+============+=============================+======================================+
+| example_fig | figure     | Example caption for figure. | Example alternative text for figure. |
++-------------+------------+-----------------------------+--------------------------------------+
+| example_tab | table      | Example caption for table.  |                                      |
++-------------+------------+-----------------------------+--------------------------------------+
+
+: Format for csv containing table and figure captions and alternative text.
+
+## Extracting key quantities from model results
+
+Next, key quantities are extracted from the model results that have already been converted into a standardized format using `asar::convert_output()`. Key quantities replace the placeholders using two successive functions: [`write_captions()`](https://github.com/nmfs-ost/stockplotr/blob/main/R/write_captions.R) and [`add_more_key_quants()`](https://github.com/nmfs-ost/stockplotr/blob/00c02487c9dbceaddb43257abdee72594f17b076/R/utils.R#L7).
+
+### `write_captions()`
+
+In this function, the captions_alt_text_template.csv file is imported as a dataframe. Then, key quantities are extracted from the model results and substituted into the dataframe's appropriate placeholders. Finally, the function exports the updated dataframe as a new csv ("captions_alt_text.csv").
+
+### `add_more_key_quants()`
+
+This function, which is located in the [utils.R file](https://github.com/nmfs-ost/stockplotr/blob/main/R/utils.R), imports the new captions_alt_text.csv as a dataframe, then substitutes some placeholders with key quantities that cannot be extracted from the model results because they are manually specified by the user, or are derived using such quantities (e.g., a figure's end year, units, reference point, and more). The function exports the dataframe by overwriting the csv with the same filename.
+
+## Connecting the tables & figures with the captions & alternative text
+
+Lastly, the [`extract_caps_alttext`](https://github.com/nmfs-ost/stockplotr/blob/main/R/extract_caps_alttext.R) function selects the appropriate captions and alternative text from captions_alt_text.csv when a figure or table is being plotted with the argument `make_rda = TRUE`. The [`export_rda`](https://github.com/nmfs-ost/stockplotr/blob/main/R/export_rda.R) function exports an rda containing 1) a table and caption, or 2) a figure, caption, and alternative text.
+
+# Expected outcomes
+
+## Single plot functions
+
+When using functions that produce one table or figure at a time, like `plot_biomass()`, only certain key quantities will be substituted into the placeholders. For instance,
+
+* `write_captions()` will substitute as many key quantities as possible, regardless of whether those quantities are associated with biomass.
+* `add_more_key_quants()` will only substitute additional key quantities that are associated with biomass because only those quantities will be specified by the user. For example, if a user specifies the unit label argument in the `plot_biomass()` as "metric tons", then `add_more_key_quants()` will replace the placeholder associated with biomass units (B.units will changed to metric tons). However, no other placeholder associated with landings units, recruitment deviations units, etc. will be substituted, and those placeholders will remain in the captions_alt_text.csv file.
+
+## Multi-plot functions 
+
+When using `exp_all_figs_tables()`, the `stockplotr` function that exports all figures and tables, all key quantities (or, as many key quantities as possible) will be substituted into the placeholders. As opposed to single-plot functions, `exp_all_figs_tables()` allows for the user to specify all arguments needed to substitute all key quantities.
