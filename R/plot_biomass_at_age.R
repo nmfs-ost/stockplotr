@@ -3,7 +3,7 @@
 #' @inheritParams plot_recruitment
 #' @return Plot total biomass at age from a stock assessment model as found in a NOAA
 #' stock assessment report. Units of total biomass can either be manually added
-#' or will be extracted from the provided file if possible. In later releases, model will not
+#' or will be extracted from the provided file if possible.
 #' @export
 #'
 plot_biomass_at_age <- function(
@@ -41,6 +41,9 @@ plot_biomass_at_age <- function(
     end_year <- max(b$year)
   }
 
+   b <- b |>
+     dplyr::filter(year <= end_year)
+
    total_fish_per_year <- b |>
      dplyr::group_by(year) |>
      dplyr::summarise(total_fish = sum(estimate))
@@ -54,9 +57,25 @@ plot_biomass_at_age <- function(
      dplyr::full_join(total_fish_per_year) |>
      dplyr::mutate(avg = interm/total_fish)
 
+   # Choose number of breaks for x-axis
+   x_n_breaks <- round(length(unique(b[["year"]])) / 10)
+   if (x_n_breaks <= 5) {
+     x_n_breaks <- round(length(unique(b[["year"]])) / 5)
+   } else if (x_n_breaks > 10) {
+     x_n_breaks <- round(length(unique(b[["year"]])) / 15)
+   }
+
+   # Choose number of breaks for y-axis
+   y_n_breaks <- round(length(unique(b[["age"]])))
+   if (y_n_breaks > 80) {
+     y_n_breaks <- round(length(unique(b[["age"]])) / 6)
+   } else if (y_n_breaks > 40) {
+     y_n_breaks <- round(length(unique(b[["age"]])) / 3)
+   }
+
   # plot
   plt <- ggplot2::ggplot() +
-    ggplot2::geom_point(data = subset(b, year <= end_year),
+    ggplot2::geom_point(data = b,
                         ggplot2::aes(x = year,
                                      y = age,
                                      size = estimate),
@@ -65,7 +84,8 @@ plot_biomass_at_age <- function(
                         color = "black",
                         fill = "gray40") +
     ggplot2::scale_size(range = c(.1, 3),
-                        name = biomass_label) +
+                        name = biomass_label,
+                        labels = scales::label_comma()) +
     # add line
     ggplot2::geom_line(
       data = annual_means,
@@ -77,11 +97,18 @@ plot_biomass_at_age <- function(
     ggplot2::labs(
       x = "Year",
       y = "Age"
+    ) +
+    ggplot2::scale_x_continuous(
+      n.breaks = x_n_breaks,
+      guide = ggplot2::guide_axis(minor.ticks = TRUE)
+    ) +
+    ggplot2::scale_y_continuous(
+      n.breaks = y_n_breaks,
+      guide = ggplot2::guide_axis(minor.ticks = TRUE),
+      limits = c(min(b$age), max(b$age))
     )
 
   final <- stockplotr::add_theme(plt)
-
-  final
 
   # export figure to rda if argument = T
   if (make_rda == TRUE) {

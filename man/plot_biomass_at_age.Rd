@@ -31,7 +31,7 @@ Default is the working directory.}
 \value{
 Plot total biomass at age from a stock assessment model as found in a NOAA
 stock assessment report. Units of total biomass can either be manually added
-or will be extracted from the provided file if possible. In later releases, model will not
+or will be extracted from the provided file if possible.
 }
 \description{
 Plot Total Biomass at Age (BAA)
