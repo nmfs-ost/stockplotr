@@ -30,6 +30,9 @@
 #' applied to plot_spawning_biomass.
 #' @param ref_point_sb Identical definition as `ref_point`, but this argument is
 #' applied to plot_spawning_biomass.
+#' @param biomass_at_age_scale_amount  A number describing how much to scale down the
+#' biomass quantities shown via bubble size. See `recruitment_scale_amount`.
+#' @param biomass_at_age_unit_label Abbreviated units for biomass at age
 #' @param indices_unit_label Units for index of abundance/CPUE
 #' @param biomass_unit_label Abbreviated units for biomass
 #' @param catch_unit_label Abbreviated units for catch
@@ -42,7 +45,8 @@
 #' \dontrun{
 #' exp_all_figs_tables(dat,
 #'   end_year = 2022, ref_line = "unfished", ref_point = 13000,
-#'   ref_point_sb = 13000, ref_line_sb = "target", indices_unit_label = "CPUE"
+#'   ref_point_sb = 13000, ref_line_sb = "target", indices_unit_label = "CPUE",
+#'   biomass_at_age_scale_amount = 1, biomass_at_age_unit_label = "metric tons"
 #' )
 #' }
 exp_all_figs_tables <- function(
@@ -67,6 +71,9 @@ exp_all_figs_tables <- function(
     # imported from plot_spawning_biomass
     ref_line_sb = c("target", "MSY", "msy", "unfished"),
     ref_point_sb = NULL,
+    # imported from plot_biomass_at_age
+    biomass_at_age_scale_amount = 1,
+    biomass_at_age_unit_label = "metric tons",
     # imported from plot_indices
     indices_unit_label = NULL,
     # imported from table_afsc_tier- add potential unique arguments after dev
@@ -189,6 +196,25 @@ exp_all_figs_tables <- function(
     },
     error = function(e) {
       message("plot_spawning_biomass failed to run. Tip: check that your arguments are correct.")
+      print(e)
+    }
+  )
+
+  tryCatch(
+    {
+      stockplotr::plot_biomass_at_age(
+        dat,
+        unit_label = biomass_at_age_unit_label,
+        scale_amount = biomass_at_age_scale_amount,
+        end_year,
+        make_rda,
+        rda_dir
+      ) # |>
+      # suppressWarnings() |>
+      # invisible()
+    },
+    error = function(e) {
+      message("plot_biomass_at_age failed to run. Tip: check that your arguments are correct.")
       print(e)
     }
   )

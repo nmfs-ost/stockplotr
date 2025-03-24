@@ -26,6 +26,7 @@ test_that("exp_all_figs_tables works when all figures/tables are plotted", {
     "bnc_table.rda",
     "indices.abundance_table.rda",
     "landings_figure.rda",
+    "pop.baa_figure.rda",
     "recruitment.deviations_figure.rda",
     "recruitment_figure.rda",
     "spawning.biomass_figure.rda"
@@ -66,6 +67,7 @@ test_that("exp_all_figs_tables works when some figures/tables are not plotted", 
     "bnc_table.rda",
     "indices.abundance_table.rda",
     "landings_figure.rda",
+    "pop.baa_figure.rda",
     "recruitment.deviations_figure.rda",
     "recruitment_figure.rda",
     "spawning.biomass_figure.rda"

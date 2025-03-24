@@ -20,6 +20,8 @@ exp_all_figs_tables(
   spawning_biomass_scale_amount = 1,
   ref_line_sb = c("target", "MSY", "msy", "unfished"),
   ref_point_sb = NULL,
+  biomass_at_age_scale_amount = 1,
+  biomass_at_age_unit_label = "metric tons",
   indices_unit_label = NULL,
   biomass_unit_label = "mt",
   catch_unit_label = "mt"
@@ -77,6 +79,11 @@ applied to plot_spawning_biomass.}
 \item{ref_point_sb}{Identical definition as `ref_point`, but this argument is
 applied to plot_spawning_biomass.}
 
+\item{biomass_at_age_scale_amount}{A number describing how much to scale down the
+biomass quantities shown via bubble size. See `recruitment_scale_amount`.}
+
+\item{biomass_at_age_unit_label}{Abbreviated units for biomass at age}
+
 \item{indices_unit_label}{Units for index of abundance/CPUE}
 
 \item{biomass_unit_label}{Abbreviated units for biomass}
@@ -93,7 +100,8 @@ Export all figures and tables to Rda files within one function.
 \dontrun{
 exp_all_figs_tables(dat,
   end_year = 2022, ref_line = "unfished", ref_point = 13000,
-  ref_point_sb = 13000, ref_line_sb = "target", indices_unit_label = "CPUE"
+  ref_point_sb = 13000, ref_line_sb = "target", indices_unit_label = "CPUE",
+  biomass_at_age_scale_amount = 1, biomass_at_age_unit_label = "metric tons"
 )
 }
 }
