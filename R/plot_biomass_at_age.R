@@ -90,7 +90,7 @@ plot_biomass_at_age <- function(
                                      y = age,
                                      size = estimate),
                         shape = 21,
-                        alpha = 0.4,
+                        alpha = 0.3,
                         color = "black",
                         fill = "gray40") +
     ggplot2::scale_size(range = c(0.2, 10),
