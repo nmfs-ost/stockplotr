@@ -703,6 +703,28 @@ write_captions <- function(dat, # converted model output object
       as.numeric() |>
       round(digits = 2)
 
+    # minimum age
+    pop.baa.age.min <- dat |>
+      dplyr::filter(
+        label == "biomass",
+        module_name == "BIOMASS_AT_AGE" | module_name == "B.age", # SS3 and BAM target module names
+        !is.na(age)
+      ) |>
+      dplyr::slice(which.min(age)) |>
+      dplyr::select(age) |>
+      as.numeric()
+
+    # maximum age
+    pop.baa.age.max <- dat |>
+      dplyr::filter(
+        label == "biomass",
+        module_name == "BIOMASS_AT_AGE" | module_name == "B.age", # SS3 and BAM target module names
+        !is.na(age)
+      ) |>
+      dplyr::slice(which.max(age)) |>
+      dplyr::select(age) |>
+      as.numeric()
+
 
     ## proj_catch (projected catch)
     # projected catch units (plural)
@@ -922,6 +944,9 @@ write_captions <- function(dat, # converted model output object
       "pop.baa.end.year" = as.character(pop.baa.end.year),
       "pop.baa.fish.min" = as.character(pop.baa.fish.min),
       "pop.baa.fish.max" = as.character(pop.baa.fish.max),
+      "pop.baa.age.min" = as.character(pop.baa.age.min),
+      "pop.baa.age.max" = as.character(pop.baa.age.max),
+
 
       ## proj_catch (projected catch)
       # 'proj.catch.units' = as.character(proj.catch.units),
