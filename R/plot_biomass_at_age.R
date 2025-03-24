@@ -79,11 +79,11 @@ plot_biomass_at_age <- function(
                         ggplot2::aes(x = year,
                                      y = age,
                                      size = estimate),
-                        shape=21,
-                        alpha = 0.2,
+                        shape = 21,
+                        alpha = 0.4,
                         color = "black",
                         fill = "gray40") +
-    ggplot2::scale_size(range = c(.1, 3),
+    ggplot2::scale_size(range = c(0.2, 10),
                         name = biomass_label,
                         labels = scales::label_comma()) +
     # add line
@@ -113,8 +113,7 @@ plot_biomass_at_age <- function(
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
     # create plot-specific variables to use throughout fxn for naming and IDing
-    # Indicate if biomass is relative or not
-      topic_label <- "pop.baa"
+    topic_label <- "pop.baa"
 
     # identify output
     fig_or_table <- "figure"
