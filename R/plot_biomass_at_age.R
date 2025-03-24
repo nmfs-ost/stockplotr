@@ -1,6 +1,9 @@
 #' Plot Total Biomass at Age (BAA)
 #'
 #' @inheritParams plot_recruitment
+#' @param scale_amount A number describing how much to scale down the biomass at
+#' age. For example, scale_amount = 100 would scale down a value
+#' from 500,000 --> 5,000. This scale will be reflected in the legend label.
 #' @return Plot total biomass at age from a stock assessment model as found in a NOAA
 #' stock assessment report. Units of total biomass can either be manually added
 #' or will be extracted from the provided file if possible.
@@ -9,11 +12,16 @@
 plot_biomass_at_age <- function(
     dat,
     unit_label = "metric tons",
+    scale_amount = 1,
     end_year = NULL,
     make_rda = FALSE,
     rda_dir = getwd()) {
 
-  biomass_label <- glue::glue("Biomass ({unit_label})")
+  biomass_label <- ifelse(
+    scale_amount == 1,
+    yes = glue::glue("Biomass ({unit_label})"),
+    no = glue::glue("Relative biomass ({unit_label}/{scale_amount})")
+  )
 
    b <- dat |>
     dplyr::filter(
@@ -23,7 +31,9 @@ plot_biomass_at_age <- function(
     ) |>
     dplyr::mutate(
       estimate = as.numeric(estimate),
-      year = as.numeric(year)
+      year = as.numeric(year),
+      estimate_orig = estimate,
+      estimate = estimate_orig / scale_amount
     )
 
    if (dim(b |>
@@ -137,9 +147,9 @@ plot_biomass_at_age <- function(
       fig_or_table = fig_or_table,
       dir = rda_dir,
       end_year = end_year,
-      units = unit_label#,
+      units = unit_label,
      # ref_pt = ref_point,
-     # scaling = scale_amount
+      scaling = scale_amount
     )
 
     # extract this plot's caption and alt text

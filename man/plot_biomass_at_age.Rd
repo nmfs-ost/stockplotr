@@ -7,6 +7,7 @@
 plot_biomass_at_age(
   dat,
   unit_label = "metric tons",
+  scale_amount = 1,
   end_year = NULL,
   make_rda = FALSE,
   rda_dir = getwd()
@@ -16,6 +17,10 @@ plot_biomass_at_age(
 \item{dat}{A data frame returned from `asar::convert_output()`.}
 
 \item{unit_label}{units for recruitment}
+
+\item{scale_amount}{A number describing how much to scale down the biomass at
+age. For example, scale_amount = 100 would scale down a value
+from 500,000 --> 5,000. This scale will be reflected in the legend label.}
 
 \item{end_year}{last year of assessment}
 
