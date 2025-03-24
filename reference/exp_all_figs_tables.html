@@ -92,6 +92,8 @@
 <span>  spawning_biomass_scale_amount <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  ref_line_sb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"target"</span>, <span class="st">"MSY"</span>, <span class="st">"msy"</span>, <span class="st">"unfished"</span><span class="op">)</span>,</span>
 <span>  ref_point_sb <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  biomass_at_age_scale_amount <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  biomass_at_age_unit_label <span class="op">=</span> <span class="st">"metric tons"</span>,</span>
 <span>  indices_unit_label <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  biomass_unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
 <span>  catch_unit_label <span class="op">=</span> <span class="st">"mt"</span></span>
@@ -183,6 +185,15 @@ applied to plot_spawning_biomass.</p></dd>
 applied to plot_spawning_biomass.</p></dd>
 
 
+<dt id="arg-biomass-at-age-scale-amount">biomass_at_age_scale_amount<a class="anchor" aria-label="anchor" href="#arg-biomass-at-age-scale-amount"></a></dt>
+<dd><p>A number describing how much to scale down the
+biomass quantities shown via bubble size. See `recruitment_scale_amount`.</p></dd>
+
+
+<dt id="arg-biomass-at-age-unit-label">biomass_at_age_unit_label<a class="anchor" aria-label="anchor" href="#arg-biomass-at-age-unit-label"></a></dt>
+<dd><p>Abbreviated units for biomass at age</p></dd>
+
+
 <dt id="arg-indices-unit-label">indices_unit_label<a class="anchor" aria-label="anchor" href="#arg-indices-unit-label"></a></dt>
 <dd><p>Units for index of abundance/CPUE</p></dd>
 
@@ -205,7 +216,8 @@ applied to plot_spawning_biomass.</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="fu">exp_all_figs_tables</span><span class="op">(</span><span class="va">dat</span>,</span></span>
 <span class="r-in"><span>  end_year <span class="op">=</span> <span class="fl">2022</span>, ref_line <span class="op">=</span> <span class="st">"unfished"</span>, ref_point <span class="op">=</span> <span class="fl">13000</span>,</span></span>
-<span class="r-in"><span>  ref_point_sb <span class="op">=</span> <span class="fl">13000</span>, ref_line_sb <span class="op">=</span> <span class="st">"target"</span>, indices_unit_label <span class="op">=</span> <span class="st">"CPUE"</span></span></span>
+<span class="r-in"><span>  ref_point_sb <span class="op">=</span> <span class="fl">13000</span>, ref_line_sb <span class="op">=</span> <span class="st">"target"</span>, indices_unit_label <span class="op">=</span> <span class="st">"CPUE"</span>,</span></span>
+<span class="r-in"><span>  biomass_at_age_scale_amount <span class="op">=</span> <span class="fl">1</span>, biomass_at_age_unit_label <span class="op">=</span> <span class="st">"metric tons"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
