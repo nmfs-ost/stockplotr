@@ -200,24 +200,24 @@ exp_all_figs_tables <- function(
     }
   )
 
-  tryCatch(
-    {
-      stockplotr::plot_biomass_at_age(
-        dat,
-        unit_label = biomass_at_age_unit_label,
-        scale_amount = biomass_at_age_scale_amount,
-        end_year,
-        make_rda,
-        rda_dir
-      ) # |>
-      # suppressWarnings() |>
-      # invisible()
-    },
-    error = function(e) {
-      message("plot_biomass_at_age failed to run. Tip: check that your arguments are correct.")
-      print(e)
-    }
-  )
+  # tryCatch(
+  #   {
+  #     stockplotr::plot_biomass_at_age(
+  #       dat,
+  #       unit_label = biomass_at_age_unit_label,
+  #       scale_amount = biomass_at_age_scale_amount,
+  #       end_year,
+  #       make_rda,
+  #       rda_dir
+  #     ) # |>
+  #     # suppressWarnings() |>
+  #     # invisible()
+  #   },
+  #   error = function(e) {
+  #     message("plot_biomass_at_age failed to run. Tip: check that your arguments are correct.")
+  #     print(e)
+  #   }
+  # )
 
   # uncomment when this is working properly
   # stockplotr::plot_indices(dat,
