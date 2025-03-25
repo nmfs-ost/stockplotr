@@ -20,6 +20,8 @@ exp_all_figs_tables(
   spawning_biomass_scale_amount = 1,
   ref_line_sb = c("target", "MSY", "msy", "unfished"),
   ref_point_sb = NULL,
+  abundance_at_age_scale_amount = 1000,
+  abundance_at_age_unit_label = "fish",
   biomass_at_age_scale_amount = 1,
   biomass_at_age_unit_label = "metric tons",
   indices_unit_label = NULL,
@@ -78,6 +80,11 @@ applied to plot_spawning_biomass.}
 
 \item{ref_point_sb}{Identical definition as `ref_point`, but this argument is
 applied to plot_spawning_biomass.}
+
+\item{abundance_at_age_scale_amount}{A number describing how much to scale down the
+abundance quantities shown via bubble size. See `recruitment_scale_amount`.}
+
+\item{abundance_at_age_unit_label}{Abbreviated units for abundance at age}
 
 \item{biomass_at_age_scale_amount}{A number describing how much to scale down the
 biomass quantities shown via bubble size. See `recruitment_scale_amount`.}
