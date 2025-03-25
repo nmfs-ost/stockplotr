@@ -100,13 +100,23 @@ plot_abundance_at_age <- function(
      x_n_breaks <- round(length(unique(b[["year"]])) / 15)
    }
 
-   # Choose number of breaks for y-axis
+   # Choose number of major breaks for y-axis
    y_n_breaks <- round(length(unique(b[["age"]])))
    if (y_n_breaks > 80) {
      y_n_breaks <- round(length(unique(b[["age"]])) / 6)
    } else if (y_n_breaks > 40) {
      y_n_breaks <- round(length(unique(b[["age"]])) / 3)
    }
+
+   # Choose number of minor breaks for y-axis
+   y_n_breaks_minor <- as.vector(unique(b$age))
+   if (length(y_n_breaks_minor) > 40) {
+     y_n_breaks_minor <- NULL
+   } else if (length(y_n_breaks_minor) > 20) {
+     y_n_breaks_minor <- y_n_breaks_minor[c(TRUE, FALSE)]
+   }
+
+
 
   # plot
   plt <- ggplot2::ggplot() +
@@ -138,6 +148,7 @@ plot_abundance_at_age <- function(
       guide = ggplot2::guide_axis(minor.ticks = TRUE)
     ) +
     ggplot2::scale_y_continuous(
+      minor_breaks = y_n_breaks_minor,
       n.breaks = y_n_breaks,
       guide = ggplot2::guide_axis(minor.ticks = TRUE),
       limits = c(min(b$age), max(b$age))
