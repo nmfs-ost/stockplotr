@@ -40,6 +40,8 @@ The file is set up like this:
 
 Next, key quantities are extracted from the model results that have already been converted into a standardized format using `asar::convert_output()`. Key quantities replace the placeholders using two successive functions: [`write_captions()`](https://github.com/nmfs-ost/stockplotr/blob/main/R/write_captions.R) and [`add_more_key_quants()`](https://github.com/nmfs-ost/stockplotr/blob/00c02487c9dbceaddb43257abdee72594f17b076/R/utils.R#L7).
 
+**NOTE**: While we extract key quantities as accurately as we can, we cannot guarantee that each quantity will be calculated perfectly. Input data varies widely. It’s always your responsibility to check the accuracy of your figures' alt text.
+
 ### `write_captions()`
 
 In this function, the captions_alt_text_template.csv file is imported as a dataframe. Then, key quantities are extracted from the model results and substituted into the dataframe's appropriate placeholders. Finally, the function exports the updated dataframe as a new csv ("captions_alt_text.csv").
