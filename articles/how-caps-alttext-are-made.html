@@ -179,6 +179,10 @@ already been converted into a standardized format using
 <code><a href="https://rdrr.io/pkg/asar/man/convert_output.html" class="external-link">asar::convert_output()</a></code>. Key quantities replace the
 placeholders using two successive functions: <a href="https://github.com/nmfs-ost/stockplotr/blob/main/R/write_captions.R" class="external-link"><code>write_captions()</code></a>
 and <a href="https://github.com/nmfs-ost/stockplotr/blob/00c02487c9dbceaddb43257abdee72594f17b076/R/utils.R#L7" class="external-link"><code>add_more_key_quants()</code></a>.</p>
+<p><strong>NOTE</strong>: While we extract key quantities as accurately
+as we can, we cannot guarantee that each quantity will be calculated
+perfectly. Input data varies widely. It’s always your responsibility to
+check the accuracy of your figures’ alt text.</p>
 <div class="section level4">
 <h4 id="write_captions">
 <code>write_captions()</code><a class="anchor" aria-label="anchor" href="#write_captions"></a>
