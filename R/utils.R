@@ -41,6 +41,7 @@ add_more_key_quants <- function(
     units = NULL,
     sr_ssb_units = NULL,
     sr_recruitment_units = NULL,
+    ref_line = NULL,
     ref_pt = NULL,
     scaling = NULL) {
   # import csv
@@ -167,7 +168,7 @@ add_more_key_quants <- function(
   }
 
   ## spawning biomass
-  if (topic_cap_alt$label == "spawning.biomass") {
+  if (topic_cap_alt$label %in% c("spawning.biomass", "relative.spawning.biomass")) {
     if (is.null(dat)) {
       message("Some key quantities associated with spawning biomass were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).")
     } else {
@@ -207,7 +208,49 @@ add_more_key_quants <- function(
         as.numeric() |>
         round(digits = 2)
 
-      # replace sr.ssb.min and sr.ssb.max placeholders within topic_cap_alt
+      # ssbtarg
+      ssbtarg <- dat |>
+        dplyr::filter(c(grepl('spawning_biomass_{ref_line}', label) |
+                          label == 'spawning_biomass_msy$')) |>
+        dplyr::pull(estimate) |>
+        as.numeric() |>
+        round(digits = 2)
+
+      # ssb.min and ssb.max can be calculated in write_captions, but these quants
+      # are needed for rel values below, so including them here instead
+      # minimum ssb
+      ssb.min <- dat |>
+        dplyr::filter(
+          label == "spawning_biomass",
+          module_name %in% c("DERIVED_QUANTITIES", "t.series")
+        ) |>
+        dplyr::slice(which.min(estimate)) |>
+        dplyr::select(estimate) |>
+        as.numeric() |>
+        round(digits = 2)
+
+      # maximum ssb
+      ssb.max <- dat |>
+        dplyr::filter(
+          label == "spawning_biomass",
+          module_name %in% c("DERIVED_QUANTITIES", "t.series")
+        ) |>
+        dplyr::slice(which.max(estimate)) |>
+        dplyr::select(estimate) |>
+        as.numeric() |>
+        round(digits = 2)
+
+      # relative ssb
+      ## relative ssb min
+      rel.ssb.min <- (ssb.min / ssbtarg) |>
+        round(digits = 2)
+
+      ## relative ssb max
+      rel.ssb.max <- (ssb.max / ssbtarg) |>
+        round(digits = 2)
+
+      # replace sr.ssb.min, sr.ssb.max, ssbtarg, ssb.min, and ssb.max placeholders
+      # within topic_cap_alt
       topic_cap_alt <- topic_cap_alt |>
         dplyr::mutate(alt_text = stringr::str_replace_all(
           alt_text,
@@ -218,6 +261,17 @@ add_more_key_quants <- function(
           alt_text,
           "sr.ssb.max",
           as.character(sr.ssb.max)
+        )) |>
+        # putting these last so they won't sub in for rel.ssb.min/max
+        dplyr::mutate(alt_text = stringr::str_replace_all(
+          alt_text,
+          "ssb.min",
+          as.character(ssb.min)
+        )) |>
+        dplyr::mutate(alt_text = stringr::str_replace_all(
+          alt_text,
+          "ssb.max",
+          as.character(ssb.max)
         ))
 
       message(paste0("sr.ssb.min: ", as.character(sr.ssb.min)))

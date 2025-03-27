@@ -209,6 +209,7 @@ plot_spawning_biomass <- function(
       end_year = end_year,
       units = unit_label,
       ref_pt = ref_point,
+      ref_line = ref_line,
       scaling = scale_amount
     )
 

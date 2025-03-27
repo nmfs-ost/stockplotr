@@ -603,46 +603,22 @@ write_captions <- function(dat, # converted model output object
     # ssb.units : added with add_more_key_quants
 
     # minimum ssb
-    ssb.min <- dat |>
-      dplyr::filter(
-        label == "spawning_biomass",
-        module_name %in% c("DERIVED_QUANTITIES", "t.series")
-      ) |>
-      dplyr::slice(which.min(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
+    # ssb.min : added with add_more_key_quants
 
     # maximum ssb
-    ssb.max <- dat |>
-      dplyr::filter(
-        label == "spawning_biomass",
-        module_name %in% c("DERIVED_QUANTITIES", "t.series")
-      ) |>
-      dplyr::slice(which.max(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
+    # ssb.max : added with add_more_key_quants
 
     # ssb reference point
     # ssb.ref.pt : added with add_more_key_quants
 
-    # TODO: uncomment and recode once we get clarity about how to extract this value properly
-    # ssbtarg <- dat |>
-    #   dplyr::filter(c(grepl('spawning_biomass', label) & grepl('msy$', label) & estimate >1) | label == 'spawning_biomass_msy$') |>
-    #   dplyr::pull(estimate) |>
-    #   as.numeric() |>
-    #   round(digits = 2)
+    # ssbtarg : added with add_more_key_quants
 
-    # TODO: uncomment and recode once we get clarity about how to extract ssbtarg properly
     ## relative ssb
     # relative ssb min
-    # rel.ssb.min <- (ssb.min / ssbtarg) |>
-    #   round(digits = 2)
-    #
-    # # relative ssb max
-    # rel.ssb.max <- (ssb.max / ssbtarg) |>
-    #   round(digits = 2)
+    # rel.ssb.min : added with add_more_key_quants
+
+    # relative ssb max
+    # rel.ssb.max : added with add_more_key_quants
 
 
     ## spr (spawning potential ratio)
@@ -921,18 +897,8 @@ write_captions <- function(dat, # converted model output object
       "recruit.dev.min" = as.character(recruit.dev.min),
       "recruit.dev.max" = as.character(recruit.dev.max),
 
-      # relative ssb
-      # NOTE: moving this above recruitment so rel.ssb.min isn't changed to
-      # "rel." + ssb.min), etc.
-      #  'rel.ssb.min' = as.character(rel.ssb.min),
-      #  'rel.ssb.max' = as.character(rel.ssb.max),
-
       ## spawning.biomass (ssb)
       "ssb.start.year" = as.character(ssb.start.year),
-      "ssb.min" = as.character(ssb.min),
-      "ssb.max" = as.character(ssb.max),
-      # 'ssbtarg' = as.character(ssbtarg),
-
 
       ## spr (spawning potential ratio)
       "spr.min" = as.character(spr.min),
