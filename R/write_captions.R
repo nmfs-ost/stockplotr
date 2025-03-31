@@ -1008,7 +1008,7 @@ write_captions <- function(dat, # converted model output object
       dplyr::rename("name" = 1,
                     "key_quantity" = 2)
 
-    message("Key quantities extracted and inserted:")
+    message("The following key quantities were extracted and inserted from write_captions(). NA values signify key quantities that were not extracted and inserted.")
     for (i in 1:dim(replaced_vals)[1]){
       message(paste0(replaced_vals[i,1],
                      ": ",
