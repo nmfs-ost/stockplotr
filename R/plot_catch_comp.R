@@ -14,15 +14,8 @@ plot_catch_comp <- function(dat,
   # Units
   catch_label <- glue::glue("Catch ({unit_label})")
 
-  # description of plot, for my reference
-  "Histograms for each year and fleet (one per year grouped by fleet or survey),
-  which show the proportion of the catch in each age group.
-  The x axis shows age groups, span from min to max.
-  The y axis shows the proportion of the catch, spans from 0-1."
-
   # TODO: update alt text/caption to remove fleet name/survey name var?
   # -update the following dat code to work for BAM
-  # update caa vars in write_captions once prev points done
   # -Make unit test
   # -add to exp_all_figs_tables
 
@@ -64,7 +57,8 @@ plot_catch_comp <- function(dat,
       ggplot2::labs(
         x = "Year",
         y = catch_label,
-        fill = "Fleet"
+        fill = "Fleet",
+        color = "Fleet"
       ) +
       ggplot2::scale_x_continuous(
         n.breaks = x_n_breaks
@@ -120,7 +114,7 @@ plot_catch_comp <- function(dat,
     }
     return(final)
   } else {
-    message("This plot has not been developed for BAM models yet.")
+    message("This plot has not yet been developed for models without catch output.")
   }
 
 }
