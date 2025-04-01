@@ -16,8 +16,6 @@ plot_catch_comp <- function(dat,
 
   # TODO:
   # -update the following dat code to work for BAM
-  # -Make unit test
-  # -add to exp_all_figs_tables
 
   # read standard data file and extract target quantity
   if (dim(dat |>
