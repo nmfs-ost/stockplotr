@@ -70,7 +70,7 @@ plot_catch_comp <- function(dat,
     final <- suppressWarnings(add_theme(plt))
 
     # create plot-specific variables to use throughout fxn for naming and IDing
-    topic_label <- "CAA"
+    topic_label <- "catch"
 
     # identify output
     fig_or_table <- "figure"
