@@ -24,6 +24,7 @@ test_that("exp_all_figs_tables works when all figures/tables are plotted", {
   base_temp_files <- c(
     "biomass_figure.rda",
     "bnc_table.rda",
+    "catch_figure.rda",
     "indices.abundance_table.rda",
     "landings_figure.rda",
     # "pop.baa_figure.rda",
@@ -66,6 +67,7 @@ test_that("exp_all_figs_tables works when some figures/tables are not plotted", 
   base_temp_files <- c(
     # "biomass_figure.rda",
     "bnc_table.rda",
+    "catch_figure.rda",
     "indices.abundance_table.rda",
     "landings_figure.rda",
     #  "pop.baa_figure.rda",
