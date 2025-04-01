@@ -389,15 +389,42 @@ write_captions <- function(dat, # converted model output object
     # fecundity.min <- # minimum fecundity
     # fecundity.max <- # maximum fecundity
 
+    ## catch composition
+    # minimum & maximum catch
+    if (dim(dat |>
+            dplyr::filter(label == "catch"))[1] > 1) {
 
-    ## CAA (catch at age)- don't code quantities yet
-    # fleet.or.survey.name <- # fleet or survey name (SHARED with CAL, below)
-    # caa.age.min <- # minimum age group
-    # caa.age.max <- # maximum age group
+      catch <- dat |>
+        dplyr::filter(label == "catch",
+                      !is.na(fleet)
+        ) |>
+        dplyr::mutate(
+          estimate = as.numeric(estimate),
+          year = as.numeric(year),
+          fleet = as.factor(fleet)
+        ) |>
+        dplyr::group_by(label, year, fleet) |>
+        dplyr::summarise(estimate = sum(estimate)) |>
+        dplyr::ungroup()
+
+      tot.catch.min <- catch |>
+        dplyr::slice(which.min(estimate)) |>
+        dplyr::select(estimate) |>
+        as.numeric()
+
+      tot.catch.max <- catch |>
+        dplyr::slice(which.max(estimate)) |>
+        dplyr::select(estimate) |>
+        as.numeric()
+      } else {
+        tot.catch.min <- "NA"
+        tot.catch.max <- "NA"
+    }
 
     ## CAL (catch at length)- don't code quantities yet
     # cal.length.min <- # minimum length group
     # cal.length.max <- # maximum length group
+    # fleet.or.survey.name <- # fleet or survey name
 
 
     ## CPUE indices plot- don't code quantities yet
@@ -841,14 +868,14 @@ write_captions <- function(dat, # converted model output object
       # 'fecundity.min' = as.character(fecundity.min),
       # 'fecundity.max' = as.character(fecundity.max),
 
-      ## CAA (catch at age)
-      # 'fleet.or.survey.name' = as.character(fleet.or.survey.name),
-      # 'caa.age.min' = as.character(caa.age.min),
-      # 'caa.age.max' = as.character(caa.age.max),
+      ## catch composition
+      # 'tot.catch.min' = as.character(tot.catch.min),
+      # 'tot.catch.max' = as.character(tot.catch.max),
 
       ## CAL (catch at length)
       # 'cal.length.min' = as.character(cal.length.min),
       # 'cal.length.max' = as.character(cal.length.max),
+      # 'fleet.or.survey.name' = as.character(fleet.or.survey.name),
 
       ## CPUE indices plot
       # 'cpue.start.year' = as.character(cpue.start.year),
