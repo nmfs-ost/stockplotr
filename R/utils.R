@@ -39,6 +39,7 @@ add_more_key_quants <- function(
       )
   }
 
+  message("The following key quantities were extracted and inserted from add_more_key_quants():")
 
   # calculate key quantities that rely on end_year for calculation
   ## terminal fishing mortality
@@ -131,6 +132,9 @@ add_more_key_quants <- function(
           "B.max",
           as.character(B.max)
         ))
+
+      message(paste0("B.min: ", as.character(B.min)))
+      message(paste0("B.max: ", as.character(B.max)))
     }
   }
 
@@ -187,6 +191,9 @@ add_more_key_quants <- function(
           "sr.ssb.max",
           as.character(sr.ssb.max)
         ))
+
+      message(paste0("sr.ssb.min: ", as.character(sr.ssb.min)))
+      message(paste0("sr.ssb.max: ", as.character(sr.ssb.max)))
     }
   }
 
@@ -243,6 +250,9 @@ add_more_key_quants <- function(
           "sr.max",
           as.character(sr.max)
         ))
+
+      message(paste0("sr.min: ", as.character(sr.min)))
+      message(paste0("sr.max: ", as.character(sr.max)))
     }
   }
 
@@ -265,6 +275,8 @@ add_more_key_quants <- function(
         stringr::regex("\\S*end\\.year\\S*\\s*"),
         end_year
       ))
+
+    message(paste0("end_year: ", as.character(end_year)))
   }
   ## units-----
 
@@ -321,6 +333,9 @@ add_more_key_quants <- function(
         stringr::regex("\\S*units\\S*"),
         as.character(units)
       ))
+
+    message(paste0("units: ", as.character(units)))
+
   }
 
   if (!is.null(sr_ssb_units)) {
@@ -332,6 +347,9 @@ add_more_key_quants <- function(
         "sr.ssb.units",
         as.character(sr_ssb_units)
       ))
+
+    message(paste0("sr.ssb.units: ", as.character(sr_ssb_units)))
+
   }
 
   if (!is.null(sr_recruitment_units)) {
@@ -343,6 +361,9 @@ add_more_key_quants <- function(
         "sr.units",
         as.character(sr_recruitment_units)
       ))
+
+    message(paste0("sr.units: ", as.character(sr_recruitment_units)))
+
   }
 
   if (!is.null(units)) {
@@ -380,6 +401,9 @@ add_more_key_quants <- function(
         stringr::regex("\\(\\S*ref\\.pt*\\S*"),
         paste0("(", as.character(ref_pt))
       ))
+
+    message(paste0("plot-specific reference point: ", as.character(ref_pt)))
+
   }
 
   # remove row with old caption/alt text, then add new row
