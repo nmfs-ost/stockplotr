@@ -14,7 +14,7 @@ plot_catch_comp <- function(dat,
   # Units
   catch_label <- glue::glue("Catch ({unit_label})")
 
-  # TODO: update alt text/caption to remove fleet name/survey name var?
+  # TODO:
   # -update the following dat code to work for BAM
   # -Make unit test
   # -add to exp_all_figs_tables
@@ -22,7 +22,7 @@ plot_catch_comp <- function(dat,
   # read standard data file and extract target quantity
   if (dim(dat |>
       dplyr::filter(label == "catch"))[1] > 1) {
-    caa <- dat |>
+    catch <- dat |>
       dplyr::filter(label == "catch",
                     !is.na(fleet)
       ) |>
@@ -36,15 +36,15 @@ plot_catch_comp <- function(dat,
       suppressWarnings()
 
     # Choose number of breaks for x-axis
-    x_n_breaks <- round(length(unique(caa[["year"]])) / 10)
+    x_n_breaks <- round(length(unique(catch[["year"]])) / 10)
     if (x_n_breaks <= 5) {
-      x_n_breaks <- round(length(unique(caa[["year"]])) / 5)
+      x_n_breaks <- round(length(unique(catch[["year"]])) / 5)
     } else if (x_n_breaks > 10) {
-      x_n_breaks <- round(length(unique(caa[["year"]])) / 15)
+      x_n_breaks <- round(length(unique(catch[["year"]])) / 15)
     }
 
     # Make generic plot
-    plt <- ggplot2::ggplot(data = caa,
+    plt <- ggplot2::ggplot(data = catch,
                            ggplot2::aes(
                              x = year,
                              y = estimate,
