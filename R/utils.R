@@ -335,7 +335,6 @@ add_more_key_quants <- function(
       ))
 
     message(paste0("units: ", as.character(units)))
-
   }
 
   if (!is.null(sr_ssb_units)) {
@@ -349,7 +348,6 @@ add_more_key_quants <- function(
       ))
 
     message(paste0("sr.ssb.units: ", as.character(sr_ssb_units)))
-
   }
 
   if (!is.null(sr_recruitment_units)) {
@@ -363,7 +361,6 @@ add_more_key_quants <- function(
       ))
 
     message(paste0("sr.units: ", as.character(sr_recruitment_units)))
-
   }
 
   if (!is.null(units)) {
@@ -403,7 +400,6 @@ add_more_key_quants <- function(
       ))
 
     message(paste0("plot-specific reference point: ", as.character(ref_pt)))
-
   }
 
   # remove row with old caption/alt text, then add new row
