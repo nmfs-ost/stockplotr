@@ -224,6 +224,23 @@ exp_all_figs_tables <- function(
     }
   )
 
+  tryCatch(
+    {
+      stockplotr::plot_catch_comp(
+        dat,
+        unit_label = catch_unit_label,
+        make_rda,
+        rda_dir
+      ) # |>
+      # suppressWarnings() |>
+      # invisible()
+    },
+    error = function(e) {
+      message("plot_catch_comp failed to run. Tip: check that your arguments are correct.")
+      print(e)
+    }
+  )
+
   # tryCatch(
   #   {
   #     stockplotr::plot_biomass_at_age(
