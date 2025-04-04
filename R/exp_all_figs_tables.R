@@ -39,6 +39,7 @@
 #' @param indices_unit_label Units for index of abundance/CPUE
 #' @param biomass_unit_label Abbreviated units for biomass
 #' @param catch_unit_label Abbreviated units for catch
+#' @param landings_unit_label Units for landings
 #'
 #' @return Rda files for each figure/table.
 #'
@@ -88,7 +89,8 @@ exp_all_figs_tables <- function(
     catch_unit_label = "mt"
     # imported from table_harvest_projection- add potential unique arguments after dev
     # imported from table_indices- zero unique arguments
-    ) {
+    # imported from table_landings- zero unique arguments
+ ){
   make_rda <- TRUE
 
   message("Starting export of figures and tables:")
@@ -282,8 +284,22 @@ exp_all_figs_tables <- function(
     }
   )
 
+  tryCatch(
+    {
+      stockplotr::table_landings(dat,
+                                 unit_label = landings_unit_label,
+                                 make_rda,
+                                 rda_dir) # |>
+      # suppressWarnings() |>
+      # invisible()
+    },
+    error = function(e) {
+      message("table_landings failed to run. Tip: check that your arguments are correct.")
+      print(e)
+    }
+  )
+
   # uncomment when finished
-  # stockplotr::table_landings(dat)# |> suppressWarnings() |> invisible()
   #
   # undeveloped tables - add arguments after more development
   # table_afsc_tier() #|> suppressWarnings() |> invisible()
