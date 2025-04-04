@@ -33,7 +33,7 @@ report.version.model.changes,table,Document version history briefly describing w
 projection.ts,table,Forecasted catch and biomass over future years for different fishing mortality scenarios. ,
 catch,table,Observed (points) and model estimated (line) catch over time for fleet catch.fleet.,
 life.history.params,table,Life history parameters used in the stock assessment model. The last column of the table indicates whether the parameters were estimated by the model or fixed.,
-landings,table,Landed catch by fleet and year in landings.tbl.units. ,
+landings,table,Landed catch by fleet and year in landings.units.,
 discards,table,Discarded catch by fleet and year in discards.tbl.units.,
 age.length.key,table,Age-length key: the proportion of fish for each age that belong to a particular length group. ,
 indices.abundance,table,Calculated indices of abundance and their corresponding CVs for the fleets and surveys identified in the column headers. ,

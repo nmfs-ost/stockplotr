@@ -1,14 +1,14 @@
 #' Landed catch by fleet and year table
 #'
 #' @inheritParams plot_recruitment
-#' @param unit_label indicate the name of the units of landings
+#' @param unit_label Abbreviated units of landings
 #'
 #' @return Create a table ready for a stock assessment report of landed catch by
 #' fleet and year.
 #' @export
 #'
 table_landings <- function(dat,
-                           unit_label = "metric tons",
+                           unit_label = "mt",
                            make_rda = FALSE,
                            rda_dir = getwd()) {
 
@@ -107,10 +107,10 @@ table_landings <- function(dat,
   land <- land |>
     dplyr::select(order(colnames(land),
                   method = "auto")) |>
-    dplyr::relocate(Year, .before = 1)
-    # dplyr::rename_with(~stringr::str_replace(.,
-    #                                            '00',
-    #                                            '')) |>
+    dplyr::relocate(Year, .before = 1) |>
+    dplyr::rename_with(~stringr::str_replace(.,
+                                               'Landings',
+                                             land_label))
 
   # add theming to final table
   final <- land |>
@@ -141,6 +141,15 @@ table_landings <- function(dat,
         year = NULL
       )
     }
+
+    # add more key quantities included as arguments in this fxn
+    add_more_key_quants(
+      dat,
+      topic = topic_label,
+      fig_or_table = fig_or_table,
+      dir = rda_dir,
+      units = unit_label
+    )
 
     # extract this plot's caption and alt text
     caps_alttext <- extract_caps_alttext(
