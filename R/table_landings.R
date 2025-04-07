@@ -12,6 +12,8 @@ table_landings <- function(dat,
                            make_rda = FALSE,
                            rda_dir = getwd()) {
 
+  # TODO: add an option to stratify by gear type
+
   # Units
   land_label <- glue::glue("Landings ({unit_label})")
 
