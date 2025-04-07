@@ -45,6 +45,9 @@ table_landings <- function(dat,
         as.character() |>
         toupper()
 
+      land_dat <- land_dat |>
+        dplyr::mutate(uncertainty = round(uncertainty, 2))
+
       if (uncert_label != "NA"){
         land_dat <- land_dat |>
           dplyr::rename(!!(uncert_label) := "uncertainty")
