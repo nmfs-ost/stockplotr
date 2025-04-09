@@ -6,6 +6,7 @@
 \usage{
 plot_catch_comp(
   dat,
+  end_year = NULL,
   unit_label = "metric tons",
   make_rda = FALSE,
   rda_dir = getwd()
@@ -13,6 +14,8 @@ plot_catch_comp(
 }
 \arguments{
 \item{dat}{A data frame returned from `asar::convert_output()`.}
+
+\item{end_year}{last year of assessment}
 
 \item{unit_label}{indicate the name of the units of catch as to label the axis}
 
@@ -26,8 +29,9 @@ Default is FALSE.}
 Default is the working directory.}
 }
 \value{
-Create a plot ready for a stock assessment report of catch composition
-by fleet.
+A plot ready for a stock assessment report of catch composition by fleet.
+This plot is made only when landings are explicitly named in the output file.
+The current plot function does not combine all sources of catch.
 }
 \description{
 Plot catch composition by fleet

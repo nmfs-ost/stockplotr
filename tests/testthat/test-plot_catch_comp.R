@@ -12,7 +12,8 @@ test_that("plot_catch_comp generates plots without errors", {
 
   # expect ggplot object is returned
   expect_s3_class(
-    stockplotr::plot_catch_comp(dat),
+    stockplotr::plot_catch_comp(dat,
+                                end_year = 2023),
     "gg"
   )
 })
@@ -27,6 +28,7 @@ test_that("rda file made when indicated", {
   plot_catch_comp(dat,
     make_rda = TRUE,
     unit_label = "metric tons",
+    end_year = 2024,
     rda_dir = getwd()
   )
 

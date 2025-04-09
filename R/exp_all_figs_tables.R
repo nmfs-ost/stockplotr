@@ -229,6 +229,7 @@ exp_all_figs_tables <- function(
       stockplotr::plot_catch_comp(
         dat,
         unit_label = catch_unit_label,
+        end_year = end_year,
         make_rda,
         rda_dir
       ) # |>
