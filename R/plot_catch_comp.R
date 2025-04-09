@@ -3,16 +3,23 @@
 #' @inheritParams plot_recruitment
 #' @param unit_label indicate the name of the units of catch as to label the axis
 #'
-#' @return Create a plot ready for a stock assessment report of catch composition
-#' by fleet.
+#' @return A plot ready for a stock assessment report of catch composition by fleet.
+#' This plot is made only when landings are explicitly named in the output file.
+#' The current plot function does not combine all sources of catch.
 #' @export
 #'
 plot_catch_comp <- function(dat,
+                          end_year = NULL,
                           unit_label = "metric tons",
                           make_rda = FALSE,
                           rda_dir = getwd()) {
   # Units
   catch_label <- glue::glue("Catch ({unit_label})")
+
+  # get end year if not defined (current year)
+  if (is.null(end_year)) {
+    end_year <- as.numeric(format(Sys.Date(), "%Y"))
+  }
 
   # TODO:
   # -update the following dat code to work for BAM
@@ -22,7 +29,8 @@ plot_catch_comp <- function(dat,
       dplyr::filter(label == "catch"))[1] > 1) {
     catch <- dat |>
       dplyr::filter(label == "catch",
-                    !is.na(fleet)
+                    !is.na(fleet),
+                    year <= end_year
       ) |>
       dplyr::mutate(
         estimate = as.numeric(estimate),
@@ -37,6 +45,9 @@ plot_catch_comp <- function(dat,
     x_n_breaks <- round(length(unique(catch[["year"]])) / 10)
     if (x_n_breaks <= 5) {
       x_n_breaks <- round(length(unique(catch[["year"]])) / 5)
+      if (length(unique(catch[["year"]])) <= 10) {
+        x_n_breaks <- NULL
+      }
     } else if (x_n_breaks > 10) {
       x_n_breaks <- round(length(unique(catch[["year"]])) / 15)
     }
