@@ -162,7 +162,8 @@ plot_spawning_biomass <- function(
       y = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
       label = list(bquote(SB[.(ref_line)])),
       parse = TRUE
-    )
+    ) +
+    ggplot2::expand_limits(y = 0)
 
   final <- suppressWarnings(add_theme(plt))
 

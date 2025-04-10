@@ -152,7 +152,8 @@ plot_biomass <- function(
       label = list(bquote(B[.(ref_line)])),
       parse = TRUE,
       fill = "white"
-    )
+    ) +
+    ggplot2::expand_limits(y = 0)
   # ggtext::geom_richtext(
   #   ggplot2::aes(
   #     x = end_year,
