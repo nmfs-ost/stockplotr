@@ -102,6 +102,17 @@ plot_landings <- function(dat,
   land <- land |>
     dplyr::filter(year <= end_year)
 
+  # Choose number of breaks for x-axis
+  x_n_breaks <- round(length(unique(land[["year"]])) / 10)
+  if (x_n_breaks <= 5) {
+    x_n_breaks <- round(length(unique(land[["year"]])) / 5)
+    if (length(unique(land[["year"]])) <= 10) {
+      x_n_breaks <- NULL
+    }
+  } else if (x_n_breaks > 10) {
+    x_n_breaks <- round(length(unique(land[["year"]])) / 15)
+  }
+
   # Make generic plot
   plt <- ggplot2::ggplot(data = land) +
     ggplot2::geom_area(
@@ -118,6 +129,12 @@ plot_landings <- function(dat,
       x = "Year",
       y = land_label,
       fill = "Fleet"
+    ) +
+    ggplot2::scale_x_continuous(
+      n.breaks = x_n_breaks
+    ) +
+    ggplot2::scale_y_continuous(
+      labels = scales::label_comma()
     )
 
   final <- suppressWarnings(add_theme(plt))
