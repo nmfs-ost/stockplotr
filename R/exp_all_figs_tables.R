@@ -90,7 +90,7 @@ exp_all_figs_tables <- function(
     # imported from table_harvest_projection- add potential unique arguments after dev
     # imported from table_indices- zero unique arguments
     # imported from table_landings- zero unique arguments
- ){
+    ) {
   make_rda <- TRUE
 
   message("Starting export of figures and tables:")
@@ -287,9 +287,10 @@ exp_all_figs_tables <- function(
   tryCatch(
     {
       stockplotr::table_landings(dat,
-                                 unit_label = landings_unit_label,
-                                 make_rda,
-                                 rda_dir) # |>
+        unit_label = landings_unit_label,
+        make_rda,
+        rda_dir
+      ) # |>
       # suppressWarnings() |>
       # invisible()
     },
