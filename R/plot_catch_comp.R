@@ -39,7 +39,10 @@ plot_catch_comp <- function(dat,
       ) |>
       dplyr::group_by(label, year, fleet) |>
       dplyr::summarise(estimate = sum(estimate)) |>
-      suppressWarnings()
+      suppressWarnings() |>
+      dplyr::filter(
+        !is.na(year)
+      )
 
     # Choose number of breaks for x-axis
     x_n_breaks <- round(length(unique(catch[["year"]])) / 10)
@@ -53,21 +56,18 @@ plot_catch_comp <- function(dat,
     }
 
     # Make generic plot
-    plt <- ggplot2::ggplot(data = catch,
-                           ggplot2::aes(
-                             x = year,
-                             y = estimate,
-                             fill = fleet
-                           )
-    ) +
-      ggplot2::geom_bar(stat = "identity",
-                        position = "stack") +
-      #   ggplot2::facet_wrap(~fleet) +
+    plt <- ggplot2::ggplot(data = catch) +
+      ggplot2::geom_area(
+        ggplot2::aes(
+          x = year,
+          y = estimate,
+          fill = fleet
+        )
+      ) +
       ggplot2::labs(
         x = "Year",
         y = catch_label,
-        fill = "Fleet",
-        color = "Fleet"
+        fill = "Fleet"
       ) +
       ggplot2::scale_x_continuous(
         n.breaks = x_n_breaks
