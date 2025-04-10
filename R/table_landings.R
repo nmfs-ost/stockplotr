@@ -11,7 +11,6 @@ table_landings <- function(dat,
                            unit_label = "mt",
                            make_rda = FALSE,
                            rda_dir = getwd()) {
-
   # TODO: add an option to stratify by gear type
 
   # Units
@@ -37,7 +36,7 @@ table_landings <- function(dat,
   #   land_dat$fleet <- paste0("00", land_dat$fleet)
   # }
 
-  if ("uncertainty" %in% names(land_dat)){
+  if ("uncertainty" %in% names(land_dat)) {
     if ("uncertainty_label" %in% names(land_dat)) {
       uncert_label <- land_dat |>
         dplyr::select(uncertainty_label) |>
@@ -48,12 +47,14 @@ table_landings <- function(dat,
       land_dat <- land_dat |>
         dplyr::mutate(uncertainty = round(uncertainty, 2))
 
-      if (uncert_label != "NA"){
+      if (uncert_label != "NA") {
         land_dat <- land_dat |>
           dplyr::rename(!!(uncert_label) := "uncertainty")
 
-        piv_vals <- c("Landings",
-                      uncert_label)
+        piv_vals <- c(
+          "Landings",
+          uncert_label
+        )
       } else {
         uncert_label <- NULL
         piv_vals <- "Landings"
@@ -72,8 +73,8 @@ table_landings <- function(dat,
   nseas <- length(unique(land_dat$season))
 
   if (narea > 1) {
-   # factors <- TRUE
-   idcols <- c("year", "Area")
+    # factors <- TRUE
+    idcols <- c("year", "Area")
     # will need facet if TRUE
   } else {
     idcols <- c("year")
@@ -95,27 +96,31 @@ table_landings <- function(dat,
   land <- land_dat |>
     dplyr::mutate(
       fleet = as.factor(fleet),
-    #  fleet = paste0("Fleet_", fleet),
-                  year = as.factor(year),
-                  estimate = round(estimate, digits = 0)) |>
+      #  fleet = paste0("Fleet_", fleet),
+      year = as.factor(year),
+      estimate = round(estimate, digits = 0)
+    ) |>
     dplyr::rename("Landings" = estimate) |>
     dplyr::relocate(fleet, .after = season) |>
     tidyr::pivot_wider(
       id_cols = dplyr::all_of(idcols),
       names_from = fleet,
-    #  names_prefix = "Fleet_",
+      #  names_prefix = "Fleet_",
       values_from = piv_vals,
-    names_glue = "Fleet {fleet}_{.value}"
+      names_glue = "Fleet {fleet}_{.value}"
     ) |>
     dplyr::rename("Year" = year)
 
   land <- land |>
     dplyr::select(order(colnames(land),
-                  method = "auto")) |>
+      method = "auto"
+    )) |>
     dplyr::relocate(Year, .before = 1) |>
-    dplyr::rename_with(~stringr::str_replace(.,
-                                               'Landings',
-                                             land_label))
+    dplyr::rename_with(~ stringr::str_replace(
+      .,
+      "Landings",
+      land_label
+    ))
 
   # add theming to final table
   final <- land |>

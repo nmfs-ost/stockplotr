@@ -22,15 +22,17 @@ test_that("html_all_figs_tables makes qmd and html files with default rda_dir ar
   html_all_figs_tables()
 
   testthat::expect(file.exists(fs::path(getwd(), "all_tables_figures", "all_tables_figures.qmd")),
-                   failure_message = "Test fail: 'all_tables_figures.qmd' does not exist")
+    failure_message = "Test fail: 'all_tables_figures.qmd' does not exist"
+  )
   testthat::expect(file.exists(fs::path(getwd(), "all_tables_figures", "all_tables_figures.html")),
-                   failure_message = "Test fail: 'all_tables_figures.html' does not exist")
+    failure_message = "Test fail: 'all_tables_figures.html' does not exist"
+  )
 
   # erase temporary testing files
   unlink(fs::path(getwd(), "all_tables_figures"), recursive = T)
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
   unlink(fs::path(getwd(), "rda_files"), recursive = T)
-  })
+})
 
 test_that("html_all_figs_tables makes qmd and html files with non-default rda_dir argument", {
   # read in sample dataset
@@ -55,15 +57,17 @@ test_that("html_all_figs_tables makes qmd and html files with non-default rda_di
       indices_unit_label = "CPUE",
       rda_dir = getwd()
     ) |>
-    suppressWarnings()
+      suppressWarnings()
   )
 
   html_all_figs_tables(rda_dir = rda_path)
 
   testthat::expect(file.exists(fs::path(rda_path, "all_tables_figures", "all_tables_figures.qmd")),
-                   failure_message = "Test fail: 'all_tables_figures.qmd' does not exist")
+    failure_message = "Test fail: 'all_tables_figures.qmd' does not exist"
+  )
   testthat::expect(file.exists(fs::path(rda_path, "all_tables_figures", "all_tables_figures.html")),
-                   failure_message = "Test fail: 'all_tables_figures.html' does not exist")
+    failure_message = "Test fail: 'all_tables_figures.html' does not exist"
+  )
 
   # erase temporary testing files
   unlink(fs::path(getwd(), "all_tables_figures"), recursive = T)
@@ -102,7 +106,5 @@ test_that("html_all_figs_tables triggers message (question) when all_tables_figu
 })
 
 test_that("html_all_figs_tables stops if rda_dir not found", {
-
   testthat::expect_error(html_all_figs_tables())
-
 })

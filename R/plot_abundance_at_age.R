@@ -19,7 +19,6 @@ plot_abundance_at_age <- function(
     end_year = NULL,
     make_rda = FALSE,
     rda_dir = getwd()) {
-
   magnitude <- floor(log10(scale_amount))
   if (magnitude == 0) {
     scale_unit <- ""
@@ -48,7 +47,7 @@ plot_abundance_at_age <- function(
     no = glue::glue("Relative abundance ({unit_mag}{unit_label})")
   )
 
-   b <- dat |>
+  b <- dat |>
     dplyr::filter(
       label == "abundance",
       module_name != "proj.N.age", # SS3 and BAM target module names
@@ -61,81 +60,89 @@ plot_abundance_at_age <- function(
       estimate = estimate_orig / scale_amount
     )
 
-   if (dim(b |>
-           dplyr::select(time) |>
-           dplyr::filter(!is.na(time)))[1] > 1) {
-     b <- b |>
-       dplyr::filter(time %% 1 != 0.5) |>
-       dplyr::group_by(age, year) |>
-       dplyr::summarise(estimate = sum(estimate), .groups = "drop") |>
-       dplyr::ungroup()
-   }
+  if (dim(b |>
+    dplyr::select(time) |>
+    dplyr::filter(!is.na(time)))[1] > 1) {
+    b <- b |>
+      dplyr::filter(time %% 1 != 0.5) |>
+      dplyr::group_by(age, year) |>
+      dplyr::summarise(estimate = sum(estimate), .groups = "drop") |>
+      dplyr::ungroup()
+  }
 
   # get end year if not defined
   if (is.null(end_year)) {
     end_year <- max(b$year)
   }
 
-   b <- b |>
-     dplyr::filter(year <= end_year)
+  b <- b |>
+    dplyr::filter(year <= end_year)
 
-   total_fish_per_year <- b |>
-     dplyr::group_by(year) |>
-     dplyr::summarise(total_fish = sum(estimate))
+  total_fish_per_year <- b |>
+    dplyr::group_by(year) |>
+    dplyr::summarise(total_fish = sum(estimate))
 
-   annual_means <- b |>
-     dplyr::group_by(age, year) |>
-     dplyr::summarise(years_per_year = sum(estimate)) |>
-     dplyr::filter(age != 0) |>
-     dplyr::group_by(year) |>
-     dplyr::summarise(interm = sum(age*years_per_year)) |>
-     dplyr::full_join(total_fish_per_year) |>
-     dplyr::mutate(avg = interm/total_fish)
+  annual_means <- b |>
+    dplyr::group_by(age, year) |>
+    dplyr::summarise(years_per_year = sum(estimate)) |>
+    dplyr::filter(age != 0) |>
+    dplyr::group_by(year) |>
+    dplyr::summarise(interm = sum(age * years_per_year)) |>
+    dplyr::full_join(total_fish_per_year) |>
+    dplyr::mutate(avg = interm / total_fish)
 
-   # Choose number of breaks for x-axis
-   x_n_breaks <- round(length(unique(b[["year"]])) / 10)
-   if (x_n_breaks <= 5) {
-     x_n_breaks <- round(length(unique(b[["year"]])) / 5)
-   } else if (x_n_breaks > 10) {
-     x_n_breaks <- round(length(unique(b[["year"]])) / 15)
-   }
+  # Choose number of breaks for x-axis
+  x_n_breaks <- round(length(unique(b[["year"]])) / 10)
+  if (x_n_breaks <= 5) {
+    x_n_breaks <- round(length(unique(b[["year"]])) / 5)
+  } else if (x_n_breaks > 10) {
+    x_n_breaks <- round(length(unique(b[["year"]])) / 15)
+  }
 
-   # Choose number of major breaks for y-axis
-   y_n_breaks <- round(length(unique(b[["age"]])))
-   if (y_n_breaks > 80) {
-     y_n_breaks <- round(length(unique(b[["age"]])) / 6)
-   } else if (y_n_breaks > 40) {
-     y_n_breaks <- round(length(unique(b[["age"]])) / 3)
-   }
+  # Choose number of major breaks for y-axis
+  y_n_breaks <- round(length(unique(b[["age"]])))
+  if (y_n_breaks > 80) {
+    y_n_breaks <- round(length(unique(b[["age"]])) / 6)
+  } else if (y_n_breaks > 40) {
+    y_n_breaks <- round(length(unique(b[["age"]])) / 3)
+  }
 
-   # Choose number of minor breaks for y-axis
-   y_n_breaks_minor <- as.vector(unique(b$age))
-   if (length(y_n_breaks_minor) > 40) {
-     y_n_breaks_minor <- NULL
-   } else if (length(y_n_breaks_minor) > 20) {
-     y_n_breaks_minor <- y_n_breaks_minor[c(TRUE, FALSE)]
-   }
+  # Choose number of minor breaks for y-axis
+  y_n_breaks_minor <- as.vector(unique(b$age))
+  if (length(y_n_breaks_minor) > 40) {
+    y_n_breaks_minor <- NULL
+  } else if (length(y_n_breaks_minor) > 20) {
+    y_n_breaks_minor <- y_n_breaks_minor[c(TRUE, FALSE)]
+  }
 
 
 
   # plot
   plt <- ggplot2::ggplot() +
-    ggplot2::geom_point(data = b,
-                        ggplot2::aes(x = year,
-                                     y = age,
-                                     size = estimate),
-                        shape = 21,
-                        alpha = 0.3,
-                        color = "black",
-                        fill = "gray40") +
-    ggplot2::scale_size(range = c(0.2, 10),
-                        name = abundance_label,
-                        labels = scales::label_comma()) +
+    ggplot2::geom_point(
+      data = b,
+      ggplot2::aes(
+        x = year,
+        y = age,
+        size = estimate
+      ),
+      shape = 21,
+      alpha = 0.3,
+      color = "black",
+      fill = "gray40"
+    ) +
+    ggplot2::scale_size(
+      range = c(0.2, 10),
+      name = abundance_label,
+      labels = scales::label_comma()
+    ) +
     # add line
     ggplot2::geom_line(
       data = annual_means,
-      ggplot2::aes(x = year,
-          y = avg),
+      ggplot2::aes(
+        x = year,
+        y = avg
+      ),
       linewidth = 1,
       color = "red"
     ) +
@@ -184,7 +191,7 @@ plot_abundance_at_age <- function(
       dir = rda_dir,
       end_year = end_year,
       units = unit_label,
-     # ref_pt = ref_point,
+      # ref_pt = ref_point,
       scaling = scale_amount
     )
 
