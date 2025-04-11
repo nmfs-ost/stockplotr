@@ -93,7 +93,7 @@ test_that("rda file made when indicated", {
     unit_label = "metric tons",
     scale_amount = 1,
     ref_line = "msy",
-    end_year = 2030,
+    end_year = 2024,
     make_rda = TRUE,
     rda_dir = getwd()
   )
