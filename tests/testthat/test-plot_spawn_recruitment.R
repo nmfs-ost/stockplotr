@@ -47,7 +47,7 @@ test_that("rda file made when indicated", {
     dat,
     spawning_biomass_label = "mt",
     recruitment_label = "mt",
-    end_year = 2026,
+    end_year = 2024,
     make_rda = TRUE,
     rda_dir = getwd()
   )
