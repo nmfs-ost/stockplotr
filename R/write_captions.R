@@ -1005,15 +1005,18 @@ write_captions <- function(dat, # converted model output object
     replaced_vals <- patterns_replacements |>
       as.data.frame() |>
       tibble::rownames_to_column() |>
-      dplyr::rename("name" = 1,
-                    "key_quantity" = 2)
+      dplyr::rename(
+        "name" = 1,
+        "key_quantity" = 2
+      )
 
     message("The following key quantities were extracted and inserted from write_captions(). NA values signify key quantities that were not extracted and inserted.")
-    for (i in 1:dim(replaced_vals)[1]){
-      message(paste0(replaced_vals[i,1],
-                     ": ",
-                     replaced_vals[i,2])
-      )
+    for (i in 1:dim(replaced_vals)[1]) {
+      message(paste0(
+        replaced_vals[i, 1],
+        ": ",
+        replaced_vals[i, 2]
+      ))
     }
 
     # enable warnings again

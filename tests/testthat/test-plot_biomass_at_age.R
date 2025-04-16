@@ -46,7 +46,8 @@ test_that("rda file made when indicated", {
     dat,
     rda_dir = getwd(),
     make_rda = TRUE,
-    end_year = 2023  )
+    end_year = 2023
+  )
 
   # expect that both rda_files dir and the pop.baa_figure.rda file exist
   expect_true(dir.exists(fs::path(getwd(), "rda_files")))
