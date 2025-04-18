@@ -76,3 +76,21 @@ test_that("rda file made when indicated", {
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
   unlink(fs::path(getwd(), "rda_files"), recursive = T)
 })
+
+test_that("plot_recruitment generates error with future end_year", {
+  # read in sample dataset
+  dat <- utils::read.csv(
+    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
+  )
+
+  # expect error
+  expect_error(
+    plot_recruitment(
+      dat,
+      end_year = 2035,
+      make_rda = TRUE,
+      rda_dir = getwd()
+    )
+  )
+
+})

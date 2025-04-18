@@ -55,18 +55,6 @@ test_that("plot_spawn_recruitment doesn't generate plots with erraneous end year
     )
   )
 
-  # expect error when attempt to use end_year past current year
-  expect_error(
-    stockplotr::plot_spawn_recruitment(
-      dat,
-      spawning_biomass_label = "mt",
-      recruitment_label = "mt",
-      end_year = 2029,
-      make_rda = FALSE, # FALSE
-      rda_dir = getwd()
-    )
-  )
-
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
   unlink(fs::path(getwd(), "rda_files"), recursive = T)
@@ -95,4 +83,24 @@ test_that("rda file made when indicated", {
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
   unlink(fs::path(getwd(), "rda_files"), recursive = T)
+})
+
+test_that("plot_spawn_recruitment generates error with future end_year", {
+  # read in sample dataset
+  dat <- utils::read.csv(
+    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
+  )
+
+  # expect error
+  expect_error(
+    stockplotr::plot_spawn_recruitment(
+      dat,
+      spawning_biomass_label = "mt",
+      recruitment_label = "mt",
+      end_year = 2029,
+      make_rda = FALSE, # FALSE
+      rda_dir = getwd()
+    )
+  )
+
 })

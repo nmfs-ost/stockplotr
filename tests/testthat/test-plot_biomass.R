@@ -111,3 +111,22 @@ test_that("rda file made when indicated", {
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
   unlink(fs::path(getwd(), "rda_files"), recursive = T)
 })
+
+test_that("plot_biomass generates error with future end_year", {
+  # read in sample dataset
+  dat <- utils::read.csv(
+    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
+  )
+
+  # expect error
+  expect_error(
+    stockplotr::plot_biomass(
+      dat,
+      rda_dir = getwd(),
+      make_rda = TRUE,
+      end_year = 2035,
+      ref_point = 18000
+    )
+  )
+
+})
