@@ -4,12 +4,20 @@
 \alias{table_landings}
 \title{Landed catch by fleet and year table}
 \usage{
-table_landings(dat, unit_label = "mt", make_rda = FALSE, rda_dir = getwd())
+table_landings(
+  dat,
+  unit_label = "mt",
+  end_year = NULL,
+  make_rda = FALSE,
+  rda_dir = getwd()
+)
 }
 \arguments{
 \item{dat}{A data frame returned from `asar::convert_output()`.}
 
 \item{unit_label}{Abbreviated units of landings}
+
+\item{end_year}{last year of assessment}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,

@@ -25,6 +25,7 @@ test_that("rda file made when indicated", {
 
   # export rda
   plot_landings(dat,
+    end_year = 2024,
     make_rda = TRUE,
     unit_label = "metric tons",
     rda_dir = getwd()

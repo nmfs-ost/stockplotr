@@ -10,6 +10,7 @@
 #'
 plot_landings <- function(dat,
                           unit_label = "metric tons",
+                          end_year = NULL,
                           make_rda = FALSE,
                           rda_dir = getwd()) {
   # Units
@@ -51,6 +52,25 @@ plot_landings <- function(dat,
       dplyr::mutate(fleet = as.character(fleet))
   }
 
+  # get end year if not defined
+  if (is.null(end_year)) {
+    end_year <- format(Sys.Date(), "%Y")
+  }
+
+  # create plot-specific variables to use throughout fxn for naming and IDing
+  topic_label <- "landings"
+
+  # identify output
+  fig_or_table <- "figure"
+
+  # check year isn't past end_year if not projections plot
+  check_year(end_year = end_year,
+             fig_or_table = fig_or_table,
+             topic = topic_label)
+
+  land <- land  |>
+    dplyr::filter(year <= end_year)
+
   # Make generic plot
   plt <- ggplot2::ggplot(data = land) +
     ggplot2::geom_area(
@@ -71,12 +91,6 @@ plot_landings <- function(dat,
 
   final <- suppressWarnings(add_theme(plt))
 
-  # create plot-specific variables to use throughout fxn for naming and IDing
-  topic_label <- "landings"
-
-  # identify output
-  fig_or_table <- "figure"
-
   # run write_captions.R if its output doesn't exist
   if (!file.exists(
     fs::path(getwd(), "captions_alt_text.csv")
@@ -85,7 +99,7 @@ plot_landings <- function(dat,
     stockplotr::write_captions(
       dat = dat,
       dir = rda_dir,
-      year = NULL
+      year = end_year
     )
   }
 
@@ -94,6 +108,7 @@ plot_landings <- function(dat,
     topic = topic_label,
     fig_or_table = fig_or_table,
     dir = rda_dir,
+    end_year = end_year,
     units = unit_label
   )
 

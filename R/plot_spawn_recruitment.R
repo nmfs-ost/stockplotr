@@ -38,7 +38,6 @@ plot_spawn_recruitment <- function(
   }
   stryr <- min(rec$year)
 
-
   # create plot-specific variables to use throughout fxn for naming and IDing
   topic_label <- "sr"
 
@@ -70,7 +69,8 @@ plot_spawn_recruitment <- function(
     dplyr::select(-c(module_name, label))
 
   # merge DF
-  sr <- dplyr::full_join(sb, rec)
+  sr <- dplyr::full_join(sb, rec) |>
+    dplyr::filter(year <= end_year)
 
   # Plot
   plt <- ggplot2::ggplot(data = sr) +

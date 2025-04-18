@@ -6,7 +6,7 @@ test_that("html_all_figs_tables makes qmd and html files with default rda_dir ar
 
   stockplotr::exp_all_figs_tables(
     dat,
-    end_year = 2030,
+    end_year = 2024,
     n_projected_years = 3,
     recruitment_unit_label = "mt",
     recruitment_scale_amount = 1,
@@ -47,7 +47,7 @@ test_that("html_all_figs_tables makes qmd and html files with non-default rda_di
     rda_path,
     stockplotr::exp_all_figs_tables(
       dat,
-      end_year = 2030,
+      end_year = 2024,
       n_projected_years = 3,
       recruitment_unit_label = "mt",
       recruitment_scale_amount = 1,
@@ -83,7 +83,7 @@ test_that("html_all_figs_tables triggers message (question) when all_tables_figu
 
   stockplotr::exp_all_figs_tables(
     dat,
-    end_year = 2030,
+    end_year = 2024,
     n_projected_years = 3,
     recruitment_unit_label = "mt",
     recruitment_scale_amount = 1,

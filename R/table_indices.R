@@ -7,11 +7,30 @@
 #'
 table_indices <- function(
     dat,
+    end_year = NULL,
     make_rda = FALSE,
     rda_dir = getwd()) {
+
+  # get end year if not defined
+  if (is.null(end_year)) {
+    end_year <- format(Sys.Date(), "%Y")
+  }
+
+  # create plot-specific variables to use throughout fxn for naming and IDing
+  topic_label <- "indices.abundance"
+
+  # identify output
+  fig_or_table <- "table"
+
+  # check year isn't past end_year if not projections plot
+  check_year(end_year = end_year,
+             fig_or_table = fig_or_table,
+             topic = topic_label)
+
   # Load data
   output <- dat |>
-    dplyr::filter(module_name == "INDEX_2" | module_name == "t.series")
+    dplyr::filter(module_name == "INDEX_2" | module_name == "t.series") |>
+    dplyr::filter(year <= end_year)
   # Check for U
   if (any(unique(output$module_name == "INDEX_2"))) {
     output <- output |>
@@ -22,6 +41,7 @@ table_indices <- function(
     output <- output |>
       dplyr::filter(grepl("cpue", label))
   }
+
   # Extract fleet names
   fleet_names <- unique(as.character(output$fleet))
   factors <- c("year", "fleet", "fleet_name", "age", "sex", "area", "seas", "season", "time", "era", "subseas", "subseason", "platoon", "platoo", "growth_pattern", "gp")
@@ -105,9 +125,6 @@ table_indices <- function(
 
   # export table to rda if argument = T
   if (make_rda) {
-    # create plot-specific variables to use throughout fxn for naming and IDing
-    topic_label <- "indices.abundance"
-
 
     # run write_captions.R if its output doesn't exist
     if (!file.exists(
@@ -117,11 +134,9 @@ table_indices <- function(
       stockplotr::write_captions(
         dat = dat,
         dir = rda_dir,
-        year = NULL
+        year = end_year
       )
     }
-    # identify output
-    fig_or_table <- "table"
 
     # extract this plot's caption and alt text
     caps_alttext <- extract_caps_alttext(

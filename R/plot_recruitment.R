@@ -71,6 +71,9 @@ plot_recruitment <- function(
   }
   stryr <- min(rec$year)
 
+  rec <- rec |>
+    dplyr::filter(year <= end_year)
+
   # create plot-specific variables to use throughout fxn for naming and IDing
   # Indicate if recruitment is relative or not
   if (relative) {

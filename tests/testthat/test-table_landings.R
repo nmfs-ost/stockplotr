@@ -14,6 +14,7 @@ test_that("table_landings generates plots without errors", {
     stockplotr::table_landings(
       dat,
       unit_label = "metric tons",
+      end_year = 2024,
       make_rda = FALSE,
       rda_dir = getwd()
     )
@@ -42,6 +43,7 @@ test_that("rda file made when indicated", {
   table_landings(
     dat,
     unit_label = "metric tons",
+    end_year = 2024,
     make_rda = TRUE,
     rda_dir = getwd()
   )

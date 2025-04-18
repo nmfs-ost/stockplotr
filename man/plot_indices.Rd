@@ -4,12 +4,20 @@
 \alias{plot_indices}
 \title{Plot Index of Abundance}
 \usage{
-plot_indices(dat, unit_label = NULL, make_rda = TRUE, rda_dir = NULL)
+plot_indices(
+  dat,
+  unit_label = NULL,
+  end_year = NULL,
+  make_rda = TRUE,
+  rda_dir = NULL
+)
 }
 \arguments{
 \item{dat}{A data frame returned from `asar::convert_output()`.}
 
 \item{unit_label}{units for index of abundance/CPUE}
+
+\item{end_year}{last year of assessment}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,

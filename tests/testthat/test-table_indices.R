@@ -13,6 +13,7 @@ test_that("table_indices generates plots without errors", {
   expect_no_error(
     stockplotr::table_indices(
       dat,
+      end_year = 2024,
       make_rda = FALSE,
       rda_dir = getwd()
     )
@@ -39,6 +40,7 @@ test_that("rda file made when indicated", {
   # export rda
   table_indices(
     dat,
+    end_year = 2024,
     make_rda = TRUE,
     rda_dir = getwd()
   )
