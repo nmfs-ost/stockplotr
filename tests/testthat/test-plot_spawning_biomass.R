@@ -21,7 +21,7 @@ test_that("plot_spawning_biomass generates plots without errors", {
       unit_label = "metric tons",
       scale_amount = 1,
       ref_line = "target",
-      end_year = 2030
+      end_year = 2024
     )
   )
 
@@ -32,7 +32,7 @@ test_that("plot_spawning_biomass generates plots without errors", {
       unit_label = "metric tons",
       scale_amount = 1,
       ref_point = 100,
-      end_year = 2030,
+      end_year = 2024,
       relative = TRUE
     )
   )
@@ -44,7 +44,7 @@ test_that("plot_spawning_biomass generates plots without errors", {
       unit_label = "metric tons",
       scale_amount = 1,
       ref_point = 100,
-      end_year = 2030,
+      end_year = 2024,
       relative = TRUE
     ),
     "gg"

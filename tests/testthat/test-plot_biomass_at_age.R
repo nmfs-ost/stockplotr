@@ -15,7 +15,7 @@ test_that("plot_biomass_at_age generates plots without errors", {
       dat,
       unit_label = "metric tons",
       scale_amount = 10,
-      end_year = 2030,
+      end_year = 2024,
       make_rda = FALSE,
       rda_dir = getwd()
     )
@@ -27,7 +27,7 @@ test_that("plot_biomass_at_age generates plots without errors", {
       dat,
       unit_label = "metric tons",
       scale_amount = 1,
-      end_year = 2030,
+      end_year = 2024,
       make_rda = FALSE,
       rda_dir = getwd()
     ),

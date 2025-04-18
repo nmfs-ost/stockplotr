@@ -67,11 +67,25 @@ plot_recruitment <- function(
   # dplyr::select(-c(module_name, label))
 
   if (is.null(end_year)) {
-    endyr <- max(rec$year) - n_projected_years
-  } else {
-    endyr <- end_year
+    end_year <- format(Sys.Date(), "%Y")
   }
   stryr <- min(rec$year)
+
+  # create plot-specific variables to use throughout fxn for naming and IDing
+  # Indicate if recruitment is relative or not
+  if (relative) {
+    topic_label <- "relative.recruitment"
+  } else {
+    topic_label <- "recruitment"
+  }
+
+  # identify output
+  fig_or_table <- "figure"
+
+  # check year isn't past end_year if not projections plot
+  check_year(end_year = end_year,
+             fig_or_table = fig_or_table,
+             topic = topic_label)
 
   # Choose number of breaks for x-axis
   x_n_breaks <- round(length(rec[["year"]]) / 10)
@@ -111,17 +125,6 @@ plot_recruitment <- function(
 
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
-    # create plot-specific variables to use throughout fxn for naming and IDing
-    # Indicate if recruitment is relative or not
-    if (relative) {
-      topic_label <- "relative.recruitment"
-    } else {
-      topic_label <- "recruitment"
-    }
-
-    # identify output
-    fig_or_table <- "figure"
-
     # run write_captions.R if its output doesn't exist
     if (!file.exists(
       fs::path(getwd(), "captions_alt_text.csv")

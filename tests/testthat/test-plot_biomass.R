@@ -21,7 +21,7 @@ test_that("plot_biomass generates plots without errors", {
       ref_point = 18000,
       unit_label = "metric tons",
       scale_amount = 1,
-      end_year = 2030,
+      end_year = 2024,
       relative = FALSE,
       make_rda = FALSE,
       rda_dir = getwd()
@@ -35,7 +35,7 @@ test_that("plot_biomass generates plots without errors", {
       ref_point = 18000,
       unit_label = "metric tons",
       scale_amount = 1,
-      end_year = 2030,
+      end_year = 2024,
       relative = TRUE,
       make_rda = FALSE,
       rda_dir = getwd()
@@ -49,7 +49,7 @@ test_that("plot_biomass generates plots without errors", {
       ref_point = 18000,
       unit_label = "metric tons",
       scale_amount = 1,
-      end_year = 2030,
+      end_year = 2024,
       relative = TRUE,
       make_rda = FALSE,
       rda_dir = getwd()

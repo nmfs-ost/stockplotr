@@ -53,8 +53,25 @@ plot_spawning_biomass <- function(
   # Determine the end year
   all_years <- dat[["year"]][grepl("^[0-9\\.]+$", dat[["year"]])]
   if (is.null(end_year)) {
-    end_year <- as.numeric(max(all_years, na.rm = TRUE)) - n_projected_years
+    end_year <- format(Sys.Date(), "%Y")
   }
+
+  # create plot-specific variables to use throughout fxn for naming and IDing
+  # Indicate if spawning biomass is relative or not
+  if (relative) {
+    topic_label <- "relative.spawning.biomass"
+  } else {
+    topic_label <- "spawning.biomass"
+  }
+
+  # identify output
+  fig_or_table <- "figure"
+
+  # check year isn't past end_year if not projections plot
+  check_year(end_year = end_year,
+             fig_or_table = fig_or_table,
+             topic = topic_label)
+
   # Commenting out bc this might not be consistent now with new setup 23dec2024
   # stopifnot(any(end_year >= all_years))
 
@@ -122,7 +139,7 @@ plot_spawning_biomass <- function(
   # Choose number of breaks for x-axis
   x_n_breaks <- round(length(sb[["year"]]) / 10)
   if (x_n_breaks <= 5) {
-    x_n_breaks <- round(length(sb[["year"]]) / 5)
+    x_n_breaks <- round(length(sb[["year"]]))
   }
 
   plt <- ggplot2::ggplot(data = sb) +
@@ -158,7 +175,7 @@ plot_spawning_biomass <- function(
     ) +
     ggplot2::annotate(
       geom = "text",
-      x = end_year + 0.05,
+      x = as.numeric(end_year) + 0.05,
       y = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
       label = list(bquote(SB[.(ref_line)])),
       parse = TRUE
@@ -169,16 +186,6 @@ plot_spawning_biomass <- function(
 
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
-    # create plot-specific variables to use throughout fxn for naming and IDing
-    # Indicate if spawning biomass is relative or not
-    if (relative) {
-      topic_label <- "relative.spawning.biomass"
-    } else {
-      topic_label <- "spawning.biomass"
-    }
-    # identify output
-    fig_or_table <- "figure"
-
     # run write_captions.R if its output doesn't exist
     if (!file.exists(
       fs::path(getwd(), "captions_alt_text.csv")

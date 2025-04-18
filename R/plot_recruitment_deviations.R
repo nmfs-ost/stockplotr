@@ -15,11 +15,20 @@ plot_recruitment_deviations <- function(
     make_rda = FALSE,
     rda_dir = getwd()) {
   if (is.null(end_year)) {
-    end_year <- max(as.numeric(dat$year), na.rm = TRUE) - n_projected_years
-  } else {
-    end_year <- end_year
+    end_year <- format(Sys.Date(), "%Y")
   }
   start_year <- min(as.numeric(dat$year), na.rm = TRUE)
+
+  # create plot-specific variables to use throughout fxn for naming and IDing
+  topic_label <- "recruitment.deviations"
+
+  # identify output
+  fig_or_table <- "figure"
+
+  # check year isn't past end_year if not projections plot
+  check_year(end_year = end_year,
+             fig_or_table = fig_or_table,
+             topic = topic_label)
 
   rec_devs <- dat |>
     dplyr::filter(
@@ -90,12 +99,6 @@ plot_recruitment_deviations <- function(
 
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
-    # create plot-specific variables to use throughout fxn for naming and IDing
-    topic_label <- "recruitment.deviations"
-
-    # identify output
-    fig_or_table <- "figure"
-
     # run write_captions.R if its output doesn't exist
     if (!file.exists(
       fs::path(getwd(), "captions_alt_text.csv")
