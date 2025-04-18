@@ -59,7 +59,7 @@ Suggests:
 VignetteBuilder: 
     knitr
 Remotes:
-    nmfs-fish-tools/nmfspalette,
+    nmfs-ost/nmfspalette,
     nmfs-ost/asar
 Config/testthat/edition: 3
 Config/testthat/parallel: false
