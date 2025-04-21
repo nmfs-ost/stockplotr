@@ -56,6 +56,9 @@ plot_recruitment_deviations <- function(
   x_n_breaks <- round(length(rec_devs[["year"]]) / 10)
   if (x_n_breaks <= 5) {
     x_n_breaks <- round(length(rec_devs[["year"]]) / 5)
+    if (x_n_breaks <= 2) {
+      x_n_breaks <- round(length(rec_devs[["year"]]))
+    }
   } else if (x_n_breaks > 10) {
     x_n_breaks <- round(length(rec_devs[["year"]]) / 15)
   }

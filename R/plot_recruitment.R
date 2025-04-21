@@ -94,7 +94,10 @@ plot_recruitment <- function(
   x_n_breaks <- round(length(rec[["year"]]) / 10)
   if (x_n_breaks <= 5) {
     x_n_breaks <- round(length(rec[["year"]]) / 5)
-  }
+    if (x_n_breaks <= 2) {
+      x_n_breaks <- round(length(rec[["year"]]))
+      }
+    }
 
   plt <- ggplot2::ggplot(data = rec) +
     ggplot2::geom_point(

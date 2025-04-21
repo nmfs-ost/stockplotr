@@ -106,7 +106,9 @@ plot_abundance_at_age <- function(
   x_n_breaks <- round(length(unique(b[["year"]])) / 10)
   if (x_n_breaks <= 5) {
     x_n_breaks <- round(length(unique(b[["year"]])) / 5)
-  } else if (x_n_breaks > 10) {
+    if (x_n_breaks <= 2) {
+      x_n_breaks <- round(length(unique(b[["year"]])))
+  }} else if (x_n_breaks > 10) {
     x_n_breaks <- round(length(unique(b[["year"]])) / 15)
   }
 
