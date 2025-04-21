@@ -124,5 +124,4 @@ test_that("plot_spawning_biomass generates error with future end_year", {
       relative = TRUE
     )
   )
-
 })

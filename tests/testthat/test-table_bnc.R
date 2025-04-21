@@ -80,5 +80,4 @@ test_that("table_bnc generates error with future end_year", {
       rda_dir = getwd()
     )
   )
-
 })

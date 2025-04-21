@@ -26,9 +26,11 @@ plot_recruitment_deviations <- function(
   fig_or_table <- "figure"
 
   # check year isn't past end_year if not projections plot
-  check_year(end_year = end_year,
-             fig_or_table = fig_or_table,
-             topic = topic_label)
+  check_year(
+    end_year = end_year,
+    fig_or_table = fig_or_table,
+    topic = topic_label
+  )
 
   rec_devs <- dat |>
     dplyr::filter(

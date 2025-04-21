@@ -29,9 +29,11 @@ table_landings <- function(dat,
   fig_or_table <- "table"
 
   # check year isn't past end_year if not projections plot
-  check_year(end_year = end_year,
-             fig_or_table = fig_or_table,
-             topic = topic_label)
+  check_year(
+    end_year = end_year,
+    fig_or_table = fig_or_table,
+    topic = topic_label
+  )
 
   # read standard data file and extract target quantity
   land_dat <- dat |>
@@ -47,7 +49,7 @@ table_landings <- function(dat,
     suppressWarnings() |>
     dplyr::filter(
       !is.na(year)
-    )|>
+    ) |>
     dplyr::filter(year <= end_year)
 
 
@@ -153,7 +155,6 @@ table_landings <- function(dat,
 
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
-
     # run write_captions.R if its output doesn't exist
     if (!file.exists(
       fs::path(getwd(), "captions_alt_text.csv")

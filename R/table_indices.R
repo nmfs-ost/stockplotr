@@ -10,7 +10,6 @@ table_indices <- function(
     end_year = NULL,
     make_rda = FALSE,
     rda_dir = getwd()) {
-
   # get end year if not defined
   if (is.null(end_year)) {
     end_year <- format(Sys.Date(), "%Y")
@@ -23,9 +22,11 @@ table_indices <- function(
   fig_or_table <- "table"
 
   # check year isn't past end_year if not projections plot
-  check_year(end_year = end_year,
-             fig_or_table = fig_or_table,
-             topic = topic_label)
+  check_year(
+    end_year = end_year,
+    fig_or_table = fig_or_table,
+    topic = topic_label
+  )
 
   # Load data
   output <- dat |>
@@ -125,7 +126,6 @@ table_indices <- function(
 
   # export table to rda if argument = T
   if (make_rda) {
-
     # run write_captions.R if its output doesn't exist
     if (!file.exists(
       fs::path(getwd(), "captions_alt_text.csv")

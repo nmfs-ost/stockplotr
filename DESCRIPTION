@@ -59,8 +59,8 @@ Suggests:
 VignetteBuilder: 
     knitr
 Remotes:
-    nmfs-ost/nmfspalette,
-    nmfs-ost/asar
+    nmfs-ost/asar,
+    nmfs-ost/nmfspalette
 Config/testthat/edition: 3
 Config/testthat/parallel: false
 Encoding: UTF-8

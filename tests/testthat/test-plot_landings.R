@@ -49,11 +49,10 @@ test_that("plot_landings generates error with future end_year", {
   # expect error
   expect_error(
     plot_landings(dat,
-                  end_year = 2035,
-                  make_rda = TRUE,
-                  unit_label = "metric tons",
-                  rda_dir = getwd()
+      end_year = 2035,
+      make_rda = TRUE,
+      unit_label = "metric tons",
+      rda_dir = getwd()
     )
   )
-
 })

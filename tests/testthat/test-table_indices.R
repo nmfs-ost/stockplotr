@@ -69,5 +69,4 @@ test_that("table_indices generates error with future end_year", {
       rda_dir = getwd()
     )
   )
-
 })

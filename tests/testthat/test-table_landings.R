@@ -73,5 +73,4 @@ test_that("table_landings generates error with future end_year", {
       rda_dir = getwd()
     )
   )
-
 })

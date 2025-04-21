@@ -31,9 +31,11 @@ table_bnc <- function(
   fig_or_table <- "table"
 
   # check year isn't past end_year if not projections plot
-  check_year(end_year = end_year,
-             fig_or_table = fig_or_table,
-             topic = topic_label)
+  check_year(
+    end_year = end_year,
+    fig_or_table = fig_or_table,
+    topic = topic_label
+  )
 
   dat <- dplyr::filter(dat, year <= end_year)
 

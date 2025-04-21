@@ -75,5 +75,4 @@ test_that("plot_biomass_at_age generates error with future end_year", {
       rda_dir = getwd()
     )
   )
-
 })

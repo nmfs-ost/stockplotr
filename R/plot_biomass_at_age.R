@@ -50,19 +50,21 @@ plot_biomass_at_age <- function(
     end_year <- format(Sys.Date(), "%Y")
   }
 
-   # create plot-specific variables to use throughout fxn for naming and IDing
-   topic_label <- "pop.baa"
+  # create plot-specific variables to use throughout fxn for naming and IDing
+  topic_label <- "pop.baa"
 
-   # identify output
-   fig_or_table <- "figure"
+  # identify output
+  fig_or_table <- "figure"
 
-   # check year isn't past end_year if not projections plot
-   check_year(end_year = end_year,
-              fig_or_table = fig_or_table,
-              topic = topic_label)
+  # check year isn't past end_year if not projections plot
+  check_year(
+    end_year = end_year,
+    fig_or_table = fig_or_table,
+    topic = topic_label
+  )
 
-   b <- b |>
-     dplyr::filter(year <= end_year)
+  b <- b |>
+    dplyr::filter(year <= end_year)
 
   total_fish_per_year <- b |>
     dplyr::group_by(year) |>
