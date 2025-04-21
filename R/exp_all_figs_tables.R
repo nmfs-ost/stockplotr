@@ -100,14 +100,14 @@ exp_all_figs_tables <- function(
   tryCatch(
     {
       stockplotr::plot_recruitment(
-        dat = dat,
+        dat,
         unit_label = recruitment_unit_label,
         scale_amount = recruitment_scale_amount,
-        end_year = end_year,
-        n_projected_years = n_projected_years,
-        relative = relative,
+        end_year,
+        n_projected_years,
+        relative,
         make_rda = TRUE,
-        rda_dir = rda_dir
+        rda_dir
       ) #|>
       # suppressWarnings() |>
       # invisible()
@@ -146,6 +146,7 @@ exp_all_figs_tables <- function(
     {
       stockplotr::plot_landings(dat,
         unit_label = landings_unit_label,
+        end_year,
         make_rda,
         rda_dir
       ) # |>
@@ -274,7 +275,10 @@ exp_all_figs_tables <- function(
 
   tryCatch(
     {
-      stockplotr::table_indices(dat, make_rda, rda_dir) # |>
+      stockplotr::table_indices(dat,
+                                end_year,
+                                make_rda,
+                                rda_dir) # |>
       # suppressWarnings() |>
       # invisible()
     },
@@ -287,10 +291,10 @@ exp_all_figs_tables <- function(
   tryCatch(
     {
       stockplotr::table_landings(dat,
-        unit_label = landings_unit_label,
-        make_rda,
-        rda_dir
-      ) # |>
+                                 unit_label = landings_unit_label,
+                                 end_year,
+                                 make_rda,
+                                 rda_dir) # |>
       # suppressWarnings() |>
       # invisible()
     },

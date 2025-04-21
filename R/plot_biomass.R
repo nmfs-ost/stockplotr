@@ -105,8 +105,24 @@ plot_biomass <- function(
 
   # get end year if not defined
   if (is.null(end_year)) {
-    end_year <- max(b$year)
+    end_year <- format(Sys.Date(), "%Y")
   }
+
+  # create plot-specific variables to use throughout fxn for naming and IDing
+  # Indicate if biomass is relative or not
+  if (relative) {
+    topic_label <- "relative.biomass"
+  } else {
+    topic_label <- "biomass"
+  }
+
+  # identify output
+  fig_or_table <- "figure"
+
+  # check year isn't past end_year if not projections plot
+  check_year(end_year = end_year,
+             fig_or_table = fig_or_table,
+             topic = topic_label)
 
   # Choose number of breaks for x-axis
   x_n_breaks <- round(length(b[["year"]]) / 10)
@@ -147,7 +163,7 @@ plot_biomass <- function(
     ) +
     ggplot2::annotate(
       geom = "text",
-      x = end_year + 0.05,
+      x = as.numeric(end_year) + 0.05,
       y = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
       label = list(bquote(B[.(ref_line)])),
       parse = TRUE,
@@ -169,17 +185,6 @@ plot_biomass <- function(
 
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
-    # create plot-specific variables to use throughout fxn for naming and IDing
-    # Indicate if biomass is relative or not
-    if (relative) {
-      topic_label <- "relative.biomass"
-    } else {
-      topic_label <- "biomass"
-    }
-
-    # identify output
-    fig_or_table <- "figure"
-
     # run write_captions.R if its output doesn't exist
     if (!file.exists(
       fs::path(getwd(), "captions_alt_text.csv")

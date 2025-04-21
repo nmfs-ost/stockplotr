@@ -2,6 +2,35 @@
 # General utility functions
 # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+# Check end_year isn't past current year for non-projections plots
+# make year character if not null
+check_year <- function(end_year = NULL,
+                       topic = NULL,
+                       fig_or_table = NULL){
+  if (!is.null(end_year)) {
+
+    # TODO: Update this to work for projections plots when developed
+    # stop if end year is past current year for non-projections plots
+    projections_plots <- c("proj.catch", "proj.biomass", "projection.ts", "sensitivity.runs")
+
+    if (!is.null(topic)){
+      if (topic %in% projections_plots == FALSE){
+        if (!is.null(fig_or_table)){
+          if (as.numeric(end_year) > format(Sys.Date(), "%Y")){
+            stop(paste0("end_year is past the current year for a non-projections plot (", topic, " ", fig_or_table, ")"))
+          }
+        } else {
+          stop("fig_or_table is NULL")
+        }
+      }
+    } else {
+      stop("topic is NULL")
+    }
+  } else {
+    stop("end_year is NULL")
+  }
+}
+
 # substitute in more key quantities (units, end_years, reference points, and more)
 # to captions/alt text
 add_more_key_quants <- function(
@@ -21,7 +50,7 @@ add_more_key_quants <- function(
   # make year character if not null
   if (!is.null(end_year)) {
     end_year <- as.character(end_year)
-  }
+    }
 
   # select specific fig/table's caption/alt text
   topic_cap_alt <- caps_alt_df |>

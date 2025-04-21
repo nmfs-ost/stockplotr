@@ -72,11 +72,22 @@ plot_abundance_at_age <- function(
 
   # get end year if not defined
   if (is.null(end_year)) {
-    end_year <- max(b$year)
+    end_year <- format(Sys.Date(), "%Y")
   }
 
-  b <- b |>
-    dplyr::filter(year <= end_year)
+   # create plot-specific variables to use throughout fxn for naming and IDing
+   topic_label <- "pop.naa"
+
+   # identify output
+   fig_or_table <- "figure"
+
+   # check year isn't past end_year if not projections plot
+   check_year(end_year = end_year,
+              fig_or_table = fig_or_table,
+              topic = topic_label)
+
+   b <- b |>
+     dplyr::filter(year <= end_year)
 
   total_fish_per_year <- b |>
     dplyr::group_by(year) |>
@@ -95,7 +106,9 @@ plot_abundance_at_age <- function(
   x_n_breaks <- round(length(unique(b[["year"]])) / 10)
   if (x_n_breaks <= 5) {
     x_n_breaks <- round(length(unique(b[["year"]])) / 5)
-  } else if (x_n_breaks > 10) {
+    if (x_n_breaks <= 2) {
+      x_n_breaks <- round(length(unique(b[["year"]])))
+  }} else if (x_n_breaks > 10) {
     x_n_breaks <- round(length(unique(b[["year"]])) / 15)
   }
 
@@ -165,12 +178,6 @@ plot_abundance_at_age <- function(
 
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
-    # create plot-specific variables to use throughout fxn for naming and IDing
-    topic_label <- "pop.naa"
-
-    # identify output
-    fig_or_table <- "figure"
-
     # run write_captions.R if its output doesn't exist
     if (!file.exists(
       fs::path(getwd(), "captions_alt_text.csv")

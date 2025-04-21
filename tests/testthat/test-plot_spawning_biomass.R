@@ -21,7 +21,7 @@ test_that("plot_spawning_biomass generates plots without errors", {
       unit_label = "metric tons",
       scale_amount = 1,
       ref_line = "target",
-      end_year = 2030
+      end_year = 2024
     )
   )
 
@@ -32,7 +32,7 @@ test_that("plot_spawning_biomass generates plots without errors", {
       unit_label = "metric tons",
       scale_amount = 1,
       ref_point = 100,
-      end_year = 2030,
+      end_year = 2024,
       relative = TRUE
     )
   )
@@ -44,7 +44,7 @@ test_that("plot_spawning_biomass generates plots without errors", {
       unit_label = "metric tons",
       scale_amount = 1,
       ref_point = 100,
-      end_year = 2030,
+      end_year = 2024,
       relative = TRUE
     ),
     "gg"
@@ -93,7 +93,7 @@ test_that("rda file made when indicated", {
     unit_label = "metric tons",
     scale_amount = 1,
     ref_line = "msy",
-    end_year = 2030,
+    end_year = 2024,
     make_rda = TRUE,
     rda_dir = getwd()
   )
@@ -105,4 +105,24 @@ test_that("rda file made when indicated", {
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
   unlink(fs::path(getwd(), "rda_files"), recursive = T)
+})
+
+test_that("plot_spawning_biomass generates error with future end_year", {
+  # read in sample dataset
+  dat <- utils::read.csv(
+    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
+  )
+
+  # expect error
+  expect_error(
+    stockplotr::plot_spawning_biomass(
+      dat,
+      unit_label = "metric tons",
+      end_year = 2055,
+      scale_amount = 1,
+      ref_point = 100,
+      relative = TRUE
+    )
+  )
+
 })

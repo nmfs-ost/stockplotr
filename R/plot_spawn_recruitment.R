@@ -34,11 +34,20 @@ plot_spawn_recruitment <- function(
     dplyr::select(-c(module_name, label))
 
   if (is.null(end_year)) {
-    endyr <- max(rec$year)
-  } else {
-    endyr <- end_year
+    end_year <- format(Sys.Date(), "%Y")
   }
   stryr <- min(rec$year)
+
+  # create plot-specific variables to use throughout fxn for naming and IDing
+  topic_label <- "sr"
+
+  # identify output
+  fig_or_table <- "figure"
+
+  # check year isn't past end_year if not projections plot
+  check_year(end_year = end_year,
+             fig_or_table = fig_or_table,
+             topic = topic_label)
 
   # Extract spawning biomass
   sb <- dat |>
@@ -60,7 +69,8 @@ plot_spawn_recruitment <- function(
     dplyr::select(-c(module_name, label))
 
   # merge DF
-  sr <- dplyr::full_join(sb, rec)
+  sr <- dplyr::full_join(sb, rec) |>
+    dplyr::filter(year <= end_year)
 
   # Plot
   plt <- ggplot2::ggplot(data = sr) +
@@ -75,12 +85,6 @@ plot_spawn_recruitment <- function(
 
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
-    # create plot-specific variables to use throughout fxn for naming and IDing
-    topic_label <- "sr"
-
-    # identify output
-    fig_or_table <- "figure"
-
     # run write_captions.R if its output doesn't exist
     if (!file.exists(
       fs::path(getwd(), "captions_alt_text.csv")

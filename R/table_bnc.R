@@ -21,11 +21,19 @@ table_bnc <- function(
   catch_label <- glue::glue("Catch ({catch_unit_label})")
 
   if (is.null(end_year)) {
-    end_year <-
-      {
-        max(as.numeric(dat$year), na.rm = TRUE) - 10
-      } |> suppressWarnings()
+    end_year <- format(Sys.Date(), "%Y")
   }
+
+  # create plot-specific variables to use throughout fxn for naming and IDing
+  topic_label <- "bnc"
+
+  # identify output
+  fig_or_table <- "table"
+
+  # check year isn't past end_year if not projections plot
+  check_year(end_year = end_year,
+             fig_or_table = fig_or_table,
+             topic = topic_label)
 
   dat <- dplyr::filter(dat, year <= end_year)
 
@@ -123,12 +131,6 @@ table_bnc <- function(
 
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
-    # create plot-specific variables to use throughout fxn for naming and IDing
-    topic_label <- "bnc"
-
-    # identify output
-    fig_or_table <- "table"
-
     # run write_captions.R if its output doesn't exist
     if (!file.exists(
       fs::path(getwd(), "captions_alt_text.csv")

@@ -10,6 +10,7 @@
 plot_indices <- function(
     dat,
     unit_label = NULL,
+    end_year = NULL,
     make_rda = TRUE,
     rda_dir = NULL) {
   # Set cpue unit label for plot
@@ -103,7 +104,23 @@ plot_indices <- function(
       ),
       fleet = as.character(fleet),
       year = as.numeric(year)
-    )
+    ) |>
+    dplyr::filter(year <= as.numeric(end_year))
+
+  # get end year if not defined
+  if (is.null(end_year)) {
+    end_year <- format(Sys.Date(), "%Y")
+  }
+
+  topic_label <- "CPUE.indices"
+
+  # identify output
+  fig_or_table <- "figure"
+
+  # check year isn't past end_year if not projections plot
+  check_year(end_year = end_year,
+             fig_or_table = fig_or_table,
+             topic = topic_label)
 
   # create plot
   plt <- ggplot2::ggplot(data = indices2) +
@@ -132,10 +149,6 @@ plot_indices <- function(
 
   if (make_rda) {
     # create plot-specific variables to use throughout fxn for naming and IDing
-    topic_label <- "CPUE.indices"
-
-    # identify output
-    fig_or_table <- "figure"
 
     # run write_captions.R if its output doesn't exist
     if (!file.exists(
@@ -153,6 +166,7 @@ plot_indices <- function(
     add_more_key_quants(
       topic = topic_label,
       fig_or_table = fig_or_table,
+      end_year = end_year,
       dir = rda_dir,
       units = unit_label
     )

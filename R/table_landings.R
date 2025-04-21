@@ -9,12 +9,29 @@
 #'
 table_landings <- function(dat,
                            unit_label = "mt",
+                           end_year = NULL,
                            make_rda = FALSE,
                            rda_dir = getwd()) {
   # TODO: add an option to stratify by gear type
 
   # Units
   land_label <- glue::glue("Landings ({unit_label})")
+
+  # get end year if not defined
+  if (is.null(end_year)) {
+    end_year <- format(Sys.Date(), "%Y")
+  }
+
+  # create plot-specific variables to use throughout fxn for naming and IDing
+  topic_label <- "landings"
+
+  # identify output
+  fig_or_table <- "table"
+
+  # check year isn't past end_year if not projections plot
+  check_year(end_year = end_year,
+             fig_or_table = fig_or_table,
+             topic = topic_label)
 
   # read standard data file and extract target quantity
   land_dat <- dat |>
@@ -30,7 +47,9 @@ table_landings <- function(dat,
     suppressWarnings() |>
     dplyr::filter(
       !is.na(year)
-    )
+    )|>
+    dplyr::filter(year <= end_year)
+
 
   # if (is.numeric(land_dat$fleet)){
   #   land_dat$fleet <- paste0("00", land_dat$fleet)
@@ -134,11 +153,6 @@ table_landings <- function(dat,
 
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
-    # create plot-specific variables to use throughout fxn for naming and IDing
-    topic_label <- "landings"
-
-    # identify output
-    fig_or_table <- "table"
 
     # run write_captions.R if its output doesn't exist
     if (!file.exists(
@@ -148,7 +162,7 @@ table_landings <- function(dat,
       stockplotr::write_captions(
         dat = dat,
         dir = rda_dir,
-        year = NULL
+        year = end_year
       )
     }
 
@@ -158,6 +172,7 @@ table_landings <- function(dat,
       topic = topic_label,
       fig_or_table = fig_or_table,
       dir = rda_dir,
+      end_year = end_year,
       units = unit_label
     )
 
