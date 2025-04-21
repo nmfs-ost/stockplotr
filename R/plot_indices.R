@@ -118,9 +118,11 @@ plot_indices <- function(
   fig_or_table <- "figure"
 
   # check year isn't past end_year if not projections plot
-  check_year(end_year = end_year,
-             fig_or_table = fig_or_table,
-             topic = topic_label)
+  check_year(
+    end_year = end_year,
+    fig_or_table = fig_or_table,
+    topic = topic_label
+  )
 
   # create plot
   plt <- ggplot2::ggplot(data = indices2) +

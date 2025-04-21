@@ -128,5 +128,4 @@ test_that("plot_biomass generates error with future end_year", {
       ref_point = 18000
     )
   )
-
 })

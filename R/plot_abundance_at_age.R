@@ -75,19 +75,21 @@ plot_abundance_at_age <- function(
     end_year <- format(Sys.Date(), "%Y")
   }
 
-   # create plot-specific variables to use throughout fxn for naming and IDing
-   topic_label <- "pop.naa"
+  # create plot-specific variables to use throughout fxn for naming and IDing
+  topic_label <- "pop.naa"
 
-   # identify output
-   fig_or_table <- "figure"
+  # identify output
+  fig_or_table <- "figure"
 
-   # check year isn't past end_year if not projections plot
-   check_year(end_year = end_year,
-              fig_or_table = fig_or_table,
-              topic = topic_label)
+  # check year isn't past end_year if not projections plot
+  check_year(
+    end_year = end_year,
+    fig_or_table = fig_or_table,
+    topic = topic_label
+  )
 
-   b <- b |>
-     dplyr::filter(year <= end_year)
+  b <- b |>
+    dplyr::filter(year <= end_year)
 
   total_fish_per_year <- b |>
     dplyr::group_by(year) |>
@@ -108,7 +110,8 @@ plot_abundance_at_age <- function(
     x_n_breaks <- round(length(unique(b[["year"]])) / 5)
     if (x_n_breaks <= 2) {
       x_n_breaks <- round(length(unique(b[["year"]])))
-  }} else if (x_n_breaks > 10) {
+    }
+  } else if (x_n_breaks > 10) {
     x_n_breaks <- round(length(unique(b[["year"]])) / 15)
   }
 

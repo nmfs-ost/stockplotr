@@ -86,9 +86,11 @@ plot_recruitment <- function(
   fig_or_table <- "figure"
 
   # check year isn't past end_year if not projections plot
-  check_year(end_year = end_year,
-             fig_or_table = fig_or_table,
-             topic = topic_label)
+  check_year(
+    end_year = end_year,
+    fig_or_table = fig_or_table,
+    topic = topic_label
+  )
 
   # Choose number of breaks for x-axis
   x_n_breaks <- round(length(rec[["year"]]) / 10)
@@ -96,8 +98,8 @@ plot_recruitment <- function(
     x_n_breaks <- round(length(rec[["year"]]) / 5)
     if (x_n_breaks <= 2) {
       x_n_breaks <- round(length(rec[["year"]]))
-      }
     }
+  }
 
   plt <- ggplot2::ggplot(data = rec) +
     ggplot2::geom_point(

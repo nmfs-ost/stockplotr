@@ -75,5 +75,4 @@ test_that("plot_recruitment_deviations generates error with future end_year", {
       rda_dir = getwd()
     )
   )
-
 })

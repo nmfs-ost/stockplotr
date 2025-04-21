@@ -275,10 +275,12 @@ exp_all_figs_tables <- function(
 
   tryCatch(
     {
-      stockplotr::table_indices(dat,
-                                end_year,
-                                make_rda,
-                                rda_dir) # |>
+      stockplotr::table_indices(
+        dat,
+        end_year,
+        make_rda,
+        rda_dir
+      ) # |>
       # suppressWarnings() |>
       # invisible()
     },
@@ -291,10 +293,11 @@ exp_all_figs_tables <- function(
   tryCatch(
     {
       stockplotr::table_landings(dat,
-                                 unit_label = landings_unit_label,
-                                 end_year,
-                                 make_rda,
-                                 rda_dir) # |>
+        unit_label = landings_unit_label,
+        end_year,
+        make_rda,
+        rda_dir
+      ) # |>
       # suppressWarnings() |>
       # invisible()
     },

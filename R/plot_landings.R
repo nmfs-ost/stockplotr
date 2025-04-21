@@ -64,11 +64,13 @@ plot_landings <- function(dat,
   fig_or_table <- "figure"
 
   # check year isn't past end_year if not projections plot
-  check_year(end_year = end_year,
-             fig_or_table = fig_or_table,
-             topic = topic_label)
+  check_year(
+    end_year = end_year,
+    fig_or_table = fig_or_table,
+    topic = topic_label
+  )
 
-  land <- land  |>
+  land <- land |>
     dplyr::filter(year <= end_year)
 
   # Make generic plot

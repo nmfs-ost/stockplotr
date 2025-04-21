@@ -6,8 +6,10 @@ test_that("plot_spawn_recruitment generates plots without errors", {
 
   # expect error-free plot with minimal arguments
   expect_no_error(
-    stockplotr::plot_spawn_recruitment(dat = dat,
-                                       end_year = 2022)
+    stockplotr::plot_spawn_recruitment(
+      dat = dat,
+      end_year = 2022
+    )
   )
 
   # expect error-free plot with many arguments
@@ -102,5 +104,4 @@ test_that("plot_spawn_recruitment generates error with future end_year", {
       rda_dir = getwd()
     )
   )
-
 })
