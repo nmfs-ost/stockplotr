@@ -76,7 +76,13 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">table_landings</span><span class="op">(</span><span class="va">dat</span>, unit_label <span class="op">=</span> <span class="st">"mt"</span>, make_rda <span class="op">=</span> <span class="cn">FALSE</span>, rda_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">table_landings</span><span class="op">(</span></span>
+<span>  <span class="va">dat</span>,</span>
+<span>  unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
+<span>  end_year <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  make_rda <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  rda_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -89,6 +95,10 @@
 
 <dt id="arg-unit-label">unit_label<a class="anchor" aria-label="anchor" href="#arg-unit-label"></a></dt>
 <dd><p>Abbreviated units of landings</p></dd>
+
+
+<dt id="arg-end-year">end_year<a class="anchor" aria-label="anchor" href="#arg-end-year"></a></dt>
+<dd><p>last year of assessment</p></dd>
 
 
 <dt id="arg-make-rda">make_rda<a class="anchor" aria-label="anchor" href="#arg-make-rda"></a></dt>
