@@ -9,7 +9,6 @@ exp_all_figs_tables(
   recruitment_unit_label = "mt",
   recruitment_scale_amount = 1,
   end_year = NULL,
-  n_projected_years = 10,
   relative = FALSE,
   rda_dir = getwd(),
   ref_line = c("target", "MSY", "msy", "unfished"),
