@@ -17,6 +17,29 @@
 #' or will be extracted from the provided file if possible. In later releases, model will not
 #' @export
 #'
+#' @examples
+#' \dontrun{
+#' plot_biomass(dat)
+#'
+#' plot_biomass(
+#' dat,
+#' unit_label = "my_unit",
+#' ref_line = "msy",
+#' end_year = 2024,
+#' rda_dir = getwd()
+#' )
+#'
+#' plot_biomass(
+#' dat,
+#' unit_label = "my_unit",
+#' scale_amount = 100,
+#' ref_point = 1000,
+#' end_year = 2024,
+#' relative = TRUE,
+#' make_rda = TRUE,
+#' rda_dir = getwd()
+#' )
+#' }
 plot_biomass <- function(
     dat,
     unit_label = "metric tons",
