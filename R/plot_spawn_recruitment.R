@@ -21,7 +21,7 @@
 #' )
 #' }
 plot_spawn_recruitment <- function(
-    dat = NULL,
+    dat,
     spawning_biomass_label = "metric tons",
     recruitment_label = "metric tons",
     end_year = NULL,

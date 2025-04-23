@@ -21,7 +21,7 @@
 #' )
 #' }
 plot_recruitment_deviations <- function(
-    dat = NULL,
+    dat,
     end_year = NULL,
     n_projected_years = 10,
     make_rda = FALSE,
