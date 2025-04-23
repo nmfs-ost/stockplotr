@@ -12,7 +12,6 @@ plot_spawning_biomass(
   ref_point = NULL,
   end_year = NULL,
   relative = FALSE,
-  n_projected_years = 10,
   make_rda = FALSE,
   rda_dir = getwd()
 )
@@ -44,9 +43,6 @@ reference point in the form c("label" = value).}
 \item{relative}{A logical value specifying if the resulting figures should
 be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
 which reference point to use.}
-
-\item{n_projected_years}{Number of years spawning biomass is projected for.
-By default this number is set to 10}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,

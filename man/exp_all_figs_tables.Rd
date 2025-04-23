@@ -41,9 +41,6 @@ recruitment_scale_amount = 100 would scale down a value from 500,000 -->
 
 \item{end_year}{last year of assessment}
 
-\item{n_projected_years}{Number of years spawning biomass is projected for.
-By default this number is set to 10}
-
 \item{relative}{A logical value specifying if the resulting figures should
 be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
 which reference point to use.}

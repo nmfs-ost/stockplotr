@@ -53,7 +53,6 @@ plot_spawning_biomass <- function(
     ref_point = NULL,
     end_year = NULL,
     relative = FALSE,
-    n_projected_years = 10,
     make_rda = FALSE,
     rda_dir = getwd()) {
   if (!is.null(ref_point)) {

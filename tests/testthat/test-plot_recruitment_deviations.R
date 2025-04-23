@@ -16,7 +16,6 @@ test_that("plot_recruitment_deviations generates plots without errors", {
     stockplotr::plot_recruitment_deviations(
       dat,
       end_year = 2022,
-      n_projected_years = 5,
       make_rda = FALSE,
       rda_dir = getwd()
     )
@@ -27,7 +26,6 @@ test_that("plot_recruitment_deviations generates plots without errors", {
     stockplotr::plot_recruitment_deviations(
       dat,
       end_year = 2022,
-      n_projected_years = 5,
       make_rda = FALSE,
       rda_dir = getwd()
     ),
@@ -45,7 +43,6 @@ test_that("rda file made when indicated", {
   plot_recruitment_deviations(
     dat,
     end_year = 2022,
-    n_projected_years = 5,
     make_rda = TRUE,
     rda_dir = getwd()
   )
@@ -70,7 +67,6 @@ test_that("plot_recruitment_deviations generates error with future end_year", {
     plot_recruitment_deviations(
       dat,
       end_year = 2035,
-      n_projected_years = 5,
       make_rda = TRUE,
       rda_dir = getwd()
     )

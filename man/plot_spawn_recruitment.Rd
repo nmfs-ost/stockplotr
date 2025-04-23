@@ -5,7 +5,7 @@
 \title{Plot Spawn-Recruit Curve}
 \usage{
 plot_spawn_recruitment(
-  dat = NULL,
+  dat,
   spawning_biomass_label = "metric tons",
   recruitment_label = "metric tons",
   end_year = NULL,

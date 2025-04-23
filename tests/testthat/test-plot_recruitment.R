@@ -18,7 +18,6 @@ test_that("plot_recruitment generates plots without errors", {
       unit_label = "mt",
       scale_amount = 10,
       end_year = 2025,
-      n_projected_years = 3,
       relative = FALSE,
       make_rda = FALSE,
       rda_dir = getwd()
@@ -32,7 +31,6 @@ test_that("plot_recruitment generates plots without errors", {
       unit_label = "mt",
       scale_amount = 10,
       end_year = 2025,
-      n_projected_years = 3,
       relative = T,
       make_rda = FALSE,
       rda_dir = getwd()
@@ -46,7 +44,6 @@ test_that("plot_recruitment generates plots without errors", {
       unit_label = "mt",
       scale_amount = 10,
       end_year = 2025,
-      n_projected_years = 3,
       relative = T,
       make_rda = FALSE,
       rda_dir = getwd()
