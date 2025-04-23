@@ -10,6 +10,17 @@
 #' associated caption for the table.
 #' @export
 #'
+#' @examples
+#' \dontrun{
+#' table_bnc(dat)
+#'
+#' table_bnc(dat,
+#' end_year = 2024,
+#' biomass_unit_label = "b label",
+#' catch_unit_label = "catch label",
+#' make_rda = TRUE,
+#' rda_dir = getwd())
+#' }
 table_bnc <- function(
     dat,
     end_year = NULL,

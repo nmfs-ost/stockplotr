@@ -27,3 +27,15 @@ stratified by fleet.
 \description{
 Create Indices of Abundance Table
 }
+\examples{
+\dontrun{
+table_indices(dat)
+
+table_indices(
+dat,
+end_year = 2024,
+make_rda = TRUE,
+rda_dir = getwd()
+)
+}
+}

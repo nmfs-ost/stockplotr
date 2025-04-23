@@ -7,6 +7,19 @@
 #' @return Plot spawning recruitment relationship from a standardized output file originating from asar::convert_output()
 #' @export
 #'
+#' @examples
+#' \dontrun{
+#' plot_spawn_recruitment(dat)
+#'
+#' plot_spawn_recruitment(
+#' dat,
+#' spawning_biomass_label = "sb label",
+#' recruitment_label = "rec label",
+#' end_year = 2024,
+#' make_rda = TRUE,
+#' rda_dir = getwd()
+#' )
+#' }
 plot_spawn_recruitment <- function(
     dat = NULL,
     spawning_biomass_label = "metric tons",

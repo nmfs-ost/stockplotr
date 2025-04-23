@@ -22,3 +22,10 @@ are automatically extracted from the converted model results file.
 Function to create captions and alternative text that contain
 key quantities from the model results file.
 }
+\examples{
+\dontrun{
+write_captions(dat,
+dir = getwd(),
+year = 2025)
+}
+}
