@@ -51,3 +51,19 @@ text for the figure.
 \description{
 Plot Recruitment
 }
+\examples{
+\dontrun{
+plot_recruitment(dat)
+
+plot_recruitment(
+dat,
+unit_label = "my_unit_label",
+scale_amount = 100,
+end_year = 2023,
+n_projected_years = 15,
+relative = TRUE,
+make_rda = TRUE,
+rda_dir = getwd()
+)
+}
+}

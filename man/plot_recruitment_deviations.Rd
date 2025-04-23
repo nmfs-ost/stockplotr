@@ -38,3 +38,16 @@ associated caption and alternative text for the figure.
 \description{
 Plot Recruitment Deviations
 }
+\examples{
+\dontrun{
+plot_recruitment_deviations(dat)
+
+plot_recruitment_deviations(
+dat,
+end_year = 2024,
+n_projected_years = 10,
+make_rda = TRUE,
+rda_dir = getwd()
+)
+}
+}

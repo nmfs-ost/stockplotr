@@ -15,6 +15,7 @@
 #' dat,
 #' unit_label = "my_unit",
 #' end_year = 2024,
+#' make_rda = TRUE,
 #' rda_dir = getwd()
 #' )
 #' }
