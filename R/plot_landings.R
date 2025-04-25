@@ -81,10 +81,10 @@ plot_landings <- function(dat,
     ) +
     ggplot2::scale_x_continuous(
       n.breaks = x_n_breaks
-    ) +
-    ggplot2::scale_y_continuous(
-      labels = scales::label_comma()
-    )
+    ) # +
+    # ggplot2::scale_y_continuous(
+    #   labels = scales::label_comma()
+    # )
 
   final <- suppressWarnings(add_theme(plt))
 
