@@ -6,8 +6,8 @@
 \usage{
 plot_catch_comp(
   dat,
-  end_year = NULL,
   unit_label = "metric tons",
+  end_year = NULL,
   make_rda = FALSE,
   rda_dir = getwd()
 )
@@ -15,9 +15,9 @@ plot_catch_comp(
 \arguments{
 \item{dat}{A data frame returned from `asar::convert_output()`.}
 
-\item{end_year}{last year of assessment}
-
 \item{unit_label}{indicate the name of the units of catch as to label the axis}
+
+\item{end_year}{last year of assessment}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,

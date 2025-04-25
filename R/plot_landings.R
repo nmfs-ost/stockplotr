@@ -46,7 +46,8 @@ plot_landings <- function(dat,
     dplyr::filter(
       c(module_name == "t.series" & grepl("landings_observed", label)) | c(module_name == "CATCH" & grepl("ret_bio", label)),
       # t.series is associated with a conversion from BAM output and CATCH with SS3 converted output
-      !is.na(fleet)
+      !is.na(fleet),
+      year <= end_year
     ) |>
     dplyr::mutate(
       estimate = as.numeric(estimate),
@@ -98,9 +99,6 @@ plot_landings <- function(dat,
     fig_or_table = fig_or_table,
     topic = topic_label
   )
-
-  land <- land |>
-    dplyr::filter(year <= end_year)
 
   # Choose number of breaks for x-axis
   x_n_breaks <- round(length(unique(land[["year"]])) / 10)
