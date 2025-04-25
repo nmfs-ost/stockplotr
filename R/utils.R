@@ -210,8 +210,8 @@ add_more_key_quants <- function(
 
       # ssbtarg
       ssbtarg <- dat |>
-        dplyr::filter(c(grepl('spawning_biomass_{ref_line}', label) |
-                          label == 'spawning_biomass_msy$')) |>
+        dplyr::filter(c(grepl(glue::glue('^spawning_biomass_{ref_line}$'), label) |
+                          grepl(glue::glue('^spawning_biomass_msy$'), label))) |>
         dplyr::pull(estimate) |>
         as.numeric() |>
         round(digits = 2)
@@ -261,6 +261,16 @@ add_more_key_quants <- function(
           alt_text,
           "sr.ssb.max",
           as.character(sr.ssb.max)
+        )) |>
+        dplyr::mutate(alt_text = stringr::str_replace_all(
+          alt_text,
+          "rel.ssb.min",
+          as.character(rel.ssb.min)
+        )) |>
+        dplyr::mutate(alt_text = stringr::str_replace_all(
+          alt_text,
+          "rel.ssb.max",
+          as.character(rel.ssb.max)
         )) |>
         # putting these last so they won't sub in for rel.ssb.min/max
         dplyr::mutate(alt_text = stringr::str_replace_all(
