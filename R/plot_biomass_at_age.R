@@ -103,7 +103,8 @@ plot_biomass_at_age <- function(
                         fill = "gray40") +
     ggplot2::scale_size(range = c(0.2, 10),
                         name = biomass_label,
-                        labels = scales::label_comma()) +
+                        # labels = scales::label_comma()
+                        ) +
     # add line
     ggplot2::geom_line(
       data = annual_means,
