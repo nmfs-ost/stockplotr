@@ -42,6 +42,7 @@ add_theme <- function(x) {
         panel.border = ggplot2::element_rect(colour = "black", fill = NA, linewidth = 0.5)
         # text = ggplot2::element_text(size = 12, family = "Cambria")
       ) +
+      # add commas when value > 9999
       # add nmfs color palette (palette will be default)
       # I believe including both functions is fine and will
       # works regardless of the type of plot (one won't be used)
@@ -56,6 +57,12 @@ add_theme <- function(x) {
     #   move_legend <- theme_obj +
     #     ggplot2::theme()
     # }
+    if(any(ggplot2::ggplot_build(x)$data[[1]]$y > 999)) {
+      theme_obj <- theme_obj +
+        ggplot2::scale_y_continuous(
+          labels = scales::label_comma()
+        )
+    }
   } else {
     message("NOAA formatting cannot be applied to this object.")
   }
