@@ -240,6 +240,7 @@ add_more_key_quants <- function(
         as.numeric() |>
         round(digits = 2)
 
+      if (length(ssbtarg) > 0){
       # relative ssb
       ## relative ssb min
       rel.ssb.min <- (ssb.min / ssbtarg) |>
@@ -248,6 +249,20 @@ add_more_key_quants <- function(
       ## relative ssb max
       rel.ssb.max <- (ssb.max / ssbtarg) |>
         round(digits = 2)
+
+      # replace rel.ssb.min, max placeholders within topic_cap_alt
+      topic_cap_alt <- topic_cap_alt |>
+        dplyr::mutate(alt_text = stringr::str_replace_all(
+          alt_text,
+          "rel.ssb.min",
+          as.character(rel.ssb.min)
+        )) |>
+        dplyr::mutate(alt_text = stringr::str_replace_all(
+          alt_text,
+          "rel.ssb.max",
+          as.character(rel.ssb.max)
+        ))
+      }
 
       # replace sr.ssb.min, sr.ssb.max, ssbtarg, ssb.min, and ssb.max placeholders
       # within topic_cap_alt
@@ -261,16 +276,6 @@ add_more_key_quants <- function(
           alt_text,
           "sr.ssb.max",
           as.character(sr.ssb.max)
-        )) |>
-        dplyr::mutate(alt_text = stringr::str_replace_all(
-          alt_text,
-          "rel.ssb.min",
-          as.character(rel.ssb.min)
-        )) |>
-        dplyr::mutate(alt_text = stringr::str_replace_all(
-          alt_text,
-          "rel.ssb.max",
-          as.character(rel.ssb.max)
         )) |>
         # putting these last so they won't sub in for rel.ssb.min/max
         dplyr::mutate(alt_text = stringr::str_replace_all(
