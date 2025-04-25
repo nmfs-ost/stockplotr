@@ -262,6 +262,9 @@ add_more_key_quants <- function(
           "rel.ssb.max",
           as.character(rel.ssb.max)
         ))
+
+      message(paste0("rel.ssb.min: ", as.character(rel.ssb.min)))
+      message(paste0("rel.ssb.max: ", as.character(rel.ssb.max)))
       }
 
       # replace sr.ssb.min, sr.ssb.max, ssbtarg, ssb.min, and ssb.max placeholders
@@ -291,6 +294,8 @@ add_more_key_quants <- function(
 
       message(paste0("sr.ssb.min: ", as.character(sr.ssb.min)))
       message(paste0("sr.ssb.max: ", as.character(sr.ssb.max)))
+      message(paste0("ssb.min: ", as.character(ssb.min)))
+      message(paste0("ssb.max: ", as.character(ssb.max)))
     }
   }
 
