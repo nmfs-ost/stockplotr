@@ -24,7 +24,7 @@
 #'
 plot_spawning_biomass <- function(
     dat,
-    unit_label = "metric ton",
+    unit_label = "metric tons",
     scale_amount = 1,
     ref_line = c("target", "unfished", "msy"),
     ref_point = NULL,
