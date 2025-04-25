@@ -9,10 +9,10 @@
 #' @export
 #'
 plot_catch_comp <- function(dat,
-                          end_year = NULL,
-                          unit_label = "metric tons",
-                          make_rda = FALSE,
-                          rda_dir = getwd()) {
+                            unit_label = "metric tons",
+                            end_year = NULL,
+                            make_rda = FALSE,
+                            rda_dir = getwd()) {
   # Units
   catch_label <- glue::glue("Catch ({unit_label})")
 
@@ -20,6 +20,19 @@ plot_catch_comp <- function(dat,
   if (is.null(end_year)) {
     end_year <- as.numeric(format(Sys.Date(), "%Y"))
   }
+
+  # create plot-specific variables to use throughout fxn for naming and IDing
+  topic_label <- "catch"
+
+  # identify output
+  fig_or_table <- "figure"
+
+  # check year isn't past end_year if not projections plot
+  check_year(
+    end_year = end_year,
+    fig_or_table = fig_or_table,
+    topic = topic_label
+  )
 
   # TODO:
   # -update the following dat code to work for BAM
@@ -77,12 +90,6 @@ plot_catch_comp <- function(dat,
       )
 
     final <- suppressWarnings(add_theme(plt))
-
-    # create plot-specific variables to use throughout fxn for naming and IDing
-    topic_label <- "catch"
-
-    # identify output
-    fig_or_table <- "figure"
 
     # run write_captions.R if its output doesn't exist
     if (!file.exists(

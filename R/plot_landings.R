@@ -17,12 +17,18 @@ plot_landings <- function(dat,
   # TODO: fix unit label is scaling
   land_label <- glue::glue("Landings ({unit_label})")
 
+  # get end year if not defined
+  if (is.null(end_year)) {
+    end_year <- format(Sys.Date(), "%Y")
+  }
+
   # read standard data file and extract target quantity
   land <- dat |>
     dplyr::filter(
       c(module_name == "t.series" & grepl("landings_observed", label)) | c(module_name == "CATCH" & grepl("ret_bio", label)),
       # t.series is associated with a conversion from BAM output and CATCH with SS3 converted output
-      !is.na(fleet)
+      !is.na(fleet),
+      year <= end_year
     ) |>
     dplyr::mutate(
       estimate = as.numeric(estimate),
@@ -52,11 +58,6 @@ plot_landings <- function(dat,
       dplyr::mutate(fleet = as.character(fleet))
   }
 
-  # get end year if not defined
-  if (is.null(end_year)) {
-    end_year <- format(Sys.Date(), "%Y")
-  }
-
   # create plot-specific variables to use throughout fxn for naming and IDing
   topic_label <- "landings"
 
@@ -69,9 +70,6 @@ plot_landings <- function(dat,
     fig_or_table = fig_or_table,
     topic = topic_label
   )
-
-  land <- land |>
-    dplyr::filter(year <= end_year)
 
   # Choose number of breaks for x-axis
   x_n_breaks <- round(length(unique(land[["year"]])) / 10)
