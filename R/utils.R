@@ -33,7 +33,7 @@ check_year <- function(end_year = NULL,
 # substitute in more key quantities (units, end_years, reference points, and more)
 # to captions/alt text
 add_more_key_quants <- function(
-    dat = NULL,
+    dat,
     topic = topic_label,
     fig_or_table = fig_or_table,
     dir = NULL,
@@ -167,8 +167,79 @@ add_more_key_quants <- function(
     }
   }
 
+  ## relative spawning biomass
+  if (topic_cap_alt$label == "relative.spawning.biomass") {
+    if (is.null(dat)) {
+      message("Some key quantities associated with relative spawning biomass were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).")
+    }
+    if (is.null(ref_line)){
+      message("ref_line was not provided. ssbtarg, rel.ssb.min, and rel.ssb.max were not calculated.")
+    } else {
+      # ssbtarg
+      ssbtarg <- dat |>
+        dplyr::filter(c(grepl(glue::glue('^spawning_biomass_{ref_line}$'), label) |
+                          grepl(glue::glue('^spawning_biomass_msy$'), label))) |>
+        dplyr::pull(estimate) |>
+        as.numeric() |>
+        round(digits = 2)
+
+      if (length(ssbtarg) > 0){
+        message("ssbtarg, rel.ssb.min, and rel.ssb.max were not calculated. Check your ref_line is accurate.")
+      } else {
+        # ssb.min and ssb.max can be calculated in write_captions, but these quants
+        # are needed for rel values below, so including them here instead
+        # minimum ssb
+        ssb.min <- dat |>
+          dplyr::filter(
+            label == "spawning_biomass",
+            module_name %in% c("DERIVED_QUANTITIES", "t.series")
+          ) |>
+          dplyr::slice(which.min(estimate)) |>
+          dplyr::select(estimate) |>
+          as.numeric() |>
+          round(digits = 2)
+
+        # maximum ssb
+        ssb.max <- dat |>
+          dplyr::filter(
+            label == "spawning_biomass",
+            module_name %in% c("DERIVED_QUANTITIES", "t.series")
+          ) |>
+          dplyr::slice(which.max(estimate)) |>
+          dplyr::select(estimate) |>
+          as.numeric() |>
+          round(digits = 2)
+
+        # relative ssb
+          ## relative ssb min
+          rel.ssb.min <- (ssb.min / ssbtarg) |>
+            round(digits = 2)
+
+          ## relative ssb max
+          rel.ssb.max <- (ssb.max / ssbtarg) |>
+            round(digits = 2)
+
+          # replace rel.ssb.min, max placeholders within topic_cap_alt
+          topic_cap_alt <- topic_cap_alt |>
+            dplyr::mutate(alt_text = stringr::str_replace_all(
+              alt_text,
+              "rel.ssb.min",
+              as.character(rel.ssb.min)
+            )) |>
+            dplyr::mutate(alt_text = stringr::str_replace_all(
+              alt_text,
+              "rel.ssb.max",
+              as.character(rel.ssb.max)
+            ))
+
+          message(paste0("rel.ssb.min: ", as.character(rel.ssb.min)))
+          message(paste0("rel.ssb.max: ", as.character(rel.ssb.max)))
+        }
+      }
+    }
+
   ## spawning biomass
-  if (topic_cap_alt$label %in% c("spawning.biomass", "relative.spawning.biomass")) {
+  if (topic_cap_alt$label == "spawning.biomass") {
     if (is.null(dat)) {
       message("Some key quantities associated with spawning biomass were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).")
     } else {
@@ -239,33 +310,6 @@ add_more_key_quants <- function(
         dplyr::select(estimate) |>
         as.numeric() |>
         round(digits = 2)
-
-      if (length(ssbtarg) > 0){
-      # relative ssb
-      ## relative ssb min
-      rel.ssb.min <- (ssb.min / ssbtarg) |>
-        round(digits = 2)
-
-      ## relative ssb max
-      rel.ssb.max <- (ssb.max / ssbtarg) |>
-        round(digits = 2)
-
-      # replace rel.ssb.min, max placeholders within topic_cap_alt
-      topic_cap_alt <- topic_cap_alt |>
-        dplyr::mutate(alt_text = stringr::str_replace_all(
-          alt_text,
-          "rel.ssb.min",
-          as.character(rel.ssb.min)
-        )) |>
-        dplyr::mutate(alt_text = stringr::str_replace_all(
-          alt_text,
-          "rel.ssb.max",
-          as.character(rel.ssb.max)
-        ))
-
-      message(paste0("rel.ssb.min: ", as.character(rel.ssb.min)))
-      message(paste0("rel.ssb.max: ", as.character(rel.ssb.max)))
-      }
 
       # replace sr.ssb.min, sr.ssb.max, ssbtarg, ssb.min, and ssb.max placeholders
       # within topic_cap_alt
