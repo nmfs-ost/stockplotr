@@ -6,7 +6,7 @@
 \usage{
 plot_spawning_biomass(
   dat,
-  unit_label = "metric ton",
+  unit_label = "metric tons",
   scale_amount = 1,
   ref_line = c("target", "unfished", "msy"),
   ref_point = NULL,

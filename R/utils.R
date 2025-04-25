@@ -33,7 +33,7 @@ check_year <- function(end_year = NULL,
 # substitute in more key quantities (units, end_years, reference points, and more)
 # to captions/alt text
 add_more_key_quants <- function(
-    dat,
+    dat = NULL,
     topic = topic_label,
     fig_or_table = fig_or_table,
     dir = NULL,
