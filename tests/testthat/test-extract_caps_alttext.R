@@ -63,7 +63,7 @@ test_that("extract_caps_alttext works for tables", {
   expect_true(length(caps_alttext) == 1)
 
   # expect the first 4 words of the caption
-  expect_true("Historical biomass, abundance, and" == stringr::word(caps_alttext, 1, 4))
+  expect_true("Historical biomass, spawning biomass," == stringr::word(caps_alttext, 1, 4))
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))

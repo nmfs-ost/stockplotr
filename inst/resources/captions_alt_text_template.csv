@@ -41,7 +41,7 @@ model.runs,table,"The base configuration and alternative sensitivity analysis co
 derived.quantities,table,Derived quantities calculated by the base configuration of the stock assessment model.,
 est.params,table,Parameters used in the base stock assessment model and whether the parameter was estimated by the model or fixed (i.e. not allowed to be estimated or changed by the model). CVs for estimated models are provided.,
 F.per.fleet.per.year,table,Partial fishing mortality estimates for each fleet in the assessment model.,
-bnc,table,"Historical biomass, abundance, catch time, and spawning biomass series estimated by the base configuration of the stock assessment model.",
+bnc,table,"Historical biomass, spawning biomass, abundance, and catch time   series estimated by the base configuration of the stock assessment model.",
 naa,table,Historical population abundance (numbers) estimated by the base model for each age group.,
 catchability,table,Catchability over time for fleet catchability.fleet.,
 sensitivity.runs,table,"Forecasted catch, biomass, spawning biomass, recruitment, fishing mortality, and stock status as projected from the base model configuration.",
