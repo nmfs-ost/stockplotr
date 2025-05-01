@@ -145,6 +145,14 @@ plot_spawning_biomass <- function(
   }
 
   plt <- ggplot2::ggplot(data = sb) +
+    ggplot2::geom_point(
+      ggplot2::aes(
+        x = year,
+        y = estimate_y
+      ),
+      shape = 1,
+      size = 2
+    ) +
     ggplot2::geom_line(
       ggplot2::aes(
         x = year,
