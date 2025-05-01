@@ -18,6 +18,7 @@ test_that("table_bnc generates plots without errors", {
       end_year = 2025,
       biomass_unit_label = "mt",
       catch_unit_label = "mt",
+      sb_unit_label = "mt",
       make_rda = FALSE,
       rda_dir = getwd()
     )
@@ -31,6 +32,7 @@ test_that("table_bnc generates plots without errors", {
       end_year = 2025,
       biomass_unit_label = "mt",
       catch_unit_label = "mt",
+      sb_unit_label = "mt",
       make_rda = FALSE,
       rda_dir = getwd()
     ),
@@ -50,6 +52,7 @@ test_that("rda file made when indicated", {
     end_year = 2025,
     biomass_unit_label = "mt",
     catch_unit_label = "mt",
+    sb_unit_label = "mt",
     make_rda = TRUE,
     rda_dir = getwd()
   )
@@ -76,6 +79,7 @@ test_that("table_bnc generates error with future end_year", {
       end_year = 2035,
       biomass_unit_label = "mt",
       catch_unit_label = "mt",
+      sb_unit_label = "mt",
       make_rda = TRUE,
       rda_dir = getwd()
     )

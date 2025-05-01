@@ -261,6 +261,7 @@ exp_all_figs_tables <- function(
         end_year,
         biomass_unit_label,
         catch_unit_label,
+        spawning_biomass_label,
         make_rda,
         rda_dir
       ) # |>
