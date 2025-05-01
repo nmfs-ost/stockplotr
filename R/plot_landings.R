@@ -16,16 +16,18 @@ plot_landings <- function(dat,
                           end_year = NULL,
                           make_rda = FALSE,
                           rda_dir = getwd(),
-                          fleet_names) {
+                          fleet_names = NULL) {
   # Units
   # TODO: fix unit label is scaling
   land_label <- glue::glue("Landings ({unit_label})")
 
   # restructure fleet_names
-  fleet_names <- data.frame(
-    fleet = names(fleet_names),
-    fleet_names = fleet_names
-  )
+  if (!is.null(fleet_names)) {
+    fleet_names <- data.frame(
+      fleet = names(fleet_names),
+      fleet_names = fleet_names
+    )
+  }
 
   # read standard data file and extract target quantity
   land <- dat |>
@@ -39,16 +41,20 @@ plot_landings <- function(dat,
       year = as.numeric(year),
       fleet = as.character(fleet)
     ) |>
-    dplyr::left_join(
-      fleet_names,
-      by = "fleet"
-    ) |>
-    dplyr::select(-fleet) |>
-    dplyr::rename(fleet = fleet_names) |>
     suppressWarnings() |>
     dplyr::filter(
       !is.na(year)
     )
+
+  if(!is.null(fleet_names)) {
+    land <- land |>
+      dplyr::left_join(
+      fleet_names,
+      by = "fleet"
+    ) |>
+      dplyr::select(-fleet) |>
+      dplyr::rename(fleet = fleet_names)
+  }
 
   # Check number of areas and season - if any are >1 then need to use alternative plot (or summarize)
   narea <- length(unique(land$area))

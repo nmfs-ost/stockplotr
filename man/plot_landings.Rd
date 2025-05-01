@@ -10,7 +10,7 @@ plot_landings(
   end_year = NULL,
   make_rda = FALSE,
   rda_dir = getwd(),
-  fleet_names
+  fleet_names = NULL
 )
 }
 \arguments{
