@@ -3,8 +3,10 @@
 #' @inheritParams plot_recruitment
 #' @param biomass_unit_label abbreviated units for biomass
 #' @param catch_unit_label abbreviated units for catch
+#' @param catch_unit_label abbreviated units for catch
+#' @param sb_unit_label abbreviated units for spawning biomass
 #'
-#' @return Create a table of biomass, abundance, and catch through all years of
+#' @return Create a table of biomass, abundance, catch, and spawning biomass through all years of
 #' the assessment model output translated to a standard structure.There are
 #' options to return a {flextable} object or export an rda object containing
 #' associated caption for the table.
@@ -15,10 +17,12 @@ table_bnc <- function(
     end_year = NULL,
     biomass_unit_label = "mt",
     catch_unit_label = "mt",
+    sb_unit_label = "mt",
     make_rda = FALSE,
     rda_dir = getwd()) {
   biomass_label <- glue::glue("Biomass ({biomass_unit_label})")
   catch_label <- glue::glue("Catch ({catch_unit_label})")
+  sb_label <- glue::glue("Spawning biomass ({sb_unit_label})")
 
   if (is.null(end_year)) {
     end_year <- format(Sys.Date(), "%Y")
@@ -114,8 +118,20 @@ table_bnc <- function(
   if (length(unique(biomass$year)) != nrow(biomass)) warning("[biomass] dataframe needs review.")
   if (length(unique(abundance$year)) != nrow(abundance)) warning("[abundance] dataframe needs review.")
 
+  sb <- dat |>
+    dplyr::filter(
+      label == "spawning_biomass",
+      module_name %in% c("DERIVED_QUANTITIES", "t.series")
+    ) |>
+    dplyr::mutate(
+      estimate = round(as.numeric(estimate), digits = 2)
+    ) |>
+    dplyr::rename(spawning_biomass = estimate) |>
+    dplyr::select(year, spawning_biomass)
+
   # Bring together quantities for table
   bnc <- biomass |>
+    dplyr::left_join(sb, by = "year") |>
     dplyr::left_join(abundance, by = "year") |>
     dplyr::left_join(catch, by = "year") |>
     dplyr::mutate(year = as.factor(year)) |>
@@ -125,7 +141,8 @@ table_bnc <- function(
       year = "Year",
       biomass = biomass_label,
       abundance = "Abundance",
-      total_catch = catch_label
+      total_catch = catch_label,
+      spawning_biomass = sb_label
     )
 
   # add theming to final table

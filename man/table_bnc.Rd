@@ -9,6 +9,7 @@ table_bnc(
   end_year = NULL,
   biomass_unit_label = "mt",
   catch_unit_label = "mt",
+  sb_unit_label = "mt",
   make_rda = FALSE,
   rda_dir = getwd()
 )
@@ -22,6 +23,8 @@ table_bnc(
 
 \item{catch_unit_label}{abbreviated units for catch}
 
+\item{sb_unit_label}{abbreviated units for spawning biomass}
+
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
 the .rda will be exported to the folder indicated in the argument "rda_dir".
@@ -32,7 +35,7 @@ Default is FALSE.}
 Default is the working directory.}
 }
 \value{
-Create a table of biomass, abundance, and catch through all years of
+Create a table of biomass, abundance, catch, and spawning biomass through all years of
 the assessment model output translated to a standard structure.There are
 options to return a {flextable} object or export an rda object containing
 associated caption for the table.
