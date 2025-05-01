@@ -81,6 +81,7 @@
 <span>  end_year <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  biomass_unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
 <span>  catch_unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
+<span>  sb_unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
 <span>  make_rda <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  rda_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -106,6 +107,10 @@
 <dd><p>abbreviated units for catch</p></dd>
 
 
+<dt id="arg-sb-unit-label">sb_unit_label<a class="anchor" aria-label="anchor" href="#arg-sb-unit-label"></a></dt>
+<dd><p>abbreviated units for spawning biomass</p></dd>
+
+
 <dt id="arg-make-rda">make_rda<a class="anchor" aria-label="anchor" href="#arg-make-rda"></a></dt>
 <dd><p>TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
@@ -121,7 +126,7 @@ Default is the working directory.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Create a table of biomass, abundance, and catch through all years of
+    <p>Create a table of biomass, abundance, catch, and spawning biomass through all years of
 the assessment model output translated to a standard structure.There are
 options to return a flextable object or export an rda object containing
 associated caption for the table.</p>
