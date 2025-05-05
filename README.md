@@ -3,7 +3,7 @@
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/nmfs-ost/stockplotr/refs/heads/badges/coverage-badge.json)](https://github.com/nmfs-ost/stockplotr/tree/badges)
-[![R-cmd-check](https://github.com/nmfs-ost/stockplotr/actions/workflows/r-cmd-check.yaml/badge.svg)](https://github.com/nmfs-ost/stockplotr/actions/workflows/call-r-cmd-check.yml)
+[![R-cmd-check](https://github.com/nmfs-ost/stockplotr/actions/workflows/call-r-cmd-check.yml/badge.svg)](https://github.com/nmfs-ost/stockplotr/actions/workflows/call-r-cmd-check.yml)
 <!-- badges: end -->
 
 ::: {.callout-note}
