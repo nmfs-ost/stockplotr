@@ -81,7 +81,8 @@
 <span>  unit_label <span class="op">=</span> <span class="st">"metric tons"</span>,</span>
 <span>  end_year <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  make_rda <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  rda_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  rda_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  fleet_names <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -112,6 +113,12 @@ Default is FALSE.</p></dd>
 <dd><p>The location of the folder containing the generated .rda files
 ("rda_files") that will be created if the argument `make_rda` = TRUE.
 Default is the working directory.</p></dd>
+
+
+<dt id="arg-fleet-names">fleet_names<a class="anchor" aria-label="anchor" href="#arg-fleet-names"></a></dt>
+<dd><p>Indicate the full names of the fleet that will be used in
+the plot legend. Format should follow
+c("fleet_name_in_model" = "Desired Fleet Name")</p></dd>
 
 </dl></div>
     <div id="value">
