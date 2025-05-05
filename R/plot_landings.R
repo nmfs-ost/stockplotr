@@ -2,6 +2,9 @@
 #'
 #' @inheritParams plot_recruitment
 #' @param unit_label indicate the name of the units of landings as to label the axis
+#' @param fleet_names Indicate the full names of the fleet that will be used in
+#' the plot legend. Format should follow
+#' c("fleet_name_in_model" = "Desired Fleet Name")
 #'
 #' @return Create a plot ready for a stock assessment report of cumulative landings
 #' over time by fleet.Includes options to plot by fleet, total observed landings
@@ -12,10 +15,19 @@ plot_landings <- function(dat,
                           unit_label = "metric tons",
                           end_year = NULL,
                           make_rda = FALSE,
-                          rda_dir = getwd()) {
+                          rda_dir = getwd(),
+                          fleet_names = NULL) {
   # Units
   # TODO: fix unit label is scaling
   land_label <- glue::glue("Landings ({unit_label})")
+
+  # restructure fleet_names
+  if (!is.null(fleet_names)) {
+    fleet_names <- data.frame(
+      fleet = names(fleet_names),
+      fleet_names = fleet_names
+    )
+  }
 
   # read standard data file and extract target quantity
   land <- dat |>
@@ -33,6 +45,16 @@ plot_landings <- function(dat,
     dplyr::filter(
       !is.na(year)
     )
+
+  if(!is.null(fleet_names)) {
+    land <- land |>
+      dplyr::left_join(
+      fleet_names,
+      by = "fleet"
+    ) |>
+      dplyr::select(-fleet) |>
+      dplyr::rename(fleet = fleet_names)
+  }
 
   # Check number of areas and season - if any are >1 then need to use alternative plot (or summarize)
   narea <- length(unique(land$area))
