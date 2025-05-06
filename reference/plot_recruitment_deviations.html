@@ -77,9 +77,8 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_recruitment_deviations</span><span class="op">(</span></span>
-<span>  dat <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">dat</span>,</span>
 <span>  end_year <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  n_projected_years <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  make_rda <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  rda_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -95,11 +94,6 @@
 
 <dt id="arg-end-year">end_year<a class="anchor" aria-label="anchor" href="#arg-end-year"></a></dt>
 <dd><p>last year of assessment</p></dd>
-
-
-<dt id="arg-n-projected-years">n_projected_years<a class="anchor" aria-label="anchor" href="#arg-n-projected-years"></a></dt>
-<dd><p>Number of years spawning biomass is projected for.
-By default this number is set to 10</p></dd>
 
 
 <dt id="arg-make-rda">make_rda<a class="anchor" aria-label="anchor" href="#arg-make-rda"></a></dt>
@@ -119,10 +113,24 @@ Default is the working directory.</p></dd>
     <h2>Value</h2>
     <p>Plot recruitment deviations relative to one over time from an
 assessment model output file translated to a standardized output. There are
-options to return a ggplot2 object or export an .rda object containing
+options to return a `ggplot2` object or export an .rda object containing
 associated caption and alternative text for the figure.</p>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="fu">plot_recruitment_deviations</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">plot_recruitment_deviations</span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">dat</span>,</span></span>
+<span class="r-in"><span>end_year <span class="op">=</span> <span class="fl">2024</span>,</span></span>
+<span class="r-in"><span>make_rda <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>rda_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
