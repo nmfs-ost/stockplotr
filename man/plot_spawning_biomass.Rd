@@ -12,7 +12,6 @@ plot_spawning_biomass(
   ref_point = NULL,
   end_year = NULL,
   relative = FALSE,
-  n_projected_years = 10,
   make_rda = FALSE,
   rda_dir = getwd()
 )
@@ -45,9 +44,6 @@ reference point in the form c("label" = value).}
 be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
 which reference point to use.}
 
-\item{n_projected_years}{Number of years spawning biomass is projected for.
-By default this number is set to 10}
-
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
 the .rda will be exported to the folder indicated in the argument "rda_dir".
@@ -65,4 +61,28 @@ modifications if needed.
 \description{
 Plot spawning biomass with a reference line as a dashed line. The figure can
 also be made relative to this reference line rather than in absolute units.
+}
+\examples{
+\dontrun{
+plot_spawning_biomass(dat)
+
+plot_spawning_biomass(
+dat,
+unit_label = "my_unit",
+ref_line = "msy",
+end_year = 2024,
+rda_dir = getwd()
+)
+
+plot_spawning_biomass(
+dat,
+unit_label = "my_unit",
+scale_amount = 100,
+ref_point = 1000,
+end_year = 2024,
+relative = TRUE,
+make_rda = TRUE,
+rda_dir = getwd()
+)
+}
 }

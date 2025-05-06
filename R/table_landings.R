@@ -7,6 +7,18 @@
 #' fleet and year.
 #' @export
 #'
+#' @examples
+#' \dontrun{
+#' table_landings(dat)
+#'
+#' table_landings(
+#' dat,
+#' unit_label = "landings label",
+#' end_year = 2024,
+#' make_rda = TRUE,
+#' rda_dir = getwd()
+#' )
+#' }
 table_landings <- function(dat,
                            unit_label = "mt",
                            end_year = NULL,

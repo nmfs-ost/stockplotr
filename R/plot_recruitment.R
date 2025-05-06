@@ -6,8 +6,6 @@
 #' shown on the y axis. For example, scale_amount = 100 would scale down a value
 #' from 500,000 --> 5,000. This scale will be reflected in the y axis label.
 #' @param end_year last year of assessment
-#' @param n_projected_years Number of years spawning biomass is projected for.
-#' By default this number is set to 10
 #' @param relative A logical value specifying if the resulting figures should
 #'   be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
 #'   which reference point to use.
@@ -24,12 +22,25 @@
 #' text for the figure.
 #' @export
 #'
+#' @examples
+#' \dontrun{
+#' plot_recruitment(dat)
+#'
+#' plot_recruitment(
+#' dat,
+#' unit_label = "my_unit_label",
+#' scale_amount = 100,
+#' end_year = 2023,
+#' relative = TRUE,
+#' make_rda = TRUE,
+#' rda_dir = getwd()
+#' )
+#' }
 plot_recruitment <- function(
     dat,
     unit_label = "metric tons",
     scale_amount = 1,
     end_year = NULL,
-    n_projected_years = 10,
     relative = FALSE,
     make_rda = FALSE,
     rda_dir = getwd()) {

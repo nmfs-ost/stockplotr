@@ -9,6 +9,19 @@
 #' or will be extracted from the provided file if possible.
 #' @export
 #'
+#' @examples
+#' \dontrun{
+#' plot_biomass_at_age(dat)
+#'
+#' plot_biomass_at_age(
+#' dat,
+#' unit_label = "my_unit",
+#' scale_amount = 100,
+#' end_year = 2024,
+#' make_rda = TRUE,
+#' rda_dir = getwd()
+#' )
+#' }
 plot_biomass_at_age <- function(
     dat,
     unit_label = "metric tons",

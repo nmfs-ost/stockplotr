@@ -4,14 +4,24 @@
 #'
 #' @return Plot recruitment deviations relative to one over time from an
 #' assessment model output file translated to a standardized output. There are
-#' options to return a {ggplot2} object or export an .rda object containing
+#' options to return a `ggplot2` object or export an .rda object containing
 #' associated caption and alternative text for the figure.
 #' @export
 #'
+#' @examples
+#' \dontrun{
+#' plot_recruitment_deviations(dat)
+#'
+#' plot_recruitment_deviations(
+#' dat,
+#' end_year = 2024,
+#' make_rda = TRUE,
+#' rda_dir = getwd()
+#' )
+#' }
 plot_recruitment_deviations <- function(
-    dat = NULL,
+    dat,
     end_year = NULL,
-    n_projected_years = 10,
     make_rda = FALSE,
     rda_dir = getwd()) {
   if (is.null(end_year)) {

@@ -9,7 +9,6 @@ exp_all_figs_tables(
   recruitment_unit_label = "mt",
   recruitment_scale_amount = 1,
   end_year = NULL,
-  n_projected_years = 10,
   relative = FALSE,
   rda_dir = getwd(),
   ref_line = c("target", "MSY", "msy", "unfished"),
@@ -40,9 +39,6 @@ recruitment_scale_amount = 100 would scale down a value from 500,000 -->
 5,000. This scale will be reflected in the y axis label.}
 
 \item{end_year}{last year of assessment}
-
-\item{n_projected_years}{Number of years spawning biomass is projected for.
-By default this number is set to 10}
 
 \item{relative}{A logical value specifying if the resulting figures should
 be relative spawning biomass. The default is `FALSE`. `ref_line` indicates

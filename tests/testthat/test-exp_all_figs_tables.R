@@ -7,7 +7,6 @@ test_that("exp_all_figs_tables works when all figures/tables are plotted", {
   stockplotr::exp_all_figs_tables(
     dat,
     end_year = 2022,
-    n_projected_years = 3,
     recruitment_unit_label = "mt",
     recruitment_scale_amount = 1,
     ref_line = "unfished",

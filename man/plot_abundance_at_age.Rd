@@ -44,3 +44,17 @@ or will be extracted from the provided file if possible.
 \description{
 Plot Abundance (or Numbers) at Age (AAA or NAA)
 }
+\examples{
+\dontrun{
+plot_abundance_at_age(dat)
+
+plot_abundance_at_age(
+dat,
+unit_label = "my_unit",
+scale_amount = 10,
+end_year = 2024,
+make_rda = TRUE,
+rda_dir = getwd()
+)
+}
+}

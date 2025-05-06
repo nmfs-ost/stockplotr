@@ -59,7 +59,6 @@ exp_all_figs_tables <- function(
     recruitment_unit_label = "mt", # changed from unit_label to recruitment_unit_label for specificity
     recruitment_scale_amount = 1,
     end_year = NULL,
-    n_projected_years = 10,
     relative = FALSE,
     rda_dir = getwd(),
     # imported from plot_biomass
@@ -104,7 +103,6 @@ exp_all_figs_tables <- function(
         unit_label = recruitment_unit_label,
         scale_amount = recruitment_scale_amount,
         end_year,
-        n_projected_years,
         relative,
         make_rda = TRUE,
         rda_dir
@@ -164,7 +162,6 @@ exp_all_figs_tables <- function(
       stockplotr::plot_recruitment_deviations(
         dat,
         end_year,
-        n_projected_years,
         make_rda,
         rda_dir
       ) #|>
@@ -196,7 +193,6 @@ exp_all_figs_tables <- function(
         ref_point = ref_point_sb,
         end_year,
         relative,
-        n_projected_years,
         make_rda,
         rda_dir
       ) # |>

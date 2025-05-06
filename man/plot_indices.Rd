@@ -8,7 +8,7 @@ plot_indices(
   dat,
   unit_label = NULL,
   end_year = NULL,
-  make_rda = TRUE,
+  make_rda = FALSE,
   rda_dir = NULL
 )
 }
@@ -34,4 +34,17 @@ model output file.
 }
 \description{
 Plot Index of Abundance
+}
+\examples{
+\dontrun{
+plot_indices(dat)
+
+plot_indices(
+dat,
+unit_label = "my_unit",
+end_year = 2024,
+make_rda = TRUE,
+rda_dir = getwd()
+)
+}
 }

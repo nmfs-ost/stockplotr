@@ -5,7 +5,7 @@
 \title{Plot Spawn-Recruit Curve}
 \usage{
 plot_spawn_recruitment(
-  dat = NULL,
+  dat,
   spawning_biomass_label = "metric tons",
   recruitment_label = "metric tons",
   end_year = NULL,
@@ -36,4 +36,18 @@ Plot spawning recruitment relationship from a standardized output file originati
 }
 \description{
 Plot Spawn-Recruit Curve
+}
+\examples{
+\dontrun{
+plot_spawn_recruitment(dat)
+
+plot_spawn_recruitment(
+dat,
+spawning_biomass_label = "sb label",
+recruitment_label = "rec label",
+end_year = 2024,
+make_rda = TRUE,
+rda_dir = getwd()
+)
+}
 }

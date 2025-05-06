@@ -5,9 +5,8 @@
 \title{Plot Recruitment Deviations}
 \usage{
 plot_recruitment_deviations(
-  dat = NULL,
+  dat,
   end_year = NULL,
-  n_projected_years = 10,
   make_rda = FALSE,
   rda_dir = getwd()
 )
@@ -16,9 +15,6 @@ plot_recruitment_deviations(
 \item{dat}{A data frame returned from `asar::convert_output()`.}
 
 \item{end_year}{last year of assessment}
-
-\item{n_projected_years}{Number of years spawning biomass is projected for.
-By default this number is set to 10}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
@@ -32,9 +28,21 @@ Default is the working directory.}
 \value{
 Plot recruitment deviations relative to one over time from an
 assessment model output file translated to a standardized output. There are
-options to return a {ggplot2} object or export an .rda object containing
+options to return a `ggplot2` object or export an .rda object containing
 associated caption and alternative text for the figure.
 }
 \description{
 Plot Recruitment Deviations
+}
+\examples{
+\dontrun{
+plot_recruitment_deviations(dat)
+
+plot_recruitment_deviations(
+dat,
+end_year = 2024,
+make_rda = TRUE,
+rda_dir = getwd()
+)
+}
 }

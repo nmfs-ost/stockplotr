@@ -7,14 +7,31 @@
 #' model output file.
 #' @export
 #'
+#' @examples
+#' \dontrun{
+#' plot_indices(dat)
+#'
+#' plot_indices(
+#' dat,
+#' unit_label = "my_unit",
+#' end_year = 2024,
+#' make_rda = TRUE,
+#' rda_dir = getwd()
+#' )
+#' }
 plot_indices <- function(
     dat,
     unit_label = NULL,
     end_year = NULL,
-    make_rda = TRUE,
+    make_rda = FALSE,
     rda_dir = NULL) {
   # Set cpue unit label for plot
   u_units <- glue::glue("Estimated CPUE ({unit_label})")
+
+  # get end year if not defined
+  if (is.null(end_year)) {
+    end_year <- format(Sys.Date(), "%Y")
+  }
 
   # Load data
   output <- dat |>
@@ -107,10 +124,6 @@ plot_indices <- function(
     ) |>
     dplyr::filter(year <= as.numeric(end_year))
 
-  # get end year if not defined
-  if (is.null(end_year)) {
-    end_year <- format(Sys.Date(), "%Y")
-  }
 
   topic_label <- "CPUE.indices"
 

@@ -41,3 +41,16 @@ with and without predicted landings. Indicate if fleet should be faceted or on o
 \description{
 Plot observed landings by fleet
 }
+\examples{
+\dontrun{
+plot_landings(dat)
+
+plot_landings(
+dat,
+unit_label = "my_unit",
+end_year = 2024,
+make_rda = TRUE,
+rda_dir = getwd()
+)
+}
+}
