@@ -58,6 +58,7 @@ plot_recruitment <- function(
     no = glue::glue("Recruitment ({unit_label})")
   )
   # Extract recruitment
+  # TODO: summarize recruitment by season or facet by season
   rec <- dat |>
     dplyr::filter(
       label == "recruitment",
