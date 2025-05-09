@@ -16,8 +16,9 @@
 #' @examples
 #' \dontrun{
 #' write_captions(dat,
-#' dir = getwd(),
-#' year = 2025)
+#'   dir = getwd(),
+#'   year = 2025
+#' )
 #' }
 write_captions <- function(dat, # converted model output object
                            dir = NULL,

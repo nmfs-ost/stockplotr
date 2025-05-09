@@ -16,11 +16,11 @@
 #' plot_landings(dat)
 #'
 #' plot_landings(
-#' dat,
-#' unit_label = "my_unit",
-#' end_year = 2024,
-#' make_rda = TRUE,
-#' rda_dir = getwd()
+#'   dat,
+#'   unit_label = "my_unit",
+#'   end_year = 2024,
+#'   make_rda = TRUE,
+#'   rda_dir = getwd()
 #' )
 #' }
 plot_landings <- function(dat,
@@ -58,12 +58,12 @@ plot_landings <- function(dat,
       !is.na(year)
     )
 
-  if(!is.null(fleet_names)) {
+  if (!is.null(fleet_names)) {
     land <- land |>
       dplyr::left_join(
-      fleet_names,
-      by = "fleet"
-    ) |>
+        fleet_names,
+        by = "fleet"
+      ) |>
       dplyr::select(-fleet) |>
       dplyr::rename(fleet = fleet_names)
   }

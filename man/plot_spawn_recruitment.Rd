@@ -42,12 +42,12 @@ Plot Spawn-Recruit Curve
 plot_spawn_recruitment(dat)
 
 plot_spawn_recruitment(
-dat,
-spawning_biomass_label = "sb label",
-recruitment_label = "rec label",
-end_year = 2024,
-make_rda = TRUE,
-rda_dir = getwd()
+  dat,
+  spawning_biomass_label = "sb label",
+  recruitment_label = "rec label",
+  end_year = 2024,
+  make_rda = TRUE,
+  rda_dir = getwd()
 )
 }
 }

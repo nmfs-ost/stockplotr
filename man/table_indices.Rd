@@ -32,10 +32,10 @@ Create Indices of Abundance Table
 table_indices(dat)
 
 table_indices(
-dat,
-end_year = 2024,
-make_rda = TRUE,
-rda_dir = getwd()
+  dat,
+  end_year = 2024,
+  make_rda = TRUE,
+  rda_dir = getwd()
 )
 }
 }
