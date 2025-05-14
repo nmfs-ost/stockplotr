@@ -14,7 +14,7 @@ plot_spawn_recruitment(
 )
 }
 \arguments{
-\item{dat}{A data frame returned from `asar::convert_output()`.}
+\item{dat}{A data frame returned from [asar::convert_output()].}
 
 \item{spawning_biomass_label}{Units for spawning biomass}
 

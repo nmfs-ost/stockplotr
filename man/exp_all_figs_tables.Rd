@@ -29,7 +29,7 @@ exp_all_figs_tables(
 )
 }
 \arguments{
-\item{dat}{A data frame returned from `asar::convert_output()`.}
+\item{dat}{A data frame returned from [asar::convert_output()].}
 
 \item{recruitment_unit_label}{Units for recruitment}
 
