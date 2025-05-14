@@ -48,10 +48,11 @@ Biomass, abundance, and catch time series table
 table_bnc(dat)
 
 table_bnc(dat,
-end_year = 2024,
-biomass_unit_label = "b label",
-catch_unit_label = "catch label",
-make_rda = TRUE,
-rda_dir = getwd())
+  end_year = 2024,
+  biomass_unit_label = "b label",
+  catch_unit_label = "catch label",
+  make_rda = TRUE,
+  rda_dir = getwd()
+)
 }
 }

@@ -39,10 +39,10 @@ Plot Recruitment Deviations
 plot_recruitment_deviations(dat)
 
 plot_recruitment_deviations(
-dat,
-end_year = 2024,
-make_rda = TRUE,
-rda_dir = getwd()
+  dat,
+  end_year = 2024,
+  make_rda = TRUE,
+  rda_dir = getwd()
 )
 }
 }

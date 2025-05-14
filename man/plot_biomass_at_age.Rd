@@ -46,12 +46,12 @@ Plot Total Biomass at Age (BAA)
 plot_biomass_at_age(dat)
 
 plot_biomass_at_age(
-dat,
-unit_label = "my_unit",
-scale_amount = 100,
-end_year = 2024,
-make_rda = TRUE,
-rda_dir = getwd()
+  dat,
+  unit_label = "my_unit",
+  scale_amount = 100,
+  end_year = 2024,
+  make_rda = TRUE,
+  rda_dir = getwd()
 )
 }
 }
