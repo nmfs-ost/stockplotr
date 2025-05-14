@@ -25,7 +25,8 @@ key quantities from the model results file.
 \examples{
 \dontrun{
 write_captions(dat,
-dir = getwd(),
-year = 2025)
+  dir = getwd(),
+  year = 2025
+)
 }
 }

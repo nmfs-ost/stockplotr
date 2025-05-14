@@ -12,11 +12,11 @@
 #' table_landings(dat)
 #'
 #' table_landings(
-#' dat,
-#' unit_label = "landings label",
-#' end_year = 2024,
-#' make_rda = TRUE,
-#' rda_dir = getwd()
+#'   dat,
+#'   unit_label = "landings label",
+#'   end_year = 2024,
+#'   make_rda = TRUE,
+#'   rda_dir = getwd()
 #' )
 #' }
 table_landings <- function(dat,
