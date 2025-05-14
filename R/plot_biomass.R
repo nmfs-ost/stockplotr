@@ -15,7 +15,7 @@
 #'   reference point in the form c("label" = value).
 #' @return Plot total biomass from a stock assessment model as found in a NOAA
 #' stock assessment report. Units of total biomass can either be manually added
-#' or will be extracted from the provided file if possible. In later releases, model will not
+#' or will be extracted from the provided file if possible.
 #' @export
 #'
 #' @examples
