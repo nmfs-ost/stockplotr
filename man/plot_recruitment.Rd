@@ -15,7 +15,7 @@ plot_recruitment(
 )
 }
 \arguments{
-\item{dat}{A data frame returned from `asar::convert_output()`.}
+\item{dat}{A data frame returned from [asar::convert_output()].}
 
 \item{unit_label}{units for recruitment}
 
