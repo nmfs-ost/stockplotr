@@ -29,27 +29,6 @@ plot_landings <- function(dat,
                           make_rda = FALSE,
                           rda_dir = getwd(),
                           fleet_names = NULL) {
-  # get end year if not defined
-  if (is.null(end_year)) {
-    end_year <- format(Sys.Date(), "%Y")
-  }
-
-  # create plot-specific variables to use throughout fxn for naming and IDing
-  topic_label <- "landings"
-
-  # identify output
-  fig_or_table <- "figure"
-
-  # check year isn't past end_year if not projections plot
-  check_year(
-    end_year = end_year,
-    fig_or_table = fig_or_table,
-    topic = topic_label
-  )
-
-  land <- land |>
-    dplyr::filter(year <= end_year)
-
   # Units
   # TODO: fix unit label is scaling
   land_label <- glue::glue("Landings ({unit_label})")
@@ -107,19 +86,28 @@ plot_landings <- function(dat,
       dplyr::mutate(fleet = as.character(fleet))
   }
 
-
-  # Choose number of breaks for x-axis
-  x_n_breaks <- round(length(unique(land[["year"]])) / 10)
-  if (x_n_breaks <= 5) {
-    x_n_breaks <- round(length(unique(land[["year"]])) / 5)
-    if (length(unique(land[["year"]])) <= 10) {
-      x_n_breaks <- NULL
-    }
-  } else if (x_n_breaks > 10) {
-    x_n_breaks <- round(length(unique(land[["year"]])) / 15)
+  # get end year if not defined
+  if (is.null(end_year)) {
+    end_year <- format(Sys.Date(), "%Y")
   }
 
-    # Make generic plot
+  # create plot-specific variables to use throughout fxn for naming and IDing
+  topic_label <- "landings"
+
+  # identify output
+  fig_or_table <- "figure"
+
+  # check year isn't past end_year if not projections plot
+  check_year(
+    end_year = end_year,
+    fig_or_table = fig_or_table,
+    topic = topic_label
+  )
+
+  land <- land |>
+    dplyr::filter(year <= end_year)
+
+  # Make generic plot
   plt <- ggplot2::ggplot(data = land) +
     ggplot2::geom_area(
       ggplot2::aes(
@@ -135,13 +123,7 @@ plot_landings <- function(dat,
       x = "Year",
       y = land_label,
       fill = "Fleet"
-    ) +
-    ggplot2::scale_x_continuous(
-      n.breaks = x_n_breaks
-    ) # +
-    # ggplot2::scale_y_continuous(
-    #   labels = scales::label_comma()
-    # )
+    )
 
   final <- suppressWarnings(add_theme(plt))
 
