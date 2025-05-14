@@ -19,7 +19,7 @@ plot_biomass(
 \arguments{
 \item{dat}{A data frame returned from `asar::convert_output()`.}
 
-\item{unit_label}{units for recruitment}
+\item{unit_label}{units for biomass}
 
 \item{scale_amount}{A number describing how much to scale down the quantities
 shown on the y axis. For example, scale_amount = 100 would scale down a value

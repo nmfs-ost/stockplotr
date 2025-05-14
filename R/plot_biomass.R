@@ -1,6 +1,7 @@
 #' Plot Total Biomass
 #'
 #' @inheritParams plot_recruitment
+#' @param unit_label units for biomass
 #' @param ref_line A string specifying the type of reference you want to
 #'   compare biomass to. The default is `"target"`, which looks for
 #'   `"biomass_target"` in the `"label"` column of `dat`. The actual
