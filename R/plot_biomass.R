@@ -189,8 +189,8 @@ plot_biomass <- function(
     ) +
     ggplot2::annotate(
       geom = "text",
-      x = as.numeric(end_year) + 0.05,
-      y = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
+      x = as.numeric(end_year) - 3,
+      y = (ref_line_val / ifelse(relative, ref_line_val, scale_amount)) - 1,
       label = list(bquote(B[.(ref_line)])),
       parse = TRUE,
       fill = "white"
