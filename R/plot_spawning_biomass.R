@@ -197,12 +197,13 @@ plot_spawning_biomass <- function(
       n.breaks = x_n_breaks,
       guide = ggplot2::guide_axis(minor.ticks = TRUE)
     ) +
-    ggplot2::geom_label(
-      x = max(sb$year)-(0.1*length(sb$year)),
-      y = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
+    ggplot2::annotate(
+      geom = "text",
+      # x = as.numeric(end_year) - 3,
+      x = max(sb$year)-(0.2*length(sb$year)),
+      y = (ref_line_val / ifelse(relative, ref_line_val, scale_amount)) - 1,
       label = list(bquote(SB[.(ref_line)])),
-      parse = TRUE,
-      label.size = 0
+      parse = TRUE
     ) +
     ggplot2::expand_limits(y = 0)
 
