@@ -132,6 +132,9 @@ plot_biomass <- function(
     end_year <- format(Sys.Date(), "%Y")
   }
 
+  b <- b |>
+    dplyr::filter(year <= end_year)
+
   # create plot-specific variables to use throughout fxn for naming and IDing
   # Indicate if biomass is relative or not
   if (relative) {
@@ -159,7 +162,7 @@ plot_biomass <- function(
   }
 
   # plot
-  plt <- ggplot2::ggplot(data = subset(b, year <= end_year)) +
+  plt <- ggplot2::ggplot(data = b) +
     ggplot2::geom_line(
       ggplot2::aes(
         x = year,
