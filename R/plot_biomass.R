@@ -132,6 +132,9 @@ plot_biomass <- function(
     end_year <- format(Sys.Date(), "%Y")
   }
 
+  b <- b |>
+    dplyr::filter(year <= end_year)
+
   # create plot-specific variables to use throughout fxn for naming and IDing
   # Indicate if biomass is relative or not
   if (relative) {
@@ -153,13 +156,13 @@ plot_biomass <- function(
   # Choose number of breaks for x-axis
   x_n_breaks <- round(length(b[["year"]]) / 10)
   if (x_n_breaks <= 5) {
-    x_n_breaks <- round(length(b[["year"]]) / 5)
+    x_n_breaks <- length(b[["year"]])
   } else if (x_n_breaks > 10) {
     x_n_breaks <- round(length(b[["year"]]) / 15)
   }
 
   # plot
-  plt <- ggplot2::ggplot(data = subset(b, year <= end_year)) +
+  plt <- ggplot2::ggplot(data = b) +
     ggplot2::geom_line(
       ggplot2::aes(
         x = year,
@@ -189,11 +192,10 @@ plot_biomass <- function(
     ) +
     ggplot2::annotate(
       geom = "text",
-      x = as.numeric(end_year) + 0.05,
+      x = as.numeric(end_year)-(0.2*length(b$year)),
       y = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
       label = list(bquote(B[.(ref_line)])),
-      parse = TRUE,
-      fill = "white"
+      parse = TRUE
     ) +
     ggplot2::expand_limits(y = 0)
   # ggtext::geom_richtext(

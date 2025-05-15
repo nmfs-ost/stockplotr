@@ -199,7 +199,7 @@ plot_spawning_biomass <- function(
     ) +
     ggplot2::annotate(
       geom = "text",
-      x = as.numeric(end_year) + 0.05,
+      x = as.numeric(end_year)-(0.2*length(sb$year)),
       y = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
       label = list(bquote(SB[.(ref_line)])),
       parse = TRUE
