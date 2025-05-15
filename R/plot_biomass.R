@@ -190,14 +190,12 @@ plot_biomass <- function(
       n.breaks = x_n_breaks,
       guide = ggplot2::guide_axis(minor.ticks = TRUE)
     ) +
-    ggplot2::annotate(
-      geom = "text",
-     # x = as.numeric(end_year) - 3,
-      x = max(b$year)-(0.2*length(b$year)),
-      y = (ref_line_val / ifelse(relative, ref_line_val, scale_amount)) - 1,
+    ggplot2::geom_label(
+      x = max(b$year)-(0.1*length(b$year)),
+      y = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
       label = list(bquote(B[.(ref_line)])),
       parse = TRUE,
-      fill = "white"
+      label.size = 0
     ) +
     ggplot2::expand_limits(y = 0)
   # ggtext::geom_richtext(
