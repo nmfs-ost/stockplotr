@@ -1,10 +1,10 @@
 pandoc: 3.1.11
-pkgdown: 2.1.2
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   how-caps-alttext-are-made: how-caps-alttext-are-made.html
   manual: manual.html
-last_built: 2025-05-15T16:02Z
+last_built: 2025-06-03T17:26Z
 urls:
   reference: nmfs-ost.github.io/stockplotr/reference
   article: nmfs-ost.github.io/stockplotr/articles
