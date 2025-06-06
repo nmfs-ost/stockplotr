@@ -69,7 +69,7 @@ table_bnc <- function(
     dplyr::select(year, biomass)
 
   if (length(unique(biomass$year)) != nrow(biomass)) {
-    stop("Duplicate years found in biomass df.")
+    cli::cli_abort("Duplicate years found in biomass df.")
   }
 
   catch <- dat |>

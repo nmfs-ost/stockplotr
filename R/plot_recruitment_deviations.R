@@ -61,7 +61,7 @@ plot_recruitment_deviations <- function(
   # dplyr::rename(recruitment_deviations = estimate) |>
   # dplyr::select(-c(module_name, label))
   if (nrow(rec_devs) == 0) {
-    stop("No recruitment deviations found in data.")
+    cli::cli_abort("No recruitment deviations found in data.")
   }
 
   # change plot breaks

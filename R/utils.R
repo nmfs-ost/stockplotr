@@ -16,17 +16,17 @@ check_year <- function(end_year = NULL,
       if (topic %in% projections_plots == FALSE) {
         if (!is.null(fig_or_table)) {
           if (as.numeric(end_year) > format(Sys.Date(), "%Y")) {
-            stop(paste0("end_year is past the current year for a non-projections plot (", topic, " ", fig_or_table, ")"))
+            cli::cli_abort(paste0("end_year is past the current year for a non-projections plot (", topic, " ", fig_or_table, ")"))
           }
         } else {
-          stop("fig_or_table is NULL")
+          cli::cli_abort("fig_or_table is NULL")
         }
       }
     } else {
-      stop("topic is NULL")
+      cli::cli_abort("topic is NULL")
     }
   } else {
-    stop("end_year is NULL")
+    cli::cli_abort("end_year is NULL")
   }
 }
 
@@ -448,7 +448,7 @@ add_more_key_quants <- function(
       )
       unit_mag <- paste(scale_unit[magnitude])
     } else {
-      stop("Scaling out of bounds. Please choose a value ranging from 1-1000000000 (one billion) in orders of magnitude (e.g., 1, 10, 100, 1000, etc.)")
+      cli::cli_abort("Scaling out of bounds. Please choose a value ranging from 1-1000000000 (one billion) in orders of magnitude (e.g., 1, 10, 100, 1000, etc.)")
     }
   }
 

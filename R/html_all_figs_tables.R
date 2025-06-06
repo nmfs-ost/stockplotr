@@ -16,7 +16,7 @@
 #' }
 html_all_figs_tables <- function(rda_dir = getwd()) {
   if (!dir.exists(fs::path(rda_dir, "rda_files"))) {
-    stop("'rda_files' folder not found. Did you enter the correct argument for rda_dir?")
+    cli::cli_abort("'rda_files' folder not found. Did you enter the correct argument for rda_dir?")
   }
   # check if dir exists and present warning message/option message
   if (dir.exists(fs::path(getwd(), "all_tables_figures"))) {
