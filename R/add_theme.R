@@ -57,7 +57,7 @@ add_theme <- function(x) {
     #     ggplot2::theme()
     # }
   } else {
-    message("NOAA formatting cannot be applied to this object.")
+    cli::cli_alert_danger("NOAA formatting cannot be applied to this object.")
   }
 
   theme_obj

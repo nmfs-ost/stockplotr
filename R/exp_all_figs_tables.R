@@ -92,7 +92,7 @@ exp_all_figs_tables <- function(
     ) {
   make_rda <- TRUE
 
-  message("Starting export of figures and tables:")
+  cli::cli_alert_info("Starting export of figures and tables:")
 
   # figures
 
@@ -111,7 +111,7 @@ exp_all_figs_tables <- function(
       # invisible()
     },
     error = function(e) {
-      message("plot_recruitment failed to run. Tip: check that your arguments are correct.")
+      cli::cli_alert_danger("plot_recruitment failed to run. Tip: check that your arguments are correct.")
       print(e)
     }
   )
@@ -134,7 +134,7 @@ exp_all_figs_tables <- function(
       # invisible()
     },
     error = function(e) {
-      message("plot_biomass failed to run. Tip: check that your arguments are correct.")
+      cli::cli_alert_danger("plot_biomass failed to run. Tip: check that your arguments are correct.")
       print(e)
     }
   )
@@ -152,7 +152,7 @@ exp_all_figs_tables <- function(
       # invisible()
     },
     error = function(e) {
-      message("plot_landings failed to run. Tip: check that your arguments are correct.")
+      cli::cli_alert_danger("plot_landings failed to run. Tip: check that your arguments are correct.")
       print(e)
     }
   )
@@ -169,9 +169,7 @@ exp_all_figs_tables <- function(
       # invisible()
     },
     error = function(e) {
-      message(
-        "plot_recruitment_deviations failed to run. Tip: check that your arguments are correct."
-      )
+      cli::cli_alert_danger("plot_recruitment_deviations failed to run. Tip: check that your arguments are correct.")
       print(e)
     }
   )
@@ -200,7 +198,7 @@ exp_all_figs_tables <- function(
       # invisible()
     },
     error = function(e) {
-      message("plot_spawning_biomass failed to run. Tip: check that your arguments are correct.")
+      cli::cli_alert_danger("plot_spawning_biomass failed to run. Tip: check that your arguments are correct.")
       print(e)
     }
   )
@@ -219,7 +217,7 @@ exp_all_figs_tables <- function(
       # invisible()
     },
     error = function(e) {
-      message("plot_abundance_at_age failed to run. Tip: check that your arguments are correct.")
+      cli::cli_alert_danger("plot_abundance_at_age failed to run. Tip: check that your arguments are correct.")
       print(e)
     }
   )
@@ -238,7 +236,7 @@ exp_all_figs_tables <- function(
   #     # invisible()
   #   },
   #   error = function(e) {
-  #     message("plot_biomass_at_age failed to run. Tip: check that your arguments are correct.")
+  #     cli::cli_alert_danger("plot_biomass_at_age failed to run. Tip: check that your arguments are correct.")
   #     print(e)
   #   }
   # )
@@ -265,7 +263,7 @@ exp_all_figs_tables <- function(
       # invisible()
     },
     error = function(e) {
-      message("table_bnc failed to run. Tip: check that your arguments are correct.")
+      cli::cli_alert_danger("table_bnc failed to run. Tip: check that your arguments are correct.")
       print(e)
     }
   )
@@ -282,7 +280,7 @@ exp_all_figs_tables <- function(
       # invisible()
     },
     error = function(e) {
-      message("table_indices failed to run. Tip: check that your arguments are correct.")
+      cli::cli_alert_danger("table_indices failed to run. Tip: check that your arguments are correct.")
       print(e)
     }
   )
@@ -299,7 +297,7 @@ exp_all_figs_tables <- function(
       # invisible()
     },
     error = function(e) {
-      message("table_landings failed to run. Tip: check that your arguments are correct.")
+      cli::cli_alert_danger("table_landings failed to run. Tip: check that your arguments are correct.")
       print(e)
     }
   )
@@ -309,5 +307,5 @@ exp_all_figs_tables <- function(
   # undeveloped tables - add arguments after more development
   # table_afsc_tier() #|> suppressWarnings() |> invisible()
   # table_harvest_projection() #|> suppressWarnings() |> invisible()
-  message("Finished export of figures and tables.")
+  cli::cli_alert_success("Finished export of figures and tables.")
 }
