@@ -98,9 +98,7 @@ export_rda <- function(final = NULL,
         )
       )
     } else {
-      warning(
-        paste0(output_file_name, " was not regenerated.")
-      )
+      cli::cli_alert_warning("{output_file_name} was not regenerated.")
     }
   } else {
     message(paste0(output_file_name, " will be newly created."))

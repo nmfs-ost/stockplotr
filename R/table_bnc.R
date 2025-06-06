@@ -126,9 +126,9 @@ table_bnc <- function(
     dplyr::select(year, abundance)
 
   # Checks
-  if (length(unique(catch$year)) != nrow(catch)) warning("[catch] dataframe needs review.")
-  if (length(unique(biomass$year)) != nrow(biomass)) warning("[biomass] dataframe needs review.")
-  if (length(unique(abundance$year)) != nrow(abundance)) warning("[abundance] dataframe needs review.")
+  if (length(unique(catch$year)) != nrow(catch)) cli::cli_alert_warning("[catch] dataframe needs review.")
+  if (length(unique(biomass$year)) != nrow(biomass)) cli::cli_alert_warning("[biomass] dataframe needs review.")
+  if (length(unique(abundance$year)) != nrow(abundance)) cli::cli_alert_warning("[abundance] dataframe needs review.")
 
   sb <- dat |>
     dplyr::filter(
