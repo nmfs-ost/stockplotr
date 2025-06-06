@@ -16,7 +16,7 @@ check_year <- function(end_year = NULL,
       if (topic %in% projections_plots == FALSE) {
         if (!is.null(fig_or_table)) {
           if (as.numeric(end_year) > format(Sys.Date(), "%Y")) {
-            cli::cli_abort(paste0("end_year is past the current year for a non-projections plot (", topic, " ", fig_or_table, ")"))
+            cli::cli_abort("end_year is past the current year for a non-projections plot ({topic} {fig_or_table})")
           }
         } else {
           cli::cli_abort("fig_or_table is NULL")
@@ -68,13 +68,13 @@ add_more_key_quants <- function(
       )
   }
 
-  message("The following key quantities were extracted and inserted from add_more_key_quants():")
+  cli::cli_alert_info("The following key quantities were extracted and inserted from add_more_key_quants():")
 
   # calculate key quantities that rely on end_year for calculation
   ## terminal fishing mortality
   if (topic_cap_alt$label == "fishing.mortality") {
     if (is.null(dat)) {
-      message("Some key quantities associated with fishing mortality were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).")
+      cli::cli_alert_warning("Some key quantities associated with fishing mortality were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).")
     } else {
       F.end.year <- dat |>
         dplyr::filter(
@@ -119,7 +119,7 @@ add_more_key_quants <- function(
   ## biomass
   if (topic_cap_alt$label == "biomass") {
     if (is.null(dat)) {
-      message("Some key quantities associated with biomass were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).")
+      cli::cli_alert_warning("Some key quantities associated with biomass were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).")
     } else {
       # minimum biomass
       B.min <- dat |>
@@ -162,18 +162,18 @@ add_more_key_quants <- function(
           as.character(B.max)
         ))
 
-      message(paste0("B.min: ", as.character(B.min)))
-      message(paste0("B.max: ", as.character(B.max)))
+      cli::cli_alert_success("B.min: {as.character(B.min)}")
+      cli::cli_alert_success("B.max: {as.character(B.max)}")
     }
   }
 
   ## relative spawning biomass
   if (topic_cap_alt$label == "relative.spawning.biomass") {
     if (is.null(dat)) {
-      message("Some key quantities associated with relative spawning biomass were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).")
+      cli::cli_alert_warning("Some key quantities associated with relative spawning biomass were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).")
     }
     if (is.null(ref_line)) {
-      message("ref_line was not provided. ssbtarg, rel.ssb.min, and rel.ssb.max were not calculated.")
+      cli::cli_alert_warning("ref_line was not provided. ssbtarg, rel.ssb.min, and rel.ssb.max were not calculated.")
     } else {
       # ssbtarg
       ssbtarg <- dat |>
@@ -184,7 +184,7 @@ add_more_key_quants <- function(
         round(digits = 2)
 
       if (length(ssbtarg) > 0) {
-        message("ssbtarg, rel.ssb.min, and rel.ssb.max were not calculated. Check your ref_line is accurate.")
+        cli::cli_alert_warning("ssbtarg, rel.ssb.min, and rel.ssb.max were not calculated. Check your ref_line is accurate.")
       } else {
         # ssb.min and ssb.max can be calculated in write_captions, but these quants
         # are needed for rel values below, so including them here instead
@@ -232,8 +232,8 @@ add_more_key_quants <- function(
             as.character(rel.ssb.max)
           ))
 
-        message(paste0("rel.ssb.min: ", as.character(rel.ssb.min)))
-        message(paste0("rel.ssb.max: ", as.character(rel.ssb.max)))
+        cli::cli_alert_success("rel.ssb.min: {as.character(rel.ssb.min)}")
+        cli::cli_alert_success("rel.ssb.max: {as.character(rel.ssb.max)}")
       }
     }
   }
@@ -241,7 +241,7 @@ add_more_key_quants <- function(
   ## spawning biomass
   if (topic_cap_alt$label == "spawning.biomass") {
     if (is.null(dat)) {
-      message("Some key quantities associated with spawning biomass were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).")
+      cli::cli_alert_warning("Some key quantities associated with spawning biomass were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).")
     } else {
       # minimum ssb
       sr.ssb.min <- dat |>
@@ -336,17 +336,17 @@ add_more_key_quants <- function(
           as.character(ssb.max)
         ))
 
-      message(paste0("sr.ssb.min: ", as.character(sr.ssb.min)))
-      message(paste0("sr.ssb.max: ", as.character(sr.ssb.max)))
-      message(paste0("ssb.min: ", as.character(ssb.min)))
-      message(paste0("ssb.max: ", as.character(ssb.max)))
+      cli::cli_alert_success("sr.ssb.min: {as.character(sr.ssb.min)}")
+      cli::cli_alert_success("sr.ssb.max: {as.character(sr.ssb.max)}")
+      cli::cli_alert_success("ssb.min: {as.character(ssb.min)}")
+      cli::cli_alert_success("ssb.max: {as.character(ssb.max)}")
     }
   }
 
   ## recruitment
   if (topic_cap_alt$label == "recruitment") {
     if (is.null(dat)) {
-      message("Some key quantities associated with recruitment were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).")
+      cli::cli_alert_warning("Some key quantities associated with recruitment were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).")
     } else {
       # minimum recruitment
       sr.min <- dat |>
@@ -397,8 +397,8 @@ add_more_key_quants <- function(
           as.character(sr.max)
         ))
 
-      message(paste0("sr.min: ", as.character(sr.min)))
-      message(paste0("sr.max: ", as.character(sr.max)))
+      cli::cli_alert_success("sr.min: {as.character(sr.min)}")
+      cli::cli_alert_success("sr.max: {as.character(sr.max)}")
     }
   }
 
@@ -422,7 +422,7 @@ add_more_key_quants <- function(
         end_year
       ))
 
-    message(paste0("end_year: ", as.character(end_year)))
+    cli::cli_alert_success("end_year: {as.character(end_year)}")
   }
   ## units-----
 
@@ -480,7 +480,7 @@ add_more_key_quants <- function(
         as.character(units)
       ))
 
-    message(paste0("units: ", as.character(units)))
+    cli::cli_alert_success("units: {as.character(units)}")
   }
 
   if (!is.null(sr_ssb_units)) {
@@ -493,7 +493,7 @@ add_more_key_quants <- function(
         as.character(sr_ssb_units)
       ))
 
-    message(paste0("sr.ssb.units: ", as.character(sr_ssb_units)))
+    cli::cli_alert_success("sr.ssb.units: {as.character(sr_ssb_units)}")
   }
 
   if (!is.null(sr_recruitment_units)) {
@@ -506,7 +506,7 @@ add_more_key_quants <- function(
         as.character(sr_recruitment_units)
       ))
 
-    message(paste0("sr.units: ", as.character(sr_recruitment_units)))
+    cli::cli_alert_success("sr.units: {as.character(sr_recruitment_units)}")
   }
 
   if (!is.null(units)) {
@@ -545,7 +545,7 @@ add_more_key_quants <- function(
         paste0("(", as.character(ref_pt))
       ))
 
-    message(paste0("plot-specific reference point: ", as.character(ref_pt)))
+    cli::cli_alert_success("plot-specific reference point: {as.character(ref_pt)}")
   }
 
   # remove row with old caption/alt text, then add new row

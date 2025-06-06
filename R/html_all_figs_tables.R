@@ -88,9 +88,7 @@ format:
       )
     )
 
-    message(
-      "The html and qmd with all tables and figures were generated and overwrote the previous versions."
-    )
+    cli::cli_alert_success("The html and qmd with all tables and figures were generated and overwrote the previous versions.")
   } else {
     cli::cli_alert_warning("The html and qmd with all tables and figures were not generated.")
   }
