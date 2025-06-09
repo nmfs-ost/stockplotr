@@ -68,7 +68,7 @@ add_more_key_quants <- function(
       )
   }
 
-  cli::cli_alert_info("The following key quantities were extracted and inserted from add_more_key_quants():", wrap = TRUE)
+  cli::cli_h3("Key quantities extracted and inserted from add_more_key_quants():")
 
   # calculate key quantities that rely on end_year for calculation
   ## terminal fishing mortality
@@ -162,8 +162,8 @@ add_more_key_quants <- function(
           as.character(B.max)
         ))
 
-      cli::cli_alert_success("B.min: {as.character(B.min)}")
-      cli::cli_alert_success("B.max: {as.character(B.max)}")
+      cli::cli_li("B.min: {as.character(B.min)}")
+      cli::cli_li("B.max: {as.character(B.max)}")
     }
   }
 
@@ -232,8 +232,8 @@ add_more_key_quants <- function(
             as.character(rel.ssb.max)
           ))
 
-        cli::cli_alert_success("rel.ssb.min: {as.character(rel.ssb.min)}")
-        cli::cli_alert_success("rel.ssb.max: {as.character(rel.ssb.max)}")
+        cli::cli_li("rel.ssb.min: {as.character(rel.ssb.min)}")
+        cli::cli_li("rel.ssb.max: {as.character(rel.ssb.max)}")
       }
     }
   }
@@ -336,10 +336,10 @@ add_more_key_quants <- function(
           as.character(ssb.max)
         ))
 
-      cli::cli_alert_success("sr.ssb.min: {as.character(sr.ssb.min)}")
-      cli::cli_alert_success("sr.ssb.max: {as.character(sr.ssb.max)}")
-      cli::cli_alert_success("ssb.min: {as.character(ssb.min)}")
-      cli::cli_alert_success("ssb.max: {as.character(ssb.max)}")
+      cli::cli_li("sr.ssb.min: {as.character(sr.ssb.min)}")
+      cli::cli_li("sr.ssb.max: {as.character(sr.ssb.max)}")
+      cli::cli_li("ssb.min: {as.character(ssb.min)}")
+      cli::cli_li("ssb.max: {as.character(ssb.max)}")
     }
   }
 
@@ -397,8 +397,8 @@ add_more_key_quants <- function(
           as.character(sr.max)
         ))
 
-      cli::cli_alert_success("sr.min: {as.character(sr.min)}")
-      cli::cli_alert_success("sr.max: {as.character(sr.max)}")
+      cli::cli_li("sr.min: {as.character(sr.min)}")
+      cli::cli_li("sr.max: {as.character(sr.max)}")
     }
   }
 
@@ -422,7 +422,7 @@ add_more_key_quants <- function(
         end_year
       ))
 
-    cli::cli_alert_success("end_year: {as.character(end_year)}")
+    cli::cli_li("end_year: {as.character(end_year)}")
   }
   ## units-----
 
@@ -480,7 +480,7 @@ add_more_key_quants <- function(
         as.character(units)
       ))
 
-    cli::cli_alert_success("units: {as.character(units)}")
+    cli::cli_li("units: {as.character(units)}")
   }
 
   if (!is.null(sr_ssb_units)) {
@@ -493,7 +493,7 @@ add_more_key_quants <- function(
         as.character(sr_ssb_units)
       ))
 
-    cli::cli_alert_success("sr.ssb.units: {as.character(sr_ssb_units)}")
+    cli::cli_li("sr.ssb.units: {as.character(sr_ssb_units)}")
   }
 
   if (!is.null(sr_recruitment_units)) {
@@ -506,7 +506,7 @@ add_more_key_quants <- function(
         as.character(sr_recruitment_units)
       ))
 
-    cli::cli_alert_success("sr.units: {as.character(sr_recruitment_units)}")
+    cli::cli_li("sr.units: {as.character(sr_recruitment_units)}")
   }
 
   if (!is.null(units)) {
@@ -545,7 +545,7 @@ add_more_key_quants <- function(
         paste0("(", as.character(ref_pt))
       ))
 
-    cli::cli_alert_success("plot-specific reference point: {as.character(ref_pt)}")
+    cli::cli_li("plot-specific reference point: {as.character(ref_pt)}")
   }
 
   # remove row with old caption/alt text, then add new row

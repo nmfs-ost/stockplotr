@@ -981,9 +981,10 @@ write_captions <- function(dat, # converted model output object
         "key_quantity" = 2
       )
 
-    cli::cli_alert_info("The following key quantities were extracted and inserted from write_captions(). NA values signify key quantities that were not extracted and inserted.", wrap = TRUE)
+    cli::cli_h3("Key quantities extracted and inserted from write_captions().")
+    cli::cli_alert_info("NA values signify key quantities that were not extracted and inserted.", wrap = TRUE)
     for (i in 1:dim(replaced_vals)[1]) {
-      cli::cli_alert_success(paste0(
+      cli::cli_li(paste0(
         replaced_vals[i, 1],
         ": ",
         replaced_vals[i, 2]

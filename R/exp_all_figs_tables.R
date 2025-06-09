@@ -92,12 +92,13 @@ exp_all_figs_tables <- function(
     ) {
   make_rda <- TRUE
 
-  cli::cli_alert_info("Starting export of figures and tables:")
+  cli::cli_h1("Starting export of figures and tables")
 
   # figures
 
   tryCatch(
     {
+      cli::cli_h2("plot_recruitment")
       stockplotr::plot_recruitment(
         dat,
         unit_label = recruitment_unit_label,
@@ -111,7 +112,12 @@ exp_all_figs_tables <- function(
       # invisible()
     },
     error = function(e) {
-      cli::cli_alert_danger("plot_recruitment failed to run. Tip: check that your arguments are correct.", wrap = TRUE)
+      cli::cli_alert_danger("plot_recruitment failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      cli::cli_li("recruitment_unit_label = {recruitment_unit_label}")
+      cli::cli_li("recruitment_scale_amount = {recruitment_scale_amount}")
+      cli::cli_li("end_year = {end_year}")
+      cli::cli_li("relative = {relative}")
       print(e)
     }
   )
@@ -119,6 +125,7 @@ exp_all_figs_tables <- function(
 
   tryCatch(
     {
+      cli::cli_h2("plot_biomass")
       stockplotr::plot_biomass(
         dat,
         unit_label = biomass_unit_label,
@@ -134,7 +141,14 @@ exp_all_figs_tables <- function(
       # invisible()
     },
     error = function(e) {
-      cli::cli_alert_danger("plot_biomass failed to run. Tip: check that your arguments are correct.", wrap = TRUE)
+      cli::cli_alert_danger("plot_biomass failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      cli::cli_li("biomass_unit_label = {biomass_unit_label}")
+      cli::cli_li("biomass_scale_amount = {biomass_scale_amount}")
+      cli::cli_li("ref_line = {ref_line}")
+      cli::cli_li("ref_point = {ref_point}")
+      cli::cli_li("end_year = {end_year}")
+      cli::cli_li("relative = {relative}")
       print(e)
     }
   )
@@ -142,6 +156,7 @@ exp_all_figs_tables <- function(
 
   tryCatch(
     {
+      cli::cli_h2("plot_landings")
       stockplotr::plot_landings(dat,
         unit_label = landings_unit_label,
         end_year,
@@ -152,13 +167,17 @@ exp_all_figs_tables <- function(
       # invisible()
     },
     error = function(e) {
-      cli::cli_alert_danger("plot_landings failed to run. Tip: check that your arguments are correct.", wrap = TRUE)
+      cli::cli_alert_danger("plot_landings failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      cli::cli_li("landings_unit_label = {landings_unit_label}")
+      cli::cli_li("end_year = {end_year}")
       print(e)
     }
   )
 
   tryCatch(
     {
+      cli::cli_h2("plot_recruitment_deviations")
       stockplotr::plot_recruitment_deviations(
         dat,
         end_year,
@@ -169,7 +188,9 @@ exp_all_figs_tables <- function(
       # invisible()
     },
     error = function(e) {
-      cli::cli_alert_danger("plot_recruitment_deviations failed to run. Tip: check that your arguments are correct.", wrap = TRUE)
+      cli::cli_alert_danger("plot_recruitment_deviations failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      cli::cli_li("end_year = {end_year}")
       print(e)
     }
   )
@@ -183,6 +204,7 @@ exp_all_figs_tables <- function(
 
   tryCatch(
     {
+      cli::cli_h2("plot_spawning_biomass")
       stockplotr::plot_spawning_biomass(
         dat,
         unit_label = spawning_biomass_label,
@@ -198,13 +220,21 @@ exp_all_figs_tables <- function(
       # invisible()
     },
     error = function(e) {
-      cli::cli_alert_danger("plot_spawning_biomass failed to run. Tip: check that your arguments are correct.", wrap = TRUE)
+      cli::cli_alert_danger("plot_spawning_biomass failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      cli::cli_li("spawning_biomass_label = {spawning_biomass_label}")
+      cli::cli_li("spawning_biomass_scale_amount = {spawning_biomass_scale_amount}")
+      cli::cli_li("ref_line_sb = {ref_line_sb}")
+      cli::cli_li("ref_point_sb = {ref_point_sb}")
+      cli::cli_li("end_year = {end_year}")
+      cli::cli_li("relative = {relative}")
       print(e)
     }
   )
 
   tryCatch(
     {
+      cli::cli_h2("plot_abundance_at_age")
       stockplotr::plot_abundance_at_age(
         dat,
         unit_label = abundance_at_age_unit_label,
@@ -217,13 +247,18 @@ exp_all_figs_tables <- function(
       # invisible()
     },
     error = function(e) {
-      cli::cli_alert_danger("plot_abundance_at_age failed to run. Tip: check that your arguments are correct.", wrap = TRUE)
+      cli::cli_alert_danger("plot_abundance_at_age failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      cli::cli_li("abundance_at_age_unit_label = {abundance_at_age_unit_label}")
+      cli::cli_li("abundance_at_age_scale_amount = {abundance_at_age_scale_amount}")
+      cli::cli_li("end_year = {end_year}")
       print(e)
     }
   )
 
   # tryCatch(
   #   {
+  #     cli::cli_h2("plot_biomass_at_age")
   #     stockplotr::plot_biomass_at_age(
   #       dat,
   #       unit_label = biomass_at_age_unit_label,
@@ -236,8 +271,12 @@ exp_all_figs_tables <- function(
   #     # invisible()
   #   },
   #   error = function(e) {
-  #     cli::cli_alert_danger("plot_biomass_at_age failed to run. Tip: check that your arguments are correct.", wrap = TRUE)
-  #     print(e)
+  # cli::cli_alert_danger("plot_biomass_at_age failed to run.")
+  # cli::cli_alert("Tip: check that your arguments are correct.")
+  # cli::cli_li("biomass_at_age_unit_label = {biomass_at_age_unit_label}")
+  # cli::cli_li("biomass_at_age_scale_amount = {biomass_at_age_scale_amount}")
+  # cli::cli_li("end_year = {end_year}")
+  # print(e)
   #   }
   # )
 
@@ -250,6 +289,7 @@ exp_all_figs_tables <- function(
   # tables
   tryCatch(
     {
+      cli::cli_h2("table_bnc")
       stockplotr::table_bnc(
         dat,
         end_year,
@@ -263,13 +303,19 @@ exp_all_figs_tables <- function(
       # invisible()
     },
     error = function(e) {
-      cli::cli_alert_danger("table_bnc failed to run. Tip: check that your arguments are correct.", wrap = TRUE)
+      cli::cli_alert_danger("table_bnc failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      cli::cli_li("end_year = {end_year}")
+      cli::cli_li("biomass_unit_label = {biomass_unit_label}")
+      cli::cli_li("catch_unit_label = {catch_unit_label}")
+      cli::cli_li("spawning_biomass_label = {spawning_biomass_label}")
       print(e)
     }
   )
 
   tryCatch(
     {
+      cli::cli_h2("table_indices")
       stockplotr::table_indices(
         dat,
         end_year,
@@ -280,13 +326,16 @@ exp_all_figs_tables <- function(
       # invisible()
     },
     error = function(e) {
-      cli::cli_alert_danger("table_indices failed to run. Tip: check that your arguments are correct.", wrap = TRUE)
+      cli::cli_alert_danger("table_indices failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      cli::cli_li("end_year = {end_year}")
       print(e)
     }
   )
 
   tryCatch(
     {
+      cli::cli_h2("table_landings")
       stockplotr::table_landings(dat,
         unit_label = landings_unit_label,
         end_year,
@@ -297,7 +346,10 @@ exp_all_figs_tables <- function(
       # invisible()
     },
     error = function(e) {
-      cli::cli_alert_danger("table_landings failed to run. Tip: check that your arguments are correct.", wrap = TRUE)
+      cli::cli_alert_danger("table_landings failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      cli::cli_li("landings_unit_label = {landings_unit_label}")
+      cli::cli_li("end_year = {end_year}")
       print(e)
     }
   )
@@ -307,5 +359,5 @@ exp_all_figs_tables <- function(
   # undeveloped tables - add arguments after more development
   # table_afsc_tier() #|> suppressWarnings() |> invisible()
   # table_harvest_projection() #|> suppressWarnings() |> invisible()
-  cli::cli_alert_success("Finished export of figures and tables.")
+  cli::cli_h1("Finished export of figures and tables.")
 }
