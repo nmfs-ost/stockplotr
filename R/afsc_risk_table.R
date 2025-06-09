@@ -254,7 +254,7 @@ risk_table <- function(dat, end_year, tier, c1, c2, c3) {
       flextable::fix_border_issues()
   } else if (tier == 1) {
     if (nrow(tbl$body$dat) > 17) {
-      cli::cli_abort("This is not a tier 1 input.\nMaybe you have a tier 3 stock...?")
+      cli::cli_abort("This is not a tier 1 input.\nMaybe you have a tier 3 stock...?", wrap = TRUE)
     }
 
     tier <- "1a"

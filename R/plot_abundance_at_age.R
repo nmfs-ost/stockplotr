@@ -50,7 +50,7 @@ plot_abundance_at_age <- function(
     )
     unit_mag <- paste(scale_unit[magnitude])
   } else {
-    cli::cli_abort("Scale_amount is out of bounds. Please choose a value ranging from 1-1000000000 (one billion) in orders of magnitude (e.g., 1, 10, 100, 1000, etc.)")
+    cli::cli_abort("Scale_amount is out of bounds. Please choose a value ranging from 1-1000000000 (one billion) in orders of magnitude (e.g., 1, 10, 100, 1000, etc.)", wrap = TRUE)
   }
 
 

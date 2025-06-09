@@ -25,8 +25,8 @@ write_captions <- function(dat, # converted model output object
                            year = NULL) {
   # only extract key quantities/export new csv if not present
   if (file.exists(fs::path(dir, "captions_alt_text.csv"))) {
-    cli::cli_alert_danger("Captions and alternative text file (captions_alt_text.csv) already exists; write_captions() will not run.")
-    cli::cli_alert_info("To extract new key quantities and make a new captions_alt_text.csv file, delete existing captions_alt_text.csv and rerun write_captions().")
+    cli::cli_alert_danger("Captions and alternative text file (captions_alt_text.csv) already exists; write_captions() will not run.", wrap = TRUE)
+    cli::cli_alert_info("To extract new key quantities and make a new captions_alt_text.csv file, delete existing captions_alt_text.csv and rerun write_captions().", wrap = TRUE)
   } else {
     # import pre-written captions and alt text that include placeholders
     # for key quantities (e.g., 'start_year' is the placeholder for the
@@ -981,7 +981,7 @@ write_captions <- function(dat, # converted model output object
         "key_quantity" = 2
       )
 
-    cli::cli_alert_info("The following key quantities were extracted and inserted from write_captions(). NA values signify key quantities that were not extracted and inserted.")
+    cli::cli_alert_info("The following key quantities were extracted and inserted from write_captions(). NA values signify key quantities that were not extracted and inserted.", wrap = TRUE)
     for (i in 1:dim(replaced_vals)[1]) {
       cli::cli_alert_success(paste0(
         replaced_vals[i, 1],
