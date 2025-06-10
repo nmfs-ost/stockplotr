@@ -131,16 +131,14 @@ plot_spawning_biomass <- function(
     # ])
   }
   if (length(ref_line_val) == 0) {
-    warning(glue::glue(
-      "The resulting reference value of `spawning_biomass_{ref_line}` was
-      not found in `dat[[\"label\"]]`."
-    ))
-    warning("Reference line will not be plotted on the figure.")
+    cli::cli_alert_warning(
+      "The resulting reference value of `spawning_biomass_{ref_line}` was not found in `dat[[\"label\"]]`.", wrap = TRUE
+    )
+    cli::cli_alert_warning("Reference line will not be plotted on the figure.")
   } else if (length(ref_line_val) > 1) {
-    warning(glue::glue(
-      "More than one of the resulting reference value of 'spawing_biomass_{ref_line}` was
-      not in `dat[[\"label\"]]`. \n Both reference points will be plotted on the figure."
-    ))
+    cli::cli_alert_warning(
+      "More than one of the resulting reference value of 'spawing_biomass_{ref_line}` was not in `dat[[\"label\"]]`. \n Both reference points will be plotted on the figure.", wrap = TRUE
+    )
   }
   sb <- dat |>
     dplyr::filter(

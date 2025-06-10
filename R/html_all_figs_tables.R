@@ -16,7 +16,7 @@
 #' }
 html_all_figs_tables <- function(rda_dir = getwd()) {
   if (!dir.exists(fs::path(rda_dir, "rda_files"))) {
-    stop("'rda_files' folder not found. Did you enter the correct argument for rda_dir?")
+    cli::cli_abort("'rda_files' folder not found. Did you enter the correct argument for rda_dir?", wrap = TRUE)
   }
   # check if dir exists and present warning message/option message
   if (dir.exists(fs::path(getwd(), "all_tables_figures"))) {
@@ -88,10 +88,9 @@ format:
       )
     )
 
-    message(
-      "The html and qmd with all tables and figures were generated and overwrote the previous versions."
-    )
+    cli::cli_alert_success("Generated html and qmd with all tables and figures", wrap = TRUE)
+    cli::cli_alert_info("Overwrote previous html and qmd")
   } else {
-    warning("The html and qmd with all tables and figures were not generated.")
+    cli::cli_alert_warning("Did not generate html and qmd with all tables and figures", wrap = TRUE)
   }
 }

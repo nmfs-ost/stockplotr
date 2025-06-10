@@ -9,8 +9,8 @@ test_that("plot_biomass generates plots without errors", {
     stockplotr::plot_biomass(dat)
   )
 
-  # expect plot with warnings if ref_point not indicated
-  expect_warning(
+  # expect plot with warning message if ref_point not indicated
+  expect_message(
     stockplotr::plot_biomass(dat)
   )
 

@@ -91,19 +91,12 @@ export_rda <- function(final = NULL,
           output_file_name
         )
       )
-      message(
-        paste0(
-          output_file_name,
-          " was regenerated and overwrote the previous version."
-        )
-      )
+      cli::cli_alert_success("{output_file_name} was regenerated and overwrote the previous version.", wrap = TRUE)
     } else {
-      warning(
-        paste0(output_file_name, " was not regenerated.")
-      )
+      cli::cli_alert_warning("{output_file_name} was not regenerated.")
     }
   } else {
-    message(paste0(output_file_name, " will be newly created."))
+    cli::cli_alert_info("{output_file_name} will be newly created.")
 
     # export rda
     save(rda,
@@ -114,11 +107,6 @@ export_rda <- function(final = NULL,
       )
     )
 
-    message(
-      paste0(
-        output_file_name,
-        " was exported."
-      )
-    )
+    cli::cli_alert_success("{output_file_name} was exported.")
   }
 }

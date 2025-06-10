@@ -93,10 +93,10 @@ plot_indices <- function(
   }
 
   # Check for correct number of columns in dataframe
-  if (4 < ncol(indices) | ncol(indices) > 4) stop("Incorrect number of columns. Additional factor present.")
+  if (4 < ncol(indices) | ncol(indices) > 4) cli::cli_abort("Incorrect number of columns. Additional factor present.", wrap = TRUE)
   # Check for error type to present to user
   # Double check this warning is correct
-  # if (grep("cv", colnames(indices)[4])) warning("Confidence Intervals were calculated using cv rather than se. Please use caution interpreting of the output plot.")
+  # if (grep("cv", colnames(indices)[4])) cli::cli_alert_warning("Confidence Intervals were calculated using cv rather than se. Please use caution interpreting of the output plot.", wrap = TRUE)
   # Create condition for error type
   if (grepl("cv", colnames(indices)[4])) {
     err_val <- TRUE # indicates that the error value is cv
