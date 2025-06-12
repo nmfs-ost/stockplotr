@@ -33,8 +33,8 @@ Depends:
     R (>= 2.10)
 Imports: 
     asar,
-    data.table,
     cli,
+    data.table,
     dplyr,
     flextable,
     fs,
