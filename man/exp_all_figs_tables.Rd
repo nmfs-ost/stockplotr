@@ -45,7 +45,7 @@ be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
 which reference point to use.}
 
 \item{figures_tables_dir}{The location of the folder containing the generated .rda files
-("rda_files") that will be created if the argument `make_rda` = TRUE.
+("figures_tables") that will be created if the argument `make_rda` = TRUE.
 Default is the working directory.}
 
 \item{ref_line}{A string specifying the type of reference you want to

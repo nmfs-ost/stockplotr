@@ -26,7 +26,7 @@ the .rda will be exported to the folder indicated in the argument "figures_table
 Default is FALSE.}
 
 \item{figures_tables_dir}{The location of the folder containing the generated .rda files
-("rda_files") that will be created if the argument `make_rda` = TRUE.
+("figures_tables") that will be created if the argument `make_rda` = TRUE.
 Default is the working directory.}
 
 \item{fleet_names}{Indicate the full names of the fleet that will be used in

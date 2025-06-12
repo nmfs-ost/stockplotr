@@ -9,8 +9,8 @@
 #' stockplotr::extract_caps_alttext().
 #' @param figures_tables_dir If the user has already created a folder containing .rda
 #' files with figures, tables, alt text, and captions, figures_tables_dir represents
-#' the location of the folder containing these .rda files ("rda_files").
-#' Otherwise, an "rda_files" folder will be created automatically, then used
+#' the location of the folder containing these .rda files ("figures_tables").
+#' Otherwise, an "figures_tables" folder will be created automatically, then used
 #' to store the exported rda files.
 ##' @param topic_label A string that describes a figure or table's label. These
 #' labels are found in the "label" column of the "captions_alt_text.csv" file
@@ -61,15 +61,15 @@ export_rda <- function(final = NULL,
   }
   output_file_name <- paste0(topic_label, "_", fig_or_table, ".rda")
 
-  # check if an rda_files folder already exists; if not, make one
-  if (!dir.exists(fs::path(figures_tables_dir, "rda_files"))) {
-    dir.create(fs::path(figures_tables_dir, "rda_files"))
+  # check if an figures_tables folder already exists; if not, make one
+  if (!dir.exists(fs::path(figures_tables_dir, "figures_tables"))) {
+    dir.create(fs::path(figures_tables_dir, "figures_tables"))
   }
 
   # check if rda is already present. If so, check it should be overwritten
   if (file.exists(fs::path(
     figures_tables_dir,
-    "rda_files",
+    "figures_tables",
     output_file_name
   ))) {
     question1 <- readline(
@@ -77,7 +77,7 @@ export_rda <- function(final = NULL,
         "The ",
         output_file_name,
         " already exists within ",
-        fs::path(figures_tables_dir, "rda_files"),
+        fs::path(figures_tables_dir, "figures_tables"),
         ". Would you like to overwrite this file? (Y/N)"
       )
     )
@@ -87,7 +87,7 @@ export_rda <- function(final = NULL,
       save(rda,
         file = fs::path(
           figures_tables_dir,
-          "rda_files",
+          "figures_tables",
           output_file_name
         )
       )
@@ -102,7 +102,7 @@ export_rda <- function(final = NULL,
     save(rda,
       file = fs::path(
         figures_tables_dir,
-        "rda_files",
+        "figures_tables",
         output_file_name
       )
     )
