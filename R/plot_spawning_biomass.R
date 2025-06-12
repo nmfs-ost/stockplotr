@@ -132,12 +132,14 @@ plot_spawning_biomass <- function(
   }
   if (length(ref_line_val) == 0) {
     cli::cli_alert_warning(
-      "The resulting reference value of `spawning_biomass_{ref_line}` was not found in `dat[[\"label\"]]`.", wrap = TRUE
+      "The resulting reference value of `spawning_biomass_{ref_line}` was not found in `dat[[\"label\"]]`.",
+      wrap = TRUE
     )
     cli::cli_alert_warning("Reference line will not be plotted on the figure.")
   } else if (length(ref_line_val) > 1) {
     cli::cli_alert_warning(
-      "More than one of the resulting reference value of 'spawing_biomass_{ref_line}` was not in `dat[[\"label\"]]`. \n Both reference points will be plotted on the figure.", wrap = TRUE
+      "More than one of the resulting reference value of 'spawing_biomass_{ref_line}` was not in `dat[[\"label\"]]`. \n Both reference points will be plotted on the figure.",
+      wrap = TRUE
     )
   }
   sb <- dat |>
@@ -197,7 +199,7 @@ plot_spawning_biomass <- function(
     ) +
     ggplot2::annotate(
       geom = "text",
-      x = as.numeric(end_year)-(0.2*length(sb$year)),
+      x = as.numeric(end_year) - (0.2 * length(sb$year)),
       y = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
       label = list(bquote(SB[.(ref_line)])),
       parse = TRUE
