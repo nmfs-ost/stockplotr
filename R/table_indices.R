@@ -13,14 +13,14 @@
 #'   dat,
 #'   end_year = 2024,
 #'   make_rda = TRUE,
-#'   rda_dir = getwd()
+#'   figures_tables_dir = getwd()
 #' )
 #' }
 table_indices <- function(
     dat,
     end_year = NULL,
     make_rda = FALSE,
-    rda_dir = getwd()) {
+    figures_tables_dir = getwd()) {
   # get end year if not defined
   if (is.null(end_year)) {
     end_year <- format(Sys.Date(), "%Y")
@@ -144,7 +144,7 @@ table_indices <- function(
     ) {
       stockplotr::write_captions(
         dat = dat,
-        dir = rda_dir,
+        dir = figures_tables_dir,
         year = end_year
       )
     }
@@ -153,14 +153,14 @@ table_indices <- function(
     caps_alttext <- extract_caps_alttext(
       topic_label = topic_label,
       fig_or_table = fig_or_table,
-      dir = rda_dir
+      dir = figures_tables_dir
     )
 
 
     export_rda(
       final = final,
       caps_alttext = caps_alttext,
-      rda_dir = rda_dir,
+      figures_tables_dir = figures_tables_dir,
       topic_label = topic_label,
       fig_or_table = fig_or_table
     )

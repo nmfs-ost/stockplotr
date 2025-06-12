@@ -35,7 +35,7 @@ test_that("export_rda works for figures", {
   export_rda(
     final = final,
     caps_alttext = caps_alttext,
-    rda_dir = getwd(),
+    figures_tables_dir = getwd(),
     topic_label = topic_label,
     fig_or_table = fig_or_table
   )
@@ -89,7 +89,7 @@ test_that("export_rda works for tables", {
   export_rda(
     final = final,
     caps_alttext = caps_alttext,
-    rda_dir = getwd(),
+    figures_tables_dir = getwd(),
     topic_label = topic_label,
     fig_or_table = fig_or_table
   )

@@ -1,4 +1,4 @@
-test_that("html_all_figs_tables makes qmd and html files with default rda_dir argument", {
+test_that("html_all_figs_tables makes qmd and html files with default figures_tables_dir argument", {
   # read in sample dataset
   dat <- utils::read.csv(
     system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
@@ -13,7 +13,7 @@ test_that("html_all_figs_tables makes qmd and html files with default rda_dir ar
     ref_point = 1000,
     ref_line_sb = "msy",
     indices_unit_label = "CPUE",
-    rda_dir = getwd()
+    figures_tables_dir = getwd()
   ) |>
     suppressWarnings()
 
@@ -33,7 +33,7 @@ test_that("html_all_figs_tables makes qmd and html files with default rda_dir ar
   unlink(fs::path(getwd(), "rda_files"), recursive = T)
 })
 
-test_that("html_all_figs_tables makes qmd and html files with non-default rda_dir argument", {
+test_that("html_all_figs_tables makes qmd and html files with non-default figures_tables_dir argument", {
   # read in sample dataset
   dat <- utils::read.csv(
     system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
@@ -53,12 +53,12 @@ test_that("html_all_figs_tables makes qmd and html files with non-default rda_di
       ref_point = 1000,
       ref_line_sb = "msy",
       indices_unit_label = "CPUE",
-      rda_dir = getwd()
+      figures_tables_dir = getwd()
     ) |>
       suppressWarnings()
   )
 
-  html_all_figs_tables(rda_dir = rda_path)
+  html_all_figs_tables(figures_tables_dir = rda_path)
 
   testthat::expect(file.exists(fs::path(rda_path, "all_tables_figures", "all_tables_figures.qmd")),
     failure_message = "Test fail: 'all_tables_figures.qmd' does not exist"
@@ -88,7 +88,7 @@ test_that("html_all_figs_tables triggers message (question) when all_tables_figu
     ref_point = 1000,
     ref_line_sb = "msy",
     indices_unit_label = "CPUE",
-    rda_dir = getwd()
+    figures_tables_dir = getwd()
   ) |>
     suppressWarnings()
 
@@ -102,6 +102,6 @@ test_that("html_all_figs_tables triggers message (question) when all_tables_figu
   unlink(fs::path(getwd(), "rda_files"), recursive = T)
 })
 
-test_that("html_all_figs_tables stops if rda_dir not found", {
+test_that("html_all_figs_tables stops if figures_tables_dir not found", {
   testthat::expect_error(html_all_figs_tables())
 })

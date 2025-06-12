@@ -60,7 +60,7 @@ exp_all_figs_tables <- function(
     recruitment_scale_amount = 1,
     end_year = NULL,
     relative = FALSE,
-    rda_dir = getwd(),
+    figures_tables_dir = getwd(),
     # imported from plot_biomass
     ref_line = c("target", "MSY", "msy", "unfished"),
     ref_point = NULL,
@@ -106,7 +106,7 @@ exp_all_figs_tables <- function(
         end_year,
         relative,
         make_rda = TRUE,
-        rda_dir
+        figures_tables_dir
       ) #|>
       # suppressWarnings() |>
       # invisible()
@@ -135,7 +135,7 @@ exp_all_figs_tables <- function(
         end_year,
         relative,
         make_rda,
-        rda_dir
+        figures_tables_dir
       ) #|>
       # suppressWarnings() |>
       # invisible()
@@ -161,7 +161,7 @@ exp_all_figs_tables <- function(
         unit_label = landings_unit_label,
         end_year,
         make_rda,
-        rda_dir
+        figures_tables_dir
       ) # |>
       # suppressWarnings() |>
       # invisible()
@@ -182,7 +182,7 @@ exp_all_figs_tables <- function(
         dat,
         end_year,
         make_rda,
-        rda_dir
+        figures_tables_dir
       ) #|>
       # suppressWarnings() |>
       # invisible()
@@ -200,7 +200,7 @@ exp_all_figs_tables <- function(
   #                        recruitment_label = recruitment_unit_label,
   #                        end_year,
   #                        make_rda,
-  #                        rda_dir)# |> suppressWarnings() |> invisible()
+  #                        figures_tables_dir)# |> suppressWarnings() |> invisible()
 
   tryCatch(
     {
@@ -214,7 +214,7 @@ exp_all_figs_tables <- function(
         end_year,
         relative,
         make_rda,
-        rda_dir
+        figures_tables_dir
       ) # |>
       # suppressWarnings() |>
       # invisible()
@@ -241,7 +241,7 @@ exp_all_figs_tables <- function(
         scale_amount = abundance_at_age_scale_amount,
         end_year,
         make_rda,
-        rda_dir
+        figures_tables_dir
       ) # |>
       # suppressWarnings() |>
       # invisible()
@@ -265,7 +265,7 @@ exp_all_figs_tables <- function(
   #       scale_amount = biomass_at_age_scale_amount,
   #       end_year,
   #       make_rda,
-  #       rda_dir
+  #       figures_tables_dir
   #     ) # |>
   #     # suppressWarnings() |>
   #     # invisible()
@@ -284,7 +284,7 @@ exp_all_figs_tables <- function(
   # stockplotr::plot_indices(dat,
   #                    unit_label = indices_unit_label,
   #                    make_rda,
-  #                    rda_dir)# |> suppressWarnings() |> invisible()
+  #                    figures_tables_dir)# |> suppressWarnings() |> invisible()
 
   # tables
   tryCatch(
@@ -297,7 +297,7 @@ exp_all_figs_tables <- function(
         catch_unit_label,
         spawning_biomass_label,
         make_rda,
-        rda_dir
+        figures_tables_dir
       ) # |>
       # suppressWarnings() |>
       # invisible()
@@ -320,7 +320,7 @@ exp_all_figs_tables <- function(
         dat,
         end_year,
         make_rda,
-        rda_dir
+        figures_tables_dir
       ) # |>
       # suppressWarnings() |>
       # invisible()
@@ -340,7 +340,7 @@ exp_all_figs_tables <- function(
         unit_label = landings_unit_label,
         end_year,
         make_rda,
-        rda_dir
+        figures_tables_dir
       ) # |>
       # suppressWarnings() |>
       # invisible()

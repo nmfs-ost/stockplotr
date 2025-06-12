@@ -13,7 +13,7 @@ test_that("exp_all_figs_tables works when all figures/tables are plotted", {
     ref_point = 1000,
     ref_line_sb = "target",
     indices_unit_label = "CPUE",
-    rda_dir = getwd()
+    figures_tables_dir = getwd()
   )
 
   # expect that the rda_files dir exists
@@ -55,7 +55,7 @@ test_that("exp_all_figs_tables works when some figures/tables are not plotted", 
     ref_line = "not_a_real_ref_line",
     ref_line_sb = "target",
     indices_unit_label = "CPUE",
-    rda_dir = getwd()
+    figures_tables_dir = getwd()
   )
 
   # expect that the rda_files dir exists

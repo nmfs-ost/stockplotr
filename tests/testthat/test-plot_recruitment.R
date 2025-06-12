@@ -20,7 +20,7 @@ test_that("plot_recruitment generates plots without errors", {
       end_year = 2025,
       relative = FALSE,
       make_rda = FALSE,
-      rda_dir = getwd()
+      figures_tables_dir = getwd()
     )
   )
 
@@ -33,7 +33,7 @@ test_that("plot_recruitment generates plots without errors", {
       end_year = 2025,
       relative = T,
       make_rda = FALSE,
-      rda_dir = getwd()
+      figures_tables_dir = getwd()
     )
   )
 
@@ -46,7 +46,7 @@ test_that("plot_recruitment generates plots without errors", {
       end_year = 2025,
       relative = T,
       make_rda = FALSE,
-      rda_dir = getwd()
+      figures_tables_dir = getwd()
     ),
     "gg"
   )
@@ -61,7 +61,7 @@ test_that("rda file made when indicated", {
   # export rda
   plot_recruitment(
     dat,
-    rda_dir = getwd(),
+    figures_tables_dir = getwd(),
     make_rda = TRUE
   )
 
@@ -86,7 +86,7 @@ test_that("plot_recruitment generates error with future end_year", {
       dat,
       end_year = 2035,
       make_rda = TRUE,
-      rda_dir = getwd()
+      figures_tables_dir = getwd()
     )
   )
 })

@@ -20,7 +20,7 @@ test_that("table_bnc generates plots without errors", {
       catch_unit_label = "mt",
       sb_unit_label = "mt",
       make_rda = FALSE,
-      rda_dir = getwd()
+      figures_tables_dir = getwd()
     )
   )
 
@@ -34,7 +34,7 @@ test_that("table_bnc generates plots without errors", {
       catch_unit_label = "mt",
       sb_unit_label = "mt",
       make_rda = FALSE,
-      rda_dir = getwd()
+      figures_tables_dir = getwd()
     ),
     "flextable"
   )
@@ -54,7 +54,7 @@ test_that("rda file made when indicated", {
     catch_unit_label = "mt",
     sb_unit_label = "mt",
     make_rda = TRUE,
-    rda_dir = getwd()
+    figures_tables_dir = getwd()
   )
 
   # expect that both rda_files dir and the bnc_table.rda file exist
@@ -81,7 +81,7 @@ test_that("table_bnc generates error with future end_year", {
       catch_unit_label = "mt",
       sb_unit_label = "mt",
       make_rda = TRUE,
-      rda_dir = getwd()
+      figures_tables_dir = getwd()
     )
   )
 })

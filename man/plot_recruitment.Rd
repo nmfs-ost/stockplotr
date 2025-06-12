@@ -11,7 +11,7 @@ plot_recruitment(
   end_year = NULL,
   relative = FALSE,
   make_rda = FALSE,
-  rda_dir = getwd()
+  figures_tables_dir = getwd()
 )
 }
 \arguments{
@@ -31,10 +31,10 @@ which reference point to use.}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
-the .rda will be exported to the folder indicated in the argument "rda_dir".
+the .rda will be exported to the folder indicated in the argument "figures_tables_dir".
 Default is FALSE.}
 
-\item{rda_dir}{The location of the folder containing the generated .rda files
+\item{figures_tables_dir}{The location of the folder containing the generated .rda files
 ("rda_files") that will be created if the argument `make_rda` = TRUE.
 Default is the working directory.}
 }
@@ -58,7 +58,7 @@ plot_recruitment(
   end_year = 2023,
   relative = TRUE,
   make_rda = TRUE,
-  rda_dir = getwd()
+  figures_tables_dir = getwd()
 )
 }
 }
