@@ -27,7 +27,7 @@
 #'   unit_label = "my_unit",
 #'   ref_line = "msy",
 #'   end_year = 2024,
-#'   rda_dir = getwd()
+#'   figures_tables_dir = getwd()
 #' )
 #'
 #' plot_biomass(
@@ -38,7 +38,7 @@
 #'   end_year = 2024,
 #'   relative = TRUE,
 #'   make_rda = TRUE,
-#'   rda_dir = getwd()
+#'   figures_tables_dir = getwd()
 #' )
 #' }
 plot_biomass <- function(
@@ -50,7 +50,7 @@ plot_biomass <- function(
     end_year = NULL,
     relative = FALSE,
     make_rda = FALSE,
-    rda_dir = getwd()) {
+    figures_tables_dir = getwd()) {
   if (!is.null(ref_point)) {
     ref_line <- names(ref_point)
   } else if (length(ref_line) > 1) {
@@ -218,7 +218,7 @@ plot_biomass <- function(
     ) {
       stockplotr::write_captions(
         dat = dat,
-        dir = rda_dir,
+        dir = figures_tables_dir,
         year = end_year
       )
     }
@@ -228,7 +228,7 @@ plot_biomass <- function(
       dat,
       topic = topic_label,
       fig_or_table = fig_or_table,
-      dir = rda_dir,
+      dir = figures_tables_dir,
       end_year = end_year,
       units = unit_label,
       ref_pt = ref_point,
@@ -239,13 +239,13 @@ plot_biomass <- function(
     caps_alttext <- extract_caps_alttext(
       topic_label = topic_label,
       fig_or_table = fig_or_table,
-      dir = rda_dir
+      dir = figures_tables_dir
     )
 
     export_rda(
       final = final,
       caps_alttext = caps_alttext,
-      rda_dir = rda_dir,
+      figures_tables_dir = figures_tables_dir,
       topic_label = topic_label,
       fig_or_table = fig_or_table
     )

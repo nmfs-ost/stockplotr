@@ -17,7 +17,7 @@ test_that("plot_recruitment_deviations generates plots without errors", {
       dat,
       end_year = 2022,
       make_rda = FALSE,
-      rda_dir = getwd()
+      figures_tables_dir = getwd()
     )
   )
 
@@ -27,7 +27,7 @@ test_that("plot_recruitment_deviations generates plots without errors", {
       dat,
       end_year = 2022,
       make_rda = FALSE,
-      rda_dir = getwd()
+      figures_tables_dir = getwd()
     ),
     "gg"
   )
@@ -44,7 +44,7 @@ test_that("rda file made when indicated", {
     dat,
     end_year = 2022,
     make_rda = TRUE,
-    rda_dir = getwd()
+    figures_tables_dir = getwd()
   )
 
   # expect that both rda_files dir and the recruitment.deviations_figure.rda file exist
@@ -68,7 +68,7 @@ test_that("plot_recruitment_deviations generates error with future end_year", {
       dat,
       end_year = 2035,
       make_rda = TRUE,
-      rda_dir = getwd()
+      figures_tables_dir = getwd()
     )
   )
 })

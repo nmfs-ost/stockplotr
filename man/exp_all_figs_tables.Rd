@@ -10,7 +10,7 @@ exp_all_figs_tables(
   recruitment_scale_amount = 1,
   end_year = NULL,
   relative = FALSE,
-  rda_dir = getwd(),
+  figures_tables_dir = getwd(),
   ref_line = c("target", "MSY", "msy", "unfished"),
   ref_point = NULL,
   biomass_scale_amount = 1,
@@ -44,7 +44,7 @@ recruitment_scale_amount = 100 would scale down a value from 500,000 -->
 be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
 which reference point to use.}
 
-\item{rda_dir}{The location of the folder containing the generated .rda files
+\item{figures_tables_dir}{The location of the folder containing the generated .rda files
 ("rda_files") that will be created if the argument `make_rda` = TRUE.
 Default is the working directory.}
 

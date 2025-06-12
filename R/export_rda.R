@@ -7,8 +7,8 @@
 #' @param caps_alttext The object containing a figure's caption and alternative
 #' text, in a list, or a table's caption, likely generated with
 #' stockplotr::extract_caps_alttext().
-#' @param rda_dir If the user has already created a folder containing .rda
-#' files with figures, tables, alt text, and captions, rda_dir represents
+#' @param figures_tables_dir If the user has already created a folder containing .rda
+#' files with figures, tables, alt text, and captions, figures_tables_dir represents
 #' the location of the folder containing these .rda files ("rda_files").
 #' Otherwise, an "rda_files" folder will be created automatically, then used
 #' to store the exported rda files.
@@ -27,7 +27,7 @@
 #' export_rda(
 #'   final = final_table_object,
 #'   caps_alttext = caps_alttext_object,
-#'   rda_dir = here::here(),
+#'   figures_tables_dir = here::here(),
 #'   topic_label = "bnc",
 #'   fig_or_table = "table"
 #' )
@@ -35,14 +35,14 @@
 #' export_rda(
 #'   final = final_figure_object,
 #'   caps_alttext = another_caps_alttext_object,
-#'   rda_dir = "my_rda_dir",
+#'   figures_tables_dir = "my_figures_tables_dir",
 #'   topic_label = "landings",
 #'   fig_or_table = "figure"
 #' )
 #' }
 export_rda <- function(final = NULL,
                        caps_alttext = NULL,
-                       rda_dir = NULL,
+                       figures_tables_dir = NULL,
                        topic_label = NULL,
                        fig_or_table = NULL) {
   # make rda for figures
@@ -62,13 +62,13 @@ export_rda <- function(final = NULL,
   output_file_name <- paste0(topic_label, "_", fig_or_table, ".rda")
 
   # check if an rda_files folder already exists; if not, make one
-  if (!dir.exists(fs::path(rda_dir, "rda_files"))) {
-    dir.create(fs::path(rda_dir, "rda_files"))
+  if (!dir.exists(fs::path(figures_tables_dir, "rda_files"))) {
+    dir.create(fs::path(figures_tables_dir, "rda_files"))
   }
 
   # check if rda is already present. If so, check it should be overwritten
   if (file.exists(fs::path(
-    rda_dir,
+    figures_tables_dir,
     "rda_files",
     output_file_name
   ))) {
@@ -77,7 +77,7 @@ export_rda <- function(final = NULL,
         "The ",
         output_file_name,
         " already exists within ",
-        fs::path(rda_dir, "rda_files"),
+        fs::path(figures_tables_dir, "rda_files"),
         ". Would you like to overwrite this file? (Y/N)"
       )
     )
@@ -86,7 +86,7 @@ export_rda <- function(final = NULL,
       # export rda
       save(rda,
         file = fs::path(
-          rda_dir,
+          figures_tables_dir,
           "rda_files",
           output_file_name
         )
@@ -101,7 +101,7 @@ export_rda <- function(final = NULL,
     # export rda
     save(rda,
       file = fs::path(
-        rda_dir,
+        figures_tables_dir,
         "rda_files",
         output_file_name
       )

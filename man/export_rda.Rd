@@ -7,7 +7,7 @@
 export_rda(
   final = NULL,
   caps_alttext = NULL,
-  rda_dir = NULL,
+  figures_tables_dir = NULL,
   topic_label = NULL,
   fig_or_table = NULL
 )
@@ -19,8 +19,8 @@ export_rda(
 text, in a list, or a table's caption, likely generated with
 stockplotr::extract_caps_alttext().}
 
-\item{rda_dir}{If the user has already created a folder containing .rda
-files with figures, tables, alt text, and captions, rda_dir represents
+\item{figures_tables_dir}{If the user has already created a folder containing .rda
+files with figures, tables, alt text, and captions, figures_tables_dir represents
 the location of the folder containing these .rda files ("rda_files").
 Otherwise, an "rda_files" folder will be created automatically, then used
 to store the exported rda files.}
@@ -44,7 +44,7 @@ Typically used after stockplotr::extract_caps_alttext().
 export_rda(
   final = final_table_object,
   caps_alttext = caps_alttext_object,
-  rda_dir = here::here(),
+  figures_tables_dir = here::here(),
   topic_label = "bnc",
   fig_or_table = "table"
 )
@@ -52,7 +52,7 @@ export_rda(
 export_rda(
   final = final_figure_object,
   caps_alttext = another_caps_alttext_object,
-  rda_dir = "my_rda_dir",
+  figures_tables_dir = "my_figures_tables_dir",
   topic_label = "landings",
   fig_or_table = "figure"
 )

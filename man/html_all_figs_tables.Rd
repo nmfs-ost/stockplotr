@@ -4,10 +4,10 @@
 \alias{html_all_figs_tables}
 \title{Make an html file with all figures and tables}
 \usage{
-html_all_figs_tables(rda_dir = getwd())
+html_all_figs_tables(figures_tables_dir = getwd())
 }
 \arguments{
-\item{rda_dir}{The location of the folder containing the generated .rda files
+\item{figures_tables_dir}{The location of the folder containing the generated .rda files
 ("rda_files") that will be created if the argument `make_rda` = TRUE.
 Default is the working directory.}
 }
@@ -21,6 +21,6 @@ Show all tables and figures in a single html file.
 \examples{
 \dontrun{
 html_all_figs_tables()
-html_all_figs_tables(rda_dir = "my_rda_dir")
+html_all_figs_tables(figures_tables_dir = "my_figures_tables_dir")
 }
 }
