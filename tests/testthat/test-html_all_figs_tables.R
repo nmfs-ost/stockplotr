@@ -30,7 +30,7 @@ test_that("html_all_figs_tables makes qmd and html files with default figures_ta
   # erase temporary testing files
   unlink(fs::path(getwd(), "all_tables_figures"), recursive = T)
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  unlink(fs::path(getwd(), "rda_files"), recursive = T)
+  unlink(fs::path(getwd(), "figures_tables"), recursive = T)
 })
 
 test_that("html_all_figs_tables makes qmd and html files with non-default figures_tables_dir argument", {
@@ -69,7 +69,7 @@ test_that("html_all_figs_tables makes qmd and html files with non-default figure
 
   # erase temporary testing files
   unlink(fs::path(getwd(), "all_tables_figures"), recursive = T)
-  unlink(fs::path(getwd(), "rda_files"), recursive = T)
+  unlink(fs::path(getwd(), "figures_tables"), recursive = T)
   unlink(fs::path(getwd(), "data"), recursive = T)
 })
 
@@ -99,7 +99,7 @@ test_that("html_all_figs_tables triggers message (question) when all_tables_figu
   # erase temporary testing files
   unlink(fs::path(getwd(), "all_tables_figures"), recursive = T)
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  unlink(fs::path(getwd(), "rda_files"), recursive = T)
+  unlink(fs::path(getwd(), "figures_tables"), recursive = T)
 })
 
 test_that("html_all_figs_tables stops if figures_tables_dir not found", {

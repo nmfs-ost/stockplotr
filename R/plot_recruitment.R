@@ -14,7 +14,7 @@
 #' the .rda will be exported to the folder indicated in the argument "figures_tables_dir".
 #' Default is FALSE.
 #' @param figures_tables_dir The location of the folder containing the generated .rda files
-#' ("rda_files") that will be created if the argument `make_rda` = TRUE.
+#' ("figures_tables") that will be created if the argument `make_rda` = TRUE.
 #' Default is the working directory.
 #' @return Plot recruitment over time from an assessment model output file
 #' translated to a standardized output. There are options to return a {ggplot2}

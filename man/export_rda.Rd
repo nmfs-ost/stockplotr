@@ -21,8 +21,8 @@ stockplotr::extract_caps_alttext().}
 
 \item{figures_tables_dir}{If the user has already created a folder containing .rda
 files with figures, tables, alt text, and captions, figures_tables_dir represents
-the location of the folder containing these .rda files ("rda_files").
-Otherwise, an "rda_files" folder will be created automatically, then used
+the location of the folder containing these .rda files ("figures_tables").
+Otherwise, an "figures_tables" folder will be created automatically, then used
 to store the exported rda files.}
 
 \item{topic_label}{A string that describes a figure or table's label. These

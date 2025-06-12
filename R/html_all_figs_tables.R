@@ -15,8 +15,8 @@
 #' html_all_figs_tables(figures_tables_dir = "my_figures_tables_dir")
 #' }
 html_all_figs_tables <- function(figures_tables_dir = getwd()) {
-  if (!dir.exists(fs::path(figures_tables_dir, "rda_files"))) {
-    cli::cli_abort("'rda_files' folder not found. Did you enter the correct argument for figures_tables_dir?", wrap = TRUE)
+  if (!dir.exists(fs::path(figures_tables_dir, "figures_tables"))) {
+    cli::cli_abort("'figures_tables' folder not found. Did you enter the correct argument for figures_tables_dir?", wrap = TRUE)
   }
   # check if dir exists and present warning message/option message
   if (dir.exists(fs::path(getwd(), "all_tables_figures"))) {

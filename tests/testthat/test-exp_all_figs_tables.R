@@ -16,10 +16,10 @@ test_that("exp_all_figs_tables works when all figures/tables are plotted", {
     figures_tables_dir = getwd()
   )
 
-  # expect that the rda_files dir exists
-  expect_true(dir.exists(fs::path(getwd(), "rda_files")))
+  # expect that the figures_tables dir exists
+  expect_true(dir.exists(fs::path(getwd(), "figures_tables")))
 
-  # expect that the rda_files are all created with expected names
+  # expect that the figures_tables are all created with expected names
   base_temp_files <- c(
     "biomass_figure.rda",
     "bnc_table.rda",
@@ -33,13 +33,13 @@ test_that("exp_all_figs_tables works when all figures/tables are plotted", {
     "spawning.biomass_figure.rda"
   )
   expect_equal(
-    list.files(fs::path(getwd(), "rda_files")),
+    list.files(fs::path(getwd(), "figures_tables")),
     base_temp_files
   )
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  unlink(fs::path(getwd(), "rda_files"), recursive = T)
+  unlink(fs::path(getwd(), "figures_tables"), recursive = T)
 })
 
 test_that("exp_all_figs_tables works when some figures/tables are not plotted", {
@@ -58,10 +58,10 @@ test_that("exp_all_figs_tables works when some figures/tables are not plotted", 
     figures_tables_dir = getwd()
   )
 
-  # expect that the rda_files dir exists
-  expect_true(dir.exists(fs::path(getwd(), "rda_files")))
+  # expect that the figures_tables dir exists
+  expect_true(dir.exists(fs::path(getwd(), "figures_tables")))
 
-  # expect that the rda_files are all created with expected names
+  # expect that the figures_tables are all created with expected names
   # except for biomass_figure
   base_temp_files <- c(
     # "biomass_figure.rda",
@@ -76,11 +76,11 @@ test_that("exp_all_figs_tables works when some figures/tables are not plotted", 
     "spawning.biomass_figure.rda"
   )
   expect_equal(
-    list.files(fs::path(getwd(), "rda_files")),
+    list.files(fs::path(getwd(), "figures_tables")),
     base_temp_files
   )
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  unlink(fs::path(getwd(), "rda_files"), recursive = T)
+  unlink(fs::path(getwd(), "figures_tables"), recursive = T)
 })
