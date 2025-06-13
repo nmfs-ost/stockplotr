@@ -24,7 +24,7 @@ test_that("plot_biomass generates plots without errors", {
       end_year = 2024,
       relative = FALSE,
       make_rda = FALSE,
-      rda_dir = getwd()
+      figures_tables_dir = getwd()
     )
   )
 
@@ -38,7 +38,7 @@ test_that("plot_biomass generates plots without errors", {
       end_year = 2024,
       relative = TRUE,
       make_rda = FALSE,
-      rda_dir = getwd()
+      figures_tables_dir = getwd()
     )
   )
 
@@ -52,7 +52,7 @@ test_that("plot_biomass generates plots without errors", {
       end_year = 2024,
       relative = TRUE,
       make_rda = FALSE,
-      rda_dir = getwd()
+      figures_tables_dir = getwd()
     ),
     "gg"
   )
@@ -97,19 +97,19 @@ test_that("rda file made when indicated", {
   # export rda
   stockplotr::plot_biomass(
     dat,
-    rda_dir = getwd(),
+    figures_tables_dir = getwd(),
     make_rda = TRUE,
     end_year = 2023,
     ref_point = 18000
   )
 
-  # expect that both rda_files dir and the biomass_figure.rda file exist
-  expect_true(dir.exists(fs::path(getwd(), "rda_files")))
-  expect_true(file.exists(fs::path(getwd(), "rda_files", "biomass_figure.rda")))
+  # expect that both figures_tables dir and the biomass_figure.rda file exist
+  expect_true(dir.exists(fs::path(getwd(), "figures_tables")))
+  expect_true(file.exists(fs::path(getwd(), "figures_tables", "biomass_figure.rda")))
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  unlink(fs::path(getwd(), "rda_files"), recursive = T)
+  unlink(fs::path(getwd(), "figures_tables"), recursive = T)
 })
 
 test_that("plot_biomass generates error with future end_year", {
@@ -122,7 +122,7 @@ test_that("plot_biomass generates error with future end_year", {
   expect_error(
     stockplotr::plot_biomass(
       dat,
-      rda_dir = getwd(),
+      figures_tables_dir = getwd(),
       make_rda = TRUE,
       end_year = 2035,
       ref_point = 18000

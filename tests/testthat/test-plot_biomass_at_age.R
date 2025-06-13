@@ -17,7 +17,7 @@ test_that("plot_biomass_at_age generates plots without errors", {
       scale_amount = 10,
       end_year = 2024,
       make_rda = FALSE,
-      rda_dir = getwd()
+      figures_tables_dir = getwd()
     )
   )
 
@@ -29,7 +29,7 @@ test_that("plot_biomass_at_age generates plots without errors", {
       scale_amount = 1,
       end_year = 2024,
       make_rda = FALSE,
-      rda_dir = getwd()
+      figures_tables_dir = getwd()
     ),
     "gg"
   )
@@ -44,18 +44,18 @@ test_that("rda file made when indicated", {
   # export rda
   stockplotr::plot_biomass_at_age(
     dat,
-    rda_dir = getwd(),
+    figures_tables_dir = getwd(),
     make_rda = TRUE,
     end_year = 2023
   )
 
-  # expect that both rda_files dir and the pop.baa_figure.rda file exist
-  expect_true(dir.exists(fs::path(getwd(), "rda_files")))
-  expect_true(file.exists(fs::path(getwd(), "rda_files", "pop.baa_figure.rda")))
+  # expect that both figures_tables dir and the pop.baa_figure.rda file exist
+  expect_true(dir.exists(fs::path(getwd(), "figures_tables")))
+  expect_true(file.exists(fs::path(getwd(), "figures_tables", "pop.baa_figure.rda")))
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  unlink(fs::path(getwd(), "rda_files"), recursive = T)
+  unlink(fs::path(getwd(), "figures_tables"), recursive = T)
 })
 
 test_that("plot_biomass_at_age generates error with future end_year", {
@@ -72,7 +72,7 @@ test_that("plot_biomass_at_age generates error with future end_year", {
       scale_amount = 10,
       end_year = 2035,
       make_rda = FALSE,
-      rda_dir = getwd()
+      figures_tables_dir = getwd()
     )
   )
 })
