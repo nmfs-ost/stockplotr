@@ -40,9 +40,9 @@ Default is the working directory.}
 }
 \value{
 Plot recruitment over time from an assessment model output file
-translated to a standardized output. There are options to return a {ggplot2}
-object or export an rda object containing associated caption and alternative
-text for the figure.
+translated to a standardized output. There are options to return a
+[ggplot2::ggplot()] object or export an rda object containing associated
+caption and alternative text for the figure.
 }
 \description{
 Plot Recruitment

@@ -17,9 +17,9 @@
 #' rda files ("figures") that will be created if the argument `make_rda` = TRUE.
 #' Default is the working directory.
 #' @return Plot recruitment over time from an assessment model output file
-#' translated to a standardized output. There are options to return a {ggplot2}
-#' object or export an rda object containing associated caption and alternative
-#' text for the figure.
+#' translated to a standardized output. There are options to return a
+#' [ggplot2::ggplot()] object or export an rda object containing associated
+#' caption and alternative text for the figure.
 #' @export
 #'
 #' @examples
