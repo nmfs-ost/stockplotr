@@ -21,7 +21,7 @@
 #'   biomass_unit_label = "b label",
 #'   catch_unit_label = "catch label",
 #'   make_rda = TRUE,
-#'   figures_tables_dir = getwd()
+#'   tables_dir = getwd()
 #' )
 #' }
 table_bnc <- function(
@@ -31,7 +31,7 @@ table_bnc <- function(
     catch_unit_label = "mt",
     sb_unit_label = "mt",
     make_rda = FALSE,
-    figures_tables_dir = getwd()) {
+    tables_dir = getwd()) {
   biomass_label <- glue::glue("Biomass ({biomass_unit_label})")
   catch_label <- glue::glue("Catch ({catch_unit_label})")
   sb_label <- glue::glue("Spawning biomass ({sb_unit_label})")
@@ -169,7 +169,7 @@ table_bnc <- function(
     ) {
       stockplotr::write_captions(
         dat = dat,
-        dir = figures_tables_dir,
+        dir = tables_dir,
         year = NULL
       )
     }
@@ -178,13 +178,13 @@ table_bnc <- function(
     caps_alttext <- extract_caps_alttext(
       topic_label = topic_label,
       fig_or_table = fig_or_table,
-      dir = figures_tables_dir
+      dir = tables_dir
     )
 
     export_rda(
       final = final,
       caps_alttext = caps_alttext,
-      figures_tables_dir = figures_tables_dir,
+      figures_tables_dir = tables_dir,
       topic_label = topic_label,
       fig_or_table = fig_or_table
     )

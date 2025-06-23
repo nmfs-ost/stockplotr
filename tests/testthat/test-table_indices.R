@@ -15,7 +15,7 @@ test_that("table_indices generates plots without errors", {
       dat,
       end_year = 2024,
       make_rda = FALSE,
-      figures_tables_dir = getwd()
+      tables_dir = getwd()
     )
   )
 
@@ -25,7 +25,7 @@ test_that("table_indices generates plots without errors", {
     stockplotr::table_indices(
       dat,
       make_rda = FALSE,
-      figures_tables_dir = getwd()
+      tables_dir = getwd()
     ),
     "flextable"
   )
@@ -42,7 +42,7 @@ test_that("rda file made when indicated", {
     dat,
     end_year = 2024,
     make_rda = TRUE,
-    figures_tables_dir = getwd()
+    tables_dir = getwd()
   )
 
   # expect that both figures_tables dir and the indices.abundance_table.rda file exist
@@ -66,7 +66,7 @@ test_that("table_indices generates error with future end_year", {
       dat,
       end_year = 2035,
       make_rda = TRUE,
-      figures_tables_dir = getwd()
+      tables_dir = getwd()
     )
   )
 })

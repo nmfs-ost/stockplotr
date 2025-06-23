@@ -19,11 +19,10 @@ export_rda(
 text, in a list, or a table's caption, likely generated with
 stockplotr::extract_caps_alttext().}
 
-\item{figures_tables_dir}{If the user has already created a folder containing .rda
-files with figures, tables, alt text, and captions, figures_tables_dir represents
-the location of the folder containing these .rda files ("figures_tables").
-Otherwise, an "figures_tables" folder will be created automatically, then used
-to store the exported rda files.}
+\item{figures_tables_dir}{If the user has already created folders containing
+figures and tables ("figures" and "tables"), figures_tables_dir represents
+the location of these folders. Otherwise, these two folders will be created
+automatically, then used to store the exported rda files.}
 
 \item{topic_label}{A string that describes a figure or table's label. These
 labels are found in the "label" column of the "captions_alt_text.csv" file

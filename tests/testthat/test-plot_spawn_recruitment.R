@@ -20,7 +20,7 @@ test_that("plot_spawn_recruitment generates plots without errors", {
       recruitment_label = "mt",
       end_year = 2024,
       make_rda = FALSE,
-      figures_tables_dir = getwd()
+      figures_dir = getwd()
     )
   )
 
@@ -33,7 +33,7 @@ test_that("plot_spawn_recruitment generates plots without errors", {
       recruitment_label = "mt",
       end_year = 2024,
       make_rda = FALSE,
-      figures_tables_dir = getwd()
+      figures_dir = getwd()
     ),
     "gg"
   )
@@ -53,7 +53,7 @@ test_that("plot_spawn_recruitment doesn't generate plots with erraneous end year
       recruitment_label = "mt",
       end_year = 2029,
       make_rda = TRUE, # TRUE
-      figures_tables_dir = getwd()
+      figures_dir = getwd()
     )
   )
 
@@ -75,7 +75,7 @@ test_that("rda file made when indicated", {
     recruitment_label = "mt",
     end_year = 2024,
     make_rda = TRUE,
-    figures_tables_dir = getwd()
+    figures_dir = getwd()
   )
 
   # expect that both figures_tables dir and the sr_figure.rda file exist
@@ -101,7 +101,7 @@ test_that("plot_spawn_recruitment generates error with future end_year", {
       recruitment_label = "mt",
       end_year = 2029,
       make_rda = FALSE, # FALSE
-      figures_tables_dir = getwd()
+      figures_dir = getwd()
     )
   )
 })
