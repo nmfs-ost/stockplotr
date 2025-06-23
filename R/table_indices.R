@@ -1,6 +1,9 @@
 #' Create Indices of Abundance Table
 #'
 #' @inheritParams plot_recruitment
+#' @param tables_dir The location of the folder containing the generated table
+#' rda files ("tables") that will be created if the argument `make_rda` = TRUE.
+#' Default is the working directory.
 #' @return Create table of observed annual indices of abundance plus error
 #' stratified by fleet.
 #' @export

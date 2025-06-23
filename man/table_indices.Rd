@@ -15,6 +15,10 @@ table_indices(dat, end_year = NULL, make_rda = FALSE, tables_dir = getwd())
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
 Default is FALSE.}
+
+\item{tables_dir}{The location of the folder containing the generated table
+rda files ("tables") that will be created if the argument `make_rda` = TRUE.
+Default is the working directory.}
 }
 \value{
 Create table of observed annual indices of abundance plus error

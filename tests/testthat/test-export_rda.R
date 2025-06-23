@@ -40,15 +40,15 @@ test_that("export_rda works for figures", {
     fig_or_table = fig_or_table
   )
 
-  # expect that both figures_tables dir and the biomass_figure.rda file exist
-  expect_true(dir.exists(fs::path(getwd(), "figures_tables")))
+  # expect that both figures dir and the biomass_figure.rda file exist
+  expect_true(dir.exists(fs::path(getwd(), "figures")))
   expect_true(file.exists(fs::path(
-    getwd(), "figures_tables", "biomass_figure.rda"
+    getwd(), "figures", "biomass_figure.rda"
   )))
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  unlink(fs::path(getwd(), "figures_tables"), recursive = T)
+  unlink(fs::path(getwd(), "figures"), recursive = T)
 })
 
 test_that("export_rda works for tables", {
@@ -94,11 +94,11 @@ test_that("export_rda works for tables", {
     fig_or_table = fig_or_table
   )
 
-  # expect that both figures_tables dir and the bnc_table.rda file exist
-  expect_true(dir.exists(fs::path(getwd(), "figures_tables")))
-  expect_true(file.exists(fs::path(getwd(), "figures_tables", "bnc_table.rda")))
+  # expect that both tables dir and the bnc_table.rda file exist
+  expect_true(dir.exists(fs::path(getwd(), "tables")))
+  expect_true(file.exists(fs::path(getwd(), "tables", "bnc_table.rda")))
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  unlink(fs::path(getwd(), "figures_tables"), recursive = T)
+  unlink(fs::path(getwd(), "tables"), recursive = T)
 })

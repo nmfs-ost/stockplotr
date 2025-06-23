@@ -2,6 +2,9 @@
 #'
 #' @inheritParams plot_recruitment
 #' @param unit_label Abbreviated units of landings
+#' @param tables_dir The location of the folder containing the generated table
+#' rda files ("tables") that will be created if the argument `make_rda` = TRUE.
+#' Default is the working directory.
 #'
 #' @return Create a table ready for a stock assessment report of landed catch by
 #' fleet and year.
