@@ -11,7 +11,7 @@
 #'
 #' @return Create a table of biomass, abundance, catch, and spawning biomass through all years of
 #' the assessment model output translated to a standard structure.There are
-#' options to return a {flextable} object or export an rda object containing
+#' options to return a [flextable::flextable()] object or export an rda object containing
 #' associated caption for the table.
 #' @export
 #'

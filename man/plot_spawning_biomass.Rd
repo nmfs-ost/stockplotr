@@ -55,7 +55,7 @@ Default is the working directory.}
 }
 \value{
 Plot spawning biomass from the results of an assessment model translated to
-the standard output. The {ggplot2} object is returned for further
+the standard output. The [ggplot2::ggplot()] object is returned for further
 modifications if needed.
 }
 \description{
