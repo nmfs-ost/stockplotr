@@ -24,7 +24,7 @@ test_that("plot_biomass generates plots without errors", {
       end_year = 2024,
       relative = FALSE,
       make_rda = FALSE,
-      figures_tables_dir = getwd()
+      figures_dir = getwd()
     )
   )
 
@@ -38,7 +38,7 @@ test_that("plot_biomass generates plots without errors", {
       end_year = 2024,
       relative = TRUE,
       make_rda = FALSE,
-      figures_tables_dir = getwd()
+      figures_dir = getwd()
     )
   )
 
@@ -52,7 +52,7 @@ test_that("plot_biomass generates plots without errors", {
       end_year = 2024,
       relative = TRUE,
       make_rda = FALSE,
-      figures_tables_dir = getwd()
+      figures_dir = getwd()
     ),
     "gg"
   )
@@ -97,7 +97,7 @@ test_that("rda file made when indicated", {
   # export rda
   stockplotr::plot_biomass(
     dat,
-    figures_tables_dir = getwd(),
+    figures_dir = getwd(),
     make_rda = TRUE,
     end_year = 2023,
     ref_point = 18000
@@ -122,7 +122,7 @@ test_that("plot_biomass generates error with future end_year", {
   expect_error(
     stockplotr::plot_biomass(
       dat,
-      figures_tables_dir = getwd(),
+      figures_dir = getwd(),
       make_rda = TRUE,
       end_year = 2035,
       ref_point = 18000

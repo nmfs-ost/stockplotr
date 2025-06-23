@@ -95,7 +95,7 @@ test_that("rda file made when indicated", {
     ref_line = "msy",
     end_year = 2024,
     make_rda = TRUE,
-    figures_tables_dir = getwd()
+    figures_dir = getwd()
   )
 
   # expect that both figures_tables dir and the spawning.biomass_figure.rda file exist

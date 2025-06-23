@@ -28,7 +28,7 @@ test_that("rda file made when indicated", {
     end_year = 2024,
     make_rda = TRUE,
     unit_label = "metric tons",
-    figures_tables_dir = getwd()
+    figures_dir = getwd()
   )
 
   # expect that both figures_tables dir and the landings_figure.rda file exist
@@ -52,7 +52,7 @@ test_that("plot_landings generates error with future end_year", {
       end_year = 2035,
       make_rda = TRUE,
       unit_label = "metric tons",
-      figures_tables_dir = getwd()
+      figures_dir = getwd()
     )
   )
 })

@@ -15,9 +15,20 @@
 #' html_all_figs_tables(figures_tables_dir = "my_figures_tables_dir")
 #' }
 html_all_figs_tables <- function(figures_tables_dir = getwd()) {
-  if (!dir.exists(fs::path(figures_tables_dir, "figures_tables"))) {
-    cli::cli_abort("'figures_tables' folder not found. Did you enter the correct argument for figures_tables_dir?", wrap = TRUE)
+  if (!dir.exists(fs::path(figures_tables_dir, "figures"))) {
+    cli::cli_alert_danger("'figures' folder not found.")
+    cli::cli_alert_warning("Figures will not be included in the html.")
+    cli::cli_alert_info("Did you enter the correct argument for figures_tables_dir?")
+    cli::cli_alert_info("figures_tables_dir entered as {figures_tables_dir}")
   }
+
+  if (!dir.exists(fs::path(figures_tables_dir, "tables"))) {
+    cli::cli_alert_danger("'tables' folder not found.")
+    cli::cli_alert_warning("Tables will not be included in the html.")
+    cli::cli_alert_info("Did you enter the correct argument for figures_tables_dir?")
+    cli::cli_alert_info("figures_tables_dir entered as {figures_tables_dir}")
+  }
+
   # check if dir exists and present warning message/option message
   if (dir.exists(fs::path(getwd(), "all_tables_figures"))) {
     question1 <- readline(
@@ -36,16 +47,17 @@ html_all_figs_tables <- function(figures_tables_dir = getwd()) {
     asar::create_tables_doc(
       subdir = tempdir(),
       include_all = TRUE,
-      figures_tables_dir = figures_tables_dir
+      tables_dir = figures_tables_dir
     )
 
     asar::create_figures_doc(
       subdir = tempdir(),
       include_all = TRUE,
-      figures_tables_dir = figures_tables_dir
+      figures_dir = figures_tables_dir
     )
 
-    tabs_figs_text <- c(readLines(fs::path(tempdir(), "08_tables.qmd")), readLines(fs::path(tempdir(), "09_figures.qmd")))
+    tabs_figs_text <- c(readLines(fs::path(tempdir(), "08_tables.qmd")),
+                        readLines(fs::path(tempdir(), "09_figures.qmd")))
 
     yaml_text <-
       "---

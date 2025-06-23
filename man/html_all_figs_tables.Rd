@@ -6,11 +6,6 @@
 \usage{
 html_all_figs_tables(figures_tables_dir = getwd())
 }
-\arguments{
-\item{figures_tables_dir}{The location of the folder containing the generated .rda files
-("figures_tables") that will be created if the argument `make_rda` = TRUE.
-Default is the working directory.}
-}
 \value{
 A folder ("all_tables_figures") in your working directory containing
 html and qmd files that show all tables and figures.

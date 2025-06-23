@@ -10,7 +10,7 @@ plot_abundance_at_age(
   scale_amount = 1000,
   end_year = NULL,
   make_rda = FALSE,
-  figures_tables_dir = getwd()
+  figures_dir = getwd()
 )
 }
 \arguments{
@@ -29,11 +29,11 @@ in the legend label. The default is 1,000.}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
-the .rda will be exported to the folder indicated in the argument "figures_tables_dir".
+the rda will be exported to the folder indicated in the argument "figures_dir".
 Default is FALSE.}
 
-\item{figures_tables_dir}{The location of the folder containing the generated .rda files
-("figures_tables") that will be created if the argument `make_rda` = TRUE.
+\item{figures_dir}{The location of the folder containing the generated figure
+rda files ("figures") that will be created if the argument `make_rda` = TRUE.
 Default is the working directory.}
 }
 \value{
@@ -54,7 +54,7 @@ plot_abundance_at_age(
   scale_amount = 10,
   end_year = 2024,
   make_rda = TRUE,
-  figures_tables_dir = getwd()
+  figures_dir = getwd()
 )
 }
 }

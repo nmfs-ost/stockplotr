@@ -8,6 +8,8 @@
 #' recruitment_scale_amount = 100 would scale down a value from 500,000 -->
 #' 5,000. This scale will be reflected in the y axis label.
 #' @param recruitment_unit_label Units for recruitment
+#' @param figures_tables_dir The location of the folder containing
+#' figures and tables ("figures" and "tables").
 #' @param ref_line A string specifying the type of reference you want to
 #' compare biomass to. The default is `"target"`, which looks for
 #' `"biomass_target"` in the `"label"` column of `dat`. The actual
@@ -48,9 +50,14 @@
 #' @examples
 #' \dontrun{
 #' exp_all_figs_tables(dat,
-#'   end_year = 2022, ref_line = "unfished", ref_point = 13000,
-#'   ref_point_sb = 13000, ref_line_sb = "target", indices_unit_label = "CPUE",
-#'   biomass_at_age_scale_amount = 1, biomass_at_age_unit_label = "metric tons"
+#'   end_year = 2022,
+#'   ref_line = "unfished",
+#'   ref_point = 13000,
+#'   ref_point_sb = 13000,
+#'   ref_line_sb = "target",
+#'   indices_unit_label = "CPUE",
+#'   biomass_at_age_scale_amount = 1,
+#'   biomass_at_age_unit_label = "metric tons"
 #' )
 #' }
 exp_all_figs_tables <- function(
@@ -106,7 +113,7 @@ exp_all_figs_tables <- function(
         end_year,
         relative,
         make_rda = TRUE,
-        figures_tables_dir
+        figures_dir = figures_tables_dir
       ) #|>
       # suppressWarnings() |>
       # invisible()
@@ -135,7 +142,7 @@ exp_all_figs_tables <- function(
         end_year,
         relative,
         make_rda,
-        figures_tables_dir
+        figures_dir = figures_tables_dir
       ) #|>
       # suppressWarnings() |>
       # invisible()
@@ -161,7 +168,7 @@ exp_all_figs_tables <- function(
         unit_label = landings_unit_label,
         end_year,
         make_rda,
-        figures_tables_dir
+        figures_dir = figures_tables_dir
       ) # |>
       # suppressWarnings() |>
       # invisible()
@@ -182,7 +189,7 @@ exp_all_figs_tables <- function(
         dat,
         end_year,
         make_rda,
-        figures_tables_dir
+        figures_dir = figures_tables_dir
       ) #|>
       # suppressWarnings() |>
       # invisible()
@@ -200,7 +207,7 @@ exp_all_figs_tables <- function(
   #                        recruitment_label = recruitment_unit_label,
   #                        end_year,
   #                        make_rda,
-  #                        figures_tables_dir)# |> suppressWarnings() |> invisible()
+  #                        figures_dir = figures_tables_dir)# |> suppressWarnings() |> invisible()
 
   tryCatch(
     {
@@ -214,7 +221,7 @@ exp_all_figs_tables <- function(
         end_year,
         relative,
         make_rda,
-        figures_tables_dir
+        figures_dir = figures_tables_dir
       ) # |>
       # suppressWarnings() |>
       # invisible()
@@ -241,7 +248,7 @@ exp_all_figs_tables <- function(
         scale_amount = abundance_at_age_scale_amount,
         end_year,
         make_rda,
-        figures_tables_dir
+        figures_dir = figures_tables_dir
       ) # |>
       # suppressWarnings() |>
       # invisible()
@@ -265,7 +272,7 @@ exp_all_figs_tables <- function(
   #       scale_amount = biomass_at_age_scale_amount,
   #       end_year,
   #       make_rda,
-  #       figures_tables_dir
+  #       figures_dir = figures_tables_dir
   #     ) # |>
   #     # suppressWarnings() |>
   #     # invisible()
@@ -284,7 +291,7 @@ exp_all_figs_tables <- function(
   # stockplotr::plot_indices(dat,
   #                    unit_label = indices_unit_label,
   #                    make_rda,
-  #                    figures_tables_dir)# |> suppressWarnings() |> invisible()
+  #                    figures_dir = figures_tables_dir)# |> suppressWarnings() |> invisible()
 
   # tables
   tryCatch(
@@ -297,7 +304,7 @@ exp_all_figs_tables <- function(
         catch_unit_label,
         spawning_biomass_label,
         make_rda,
-        figures_tables_dir
+        tables_dir = figures_tables_dir
       ) # |>
       # suppressWarnings() |>
       # invisible()
@@ -320,7 +327,7 @@ exp_all_figs_tables <- function(
         dat,
         end_year,
         make_rda,
-        figures_tables_dir
+        tables_dir = figures_tables_dir
       ) # |>
       # suppressWarnings() |>
       # invisible()
@@ -340,7 +347,7 @@ exp_all_figs_tables <- function(
         unit_label = landings_unit_label,
         end_year,
         make_rda,
-        figures_tables_dir
+        tables_dir = figures_tables_dir
       ) # |>
       # suppressWarnings() |>
       # invisible()

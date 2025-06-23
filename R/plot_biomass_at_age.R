@@ -19,7 +19,7 @@
 #'   scale_amount = 100,
 #'   end_year = 2024,
 #'   make_rda = TRUE,
-#'   figures_tables_dir = getwd()
+#'   figures_dir = getwd()
 #' )
 #' }
 plot_biomass_at_age <- function(
@@ -28,7 +28,7 @@ plot_biomass_at_age <- function(
     scale_amount = 1,
     end_year = NULL,
     make_rda = FALSE,
-    figures_tables_dir = getwd()) {
+    figures_dir = getwd()) {
   biomass_label <- ifelse(
     scale_amount == 1,
     yes = glue::glue("Biomass ({unit_label})"),
@@ -171,7 +171,7 @@ plot_biomass_at_age <- function(
     ) {
       stockplotr::write_captions(
         dat = dat,
-        dir = figures_tables_dir,
+        dir = figures_dir,
         year = end_year
       )
     }
@@ -181,7 +181,7 @@ plot_biomass_at_age <- function(
       dat,
       topic = topic_label,
       fig_or_table = fig_or_table,
-      dir = figures_tables_dir,
+      dir = figures_dir,
       end_year = end_year,
       units = unit_label,
       # ref_pt = ref_point,
@@ -192,13 +192,13 @@ plot_biomass_at_age <- function(
     caps_alttext <- extract_caps_alttext(
       topic_label = topic_label,
       fig_or_table = fig_or_table,
-      dir = figures_tables_dir
+      dir = figures_dir
     )
 
     export_rda(
       final = final,
       caps_alttext = caps_alttext,
-      figures_tables_dir = figures_tables_dir,
+      figures_tables_dir = figures_dir,
       topic_label = topic_label,
       fig_or_table = fig_or_table
     )

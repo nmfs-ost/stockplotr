@@ -17,7 +17,7 @@ test_that("plot_abundance_at_age generates plots without errors", {
       scale_amount = 10,
       end_year = 2024,
       make_rda = FALSE,
-      figures_tables_dir = getwd()
+      figures_dir = getwd()
     )
   )
 
@@ -29,7 +29,7 @@ test_that("plot_abundance_at_age generates plots without errors", {
       scale_amount = 1,
       end_year = 2024,
       make_rda = FALSE,
-      figures_tables_dir = getwd()
+      figures_dir = getwd()
     ),
     "gg"
   )
@@ -44,7 +44,7 @@ test_that("rda file made when indicated", {
   # export rda
   stockplotr::plot_abundance_at_age(
     dat,
-    figures_tables_dir = getwd(),
+    figures_dir = getwd(),
     make_rda = TRUE,
     end_year = 2023
   )
@@ -72,7 +72,7 @@ test_that("plot_abundance_at_age generates error with future end_year", {
       scale_amount = 10,
       end_year = 2035,
       make_rda = FALSE,
-      figures_tables_dir = getwd()
+      figures_dir = getwd()
     )
   )
 })

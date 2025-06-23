@@ -16,14 +16,14 @@
 #'   dat,
 #'   end_year = 2024,
 #'   make_rda = TRUE,
-#'   figures_tables_dir = getwd()
+#'   figures_dir = getwd()
 #' )
 #' }
 plot_recruitment_deviations <- function(
     dat,
     end_year = NULL,
     make_rda = FALSE,
-    figures_tables_dir = getwd()) {
+    figures_dir = getwd()) {
   if (is.null(end_year)) {
     end_year <- format(Sys.Date(), "%Y")
   }
@@ -121,7 +121,7 @@ plot_recruitment_deviations <- function(
     ) {
       stockplotr::write_captions(
         dat = dat,
-        dir = figures_tables_dir,
+        dir = figures_dir,
         year = end_year
       )
     }
@@ -130,7 +130,7 @@ plot_recruitment_deviations <- function(
     add_more_key_quants(
       topic = topic_label,
       fig_or_table = fig_or_table,
-      dir = figures_tables_dir,
+      dir = figures_dir,
       end_year = end_year
     )
 
@@ -138,13 +138,13 @@ plot_recruitment_deviations <- function(
     caps_alttext <- extract_caps_alttext(
       topic_label = topic_label,
       fig_or_table = fig_or_table,
-      dir = figures_tables_dir
+      dir = figures_dir
     )
 
     export_rda(
       final = final,
       caps_alttext = caps_alttext,
-      figures_tables_dir = figures_tables_dir,
+      figures_tables_dir = figures_dir,
       topic_label = topic_label,
       fig_or_table = fig_or_table
     )

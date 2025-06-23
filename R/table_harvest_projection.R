@@ -1,7 +1,7 @@
 # AFSC Tier Table
 table_harvest_projection <- function() {
   # REMINDERS: add in code that
-  # -adds make_rda and figures_tables_dir as arguments
+  # -adds make_rda and tables_dir as arguments
   # -defines topic_label, fig_or_table; and
   # -makes an rda if make_rda = TRUE
   # (see table_indices.R for reference)
