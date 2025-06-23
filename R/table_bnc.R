@@ -5,6 +5,9 @@
 #' @param catch_unit_label abbreviated units for catch
 #' @param catch_unit_label abbreviated units for catch
 #' @param sb_unit_label abbreviated units for spawning biomass
+#' @param tables_dir The location of the folder containing the generated table
+#' rda files ("tables") that will be created if the argument `make_rda` = TRUE.
+#' Default is the working directory.
 #'
 #' @return Create a table of biomass, abundance, catch, and spawning biomass through all years of
 #' the assessment model output translated to a standard structure.There are

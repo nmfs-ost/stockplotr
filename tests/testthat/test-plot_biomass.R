@@ -103,13 +103,13 @@ test_that("rda file made when indicated", {
     ref_point = 18000
   )
 
-  # expect that both figures_tables dir and the biomass_figure.rda file exist
-  expect_true(dir.exists(fs::path(getwd(), "figures_tables")))
-  expect_true(file.exists(fs::path(getwd(), "figures_tables", "biomass_figure.rda")))
+  # expect that both figures dir and the biomass_figure.rda file exist
+  expect_true(dir.exists(fs::path(getwd(), "figures")))
+  expect_true(file.exists(fs::path(getwd(), "figures", "biomass_figure.rda")))
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  unlink(fs::path(getwd(), "figures_tables"), recursive = T)
+  unlink(fs::path(getwd(), "figures"), recursive = T)
 })
 
 test_that("plot_biomass generates error with future end_year", {

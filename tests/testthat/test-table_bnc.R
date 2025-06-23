@@ -57,13 +57,13 @@ test_that("rda file made when indicated", {
     tables_dir = getwd()
   )
 
-  # expect that both figures_tables dir and the bnc_table.rda file exist
-  expect_true(dir.exists(fs::path(getwd(), "figures_tables")))
-  expect_true(file.exists(fs::path(getwd(), "figures_tables", "bnc_table.rda")))
+  # expect that both tables dir and the bnc_table.rda file exist
+  expect_true(dir.exists(fs::path(getwd(), "tables")))
+  expect_true(file.exists(fs::path(getwd(), "tables", "bnc_table.rda")))
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  unlink(fs::path(getwd(), "figures_tables"), recursive = T)
+  unlink(fs::path(getwd(), "tables"), recursive = T)
 })
 
 test_that("table_bnc generates error with future end_year", {
