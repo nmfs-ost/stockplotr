@@ -13,7 +13,7 @@ plot_indices(
 )
 }
 \arguments{
-\item{dat}{A data frame returned from [asar::convert_output()].}
+\item{dat}{A data frame returned from \link[asar]{convert_output}}
 
 \item{unit_label}{units for index of abundance/CPUE}
 

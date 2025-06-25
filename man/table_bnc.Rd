@@ -15,7 +15,7 @@ table_bnc(
 )
 }
 \arguments{
-\item{dat}{A data frame returned from [asar::convert_output()].}
+\item{dat}{A data frame returned from \link[asar]{convert_output}}
 
 \item{end_year}{last year of assessment}
 
