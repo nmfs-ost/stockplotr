@@ -14,7 +14,7 @@ plot_biomass_at_age(
 )
 }
 \arguments{
-\item{dat}{A data frame returned from `asar::convert_output()`.}
+\item{dat}{A data frame returned from \link[asar]{convert_output}}
 
 \item{unit_label}{units for recruitment}
 

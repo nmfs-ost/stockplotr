@@ -14,7 +14,7 @@ plot_spawn_recruitment(
 )
 }
 \arguments{
-\item{dat}{A data frame returned from `asar::convert_output()`.}
+\item{dat}{A data frame returned from \link[asar]{convert_output}}
 
 \item{spawning_biomass_label}{Units for spawning biomass}
 
@@ -32,7 +32,7 @@ Default is FALSE.}
 Default is the working directory.}
 }
 \value{
-Plot spawning recruitment relationship from a standardized output file originating from asar::convert_output()
+Plot spawning recruitment relationship from a standardized output file originating from \link[asar]{convert_output}
 }
 \description{
 Plot Spawn-Recruit Curve
