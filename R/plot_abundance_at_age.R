@@ -1,6 +1,18 @@
 #' Plot Abundance (or Numbers) at Age (AAA or NAA)
 #'
-#' @inheritParams plot_recruitment
+#' @param dat A data frame returned from \link[asar]{convert_output}
+#' @param unit_label units for recruitment
+#' @param end_year last year of assessment
+#' @param relative A logical value specifying if the resulting figures should
+#'   be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
+#'   which reference point to use.
+#' @param make_rda TRUE/FALSE; indicate whether to produce an .rda file containing
+#' a list with the figure/table, caption, and alternative text (if figure). If TRUE,
+#' the .rda will be exported to the folder indicated in the argument "rda_dir".
+#' Default is FALSE.
+#' @param rda_dir The location of the folder containing the generated .rda files
+#' ("rda_files") that will be created if the argument `make_rda` = TRUE.
+#' Default is the working directory.
 #' @param scale_amount A number describing how much to scale down the abundance at
 #' age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders
 #' of magnitude (e.g., 1, 10, 100, 1000, etc.). For example, scale_amount = 100
