@@ -5,10 +5,13 @@
 #' @param catch_unit_label abbreviated units for catch
 #' @param catch_unit_label abbreviated units for catch
 #' @param sb_unit_label abbreviated units for spawning biomass
+#' @param tables_dir The location of the folder containing the generated table
+#' rda files ("tables") that will be created if the argument `make_rda` = TRUE.
+#' Default is the working directory.
 #'
 #' @return Create a table of biomass, abundance, catch, and spawning biomass through all years of
 #' the assessment model output translated to a standard structure.There are
-#' options to return a {flextable} object or export an rda object containing
+#' options to return a [flextable::flextable()] object or export an rda object containing
 #' associated caption for the table.
 #' @export
 #'
@@ -21,7 +24,7 @@
 #'   biomass_unit_label = "b label",
 #'   catch_unit_label = "catch label",
 #'   make_rda = TRUE,
-#'   rda_dir = getwd()
+#'   tables_dir = getwd()
 #' )
 #' }
 table_bnc <- function(
@@ -31,7 +34,7 @@ table_bnc <- function(
     catch_unit_label = "mt",
     sb_unit_label = "mt",
     make_rda = FALSE,
-    rda_dir = getwd()) {
+    tables_dir = getwd()) {
   biomass_label <- glue::glue("Biomass ({biomass_unit_label})")
   catch_label <- glue::glue("Catch ({catch_unit_label})")
   sb_label <- glue::glue("Spawning biomass ({sb_unit_label})")
@@ -169,7 +172,7 @@ table_bnc <- function(
     ) {
       stockplotr::write_captions(
         dat = dat,
-        dir = rda_dir,
+        dir = tables_dir,
         year = NULL
       )
     }
@@ -178,13 +181,13 @@ table_bnc <- function(
     caps_alttext <- extract_caps_alttext(
       topic_label = topic_label,
       fig_or_table = fig_or_table,
-      dir = rda_dir
+      dir = tables_dir
     )
 
     export_rda(
       final = final,
       caps_alttext = caps_alttext,
-      rda_dir = rda_dir,
+      figures_tables_dir = tables_dir,
       topic_label = topic_label,
       fig_or_table = fig_or_table
     )

@@ -10,7 +10,7 @@ exp_all_figs_tables(
   recruitment_scale_amount = 1,
   end_year = NULL,
   relative = FALSE,
-  rda_dir = getwd(),
+  figures_tables_dir = getwd(),
   ref_line = c("target", "MSY", "msy", "unfished"),
   ref_point = NULL,
   biomass_scale_amount = 1,
@@ -44,9 +44,8 @@ recruitment_scale_amount = 100 would scale down a value from 500,000 -->
 be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
 which reference point to use.}
 
-\item{rda_dir}{The location of the folder containing the generated .rda files
-("rda_files") that will be created if the argument `make_rda` = TRUE.
-Default is the working directory.}
+\item{figures_tables_dir}{The location of the folder containing
+figures and tables ("figures" and "tables").}
 
 \item{ref_line}{A string specifying the type of reference you want to
 compare biomass to. The default is `"target"`, which looks for
@@ -102,9 +101,14 @@ Export all figures and tables to Rda files within one function.
 \examples{
 \dontrun{
 exp_all_figs_tables(dat,
-  end_year = 2022, ref_line = "unfished", ref_point = 13000,
-  ref_point_sb = 13000, ref_line_sb = "target", indices_unit_label = "CPUE",
-  biomass_at_age_scale_amount = 1, biomass_at_age_unit_label = "metric tons"
+  end_year = 2022,
+  ref_line = "unfished",
+  ref_point = 13000,
+  ref_point_sb = 13000,
+  ref_line_sb = "target",
+  indices_unit_label = "CPUE",
+  biomass_at_age_scale_amount = 1,
+  biomass_at_age_unit_label = "metric tons"
 )
 }
 }

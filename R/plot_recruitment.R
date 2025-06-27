@@ -11,15 +11,15 @@
 #'   which reference point to use.
 #' @param make_rda TRUE/FALSE; indicate whether to produce an .rda file containing
 #' a list with the figure/table, caption, and alternative text (if figure). If TRUE,
-#' the .rda will be exported to the folder indicated in the argument "rda_dir".
+#' the rda will be exported to the folder indicated in the argument "figures_dir".
 #' Default is FALSE.
-#' @param rda_dir The location of the folder containing the generated .rda files
-#' ("rda_files") that will be created if the argument `make_rda` = TRUE.
+#' @param figures_dir The location of the folder containing the generated figure
+#' rda files ("figures") that will be created if the argument `make_rda` = TRUE.
 #' Default is the working directory.
 #' @return Plot recruitment over time from an assessment model output file
-#' translated to a standardized output. There are options to return a {ggplot2}
-#' object or export an rda object containing associated caption and alternative
-#' text for the figure.
+#' translated to a standardized output. There are options to return a
+#' [ggplot2::ggplot()] object or export an rda object containing associated
+#' caption and alternative text for the figure.
 #' @export
 #'
 #' @examples
@@ -33,7 +33,7 @@
 #'   end_year = 2023,
 #'   relative = TRUE,
 #'   make_rda = TRUE,
-#'   rda_dir = getwd()
+#'   figures_dir = getwd()
 #' )
 #' }
 plot_recruitment <- function(
@@ -43,7 +43,7 @@ plot_recruitment <- function(
     end_year = NULL,
     relative = FALSE,
     make_rda = FALSE,
-    rda_dir = getwd()) {
+    figures_dir = getwd()) {
   # Find R0
   R0 <- dat |>
     dplyr::filter(c(grepl("recruitment", label) & age == 0) |
@@ -152,7 +152,7 @@ plot_recruitment <- function(
     ) {
       stockplotr::write_captions(
         dat = dat,
-        dir = rda_dir,
+        dir = figures_dir,
         year = end_year
       )
     }
@@ -162,7 +162,7 @@ plot_recruitment <- function(
       dat,
       topic = topic_label,
       fig_or_table = fig_or_table,
-      dir = rda_dir,
+      dir = figures_dir,
       end_year = end_year,
       units = unit_label,
       scaling = scale_amount
@@ -172,13 +172,13 @@ plot_recruitment <- function(
     caps_alttext <- extract_caps_alttext(
       topic_label = topic_label,
       fig_or_table = fig_or_table,
-      dir = rda_dir
+      dir = figures_dir
     )
 
     export_rda(
       final = final,
       caps_alttext = caps_alttext,
-      rda_dir = rda_dir,
+      figures_tables_dir = figures_dir,
       topic_label = topic_label,
       fig_or_table = fig_or_table
     )

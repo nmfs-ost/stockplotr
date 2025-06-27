@@ -20,7 +20,7 @@ test_that("plot_spawn_recruitment generates plots without errors", {
       recruitment_label = "mt",
       end_year = 2024,
       make_rda = FALSE,
-      rda_dir = getwd()
+      figures_dir = getwd()
     )
   )
 
@@ -33,7 +33,7 @@ test_that("plot_spawn_recruitment generates plots without errors", {
       recruitment_label = "mt",
       end_year = 2024,
       make_rda = FALSE,
-      rda_dir = getwd()
+      figures_dir = getwd()
     ),
     "gg"
   )
@@ -53,13 +53,13 @@ test_that("plot_spawn_recruitment doesn't generate plots with erraneous end year
       recruitment_label = "mt",
       end_year = 2029,
       make_rda = TRUE, # TRUE
-      rda_dir = getwd()
+      figures_dir = getwd()
     )
   )
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  unlink(fs::path(getwd(), "rda_files"), recursive = T)
+  unlink(fs::path(getwd(), "figures"), recursive = T)
 })
 
 test_that("rda file made when indicated", {
@@ -75,16 +75,16 @@ test_that("rda file made when indicated", {
     recruitment_label = "mt",
     end_year = 2024,
     make_rda = TRUE,
-    rda_dir = getwd()
+    figures_dir = getwd()
   )
 
-  # expect that both rda_files dir and the sr_figure.rda file exist
-  expect_true(dir.exists(fs::path(getwd(), "rda_files")))
-  expect_true(file.exists(fs::path(getwd(), "rda_files", "sr_figure.rda")))
+  # expect that both figures dir and the sr_figure.rda file exist
+  expect_true(dir.exists(fs::path(getwd(), "figures")))
+  expect_true(file.exists(fs::path(getwd(), "figures", "sr_figure.rda")))
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  unlink(fs::path(getwd(), "rda_files"), recursive = T)
+  unlink(fs::path(getwd(), "figures"), recursive = T)
 })
 
 test_that("plot_spawn_recruitment generates error with future end_year", {
@@ -101,7 +101,7 @@ test_that("plot_spawn_recruitment generates error with future end_year", {
       recruitment_label = "mt",
       end_year = 2029,
       make_rda = FALSE, # FALSE
-      rda_dir = getwd()
+      figures_dir = getwd()
     )
   )
 })

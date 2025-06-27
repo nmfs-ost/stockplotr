@@ -20,14 +20,14 @@
 #'   unit_label = "my_unit",
 #'   end_year = 2024,
 #'   make_rda = TRUE,
-#'   rda_dir = getwd()
+#'   figures_dir = getwd()
 #' )
 #' }
 plot_landings <- function(dat,
                           unit_label = "metric tons",
                           end_year = NULL,
                           make_rda = FALSE,
-                          rda_dir = getwd(),
+                          figures_dir = getwd(),
                           fleet_names = NULL) {
   # Units
   # TODO: fix unit label is scaling
@@ -134,7 +134,7 @@ plot_landings <- function(dat,
   ) {
     stockplotr::write_captions(
       dat = dat,
-      dir = rda_dir,
+      dir = figures_dir,
       year = end_year
     )
   }
@@ -143,7 +143,7 @@ plot_landings <- function(dat,
   add_more_key_quants(
     topic = topic_label,
     fig_or_table = fig_or_table,
-    dir = rda_dir,
+    dir = figures_dir,
     end_year = end_year,
     units = unit_label
   )
@@ -152,7 +152,7 @@ plot_landings <- function(dat,
   caps_alttext <- extract_caps_alttext(
     topic_label = topic_label,
     fig_or_table = fig_or_table,
-    dir = rda_dir
+    dir = figures_dir
   )
 
   # export figure to rda if argument = T
@@ -160,7 +160,7 @@ plot_landings <- function(dat,
     export_rda(
       final = final,
       caps_alttext = caps_alttext,
-      rda_dir = rda_dir,
+      figures_tables_dir = figures_dir,
       topic_label = topic_label,
       fig_or_table = fig_or_table
     )

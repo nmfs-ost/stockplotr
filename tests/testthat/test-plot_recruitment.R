@@ -20,7 +20,7 @@ test_that("plot_recruitment generates plots without errors", {
       end_year = 2025,
       relative = FALSE,
       make_rda = FALSE,
-      rda_dir = getwd()
+      figures_dir = getwd()
     )
   )
 
@@ -33,7 +33,7 @@ test_that("plot_recruitment generates plots without errors", {
       end_year = 2025,
       relative = T,
       make_rda = FALSE,
-      rda_dir = getwd()
+      figures_dir = getwd()
     )
   )
 
@@ -46,7 +46,7 @@ test_that("plot_recruitment generates plots without errors", {
       end_year = 2025,
       relative = T,
       make_rda = FALSE,
-      rda_dir = getwd()
+      figures_dir = getwd()
     ),
     "gg"
   )
@@ -61,17 +61,17 @@ test_that("rda file made when indicated", {
   # export rda
   plot_recruitment(
     dat,
-    rda_dir = getwd(),
+    figures_dir = getwd(),
     make_rda = TRUE
   )
 
-  # expect that both rda_files dir and the recruitment_figure.rda file exist
-  expect_true(dir.exists(fs::path(getwd(), "rda_files")))
-  expect_true(file.exists(fs::path(getwd(), "rda_files", "recruitment_figure.rda")))
+  # expect that both figures dir and the recruitment_figure.rda file exist
+  expect_true(dir.exists(fs::path(getwd(), "figures")))
+  expect_true(file.exists(fs::path(getwd(), "figures", "recruitment_figure.rda")))
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  unlink(fs::path(getwd(), "rda_files"), recursive = T)
+  unlink(fs::path(getwd(), "figures"), recursive = T)
 })
 
 test_that("plot_recruitment generates error with future end_year", {
@@ -86,7 +86,7 @@ test_that("plot_recruitment generates error with future end_year", {
       dat,
       end_year = 2035,
       make_rda = TRUE,
-      rda_dir = getwd()
+      figures_dir = getwd()
     )
   )
 })
