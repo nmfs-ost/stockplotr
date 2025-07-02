@@ -1,8 +1,8 @@
+# read in sample dataset
+dat <- asar::convert_output(file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
+                            model = "ss3")
+
 test_that("exp_all_figs_tables works when all figures/tables are plotted", {
-  # read in sample dataset
-  dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
-  )
 
   stockplotr::exp_all_figs_tables(
     dat,
@@ -25,7 +25,7 @@ test_that("exp_all_figs_tables works when all figures/tables are plotted", {
     "biomass_figure.rda",
     "landings_figure.rda",
     # "pop.baa_figure.rda",
-    "pop.naa_figure.rda",
+    # "pop.naa_figure.rda",
     "recruitment.deviations_figure.rda",
     "recruitment_figure.rda",
     "spawning.biomass_figure.rda"
@@ -53,10 +53,6 @@ test_that("exp_all_figs_tables works when all figures/tables are plotted", {
 })
 
 test_that("exp_all_figs_tables works when some figures/tables are not plotted", {
-  # read in sample dataset
-  dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
-  )
 
   # plot all figs/tables except for plot_biomass
   stockplotr::exp_all_figs_tables(dat,
@@ -77,8 +73,8 @@ test_that("exp_all_figs_tables works when some figures/tables are not plotted", 
   fig_base_temp_files <- c(
     # "biomass_figure.rda",
     "landings_figure.rda",
-    #  "pop.baa_figure.rda",
-    "pop.naa_figure.rda",
+    # "pop.baa_figure.rda",
+    # "pop.naa_figure.rda",
     "recruitment.deviations_figure.rda",
     "recruitment_figure.rda",
     "spawning.biomass_figure.rda"
@@ -90,4 +86,6 @@ test_that("exp_all_figs_tables works when some figures/tables are not plotted", 
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  unlink(fs::path(getwd(), "figures"), recursive = T)})
+  unlink(fs::path(getwd(), "figures"), recursive = T)
+  unlink(fs::path(getwd(), "tables"), recursive = T)
+})

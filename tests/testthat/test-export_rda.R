@@ -1,13 +1,8 @@
+# read in sample dataset
+dat <- asar::convert_output(file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
+                            model = "ss3")
+
 test_that("export_rda works for figures", {
-  # read in sample dataset
-  dat <- utils::read.csv(
-    system.file(
-      "resources",
-      "sample_data",
-      "petrale_sole-after_2020.csv",
-      package = "stockplotr"
-    )
-  )
 
   topic_label <- "biomass"
   fig_or_table <- "figure"
@@ -52,15 +47,6 @@ test_that("export_rda works for figures", {
 })
 
 test_that("export_rda works for tables", {
-  # read in sample dataset
-  dat <- utils::read.csv(
-    system.file(
-      "resources",
-      "sample_data",
-      "petrale_sole-after_2020.csv",
-      package = "stockplotr"
-    )
-  )
 
   topic_label <- "bnc"
   fig_or_table <- "table"

@@ -1,8 +1,8 @@
+# read in sample dataset
+dat <- asar::convert_output(file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
+                            model = "ss3")
+
 test_that("plot_recruitment generates plots without errors", {
-  # read in sample dataset
-  dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
-  )
 
   # expect error-free plot with minimal arguments
   expect_no_error(
@@ -53,10 +53,6 @@ test_that("plot_recruitment generates plots without errors", {
 })
 
 test_that("rda file made when indicated", {
-  # read in sample dataset
-  dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
-  )
 
   # export rda
   plot_recruitment(
@@ -75,10 +71,6 @@ test_that("rda file made when indicated", {
 })
 
 test_that("plot_recruitment generates error with future end_year", {
-  # read in sample dataset
-  dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
-  )
 
   # expect error
   expect_error(
