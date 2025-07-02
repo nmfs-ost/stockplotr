@@ -31,7 +31,7 @@ html_all_figs_tables <- function(figures_tables_dir = getwd()) {
   }
 
   # check if dir exists and present warning message/option message
-  if (dir.exists(fs::path(getwd(), "all_tables_figures"))) {
+  if (dir.exists(fs::path(figures_tables_dir, "all_tables_figures"))) {
     question1 <- readline(
       "The 'all_tables_figures' folder already exists within your working directory. Would you like to overwrite the files within this folder? (Y/N)"
     )
@@ -46,19 +46,17 @@ html_all_figs_tables <- function(figures_tables_dir = getwd()) {
     dir.create(doc_path)
 
     asar::create_tables_doc(
-      subdir = tempdir(),
-      include_all = TRUE,
+      subdir = figures_tables_dir,
       tables_dir = figures_tables_dir
     )
 
     asar::create_figures_doc(
-      subdir = tempdir(),
-      include_all = TRUE,
+      subdir = figures_tables_dir,
       figures_dir = figures_tables_dir
     )
 
-    tabs_figs_text <- c(readLines(fs::path(tempdir(), "08_tables.qmd")),
-                        readLines(fs::path(tempdir(), "09_figures.qmd")))
+    tabs_figs_text <- c(readLines(fs::path(figures_tables_dir, "08_tables.qmd")),
+                        readLines(fs::path(figures_tables_dir, "09_figures.qmd")))
 
     yaml_text <-
       "---
