@@ -2,6 +2,9 @@
 #'
 #' @inheritParams plot_recruitment
 #' @param unit_label Abbreviated units of landings
+#' @param tables_dir The location of the folder containing the generated table
+#' rda files ("tables") that will be created if the argument `make_rda` = TRUE.
+#' Default is the working directory.
 #'
 #' @return Create a table ready for a stock assessment report of landed catch by
 #' fleet and year.
@@ -16,14 +19,14 @@
 #'   unit_label = "landings label",
 #'   end_year = 2024,
 #'   make_rda = TRUE,
-#'   rda_dir = getwd()
+#'   tables_dir = getwd()
 #' )
 #' }
 table_landings <- function(dat,
                            unit_label = "mt",
                            end_year = NULL,
                            make_rda = FALSE,
-                           rda_dir = getwd()) {
+                           tables_dir = getwd()) {
   # TODO: add an option to stratify by gear type
 
   # Units
@@ -174,7 +177,7 @@ table_landings <- function(dat,
     ) {
       stockplotr::write_captions(
         dat = dat,
-        dir = rda_dir,
+        dir = tables_dir,
         year = end_year
       )
     }
@@ -184,7 +187,7 @@ table_landings <- function(dat,
       dat,
       topic = topic_label,
       fig_or_table = fig_or_table,
-      dir = rda_dir,
+      dir = tables_dir,
       end_year = end_year,
       units = unit_label
     )
@@ -193,13 +196,13 @@ table_landings <- function(dat,
     caps_alttext <- extract_caps_alttext(
       topic_label = topic_label,
       fig_or_table = fig_or_table,
-      dir = rda_dir
+      dir = tables_dir
     )
 
     export_rda(
       final = final,
       caps_alttext = caps_alttext,
-      rda_dir = rda_dir,
+      figures_tables_dir = tables_dir,
       topic_label = topic_label,
       fig_or_table = fig_or_table
     )

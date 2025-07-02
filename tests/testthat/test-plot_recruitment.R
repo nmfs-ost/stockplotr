@@ -1,8 +1,8 @@
+# read in sample dataset
+dat <- asar::convert_output(file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
+                            model = "ss3")
+
 test_that("plot_recruitment generates plots without errors", {
-  # read in sample dataset
-  dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
-  )
 
   # expect error-free plot with minimal arguments
   expect_no_error(
@@ -20,7 +20,7 @@ test_that("plot_recruitment generates plots without errors", {
       end_year = 2025,
       relative = FALSE,
       make_rda = FALSE,
-      rda_dir = getwd()
+      figures_dir = getwd()
     )
   )
 
@@ -33,7 +33,7 @@ test_that("plot_recruitment generates plots without errors", {
       end_year = 2025,
       relative = T,
       make_rda = FALSE,
-      rda_dir = getwd()
+      figures_dir = getwd()
     )
   )
 
@@ -46,39 +46,31 @@ test_that("plot_recruitment generates plots without errors", {
       end_year = 2025,
       relative = T,
       make_rda = FALSE,
-      rda_dir = getwd()
+      figures_dir = getwd()
     ),
     "gg"
   )
 })
 
 test_that("rda file made when indicated", {
-  # read in sample dataset
-  dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
-  )
 
   # export rda
   plot_recruitment(
     dat,
-    rda_dir = getwd(),
+    figures_dir = getwd(),
     make_rda = TRUE
   )
 
-  # expect that both rda_files dir and the recruitment_figure.rda file exist
-  expect_true(dir.exists(fs::path(getwd(), "rda_files")))
-  expect_true(file.exists(fs::path(getwd(), "rda_files", "recruitment_figure.rda")))
+  # expect that both figures dir and the recruitment_figure.rda file exist
+  expect_true(dir.exists(fs::path(getwd(), "figures")))
+  expect_true(file.exists(fs::path(getwd(), "figures", "recruitment_figure.rda")))
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  unlink(fs::path(getwd(), "rda_files"), recursive = T)
+  unlink(fs::path(getwd(), "figures"), recursive = T)
 })
 
 test_that("plot_recruitment generates error with future end_year", {
-  # read in sample dataset
-  dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
-  )
 
   # expect error
   expect_error(
@@ -86,7 +78,7 @@ test_that("plot_recruitment generates error with future end_year", {
       dat,
       end_year = 2035,
       make_rda = TRUE,
-      rda_dir = getwd()
+      figures_dir = getwd()
     )
   )
 })

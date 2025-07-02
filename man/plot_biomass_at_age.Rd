@@ -10,7 +10,7 @@ plot_biomass_at_age(
   scale_amount = 1,
   end_year = NULL,
   make_rda = FALSE,
-  rda_dir = getwd()
+  figures_dir = getwd()
 )
 }
 \arguments{
@@ -26,11 +26,11 @@ from 500,000 --> 5,000. This scale will be reflected in the legend label.}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
-the .rda will be exported to the folder indicated in the argument "rda_dir".
+the rda will be exported to the folder indicated in the argument "figures_dir".
 Default is FALSE.}
 
-\item{rda_dir}{The location of the folder containing the generated .rda files
-("rda_files") that will be created if the argument `make_rda` = TRUE.
+\item{figures_dir}{The location of the folder containing the generated figure
+rda files ("figures") that will be created if the argument `make_rda` = TRUE.
 Default is the working directory.}
 }
 \value{
@@ -51,7 +51,7 @@ plot_biomass_at_age(
   scale_amount = 100,
   end_year = 2024,
   make_rda = TRUE,
-  rda_dir = getwd()
+  figures_dir = getwd()
 )
 }
 }

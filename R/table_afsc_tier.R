@@ -1,7 +1,7 @@
 # AFSC Tier Table
 table_afsc_tier <- function() {
   # REMINDERS: add in code that
-  # -adds make_rda and rda_dir as arguments
+  # -adds make_rda and tables_dir as arguments
   # -defines topic_label, fig_or_table; and
   # -makes an rda if make_rda = TRUE
   # (see table_indices.R for reference)
@@ -17,7 +17,7 @@ table_afsc_tier <- function() {
   ) {
     stockplotr::write_captions(
       dat = dat,
-      dir = rda_dir,
+      dir = tables_dir,
       year = NULL
     )
   }

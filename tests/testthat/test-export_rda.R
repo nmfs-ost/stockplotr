@@ -1,13 +1,8 @@
+# read in sample dataset
+dat <- asar::convert_output(file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
+                            model = "ss3")
+
 test_that("export_rda works for figures", {
-  # read in sample dataset
-  dat <- utils::read.csv(
-    system.file(
-      "resources",
-      "sample_data",
-      "petrale_sole-after_2020.csv",
-      package = "stockplotr"
-    )
-  )
 
   topic_label <- "biomass"
   fig_or_table <- "figure"
@@ -35,32 +30,23 @@ test_that("export_rda works for figures", {
   export_rda(
     final = final,
     caps_alttext = caps_alttext,
-    rda_dir = getwd(),
+    figures_tables_dir = getwd(),
     topic_label = topic_label,
     fig_or_table = fig_or_table
   )
 
-  # expect that both rda_files dir and the biomass_figure.rda file exist
-  expect_true(dir.exists(fs::path(getwd(), "rda_files")))
+  # expect that both figures dir and the biomass_figure.rda file exist
+  expect_true(dir.exists(fs::path(getwd(), "figures")))
   expect_true(file.exists(fs::path(
-    getwd(), "rda_files", "biomass_figure.rda"
+    getwd(), "figures", "biomass_figure.rda"
   )))
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  unlink(fs::path(getwd(), "rda_files"), recursive = T)
+  unlink(fs::path(getwd(), "figures"), recursive = T)
 })
 
 test_that("export_rda works for tables", {
-  # read in sample dataset
-  dat <- utils::read.csv(
-    system.file(
-      "resources",
-      "sample_data",
-      "petrale_sole-after_2020.csv",
-      package = "stockplotr"
-    )
-  )
 
   topic_label <- "bnc"
   fig_or_table <- "table"
@@ -89,16 +75,16 @@ test_that("export_rda works for tables", {
   export_rda(
     final = final,
     caps_alttext = caps_alttext,
-    rda_dir = getwd(),
+    figures_tables_dir = getwd(),
     topic_label = topic_label,
     fig_or_table = fig_or_table
   )
 
-  # expect that both rda_files dir and the bnc_table.rda file exist
-  expect_true(dir.exists(fs::path(getwd(), "rda_files")))
-  expect_true(file.exists(fs::path(getwd(), "rda_files", "bnc_table.rda")))
+  # expect that both tables dir and the bnc_table.rda file exist
+  expect_true(dir.exists(fs::path(getwd(), "tables")))
+  expect_true(file.exists(fs::path(getwd(), "tables", "bnc_table.rda")))
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  unlink(fs::path(getwd(), "rda_files"), recursive = T)
+  unlink(fs::path(getwd(), "tables"), recursive = T)
 })

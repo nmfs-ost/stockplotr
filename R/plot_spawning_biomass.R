@@ -18,7 +18,7 @@
 #' @param unit_label units for spawning_biomass
 #' @return
 #' Plot spawning biomass from the results of an assessment model translated to
-#' the standard output. The {ggplot2} object is returned for further
+#' the standard output. The [ggplot2::ggplot()] object is returned for further
 #' modifications if needed.
 #' @export
 #'
@@ -31,7 +31,7 @@
 #'   unit_label = "my_unit",
 #'   ref_line = "msy",
 #'   end_year = 2024,
-#'   rda_dir = getwd()
+#'   figures_dir = getwd()
 #' )
 #'
 #' plot_spawning_biomass(
@@ -42,7 +42,7 @@
 #'   end_year = 2024,
 #'   relative = TRUE,
 #'   make_rda = TRUE,
-#'   rda_dir = getwd()
+#'   figures_dir = getwd()
 #' )
 #' }
 plot_spawning_biomass <- function(
@@ -54,7 +54,7 @@ plot_spawning_biomass <- function(
     end_year = NULL,
     relative = FALSE,
     make_rda = FALSE,
-    rda_dir = getwd()) {
+    figures_dir = getwd()) {
   if (!is.null(ref_point)) {
     ref_line <- names(ref_point)
   } else if (length(ref_line) > 1) {
@@ -215,7 +215,7 @@ plot_spawning_biomass <- function(
     ) {
       stockplotr::write_captions(
         dat = dat,
-        dir = rda_dir,
+        dir = figures_dir,
         year = end_year
       )
     }
@@ -225,7 +225,7 @@ plot_spawning_biomass <- function(
       dat,
       topic = topic_label,
       fig_or_table = fig_or_table,
-      dir = rda_dir,
+      dir = figures_dir,
       end_year = end_year,
       units = unit_label,
       ref_pt = ref_point,
@@ -237,13 +237,13 @@ plot_spawning_biomass <- function(
     caps_alttext <- extract_caps_alttext(
       topic_label = topic_label,
       fig_or_table = fig_or_table,
-      dir = rda_dir
+      dir = figures_dir
     )
 
     export_rda(
       final = final,
       caps_alttext = caps_alttext,
-      rda_dir = rda_dir,
+      figures_tables_dir = figures_dir,
       topic_label = topic_label,
       fig_or_table = fig_or_table
     )

@@ -1,8 +1,8 @@
+# read in sample dataset
+dat <- asar::convert_output(file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
+                            model = "ss3")
+
 test_that("plot_spawning_biomass generates plots without errors", {
-  # read in sample dataset
-  dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
-  )
 
   # expect error-free plot with minimal arguments
   expect_no_error(
@@ -52,11 +52,6 @@ test_that("plot_spawning_biomass generates plots without errors", {
 })
 
 test_that("plot_spawning_biomass plots contain reference point when indicated", {
-  # read in sample dataset
-  dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
-  )
-
 
   # expect plot with a reference point (horizontal line) contains 4 layers while
   # plot w/o ref pt contains only 3 layers
@@ -82,10 +77,6 @@ test_that("plot_spawning_biomass plots contain reference point when indicated", 
 })
 
 test_that("rda file made when indicated", {
-  # read in sample dataset
-  dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
-  )
 
   # export rda
   plot_spawning_biomass(
@@ -95,23 +86,19 @@ test_that("rda file made when indicated", {
     ref_line = "msy",
     end_year = 2024,
     make_rda = TRUE,
-    rda_dir = getwd()
+    figures_dir = getwd()
   )
 
-  # expect that both rda_files dir and the spawning.biomass_figure.rda file exist
-  expect_true(dir.exists(fs::path(getwd(), "rda_files")))
-  expect_true(file.exists(fs::path(getwd(), "rda_files", "spawning.biomass_figure.rda")))
+  # expect that both figures dir and the spawning.biomass_figure.rda file exist
+  expect_true(dir.exists(fs::path(getwd(), "figures")))
+  expect_true(file.exists(fs::path(getwd(), "figures", "spawning.biomass_figure.rda")))
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  unlink(fs::path(getwd(), "rda_files"), recursive = T)
+  unlink(fs::path(getwd(), "figures"), recursive = T)
 })
 
 test_that("plot_spawning_biomass generates error with future end_year", {
-  # read in sample dataset
-  dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
-  )
 
   # expect error
   expect_error(

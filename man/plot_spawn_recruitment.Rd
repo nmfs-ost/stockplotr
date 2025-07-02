@@ -10,7 +10,7 @@ plot_spawn_recruitment(
   recruitment_label = "metric tons",
   end_year = NULL,
   make_rda = FALSE,
-  rda_dir = getwd()
+  figures_dir = getwd()
 )
 }
 \arguments{
@@ -24,11 +24,11 @@ plot_spawn_recruitment(
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
-the .rda will be exported to the folder indicated in the argument "rda_dir".
+the rda will be exported to the folder indicated in the argument "figures_dir".
 Default is FALSE.}
 
-\item{rda_dir}{The location of the folder containing the generated .rda files
-("rda_files") that will be created if the argument `make_rda` = TRUE.
+\item{figures_dir}{The location of the folder containing the generated figure
+rda files ("figures") that will be created if the argument `make_rda` = TRUE.
 Default is the working directory.}
 }
 \value{
@@ -47,7 +47,7 @@ plot_spawn_recruitment(
   recruitment_label = "rec label",
   end_year = 2024,
   make_rda = TRUE,
-  rda_dir = getwd()
+  figures_dir = getwd()
 )
 }
 }

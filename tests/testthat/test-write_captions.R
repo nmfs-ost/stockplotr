@@ -9,15 +9,9 @@ test_that("write_captions() function imports alt text/captions template
 })
 
 test_that("write_captions() function replaces placeholder text with key quantities as expected", {
-  # import data
-  dat <- utils::read.csv(
-    system.file(
-      "resources",
-      "sample_data",
-      "petrale_sole-after_2020.csv",
-      package = "stockplotr"
-    )
-  )
+  # read in sample dataset
+  dat <- asar::convert_output(file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
+                              model = "ss3")
 
   # make captions/alt text csv
   write_captions(dat, dir = here::here(), year = 2022)
@@ -35,7 +29,7 @@ test_that("write_captions() function replaces placeholder text with key quantiti
     as.character()
 
   # expected alt text from end of biomass figure
-  expected_alt_text_substring <- "spans from 2021 to B.end.year"
+  expected_alt_text_substring <- "spans from 1964 to B.end.year"
 
   # test expected alt text within B alt text
   expect_true(

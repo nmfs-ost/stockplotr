@@ -1,8 +1,8 @@
-test_that("html_all_figs_tables makes qmd and html files with default rda_dir argument", {
   # read in sample dataset
-  dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
-  )
+dat <- asar::convert_output(file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
+                       model = "ss3")
+
+test_that("html_all_figs_tables makes qmd and html files with default figures_tables_dir argument", {
 
   stockplotr::exp_all_figs_tables(
     dat,
@@ -13,7 +13,7 @@ test_that("html_all_figs_tables makes qmd and html files with default rda_dir ar
     ref_point = 1000,
     ref_line_sb = "msy",
     indices_unit_label = "CPUE",
-    rda_dir = getwd()
+    figures_tables_dir = getwd()
   ) |>
     suppressWarnings()
 
@@ -30,14 +30,13 @@ test_that("html_all_figs_tables makes qmd and html files with default rda_dir ar
   # erase temporary testing files
   unlink(fs::path(getwd(), "all_tables_figures"), recursive = T)
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  unlink(fs::path(getwd(), "rda_files"), recursive = T)
+  file.remove(fs::path(getwd(), "08_tables.qmd"))
+  file.remove(fs::path(getwd(), "09_figures.qmd"))
+  unlink(fs::path(getwd(), "figures"), recursive = T)
+  unlink(fs::path(getwd(), "tables"), recursive = T)
 })
 
-test_that("html_all_figs_tables makes qmd and html files with non-default rda_dir argument", {
-  # read in sample dataset
-  dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
-  )
+test_that("html_all_figs_tables makes qmd and html files with non-default figures_tables_dir argument", {
 
   rda_path <- fs::path(getwd(), "data")
   dir.create(rda_path)
@@ -53,12 +52,12 @@ test_that("html_all_figs_tables makes qmd and html files with non-default rda_di
       ref_point = 1000,
       ref_line_sb = "msy",
       indices_unit_label = "CPUE",
-      rda_dir = getwd()
+      figures_tables_dir = getwd()
     ) |>
       suppressWarnings()
   )
 
-  html_all_figs_tables(rda_dir = rda_path)
+  html_all_figs_tables(figures_tables_dir = rda_path)
 
   testthat::expect(file.exists(fs::path(rda_path, "all_tables_figures", "all_tables_figures.qmd")),
     failure_message = "Test fail: 'all_tables_figures.qmd' does not exist"
@@ -68,16 +67,12 @@ test_that("html_all_figs_tables makes qmd and html files with non-default rda_di
   )
 
   # erase temporary testing files
-  unlink(fs::path(getwd(), "all_tables_figures"), recursive = T)
-  unlink(fs::path(getwd(), "rda_files"), recursive = T)
+  # unlink(fs::path(getwd(), "all_tables_figures"), recursive = T)
+  # unlink(fs::path(getwd(), "figures_tables"), recursive = T)
   unlink(fs::path(getwd(), "data"), recursive = T)
 })
 
 test_that("html_all_figs_tables triggers message (question) when all_tables_figures folder already present", {
-  # read in sample dataset
-  dat <- utils::read.csv(
-    system.file("resources", "sample_data", "petrale_sole-after_2020.csv", package = "stockplotr")
-  )
 
   stockplotr::exp_all_figs_tables(
     dat,
@@ -88,7 +83,7 @@ test_that("html_all_figs_tables triggers message (question) when all_tables_figu
     ref_point = 1000,
     ref_line_sb = "msy",
     indices_unit_label = "CPUE",
-    rda_dir = getwd()
+    figures_tables_dir = getwd()
   ) |>
     suppressWarnings()
 
@@ -99,9 +94,8 @@ test_that("html_all_figs_tables triggers message (question) when all_tables_figu
   # erase temporary testing files
   unlink(fs::path(getwd(), "all_tables_figures"), recursive = T)
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  unlink(fs::path(getwd(), "rda_files"), recursive = T)
-})
-
-test_that("html_all_figs_tables stops if rda_dir not found", {
-  testthat::expect_error(html_all_figs_tables())
+  file.remove(fs::path(getwd(), "08_tables.qmd"))
+  file.remove(fs::path(getwd(), "09_figures.qmd"))
+  unlink(fs::path(getwd(), "figures"), recursive = T)
+  unlink(fs::path(getwd(), "tables"), recursive = T)
 })

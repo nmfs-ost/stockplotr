@@ -16,7 +16,7 @@
 #'   unit_label = "my_unit",
 #'   end_year = 2024,
 #'   make_rda = TRUE,
-#'   rda_dir = getwd()
+#'   figures_dir = getwd()
 #' )
 #' }
 plot_indices <- function(
@@ -24,7 +24,7 @@ plot_indices <- function(
     unit_label = NULL,
     end_year = NULL,
     make_rda = FALSE,
-    rda_dir = NULL) {
+    figures_dir = NULL) {
   # Set cpue unit label for plot
   u_units <- glue::glue("Estimated CPUE ({unit_label})")
 
@@ -172,7 +172,7 @@ plot_indices <- function(
     ) {
       stockplotr::write_captions(
         dat = dat,
-        dir = rda_dir,
+        dir = figures_dir,
         year = end_year
       )
     }
@@ -182,7 +182,7 @@ plot_indices <- function(
       topic = topic_label,
       fig_or_table = fig_or_table,
       end_year = end_year,
-      dir = rda_dir,
+      dir = figures_dir,
       units = unit_label
     )
 
@@ -190,13 +190,13 @@ plot_indices <- function(
     caps_alttext <- extract_caps_alttext(
       topic_label = topic_label,
       fig_or_table = fig_or_table,
-      dir = rda_dir
+      dir = figures_dir
     )
 
     export_rda(
       final = final,
       caps_alttext = caps_alttext,
-      rda_dir = rda_dir,
+      figures_tables_dir = figures_dir,
       topic_label = topic_label,
       fig_or_table = fig_or_table
     )
