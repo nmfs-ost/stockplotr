@@ -1,5 +1,5 @@
   # read in sample dataset
-  dat <- asar::convert_output(file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
+dat <- asar::convert_output(file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
                        model = "ss3")
 
 test_that("html_all_figs_tables makes qmd and html files with default figures_tables_dir argument", {

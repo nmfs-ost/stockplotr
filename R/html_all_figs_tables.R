@@ -55,8 +55,14 @@ html_all_figs_tables <- function(figures_tables_dir = getwd()) {
       figures_dir = figures_tables_dir
     )
 
-    tabs_figs_text <- c(readLines(fs::path(figures_tables_dir, "08_tables.qmd")),
-                        readLines(fs::path(figures_tables_dir, "09_figures.qmd")))
+    tab_doc_name <- list.files(figures_tables_dir)[grepl("_tables.qmd", list.files(figures_tables_dir))]
+    tab_doc <- readLines(fs::path(figures_tables_dir, tab_doc_name))
+
+    fig_doc_name <- list.files(figures_tables_dir)[grepl("_figures.qmd", list.files(figures_tables_dir))]
+    fig_doc <- readLines(fs::path(figures_tables_dir, fig_doc_name))
+
+    tabs_figs_text <- c(tab_doc,
+                        fig_doc)
 
     yaml_text <-
       "---
