@@ -97,34 +97,53 @@
 <!-- badges: start -->
 
 <p><img src="reference/figures/stockplotr-hex.png" align="right" height="200" style="float:right; height:200px;"></p>
-<div class="callout-note">
 <p><strong><em>Previously named ‘satf’</em></strong></p>
-</div>
 <p>The goal of <code>stockplotr</code> is to create a centralized package that contains all of the figures and tables that are used when analyzing stock assessment model outputs, writing a report, and other various procedures performed during the stock assessment workflow. There are multiple current packages that perform a similar function, but they are typically region and/or model dependent. Across the US, there are multiple packages that create plots that are directly used in a stock assessment report used for management. For example, an analyst that uses Stock Synthesis (SS3) to assess a stock will utilize <a href="https://github.com/r4ss/r4ss/" class="external-link"><code>r4ss</code></a>, a package that reads outputs, plots key parameters, and more to increase throughput and reduce tedious tasks for an analyst.</p>
 <p>Please note that this package is still in development. As such, some functions are still in development, such as the functions that create indices figures (i.e., <code>plot_indices</code>) and landings tables (i.e., <code>table_landings</code>).</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of <code>stockplotr</code> from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>Install the package using one of the three following ways:</p>
+<ol style="list-style-type: decimal">
+<li>Using <code>pak</code>
+</li>
+</ol>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"nmfs-ost/stockplotr"</span><span class="op">)</span></span></code></pre></div>
-<p>Alternatively, you can install <code>stockplotr</code> using the <code>remotes</code> package:</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"nmfs-ost/stockplotr"</span><span class="op">)</span></span></code></pre></div>
+<ol start="2" style="list-style-type: decimal">
+<li>Using <code>remotes</code>
+</li>
+</ol>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"nmfs-ost/stockplotr"</span><span class="op">)</span></span></code></pre></div>
-<p>Occasionally, the package can not be installed using the <code>remotes</code> package. If this is the case for you and the other two installation options don’t work please try:</p>
+<ol start="3" style="list-style-type: decimal">
+<li>From the nmfs-ost r-universe</li>
+</ol>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"nmfs-ost/stockplotr"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"stockplotr"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"https://nmfs-ost.r-universe.dev"</span>, <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+<h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<p>This is a basic example which shows you how to solve a common problem:</p>
+<p>Please refer to the <a href="https://connect.fisheries.noaa.gov/asar_tutorial/#section-preparing-to-run-create_template" class="external-link"><code>asar</code> tutorial</a> to learn how to produce the input file necessary to create figures and tables with <code>stockplotr</code>.</p>
+<p>Then, once your converted model results are saved as an object in your R environment, you can use <code>stockplotr</code> functions to create plots from the object.</p>
+<p>For example:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">stockplotr</span><span class="op">)</span></span>
-<span><span class="co">## basic example code</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">output_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Report.sso"</span>, package <span class="op">=</span> <span class="st">"stockplotr"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># convert your model results file into a `stockplotr` object</span></span>
+<span><span class="va">converted_output</span> <span class="op">&lt;-</span> <span class="fu">asar</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/asar/man/convert_output.html" class="external-link">convert_output</a></span><span class="op">(</span></span>
+<span>  file <span class="op">=</span> <span class="va">output_file</span>,</span>
+<span>  model <span class="op">=</span> <span class="st">"SS3"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># create a landings figure from your object</span></span>
+<span><span class="fu"><a href="reference/plot_landings.html">plot_landings</a></span><span class="op">(</span><span class="va">converted_output</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># create a landings table from your object</span></span>
+<span><span class="fu"><a href="reference/table_landings.html">table_landings</a></span><span class="op">(</span><span class="va">converted_output</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="disclaimer">Disclaimer<a class="anchor" aria-label="anchor" href="#disclaimer"></a>
