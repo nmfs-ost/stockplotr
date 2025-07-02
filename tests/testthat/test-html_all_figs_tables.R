@@ -1,9 +1,10 @@
-  # read in sample dataset
-dat <- asar::convert_output(file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
-                       model = "ss3")
+# read in sample dataset
+dat <- asar::convert_output(
+  file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
+  model = "ss3"
+)
 
 test_that("html_all_figs_tables makes qmd and html files with default figures_tables_dir argument", {
-
   stockplotr::exp_all_figs_tables(
     dat,
     end_year = 2024,
@@ -37,7 +38,6 @@ test_that("html_all_figs_tables makes qmd and html files with default figures_ta
 })
 
 test_that("html_all_figs_tables makes qmd and html files with non-default figures_tables_dir argument", {
-
   rda_path <- fs::path(getwd(), "data")
   dir.create(rda_path)
 
@@ -73,7 +73,6 @@ test_that("html_all_figs_tables makes qmd and html files with non-default figure
 })
 
 test_that("html_all_figs_tables triggers message (question) when all_tables_figures folder already present", {
-
   stockplotr::exp_all_figs_tables(
     dat,
     end_year = 2024,

@@ -1,9 +1,10 @@
 # read in sample dataset
-dat <- asar::convert_output(file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
-                            model = "ss3")
+dat <- asar::convert_output(
+  file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
+  model = "ss3"
+)
 
 test_that("plot_recruitment_deviations generates plots without errors", {
-
   # expect error-free plot with minimal arguments
   expect_no_error(
     stockplotr::plot_recruitment_deviations(dat,
@@ -34,7 +35,6 @@ test_that("plot_recruitment_deviations generates plots without errors", {
 })
 
 test_that("rda file made when indicated", {
-
   # export rda
   plot_recruitment_deviations(
     dat,
@@ -53,7 +53,6 @@ test_that("rda file made when indicated", {
 })
 
 test_that("plot_recruitment_deviations generates error with future end_year", {
-
   # expect error
   expect_error(
     plot_recruitment_deviations(
