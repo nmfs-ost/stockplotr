@@ -8,9 +8,7 @@
 
 <img src="man/figures/stockplotr-hex.png" align="right" height="200" style="float:right; height:200px;" />
 
-::: {.callout-note}
 ***Previously named 'satf'***
-:::
 
 The goal of `stockplotr` is to create a centralized package that contains all of the figures and tables that are used when analyzing stock assessment model outputs, writing a report, and other various procedures performed during the stock assessment workflow. There are multiple current packages that perform a similar function, but they are typically region and/or model dependent. Across the US, there are multiple packages that create plots that are directly used in a stock assessment report used for management. For example, an analyst that uses Stock Synthesis (SS3) to assess a stock will utilize [`r4ss`](https://github.com/r4ss/r4ss/), a package that reads outputs, plots key parameters, and more to increase throughput and reduce tedious tasks for an analyst.
 
@@ -18,34 +16,50 @@ Please note that this package is still in development. As such, some functions a
 
 ## Installation
 
-You can install the development version of `stockplotr` from [GitHub](https://github.com/) with:
+Install the package using one of the three following ways:
 
-``` r
-# install.packages("devtools")
-devtools::install_github("nmfs-ost/stockplotr")
-```
-
-Alternatively, you can install `stockplotr` using the `remotes` package:
-
-```r
-install.packages("remotes")
-remotes::install_github("nmfs-ost/stockplotr")
-```
-
-Occasionally, the package can not be installed using the `remotes` package. If this is the case for you and the other two installation options don't work please try:
+(1) Using `pak`
 
 ```r
 install.packages("pak")
 pak::pak("nmfs-ost/stockplotr")
 ```
 
-## Example
+(2) Using `remotes`
 
-This is a basic example which shows you how to solve a common problem:
+```r
+install.packages("remotes")
+remotes::install_github("nmfs-ost/stockplotr")
+```
 
-``` r
-library(stockplotr)
-## basic example code
+(3) From the nmfs-ost r-universe
+
+```r
+install.packages("stockplotr", repos = c("https://nmfs-ost.r-universe.dev", "https://cloud.r-project.org"))
+```
+
+## Usage
+
+Please refer to the [`asar` tutorial](https://connect.fisheries.noaa.gov/asar_tutorial/#section-preparing-to-run-create_template) to learn how to produce the input file necessary to create figures and tables with `stockplotr`.
+
+Then, once your converted model results are saved as an object in your R environment, you can use `stockplotr` functions to create plots from the object.
+
+For example:
+
+```r
+output_file <- system.file("extdata", "Report.sso", package = "stockplotr")
+
+# convert your model results file into a `stockplotr` object
+converted_output <- asar::convert_output(
+  file = output_file,
+  model = "SS3"
+)
+
+# create a landings figure from your object
+plot_landings(converted_output)
+
+# create a landings table from your object
+table_landings(converted_output)
 ```
 
 ## Disclaimer
