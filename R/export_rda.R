@@ -100,7 +100,8 @@ export_rda <- function(final = NULL,
         )
       )
       cli::cli_alert_success("{output_file_name} was regenerated and overwrote the previous version.",
-                             wrap = TRUE)
+        wrap = TRUE
+      )
     } else {
       cli::cli_alert_warning("{output_file_name} was not regenerated.")
     }

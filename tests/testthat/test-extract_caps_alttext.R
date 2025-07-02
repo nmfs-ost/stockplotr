@@ -1,9 +1,10 @@
 # read in sample dataset
-dat <- asar::convert_output(file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
-                            model = "ss3")
+dat <- asar::convert_output(
+  file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
+  model = "ss3"
+)
 
 test_that("extract_caps_alttext works for figures", {
-
   topic_label <- "biomass"
   fig_or_table <- "figure"
 
@@ -36,7 +37,6 @@ test_that("extract_caps_alttext works for figures", {
 })
 
 test_that("extract_caps_alttext works for tables", {
-
   topic_label <- "bnc"
   fig_or_table <- "table"
 

@@ -1,6 +1,8 @@
 # read in sample dataset
-dat <- asar::convert_output(file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
-                            model = "ss3")
+dat <- asar::convert_output(
+  file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
+  model = "ss3"
+)
 
 # TODO: Fix tests
 # test_that("plot_abundance_at_age generates plots without errors", {

@@ -1,9 +1,10 @@
 # read in sample dataset
-dat <- asar::convert_output(file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
-                            model = "ss3")
+dat <- asar::convert_output(
+  file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
+  model = "ss3"
+)
 
 test_that("plot_landings generates plots without errors", {
-
   # expect error-free plot with minimal arguments
   expect_no_error(
     stockplotr::plot_landings(dat)
@@ -18,7 +19,6 @@ test_that("plot_landings generates plots without errors", {
 })
 
 test_that("rda file made when indicated", {
-
   # export rda
   plot_landings(dat,
     end_year = 2024,
@@ -37,7 +37,6 @@ test_that("rda file made when indicated", {
 })
 
 test_that("plot_landings generates error with future end_year", {
-
   # expect error
   expect_error(
     plot_landings(dat,

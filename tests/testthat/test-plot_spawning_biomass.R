@@ -1,9 +1,10 @@
 # read in sample dataset
-dat <- asar::convert_output(file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
-                            model = "ss3")
+dat <- asar::convert_output(
+  file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
+  model = "ss3"
+)
 
 test_that("plot_spawning_biomass generates plots without errors", {
-
   # expect error-free plot with minimal arguments
   expect_no_error(
     stockplotr::plot_spawning_biomass(dat)
@@ -52,7 +53,6 @@ test_that("plot_spawning_biomass generates plots without errors", {
 })
 
 test_that("plot_spawning_biomass plots contain reference point when indicated", {
-
   # expect plot with a reference point (horizontal line) contains 4 layers while
   # plot w/o ref pt contains only 3 layers
 
@@ -77,7 +77,6 @@ test_that("plot_spawning_biomass plots contain reference point when indicated", 
 })
 
 test_that("rda file made when indicated", {
-
   # export rda
   plot_spawning_biomass(
     dat,
@@ -99,7 +98,6 @@ test_that("rda file made when indicated", {
 })
 
 test_that("plot_spawning_biomass generates error with future end_year", {
-
   # expect error
   expect_error(
     stockplotr::plot_spawning_biomass(
