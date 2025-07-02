@@ -47,7 +47,7 @@ Then, once your converted model results are saved as an object in your R environ
 For example:
 
 ```r
-output_file <- fs::path("path/to/my/Report.sso")
+output_file <- system.file("extdata", "Report.sso", package = "stockplotr")
 
 # convert your model results file into a `stockplotr` object
 converted_output <- asar::convert_output(
