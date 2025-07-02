@@ -6,6 +6,8 @@
 [![R-cmd-check](https://github.com/nmfs-ost/stockplotr/actions/workflows/call-r-cmd-check.yml/badge.svg)](https://github.com/nmfs-ost/stockplotr/actions/workflows/call-r-cmd-check.yml)
 <!-- badges: end -->
 
+<img src="man/figures/stockplotr-hex.png" align="right" height="200" style="float:right; height:200px;" />
+
 ::: {.callout-note}
 ***Previously named 'satf'***
 :::
