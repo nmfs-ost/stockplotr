@@ -6,7 +6,7 @@
 \usage{
 plot_indices(
   dat,
-  unit_label = NULL,
+  unit_label = "kg/hr",
   end_year = NULL,
   make_rda = FALSE,
   figures_dir = NULL
