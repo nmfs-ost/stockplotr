@@ -49,7 +49,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' exp_all_figs_tables(dat,
+#' save_all_plots(dat,
 #'   end_year = 2022,
 #'   ref_line = "unfished",
 #'   ref_point = 13000,
@@ -60,7 +60,7 @@
 #'   biomass_at_age_unit_label = "metric tons"
 #' )
 #' }
-exp_all_figs_tables <- function(
+save_all_plots <- function(
     # imported from plot_recruitment
     dat,
     recruitment_unit_label = "mt", # changed from unit_label to recruitment_unit_label for specificity
