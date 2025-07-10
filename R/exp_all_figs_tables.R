@@ -16,7 +16,8 @@
 #' searching in `dat` is case agnostic and will work with either upper- or
 #' lower-case letters but you must use one of the options specified in the
 #' default list to ensure that the label on the figure looks correct
-#' regardless of how it is specified in `dat`.
+#' regardless of how it is specified in `dat`. Other possibilities may include 
+#' "MSY", "msy", and "unfished".
 #' @param ref_point A known value of the reference point along with the label
 #' for the reference point as specified in the output file. Please use this
 #' option if the ref_line cannot find your desired point. Indicate the
@@ -65,11 +66,11 @@ save_all_plots <- function(
     dat,
     recruitment_unit_label = "mt", # changed from unit_label to recruitment_unit_label for specificity
     recruitment_scale_amount = 1,
-    end_year = NULL,
+    end_year = format(Sys.Date(), "%Y"),
     relative = FALSE,
     figures_tables_dir = getwd(),
     # imported from plot_biomass
-    ref_line = c("target", "MSY", "msy", "unfished"),
+    ref_line = "target",
     ref_point = NULL,
     biomass_scale_amount = 1,
     # imported from plot_landings
@@ -79,16 +80,16 @@ save_all_plots <- function(
     spawning_biomass_label = "mt",
     spawning_biomass_scale_amount = 1,
     # imported from plot_spawning_biomass
-    ref_line_sb = c("target", "MSY", "msy", "unfished"),
+    ref_line_sb = "target",
     ref_point_sb = NULL,
     # imported from plot_abundance_at_age
     abundance_at_age_scale_amount = 1000,
     abundance_at_age_unit_label = "fish",
     # imported from plot_biomass_at_age
     biomass_at_age_scale_amount = 1,
-    biomass_at_age_unit_label = "metric tons",
+    biomass_at_age_unit_label = "mt",
     # imported from plot_indices
-    indices_unit_label = NULL,
+    indices_unit_label = "kg/hr",
     # imported from table_afsc_tier- add potential unique arguments after dev
     # imported from table_bnc
     biomass_unit_label = "mt",
