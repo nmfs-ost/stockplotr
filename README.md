@@ -78,6 +78,11 @@ plot_landings(converted_output)
 table_landings(converted_output)
 ```
 
+Example Plot | Example Table |
+:------------|---------------:
+![Example landings plot from stockplotr](man/figures/landings_plot_ex.png) | ![Example landings tables from stockplotr](man/figures/landings_table_ex.png)
+
+
 ## User Community
 
 We hope that this package will be able to be a one stop shop for plots regarding 
