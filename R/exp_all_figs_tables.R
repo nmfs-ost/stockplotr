@@ -70,7 +70,7 @@ save_all_plots <- function(
     relative = FALSE,
     figures_tables_dir = getwd(),
     # imported from plot_biomass
-    ref_line = "target",
+    ref_line = "msy",
     ref_point = NULL,
     biomass_scale_amount = 1,
     # imported from plot_landings
@@ -80,7 +80,7 @@ save_all_plots <- function(
     spawning_biomass_label = "mt",
     spawning_biomass_scale_amount = 1,
     # imported from plot_spawning_biomass
-    ref_line_sb = "target",
+    ref_line_sb = "msy",
     ref_point_sb = NULL,
     # imported from plot_abundance_at_age
     abundance_at_age_scale_amount = 1000,

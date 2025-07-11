@@ -46,7 +46,7 @@ plot_biomass <- function(
     dat,
     unit_label = "mt",
     scale_amount = 1,
-    ref_line = "target",
+    ref_line = "msy",
     ref_point = NULL,
     end_year = NULL,
     relative = FALSE,
