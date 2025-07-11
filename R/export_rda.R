@@ -3,7 +3,7 @@
 #' Export a figure/table, and its caption and alternative text, to an rda object.
 #' Typically used after stockplotr::extract_caps_alttext().
 #'
-#' @param final The final figure (ggplot) or table (flextable) object.
+#' @param object The figure (ggplot) or table (flextable) object to be exported.
 #' @param caps_alttext The object containing a figure's caption and alternative
 #' text, in a list, or a table's caption, likely generated with
 #' stockplotr::extract_caps_alttext().
@@ -24,7 +24,7 @@
 #' @examples
 #' \dontrun{
 #' export_rda(
-#'   final = final_table_object,
+#'   object = final_table_object,
 #'   caps_alttext = caps_alttext_object,
 #'   figures_tables_dir = here::here(),
 #'   topic_label = "bnc",
@@ -32,14 +32,14 @@
 #' )
 #'
 #' export_rda(
-#'   final = final_figure_object,
+#'   object = final_figure_object,
 #'   caps_alttext = another_caps_alttext_object,
 #'   figures_tables_dir = "my_figures_tables_dir",
 #'   topic_label = "landings",
 #'   fig_or_table = "figure"
 #' )
 #' }
-export_rda <- function(final = NULL,
+export_rda <- function(object = NULL,
                        caps_alttext = NULL,
                        figures_tables_dir = NULL,
                        topic_label = NULL,
@@ -47,7 +47,7 @@ export_rda <- function(final = NULL,
   # make rda for figures
   if (fig_or_table == "figure") {
     rda <- list(
-      "figure" = final,
+      "figure" = object,
       "cap" = caps_alttext[[1]],
       "alt_text" = caps_alttext[[2]]
     )
@@ -62,7 +62,7 @@ export_rda <- function(final = NULL,
     # make rda for tables
   } else if (fig_or_table == "table") {
     rda <- list(
-      "table" = final,
+      "table" = object,
       "cap" = caps_alttext[[1]]
     )
     rda_loc <- "tables"
