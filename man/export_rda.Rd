@@ -5,11 +5,11 @@
 \title{Export a figure or table to rda}
 \usage{
 export_rda(
-  object = NULL,
-  caps_alttext = NULL,
-  figures_tables_dir = NULL,
-  topic_label = NULL,
-  fig_or_table = NULL
+  object,
+  caps_alttext,
+  topic_label,
+  fig_or_table,
+  figures_tables_dir = getwd()
 )
 }
 \arguments{
@@ -19,16 +19,17 @@ export_rda(
 text, in a list, or a table's caption, likely generated with
 stockplotr::extract_caps_alttext().}
 
-\item{figures_tables_dir}{If the user has already created folders containing
-figures and tables ("figures" and "tables"), figures_tables_dir represents
-the location of these folders. Otherwise, these two folders will be created
-automatically, then used to store the exported rda files.}
-
 \item{topic_label}{A string that describes a figure or table's label. These
 labels are found in the "label" column of the "captions_alt_text.csv" file
 and are used to link the figure or table with its caption/alt text.}
 
 \item{fig_or_table}{A string describing whether the plot is a figure or table.}
+
+\item{figures_tables_dir}{If the user has already created folders containing
+figures and tables ("figures" and "tables"), figures_tables_dir represents
+the location of these folders. Otherwise, these two folders will be created
+automatically, then used to store the exported rda files. Default is the 
+working directory.}
 }
 \value{
 An rda file with a figure's ggplot, caption, and alternative text, or
@@ -43,17 +44,17 @@ Typically used after stockplotr::extract_caps_alttext().
 export_rda(
   object = final_table_object,
   caps_alttext = caps_alttext_object,
-  figures_tables_dir = here::here(),
   topic_label = "bnc",
-  fig_or_table = "table"
+  fig_or_table = "table",
+  figures_tables_dir = here::here()
 )
 
 export_rda(
   object = final_figure_object,
   caps_alttext = another_caps_alttext_object,
-  figures_tables_dir = "my_figures_tables_dir",
   topic_label = "landings",
-  fig_or_table = "figure"
+  fig_or_table = "figure",
+  figures_tables_dir = "my_figures_tables_dir"
 )
 }
 }
