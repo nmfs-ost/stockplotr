@@ -5,7 +5,7 @@ load(file.path(
 ))
 
 test_that("html_all_figs_tables makes qmd and html files with default figures_tables_dir argument", {
-  exp_all_figs_tables(
+  stockplotr::save_all_plots(
     out_new,
     end_year = 2024,
     recruitment_unit_label = "mt",
@@ -43,7 +43,7 @@ test_that("html_all_figs_tables makes qmd and html files with non-default figure
 
   withr::with_dir(
     rda_path,
-    exp_all_figs_tables(
+    stockplotr::save_all_plots(
       out_new,
       end_year = 2024,
       recruitment_unit_label = "mt",
@@ -73,7 +73,7 @@ test_that("html_all_figs_tables makes qmd and html files with non-default figure
 })
 
 test_that("html_all_figs_tables triggers message (question) when all_tables_figures folder already present", {
-  exp_all_figs_tables(
+  stockplotr::save_all_plots(
     out_new,
     end_year = 2024,
     recruitment_unit_label = "mt",

@@ -6,7 +6,7 @@
 \usage{
 plot_landings(
   dat,
-  unit_label = "metric tons",
+  unit_label = "mt",
   end_year = NULL,
   make_rda = FALSE,
   figures_dir = getwd(),

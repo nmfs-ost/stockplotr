@@ -65,4 +65,4 @@ When using functions that produce one table or figure at a time, like `plot_biom
 
 ## Multi-plot functions 
 
-When using `exp_all_figs_tables()`, the `stockplotr` function that exports all figures and tables, all key quantities (or, as many key quantities as possible) will be substituted into the placeholders. As opposed to single-plot functions, `exp_all_figs_tables()` allows for the user to specify all arguments needed to substitute all key quantities.
+When using `save_all_plots()`, the `stockplotr` function that exports all figures and tables, all key quantities (or, as many key quantities as possible) will be substituted into the placeholders. As opposed to single-plot functions, `save_all_plots()` allows for the user to specify all arguments needed to substitute all key quantities.

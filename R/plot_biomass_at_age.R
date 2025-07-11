@@ -24,7 +24,7 @@
 #' }
 plot_biomass_at_age <- function(
     dat,
-    unit_label = "metric tons",
+    unit_label = "mt",
     scale_amount = 1,
     end_year = NULL,
     make_rda = FALSE,
