@@ -21,7 +21,7 @@
 #' }
 plot_indices <- function(
     dat,
-    unit_label = NULL,
+    unit_label = "",
     end_year = NULL,
     make_rda = FALSE,
     figures_dir = NULL) {

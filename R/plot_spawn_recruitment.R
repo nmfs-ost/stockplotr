@@ -22,8 +22,8 @@
 #' }
 plot_spawn_recruitment <- function(
     dat,
-    spawning_biomass_label = "metric tons",
-    recruitment_label = "metric tons",
+    spawning_biomass_label = "mt",
+    recruitment_label = "mt",
     end_year = NULL,
     make_rda = FALSE,
     figures_dir = getwd()) {

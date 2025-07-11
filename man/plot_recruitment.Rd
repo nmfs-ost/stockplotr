@@ -6,9 +6,9 @@
 \usage{
 plot_recruitment(
   dat,
-  unit_label = "metric tons",
+  unit_label = "mt",
   scale_amount = 1,
-  end_year = NULL,
+  end_year = format(Sys.Date(), "\%Y"),
   relative = FALSE,
   make_rda = FALSE,
   figures_dir = getwd()

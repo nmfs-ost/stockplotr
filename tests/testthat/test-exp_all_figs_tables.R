@@ -4,8 +4,8 @@ dat <- asar::convert_output(
   model = "ss3"
 )
 
-test_that("exp_all_figs_tables works when all figures/tables are plotted", {
-  stockplotr::exp_all_figs_tables(
+test_that("save_all_plots works when all figures/tables are plotted", {
+  stockplotr::save_all_plots(
     dat,
     end_year = 2022,
     recruitment_unit_label = "mt",
@@ -53,9 +53,9 @@ test_that("exp_all_figs_tables works when all figures/tables are plotted", {
   unlink(fs::path(getwd(), "tables"), recursive = T)
 })
 
-test_that("exp_all_figs_tables works when some figures/tables are not plotted", {
+test_that("save_all_plots works when some figures/tables are not plotted", {
   # plot all figs/tables except for plot_biomass
-  stockplotr::exp_all_figs_tables(dat,
+  stockplotr::save_all_plots(dat,
     end_year = 2022,
     # add an unreal ref_line so plot_biomass doesn't work
     ref_line = "not_a_real_ref_line",
