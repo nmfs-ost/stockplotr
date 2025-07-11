@@ -89,7 +89,7 @@ save_all_plots <- function(
     biomass_at_age_scale_amount = 1,
     biomass_at_age_unit_label = "mt",
     # imported from plot_indices
-    indices_unit_label = "kg/hr",
+    indices_unit_label = "",
     # imported from table_afsc_tier- add potential unique arguments after dev
     # imported from table_bnc
     biomass_unit_label = "mt",
