@@ -11,13 +11,13 @@
 #' @param figures_tables_dir The location of the folder containing
 #' figures and tables ("figures" and "tables").
 #' @param ref_line A string specifying the type of reference you want to
-#' compare biomass to. The default is `"target"`, which looks for
-#' `"biomass_target"` in the `"label"` column of `dat`. The actual
+#' compare biomass to. The default is `"msy"`, which looks for
+#' `"biomass_msy"` in the `"label"` column of `dat`. The actual
 #' searching in `dat` is case agnostic and will work with either upper- or
 #' lower-case letters but you must use one of the options specified in the
 #' default list to ensure that the label on the figure looks correct
 #' regardless of how it is specified in `dat`. Other possibilities may include 
-#' "MSY", "msy", and "unfished".
+#' "target", "MSY", and "unfished".
 #' @param ref_point A known value of the reference point along with the label
 #' for the reference point as specified in the output file. Please use this
 #' option if the ref_line cannot find your desired point. Indicate the
