@@ -48,7 +48,7 @@ plot_biomass <- function(
     scale_amount = 1,
     ref_line = "msy",
     ref_point = NULL,
-    end_year = NULL,
+    end_year = format(Sys.Date(), "%Y"),
     relative = FALSE,
     make_rda = FALSE,
     figures_dir = getwd()) {
@@ -125,11 +125,6 @@ plot_biomass <- function(
       estimate_upper = estimate + 1.96 * uncertainty /
         ifelse(relative, ref_line_val, scale_amount)
     )
-
-  # get end year if not defined
-  if (is.null(end_year)) {
-    end_year <- format(Sys.Date(), "%Y")
-  }
 
   b <- b |>
     dplyr::filter(year <= end_year)

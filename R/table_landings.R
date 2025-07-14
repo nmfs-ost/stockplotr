@@ -24,18 +24,13 @@
 #' }
 table_landings <- function(dat,
                            unit_label = "mt",
-                           end_year = NULL,
+                           end_year = format(Sys.Date(), "%Y"),
                            make_rda = FALSE,
                            tables_dir = getwd()) {
   # TODO: add an option to stratify by gear type
 
   # Units
   land_label <- glue::glue("Landings ({unit_label})")
-
-  # get end year if not defined
-  if (is.null(end_year)) {
-    end_year <- format(Sys.Date(), "%Y")
-  }
 
   # create plot-specific variables to use throughout fxn for naming and IDing
   topic_label <- "landings"

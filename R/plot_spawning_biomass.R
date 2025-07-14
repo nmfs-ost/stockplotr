@@ -52,7 +52,7 @@ plot_spawning_biomass <- function(
     scale_amount = 1,
     ref_line = "msy",
     ref_point = NULL,
-    end_year = NULL,
+    end_year = format(Sys.Date(), "%Y"),
     relative = FALSE,
     make_rda = FALSE,
     figures_dir = getwd()) {
@@ -73,11 +73,7 @@ plot_spawning_biomass <- function(
   )
 
   # output <- dat
-  # Determine the end year
   all_years <- dat[["year"]][grepl("^[0-9\\.]+$", dat[["year"]])]
-  if (is.null(end_year)) {
-    end_year <- format(Sys.Date(), "%Y")
-  }
 
   # create plot-specific variables to use throughout fxn for naming and IDing
   # Indicate if spawning biomass is relative or not

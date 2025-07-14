@@ -21,12 +21,9 @@
 #' }
 plot_recruitment_deviations <- function(
     dat,
-    end_year = NULL,
+    end_year = format(Sys.Date(), "%Y"),
     make_rda = FALSE,
     figures_dir = getwd()) {
-  if (is.null(end_year)) {
-    end_year <- format(Sys.Date(), "%Y")
-  }
   start_year <- min(as.numeric(dat$year), na.rm = TRUE)
 
   # create plot-specific variables to use throughout fxn for naming and IDing

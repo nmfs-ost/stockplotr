@@ -21,13 +21,9 @@
 #' }
 table_indices <- function(
     dat,
-    end_year = NULL,
+    end_year = format(Sys.Date(), "%Y"),
     make_rda = FALSE,
     tables_dir = getwd()) {
-  # get end year if not defined
-  if (is.null(end_year)) {
-    end_year <- format(Sys.Date(), "%Y")
-  }
 
   # create plot-specific variables to use throughout fxn for naming and IDing
   topic_label <- "indices.abundance"

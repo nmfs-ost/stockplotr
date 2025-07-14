@@ -29,7 +29,7 @@
 #' }
 table_bnc <- function(
     dat,
-    end_year = NULL,
+    end_year = format(Sys.Date(), "%Y"),
     biomass_unit_label = "mt",
     catch_unit_label = "mt",
     sb_unit_label = "mt",
@@ -38,10 +38,6 @@ table_bnc <- function(
   biomass_label <- glue::glue("Biomass ({biomass_unit_label})")
   catch_label <- glue::glue("Catch ({catch_unit_label})")
   sb_label <- glue::glue("Spawning biomass ({sb_unit_label})")
-
-  if (is.null(end_year)) {
-    end_year <- format(Sys.Date(), "%Y")
-  }
 
   # create plot-specific variables to use throughout fxn for naming and IDing
   topic_label <- "bnc"

@@ -22,16 +22,11 @@
 plot_indices <- function(
     dat,
     unit_label = "",
-    end_year = NULL,
+    end_year = format(Sys.Date(), "%Y"),
     make_rda = FALSE,
     figures_dir = NULL) {
   # Set cpue unit label for plot
   u_units <- glue::glue("Estimated CPUE ({unit_label})")
-
-  # get end year if not defined
-  if (is.null(end_year)) {
-    end_year <- format(Sys.Date(), "%Y")
-  }
 
   # Load data
   output <- dat |>

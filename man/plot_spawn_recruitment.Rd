@@ -8,7 +8,7 @@ plot_spawn_recruitment(
   dat,
   spawning_biomass_label = "mt",
   recruitment_label = "mt",
-  end_year = NULL,
+  end_year = format(Sys.Date(), "\%Y"),
   make_rda = FALSE,
   figures_dir = getwd()
 )
@@ -20,7 +20,7 @@ plot_spawn_recruitment(
 
 \item{recruitment_label}{units for recruitment}
 
-\item{end_year}{last year of assessment}
+\item{end_year}{Last year of assessment. Default is the current year.}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
