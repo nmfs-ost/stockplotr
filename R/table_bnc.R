@@ -185,7 +185,7 @@ table_bnc <- function(
     )
 
     export_rda(
-      final = final,
+      object = final,
       caps_alttext = caps_alttext,
       figures_tables_dir = tables_dir,
       topic_label = topic_label,
