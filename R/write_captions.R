@@ -4,8 +4,10 @@
 #' key quantities from the model results file.
 #'
 #' @inheritParams plot_spawning_biomass
-#' @param dir Directory where the output captions and alt text file should be saved
-#' @param year the last year of the data or the current year this function is being performed
+#' @param dir Directory where the output captions and alt text file should be 
+#' saved. Defaults to working directory.
+#' @param year the last year of the data or the current year this function is 
+#' being performed. Defaults to the current year.
 #'
 #' @return Exports .csv with captions and alt text for figures and tables
 #' that contain key quantities (e.g., an assessment's start year) that
@@ -21,8 +23,8 @@
 #' )
 #' }
 write_captions <- function(dat, # converted model output object
-                           dir = NULL,
-                           year = NULL) {
+                           dir = getwd(),
+                           year = format(Sys.Date(), "%Y")) {
   # only extract key quantities/export new csv if not present
   if (file.exists(fs::path(dir, "captions_alt_text.csv"))) {
     cli::cli_alert_danger("Captions and alternative text file (captions_alt_text.csv) already exists; write_captions() will not run.", wrap = TRUE)
