@@ -142,7 +142,7 @@ plot_recruitment_deviations <- function(
     )
 
     export_rda(
-      final = final,
+      object = final,
       caps_alttext = caps_alttext,
       figures_tables_dir = figures_dir,
       topic_label = topic_label,
