@@ -10,9 +10,19 @@
 
 ***Previously named 'satf'***
 
-The goal of `stockplotr` is to create a centralized package that contains all of the figures and tables that are used when analyzing stock assessment model outputs, writing a report, and other various procedures performed during the stock assessment workflow. There are multiple current packages that perform a similar function, but they are typically region and/or model dependent. Across the US, there are multiple packages that create plots that are directly used in a stock assessment report used for management. For example, an analyst that uses Stock Synthesis (SS3) to assess a stock will utilize [`r4ss`](https://github.com/r4ss/r4ss/), a package that reads outputs, plots key parameters, and more, to increase throughput and reduce tedious tasks for an analyst.
+The goal of `stockplotr` is to create a centralized package that contains all of
+the figures and tables for a stock assessment report used to inform management. 
+There are multiple current packages that perform a 
+similar function, but they are typically region and/or model dependent. Across 
+the US, there are multiple packages that create plots that are directly used in 
+a stock assessment report used for management. For example, an analyst that uses 
+Stock Synthesis (SS3) to assess a stock will utilize [`r4ss`](https://github.com/r4ss/r4ss/), 
+a package that reads outputs, plots key parameters, and more to increase 
+throughput and reduce tedious tasks for an analyst.
 
-Please note that this package is still in development. As such, some functions are still in development, such as the functions that create indices figures (i.e., `plot_indices`) and landings tables (i.e., `table_landings`).
+Please note that this package is still in development. As such, some functions 
+are still in development, such as the functions that create indices figures 
+(i.e., `plot_indices`) and landings tables (i.e., `table_landings`).
 
 ## Installation
 
@@ -44,12 +54,18 @@ Please refer to the [`asar` tutorial](https://connect.fisheries.noaa.gov/asar_tu
 
 Then, once your converted model results are saved as an object in your R environment, you can use `stockplotr` functions to create plots from the object.
 
-For example:
+> [!TIP]
+> `stockplotr` plots or tables are exported as `ggplot2` or `flextables` objects 
+> meaning that users can use the same process to add new data, formatting, or 
+> other customizations to the plot beyond the baseline made by this package
+
+### Example
 
 ```r
 output_file <- system.file("extdata", "Report.sso", package = "stockplotr")
 
 # convert your model results file into a `stockplotr` object
+pak::pak("nmfs-ost/asar")
 converted_output <- asar::convert_output(
   file = output_file,
   model = "SS3"
@@ -61,6 +77,25 @@ plot_landings(converted_output)
 # create a landings table from your object
 table_landings(converted_output)
 ```
+
+Example Plot | Example Table |
+:------------|---------------:
+![Example landings plot from stockplotr](man/figures/landings_plot_ex.png) | ![Example landings tables from stockplotr](man/figures/landings_table_ex.png)
+
+
+## User Community
+
+We hope that this package will be able to be a one stop shop for plots regarding 
+interpreting assessment models and presenting the results to managers and relevant 
+stakeholders. We encourage interested users to contribute to this package using 
+their custom code when they find it may be useful across the nation.
+
+> [!NOTE]
+> An additional package to plot model diagnostics is being worked on for the 
+> Fisheries Integrated Modelling System [FIMS] that will natively work with the 
+> output used for stockplotr since the model output for FIMS works together with
+> stockplotr. More information can be found soon and a link to the repo will be 
+> located here once available.
 
 ## Disclaimer
 
