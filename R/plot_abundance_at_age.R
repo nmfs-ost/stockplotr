@@ -29,7 +29,7 @@ plot_abundance_at_age <- function(
     dat,
     unit_label = "fish",
     scale_amount = 1000,
-    end_year = NULL,
+    end_year = format(Sys.Date(), "%Y"),
     make_rda = FALSE,
     figures_dir = getwd()) {
   magnitude <- floor(log10(scale_amount))
@@ -81,11 +81,6 @@ plot_abundance_at_age <- function(
       dplyr::group_by(age, year) |>
       dplyr::summarise(estimate = sum(estimate), .groups = "drop") |>
       dplyr::ungroup()
-  }
-
-  # get end year if not defined
-  if (is.null(end_year)) {
-    end_year <- format(Sys.Date(), "%Y")
   }
 
   # create plot-specific variables to use throughout fxn for naming and IDing

@@ -5,7 +5,7 @@
 #' @param scale_amount A number describing how much to scale down the quantities
 #' shown on the y axis. For example, scale_amount = 100 would scale down a value
 #' from 500,000 --> 5,000. This scale will be reflected in the y axis label.
-#' @param end_year last year of assessment
+#' @param end_year Last year of assessment. Default is the current year.
 #' @param relative A logical value specifying if the resulting figures should
 #'   be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
 #'   which reference point to use.
@@ -78,9 +78,6 @@ plot_recruitment <- function(
   # dplyr::rename(recruitment = estimate) |>
   # dplyr::select(-c(module_name, label))
 
-  if (is.null(end_year)) {
-    end_year <- format(Sys.Date(), "%Y")
-  }
   stryr <- min(rec$year)
 
   rec <- rec |>

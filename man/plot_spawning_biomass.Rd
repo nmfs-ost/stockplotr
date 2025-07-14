@@ -10,7 +10,7 @@ plot_spawning_biomass(
   scale_amount = 1,
   ref_line = "msy",
   ref_point = NULL,
-  end_year = NULL,
+  end_year = format(Sys.Date(), "\%Y"),
   relative = FALSE,
   make_rda = FALSE,
   figures_dir = getwd()
@@ -39,7 +39,7 @@ for the reference point as specified in the output file. Please use this
 option if the ref_line cannot find your desired point. Indicate the
 reference point in the form c("label" = value).}
 
-\item{end_year}{last year of assessment}
+\item{end_year}{Last year of assessment. Default is the current year.}
 
 \item{relative}{A logical value specifying if the resulting figures should
 be relative spawning biomass. The default is `FALSE`. `ref_line` indicates

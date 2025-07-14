@@ -6,7 +6,7 @@
 \usage{
 plot_recruitment_deviations(
   dat,
-  end_year = NULL,
+  end_year = format(Sys.Date(), "\%Y"),
   make_rda = FALSE,
   figures_dir = getwd()
 )
@@ -14,7 +14,7 @@ plot_recruitment_deviations(
 \arguments{
 \item{dat}{A data frame returned from \link[asar]{convert_output}}
 
-\item{end_year}{last year of assessment}
+\item{end_year}{Last year of assessment. Default is the current year.}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,

@@ -4,12 +4,17 @@
 \alias{table_indices}
 \title{Create Indices of Abundance Table}
 \usage{
-table_indices(dat, end_year = NULL, make_rda = FALSE, tables_dir = getwd())
+table_indices(
+  dat,
+  end_year = format(Sys.Date(), "\%Y"),
+  make_rda = FALSE,
+  tables_dir = getwd()
+)
 }
 \arguments{
 \item{dat}{A data frame returned from \link[asar]{convert_output}}
 
-\item{end_year}{last year of assessment}
+\item{end_year}{Last year of assessment. Default is the current year.}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,

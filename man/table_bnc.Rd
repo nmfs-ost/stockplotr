@@ -6,7 +6,7 @@
 \usage{
 table_bnc(
   dat,
-  end_year = NULL,
+  end_year = format(Sys.Date(), "\%Y"),
   biomass_unit_label = "mt",
   catch_unit_label = "mt",
   sb_unit_label = "mt",
@@ -17,7 +17,7 @@ table_bnc(
 \arguments{
 \item{dat}{A data frame returned from \link[asar]{convert_output}}
 
-\item{end_year}{last year of assessment}
+\item{end_year}{Last year of assessment. Default is the current year.}
 
 \item{biomass_unit_label}{abbreviated units for biomass}
 
