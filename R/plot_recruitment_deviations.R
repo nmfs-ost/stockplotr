@@ -1,6 +1,13 @@
 #' Plot Recruitment Deviations
 #'
+<<<<<<< HEAD
 #' @inheritParams plot_spawning_biomass
+=======
+#' @inheritParams plot_recruitment
+#' @param group
+#' @param facet description
+#' @param ... description
+>>>>>>> 057e873 (add baseline timeseries plot and adjustments to plot_rec_devs)
 #'
 #' @return Plot recruitment deviations relative to one over time from an
 #' assessment model output(s) file translated to a standardized output. There are
