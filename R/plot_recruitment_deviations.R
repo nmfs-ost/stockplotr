@@ -1,9 +1,9 @@
 #' Plot Recruitment Deviations
 #'
 #' @inheritParams plot_recruitment
-#' @param group
-#' @param facet description
-#' @param ... description
+#' @param group string of a column that groups the data (e.g. "fleet", "area", etc.)
+#' @param facet string or list of strings that facet the data (e.g. "year", "area", etc.)
+#' @param ... Other ggplot2 options for selected geom (e.g. `size`, `color`, etc.)
 #'
 #' @return Plot recruitment deviations relative to one over time from an
 #' assessment model output file translated to a standardized output. There are

@@ -6,15 +6,19 @@
 \usage{
 plot_recruitment_deviations(
   dat,
-  end_year = NULL,
+  group = NULL,
+  facet = NULL,
   make_rda = FALSE,
-  figures_dir = getwd()
+  figures_dir = getwd(),
+  ...
 )
 }
 \arguments{
 \item{dat}{A data frame returned from \link[asar]{convert_output}}
 
-\item{end_year}{last year of assessment}
+\item{group}{string of a column that groups the data (e.g. "fleet", "area", etc.)}
+
+\item{facet}{string or list of strings that facet the data (e.g. "year", "area", etc.)}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
@@ -24,6 +28,8 @@ Default is FALSE.}
 \item{figures_dir}{The location of the folder containing the generated figure
 rda files ("figures") that will be created if the argument `make_rda` = TRUE.
 Default is the working directory.}
+
+\item{...}{Other ggplot2 options for selected geom (e.g. `size`, `color`, etc.)}
 }
 \value{
 Plot recruitment deviations relative to one over time from an

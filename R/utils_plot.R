@@ -21,10 +21,6 @@
 #' (e.g. "year", "area", etc.)
 #' @param ... inherited arguments from internal functions from ggplot2::geom_xx
 #'
-#' @returns
-#' @export
-#'
-#' @examples
 plot_timeseries <- function(
     dat,
     x = "year",
