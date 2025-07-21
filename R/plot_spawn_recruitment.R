@@ -138,5 +138,5 @@ plot_spawn_recruitment <- function(
       fig_or_table = fig_or_table
     )
   }
-  return(final)
+final
 }

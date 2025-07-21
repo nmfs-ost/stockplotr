@@ -201,5 +201,5 @@ plot_indices <- function(
       fig_or_table = fig_or_table
     )
   }
-  return(final)
+final
 }

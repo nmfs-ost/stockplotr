@@ -203,5 +203,5 @@ plot_biomass_at_age <- function(
       fig_or_table = fig_or_table
     )
   }
-  return(final)
+final
 }

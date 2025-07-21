@@ -193,5 +193,5 @@ table_bnc <- function(
     )
   }
   # Return finished table
-  return(final)
+final
 }

@@ -26,7 +26,7 @@ SS3_extract_df <- function(dat, label) {
     naniar::replace_with_na_all(condition = ~ .x == "")
   clean_df <- Filter(function(x) !all(is.na(x)), clean_df)
 
-  return(clean_df)
+clean_df
 }
 
 
@@ -44,7 +44,7 @@ SS3_extract_bio_info <- function(
       skip = skip, quote = "",
       comment.char = ""
     )) + 1
-    return(nummax)
+  nummax
   }
 
   output <- utils::read.table(
@@ -64,5 +64,5 @@ SS3_extract_bio_info <- function(
   if (isTRUE(reference.points)) {
 
   }
-  return(bio_info)
+bio_info
 }
