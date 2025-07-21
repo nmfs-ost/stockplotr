@@ -2,7 +2,7 @@
 #' 
 #' @param ... Arguments passed to `ggplot2::theme()`.
 #'
-#' @returns
+#' @returns theme for NOAA Fisheries plots
 #' @export
 #'
 #' @examples ggplot2::ggplot() + ggplot2::geom_line(ggplot2::aes(x = 1:10, y = 1:10)) + theme_noaa()
