@@ -8,7 +8,8 @@ plot_recruitment_deviations(
   dat,
   geom = "point",
   make_rda = FALSE,
-  figures_dir = getwd()
+  figures_dir = getwd(),
+  ...
 )
 }
 \arguments{
