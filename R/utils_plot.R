@@ -21,10 +21,23 @@
 #' (e.g. "year", "area", etc.)
 #' @param ... inherited arguments from internal functions from ggplot2::geom_xx
 #'
-#' @returns
+#' @return Create a time series plot for a stock assessment report. The user 
+#' has options to create a line, point, or area plot where the x-axis is year 
+#' and Y can vary for any time series quantity. Currently, grouping is
+#' restricted to one group where faceting can be any number of facets.
+#' 
 #' @export
-#'
 #' @examples
+#' \dontrun{
+#' plot_timeseries(dat,
+#'                x = "year",
+#'                y = "estimate",
+#'                geom = "line",
+#'                xlab = "Year",
+#'                ylab = "Biomass",
+#'                group = "fleet",
+#'                facet = "area")
+#' }
 plot_timeseries <- function(
     dat,
     x = "year",
@@ -131,9 +144,9 @@ plot_timeseries <- function(
   # Check if facet(s) are desired
   if (!is.null(facet)){
     if (geom == "area")
-    facet <- paste("~", paste(facet, collapse = " + "))
+      facet <- paste("~", paste(facet, collapse = " + "))
     facet_formula <- stats::reformulate(facet)
-
+    
     final <- final + ggplot2::facet_wrap(facet_formula)
   }
   final
@@ -141,6 +154,22 @@ plot_timeseries <- function(
 
 #------------------------------------------------------------------------------
 
+#' Pre-formatted reference line
+#'
+#' @param dat standard data frame where reference point should be extracted
+#' @param label_name string of the name of the quantity that users want to 
+#' extract the reference point from
+#' @param reference string. name of the reference point such as "msy", 
+#' "unfished", or "target"
+#'
+#' @returns a ggplot2 geom_hline object for a reference point that can be added 
+#' to a plot
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' reference_line(dat, "biomass", "msy")
+#' }
 reference_line <- function(dat, label_name, reference) {
   # calculate reference line
   # Find a way to inherit the data from the previous plot using + operator
@@ -170,6 +199,8 @@ reference_line <- function(dat, label_name, reference) {
 }
 
 #------------------------------------------------------------------------------
+
+#' Calculate axis breaks for a plot
 
 axis_breaks <- function(data){
   # change plot breaks
@@ -203,7 +234,24 @@ calculate_uncertainty <- function() {
 
 #------------------------------------------------------------------------------
 
-# Prep data for input into aesthetics for ggplot2
+#' Prep data for input into aesthetics for ggplot2
+#'
+#' @param dat a data frame or list of data frames that contains the data to be 
+#' plotted.
+#' @param label_name a string of the name of the label that is used to filter 
+#' the data.
+#' @param geom Type of plot user wants to create. Options are "line", "point", 
+#' and "area".
+#' @param group Selected grouping for the data. If you want to just summarize 
+#' the data across all factors, set group = "none".
+#'
+#' @returns a data frame that is pre-formatted for plotting with ggplot2.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' prepare_data(dat, "biomass", "line", group = "fleet")
+#' }
 prepare_data <- function(
     dat,
     label_name,
@@ -241,11 +289,11 @@ prepare_data <- function(
         estimate_lower = dplyr::case_when(
           grepl("se", uncertainty_label) ~ estimate - 1.96 * uncertainty,
           TRUE ~ NA
-          ),
+        ),
         estimate_upper = dplyr::case_when(
           grepl("se", uncertainty_label) ~ estimate + 1.96 * uncertainty,
           TRUE ~ NA
-          )
+        )
       )
     if (!is.null(group)) {
       data <- data
@@ -272,7 +320,7 @@ prepare_data <- function(
   # unsure if want to keep this
   # this is filtering for time series
   # TODO: change or remove in the future when moving to other plot types
-  if (is.null(group)) {
+  if (group == "none") {
     plot_data <- plot_data |>
       dplyr::filter(
         !is.na(year),
@@ -313,7 +361,7 @@ prepare_data <- function(
       plot_data <- plot_data |>
         dplyr::filter(
           module_name == selected_module
-      )
+        )
     }
   }
   if (geom == "area") {
