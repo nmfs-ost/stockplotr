@@ -6,6 +6,9 @@
 \usage{
 theme_noaa(...)
 }
+\arguments{
+\item{...}{Arguments passed to `ggplot2::theme()`.}
+}
 \value{
 theme for NOAA Fisheries plots
 }

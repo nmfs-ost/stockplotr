@@ -1,4 +1,6 @@
 #' Add NOAA theming to ggplot2 object
+#' 
+#' @param ... Arguments passed to `ggplot2::theme()`.
 #'
 #' @returns theme for NOAA Fisheries plots
 #' @export
@@ -12,7 +14,7 @@ theme_noaa <- function(...) {
     panel.grid = ggplot2::element_blank(),
     panel.border = ggplot2::element_rect(colour = "black", fill = NA, linewidth = 0.5),
     complete = TRUE
-  ) +
-    nmfspalette::scale_color_nmfs() +
-    nmfspalette::scale_fill_nmfs()
+  ) # +
+    # nmfspalette::scale_color_nmfs() +
+    # nmfspalette::scale_fill_nmfs()
 }
