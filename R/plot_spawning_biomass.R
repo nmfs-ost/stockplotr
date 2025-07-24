@@ -73,7 +73,6 @@ plot_spawning_biomass <- function(
     yes = "Relative spawning biomass",
     no = glue::glue("Spawning biomass ({unit_label})")
   )
-
   # check year isn't past end_year if not projections plot
   # check_year(
   #   end_year = end_year,
