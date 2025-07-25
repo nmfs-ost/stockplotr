@@ -133,6 +133,16 @@ plot_timeseries <- function(
       labs
     )
   }
+  if (length(unique(dat$model)) == 1){
+    labs <- switch(
+      geom,
+      "line" = labs + ggplot2::guides(color = "none"),
+      "point" = labs + ggplot2::guides(color = "none"),
+      "area" = labs + ggplot2::guides(fill = "none"),
+      # return plot if option beyond line and point for now
+      labs
+    )
+  }
   
   # Calc axis breaks
   x_n_breaks <- axis_breaks(dat)
@@ -204,10 +214,12 @@ reference_line <- function(
     ggplot2::annotate(
       geom = "text",
       # TODO: need to change this for general process
-      x = as.numeric(max(dat$year[dat$era == "time"], na.rm = TRUE)) - as.numeric(max(dat$year[dat$era == "time"], na.rm = TRUE))/100,
+      x = as.numeric(max(dat$year[dat$era == "time"], na.rm = TRUE)), # - as.numeric(max(dat$year[dat$era == "time"], na.rm = TRUE))/200,
       y = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
       label = glue::glue("{label_name}_{reference}"), # list(bquote(label_name[.(reference)])),
-      parse = TRUE
+      parse = TRUE,
+      hjust = 1,
+      vjust = 0
     )
 }
 
@@ -276,7 +288,12 @@ prepare_data <- function(
   # Replace all spaces with underscore if not in proper format
   label_name <- sub(" ", "_", label_name)
   list_of_data <- list()
-  for (i in 1:length(dat)) {
+  length_dat <- ifelse(
+    is.data.frame(dat),
+    1,
+    length(dat)
+  )
+  for (i in 1:length_dat) {
     # start for loop to bring together each data as their own geom
     # Add columns to data if grouping is selected
     # format geoms the way we want

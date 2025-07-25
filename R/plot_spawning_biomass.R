@@ -43,23 +43,24 @@
 #' }
 plot_spawning_biomass <- function(
     dat,
-    unit_label = "mt",
-    scale_amount = 1,
+    geom = "line",
+    group = NULL,
+    facet = NULL,
     ref_line = "msy",
-    ref_point = NULL,
-    end_year = format(Sys.Date(), "%Y"),
+    unit_label = "metric tons",
+    scale_amount = 1,
     relative = FALSE,
     make_rda = FALSE,
     figures_dir = getwd(),
-    group = NULL,
-    geom = "line") {
-  if (!is.null(ref_point)) {
-    ref_line <- names(ref_point)
-  } else if (length(ref_line) > 1) {
-    ref_line <- "msy"
-  } else {
-    ref_line <- match.arg(ref_line, several.ok = FALSE)
-  }
+    ...
+    ) {
+  # if (!is.null(ref_point)) {
+  #   ref_line <- names(ref_point)
+  # } else if (length(ref_line) > 1) {
+  #   ref_line <- "msy"
+  # } else {
+  #   ref_line <- match.arg(ref_line, several.ok = FALSE)
+  # }
   # TODO: Fix the unit label if scaling. Maybe this is up to the user to do if
   #       they want something scaled then they have to supply a better unit name
   #       or we create a helper function to do this.
@@ -70,14 +71,14 @@ plot_spawning_biomass <- function(
   )
 
   # Indicate if spawning biomass is relative or not
-  if (relative) {
-    topic_label <- "relative.spawning.biomass"
-  } else {
-    topic_label <- "spawning.biomass"
-  }
+  # if (relative) {
+  #   topic_label <- "relative.spawning.biomass"
+  # } else {
+  #   topic_label <- "spawning.biomass"
+  # }
   
   # identify output
-  fig_or_table <- "figure"
+  # fig_or_table <- "figure"
   
   # check year isn't past end_year if not projections plot
   # check_year(
@@ -102,10 +103,16 @@ plot_spawning_biomass <- function(
     group = group,
     facet = facet
   )
-  # Add refernce line
+  # Add reference line
+  # getting data set - an ifelse statement in the fxn wasn't working
+  if (!is.data.frame(dat)) {
+    rp_dat <- dat[[1]]
+  } else {
+    rp_dat <- dat
+  }
   plt2 <- reference_line(
     plot = plt,
-    dat = dat[[1]],
+    dat = rp_dat,
     label_name = "spawning_biomass",
     reference  = ref_line,
     relative = relative,
@@ -115,49 +122,49 @@ plot_spawning_biomass <- function(
   final <- suppressWarnings(add_theme(plt2))
   
   # Only run rda export if dat is one otherwise the alt text and caption is not accurate
-  if(length(dat) == 1) {
-    # export figure to rda if argument = T
-    if (make_rda == TRUE) {
-      # run write_captions.R if its output doesn't exist
-      if (!file.exists(
-        fs::path(getwd(), "captions_alt_text.csv")
-      )
-      ) {
-        stockplotr::write_captions(
-          dat = dat,
-          dir = figures_dir,
-          year = end_year
-        )
-      }
-      
-      # add more key quantities included as arguments in this fxn
-      add_more_key_quants(
-        dat,
-        topic = topic_label,
-        fig_or_table = fig_or_table,
-        dir = figures_dir,
-        end_year = end_year,
-        units = unit_label,
-        ref_pt = ref_point,
-        ref_line = ref_line,
-        scaling = scale_amount
-      )
-      
-      # extract this plot's caption and alt text
-      caps_alttext <- extract_caps_alttext(
-        topic_label = topic_label,
-        fig_or_table = fig_or_table,
-        dir = figures_dir
-      )
-      
-      export_rda(
-        final = final,
-        caps_alttext = caps_alttext,
-        figures_tables_dir = figures_dir,
-        topic_label = topic_label,
-        fig_or_table = fig_or_table
-      )
-    }
-  }
+  # if(length(dat) == 1) {
+  #   # export figure to rda if argument = T
+  #   if (make_rda == TRUE) {
+  #     # run write_captions.R if its output doesn't exist
+  #     if (!file.exists(
+  #       fs::path(getwd(), "captions_alt_text.csv")
+  #     )
+  #     ) {
+  #       stockplotr::write_captions(
+  #         dat = dat,
+  #         dir = figures_dir,
+  #         year = end_year
+  #       )
+  #     }
+  #     
+  #     # add more key quantities included as arguments in this fxn
+  #     add_more_key_quants(
+  #       dat,
+  #       topic = topic_label,
+  #       fig_or_table = fig_or_table,
+  #       dir = figures_dir,
+  #       end_year = end_year,
+  #       units = unit_label,
+  #       ref_pt = ref_point,
+  #       ref_line = ref_line,
+  #       scaling = scale_amount
+  #     )
+  #     
+  #     # extract this plot's caption and alt text
+  #     caps_alttext <- extract_caps_alttext(
+  #       topic_label = topic_label,
+  #       fig_or_table = fig_or_table,
+  #       dir = figures_dir
+  #     )
+  #     
+  #     export_rda(
+  #       final = final,
+  #       caps_alttext = caps_alttext,
+  #       figures_tables_dir = figures_dir,
+  #       topic_label = topic_label,
+  #       fig_or_table = fig_or_table
+  #     )
+  #   }
+  # }
   return(final)
 }
