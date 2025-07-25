@@ -78,6 +78,7 @@ plot_timeseries <- function(
           # size = point_size,
           ...
         )
+    },
     "line" = {
       plot + 
         ggplot2::geom_line(
@@ -116,7 +117,40 @@ plot_timeseries <- function(
         )
     }
   )
-
+  
+  # Add labels to axis and legend
+  labs <- plot + ggplot2::labs(
+    x = xlab,
+    y = ylab,
+    color = "Model",
+    linetype = cap_first_letter(group),
+    fill = cap_first_letter(group),
+    shape = cap_first_letter(group)
+  )
+  
+  # Remove linetype or point when there is no grouping
+  if (is.null(group)) {
+    labs <- switch(
+      geom,
+      "line" = labs + ggplot2::guides(linetype = "none"),
+      "point" = labs + ggplot2::guides(shape = "none"),
+      # return plot if option beyond line and point for now
+      labs
+    )
+  }
+  if (length(unique(dat$model)) == 1){
+    labs <- switch(
+      geom,
+      "line" = labs + ggplot2::guides(color = "none"),
+      "point" = labs + ggplot2::guides(color = "none"),
+      "area" = labs + ggplot2::guides(fill = "none"),
+      # return plot if option beyond line and point for now
+      labs
+    )
+  }
+  
+  # Calc axis breaks
+  x_n_breaks <- axis_breaks(dat)
   breaks <- ggplot2::scale_x_continuous(
     n.breaks = x_n_breaks,
     guide = ggplot2::guide_axis(
@@ -133,7 +167,7 @@ plot_timeseries <- function(
   }
   
   # Check if facet(s) are desired
-  if (!is.null(facet)){
+  if (!is.null(facet)) {
     facet <- paste("~", paste(facet, collapse = " + "))
     facet_formula <- stats::reformulate(facet)
 
