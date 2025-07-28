@@ -205,7 +205,7 @@ reference_line <- function(
   )
   
   # Add geom for ref line
-  plt + 
+  plot + 
     ggplot2::geom_hline(
     yintercept = ref_line_val,
     color = "black",
