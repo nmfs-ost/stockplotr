@@ -60,7 +60,7 @@ create_rda <- function(
     dplyr::filter(year %notin% c("Virg","S/Rcurve","Init","selex"),
                   era == "time") |>
     dplyr::mutate(year = as.numeric(year))
-  
+
   # add more key quantities included as arguments in this fxn
   add_more_key_quants(
     dat,
@@ -1499,16 +1499,16 @@ write_captions <- function(dat, # converted model output object
       # 'fecundity.units' = as.character(fecundity.units),
       # 'fecundity.min' = as.character(fecundity.min),
       # 'fecundity.max' = as.character(fecundity.max),
-
-      ## catch composition
-      # 'tot.catch.min' = as.character(tot.catch.min),
-      # 'tot.catch.max' = as.character(tot.catch.max),
-
+      
+      ## CAA (catch at age)
+      # 'fleet.or.survey.name' = as.character(fleet.or.survey.name),
+      # 'caa.age.min' = as.character(caa.age.min),
+      # 'caa.age.max' = as.character(caa.age.max),
+      
       ## CAL (catch at length)
       # 'cal.length.min' = as.character(cal.length.min),
       # 'cal.length.max' = as.character(cal.length.max),
-      # 'fleet.or.survey.name' = as.character(fleet.or.survey.name),
-
+      
       ## CPUE indices plot
       # 'cpue.start.year' = as.character(cpue.start.year),
       # 'cpue.end.year' = as.character(cpue.end.year),
