@@ -41,11 +41,12 @@ default list to ensure that the label on the figure looks correct
 regardless of how it is specified in `dat`. Other possibilities may include
 "target", "MSY", and "unfished".}
 
-\item{unit_label}{units for spawning_biomass}
+\item{geom}{A string stating the geom used for the plot. Default is "line". 
+Options include "line", "point", or "area"}
 
-\item{scale_amount}{A number describing how much to scale down the quantities
-shown on the y axis. For example, scale_amount = 100 would scale down a value
-from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
+\item{group}{description}
+
+\item{facet}{description}
 
 \item{relative}{A logical value specifying if the resulting figures should
 be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
