@@ -4,11 +4,21 @@
 #' also be made relative to this reference line rather than in absolute units.
 #'
 #' @param dat A data frame returned from \link[stockplotr]{prepate_data}
-#' @param unit_label units for recruitment
+#' @param geom A string stating the geom used for the plot. Default is "line". 
+#' Options include "line", "point", or "area"
+#' @param group description
+#' @param facet description
+#' @param ref_line A string specifying the type of reference you want to
+#'   compare spawning biomass to. The default is `"target"`, which looks for
+#'   `"spawning_biomass_target"` in the `"label"` column of `dat`. The actual
+#'   searching in `dat` is case agnostic and will work with either upper- or
+#'   lower-case letters but you must use one of the options specified in the
+#'   default list to ensure that the label on the figure looks correct
+#'   regardless of how it is specified in `dat`.
+#' @param unit_label units for spawning_biomass
 #' @param scale_amount A number describing how much to scale down the quantities
 #' shown on the y axis. For example, scale_amount = 100 would scale down a value
 #' from 500,000 --> 5,000. This scale will be reflected in the y axis label.
-#' @param end_year last year of assessment
 #' @param relative A logical value specifying if the resulting figures should
 #'   be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
 #'   which reference point to use.
@@ -19,19 +29,6 @@
 #' @param figures_dir The location of the folder containing the generated figure
 #' rda files ("figures") that will be created if the argument `make_rda` = TRUE.
 #' Default is the working directory.
-#' @param ref_line A string specifying the type of reference you want to
-#'   compare spawning biomass to. The default is `"msy"`, which looks for
-#'   `"spawning_biomass_target"` in the `"label"` column of `dat`. The actual
-#'   searching in `dat` is case agnostic and will work with either upper- or
-#'   lower-case letters but you must use one of the options specified in the
-#'   default list to ensure that the label on the figure looks correct
-#'   regardless of how it is specified in `dat`. Other possibilities may include
-#'   "target", "MSY", and "unfished".
-#' @param ref_point A known value of the reference point along with the label
-#'   for the reference point as specified in the output file. Please use this
-#'   option if the ref_line cannot find your desired point. Indicate the
-#'   reference point in the form c("label" = value).
-#' @param unit_label units for spawning_biomass
 #' @return
 #' Plot spawning biomass from the results of an assessment model translated to
 #' the standard output. The [ggplot2::ggplot()] object is returned for further
@@ -40,6 +37,15 @@
 #'
 #' @examples
 #' \dontrun{
+#' plot_spawning_biomass(
+#'   dat = list('base_model'=dat1,'sensitivity1'=dat2,'sensitivity2'=dat3),
+#'   geom = "line",
+#'   group= "sex",
+#'   facet = "fleet",
+#'   ref_line = "target",
+#'   unit_label = "mt",
+#'   scale_amount = 1000
+#' )
 #' }
 plot_spawning_biomass <- function(
     dat,
