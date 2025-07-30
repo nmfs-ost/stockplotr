@@ -142,6 +142,7 @@ plot_spawning_biomass <- function(
       wrap = TRUE
     )
   }
+  
   sb <- dat |>
     dplyr::filter(
       label == "spawning_biomass",
