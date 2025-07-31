@@ -1,19 +1,19 @@
-# read in sample dataset
-dat <- asar::convert_output(
-  file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
-  model = "ss3"
-)
+# load sample dataset
+load(file.path(
+  "fixtures", "ss3_models_converted", "Hake_2018",
+  "std_output.rda"
+))
 
 test_that("table_landings generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    stockplotr::table_landings(dat)
+    stockplotr::table_landings(out_new)
   )
 
   # expect error-free plot with many arguments
   expect_no_error(
     stockplotr::table_landings(
-      dat,
+      out_new,
       unit_label = "metric tons",
       end_year = 2024,
       make_rda = FALSE,
@@ -25,7 +25,7 @@ test_that("table_landings generates plots without errors", {
   # expect flextable object is returned
   expect_s3_class(
     stockplotr::table_landings(
-      dat,
+      out_new,
       unit_label = "metric tons",
       make_rda = FALSE,
       tables_dir = getwd()
@@ -37,7 +37,7 @@ test_that("table_landings generates plots without errors", {
 test_that("rda file made when indicated", {
   # export rda
   table_landings(
-    dat,
+    out_new,
     unit_label = "metric tons",
     end_year = 2024,
     make_rda = TRUE,
@@ -57,7 +57,7 @@ test_that("table_landings generates error with future end_year", {
   # expect error
   expect_error(
     stockplotr::table_landings(
-      dat,
+      out_new,
       unit_label = "metric tons",
       end_year = 2055,
       make_rda = FALSE,

@@ -1,13 +1,13 @@
-# read in sample dataset
-dat <- asar::convert_output(
-  file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
-  model = "ss3"
-)
+# load sample dataset
+load(file.path(
+  "fixtures", "ss3_models_converted", "Hake_2018",
+  "std_output.rda"
+))
 
 test_that("plot_recruitment_deviations generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    stockplotr::plot_recruitment_deviations(dat,
+    stockplotr::plot_recruitment_deviations(out_new,
       end_year = 2022
     )
   )
@@ -15,7 +15,7 @@ test_that("plot_recruitment_deviations generates plots without errors", {
   # expect error-free plot with many arguments
   expect_no_error(
     stockplotr::plot_recruitment_deviations(
-      dat,
+      out_new,
       end_year = 2022,
       make_rda = FALSE,
       figures_dir = getwd()
@@ -25,7 +25,7 @@ test_that("plot_recruitment_deviations generates plots without errors", {
   # expect ggplot object is returned
   expect_s3_class(
     stockplotr::plot_recruitment_deviations(
-      dat,
+      out_new,
       end_year = 2022,
       make_rda = FALSE,
       figures_dir = getwd()
@@ -37,7 +37,7 @@ test_that("plot_recruitment_deviations generates plots without errors", {
 test_that("rda file made when indicated", {
   # export rda
   plot_recruitment_deviations(
-    dat,
+    out_new,
     end_year = 2022,
     make_rda = TRUE,
     figures_dir = getwd()
@@ -56,7 +56,7 @@ test_that("plot_recruitment_deviations generates error with future end_year", {
   # expect error
   expect_error(
     plot_recruitment_deviations(
-      dat,
+      out_new,
       end_year = 2035,
       make_rda = TRUE,
       figures_dir = getwd()

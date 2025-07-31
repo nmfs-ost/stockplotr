@@ -9,14 +9,14 @@ test_that("write_captions() function imports alt text/captions template
 })
 
 test_that("write_captions() function replaces placeholder text with key quantities as expected", {
-  # read in sample dataset
-  dat <- asar::convert_output(
-    file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
-    model = "ss3"
-  )
+  # load sample dataset
+  load(file.path(
+    "fixtures", "ss3_models_converted", "Hake_2018",
+    "std_output.rda"
+  ))
 
   # make captions/alt text csv
-  write_captions(dat, dir = here::here(), year = 2022)
+  write_captions(out_new, dir = here::here(), year = 2022)
 
   # import csv
   caps <- read.csv(here::here("captions_alt_text.csv"))

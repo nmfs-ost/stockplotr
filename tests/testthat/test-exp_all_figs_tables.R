@@ -1,12 +1,12 @@
-# read in sample dataset
-dat <- asar::convert_output(
-  file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
-  model = "ss3"
-)
+# load sample dataset
+load(file.path(
+  "fixtures", "ss3_models_converted", "Hake_2018",
+  "std_output.rda"
+))
 
 test_that("exp_all_figs_tables works when all figures/tables are plotted", {
   stockplotr::exp_all_figs_tables(
-    dat,
+    out_new,
     end_year = 2022,
     recruitment_unit_label = "mt",
     recruitment_scale_amount = 1,
@@ -55,7 +55,7 @@ test_that("exp_all_figs_tables works when all figures/tables are plotted", {
 
 test_that("exp_all_figs_tables works when some figures/tables are not plotted", {
   # plot all figs/tables except for plot_biomass
-  stockplotr::exp_all_figs_tables(dat,
+  stockplotr::exp_all_figs_tables(out_new,
     end_year = 2022,
     # add an unreal ref_line so plot_biomass doesn't work
     ref_line = "not_a_real_ref_line",

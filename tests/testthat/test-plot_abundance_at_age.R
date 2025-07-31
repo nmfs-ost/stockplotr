@@ -1,21 +1,21 @@
-# read in sample dataset
-dat <- asar::convert_output(
-  file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
-  model = "ss3"
-)
+# load sample dataset
+load(file.path(
+  "fixtures", "ss3_models_converted", "Hake_2018",
+  "std_output.rda"
+))
 
 # TODO: Fix tests
 # test_that("plot_abundance_at_age generates plots without errors", {
 #
 #   # expect error-free plot with minimal arguments
 #   expect_no_error(
-#     stockplotr::plot_abundance_at_age(dat)
+#     stockplotr::plot_abundance_at_age(out_new)
 #   )
 #
 #   # expect error-free plot with many arguments
 #   expect_no_error(
 #     stockplotr::plot_abundance_at_age(
-#       dat,
+#       out_new,
 #       unit_label = "metric tons",
 #       scale_amount = 10,
 #       end_year = 2024,
@@ -27,7 +27,7 @@ dat <- asar::convert_output(
 #   # expect ggplot object is returned
 #   expect_s3_class(
 #     stockplotr::plot_abundance_at_age(
-#       dat,
+#       out_new,
 #       unit_label = "metric tons",
 #       scale_amount = 1,
 #       end_year = 2024,
@@ -42,7 +42,7 @@ dat <- asar::convert_output(
 #
 #   # export rda
 #   stockplotr::plot_abundance_at_age(
-#     dat,
+#     out_new,
 #     figures_dir = getwd(),
 #     make_rda = TRUE,
 #     end_year = 2023
@@ -62,7 +62,7 @@ dat <- asar::convert_output(
 #   # expect error
 #   expect_error(
 #     stockplotr::plot_abundance_at_age(
-#       dat,
+#       out_new,
 #       unit_label = "metric tons",
 #       scale_amount = 10,
 #       end_year = 2035,

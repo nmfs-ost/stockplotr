@@ -1,8 +1,8 @@
-# read in sample dataset
-dat <- asar::convert_output(
-  file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
-  model = "ss3"
-)
+# load sample dataset
+load(file.path(
+  "fixtures", "ss3_models_converted", "Hake_2018",
+  "std_output.rda"
+))
 
 test_that("export_rda works for figures", {
   topic_label <- "biomass"
@@ -10,7 +10,7 @@ test_that("export_rda works for figures", {
 
   # run write_captions.R
   stockplotr::write_captions(
-    dat = dat,
+    dat = out_new,
     dir = getwd(),
     year = 2022
   )
@@ -53,7 +53,7 @@ test_that("export_rda works for tables", {
 
   # run write_captions.R
   stockplotr::write_captions(
-    dat = dat,
+    dat = out_new,
     dir = getwd(),
     year = 2022
   )

@@ -1,14 +1,14 @@
-# read in sample dataset
-dat <- asar::convert_output(
-  file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
-  model = "ss3"
-)
+# load sample dataset
+load(file.path(
+  "fixtures", "ss3_models_converted", "Hake_2018",
+  "std_output.rda"
+))
 
 test_that("plot_spawn_recruitment generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
     stockplotr::plot_spawn_recruitment(
-      dat = dat,
+      dat = out_new,
       end_year = 2022
     )
   )
@@ -16,7 +16,7 @@ test_that("plot_spawn_recruitment generates plots without errors", {
   # expect error-free plot with many arguments
   expect_no_error(
     stockplotr::plot_spawn_recruitment(
-      dat,
+      out_new,
       spawning_biomass_label = "mt",
       recruitment_label = "mt",
       end_year = 2024,
@@ -29,7 +29,7 @@ test_that("plot_spawn_recruitment generates plots without errors", {
   # expect ggplot object is returned
   expect_s3_class(
     stockplotr::plot_spawn_recruitment(
-      dat,
+      out_new,
       spawning_biomass_label = "mt",
       recruitment_label = "mt",
       end_year = 2024,
@@ -44,7 +44,7 @@ test_that("plot_spawn_recruitment doesn't generate plots with erraneous end year
   # expect error when attempt to use end_year past current year
   expect_error(
     stockplotr::plot_spawn_recruitment(
-      dat,
+      out_new,
       spawning_biomass_label = "mt",
       recruitment_label = "mt",
       end_year = 2029,
@@ -61,7 +61,7 @@ test_that("plot_spawn_recruitment doesn't generate plots with erraneous end year
 test_that("rda file made when indicated", {
   # export rda
   plot_spawn_recruitment(
-    dat,
+    out_new,
     spawning_biomass_label = "mt",
     recruitment_label = "mt",
     end_year = 2024,
@@ -82,7 +82,7 @@ test_that("plot_spawn_recruitment generates error with future end_year", {
   # expect error
   expect_error(
     stockplotr::plot_spawn_recruitment(
-      dat,
+      out_new,
       spawning_biomass_label = "mt",
       recruitment_label = "mt",
       end_year = 2029,
