@@ -69,11 +69,11 @@ StatTimeseries <- ggproto("StatTimeseries", Stat,
       data <- data |>
         dplyr::mutate(
           ymin = dplyr::case_when(
-            grepl("se", .data$uncertainty_label) ~ .data$estimate - 1.96 * .data$uncertainty,
+            grepl("se", .data$uncertainty_label) ~ .data$x - 1.96 * .data$uncertainty,
             TRUE ~ NA_real_
           ),
           ymax = dplyr::case_when(
-            grepl("se", .data$uncertainty_label) ~ .data$estimate + 1.96 * .data$uncertainty,
+            grepl("se", .data$uncertainty_label) ~ .data$x + 1.96 * .data$uncertainty,
             TRUE ~ NA_real_
           )
         )

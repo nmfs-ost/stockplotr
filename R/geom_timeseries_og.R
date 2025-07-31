@@ -5,18 +5,30 @@ StatTimeseries <- ggproto("StatTimeseries", Stat,
                           optional_aes = c("uncertainty", "label", "era", "module_name", "uncertainty_label"),
                           extra_params = c("na.rm", "label_name", "reference_name"), 
                           
-                          setup_params = function(data, params){
+                          compute_group = function(data, params){
+                            message("--- Entering setup_params ---")
+                            message(glue::glue("params before modification: {paste(names(params), collapse = ', ')}"))
                             
                             params$label_name <- params$label_name %||% "spawning_biomass"
                             params$reference_name <- params$reference_name %||% "msy"
+                            
+                            message(glue::glue("params after modification: {paste(names(params), collapse = ', ')}"))
+                            message("--- Exiting setup_params ---")
                             params
                           },
                           
-                          compute_group = function(data, scales, params) {
-                            # If the data frame is empty, we must return an empty data frame.
-                            if (nrow(data) == 0) {
-                              return(data)
-                            }
+                          setup_data = function(data, params) {
+                            
+                            message("--- Entering setup_data ---")
+                            message(glue::glue("Initial data dimensions: {paste(dim(data), collapse = 'x')}"))
+                            message(glue::glue("Initial data columns: {paste(names(data), collapse = ', ')}"))
+                            
+                            # Calculate reference point
+                            yintercept <- calculate_reference_point(
+                              dat = data,
+                              reference_name = params$reference_name,
+                              label_name = params$label_name
+                            )
                             
                             # Ensure x and y are numeric and create 'year' and 'estimate' columns
                             if (!("x" %in% names(data)) || !("y" %in% names(data))) {
@@ -26,16 +38,27 @@ StatTimeseries <- ggproto("StatTimeseries", Stat,
                             data <- data |>
                               dplyr::mutate(
                                 x = as.numeric(.data$x),
-                                y = as.numeric(.data$y)
+                                y = as.numeric(.data$y),
+                                yintercept = yintercept
                               )
-
+                            message(glue::glue("After x/y mutate, data dimensions: {paste(dim(data), collapse = 'x')}"))
+                            
+                            
                             # Initial filtering of the data
+                            message(glue::glue("Checking for 'label' and 'era' columns... label present: {'label' %in% names(data)}, era present: {'era' %in% names(data)}"))
                             if ("label" %in% names(data) && "era" %in% names(data)) {
+                              message(glue::glue("Filtering by label ('{params$label_name}') and era ('time')..."))
+                              message(glue::glue("Sample of data$label before filter: {paste(head(data$label), collapse = ', ')}"))
+                              message(glue::glue("Sample of data$era before filter: {paste(head(data$era), collapse = ', ')}"))
                               data <- data |>
                                 dplyr::filter(
                                   grepl(glue::glue("{params$label_name}$"), .data$label),
                                   .data$era == "time"
                                 )
+                              message(glue::glue("After label/era filter, data dimensions: {paste(dim(data), collapse = 'x')}"))
+                              message(glue::glue("Current column names: {paste(names(data), collapse = ', ')}"))
+                              message(glue::glue("Sample of data$label after filter: {paste(head(data$label), collapse = ', ')}"))
+                              message(glue::glue("Sample of data$era after filter: {paste(head(data$era), collapse = ', ')}"))
                             } else {
                               # If 'label' or 'era' are not provided, you might want to issue a warning
                               # or handle this case based on your desired behavior.
@@ -44,7 +67,9 @@ StatTimeseries <- ggproto("StatTimeseries", Stat,
                             
                             # Conditional calculation of uncertainty bounds
                             # Only calculate if 'uncertainty' and 'uncertainty_label' columns are present
+                            message(glue::glue("Checking for 'uncertainty' and 'uncertainty_label' columns... uncertainty present: {'uncertainty' %in% names(data)}, uncertainty_label present: {'uncertainty_label' %in% names(data)}"))
                             if ("uncertainty" %in% names(data) && "uncertainty_label" %in% names(data)) {
+                              message("Calculating uncertainty bounds...")
                               data <- data |>
                                 dplyr::mutate(
                                   ymin = dplyr::case_when(
@@ -56,13 +81,17 @@ StatTimeseries <- ggproto("StatTimeseries", Stat,
                                     TRUE ~ NA_real_
                                   )
                                 )
+                              message(glue::glue("After uncertainty calculation, data dimensions: {paste(dim(data), collapse = 'x')}"))
                             } else {
                               # Initialize estimate_lower and estimate_upper
                               data$ymin <- NA_real_
                               data$ymax <- NA_real_
                             }
                             # Filter for module_name if exists
+                            message(glue::glue("Checking for 'module_name' column... module_name present: {'module_name' %in% names(data)}"))
                             if ("module_name" %in% names(data) && length(unique(data$module_name)) > 1) {
+                              message("Filtering data by module_name...")
+                              message(glue::glue("Data dimensions before filtering module_name:  {paste(dim(data), collapse = 'x')}"))
                               if ("TIME_SERIES" %in% unique(data$module_name) | "t.series" %in% unique(data$module_name)) {
                                 module_name1 <- intersect(c("t.series","TIME_SERIES"), unique(data$module_name))
                               } else {
@@ -71,14 +100,17 @@ StatTimeseries <- ggproto("StatTimeseries", Stat,
                               }
                               data <- data |>
                                 dplyr::filter(.data$module_name == module_name1)
+                              message(glue::glue("Data dimensions after filtering module_name:  {paste(dim(data), collapse = 'x')}"))
+                              message(glue::glue("Data column names after filtering module_name:  {paste(names(data), collapse = ', ')}"))
                             }
-                            # Calculate reference point
-                            data$yintercept <- calculate_reference_point(
-                              dat = data,
-                              reference_name = params$reference_name,
-                              label_name = params$label_name
-                            )
-                            data
+                            message(glue::glue("Unique values of data$module_name after filter: {unique(data$module_name)}"))
+                            
+                            message(glue::glue("Final data:"))
+                            print(head(data, 10))
+                            
+                            message(glue::glue("Checking for NA in data: {any(is.na(data$x))}"))
+                            message("--- Exiting setup_data ---")
+                            return(data)
                           }
 )
 
@@ -103,7 +135,7 @@ GeomTimeseries <- ggproto("GeomTimeseries", Geom,
                           
                           # a character vector of param names in addition to those imputed from the draw_panel() or draw_groups() methods.
                           # This field can be set to include params for setup_data() or handle_na() methods
-                          extra_params = c("na.rm", "label_name", "reference_name"), # na.rm default
+                          # extra_params = c("na.rm", "label_name", "reference_name"), # na.rm default
                           
                           # A function generating a single legend glyph for the geom
                           # draw_key = draw_key_point,
@@ -131,87 +163,87 @@ GeomTimeseries <- ggproto("GeomTimeseries", Geom,
                           # function to modify or check the data prior to adding defaults
                           # Do not need since done for us in stat
                           # setup_data = function(data, params, label_name){
-                            # message("---Entering setup_data---")
-                            # message(glue::glue("Dimensions of initial data: {paste(dim(data), collapse = 'x')}"))
-                            # message(glue::glue("Initial data column names: {paste(names(data), collapse = ', ')}"))
-                            # # Calculate reference point
-                            # ref_pt <- calculate_reference_point(
-                            #   dat = data,
-                            #   reference_name = params$reference_name,
-                            #   label_name = params$label_name
-                            # )
-                            # 
-                            # # Ensure x and y are numeric and create 'year' and 'estimate' columns
-                            # if (!("x" %in% names(data)) || !("y" %in% names(data))) {
-                            #   stop("Data must contain 'x' and 'y' aesthetics mapped to columns.")
-                            # }
-                            # 
-                            # data <- data |>
-                            #   dplyr::mutate(
-                            #     x = as.numeric(.data$x),
-                            #     y = as.numeric(.data$y),
-                            #     ref_pt = ref_pt
-                            #   )
-                            # 
-                            # # Initialize estimate_lower and estimate_upper
-                            # data$ymin <- NA_real_ # previously estimate_lower
-                            # data$ymax <- NA_real_ # previously estimate_upper
-                            # message(glue::glue("Data column names after ref_pt and estimate intervals added: \n{paste(names(data), collapse = ', ')}"))
-                            # 
-                            # # Initial filtering of the data
-                            # if ("label" %in% names(data) && "era" %in% names(data)) {
-                            #   message(glue::glue("Data contains label and era -- filtering by {params$label_name}"))
-                            #   data <- data |>
-                            #     dplyr::filter(
-                            #       grepl(glue::glue("{params$label_name}$"), .data$label),
-                            #       .data$era == "time"
-                            #     )
-                            #   message(glue::glue("Dimensions of data after filter 1: {paste(dim(data), collapse = 'x')}"))
-                            #   message(glue::glue("Data column names after filter 1: {paste(names(data), collapse = ', ')}"))
-                            # } else {
-                            #   # If 'label' or 'era' are not provided, you might want to issue a warning
-                            #   # or handle this case based on your desired behavior.
-                            #   message("Warning: 'label' or 'era' aesthetic not provided. Filtering skipped.")
-                            # }
-                            # 
-                            # # Conditional calculation of uncertainty bounds
-                            # # Only calculate if 'uncertainty' and 'uncertainty_label' columns are present
-                            # if ("uncertainty" %in% names(data) && "uncertainty_label" %in% names(data)) {
-                            #   message("Uncertainty column(s) found -- calculating ymin and ymax")
-                            #   data <- data |>
-                            #     dplyr::mutate(
-                            #       ymin = dplyr::case_when(
-                            #         grepl("se", .data$uncertainty_label) ~ .data$x - 1.96 * .data$uncertainty,
-                            #         TRUE ~ NA_real_
-                            #       ),
-                            #       ymax = dplyr::case_when(
-                            #         grepl("se", .data$uncertainty_label) ~ .data$x + 1.96 * .data$uncertainty,
-                            #         TRUE ~ NA_real_
-                            #       )
-                            #     )
-                            #   message(glue::glue("Current data dimensions: {paste(dim(data), collapse = 'x')}"))
-                            #   message("Top 5 rows of data")
-                            #   print(head(data, 5))
-                            # }
-                            # # Filter for module_name if exists
-                            # if ("module_name" %in% names(data) && length(unique(data$module_name)) > 1) {
-                            #   message("Filtering data by module_name...")
-                            #   message(glue::glue("Data dimensions before filtering module_name:  {paste(dim(data), collapse = 'x')}"))
-                            #   if ("TIME_SERIES" %in% unique(data$module_name) | "t.series" %in% unique(data$module_name)) {
-                            #     module_name1 <- intersect(c("t.series","TIME_SERIES"), unique(data$module_name))
-                            #   } else {
-                            #     # Select first module_name in list
-                            #     module_name1 <- unique(data$module_name)[1]
-                            #   }
-                            #   data <- data |>
-                            #     dplyr::filter(.data$module_name == module_name1)
-                            #   message(glue::glue("Data dimensions after filtering module_name:  {paste(dim(data), collapse = 'x')}"))
-                            #   message(glue::glue("Data column names after filtering module_name:  {paste(names(data), collapse = ', ')}"))
-                            # }
-                            # message(glue::glue("Final data column names: {paste(names(data), collapse = ', ')}"))
-                            # message("Top 5 row of final data:")
-                            # print(head(data, 5))
-                            # message("---Exiting setup_data---")
+                          # message("---Entering setup_data---")
+                          # message(glue::glue("Dimensions of initial data: {paste(dim(data), collapse = 'x')}"))
+                          # message(glue::glue("Initial data column names: {paste(names(data), collapse = ', ')}"))
+                          # # Calculate reference point
+                          # ref_pt <- calculate_reference_point(
+                          #   dat = data,
+                          #   reference_name = params$reference_name,
+                          #   label_name = params$label_name
+                          # )
+                          # 
+                          # # Ensure x and y are numeric and create 'year' and 'estimate' columns
+                          # if (!("x" %in% names(data)) || !("y" %in% names(data))) {
+                          #   stop("Data must contain 'x' and 'y' aesthetics mapped to columns.")
+                          # }
+                          # 
+                          # data <- data |>
+                          #   dplyr::mutate(
+                          #     x = as.numeric(.data$x),
+                          #     y = as.numeric(.data$y),
+                          #     ref_pt = ref_pt
+                          #   )
+                          # 
+                          # # Initialize estimate_lower and estimate_upper
+                          # data$ymin <- NA_real_ # previously estimate_lower
+                          # data$ymax <- NA_real_ # previously estimate_upper
+                          # message(glue::glue("Data column names after ref_pt and estimate intervals added: \n{paste(names(data), collapse = ', ')}"))
+                          # 
+                          # # Initial filtering of the data
+                          # if ("label" %in% names(data) && "era" %in% names(data)) {
+                          #   message(glue::glue("Data contains label and era -- filtering by {params$label_name}"))
+                          #   data <- data |>
+                          #     dplyr::filter(
+                          #       grepl(glue::glue("{params$label_name}$"), .data$label),
+                          #       .data$era == "time"
+                          #     )
+                          #   message(glue::glue("Dimensions of data after filter 1: {paste(dim(data), collapse = 'x')}"))
+                          #   message(glue::glue("Data column names after filter 1: {paste(names(data), collapse = ', ')}"))
+                          # } else {
+                          #   # If 'label' or 'era' are not provided, you might want to issue a warning
+                          #   # or handle this case based on your desired behavior.
+                          #   message("Warning: 'label' or 'era' aesthetic not provided. Filtering skipped.")
+                          # }
+                          # 
+                          # # Conditional calculation of uncertainty bounds
+                          # # Only calculate if 'uncertainty' and 'uncertainty_label' columns are present
+                          # if ("uncertainty" %in% names(data) && "uncertainty_label" %in% names(data)) {
+                          #   message("Uncertainty column(s) found -- calculating ymin and ymax")
+                          #   data <- data |>
+                          #     dplyr::mutate(
+                          #       ymin = dplyr::case_when(
+                          #         grepl("se", .data$uncertainty_label) ~ .data$x - 1.96 * .data$uncertainty,
+                          #         TRUE ~ NA_real_
+                          #       ),
+                          #       ymax = dplyr::case_when(
+                          #         grepl("se", .data$uncertainty_label) ~ .data$x + 1.96 * .data$uncertainty,
+                          #         TRUE ~ NA_real_
+                          #       )
+                          #     )
+                          #   message(glue::glue("Current data dimensions: {paste(dim(data), collapse = 'x')}"))
+                          #   message("Top 5 rows of data")
+                          #   print(head(data, 5))
+                          # }
+                          # # Filter for module_name if exists
+                          # if ("module_name" %in% names(data) && length(unique(data$module_name)) > 1) {
+                          #   message("Filtering data by module_name...")
+                          #   message(glue::glue("Data dimensions before filtering module_name:  {paste(dim(data), collapse = 'x')}"))
+                          #   if ("TIME_SERIES" %in% unique(data$module_name) | "t.series" %in% unique(data$module_name)) {
+                          #     module_name1 <- intersect(c("t.series","TIME_SERIES"), unique(data$module_name))
+                          #   } else {
+                          #     # Select first module_name in list
+                          #     module_name1 <- unique(data$module_name)[1]
+                          #   }
+                          #   data <- data |>
+                          #     dplyr::filter(.data$module_name == module_name1)
+                          #   message(glue::glue("Data dimensions after filtering module_name:  {paste(dim(data), collapse = 'x')}"))
+                          #   message(glue::glue("Data column names after filtering module_name:  {paste(names(data), collapse = ', ')}"))
+                          # }
+                          # message(glue::glue("Final data column names: {paste(names(data), collapse = ', ')}"))
+                          # message("Top 5 row of final data:")
+                          # print(head(data, 5))
+                          # message("---Exiting setup_data---")
                           #   data
                           # },
                           
@@ -261,63 +293,63 @@ GeomTimeseries <- ggproto("GeomTimeseries", Geom,
                           # draw_group which assembles into a single grob
                           # ... argument is reserved for ententions. By default passed onto the draw_group method
                           # draw_panel = function(self, data, panel_params, 
-                                                # label_name, coord, ...) { # not sure what `self` is
-                            # message("---Entering draw_panel---")
-                            # Default code from ggplot2
-                            # groups <- split(data, factor(data$group))
-                            # grobs <- lapply(groups, function(group) {
-                            #   self$draw_group(group, panel_params, coord, ...)
-                            # })
-                            # 
-                            # ggname(snake_class(self), grid::gTree(
-                            #   children = inject(grid::gList(!!!grobs))
-                            # ))
-                            
-                            # Custom code
-                            # Transformed data for the ribbon
-                            # error1 <- data |>
-                            #   dplyr::mutate(
-                            #     estimate_lower = dplyr::case_when(
-                            #       grepl("se", .data$uncertainty_label) ~ .data$x - 1.96 * .data$uncertainty,
-                            #       TRUE ~ NA_real_
-                            #     ),
-                            #     estimate_upper = dplyr::case_when(
-                            #       grepl("se", .data$uncertainty_label) ~ .data$x + 1.96 * .data$uncertainty,
-                            #       TRUE ~ NA_real_
-                            #     )
-                            #   )
-                            
-                            # data_hline <- modifyList(data, ref_pt)
-                            
-                            # groups <- split(data, factor(data$group))
-                            # message("Look of the first 5 rows of data when split by groups: ")
-                            # print(head(groups, 5))
-                            
-                            # data$y <- data$yintercept
-                            # message("---Exiting draw_panel---")
-                            # grid::gTree(children = grid::gList(
-                              # grobs <- lapply(groups, function(group) {
-                              # GeomLine$draw_panel(data, panel_params, coord, ...)
-                              # GeomLine$draw_panel(
-                              #   data = data, 
-                              #   panel_params = panel_params, 
-                              #   coord = coord,
-                              #   na.rm = na.rm,
-                              #   ...
-                              # ),
-                              # GeomRibbon$draw_panel(data, panel_params, coord, ...),
-                              # GeomHline$draw_panel(data, panel_params, coord, ...)
-                              # })
-                            # ))
-                            
-                            # ggname(snake_class(self), grid::gTree(
-                            #   children = rlang::inject(grid::gList(!!!grobs))
-                            # ))
-                            
-                            # grid::grid::gList(
-                            #   GeomLine$draw_panel(data, panel_params, coord, ...),
-                            #   GeomRibbon$draw_panel(error1, panel_params, coord, ...)
-                            # )
+                          # label_name, coord, ...) { # not sure what `self` is
+                          # message("---Entering draw_panel---")
+                          # Default code from ggplot2
+                          # groups <- split(data, factor(data$group))
+                          # grobs <- lapply(groups, function(group) {
+                          #   self$draw_group(group, panel_params, coord, ...)
+                          # })
+                          # 
+                          # ggname(snake_class(self), grid::gTree(
+                          #   children = inject(grid::gList(!!!grobs))
+                          # ))
+                          
+                          # Custom code
+                          # Transformed data for the ribbon
+                          # error1 <- data |>
+                          #   dplyr::mutate(
+                          #     estimate_lower = dplyr::case_when(
+                          #       grepl("se", .data$uncertainty_label) ~ .data$x - 1.96 * .data$uncertainty,
+                          #       TRUE ~ NA_real_
+                          #     ),
+                          #     estimate_upper = dplyr::case_when(
+                          #       grepl("se", .data$uncertainty_label) ~ .data$x + 1.96 * .data$uncertainty,
+                          #       TRUE ~ NA_real_
+                          #     )
+                          #   )
+                          
+                          # data_hline <- modifyList(data, ref_pt)
+                          
+                          # groups <- split(data, factor(data$group))
+                          # message("Look of the first 5 rows of data when split by groups: ")
+                          # print(head(groups, 5))
+                          
+                          # data$y <- data$yintercept
+                          # message("---Exiting draw_panel---")
+                          # grid::gTree(children = grid::gList(
+                          # grobs <- lapply(groups, function(group) {
+                          # GeomLine$draw_panel(data, panel_params, coord, ...)
+                          # GeomLine$draw_panel(
+                          #   data = data, 
+                          #   panel_params = panel_params, 
+                          #   coord = coord,
+                          #   na.rm = na.rm,
+                          #   ...
+                          # ),
+                          # GeomRibbon$draw_panel(data, panel_params, coord, ...),
+                          # GeomHline$draw_panel(data, panel_params, coord, ...)
+                          # })
+                          # ))
+                          
+                          # ggname(snake_class(self), grid::gTree(
+                          #   children = rlang::inject(grid::gList(!!!grobs))
+                          # ))
+                          
+                          # grid::grid::gList(
+                          #   GeomLine$draw_panel(data, panel_params, coord, ...),
+                          #   GeomRibbon$draw_panel(error1, panel_params, coord, ...)
+                          # )
                           # },
                           
                           # Panel from gemini
