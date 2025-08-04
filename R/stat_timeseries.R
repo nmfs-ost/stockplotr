@@ -7,21 +7,21 @@ StatTimeseries <- ggproto("StatTimeseries", Stat,
   non_required_aes = c("label", "era", "module_name", "uncertainty_label", "uncertainty", "ref_pt"),
 
   setup_params = function(data, params){
-    message("--- Entering setup_params ---")
-    message(glue::glue("params before modification: {paste(names(params), collapse = ', ')}"))
+    # message("--- Entering setup_params ---")
+    # message(glue::glue("params before modification: {paste(names(params), collapse = ', ')}"))
 
     params$label_name <- ifelse(is.null(params$label_name), "spawning_biomass", params$label_name)
 
-    message(glue::glue("params after modification: {paste(names(params), collapse = ', ')}"))
-    message("--- Exiting setup_params ---")
+    # message(glue::glue("params after modification: {paste(names(params), collapse = ', ')}"))
+    # message("--- Exiting setup_params ---")
     params
   },
   
   setup_data = function(data, params, label_name) {
     
-    message("--- Entering setup_data ---")
-    message(glue::glue("Initial data dimensions: {paste(dim(data), collapse = 'x')}"))
-    message(glue::glue("Initial data columns: {paste(names(data), collapse = ', ')}"))
+    # message("--- Entering setup_data ---")
+    # message(glue::glue("Initial data dimensions: {paste(dim(data), collapse = 'x')}"))
+    # message(glue::glue("Initial data columns: {paste(names(data), collapse = ', ')}"))
     
     # Ensure x and y are numeric and create 'year' and 'estimate' columns
     if (!("x" %in% names(data)) || !("y" %in% names(data))) {
@@ -33,7 +33,7 @@ StatTimeseries <- ggproto("StatTimeseries", Stat,
         x = as.numeric(.data$x),
         y = as.numeric(.data$y)
     )
-    message(glue::glue("After x/y mutate, data dimensions: {paste(dim(data), collapse = 'x')}"))
+    # message(glue::glue("After x/y mutate, data dimensions: {paste(dim(data), collapse = 'x')}"))
     
     
     # Initialize estimate_lower and estimate_upper
@@ -41,20 +41,20 @@ StatTimeseries <- ggproto("StatTimeseries", Stat,
     data$ymax <- NA_real_
     
     # Initial filtering of the data
-    message(glue::glue("Checking for 'label' and 'era' columns... label present: {'label' %in% names(data)}, era present: {'era' %in% names(data)}"))
+    # message(glue::glue("Checking for 'label' and 'era' columns... label present: {'label' %in% names(data)}, era present: {'era' %in% names(data)}"))
     if ("label" %in% names(data) && "era" %in% names(data)) {
-      message(glue::glue("Filtering by label ('{params$label_name}') and era ('time')..."))
-      message(glue::glue("Sample of data$label before filter: {paste(head(data$label), collapse = ', ')}"))
-      message(glue::glue("Sample of data$era before filter: {paste(head(data$era), collapse = ', ')}"))
+      # message(glue::glue("Filtering by label ('{params$label_name}') and era ('time')..."))
+      # message(glue::glue("Sample of data$label before filter: {paste(head(data$label), collapse = ', ')}"))
+      # message(glue::glue("Sample of data$era before filter: {paste(head(data$era), collapse = ', ')}"))
       data <- data |>
         dplyr::filter(
           grepl(glue::glue("{params$label_name}$"), .data$label),
           .data$era == "time"
         )
-      message(glue::glue("After label/era filter, data dimensions: {paste(dim(data), collapse = 'x')}"))
-      message(glue::glue("Current column names: {paste(names(data), collapse = ', ')}"))
-      message(glue::glue("Sample of data$label after filter: {paste(head(data$label), collapse = ', ')}"))
-      message(glue::glue("Sample of data$era after filter: {paste(head(data$era), collapse = ', ')}"))
+      # message(glue::glue("After label/era filter, data dimensions: {paste(dim(data), collapse = 'x')}"))
+      # message(glue::glue("Current column names: {paste(names(data), collapse = ', ')}"))
+      # message(glue::glue("Sample of data$label after filter: {paste(head(data$label), collapse = ', ')}"))
+      # message(glue::glue("Sample of data$era after filter: {paste(head(data$era), collapse = ', ')}"))
     } else {
       # If 'label' or 'era' are not provided, you might want to issue a warning
       # or handle this case based on your desired behavior.
@@ -63,9 +63,9 @@ StatTimeseries <- ggproto("StatTimeseries", Stat,
     
     # Conditional calculation of uncertainty bounds
     # Only calculate if 'uncertainty' and 'uncertainty_label' columns are present
-    message(glue::glue("Checking for 'uncertainty' and 'uncertainty_label' columns... uncertainty present: {'uncertainty' %in% names(data)}, uncertainty_label present: {'uncertainty_label' %in% names(data)}"))
+    # message(glue::glue("Checking for 'uncertainty' and 'uncertainty_label' columns... uncertainty present: {'uncertainty' %in% names(data)}, uncertainty_label present: {'uncertainty_label' %in% names(data)}"))
     if ("uncertainty" %in% names(data) && "uncertainty_label" %in% names(data)) {
-      message("Calculating uncertainty bounds...")
+      # message("Calculating uncertainty bounds...")
       data <- data |>
         dplyr::mutate(
           ymin = dplyr::case_when(
@@ -77,23 +77,23 @@ StatTimeseries <- ggproto("StatTimeseries", Stat,
             TRUE ~ NA_real_
           )
         )
-      message(glue::glue("After uncertainty calculation, data dimensions: {paste(dim(data), collapse = 'x')}"))
+      # message(glue::glue("After uncertainty calculation, data dimensions: {paste(dim(data), collapse = 'x')}"))
     }
     # Filter for module_name if exists
-    message(glue::glue("Checking for 'module_name' column... module_name present: {'module_name' %in% names(data)}"))
+    # message(glue::glue("Checking for 'module_name' column... module_name present: {'module_name' %in% names(data)}"))
     if ("module_name" %in% names(data) && length(unique(data$module_name)) > 1) {
       data <- data |>
         dplyr::filter(.data$module_name %in% c("TIME_SERIES", "t.series"))
-      message(glue::glue("After module_name filter, data dimensions: {paste(dim(data), collapse = 'x')}"))
+      # message(glue::glue("After module_name filter, data dimensions: {paste(dim(data), collapse = 'x')}"))
     }
-    message(glue::glue("Unique values of data$module_name after filter: {unique(data$module_name)}"))
+    # message(glue::glue("Unique values of data$module_name after filter: {unique(data$module_name)}"))
 
-    message(glue::glue("Final data:"))
-    message(glue::glue("{paste(names(data), collapse = ', ')}"))
-    message(glue::glue("{head(data)}\n"))
+    # message(glue::glue("Final data:"))
+    # message(glue::glue("{paste(names(data), collapse = ', ')}"))
+    # message(glue::glue("{head(data)}\n"))
     
     
-    message("--- Exiting setup_data ---")
+    # message("--- Exiting setup_data ---")
     return(data)
   },
   
@@ -108,11 +108,11 @@ StatTimeseries <- ggproto("StatTimeseries", Stat,
                            scales, 
                            params,
                            label_name){
-    message("--- Entering compute_group ---")
+    # message("--- Entering compute_group ---")
     
-    message(glue::glue("Column names after computing groups: {paste(names(data), collapse = ', ')}"))
-    message(glue::glue("Unique values of data$label of final df: {unique(data$label)}"))
-    message("--- Exiting compute_group ---")
+    # message(glue::glue("Column names after computing groups: {paste(names(data), collapse = ', ')}"))
+    # message(glue::glue("Unique values of data$label of final df: {unique(data$label)}"))
+    # message("--- Exiting compute_group ---")
     # ensure the processed data returns
     return(data)
   }
@@ -211,11 +211,14 @@ ggplot(data = sample_data,
   stat_timeseries(
     aes(
       # shape = fleet
+      # fill = fleet
+      linetype = fleet,
       color = fleet
       ),
     label_name = 'spawning_biomass', 
     # geom = "point", 
-    geom = "line", 
+    geom = "line",
+    # geom = "area",
     na.rm = TRUE) + 
   # geom_ribbon(aes(ymin = estimate_lower, ymax = estimate_upper), alpha = 0.2) +
   facet_wrap(~season)
