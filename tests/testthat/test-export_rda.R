@@ -9,7 +9,7 @@ test_that("export_rda works for figures", {
   fig_or_table <- "figure"
 
   # run write_captions.R
-  stockplotr::write_captions(
+  write_captions(
     dat = out_new,
     dir = getwd(),
     year = 2022
@@ -52,7 +52,7 @@ test_that("export_rda works for tables", {
   fig_or_table <- "table"
 
   # run write_captions.R
-  stockplotr::write_captions(
+  write_captions(
     dat = out_new,
     dir = getwd(),
     year = 2022

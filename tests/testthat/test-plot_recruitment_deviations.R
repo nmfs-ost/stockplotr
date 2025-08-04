@@ -7,14 +7,14 @@ load(file.path(
 test_that("plot_recruitment_deviations generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    stockplotr::plot_recruitment_deviations(out_new,
+    plot_recruitment_deviations(out_new,
       end_year = 2022
     )
   )
 
   # expect error-free plot with many arguments
   expect_no_error(
-    stockplotr::plot_recruitment_deviations(
+    plot_recruitment_deviations(
       out_new,
       end_year = 2022,
       make_rda = FALSE,
@@ -24,7 +24,7 @@ test_that("plot_recruitment_deviations generates plots without errors", {
 
   # expect ggplot object is returned
   expect_s3_class(
-    stockplotr::plot_recruitment_deviations(
+    plot_recruitment_deviations(
       out_new,
       end_year = 2022,
       make_rda = FALSE,

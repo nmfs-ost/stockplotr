@@ -7,13 +7,13 @@ load(file.path(
 test_that("plot_landings generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    stockplotr::plot_landings(out_new)
+    plot_landings(out_new)
   )
 
 
   # expect ggplot object is returned
   expect_s3_class(
-    stockplotr::plot_landings(out_new),
+    plot_landings(out_new),
     "gg"
   )
 })

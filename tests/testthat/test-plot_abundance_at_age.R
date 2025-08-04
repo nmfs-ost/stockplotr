@@ -9,12 +9,12 @@ load(file.path(
 #
 #   # expect error-free plot with minimal arguments
 #   expect_no_error(
-#     stockplotr::plot_abundance_at_age(out_new)
+#     plot_abundance_at_age(out_new)
 #   )
 #
 #   # expect error-free plot with many arguments
 #   expect_no_error(
-#     stockplotr::plot_abundance_at_age(
+#     plot_abundance_at_age(
 #       out_new,
 #       unit_label = "metric tons",
 #       scale_amount = 10,
@@ -26,7 +26,7 @@ load(file.path(
 #
 #   # expect ggplot object is returned
 #   expect_s3_class(
-#     stockplotr::plot_abundance_at_age(
+#     plot_abundance_at_age(
 #       out_new,
 #       unit_label = "metric tons",
 #       scale_amount = 1,
@@ -41,7 +41,7 @@ load(file.path(
 # test_that("rda file made when indicated", {
 #
 #   # export rda
-#   stockplotr::plot_abundance_at_age(
+#   plot_abundance_at_age(
 #     out_new,
 #     figures_dir = getwd(),
 #     make_rda = TRUE,
@@ -61,7 +61,7 @@ load(file.path(
 #
 #   # expect error
 #   expect_error(
-#     stockplotr::plot_abundance_at_age(
+#     plot_abundance_at_age(
 #       out_new,
 #       unit_label = "metric tons",
 #       scale_amount = 10,

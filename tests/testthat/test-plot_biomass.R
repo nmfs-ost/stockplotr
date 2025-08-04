@@ -7,18 +7,18 @@ load(file.path(
 test_that("plot_biomass generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    stockplotr::plot_biomass(out_new)
+    plot_biomass(out_new)
   )
 
   # TODO: Update test
   # expect plot with warning message if ref_point not indicated
   # expect_message(
-  #   stockplotr::plot_biomass(out_new)
+  #   plot_biomass(out_new)
   # )
 
   # expect error-free plot with many arguments
   expect_no_error(
-    stockplotr::plot_biomass(
+    plot_biomass(
       out_new,
       ref_point = 18000,
       unit_label = "metric tons",
@@ -32,7 +32,7 @@ test_that("plot_biomass generates plots without errors", {
 
   # expect error-free plot when setting relative to T
   expect_no_error(
-    stockplotr::plot_biomass(
+    plot_biomass(
       out_new,
       ref_point = 18000,
       unit_label = "metric tons",
@@ -46,7 +46,7 @@ test_that("plot_biomass generates plots without errors", {
 
   # expect ggplot object is returned
   expect_s3_class(
-    stockplotr::plot_biomass(
+    plot_biomass(
       out_new,
       ref_point = 18000,
       unit_label = "metric tons",
@@ -65,7 +65,7 @@ test_that("plot_biomass plots contain reference point when indicated", {
   # plot w/o ref pt contains only 3 layers
 
   # make b plot with reference point
-  b_ref <- stockplotr::plot_biomass(out_new,
+  b_ref <- plot_biomass(out_new,
     ref_point = 18000
   )
   # extract number of layers (should be 4)
@@ -73,7 +73,7 @@ test_that("plot_biomass plots contain reference point when indicated", {
     length()
 
   # make b plot without reference point
-  b_no_ref <- stockplotr::plot_biomass(out_new)
+  b_no_ref <- plot_biomass(out_new)
   # extract number of layers (should be 3)
   b_no_ref_layers <- b_no_ref[["layers"]] |>
     length()
@@ -87,7 +87,7 @@ test_that("plot_biomass plots contain reference point when indicated", {
 
 test_that("rda file made when indicated", {
   # export rda
-  stockplotr::plot_biomass(
+  plot_biomass(
     out_new,
     figures_dir = getwd(),
     make_rda = TRUE,
@@ -107,7 +107,7 @@ test_that("rda file made when indicated", {
 test_that("plot_biomass generates error with future end_year", {
   # expect error
   expect_error(
-    stockplotr::plot_biomass(
+    plot_biomass(
       out_new,
       figures_dir = getwd(),
       make_rda = TRUE,

@@ -5,7 +5,7 @@ load(file.path(
 ))
 
 test_that("exp_all_figs_tables works when all figures/tables are plotted", {
-  stockplotr::exp_all_figs_tables(
+  exp_all_figs_tables(
     out_new,
     end_year = 2022,
     recruitment_unit_label = "mt",
@@ -55,7 +55,7 @@ test_that("exp_all_figs_tables works when all figures/tables are plotted", {
 
 test_that("exp_all_figs_tables works when some figures/tables are not plotted", {
   # plot all figs/tables except for plot_biomass
-  stockplotr::exp_all_figs_tables(out_new,
+  exp_all_figs_tables(out_new,
     end_year = 2022,
     # add an unreal ref_line so plot_biomass doesn't work
     ref_line = "not_a_real_ref_line",

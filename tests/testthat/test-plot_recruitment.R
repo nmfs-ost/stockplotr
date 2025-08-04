@@ -7,14 +7,14 @@ load(file.path(
 test_that("plot_recruitment generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    stockplotr::plot_recruitment(out_new,
+    plot_recruitment(out_new,
       end_year = 2022
     )
   )
 
   # expect error-free plot with many arguments
   expect_no_error(
-    stockplotr::plot_recruitment(
+    plot_recruitment(
       out_new,
       unit_label = "mt",
       scale_amount = 10,
@@ -27,7 +27,7 @@ test_that("plot_recruitment generates plots without errors", {
 
   # expect error-free plot when setting relative to T
   expect_no_error(
-    stockplotr::plot_recruitment(
+    plot_recruitment(
       out_new,
       unit_label = "mt",
       scale_amount = 10,
@@ -40,7 +40,7 @@ test_that("plot_recruitment generates plots without errors", {
 
   # expect ggplot object is returned
   expect_s3_class(
-    stockplotr::plot_recruitment(
+    plot_recruitment(
       out_new,
       unit_label = "mt",
       scale_amount = 10,
