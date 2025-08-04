@@ -1,16 +1,16 @@
-# read in sample dataset
-dat <- asar::convert_output(
-  file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
-  model = "ss3"
-)
+# load sample dataset
+load(file.path(
+  "fixtures", "ss3_models_converted", "Hake_2018",
+  "std_output.rda"
+))
 
 test_that("extract_caps_alttext works for figures", {
   topic_label <- "biomass"
   fig_or_table <- "figure"
 
   # run write_captions.R
-  stockplotr::write_captions(
-    dat = dat,
+  write_captions(
+    dat = out_new,
     dir = getwd(),
     year = 2022
   )
@@ -41,8 +41,8 @@ test_that("extract_caps_alttext works for tables", {
   fig_or_table <- "table"
 
   # run write_captions.R
-  stockplotr::write_captions(
-    dat = dat,
+  write_captions(
+    dat = out_new,
     dir = getwd(),
     year = 2022
   )

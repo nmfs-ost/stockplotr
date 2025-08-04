@@ -1,21 +1,21 @@
-# read in sample dataset
-dat <- asar::convert_output(
-  file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
-  model = "ss3"
-)
+# load sample dataset
+load(file.path(
+  "fixtures", "ss3_models_converted", "Hake_2018",
+  "std_output.rda"
+))
 
 test_that("plot_recruitment generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    stockplotr::plot_recruitment(dat,
+    plot_recruitment(out_new,
       end_year = 2022
     )
   )
 
   # expect error-free plot with many arguments
   expect_no_error(
-    stockplotr::plot_recruitment(
-      dat,
+    plot_recruitment(
+      out_new,
       unit_label = "mt",
       scale_amount = 10,
       end_year = 2025,
@@ -27,8 +27,8 @@ test_that("plot_recruitment generates plots without errors", {
 
   # expect error-free plot when setting relative to T
   expect_no_error(
-    stockplotr::plot_recruitment(
-      dat,
+    plot_recruitment(
+      out_new,
       unit_label = "mt",
       scale_amount = 10,
       end_year = 2025,
@@ -40,8 +40,8 @@ test_that("plot_recruitment generates plots without errors", {
 
   # expect ggplot object is returned
   expect_s3_class(
-    stockplotr::plot_recruitment(
-      dat,
+    plot_recruitment(
+      out_new,
       unit_label = "mt",
       scale_amount = 10,
       end_year = 2025,
@@ -56,7 +56,7 @@ test_that("plot_recruitment generates plots without errors", {
 test_that("rda file made when indicated", {
   # export rda
   plot_recruitment(
-    dat,
+    out_new,
     figures_dir = getwd(),
     make_rda = TRUE
   )
@@ -74,7 +74,7 @@ test_that("plot_recruitment generates error with future end_year", {
   # expect error
   expect_error(
     plot_recruitment(
-      dat,
+      out_new,
       end_year = 2035,
       make_rda = TRUE,
       figures_dir = getwd()

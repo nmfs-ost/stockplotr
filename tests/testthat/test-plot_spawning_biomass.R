@@ -1,24 +1,24 @@
-# read in sample dataset
-dat <- asar::convert_output(
-  file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
-  model = "ss3"
-)
+# load sample dataset
+load(file.path(
+  "fixtures", "ss3_models_converted", "Hake_2018",
+  "std_output.rda"
+))
 
 test_that("plot_spawning_biomass generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    stockplotr::plot_spawning_biomass(dat)
+    stockplotr::plot_spawning_biomass(out_new)
   )
 
   # expect plot with warnings if ref_point not indicated
   expect_message(
-    stockplotr::plot_spawning_biomass(dat)
+    stockplotr::plot_spawning_biomass(out_new)
   )
 
   # expect error-free plot with many arguments
   expect_no_error(
     stockplotr::plot_spawning_biomass(
-      dat,
+      out_new,
       unit_label = "metric tons",
       scale_amount = 1,
       ref_line = "target",
@@ -29,7 +29,7 @@ test_that("plot_spawning_biomass generates plots without errors", {
   # expect error-free plot when setting relative to T
   expect_no_error(
     stockplotr::plot_spawning_biomass(
-      dat,
+      out_new,
       unit_label = "metric tons",
       scale_amount = 1,
       ref_point = 100,
@@ -41,7 +41,7 @@ test_that("plot_spawning_biomass generates plots without errors", {
   # expect ggplot object is returned
   expect_s3_class(
     stockplotr::plot_spawning_biomass(
-      dat,
+      out_new,
       unit_label = "metric tons",
       scale_amount = 1,
       ref_point = 100,
@@ -57,7 +57,7 @@ test_that("plot_spawning_biomass plots contain reference point when indicated", 
   # plot w/o ref pt contains only 3 layers
 
   # make sb plot with reference point
-  sb_ref <- stockplotr::plot_spawning_biomass(dat,
+  sb_ref <- stockplotr::plot_spawning_biomass(out_new,
     ref_point = 18000
   )
   # extract number of layers (should be 4)
@@ -65,7 +65,7 @@ test_that("plot_spawning_biomass plots contain reference point when indicated", 
     length()
 
   # make sb plot without reference point
-  sb_no_ref <- stockplotr::plot_spawning_biomass(dat)
+  sb_no_ref <- stockplotr::plot_spawning_biomass(out_new)
   # extract number of layers (should be 3)
   sb_no_ref_layers <- sb_no_ref[["layers"]] |>
     length()
@@ -79,7 +79,7 @@ test_that("plot_spawning_biomass plots contain reference point when indicated", 
 test_that("rda file made when indicated", {
   # export rda
   plot_spawning_biomass(
-    dat,
+    out_new,
     unit_label = "metric tons",
     scale_amount = 1,
     ref_line = "msy",
@@ -101,7 +101,7 @@ test_that("plot_spawning_biomass generates error with future end_year", {
   # expect error
   expect_error(
     stockplotr::plot_spawning_biomass(
-      dat,
+      out_new,
       unit_label = "metric tons",
       end_year = 2055,
       scale_amount = 1,

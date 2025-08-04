@@ -1,13 +1,13 @@
-# read in sample dataset
-dat <- asar::convert_output(
-  file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
-  model = "ss3"
-)
+# load sample dataset
+load(file.path(
+  "fixtures", "ss3_models_converted", "Hake_2018",
+  "std_output.rda"
+))
 
 test_that("table_bnc generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    stockplotr::table_bnc(dat,
+    stockplotr::table_bnc(out_new,
       end_year = 2022
     )
   )
@@ -15,7 +15,7 @@ test_that("table_bnc generates plots without errors", {
   # expect error-free plot with many arguments
   expect_no_error(
     stockplotr::table_bnc(
-      dat,
+      out_new,
       end_year = 2025,
       biomass_unit_label = "mt",
       catch_unit_label = "mt",
@@ -29,7 +29,7 @@ test_that("table_bnc generates plots without errors", {
   # expect flextable object is returned
   expect_s3_class(
     stockplotr::table_bnc(
-      dat,
+      out_new,
       end_year = 2025,
       biomass_unit_label = "mt",
       catch_unit_label = "mt",
@@ -44,7 +44,7 @@ test_that("table_bnc generates plots without errors", {
 test_that("rda file made when indicated", {
   # export rda
   table_bnc(
-    dat,
+    out_new,
     end_year = 2025,
     biomass_unit_label = "mt",
     catch_unit_label = "mt",
@@ -66,7 +66,7 @@ test_that("table_bnc generates error with future end_year", {
   # expect error
   expect_error(
     stockplotr::table_bnc(
-      dat,
+      out_new,
       end_year = 2035,
       biomass_unit_label = "mt",
       catch_unit_label = "mt",
