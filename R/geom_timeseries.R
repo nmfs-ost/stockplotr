@@ -3,8 +3,9 @@ StatTimeseries <- ggproto("StatTimeseries", Stat,
                           required_aes = c("x", "y"),
                           # non_required_aes = c("label", "era", "module_name", "uncertainty_label", "uncertainty"),
                           optional_aes = c("uncertainty", "label", "era", "module_name", "uncertainty_label"),
+                          non_missing_aes = c("x", "y", "colour"),
                           extra_params = c("na.rm", "label_name", "reference_name"),
-                          
+
                           setup_params = function(data, params,
                                                   label_name = "spawning_biomass",
                                                   reference_name = "msy"){
@@ -15,7 +16,8 @@ StatTimeseries <- ggproto("StatTimeseries", Stat,
                           
                           compute_group = function(data, scales, params,
                                                    label_name = "spawning_biomass",
-                                                   reference_name = "msy") {
+                                                   reference_name = "msy",
+                                                   na.rm = TRUE) {
                             # If the data frame is empty, we must return an empty data frame.
                             if (nrow(data) == 0) {
                               return(data)
@@ -26,12 +28,12 @@ StatTimeseries <- ggproto("StatTimeseries", Stat,
                               stop("Data must contain 'x' and 'y' aesthetics mapped to columns.")
                             }
                             
-                            data <- data |>
-                              dplyr::mutate(
-                                x = as.numeric(.data$x),
-                                y = as.numeric(.data$y)
-                              )
-
+                            # message("Check that sb_msy exists:")
+                            # ref_point <- dplyr::filter(data, grepl("spawning_biomass_msy", label))
+                            # print(ref_point)
+                            
+                            print(unique(data$label))
+                            
                             # Calculate reference point
                             # Needs to be before filtering
                             data$yintercept <- calculate_reference_point(
@@ -39,13 +41,21 @@ StatTimeseries <- ggproto("StatTimeseries", Stat,
                               reference_name = reference_name, # params$reference_name,
                               label_name = label_name # params$label_name
                             )
+
+                            data <- data |>
+                              dplyr::mutate(
+                                x = as.numeric(.data$x),
+                                y = as.numeric(.data$y)
+                              )
+
                             # Initial filtering of the data
                             if ("label" %in% names(data) && "era" %in% names(data)) {
                               # label_pattern <- glue::glue("{label_name}$")
                               data <- data |>
                                 dplyr::filter(
                                   grepl(label_name, .data$label),
-                                  .data$era == "time"
+                                  .data$era == "time",
+                                  !is.na(.data$y)
                                 )
                             }
                             
@@ -55,11 +65,11 @@ StatTimeseries <- ggproto("StatTimeseries", Stat,
                               data <- data |>
                                 dplyr::mutate(
                                   ymin = dplyr::case_when(
-                                    grepl("se", .data$uncertainty_label) ~ .data$x - 1.96 * .data$uncertainty,
+                                    grepl("se", .data$uncertainty_label) ~ .data$y - 1.96 * .data$uncertainty,
                                     TRUE ~ NA_real_
                                   ),
                                   ymax = dplyr::case_when(
-                                    grepl("se", .data$uncertainty_label) ~ .data$x + 1.96 * .data$uncertainty,
+                                    grepl("se", .data$uncertainty_label) ~ .data$y + 1.96 * .data$uncertainty,
                                     TRUE ~ NA_real_
                                   )
                                 )
@@ -70,7 +80,7 @@ StatTimeseries <- ggproto("StatTimeseries", Stat,
                             }
                             
                             # Filter for module_name if exists
-                            if ("module_name" %in% names(data) && length(unique(data$module_name)) > 1) {
+                            # if ("module_name" %in% names(data) && length(unique(data$module_name)) > 1) {
                               if ("TIME_SERIES" %in% unique(data$module_name) | "t.series" %in% unique(data$module_name)) {
                                 module_name1 <- intersect(c("t.series","TIME_SERIES"), unique(data$module_name))
                               } else {
@@ -79,16 +89,32 @@ StatTimeseries <- ggproto("StatTimeseries", Stat,
                               }
                               data <- data |>
                                 dplyr::filter(.data$module_name == module_name1)
-                            }
+                            # }
                             
+                            # Remove rows with NA's that were created during the computations above.
+                            # We check the aesthetics that will be used for plotting.
+                            if (na.rm) {
+                              # Note: `yintercept` is an important aesthetic, but it's okay for it to be NA
+                              # if you want the horizontal line to not be drawn.
+                              # The crucial aesthetics for the line and ribbon are x, y, ymin, and ymax.
+                              data <- data[!is.na(data$x) & !is.na(data$y), ]
+                            }
+                            # message(glue::glue("Processed data dimensions: {paste(dim(data), collapse = 'x')}"))
+                            # message(glue::glue("Processed data columns: {paste(names(data), collapse = ', ')}"))
+                            # print(head(data, 10))
+                            # 
                             data
                           },
                           
                           handle_na = function(self, data, params) {
-                            remove_missing(data, params$na.rm,
-                                           c(self$required_aes, self$non_missing_aes),
-                                           snake_class(self)
-                            )
+                            # Combine required_aes and non_missing_aes to ensure all critical
+                            # aesthetics are checked for NA values.
+                            missing_aes <- unique(c(self$required_aes, self$non_missing_aes))
+                            remove_missing(data, params$na.rm, missing_aes, snake_class(self))
+                            # remove_missing(data, params$na.rm,
+                            #                c(self$required_aes, self$non_missing_aes),
+                            #                snake_class(self)
+                            # )
                           }
 )
 
@@ -107,7 +133,7 @@ GeomTimeseries <- ggproto("GeomTimeseries", Geom,
                           extra_params = c("na.rm", "label_name", "reference_name"), # na.rm default
                           
                           # Link geom to stat
-                          default_stat = StatTimeseries,
+                          default_stat = function(.) StatTimeseries,
                           
                           # Methods -----------------------------------------------------------------
                           
@@ -118,14 +144,16 @@ GeomTimeseries <- ggproto("GeomTimeseries", Geom,
                           # },
                           
                           # Panel from gemini
-                          draw_panel = function(self, data, panel_params, coord, ...) {
+                          draw_panel = function(self, data, panel_params, coord, ymin, ymax, yintercept, ...) {
                             # If the data frame is empty, we must return an empty grob
                             if (nrow(data) == 0) {
                               return(zeroGrob())
                             }
-                            
+
                             # Transform coordinates
                             coords <- coord$transform(data, panel_params)
+                            # message("Coordinate data for plots:")
+                            # print(head(coords, 10))
                             
                             # Create a list to hold the grobs
                             grobs <- list()
@@ -139,8 +167,10 @@ GeomTimeseries <- ggproto("GeomTimeseries", Geom,
                                 coord = coord
                               )
                               grobs <- c(grobs, list(ribbon_grob))
+                              message("Ribbon grob:")
+                              print(ribbon_grob$data$colour)
                             }
-                            
+
                             # Draw the line
                             if (nrow(coords) > 0) {
                               line_grob <- GeomLine$draw_panel(
@@ -149,10 +179,12 @@ GeomTimeseries <- ggproto("GeomTimeseries", Geom,
                                 coord = coord
                               )
                               grobs <- c(grobs, list(line_grob))
+                              message("Line grob:")
+                              print(line_grob)
                             }
                             
                             # Draw the horizontal line
-                            if (nrow(coords) > 0) {
+                            if (!is.na(coords$yintercept[1])) {
                               hline_data <- data.frame(
                                 yintercept = coords$yintercept[1],
                                 group = coords$group[1],
@@ -160,6 +192,7 @@ GeomTimeseries <- ggproto("GeomTimeseries", Geom,
                                 linewidth = coords$linewidth[1],
                                 colour = "red"
                               )
+
                               hline_grob <- GeomHline$draw_panel(
                                 data = hline_data,
                                 panel_params = panel_params,
@@ -173,7 +206,7 @@ GeomTimeseries <- ggproto("GeomTimeseries", Geom,
                               return(zeroGrob())
                             }
                             
-                            gTree(children = do.call(gList, grobs))
+                            grid::gTree(children = do.call(grid::gList, grobs))
                           }
 )
 
@@ -207,7 +240,7 @@ geom_timeseries <- function(
 }
 
 # test geom -------
-ggplot(data = sample_data,
+test <- ggplot(data = sample_data,
        aes(x = year,
            y = estimate,
            label = label,
@@ -216,9 +249,12 @@ ggplot(data = sample_data,
            uncertainty = uncertainty,
            uncertainty_label = uncertainty_label
        )
-) +
+  ) +
   geom_timeseries(
     label_name = "spawning_biomass", 
     reference_name = "msy",
-    na.rm = TRUE
-  )
+    na.rm = TRUE,
+    aes(colour = fleet,
+    linetype = season)
+  ) +
+  facet_grid(~ module_name)

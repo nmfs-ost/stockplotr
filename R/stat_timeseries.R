@@ -201,7 +201,7 @@ calculate_reference_point <- function(
 }
 
 # test stat ------------------
-ggplot(data = sample_data, 
+test <- ggplot(data = sample_data, 
        aes(x = year, 
            y = estimate,
            label = label,

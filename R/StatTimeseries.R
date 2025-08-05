@@ -545,33 +545,4 @@ ggplot(data = sample_data,
   # theme_minimal()
   
   
-# GeomTimeseries <- ggproto("GeomTimeseries", Geom,
-#                           required_aes = c("x", "y", "label"),
-#                           
-#                           setup_data = function(data, params, label) {
-#                             data
-#                           },
-#                           
-#                           draw_panel = function(data, panel_scales, coord) {
-#                             ggname("geom_timeseries", ggplot2::GeomPath$draw_panel(data, panel_scales, coord))
-#                           },
-#                           
-#                           default_aes = aes(colour = "black", size = 0.5, linetype = "solid", alpha = NA)
-# )
-# 
-# geom_timeseries <- function(mapping = NULL, data = NULL, stat = "identity",
-#                             position = "identity", na.rm = FALSE, show.legend = NA,
-#                             inherit.aes = TRUE, ...) {
-#   layer(
-#     data = data,
-#     mapping = mapping,
-#     stat = stat,
-#     geom = GeomTimeseries,
-#     position = position,
-#     show.legend = show.legend,
-#     inherit.aes = inherit.aes,
-#     na.rm = na.rm,
-#     ...
-#   )
-# }
 
