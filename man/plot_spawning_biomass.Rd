@@ -41,12 +41,14 @@ default list to ensure that the label on the figure looks correct
 regardless of how it is specified in `dat`. Other possibilities may include
 "target", "MSY", and "unfished".}
 
-\item{geom}{A string stating the geom used for the plot. Default is "line". 
+\item{geom}{A string stating the geom used for the plot. Default is "line".
 Options include "line", "point", or "area"}
 
-\item{group}{description}
+\item{group}{a string of a single column that groups the data (e.g. "fleet",
+"sex", "area", etc.). Currently can only have one level of grouping.}
 
-\item{facet}{description}
+\item{facet}{a string or vector of strings of a column that facets the data
+(e.g. "year", "area", etc.)}
 
 \item{relative}{A logical value specifying if the resulting figures should
 be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
