@@ -32,7 +32,6 @@ License: MIT + file LICENSE
 Depends: 
     R (>= 2.10)
 Imports: 
-    asar,
     cli,
     data.table,
     dplyr,
@@ -61,7 +60,6 @@ Suggests:
 VignetteBuilder: 
     knitr
 Remotes:
-    nmfs-ost/asar,
     nmfs-ost/nmfspalette
 Config/testthat/edition: 3
 Config/testthat/parallel: false
