@@ -10,7 +10,6 @@
 <url><loc>nmfs-ost.github.io/stockplotr/authors.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/index.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/add_theme.html</loc></url>
-<url><loc>nmfs-ost.github.io/stockplotr/reference/exp_all_figs_tables.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/export_rda.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/extract_caps_alttext.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/html_all_figs_tables.html</loc></url>
@@ -25,6 +24,7 @@
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_spawn_recruitment.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_spawning_biomass.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/risk_table.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/save_all_plots.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/stockplotr-package.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/table_bnc.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/table_indices.html</loc></url>

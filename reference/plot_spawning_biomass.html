@@ -80,11 +80,11 @@ also be made relative to this reference line rather than in absolute units.</p>
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_spawning_biomass</span><span class="op">(</span></span>
 <span>  <span class="va">dat</span>,</span>
-<span>  unit_label <span class="op">=</span> <span class="st">"metric tons"</span>,</span>
+<span>  unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
 <span>  scale_amount <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  ref_line <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"target"</span>, <span class="st">"unfished"</span>, <span class="st">"msy"</span><span class="op">)</span>,</span>
+<span>  ref_line <span class="op">=</span> <span class="st">"msy"</span>,</span>
 <span>  ref_point <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  end_year <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  end_year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"%Y"</span><span class="op">)</span>,</span>
 <span>  relative <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  make_rda <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  figures_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -111,12 +111,13 @@ from 500,000 –&gt; 5,000. This scale will be reflected in the y axis label.</p
 
 <dt id="arg-ref-line">ref_line<a class="anchor" aria-label="anchor" href="#arg-ref-line"></a></dt>
 <dd><p>A string specifying the type of reference you want to
-compare spawning biomass to. The default is `"target"`, which looks for
+compare spawning biomass to. The default is `"msy"`, which looks for
 `"spawning_biomass_target"` in the `"label"` column of `dat`. The actual
 searching in `dat` is case agnostic and will work with either upper- or
 lower-case letters but you must use one of the options specified in the
 default list to ensure that the label on the figure looks correct
-regardless of how it is specified in `dat`.</p></dd>
+regardless of how it is specified in `dat`. Other possibilities may include
+"target", "MSY", and "unfished".</p></dd>
 
 
 <dt id="arg-ref-point">ref_point<a class="anchor" aria-label="anchor" href="#arg-ref-point"></a></dt>
@@ -127,7 +128,7 @@ reference point in the form c("label" = value).</p></dd>
 
 
 <dt id="arg-end-year">end_year<a class="anchor" aria-label="anchor" href="#arg-end-year"></a></dt>
-<dd><p>last year of assessment</p></dd>
+<dd><p>Last year of assessment. Default is the current year.</p></dd>
 
 
 <dt id="arg-relative">relative<a class="anchor" aria-label="anchor" href="#arg-relative"></a></dt>

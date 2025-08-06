@@ -111,9 +111,9 @@ function documentation and refer to the documentation of <a href="https://github
 <h3 id="updating-alternative-text-and-captions">Updating alternative text and captions<a class="anchor" aria-label="anchor" href="#updating-alternative-text-and-captions"></a>
 </h3>
 <p>When a plotting function (e.g., <code><a href="../reference/plot_biomass.html">plot_biomass()</a></code>,
-<code><a href="../reference/table_indices.html">table_indices()</a></code>, <code><a href="../reference/exp_all_figs_tables.html">exp_all_figs_tables()</a></code>) is
-run, placeholders within the plot’s associated alternative text and
-captions are replaced with key quantities (see the <a href="https://nmfs-ost.github.io/asar/articles/accessibility_guide.html" class="external-link"><code>asar</code>
+<code><a href="../reference/table_indices.html">table_indices()</a></code>, <code><a href="../reference/save_all_plots.html">save_all_plots()</a></code>) is run,
+placeholders within the plot’s associated alternative text and captions
+are replaced with key quantities (see the <a href="https://nmfs-ost.github.io/asar/articles/accessibility_guide.html" class="external-link"><code>asar</code>
 package’s Accessibility vignette</a> and/or the <a href="https://github.com/nmfs-ost/stockplotr/blob/master/R/write_captions.R" class="external-link"><code>stockplotr::write_captions()</code>
 function</a> for more details).</p>
 <p>As stated in the <a href="https://nmfs-ost.github.io/asar/articles/accessibility_guide.html#your-to-do-list" class="external-link">Accessibility
@@ -149,8 +149,8 @@ overwrite your original rda) by entering the following command:
 <p><strong>NOTE: Your edits will be lost if:</strong></p>
 <ul>
 <li>You regenerate (overwrite) the captions_alt_text.csv file</li>
-<li>You rerun <code><a href="../reference/exp_all_figs_tables.html">exp_all_figs_tables()</a></code> or that plot’s function
-with the <code>make_rda</code> argument = T after regenerating the
+<li>You rerun <code><a href="../reference/save_all_plots.html">save_all_plots()</a></code> or that plot’s function with
+the <code>make_rda</code> argument = T after regenerating the
 captions_alt_text.csv file.</li>
 </ul>
 <p>We recommend saving a version of your altered text elsewhere to
@@ -160,12 +160,12 @@ ensure you can reuse it if it were to be overwritten.</p>
 <h4 id="changeupdate-arguments-or-key-quantities">Change/Update Arguments or Key Quantities<a class="anchor" aria-label="anchor" href="#changeupdate-arguments-or-key-quantities"></a>
 </h4>
 <div class="section level5">
-<h5 id="exp_all_figs_tables">
-<code>exp_all_figs_tables()</code><a class="anchor" aria-label="anchor" href="#exp_all_figs_tables"></a>
+<h5 id="save_all_plots">
+<code>save_all_plots()</code><a class="anchor" aria-label="anchor" href="#save_all_plots"></a>
 </h5>
 <ol style="list-style-type: decimal">
 <li><p>Delete the captions_alt_text.csv file</p></li>
-<li><p>Rerun <code><a href="../reference/exp_all_figs_tables.html">exp_all_figs_tables()</a></code> with the correct
+<li><p>Rerun <code><a href="../reference/save_all_plots.html">save_all_plots()</a></code> with the correct
 arguments</p></li>
 </ol>
 <p><strong>NOTE</strong>: It is possible to directly edit the
