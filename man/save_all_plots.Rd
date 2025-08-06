@@ -53,7 +53,7 @@ compare biomass to. The default is `"msy"`, which looks for
 searching in `dat` is case agnostic and will work with either upper- or
 lower-case letters but you must use one of the options specified in the
 default list to ensure that the label on the figure looks correct
-regardless of how it is specified in `dat`. Other possibilities may include 
+regardless of how it is specified in `dat`. Other possibilities may include
 "target", "MSY", and "unfished".}
 
 \item{ref_point}{A known value of the reference point along with the label

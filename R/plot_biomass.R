@@ -246,5 +246,5 @@ plot_biomass <- function(
       fig_or_table = fig_or_table
     )
   }
-final
+  final
 }

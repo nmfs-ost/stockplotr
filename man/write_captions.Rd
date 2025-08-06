@@ -9,10 +9,10 @@ write_captions(dat, dir = getwd(), year = format(Sys.Date(), "\%Y"))
 \arguments{
 \item{dat}{A data frame returned from \link[asar]{convert_output}}
 
-\item{dir}{Directory where the output captions and alt text file should be 
+\item{dir}{Directory where the output captions and alt text file should be
 saved. Defaults to working directory.}
 
-\item{year}{the last year of the data or the current year this function is 
+\item{year}{the last year of the data or the current year this function is
 being performed. Defaults to the current year.}
 }
 \value{

@@ -10,7 +10,7 @@
 #'   searching in `dat` is case agnostic and will work with either upper- or
 #'   lower-case letters but you must use one of the options specified in the
 #'   default list to ensure that the label on the figure looks correct
-#'   regardless of how it is specified in `dat`. Other possibilities may include 
+#'   regardless of how it is specified in `dat`. Other possibilities may include
 #'   "target", "MSY", and "unfished".
 #' @param ref_point A known value of the reference point along with the label
 #'   for the reference point as specified in the output file. Please use this
@@ -60,7 +60,7 @@ plot_spawning_biomass <- function(
     ref_line <- names(ref_point)
   } else if (length(ref_line) > 1) {
     ref_line <- "target"
-  } 
+  }
   # TODO: Fix the unit label if scaling. Maybe this is up to the user to do if
   #       they want something scaled then they have to supply a better unit name
   #       or we create a helper function to do this.
@@ -245,5 +245,5 @@ plot_spawning_biomass <- function(
       fig_or_table = fig_or_table
     )
   }
-final
+  final
 }

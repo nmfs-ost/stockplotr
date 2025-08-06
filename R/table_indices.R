@@ -24,7 +24,6 @@ table_indices <- function(
     end_year = format(Sys.Date(), "%Y"),
     make_rda = FALSE,
     tables_dir = getwd()) {
-
   # create plot-specific variables to use throughout fxn for naming and IDing
   topic_label <- "indices.abundance"
 
@@ -164,5 +163,5 @@ table_indices <- function(
       fig_or_table = fig_or_table
     )
   }
-final
+  final
 }
