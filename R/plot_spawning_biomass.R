@@ -5,12 +5,13 @@
 #'
 #' @inheritParams plot_recruitment
 #' @param ref_line A string specifying the type of reference you want to
-#'   compare spawning biomass to. The default is `"target"`, which looks for
+#'   compare spawning biomass to. The default is `"msy"`, which looks for
 #'   `"spawning_biomass_target"` in the `"label"` column of `dat`. The actual
 #'   searching in `dat` is case agnostic and will work with either upper- or
 #'   lower-case letters but you must use one of the options specified in the
 #'   default list to ensure that the label on the figure looks correct
-#'   regardless of how it is specified in `dat`.
+#'   regardless of how it is specified in `dat`. Other possibilities may include 
+#'   "target", "MSY", and "unfished".
 #' @param ref_point A known value of the reference point along with the label
 #'   for the reference point as specified in the output file. Please use this
 #'   option if the ref_line cannot find your desired point. Indicate the
@@ -47,11 +48,11 @@
 #' }
 plot_spawning_biomass <- function(
     dat,
-    unit_label = "metric tons",
+    unit_label = "mt",
     scale_amount = 1,
-    ref_line = c("target", "unfished", "msy"),
+    ref_line = "msy",
     ref_point = NULL,
-    end_year = NULL,
+    end_year = format(Sys.Date(), "%Y"),
     relative = FALSE,
     make_rda = FALSE,
     figures_dir = getwd()) {
@@ -59,9 +60,7 @@ plot_spawning_biomass <- function(
     ref_line <- names(ref_point)
   } else if (length(ref_line) > 1) {
     ref_line <- "target"
-  } else {
-    ref_line <- match.arg(ref_line, several.ok = FALSE)
-  }
+  } 
   # TODO: Fix the unit label if scaling. Maybe this is up to the user to do if
   #       they want something scaled then they have to supply a better unit name
   #       or we create a helper function to do this.
@@ -72,11 +71,7 @@ plot_spawning_biomass <- function(
   )
 
   # output <- dat
-  # Determine the end year
   all_years <- dat[["year"]][grepl("^[0-9\\.]+$", dat[["year"]])]
-  if (is.null(end_year)) {
-    end_year <- format(Sys.Date(), "%Y")
-  }
 
   # create plot-specific variables to use throughout fxn for naming and IDing
   # Indicate if spawning biomass is relative or not
@@ -243,7 +238,7 @@ plot_spawning_biomass <- function(
     )
 
     export_rda(
-      final = final,
+      object = final,
       caps_alttext = caps_alttext,
       figures_tables_dir = figures_dir,
       topic_label = topic_label,

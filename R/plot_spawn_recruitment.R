@@ -22,9 +22,9 @@
 #' }
 plot_spawn_recruitment <- function(
     dat,
-    spawning_biomass_label = "metric tons",
-    recruitment_label = "metric tons",
-    end_year = NULL,
+    spawning_biomass_label = "mt",
+    recruitment_label = "mt",
+    end_year = format(Sys.Date(), "%Y"),
     make_rda = FALSE,
     figures_dir = getwd()) {
   # Extract recruitment
@@ -46,9 +46,6 @@ plot_spawn_recruitment <- function(
     dplyr::rename(recruitment = estimate) |>
     dplyr::select(-c(module_name, label))
 
-  if (is.null(end_year)) {
-    end_year <- format(Sys.Date(), "%Y")
-  }
   stryr <- min(rec$year)
 
   # create plot-specific variables to use throughout fxn for naming and IDing
@@ -131,7 +128,7 @@ plot_spawn_recruitment <- function(
     )
 
     export_rda(
-      final = final,
+      object = final,
       caps_alttext = caps_alttext,
       figures_tables_dir = figures_dir,
       topic_label = topic_label,

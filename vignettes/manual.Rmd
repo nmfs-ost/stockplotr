@@ -22,7 +22,7 @@ This manual is a work in progress. In the meantime, please read the function doc
 
 ## Updating alternative text and captions
 
-When a plotting function (e.g., `plot_biomass()`, `table_indices()`, `exp_all_figs_tables()`) is run, placeholders within the plot's associated alternative text and captions are replaced with key quantities (see the [`asar` package's Accessibility vignette](https://nmfs-ost.github.io/asar/articles/accessibility_guide.html) and/or the [`stockplotr::write_captions()` function](https://github.com/nmfs-ost/stockplotr/blob/master/R/write_captions.R) for more details).
+When a plotting function (e.g., `plot_biomass()`, `table_indices()`, `save_all_plots()`) is run, placeholders within the plot's associated alternative text and captions are replaced with key quantities (see the [`asar` package's Accessibility vignette](https://nmfs-ost.github.io/asar/articles/accessibility_guide.html) and/or the [`stockplotr::write_captions()` function](https://github.com/nmfs-ost/stockplotr/blob/master/R/write_captions.R) for more details).
 
 As stated in the [Accessibility vignette's "Your to-do list" section](https://nmfs-ost.github.io/asar/articles/accessibility_guide.html#your-to-do-list), **you should always:**
 
@@ -48,17 +48,17 @@ Directly edit the rda's caption or alt_text objects. To do so, assign a new valu
 **NOTE: Your edits will be lost if:**
 
 - You regenerate (overwrite) the captions_alt_text.csv file
-- You rerun `exp_all_figs_tables()` or that plot's function with the `make_rda` argument = T after regenerating the captions_alt_text.csv file.
+- You rerun `save_all_plots()` or that plot's function with the `make_rda` argument = T after regenerating the captions_alt_text.csv file.
 
 We recommend saving a version of your altered text elsewhere to ensure you can reuse it if it were to be overwritten.
 
 ### Change/Update Arguments or Key Quantities
 
-#### `exp_all_figs_tables()`
+#### `save_all_plots()`
 
 1.  Delete the captions_alt_text.csv file
 
-2.  Rerun `exp_all_figs_tables()` with the correct arguments
+2.  Rerun `save_all_plots()` with the correct arguments
 
 **NOTE**: It is possible to directly edit the captions_alt_text.csv file to change the caption or alternative text. However, if you wish to do anything besides adding or removing text, we recommend using the two-step workflow, above, to avoid potential issues where an incorrect argument was used to calculate other (now incorrect) key quantities. For instance, `end_year` may be used to calculate values associated with F, which are then used to calculate other values.
 

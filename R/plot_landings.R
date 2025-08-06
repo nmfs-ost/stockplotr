@@ -24,8 +24,8 @@
 #' )
 #' }
 plot_landings <- function(dat,
-                          unit_label = "metric tons",
-                          end_year = NULL,
+                          unit_label = "mt",
+                          end_year = format(Sys.Date(), "%Y"),
                           make_rda = FALSE,
                           figures_dir = getwd(),
                           fleet_names = NULL) {
@@ -84,11 +84,6 @@ plot_landings <- function(dat,
       dplyr::group_by(year, fleet, sex, area, growth_pattern) |>
       dplyr::summarize(estimate = mean(estimate)) |>
       dplyr::mutate(fleet = as.character(fleet))
-  }
-
-  # get end year if not defined
-  if (is.null(end_year)) {
-    end_year <- format(Sys.Date(), "%Y")
   }
 
   # create plot-specific variables to use throughout fxn for naming and IDing
@@ -158,7 +153,7 @@ plot_landings <- function(dat,
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
     export_rda(
-      final = final,
+      object = final,
       caps_alttext = caps_alttext,
       figures_tables_dir = figures_dir,
       topic_label = topic_label,

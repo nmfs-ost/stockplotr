@@ -6,11 +6,11 @@
 \usage{
 plot_biomass(
   dat,
-  unit_label = "metric tons",
+  unit_label = "mt",
   scale_amount = 1,
-  ref_line = c("target", "MSY", "msy", "unfished"),
+  ref_line = "msy",
   ref_point = NULL,
-  end_year = NULL,
+  end_year = format(Sys.Date(), "\%Y"),
   relative = FALSE,
   make_rda = FALSE,
   figures_dir = getwd()
@@ -26,19 +26,20 @@ shown on the y axis. For example, scale_amount = 100 would scale down a value
 from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
 
 \item{ref_line}{A string specifying the type of reference you want to
-compare biomass to. The default is `"target"`, which looks for
-`"biomass_target"` in the `"label"` column of `dat`. The actual
+compare biomass to. The default is `"msy"`, which looks for
+`"biomass_msy"` in the `"label"` column of `dat`. The actual
 searching in `dat` is case agnostic and will work with either upper- or
 lower-case letters but you must use one of the options specified in the
 default list to ensure that the label on the figure looks correct
-regardless of how it is specified in `dat`.}
+regardless of how it is specified in `dat`. Other possibilities may include
+"target", "MSY", and "unfished".}
 
 \item{ref_point}{A known value of the reference point along with the label
 for the reference point as specified in the output file. Please use this
 option if the ref_line cannot find your desired point. Indicate the
 reference point in the form c("label" = value).}
 
-\item{end_year}{last year of assessment}
+\item{end_year}{Last year of assessment. Default is the current year.}
 
 \item{relative}{A logical value specifying if the resulting figures should
 be relative spawning biomass. The default is `FALSE`. `ref_line` indicates

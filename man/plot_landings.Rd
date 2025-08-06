@@ -6,8 +6,8 @@
 \usage{
 plot_landings(
   dat,
-  unit_label = "metric tons",
-  end_year = NULL,
+  unit_label = "mt",
+  end_year = format(Sys.Date(), "\%Y"),
   make_rda = FALSE,
   figures_dir = getwd(),
   fleet_names = NULL
@@ -18,7 +18,7 @@ plot_landings(
 
 \item{unit_label}{indicate the name of the units of landings as to label the axis}
 
-\item{end_year}{last year of assessment}
+\item{end_year}{Last year of assessment. Default is the current year.}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
