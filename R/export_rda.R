@@ -14,7 +14,7 @@
 #' @param figures_tables_dir If the user has already created folders containing
 #' figures and tables ("figures" and "tables"), figures_tables_dir represents
 #' the location of these folders. Otherwise, these two folders will be created
-#' automatically, then used to store the exported rda files. Default is the 
+#' automatically, then used to store the exported rda files. Default is the
 #' working directory.
 #'
 #' @return An rda file with a figure's ggplot, caption, and alternative text, or
@@ -44,8 +44,7 @@ export_rda <- function(object,
                        caps_alttext,
                        topic_label,
                        fig_or_table,
-                       figures_tables_dir = getwd()
-                       ) {
+                       figures_tables_dir = getwd()) {
   # make rda for figures
   if (fig_or_table == "figure") {
     rda <- list(

@@ -61,5 +61,5 @@ extract_caps_alttext <- function(topic_label = NULL,
     caps_alttext_list <- list(cap)
   }
 
-caps_alttext_list
+  caps_alttext_list
 }

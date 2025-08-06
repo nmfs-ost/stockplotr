@@ -28,7 +28,7 @@ and are used to link the figure or table with its caption/alt text.}
 \item{figures_tables_dir}{If the user has already created folders containing
 figures and tables ("figures" and "tables"), figures_tables_dir represents
 the location of these folders. Otherwise, these two folders will be created
-automatically, then used to store the exported rda files. Default is the 
+automatically, then used to store the exported rda files. Default is the
 working directory.}
 }
 \value{

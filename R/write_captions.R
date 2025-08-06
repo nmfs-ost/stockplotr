@@ -4,9 +4,9 @@
 #' key quantities from the model results file.
 #'
 #' @inheritParams plot_spawning_biomass
-#' @param dir Directory where the output captions and alt text file should be 
+#' @param dir Directory where the output captions and alt text file should be
 #' saved. Defaults to working directory.
-#' @param year the last year of the data or the current year this function is 
+#' @param year the last year of the data or the current year this function is
 #' being performed. Defaults to the current year.
 #'
 #' @return Exports .csv with captions and alt text for figures and tables

@@ -203,5 +203,5 @@ table_landings <- function(dat,
     )
   }
   # Return finished table
-final
+  final
 }
