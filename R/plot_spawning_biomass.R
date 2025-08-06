@@ -60,9 +60,7 @@ plot_spawning_biomass <- function(
     ref_line <- names(ref_point)
   } else if (length(ref_line) > 1) {
     ref_line <- "target"
-  } else {
-    ref_line <- ref_line
-  }
+  } 
   # TODO: Fix the unit label if scaling. Maybe this is up to the user to do if
   #       they want something scaled then they have to supply a better unit name
   #       or we create a helper function to do this.
