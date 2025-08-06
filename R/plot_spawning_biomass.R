@@ -245,5 +245,5 @@ plot_spawning_biomass <- function(
       fig_or_table = fig_or_table
     )
   }
-  return(final)
+final
 }
