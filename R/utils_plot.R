@@ -436,10 +436,15 @@ prepare_data <- function(
       # options <- paste0(options, " ", i, ") ", unique(plot_data$module_name)[i], "\n")
       options[i] <- paste0(" ", i, ") ", unique(plot_data$module_name)[i])
     }
-    question1 <- utils::menu(
-      options,
-      title = "Please select one of the following:"
-    )
+    if (interactive()) {
+      question1 <- utils::menu(
+        options,
+        title = "Please select one of the following:"
+      )
+    } else {
+      selected_module <- options[1]
+      cli::cli_alert_info(glue::glue("Environment not interactive. Selecting {selected_module}."))
+    }
     selected_module <- unique(plot_data$module_name)[as.numeric(question1)]
     if (length(selected_module) > 0) {
       plot_data <- plot_data |>
