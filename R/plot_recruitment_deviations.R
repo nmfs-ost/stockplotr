@@ -3,7 +3,7 @@
 #' @inheritParams plot_spawning_biomass
 #'
 #' @return Plot recruitment deviations relative to one over time from an
-#' assessment model output file translated to a standardized output. There are
+#' assessment model output(s) file translated to a standardized output. There are
 #' options to return a `ggplot2` object or export an .rda object containing
 #' associated caption and alternative text for the figure.
 #' 
@@ -11,13 +11,12 @@
 #'
 #' @examples
 #' \dontrun{
-#' plot_recruitment_deviations(dat)
-#'
 #' plot_recruitment_deviations(
-#'   dat,
-#'   end_year = 2024,
+#'   dat = list("model1"=dat1,"model2"=dat2),
+#'   geom = "point",
 #'   make_rda = TRUE,
-#'   figures_dir = getwd()
+#'   figures_dir = getwd(),
+#'   size = 3
 #' )
 #' }
 plot_recruitment_deviations <- function(
@@ -36,105 +35,76 @@ plot_recruitment_deviations <- function(
     group = NULL
   )
 
-  # plt <- 
-  plot_error(
+  if (nrow(filter_data) == 0) {
+    cli::cli_abort("No recruitment deviations found in data.")
+  }
+
+  # Create final plot
+  final <- plot_error(
     filter_data,
     geom = "point",
-    facet = if(length(unique(filter_data$model)) > 1) "model" else NULL,
-    xlab = "Year",
-    ylab = "Recruitment Deviations",
-    size = 2
+     facet = if(length(unique(filter_data$model)) > 1) "model" else NULL,
+     xlab = "Year",
+     ylab = "Recruitment Deviations",
+     size = 2
   ) +
   # ggplot2::facet_wrap(~ model, scales = "free_y") +
   theme_noaa()
 
-
   # Make RDA
-  # time <- dat |>
-  #   dplyr::filter(era == "time")
-  # end_year <- max(as.numeric(time$year), na.rm = TRUE)
-  # start_year <- min(as.numeric(time$year), na.rm = TRUE)
+  if (make_rda) {
+    create_rda(
+      object = final,
+      topic_label = "recruitment.deviations",
+      fig_or_table = "figure",
+      dat = filter_data,
+      dir = figures_dir,
+      unit_label = ""
+    )
+  }
 
-  # # create plot-specific variables to use throughout fxn for naming and IDing
-  # topic_label <- "recruitment.deviations"
+  # check year isn't past end_year if not projections plot
+  check_year(
+    end_year = end_year,
+    fig_or_table = fig_or_table,
+    topic = topic_label
+  )
+  # export figure to rda if argument = T
+  if (make_rda == TRUE) {
+    # run write_captions.R if its output doesn't exist
+    if (!file.exists(
+      fs::path(getwd(), "captions_alt_text.csv")
+    )
+    ) {
+      stockplotr::write_captions(
+        dat = dat,
+        dir = figures_dir,
+        year = end_year
+      )
+    }
 
-  # # identify output
-  # fig_or_table <- "figure"
+    # add more key quantities included as arguments in this fxn
+    add_more_key_quants(
+      topic = topic_label,
+      fig_or_table = fig_or_table,
+      dir = figures_dir,
+      end_year = end_year
+    )
 
-  # # check year isn't past end_year if not projections plot
-  # check_year(
-  #   end_year = end_year,
-  #   fig_or_table = fig_or_table,
-  #   topic = topic_label
-  # )
+    # extract this plot's caption and alt text
+    caps_alttext <- extract_caps_alttext(
+      topic_label = topic_label,
+      fig_or_table = fig_or_table,
+      dir = figures_dir
+    )
 
-  # rec_devs <- dat |>
-  #   dplyr::filter(
-  #     label == "recruitment_deviations" | label == "log_recruitment_deviations",
-  #     module_name == "SPAWN_RECRUIT" | module_name == "t.series",
-  #     !is.na(year),
-  #     is.na(fleet) | length(unique(fleet)) <= 1,
-  #     is.na(sex) | length(unique(sex)) <= 1,
-  #     is.na(area) | length(unique(area)) <= 1,
-  #     is.na(growth_pattern) | length(unique(growth_pattern)) <= 1,
-  #     !year %in% year_exclusions,
-  #     year <= end_year
-  #   ) |> # SS3 and BAM target module names
-  #   dplyr::mutate(
-  #     estimate = as.numeric(estimate),
-  #     year = as.numeric(year)
-  #   )
-  # if (nrow(rec_devs) == 0) {
-  #   cli::cli_abort("No recruitment deviations found in data.")
-  # }
-
-  # # Plot
-  # plt <- plot_timeseries(
-  #   rec_devs,
-  #   x = year,
-  #   y = estimate,
-  #   geom = "point",
-  #   ylab = "Recruitment Deviations"
-  #   ) +
-  #   reference_line(0, linetype = "dashed")
-  # plt <- add_theme(plt) # suppressWarnings()
-
-  # # export figure to rda if argument = T
-  # if (make_rda == TRUE) {
-  #   # run write_captions.R if its output doesn't exist
-  #   if (!file.exists(
-  #     fs::path(getwd(), "captions_alt_text.csv")
-  #   )
-  #   ) {
-  #     stockplotr::write_captions(
-  #       dat = dat,
-  #       dir = figures_dir,
-  #       year = end_year
-  #     )
-  #   }
-
-  #   # add more key quantities included as arguments in this fxn
-  #   add_more_key_quants(
-  #     topic = topic_label,
-  #     fig_or_table = fig_or_table,
-  #     dir = figures_dir,
-  #     end_year = end_year
-  #   )
-
-  #   # extract this plot's caption and alt text
-  #   caps_alttext <- extract_caps_alttext(
-  #     topic_label = topic_label,
-  #     fig_or_table = fig_or_table,
-  #     dir = figures_dir
-  #   )
-
-  #   export_rda(
-  #     final = final,
-  #     caps_alttext = caps_alttext,
-  #     figures_tables_dir = figures_dir,
-  #     topic_label = topic_label,
-  #     fig_or_table = fig_or_table
-  #   )
-  # }
-  # final
+    export_rda(
+      final = final,
+      caps_alttext = caps_alttext,
+      figures_tables_dir = figures_dir,
+      topic_label = topic_label,
+      fig_or_table = fig_or_table
+    )
+  }
+  final
 }
