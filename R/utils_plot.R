@@ -234,8 +234,8 @@ plot_error <- function(
     ggplot2::geom_hline(
       yintercept = 0,
       linewidth = 1,
-      linetype = "dashed", # "soolid",
-      colour = "grey"
+      linetype = "solid", # "dashed",
+      colour = "#6e6e6e"
     )
 }
 
