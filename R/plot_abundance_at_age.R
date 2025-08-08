@@ -64,8 +64,7 @@ plot_abundance_at_age <- function(
   } else {
     cli::cli_abort("Scale_amount is out of bounds. Please choose a value ranging from 1-1000000000 (one billion) in orders of magnitude (e.g., 1, 10, 100, 1000, etc.)", wrap = TRUE)
   }
-
-
+  
   abundance_label <- ifelse(
     scale_amount == 1000,
     yes = glue::glue("Abundance ({unit_mag}{unit_label})"),
@@ -81,6 +80,7 @@ plot_abundance_at_age <- function(
     dplyr::mutate(
       estimate = as.numeric(estimate),
       year = as.numeric(year),
+      age = as.numeric(age),
       estimate_orig = estimate,
       estimate = estimate_orig / scale_amount
     )
@@ -89,7 +89,7 @@ plot_abundance_at_age <- function(
     dplyr::select(time) |>
     dplyr::filter(!is.na(time)))[1] > 1) {
     b <- b |>
-      dplyr::filter(time %% 1 != 0.5) |>
+      # dplyr::filter(time %% 1 != 0.5) |>
       dplyr::group_by(age, year) |>
       dplyr::summarise(estimate = sum(estimate), .groups = "drop") |>
       dplyr::ungroup()

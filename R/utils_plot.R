@@ -251,6 +251,55 @@ plot_error <- function(
 
 #------------------------------------------------------------------------------
 
+#' Create "at-age" plot
+#' 
+plot_aa <- function(
+  dat,
+  means_dat,
+  abundance_label = "Abundance",
+  facet = NULL
+){
+  # Calculate y-axis breaks
+  y_n_breaks <- y_axis_breaks(dat)
+
+  plot_timeseries(
+    dat,
+    x = "year",
+    y = "age",
+    size = "estimate",
+    geom = "point",
+    xlab = "Year",
+    ylab = "Age",
+    shape = 21,
+    alpha = 0.3,
+    color = "black",
+    fill = "gray40"
+  ) +
+    ggplot2::scale_size(
+      range = c(0.2, 10),
+      name = abundance_label,
+      labels = scales::label_comma()
+    ) +
+    # add line
+    ggplot2::geom_line(
+      data = means_dat,
+      ggplot2::aes(
+        x = year,
+        y = avg
+      ),
+      linewidth = 1,
+      color = "red"
+    ) +
+    ggplot2::scale_y_continuous(
+      minor_breaks = y_n_breaks[[1]],
+      n.breaks = y_n_breaks[[2]],
+      guide = ggplot2::guide_axis(minor.ticks = TRUE),
+      limits = c(min(dat[["age"]]), max(dat[["age"]]))
+    )
+}
+
+#------------------------------------------------------------------------------
+
 #' Pre-formatted reference line
 #'
 #' @param dat standard data frame where reference point should be extracted
@@ -318,6 +367,22 @@ axis_breaks <- function(data){
     x_n_breaks <- round(length(unique(data[["year"]])) / 20)
   }
   x_n_breaks
+}
+
+y_axis_breaks <- function(data){
+  y_n_breaks <- round(length(unique(data[["age"]])))
+  if (y_n_breaks > 80) {
+    y_n_breaks <- round(length(unique(data[["age"]])) / 6)
+  } else if (y_n_breaks > 40) {
+    y_n_breaks <- round(length(unique(data[["age"]])) / 3)
+  }
+  y_n_breaks_minor <- as.vector(unique(data[["age"]]))
+  if (length(y_n_breaks_minor) > 40) {
+    y_n_breaks_minor <- NULL
+  } else if (length(y_n_breaks_minor) > 20) {
+    y_n_breaks_minor <- y_n_breaks_minor[c(TRUE, FALSE)]
+  }
+  list(y_n_breaks_minor, y_n_breaks)
 }
 
 #------------------------------------------------------------------------------
