@@ -342,14 +342,16 @@ calculate_uncertainty <- function() {
 
 #' Prep data for input into aesthetics for ggplot2
 #'
-#' @param dat a data frame or list of data frames that contains the data to be 
+#' @param dat a data frame or list of data frames that contains the data to be
 #' plotted.
-#' @param label_name a string of the name of the label that is used to filter 
+#' @param label_name a string of the name of the label that is used to filter
 #' the data.
-#' @param geom Type of plot user wants to create. Options are "line", "point", 
+#' @param geom Type of plot user wants to create. Options are "line", "point",
 #' and "area".
-#' @param group Selected grouping for the data. If you want to just summarize 
+#' @param group Selected grouping for the data. If you want to just summarize
 #' the data across all factors, set group = "none".
+#' @param interactive logical. If TRUE, the user will be prompted to select
+#' a module_name when there was more than one found in the filtered dataset.
 #'
 #' @returns a data frame that is pre-formatted for plotting with ggplot2.
 #' @export
@@ -362,7 +364,8 @@ prepare_data <- function(
     dat,
     label_name,
     geom,
-    group = NULL){
+    group = NULL,
+    interactive = TRUE){
   # Replace all spaces with underscore if not in proper format
   label_name <- sub(" ", "_", label_name)
   list_of_data <- list()
@@ -448,15 +451,20 @@ prepare_data <- function(
       options[i] <- paste0(" ", i, ") ", unique(plot_data$module_name)[i])
     }
     if (interactive()) {
-      question1 <- utils::menu(
-        options,
-        title = "Please select one of the following:"
-      )
+      if(interactive) {
+        question1 <- utils::menu(
+                options,
+                title = "Please select one of the following:"
+              )
+        selected_module <- unique(plot_data$module_name)[as.numeric(question1)]
+      } else {
+        selected_module <- unique(plot_data$module_name)[1]
+        cli::cli_alert_info("Selection bypassed. Filtering by {selected_module}.")
+      }
     } else {
-      selected_module <- options[1]
+      selected_module <- unique(plot_data$module_name)[1]
       cli::cli_alert_info(glue::glue("Environment not interactive. Selecting {selected_module}."))
     }
-    selected_module <- unique(plot_data$module_name)[as.numeric(question1)]
     if (length(selected_module) > 0) {
       plot_data <- plot_data |>
         dplyr::filter(
