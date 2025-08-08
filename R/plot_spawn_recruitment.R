@@ -30,33 +30,53 @@ plot_spawn_recruitment <- function(
   recruitment <- prepare_data(
     dat = dat,
     label_name = "recruitment",
-    geom = "point"
-  ) |>
-  dplyr::rename(recruitment = estimate) |>
-  dplyr::select(-c(label, estimate_lower, estimate_upper))
-
-
+    geom = "point",
+    interactive = FALSE
+  ) 
+  if (length(unique(recruitment$label)) > 1) {
+    recruitment <- recruitment |>
+      tidyr::pivot_wider(
+      id_cols = c(year, model, group_var, estimate_lower, estimate_upper),
+      names_from = label,
+      values_from = estimate
+    )
+  } else {
+    recruitment <- recruitment |>
+    dplyr::rename(spawning_biomass = estimate) |>
+    dplyr::select(-c(label))
+  }
+  
   # Extract spawning biomass
   sb <- prepare_data(
     dat = dat,
     label_name = "spawning biomass",
-    geom = "point"
+    geom = "point",
+    interactive = FALSE
   ) |>
   dplyr::rename(spawning_biomass = estimate) |>
-  dplyr::select(-c(label, estimate_lower, estimate_upper))
+  dplyr::select(-c(label))
 
   # Merge recruitment and spawning biomass data
   sr <- dplyr::left_join(sb, recruitment)
 
   # Plot
-  # final <- 
-  plot_timeseries(
+  final <- plot_timeseries(
     dat = sr,
     x = "spawning_biomass",
-    y = "recruitment",
+    y = "predicted_recruitment",
     geom = "point",
-    xlab = paste("Spawning Biomass (", spawning_biomass_label, ")", sep = ""),
-    ylab = paste("Recruitment (", recruitment_label, ")", sep = "")
+    color = "black",
+    facet = {
+      if (length(unique(sr$model)) > 1) {
+        "model"
+      } else {
+        NULL
+      }
+    }
+  ) +
+  ggplot2::geom_line(data = sr,
+    ggplot2::aes(x = spawning_biomass, y = expected_recruitment),
+    color = "red"
   ) +
   theme_noaa()
   
@@ -67,11 +87,8 @@ plot_spawn_recruitment <- function(
       topic_label = ifelse(relative, "relative.spawning.biomass", "spawning.biomass"),
       fig_or_table = "figure",
       dat = rp_dat,
-      dir = figures_dir,
-      ref_line = ref_line,
-      ref_point = ref_line, # need to remove this I think
-      scale_amount = scale_amount,
-      unit_label = unit_label
+      dir = figures_dir# ,
+      # unit_label = unit_label
     )
   }
 
