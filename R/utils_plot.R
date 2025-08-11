@@ -252,50 +252,122 @@ plot_error <- function(
 #------------------------------------------------------------------------------
 
 #' Create "at-age" plot
+#'
+#' @param dat filtered data frame from standard output file(s) pre-formatted for
+#'  the target label from \link[stockplotr]{prepare_data}
+#' @param x a string of the column name of data used to plot on the x-axis
+#' (default is "year")
+#' @param y a string of the column name of data used to plot on the y-axis
+#' (default is "age")
+#' @param z a string of the column name of data used to control the size of the
+#' bubbles (default is "estimate")
+#' @param label a string of the label for the size of the bubbles
+#' (default is "Abundance")
+#' @param xlab a string of the x-axis label (default is "Year")
+#' @param ylab a string of the y-axis label (default is "Age")
+#' @param facet a string or vector of strings of a column that facets the data
+#' (e.g. "sex", "area", etc.). It is not recommended to include more than one
+#' facet due to the complexity of the plot.
+#' @param ... inherited arguments from internal functions from
+#' \link[ggplot2]{geom_point}
 #' 
+#' @return Create a plot of abundance at age for a stock assessment report.
+#' @export
+#' @example \dontrun{
+#'  plot_aa(dat)
+#' }
 plot_aa <- function(
   dat,
-  means_dat,
-  abundance_label = "Abundance",
-  facet = NULL
-){
+  x = "year",
+  y = "age",
+  z = "estimate",
+  label = "Abundance",
+  xlab = "Year",
+  ylab = "Age",
+  facet = NULL,
+  ...
+) {
+  # Make sure age is numeric
+  dat <- dat |>
+    dplyr::mutate(
+      age = as.numeric(age)
+    )
+  # Caclaulate x-axis breaks
+  x_n_breaks <- axis_breaks(dat)
   # Calculate y-axis breaks
   y_n_breaks <- y_axis_breaks(dat)
 
-  plot_timeseries(
-    dat,
-    x = "year",
-    y = "age",
-    size = "estimate",
-    geom = "point",
-    xlab = "Year",
-    ylab = "Age",
-    shape = 21,
-    alpha = 0.3,
-    color = "black",
-    fill = "gray40"
-  ) +
-    ggplot2::scale_size(
-      range = c(0.2, 10),
-      name = abundance_label,
-      labels = scales::label_comma()
-    ) +
-    # add line
+  # Calculate annual mean age
+  grouping <- intersect(colnames(dat), facet)
+  total_fish_per_year <- dat |>
+    dplyr::group_by(dplyr::across(dplyr::all_of(c("year", grouping)))) |>
+    dplyr::summarise(total_fish = sum(estimate))
+  annual_means <- dat |>
+    dplyr::group_by(dplyr::across(dplyr::all_of(c("age", "year", grouping)))) |>
+    dplyr::summarise(years_per_year = sum(estimate)) |>
+    dplyr::filter(age != 0) |>
+    dplyr::group_by(year) |>
+    dplyr::summarise(interm = sum(age * years_per_year)) |>
+    dplyr::full_join(total_fish_per_year) |>
+    dplyr::mutate(avg = interm / total_fish)
+
+  # Create average age line
+  average_age_line <- list(
     ggplot2::geom_line(
-      data = means_dat,
+      data = annual_means,
       ggplot2::aes(
         x = year,
         y = avg
       ),
       linewidth = 1,
       color = "red"
+    )
+  )
+  # Initialize gg plot
+  plot <- ggplot2::ggplot() +
+  # Add geom
+    ggplot2::geom_point(
+      data = dat,
+      ggplot2::aes(
+        x = .data[[x]],
+        y = .data[[y]],
+        color = model,
+        size = .data[[z]]
+      ),
+      shape = 21,
+      alpha = 0.3,
+      color = "black",
+      fill = "gray40"
+      # ...
+    ) +
+    ggplot2::scale_size(
+      range = c(0.2, 10),
+      name = label,
+      labels = scales::label_comma()
+    ) +
+    # Add axis breaks
+    ggplot2::scale_x_continuous(
+      n.breaks = x_n_breaks,
+      guide = ggplot2::guide_axis(minor.ticks = TRUE)
     ) +
     ggplot2::scale_y_continuous(
       minor_breaks = y_n_breaks[[1]],
       n.breaks = y_n_breaks[[2]],
-      guide = ggplot2::guide_axis(minor.ticks = TRUE),
-      limits = c(min(dat[["age"]]), max(dat[["age"]]))
-    )
+      guide = ggplot2::guide_axis(minor.ticks = TRUE)
+      # limits = c(min(.data[[y]]), max(.data[[y]]))
+    ) +
+    # add line of average age
+    average_age_line +
+    # add noaa theme
+    theme_noaa()
+
+  # Facet plot if groups are present
+  if (!is.null(facet)) {
+    facet <- paste("~", paste(facet, collapse = " + "))
+    # facet_formula <- stats::reformulate(facet)
+    plot <- plot + ggplot2::facet_wrap(facet_formula)
+  }
+  plot
 }
 
 #------------------------------------------------------------------------------
@@ -430,7 +502,8 @@ prepare_data <- function(
     module = NULL,
     geom,
     group = NULL,
-    interactive = TRUE){
+    interactive = TRUE) {
+  # TODO: add option to scale data
   # Replace all spaces with underscore if not in proper format
   label_name <- sub(" ", "_", label_name)
   list_of_data <- list()
