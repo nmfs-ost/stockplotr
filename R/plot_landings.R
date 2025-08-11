@@ -29,10 +29,19 @@ plot_landings <- function(dat,
                           make_rda = FALSE,
                           figures_dir = getwd(),
                           fleet_names = NULL) {
-  # Units
+  # Extract landings
+  landings <- prepare_data(
+    dat = dat,
+    label_name = "landings",
+    geom = "area",
+    group = "fleet",
+    interactive = FALSE
+  ) 
+  
   # TODO: fix unit label is scaling
-  land_label <- glue::glue("Landings ({unit_label})")
-
+  # add back this code as the landings axis label
+  # glue::glue("Landings ({unit_label})")
+  
   # restructure fleet_names
   if (!is.null(fleet_names)) {
     fleet_names <- data.frame(
