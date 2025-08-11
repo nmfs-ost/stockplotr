@@ -18,10 +18,19 @@
 #' from 500,000 --> 5,000. This scale will be reflected in the y axis label.
 #' @param unit_label A string containing a unit label for the y-axis
 #'
-#' @returns
+#' @returns Create an rda package for a plot or table object. Requires an
+#' object from the R environment such as a ggplot or flextable object.
 #' @export
 #'
-#' @examples
+#' @examples \dontrun{
+#' create_rda(
+#'  object = my_plot,
+#'  topic_label = "my_plot",
+#'  fig_or_table = "figure",
+#'  dat = my_data,
+#'  dir = "path/to/save"
+#' )
+#' }
 create_rda <- function(
     object, # REQUIRED: table or plot object to export
     topic_label, # REQUIRED

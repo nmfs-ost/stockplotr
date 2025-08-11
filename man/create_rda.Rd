@@ -41,6 +41,21 @@ from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
 
 \item{topic.label}{A string that names the object}
 }
+\value{
+Create an rda package for a plot or table object. Requires an
+object from the R environment such as a ggplot or flextable object.
+}
 \description{
 Create the rda package for a plot or table
+}
+\examples{
+\dontrun{
+create_rda(
+ object = my_plot,
+ topic_label = "my_plot",
+ fig_or_table = "figure",
+ dat = my_data,
+ dir = "path/to/save"
+)
+}
 }
