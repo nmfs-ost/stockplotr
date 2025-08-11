@@ -75,7 +75,8 @@ plot_abundance_at_age <- function(
     dat = dat,
     label_name = "abundance",
     geom = "point",
-    group = "age"
+    group = "age",
+    interactive = FALSE
   )
 
   if (nrow(b) == 0) {
