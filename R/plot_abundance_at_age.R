@@ -77,6 +77,14 @@ plot_abundance_at_age <- function(
     geom = "point",
     group = "age"
   )
+
+  if (nrow(b) == 0) {
+    cli::cli_alert_warning("No data found for abundance at age. Please check the input data.")
+    return(
+      ggplot2::ggplot()
+    )
+  }
+
   # Plot data
   plot <- plot_aa(
     dat = b,
