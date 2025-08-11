@@ -44,6 +44,27 @@ plot_recruitment <- function(
     relative = FALSE,
     make_rda = FALSE,
     figures_dir = getwd()) {
+  # Extract recruitment
+  recruitment <- prepare_data(
+    dat = dat,
+    label_name = "recruitment",
+    geom = "point",
+    interactive = FALSE
+  ) 
+  # this selects SPAWN_RECRUIT as the module name...
+  if (length(unique(recruitment$label)) > 1) {
+    recruitment <- recruitment |>
+      tidyr::pivot_wider(
+        id_cols = c(year, model, group_var, estimate_lower, estimate_upper),
+        names_from = label,
+        values_from = estimate
+      )
+  } else {
+    recruitment <- recruitment |>
+      dplyr::rename(predicted_recruitment = estimate) |>
+      dplyr::select(-c(label))
+  }
+  
   # Find R0
   R0 <- dat |>
     dplyr::filter(c(grepl("recruitment", label) & age == 0) |
@@ -96,22 +117,6 @@ plot_recruitment <- function(
 
   # identify output
   fig_or_table <- "figure"
-
-  # check year isn't past end_year if not projections plot
-  check_year(
-    end_year = end_year,
-    fig_or_table = fig_or_table,
-    topic = topic_label
-  )
-
-  # Choose number of breaks for x-axis
-  x_n_breaks <- round(length(rec[["year"]]) / 10)
-  if (x_n_breaks <= 5) {
-    x_n_breaks <- round(length(rec[["year"]]) / 5)
-    if (x_n_breaks <= 2) {
-      x_n_breaks <- round(length(rec[["year"]]))
-    }
-  }
 
   plt <- ggplot2::ggplot(data = rec) +
     ggplot2::geom_point(
