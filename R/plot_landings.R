@@ -32,10 +32,11 @@ plot_landings <- function(dat,
   # Extract landings
   landings <- prepare_data(
     dat = dat,
-    label_name = "landings",
-    geom = "area",
-    group = "fleet",
-    interactive = FALSE
+    label_name = "catch",
+    geom = "point", # this doesn't matter
+    group = NULL,
+   # group = group, # use this in fxn but not when testing
+    interactive = TRUE
   ) 
   
   # TODO: fix unit label is scaling
