@@ -363,12 +363,14 @@ plot_aa <- function(
 
   # Facet plot if groups are present
   if (!is.null(facet)) {
+    if (length(unique(dat$model)) > 1) facet <- c(facet, "model")
     # Replace spaces with underscores
     facet <- gsub(" ", "_", facet)
     # If facet is a vector, paste together with +
-    facet <- paste0("~", paste(facet, collapse = " + "))
+    facet <- paste("~ ", paste(facet, collapse = " + "))
+    facet_formula <- stats::reformulate(facet)
     # facet_formula <- stats::reformulate(facet)
-    plot <- plot + ggplot2::facet_wrap(facet)
+    plot2 <- plot + ggplot2::facet_wrap(facet_formula)
   }
   plot
 }
