@@ -38,11 +38,12 @@ plot_catch_comp <- function(dat,
 
   # read standard data file and extract target quantity
   if (dim(dat |>
-      dplyr::filter(label == "catch"))[1] > 1) {
+    dplyr::filter(label == "catch"))[1] > 1) {
     catch <- dat |>
-      dplyr::filter(label == "catch",
-                    !is.na(fleet),
-                    year <= end_year
+      dplyr::filter(
+        label == "catch",
+        !is.na(fleet),
+        year <= end_year
       ) |>
       dplyr::mutate(
         estimate = as.numeric(estimate),
@@ -131,5 +132,4 @@ plot_catch_comp <- function(dat,
   } else {
     message("This plot has not yet been developed for models without catch output.")
   }
-
 }
