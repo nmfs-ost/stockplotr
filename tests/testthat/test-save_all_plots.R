@@ -24,6 +24,7 @@ test_that("save_all_plots works when all figures/tables are plotted", {
   # expect that the figures are all created with expected names
   fig_base_temp_files <- c(
     "biomass_figure.rda",
+  #  "catch_figure.rda",
     "landings_figure.rda",
     # "pop.baa_figure.rda",
     # "pop.naa_figure.rda",
@@ -72,6 +73,7 @@ test_that("save_all_plots works when some figures/tables are not plotted", {
   # except for biomass_figure
   fig_base_temp_files <- c(
     # "biomass_figure.rda",
+  #  "catch_figure.rda",
     "landings_figure.rda",
     # "pop.baa_figure.rda",
     # "pop.naa_figure.rda",
@@ -84,6 +86,16 @@ test_that("save_all_plots works when some figures/tables are not plotted", {
     fig_base_temp_files
   )
 
+  # expect that the figures are all created with expected names
+  tab_base_temp_files <- c(
+    "bnc_table.rda",
+    "indices.abundance_table.rda",
+    "landings_table.rda"
+  )
+  expect_equal(
+    list.files(fs::path(getwd(), "tables")),
+    tab_base_temp_files
+  )
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
   unlink(fs::path(getwd(), "figures"), recursive = T)
