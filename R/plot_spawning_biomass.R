@@ -89,7 +89,8 @@ plot_spawning_biomass <- function(
     label_name = "spawning biomass",
     geom = geom,
     group = group,
-    module = module
+    module = module,
+    scale_amount = scale_amount
   )
 
   plt <- plot_timeseries(
@@ -107,16 +108,16 @@ plot_spawning_biomass <- function(
   } else {
     rp_dat <- dat
   }
-  ref_line <- reference_line(
-    # plot = plt,
+  final <- reference_line(
+    plot = plt,
     dat = rp_dat,
     label_name = "spawning_biomass",
     reference  = ref_line,
     relative = relative,
     scale_amount = scale_amount
-  )
+  ) + theme_noaa()
 
-  final <- plot + ref_line + theme_noaa()
+  # final <- 
 
   ### Make RDA ----
   if (make_rda) {

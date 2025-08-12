@@ -379,6 +379,7 @@ plot_aa <- function(
 
 #' Pre-formatted reference line
 #'
+#' @param plot a ggplot2 object where the reference line will be added
 #' @param dat standard data frame where reference point should be extracted
 #' @param label_name string of the name of the quantity that users want to 
 #' extract the reference point from
@@ -394,6 +395,7 @@ plot_aa <- function(
 #' reference_line(dat, "biomass", "msy")
 #' }
 reference_line <- function(
+    plot,
     dat,
     label_name,
     reference,
@@ -407,11 +409,11 @@ reference_line <- function(
   )
   
   # Add geom for ref line
-  list(
+  plot +
     ggplot2::geom_hline(
-    yintercept = ref_line_val,
-    color = "black",
-    linetype = "dashed"
+      ggplot2::aes(yintercept = ref_line_val),
+      color = "black",
+      linetype = "dashed"
     ) +
     ggplot2::annotate(
       geom = "text",
@@ -423,7 +425,6 @@ reference_line <- function(
       hjust = 1,
       vjust = 0
     )
-  )
 }
 
 #------------------------------------------------------------------------------
