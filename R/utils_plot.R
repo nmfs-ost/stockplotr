@@ -370,7 +370,7 @@ plot_aa <- function(
     facet <- paste("~ ", paste(facet, collapse = " + "))
     facet_formula <- stats::reformulate(facet)
     # facet_formula <- stats::reformulate(facet)
-    plot2 <- plot + ggplot2::facet_wrap(facet_formula)
+    plot <- plot + ggplot2::facet_wrap(facet_formula)
   }
   plot
 }
@@ -491,6 +491,8 @@ calculate_uncertainty <- function() {
 #' and "area".
 #' @param group Selected grouping for the data. If you want to just summarize
 #' the data across all factors, set group = "none".
+#' @param scale_amount A number describing how much to scale down the quantities
+#' shown on the y axis.
 #' @param interactive logical. If TRUE, the user will be prompted to select
 #' a module_name when there was more than one found in the filtered dataset.
 #'
@@ -507,6 +509,7 @@ prepare_data <- function(
     module = NULL,
     geom,
     group = NULL,
+    scale_amount = 1,
     interactive = TRUE) {
   # TODO: add option to scale data
   # Replace all spaces with underscore if not in proper format
@@ -542,15 +545,15 @@ prepare_data <- function(
       dplyr::mutate(
         year = as.numeric(year),
         model = ifelse(model_label, get_id(dat)[i], NA),
-        estimate = as.numeric(estimate),
+        estimate = as.numeric(estimate) / scale_amount,
         # calc uncertainty when se
         # TODO: calculate other sources of error to upper and lower (cv,)
         estimate_lower = dplyr::case_when(
-          grepl("se", uncertainty_label) ~ estimate - 1.96 * uncertainty,
+          grepl("se", uncertainty_label) ~ (estimate - 1.96 * uncertainty) / scale_amount,
           TRUE ~ NA
         ),
         estimate_upper = dplyr::case_when(
-          grepl("se", uncertainty_label) ~ estimate + 1.96 * uncertainty,
+          grepl("se", uncertainty_label) ~ (estimate + 1.96 * uncertainty) / scale_amount,
           TRUE ~ NA
         )
       )
