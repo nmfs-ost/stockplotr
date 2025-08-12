@@ -64,21 +64,18 @@ plot_abundance_at_age <- function(
   } else {
     cli::cli_abort("Scale_amount is out of bounds. Please choose a value ranging from 1-1000000000 (one billion) in orders of magnitude (e.g., 1, 10, 100, 1000, etc.)", wrap = TRUE)
   }
-  
-  abundance_label <- ifelse(
-    scale_amount == 1000,
-    yes = glue::glue("Abundance \n({unit_mag}{unit_label})"),
-    no = glue::glue("Relative abundance")
-  )
-
+  # Create label for abundance units in legend
+  abundance_label <- glue::glue("Abundance \n({unit_mag}{unit_label})")
+  # Filter data
   b <- prepare_data(
     dat = dat,
     label_name = "abundance",
     geom = "point",
     group = "age",
+    scale_amount = scale_amount,
     interactive = FALSE
   )
-
+  # Check for extracted data, if not return warning and empty plot
   if (nrow(b) == 0) {
     cli::cli_alert_warning("No data found for abundance at age. Please check the input data.")
     return(
