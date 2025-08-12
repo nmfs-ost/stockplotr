@@ -24,7 +24,7 @@ test_that("save_all_plots works when all figures/tables are plotted", {
   # expect that the figures are all created with expected names
   fig_base_temp_files <- c(
     "biomass_figure.rda",
-  #  "catch_figure.rda",
+    #  "catch_figure.rda",
     "landings_figure.rda",
     # "pop.baa_figure.rda",
     # "pop.naa_figure.rda",
@@ -73,7 +73,7 @@ test_that("save_all_plots works when some figures/tables are not plotted", {
   # except for biomass_figure
   fig_base_temp_files <- c(
     # "biomass_figure.rda",
-  #  "catch_figure.rda",
+    #  "catch_figure.rda",
     "landings_figure.rda",
     # "pop.baa_figure.rda",
     # "pop.naa_figure.rda",

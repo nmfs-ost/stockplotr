@@ -392,11 +392,11 @@ write_captions <- function(dat, # converted model output object
     ## catch composition
     # minimum & maximum catch
     if (dim(dat |>
-            dplyr::filter(label == "catch"))[1] > 1) {
-
+      dplyr::filter(label == "catch"))[1] > 1) {
       catch <- dat |>
-        dplyr::filter(label == "catch",
-                      !is.na(fleet)
+        dplyr::filter(
+          label == "catch",
+          !is.na(fleet)
         ) |>
         dplyr::mutate(
           estimate = as.numeric(estimate),
@@ -416,9 +416,9 @@ write_captions <- function(dat, # converted model output object
         dplyr::slice(which.max(estimate)) |>
         dplyr::select(estimate) |>
         as.numeric()
-      } else {
-        tot.catch.min <- "NA"
-        tot.catch.max <- "NA"
+    } else {
+      tot.catch.min <- "NA"
+      tot.catch.max <- "NA"
     }
 
     ## CAL (catch at length)- don't code quantities yet
