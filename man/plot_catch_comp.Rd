@@ -13,20 +13,16 @@ plot_catch_comp(
 )
 }
 \arguments{
-\item{dat}{A data frame returned from `asar::convert_output()`.}
+\item{dat}{A data frame returned from \link[asar]{convert_output}}
 
 \item{unit_label}{indicate the name of the units of catch as to label the axis}
 
-\item{end_year}{last year of assessment}
+\item{end_year}{Last year of assessment. Default is the current year.}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
-the .rda will be exported to the folder indicated in the argument "rda_dir".
+the rda will be exported to the folder indicated in the argument "figures_dir".
 Default is FALSE.}
-
-\item{rda_dir}{The location of the folder containing the generated .rda files
-("rda_files") that will be created if the argument `make_rda` = TRUE.
-Default is the working directory.}
 }
 \value{
 A plot ready for a stock assessment report of catch composition by fleet.

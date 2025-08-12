@@ -6,7 +6,6 @@
 #' @return A plot ready for a stock assessment report of catch composition by fleet.
 #' This plot is made only when landings are explicitly named in the output file.
 #' The current plot function does not combine all sources of catch.
-#' @export
 #'
 plot_catch_comp <- function(dat,
                             unit_label = "metric tons",
