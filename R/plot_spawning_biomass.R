@@ -82,7 +82,7 @@ plot_spawning_biomass <- function(
   #   fig_or_table = fig_or_table,
   #   topic = topic_label
   # )
-  
+
   # Filter data for spawning biomass
   filter_data <- prepare_data(
     dat = dat,
@@ -91,7 +91,7 @@ plot_spawning_biomass <- function(
     group = group,
     module = module
   )
-  
+
   plt <- plot_timeseries(
     dat = filter_data,
     y = "estimate",
@@ -107,18 +107,18 @@ plot_spawning_biomass <- function(
   } else {
     rp_dat <- dat
   }
-  plt2 <- reference_line(
-    plot = plt,
+  ref_line <- reference_line(
+    # plot = plt,
     dat = rp_dat,
     label_name = "spawning_biomass",
     reference  = ref_line,
     relative = relative,
     scale_amount = scale_amount
   )
-  
-  final <- suppressWarnings(add_theme(plt2))
-  
-  ### Make RDA ---- 
+
+  final <- plot + ref_line + theme_noaa()
+
+  ### Make RDA ----
   if (make_rda) {
     create_rda(
       object = final,
@@ -132,7 +132,6 @@ plot_spawning_biomass <- function(
       unit_label = unit_label
     )
   }
-  
   # Output final plot
-  return(final)
+  final
 }

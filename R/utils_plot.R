@@ -394,11 +394,10 @@ plot_aa <- function(
 #' reference_line(dat, "biomass", "msy")
 #' }
 reference_line <- function(
-    plot,
-    dat, 
+    dat,
     label_name,
-    reference, 
-    relative = FALSE, 
+    reference,
+    relative = FALSE,
     scale_amount = 1
     ) {
   # calculate reference point value
@@ -408,7 +407,7 @@ reference_line <- function(
   )
   
   # Add geom for ref line
-  plot + 
+  list(
     ggplot2::geom_hline(
     yintercept = ref_line_val,
     color = "black",
@@ -424,6 +423,7 @@ reference_line <- function(
       hjust = 1,
       vjust = 0
     )
+  )
 }
 
 #------------------------------------------------------------------------------
