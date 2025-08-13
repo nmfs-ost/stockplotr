@@ -6,15 +6,19 @@
 \usage{
 plot_recruitment_deviations(
   dat,
-  end_year = format(Sys.Date(), "\%Y"),
+  module = NULL,
   make_rda = FALSE,
-  figures_dir = getwd()
+  figures_dir = getwd(),
+  ...
 )
 }
 \arguments{
 \item{dat}{A data frame returned from \link[asar]{convert_output}}
 
 \item{end_year}{Last year of assessment. Default is the current year.}
+
+\item{module}{The selected module or name where the data was grouped in  the 
+original output file.}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,

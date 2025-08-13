@@ -6,7 +6,12 @@
 \usage{
 plot_spawning_biomass(
   dat,
-  unit_label = "mt",
+  geom = "line",
+  group = NULL,
+  facet = NULL,
+  ref_line = "msy",
+  unit_label = "metric tons",
+  module = NULL,
   scale_amount = 1,
   ref_line = "msy",
   ref_point = NULL,
@@ -20,6 +25,9 @@ plot_spawning_biomass(
 \item{dat}{A data frame returned from \link[asar]{convert_output}}
 
 \item{unit_label}{units for spawning_biomass}
+
+\item{module}{The selected module or name where the data was grouped in  the 
+original output file.}
 
 \item{scale_amount}{A number describing how much to scale down the quantities
 shown on the y axis. For example, scale_amount = 100 would scale down a value

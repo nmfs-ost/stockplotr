@@ -25,22 +25,19 @@
 #' }
 plot_recruitment_deviations <- function(
     dat,
-    group = NULL,
-    facet = NULL,
+    # geom = "point",
+    module = NULL,
     make_rda = FALSE,
     figures_dir = getwd(),
-    ...) {
-  # create plot-specific variables to use throughout fxn for naming and IDing
-  topic_label <- "recruitment.deviations"
-
-  # identify output
-  fig_or_table <- "figure"
-
-  # check year isn't past end_year if not projections plot
-  check_year(
-    end_year = end_year,
-    fig_or_table = fig_or_table,
-    topic = topic_label
+    ...
+) {
+  # Make plot
+  filter_data <- prepare_data(
+    dat = dat,
+    label_name = "recruitment_deviations",
+    geom = "point",
+    group = NULL,
+    module = module
   )
 
   rec_devs <- dat |>

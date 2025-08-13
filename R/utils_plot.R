@@ -349,3 +349,274 @@ cap_first_letter <- function(s) {
   rest_of_string <- substring(s, 2)
   paste0(first_letter, rest_of_string)
 }
+
+#------------------------------------------------------------------------------
+
+calculate_uncertainty <- function() {
+  
+}
+
+#------------------------------------------------------------------------------
+
+#' Prep data for input into aesthetics for ggplot2
+#'
+#' @param dat a data frame or list of data frames that contains the data to be
+#' plotted.
+#' @param label_name a string of the name of the label that is used to filter
+#' the data.
+#' @param geom Type of plot user wants to create. Options are "line", "point",
+#' and "area".
+#' @param group Selected grouping for the data. If you want to just summarize
+#' the data across all factors, set group = "none".
+#' @param interactive logical. If TRUE, the user will be prompted to select
+#' a module_name when there was more than one found in the filtered dataset.
+#'
+#' @returns a data frame that is pre-formatted for plotting with ggplot2.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' prepare_data(dat, "biomass", "line", group = "fleet")
+#' }
+prepare_data <- function(
+    dat,
+    label_name,
+    module = NULL,
+    geom,
+    group = NULL,
+    interactive = TRUE){
+  # Replace all spaces with underscore if not in proper format
+  label_name <- sub(" ", "_", label_name)
+  list_of_data <- list()
+  length_dat <- ifelse(
+    is.data.frame(dat),
+    1,
+    length(dat)
+  )
+  for (i in 1:length_dat) {
+    # start for loop to bring together each data as their own geom
+    # Add columns to data if grouping is selected
+    # format geoms the way we want
+    # ggplot easier and more consistent to use
+    # defaults are focused for stock assessment
+    # vignette to show how you can filter the data instead of the devs
+    # vignette is the effort to show what to do and has example
+    # would have to use the plus operator
+    
+    if (is.data.frame(dat)) {
+      data <- dat
+      model_label = FALSE
+    } else {
+      data <- dat[[i]]
+      model_label = TRUE
+    }
+    data <- data |>
+      dplyr::filter(
+        grepl(glue::glue("{label_name}$"), label),
+        era == "time"
+      ) |>
+      dplyr::mutate(
+        year = as.numeric(year),
+        model = ifelse(model_label, get_id(dat)[i], NA),
+        estimate = as.numeric(estimate),
+        # calc uncertainty when se
+        # TODO: calculate other sources of error to upper and lower (cv,)
+        estimate_lower = dplyr::case_when(
+          grepl("se", uncertainty_label) ~ estimate - 1.96 * uncertainty,
+          TRUE ~ NA
+        ),
+        estimate_upper = dplyr::case_when(
+          grepl("se", uncertainty_label) ~ estimate + 1.96 * uncertainty,
+          TRUE ~ NA
+        )
+      )
+    if (nrow(data) < 1) cli::cli_abort("{label_name} not found.")
+    if (is.null(group)) {
+      data <- data |>
+        dplyr::mutate(
+          group_var = switch(geom,
+                             "line" = "solid",
+                             "point" = "black",
+                             1
+          )
+        )
+    } else if (group == "none"){
+      data <- data |>
+        dplyr::mutate(
+          group_var = switch(geom,
+                             "line" = "solid",
+                             "point" = "black",
+                             1
+          )
+        )
+    } else {
+      data <- data |>
+        dplyr::mutate(
+          group_var = .data[[group]]
+        )
+    }
+    list_of_data[[get_id(dat)[i]]] <- data
+  }
+  # Put in
+  plot_data <- dplyr::bind_rows(list_of_data, .id = "model")
+  # do.call(rbind, list_of_data)
+  
+  # Check if there are multiple module_names present
+  if (length(unique(plot_data$module_name)) > 1) {
+    if (!is.null(module)) {
+      plot_data <- plot_data |>
+        dplyr::filter(
+          module_name == module
+        )
+    } else {
+      cli::cli_alert_warning("Multiple module names found in data. \n")
+      options <- c()
+      for (i in seq_along(unique(plot_data$module_name))) {
+        # options <- paste0(options, " ", i, ") ", unique(plot_data$module_name)[i], "\n")
+        options[i] <- paste0(" ", i, ") ", unique(plot_data$module_name)[i])
+      }
+      if (interactive()) {
+        if(interactive) {
+          question1 <- utils::menu(
+                  options,
+                  title = "Please select one of the following:"
+                )
+          selected_module <- unique(plot_data$module_name)[as.numeric(question1)]
+        } else {
+          selected_module <- unique(plot_data$module_name)[1]
+          cli::cli_alert_info("Selection bypassed. Filtering by {selected_module}.")
+        }
+      } else {
+        selected_module <- unique(plot_data$module_name)[1]
+        cli::cli_alert_info(glue::glue("Environment not interactive. Selecting {selected_module}."))
+      }
+      if (length(selected_module) > 0) {
+        plot_data <- plot_data |>
+          dplyr::filter(
+            module_name == selected_module
+          )
+      }
+    }
+  }
+  
+  # If group is false then filter out/summarize data for plotting
+  # unsure if want to keep this
+  # this is filtering for time series
+  # TODO: change or remove in the future when moving to other plot types
+  if (is.null(group)){
+    plot_data <- plot_data |>
+      dplyr::filter(
+        !is.na(year),
+        is.na(fleet) | length(unique(fleet)) <= 1,
+        is.na(sex) | length(unique(sex)) <= 1,
+        is.na(area) | length(unique(area)) <= 1,
+        is.na(growth_pattern) | length(unique(growth_pattern)) <= 1
+      ) |>
+      dplyr::group_by(
+        year,
+        model,
+        group_var,
+        module_name,
+        label
+      ) |>
+      dplyr::summarise(
+        estimate = mean(estimate, na.rm = TRUE),
+        estimate_lower = mean(estimate_lower, na.rm = TRUE),
+        estimate_upper = mean(estimate_upper, na.rm = TRUE)
+      ) |>
+      dplyr::ungroup()
+  } else if (group == "none") {
+    plot_data <- plot_data |>
+      dplyr::filter(
+        !is.na(year),
+        is.na(fleet) | length(unique(fleet)) <= 1,
+        is.na(sex) | length(unique(sex)) <= 1,
+        is.na(area) | length(unique(area)) <= 1,
+        is.na(growth_pattern) | length(unique(growth_pattern)) <= 1
+      ) |>
+      dplyr::group_by(
+        year,
+        model,
+        group_var,
+        module_name,
+        label
+      ) |>
+      dplyr::summarise(
+        estimate = mean(estimate, na.rm = TRUE),
+        estimate_lower = mean(estimate_lower, na.rm = TRUE),
+        estimate_upper = mean(estimate_upper, na.rm = TRUE)
+      ) |>
+      dplyr::ungroup()
+  }
+  
+  if (geom == "area") {
+    plot_data2 <- dplyr::mutate(
+      plot_data,
+      model = reorder(.data[["model"]], .data[["estimate"]], function(x) -max(x) )
+    )
+  }
+  plot_data
+}
+
+#------------------------------------------------------------------------------
+
+# helper function to get the names of a list or name the elements of the list in number
+get_id <- function(dat) {
+  if (is.null(names(dat))) {
+    # If the list is unnamed, return the sequence of its elements
+    return(seq_along(dat))
+  } else {
+    # If the list is named, return its names
+    return(names(dat))
+  }
+}
+
+#------------------------------------------------------------------------------
+
+# Calculate reference value point
+
+calculate_reference_point <- function(
+    dat,
+    reference_name
+) {
+  # Check if the reference point exists in the data
+  if (inherits(try(solve(as.numeric(dat[
+    grep(
+      pattern = glue::glue("^{reference_name}$"),
+      x = dat[["label"]]
+    ),
+    "estimate"
+  ])), silent = TRUE), "try-error")) {
+    ref_line_val <- NULL
+  } else {
+    ref_line_val <- as.numeric(dat[
+      grep(
+        pattern = glue::glue("^{reference_name}$"),
+        x = dat[["label"]]
+      ),
+      "estimate"
+    ])
+  }
+  
+  # Check if the reference value was found
+  if (length(ref_line_val) == 0) {
+    cli::cli_alert_warning(
+      "The resulting reference value of `{reference_name}` was not found.",
+      wrap = TRUE
+    )
+    ref_line_val <- NULL
+  } else if (length(ref_line_val) > 1) {
+    cli::cli_alert_warning("More than one of the resulting reference value of `{reference_name}` was found. \n")
+    options <- c()
+    for (i in seq_along(unique(plot_data$module_name))) {
+      # options <- paste0(options, " ", i, ") ", unique(plot_data$module_name)[i], "\n")
+      options[i] <- paste0(" ", i, ") ", unique(plot_data$module_name)[i])
+    }
+    ref_line_val <- utils::menu(
+      options,
+      title = "Please select one:"
+    )
+    ref_line_val <- as.numeric(ref_line_val)
+  }
+  ref_line_val
+}
