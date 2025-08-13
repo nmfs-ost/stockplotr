@@ -6,9 +6,9 @@
 \usage{
 plot_biomass_at_age(
   dat,
+  group = NULL,
   unit_label = "mt",
-  scale_amount = 1,
-  end_year = format(Sys.Date(), "\%Y"),
+  scale_amount = 1000,
   make_rda = FALSE,
   figures_dir = getwd()
 )
@@ -22,16 +22,10 @@ plot_biomass_at_age(
 age. For example, scale_amount = 100 would scale down a value
 from 500,000 --> 5,000. This scale will be reflected in the legend label.}
 
-\item{end_year}{Last year of assessment. Default is the current year.}
-
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
-the rda will be exported to the folder indicated in the argument "figures_dir".
+the .rda will be exported to the folder indicated in the argument "rda_dir".
 Default is FALSE.}
-
-\item{figures_dir}{The location of the folder containing the generated figure
-rda files ("figures") that will be created if the argument `make_rda` = TRUE.
-Default is the working directory.}
 }
 \value{
 Plot total biomass at age from a stock assessment model as found in a NOAA
