@@ -24,5 +24,11 @@ export(plot_timeseries)
 export(process_data)
 export(reference_line)
 export(save_all_plots)
+<<<<<<< HEAD
+=======
+export(table_bnc)
+export(table_indices)
+export(table_landings)
+>>>>>>> 52625f7 (Apply viridis palette to figures (#135))
 export(theme_noaa)
 export(write_captions)
