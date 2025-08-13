@@ -1,4 +1,4 @@
-################################
+#################################
 # Utility functions for plotting
 #################################
 
@@ -151,7 +151,6 @@ plot_timeseries <- function(
   
   # Calc axis breaks
   x_n_breaks <- axis_breaks(dat)
-
   breaks <- ggplot2::scale_x_continuous(
     n.breaks = x_n_breaks,
     guide = ggplot2::guide_axis(
@@ -169,9 +168,10 @@ plot_timeseries <- function(
   
   # Check if facet(s) are desired
   if (!is.null(facet)){
-    facet <- paste("~", paste(facet, collapse = " + "))
+    if (geom == "area")
+      facet <- paste("~", paste(facet, collapse = " + "))
     facet_formula <- stats::reformulate(facet)
-
+    
     final <- final + ggplot2::facet_wrap(facet_formula)
   }
   final
@@ -570,3 +570,4 @@ calculate_reference_point <- function(
   }
   ref_line_val
 }
+
