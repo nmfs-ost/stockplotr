@@ -17,6 +17,22 @@
 #'   option if the ref_line cannot find your desired point. Indicate the
 #'   reference point in the form c("label" = value).
 #' @param unit_label units for spawning_biomass
+#' @param module The selected module or name where the data was grouped in  the 
+#' original output file.
+#' @param scale_amount A number describing how much to scale down the quantities
+#' shown on the y axis. For example, scale_amount = 100 would scale down a value
+#' from 500,000 --> 5,000. This scale will be reflected in the y axis label.
+#' @param relative A logical value specifying if the resulting figures should
+#'   be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
+#'   which reference point to use.
+#' @param make_rda TRUE/FALSE; indicate whether to produce an .rda file containing
+#' a list with the figure/table, caption, and alternative text (if figure). If TRUE,
+#' the rda will be exported to the folder indicated in the argument "figures_dir".
+#' Default is FALSE.
+#' @param figures_dir The location of the folder containing the generated figure
+#' rda files ("figures") that will be created if the argument `make_rda` = TRUE.
+#' Default is the working directory.
+#' @param ... Arguments called from ggplot2::geom_line or ggplotr2::geom_point 
 #' @return
 #' Plot spawning biomass from the results of an assessment model translated to
 #' the standard output. The [ggplot2::ggplot()] object is returned for further
@@ -48,7 +64,12 @@
 #' }
 plot_spawning_biomass <- function(
     dat,
-    unit_label = "mt",
+    geom = "line",
+    group = NULL,
+    facet = NULL,
+    ref_line = "msy",
+    unit_label = "metric tons",
+    module = NULL,
     scale_amount = 1,
     ref_line = "msy",
     ref_point = NULL,
@@ -70,13 +91,34 @@ plot_spawning_biomass <- function(
     no = glue::glue("Spawning biomass ({unit_label})")
   )
 
-  # output <- dat
-  all_years <- dat[["year"]][grepl("^[0-9\\.]+$", dat[["year"]])]
-
-  # create plot-specific variables to use throughout fxn for naming and IDing
-  # Indicate if spawning biomass is relative or not
-  if (relative) {
-    topic_label <- "relative.spawning.biomass"
+  # check year isn't past end_year if not projections plot
+  # check_year(
+  #   end_year = end_year,
+  #   fig_or_table = fig_or_table,
+  #   topic = topic_label
+  # )
+  
+  # Filter data for spawning biomass
+  filter_data <- prepare_data(
+    dat = dat,
+    label_name = "spawning biomass",
+    geom = geom,
+    group = group,
+    module = module
+  )
+  
+  plt <- plot_timeseries(
+    dat = filter_data,
+    y = "estimate",
+    geom = geom,
+    ylab = spawning_biomass_label,
+    group = group,
+    facet = facet
+  )
+  # Add reference line
+  # getting data set - an ifelse statement in the fxn wasn't working
+  if (!is.data.frame(dat)) {
+    rp_dat <- dat[[1]]
   } else {
     topic_label <- "spawning.biomass"
   }
