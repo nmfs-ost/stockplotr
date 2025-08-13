@@ -21,7 +21,7 @@
 #' }
 plot_recruitment_deviations <- function(
     dat,
-    geom = "point",
+    # geom = "point",
     make_rda = FALSE,
     figures_dir = getwd(),
     ...
@@ -30,7 +30,7 @@ plot_recruitment_deviations <- function(
   filter_data <- prepare_data(
     dat = dat,
     label_name = "recruitment_deviations",
-    geom = geom,
+    geom = "point",
     group = NULL
   )
 
@@ -42,10 +42,10 @@ plot_recruitment_deviations <- function(
   final <- plot_error(
     filter_data,
     geom = "point",
-     facet = if(length(unique(filter_data$model)) > 1) "model" else NULL,
-     xlab = "Year",
-     ylab = "Recruitment Deviations",
-     size = 2
+    facet = if(length(unique(filter_data$model)) > 1) "model" else NULL,
+    xlab = "Year",
+    ylab = "Recruitment Deviations",
+    size = 2
   ) +
   # ggplot2::facet_wrap(~ model, scales = "free_y") +
   theme_noaa()
