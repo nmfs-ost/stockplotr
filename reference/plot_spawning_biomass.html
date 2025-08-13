@@ -80,14 +80,16 @@ also be made relative to this reference line rather than in absolute units.</p>
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_spawning_biomass</span><span class="op">(</span></span>
 <span>  <span class="va">dat</span>,</span>
-<span>  unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
-<span>  scale_amount <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  geom <span class="op">=</span> <span class="st">"line"</span>,</span>
+<span>  group <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  facet <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ref_line <span class="op">=</span> <span class="st">"msy"</span>,</span>
-<span>  ref_point <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  end_year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"%Y"</span><span class="op">)</span>,</span>
+<span>  unit_label <span class="op">=</span> <span class="st">"metric tons"</span>,</span>
+<span>  scale_amount <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  relative <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  make_rda <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  figures_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  figures_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -96,7 +98,34 @@ also be made relative to this reference line rather than in absolute units.</p>
 
 
 <dl><dt id="arg-dat">dat<a class="anchor" aria-label="anchor" href="#arg-dat"></a></dt>
-<dd><p>A data frame returned from <a href="https://rdrr.io/pkg/asar/man/convert_output.html" class="external-link">convert_output</a></p></dd>
+<dd><p>A data frame or names list of data frames returned from
+<a href="https://rdrr.io/pkg/asar/man/convert_output.html" class="external-link">convert_output</a>. The first data frame in the list is used in
+calculation of a reference line if one is present</p></dd>
+
+
+<dt id="arg-geom">geom<a class="anchor" aria-label="anchor" href="#arg-geom"></a></dt>
+<dd><p>A string stating the geom used for the plot. Default is "line".
+Options include "line", "point", or "area"</p></dd>
+
+
+<dt id="arg-group">group<a class="anchor" aria-label="anchor" href="#arg-group"></a></dt>
+<dd><p>a string of a single column that groups the data (e.g. "fleet",
+"sex", "area", etc.). Currently can only have one level of grouping.</p></dd>
+
+
+<dt id="arg-facet">facet<a class="anchor" aria-label="anchor" href="#arg-facet"></a></dt>
+<dd><p>a string or vector of strings of a column that facets the data
+(e.g. "year", "area", etc.)</p></dd>
+
+
+<dt id="arg-ref-line">ref_line<a class="anchor" aria-label="anchor" href="#arg-ref-line"></a></dt>
+<dd><p>A string specifying the type of reference you want to
+compare spawning biomass to. The default is `"target"`, which looks for
+`"spawning_biomass_target"` in the `"label"` column of `dat`. The actual
+searching in `dat` is case agnostic and will work with either upper- or
+lower-case letters but you must use one of the options specified in the
+default list to ensure that the label on the figure looks correct
+regardless of how it is specified in `dat`.</p></dd>
 
 
 <dt id="arg-unit-label">unit_label<a class="anchor" aria-label="anchor" href="#arg-unit-label"></a></dt>
@@ -107,28 +136,6 @@ also be made relative to this reference line rather than in absolute units.</p>
 <dd><p>A number describing how much to scale down the quantities
 shown on the y axis. For example, scale_amount = 100 would scale down a value
 from 500,000 –&gt; 5,000. This scale will be reflected in the y axis label.</p></dd>
-
-
-<dt id="arg-ref-line">ref_line<a class="anchor" aria-label="anchor" href="#arg-ref-line"></a></dt>
-<dd><p>A string specifying the type of reference you want to
-compare spawning biomass to. The default is `"msy"`, which looks for
-`"spawning_biomass_target"` in the `"label"` column of `dat`. The actual
-searching in `dat` is case agnostic and will work with either upper- or
-lower-case letters but you must use one of the options specified in the
-default list to ensure that the label on the figure looks correct
-regardless of how it is specified in `dat`. Other possibilities may include
-"target", "MSY", and "unfished".</p></dd>
-
-
-<dt id="arg-ref-point">ref_point<a class="anchor" aria-label="anchor" href="#arg-ref-point"></a></dt>
-<dd><p>A known value of the reference point along with the label
-for the reference point as specified in the output file. Please use this
-option if the ref_line cannot find your desired point. Indicate the
-reference point in the form c("label" = value).</p></dd>
-
-
-<dt id="arg-end-year">end_year<a class="anchor" aria-label="anchor" href="#arg-end-year"></a></dt>
-<dd><p>Last year of assessment. Default is the current year.</p></dd>
 
 
 <dt id="arg-relative">relative<a class="anchor" aria-label="anchor" href="#arg-relative"></a></dt>
@@ -149,6 +156,10 @@ Default is FALSE.</p></dd>
 rda files ("figures") that will be created if the argument `make_rda` = TRUE.
 Default is the working directory.</p></dd>
 
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Arguments called from ggplot2::geom_line or ggplotr2::geom_point</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -160,25 +171,14 @@ modifications if needed.</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="fu">plot_spawning_biomass</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">plot_spawning_biomass</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">dat</span>,</span></span>
-<span class="r-in"><span>  unit_label <span class="op">=</span> <span class="st">"my_unit"</span>,</span></span>
-<span class="r-in"><span>  ref_line <span class="op">=</span> <span class="st">"msy"</span>,</span></span>
-<span class="r-in"><span>  end_year <span class="op">=</span> <span class="fl">2024</span>,</span></span>
-<span class="r-in"><span>  figures_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">plot_spawning_biomass</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">dat</span>,</span></span>
-<span class="r-in"><span>  unit_label <span class="op">=</span> <span class="st">"my_unit"</span>,</span></span>
-<span class="r-in"><span>  scale_amount <span class="op">=</span> <span class="fl">100</span>,</span></span>
-<span class="r-in"><span>  ref_point <span class="op">=</span> <span class="fl">1000</span>,</span></span>
-<span class="r-in"><span>  end_year <span class="op">=</span> <span class="fl">2024</span>,</span></span>
-<span class="r-in"><span>  relative <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>  make_rda <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>  figures_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">'base_model'</span><span class="op">=</span><span class="va">dat1</span>,<span class="st">'sensitivity1'</span><span class="op">=</span><span class="va">dat2</span>,<span class="st">'sensitivity2'</span><span class="op">=</span><span class="va">dat3</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  geom <span class="op">=</span> <span class="st">"line"</span>,</span></span>
+<span class="r-in"><span>  group<span class="op">=</span> <span class="st">"sex"</span>,</span></span>
+<span class="r-in"><span>  facet <span class="op">=</span> <span class="st">"fleet"</span>,</span></span>
+<span class="r-in"><span>  ref_line <span class="op">=</span> <span class="st">"target"</span>,</span></span>
+<span class="r-in"><span>  unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span></span>
+<span class="r-in"><span>  scale_amount <span class="op">=</span> <span class="fl">1000</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
