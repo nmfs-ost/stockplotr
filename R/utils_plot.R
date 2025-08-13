@@ -1,4 +1,4 @@
-#################################
+################################
 # Utility functions for plotting
 #################################
 
@@ -151,6 +151,7 @@ plot_timeseries <- function(
   
   # Calc axis breaks
   x_n_breaks <- axis_breaks(dat)
+
   breaks <- ggplot2::scale_x_continuous(
     n.breaks = x_n_breaks,
     guide = ggplot2::guide_axis(
@@ -168,8 +169,7 @@ plot_timeseries <- function(
   
   # Check if facet(s) are desired
   if (!is.null(facet)){
-    if (geom == "area")
-      facet <- paste("~", paste(facet, collapse = " + "))
+    facet <- paste("~", paste(facet, collapse = " + "))
     facet_formula <- stats::reformulate(facet)
     
     final <- final + ggplot2::facet_wrap(facet_formula)
@@ -342,14 +342,16 @@ calculate_uncertainty <- function() {
 
 #' Prep data for input into aesthetics for ggplot2
 #'
-#' @param dat a data frame or list of data frames that contains the data to be 
+#' @param dat a data frame or list of data frames that contains the data to be
 #' plotted.
-#' @param label_name a string of the name of the label that is used to filter 
+#' @param label_name a string of the name of the label that is used to filter
 #' the data.
-#' @param geom Type of plot user wants to create. Options are "line", "point", 
+#' @param geom Type of plot user wants to create. Options are "line", "point",
 #' and "area".
-#' @param group Selected grouping for the data. If you want to just summarize 
+#' @param group Selected grouping for the data. If you want to just summarize
 #' the data across all factors, set group = "none".
+#' @param interactive logical. If TRUE, the user will be prompted to select
+#' a module_name when there was more than one found in the filtered dataset.
 #'
 #' @returns a data frame that is pre-formatted for plotting with ggplot2.
 #' @export
@@ -361,8 +363,10 @@ calculate_uncertainty <- function() {
 prepare_data <- function(
     dat,
     label_name,
+    module = NULL,
     geom,
-    group = NULL){
+    group = NULL,
+    interactive = TRUE){
   # Replace all spaces with underscore if not in proper format
   label_name <- sub(" ", "_", label_name)
   list_of_data <- list()
@@ -441,22 +445,39 @@ prepare_data <- function(
   
   # Check if there are multiple module_names present
   if (length(unique(plot_data$module_name)) > 1) {
-    cli::cli_alert_warning("Multiple module names found in data. \n")
-    options <- c()
-    for (i in seq_along(unique(plot_data$module_name))) {
-      # options <- paste0(options, " ", i, ") ", unique(plot_data$module_name)[i], "\n")
-      options[i] <- paste0(" ", i, ") ", unique(plot_data$module_name)[i])
-    }
-    question1 <- utils::menu(
-      options,
-      title = "Please select one of the following:"
-    )
-    selected_module <- unique(plot_data$module_name)[as.numeric(question1)]
-    if (length(selected_module) > 0) {
+    if (!is.null(module)) {
       plot_data <- plot_data |>
         dplyr::filter(
-          module_name == selected_module
+          module_name == module
         )
+    } else {
+      cli::cli_alert_warning("Multiple module names found in data. \n")
+      options <- c()
+      for (i in seq_along(unique(plot_data$module_name))) {
+        # options <- paste0(options, " ", i, ") ", unique(plot_data$module_name)[i], "\n")
+        options[i] <- paste0(" ", i, ") ", unique(plot_data$module_name)[i])
+      }
+      if (interactive()) {
+        if(interactive) {
+          question1 <- utils::menu(
+                  options,
+                  title = "Please select one of the following:"
+                )
+          selected_module <- unique(plot_data$module_name)[as.numeric(question1)]
+        } else {
+          selected_module <- unique(plot_data$module_name)[1]
+          cli::cli_alert_info("Selection bypassed. Filtering by {selected_module}.")
+        }
+      } else {
+        selected_module <- unique(plot_data$module_name)[1]
+        cli::cli_alert_info(glue::glue("Environment not interactive. Selecting {selected_module}."))
+      }
+      if (length(selected_module) > 0) {
+        plot_data <- plot_data |>
+          dplyr::filter(
+            module_name == selected_module
+          )
+      }
     }
   }
   
@@ -581,4 +602,3 @@ calculate_reference_point <- function(
   }
   ref_line_val
 }
-
