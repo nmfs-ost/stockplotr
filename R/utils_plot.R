@@ -344,6 +344,7 @@ plot_aa <- function(
       guide = ggplot2::guide_axis(minor.ticks = TRUE)
       # limits = c(min(.data[[y]]), max(.data[[y]]))
     ) +
+    # ggplot2::coord_cartesian(xlim = c(0, NA)) +
     # add noaa theme
     theme_noaa()
 
@@ -391,6 +392,62 @@ average_age_line <- function(
       linewidth = 1,
       color = "red"
     )
+  )
+}
+
+#------------------------------------------------------------------------------
+
+# Cohort line
+cohort_line <- function(
+  dat,
+  x = "year",
+  y = "age",
+  z = "estimate"
+){
+  # Make sure all dimensions are numeric
+  dat <- dat |>
+    dplyr::mutate(
+      age = as.numeric(age),
+      year = as.numeric(year),
+      estimate = as.numeric(estimate)
+    )
+# Calculate the total estimate for each cohort
+cohort_estimates <- dat |>
+  dplyr::mutate(cohort = as.numeric(.data[[x]]) - as.numeric(.data[[y]])) |>
+  dplyr::group_by(cohort) |>
+  dplyr::summarize(total_estimate = sum(.data[[z]], na.rm = TRUE))
+# Filter for top 5% of cohorts
+# Find the 95th percentile of total_estimate
+threshold <- quantile(cohort_estimates$total_estimate, 0.95)
+
+# Filter the original data to keep only the top 5% cohorts
+top_cohorts_data <- dat |>
+  dplyr::mutate(cohort = as.numeric(.data[[x]]) - as.numeric(.data[[y]])) |>
+  dplyr::filter(cohort %in% (cohort_estimates |>
+                       dplyr::filter(total_estimate >= threshold) |>
+                       dplyr::pull(cohort)))
+
+  list(
+    # Create line for only the top 5% of cohorts
+    ggplot2::geom_line(
+      data = top_cohorts_data,
+      ggplot2::aes(
+        x = .data[[x]],
+        y = .data[[y]],
+        group = cohort
+      ),
+      linewidth = 1,
+      linetype = "dotted",
+      alpha = 0.8,
+      color = "grey"
+    )
+  #   ggplot2::geom_line(
+  #     ggplot2::aes(
+  #       x = .data[[x]], 
+  #       y = .data[[y]], 
+  #       group = cohort, 
+  #       color = "grey")),
+  #       linetype = "dashed"
   )
 }
 
