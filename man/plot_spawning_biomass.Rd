@@ -33,22 +33,18 @@ Options include "line", "point", or "area"}
 (e.g. "year", "area", etc.)}
 
 \item{ref_line}{A string specifying the type of reference you want to
-compare spawning biomass to. The default is `"msy"`, which looks for
+compare spawning biomass to. The default is `"target"`, which looks for
 `"spawning_biomass_target"` in the `"label"` column of `dat`. The actual
 searching in `dat` is case agnostic and will work with either upper- or
 lower-case letters but you must use one of the options specified in the
 default list to ensure that the label on the figure looks correct
-regardless of how it is specified in `dat`. Other possibilities may include
-"target", "MSY", and "unfished".}
+regardless of how it is specified in `dat`.}
 
-\item{geom}{A string stating the geom used for the plot. Default is "line".
-Options include "line", "point", or "area"}
+\item{unit_label}{units for spawning_biomass}
 
-\item{group}{a string of a single column that groups the data (e.g. "fleet",
-"sex", "area", etc.). Currently can only have one level of grouping.}
-
-\item{facet}{a string or vector of strings of a column that facets the data
-(e.g. "year", "area", etc.)}
+\item{scale_amount}{A number describing how much to scale down the quantities
+shown on the y axis. For example, scale_amount = 100 would scale down a value
+from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
 
 \item{relative}{A logical value specifying if the resulting figures should
 be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
