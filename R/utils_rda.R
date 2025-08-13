@@ -41,7 +41,7 @@ create_rda <- function(
   ) {
     write_captions(
       dat = dat,
-      dir = dir,
+      dir = figures_dir,
       year = max(dat$year, na.rm = TRUE) # this is not right I think
     )
   }

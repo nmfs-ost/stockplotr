@@ -22,6 +22,7 @@
 plot_recruitment_deviations <- function(
     dat,
     geom = "point",
+    relative = FALSE,
     make_rda = FALSE,
     figures_dir = getwd(),
     ...
@@ -52,19 +53,16 @@ plot_recruitment_deviations <- function(
 
   # Make RDA
   if (make_rda) {
-    if(!is.data.frame(dat)) {
-      selected_dat <- dat[[1]]
-    } else {
-      selected_dat <- dat
-    }
     create_rda(
       object = final,
       topic_label = "recruitment.deviations",
       fig_or_table = "figure",
-      dat = selected_dat,
+      dat = filter_data,
       dir = figures_dir,
       unit_label = ""
     )
+  }
+
   }
   final
 }
