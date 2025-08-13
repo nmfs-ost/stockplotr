@@ -63,6 +63,48 @@ plot_recruitment_deviations <- function(
     )
   }
 
+  # check year isn't past end_year if not projections plot
+  check_year(
+    end_year = end_year,
+    fig_or_table = fig_or_table,
+    topic = topic_label
+  )
+  # export figure to rda if argument = T
+  if (make_rda == TRUE) {
+    # run write_captions.R if its output doesn't exist
+    if (!file.exists(
+      fs::path(getwd(), "captions_alt_text.csv")
+    )
+    ) {
+      stockplotr::write_captions(
+        dat = dat,
+        dir = figures_dir,
+        year = end_year
+      )
+    }
+
+    # add more key quantities included as arguments in this fxn
+    add_more_key_quants(
+      topic = topic_label,
+      fig_or_table = fig_or_table,
+      dir = figures_dir,
+      end_year = end_year
+    )
+
+    # extract this plot's caption and alt text
+    caps_alttext <- extract_caps_alttext(
+      topic_label = topic_label,
+      fig_or_table = fig_or_table,
+      dir = figures_dir
+    )
+
+    export_rda(
+      final = final,
+      caps_alttext = caps_alttext,
+      figures_tables_dir = figures_dir,
+      topic_label = topic_label,
+      fig_or_table = fig_or_table
+    )
   }
   final
 }
