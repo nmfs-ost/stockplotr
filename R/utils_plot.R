@@ -58,11 +58,6 @@ plot_timeseries <- function(
   plot <- switch(
     geom,
     "point" = {
-      point_size = ifelse(
-        is.null(list(...)$size),
-        2.0,
-        list(...)$size
-      )
       plot + 
         ggplot2::geom_point(
           data = dat,
@@ -75,7 +70,7 @@ plot_timeseries <- function(
             color = model,
             shape = group_var
           ),
-          # size = point_size,
+          size = 2.0,
           ...
         )
     },
@@ -175,68 +170,6 @@ plot_timeseries <- function(
     final <- final + ggplot2::facet_wrap(facet_formula)
   }
   final
-}
-
-#------------------------------------------------------------------------------
-
-#' Create plot with error
-#' 
-#' @param dat filtered data frame from standard output file(s) pre-formatted for
-#'  the target label from \link[stockplotr]{prepare_data}
-#' @param x a string of the column name of data used to plot on the x-axis (default 
-#' is "year")
-#' @param y a string of the column name of data used to plot on the y-axis (default 
-#' is "estimate")
-#' @param geom type of geom to use for plotting found in ggplot2 (e.g. "point", 
-#' "line", etc.). Default is "line". Other options are "point" and "area".
-#' @param xlab a string of the x-axis label (default is "Year")
-#' @param ylab a string of the y-axis label. If NULL, it will be set to the name
-#'  of `y`.
-#' @param group a string of a single column that groups the data (e.g. "fleet", 
-#' "sex", "area", etc.). Currently can only have one level of grouping.
-#' @param facet a string or vector of strings of a column that facets the data 
-#' (e.g. "year", "area", etc.)
-#' @param ... inherited arguments from internal functions from ggplot2::geom_xx
-#' 
-#' 
-plot_error <- function(
-    dat,
-    x = "year",
-    y = "estimate",
-    geom = "point",
-    group = NULL,
-    facet = NULL,
-    xlab = "Year",
-    ylab = NULL,
-    ...
-) {
-  plot_timeseries(
-    dat = dat,
-    x = x,
-    y = y,
-    geom = geom,
-    xlab = xlab,
-    ylab = ylab,
-    group = group,
-    facet = facet,
-    colour = "black",
-    ...
-  ) +
-    ggplot2::geom_segment(
-      data = dat,
-      ggplot2::aes(
-        x = .data[[x]],
-        y = .data[[y]],
-        yend = 0
-      )
-      # linewidth = 0.5 # leaving this up to the user aka the actual rec dev plot
-    ) +
-    ggplot2::geom_hline(
-      yintercept = 0,
-      linewidth = 1,
-      linetype = "solid", # "dashed",
-      colour = "grey"
-    )
 }
 
 #------------------------------------------------------------------------------
