@@ -4,14 +4,7 @@
 \alias{reference_line}
 \title{Pre-formatted reference line}
 \usage{
-reference_line(
-  plot,
-  dat,
-  label_name,
-  reference,
-  relative = FALSE,
-  scale_amount = 1
-)
+reference_line(dat, label_name, reference)
 }
 \arguments{
 \item{dat}{standard data frame where reference point should be extracted}

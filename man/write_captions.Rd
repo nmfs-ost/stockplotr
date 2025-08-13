@@ -7,7 +7,7 @@
 write_captions(dat, dir = getwd(), year = format(Sys.Date(), "\%Y"))
 }
 \arguments{
-\item{dat}{A data frame returned from \link[stockplotr]{prepate_data}}
+\item{dat}{A data frame returned from \link[asar]{convert_output}}
 
 \item{dir}{Directory where the output captions and alt text file should be
 saved. Defaults to working directory.}
