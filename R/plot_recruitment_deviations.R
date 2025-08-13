@@ -9,7 +9,7 @@
 #' assessment model output file translated to a standardized output. There are
 #' options to return a `ggplot2` object or export an .rda object containing
 #' associated caption and alternative text for the figure.
-#' 
+#'
 #' @export
 #'
 #' @examples
@@ -70,7 +70,7 @@ plot_recruitment_deviations <- function(
     y = estimate,
     geom = "point",
     ylab = "Recruitment Deviations"
-    ) +
+  ) +
     reference_line(0, linetype = "dashed")
   plt <- add_theme(plt) # suppressWarnings()
 

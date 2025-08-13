@@ -1,18 +1,18 @@
 #############################
-# Utility functions 
+# Utility functions
 #############################
 
 #' Plot time series trends
 #'
-#' @param dat 
-#' @param x 
-#' @param y 
+#' @param dat
+#' @param x
+#' @param y
 #' @param geom type of geom to use for plotting found in ggplot2 (e.g. "point", "line", etc.)
 #' @param xlab a string of the x-axis label (default is "Year")
 #' @param ylab a string of the y-axis label. If NULL, it will be set to the name of `y`.
 #' @param group a string of a single column that groups the data (e.g. "fleet", "sex", "area", etc.)
 #' @param facet a string of a single column that facets the data (e.g. "year", "area", etc.)
-#' @param ... 
+#' @param ...
 #'
 #' @returns
 #' @export
@@ -27,8 +27,7 @@ plot_timeseries <- function(
     ylab = NULL,
     group = NULL,
     facet = NULL,
-    ...
-) {
+    ...) {
   # Start plot
   plot <- ggplot2::ggplot()
   # Break down data
@@ -44,16 +43,16 @@ plot_timeseries <- function(
         )
       if (!is.null(group)) {
         data <- data
-          dplyr::mutate(
-            group_var = .data[[group]]
-          )
+        dplyr::mutate(
+          group_var = .data[[group]]
+        )
       } else {
         data <- data |>
           dplyr::mutate(
             group_var = switch(geom,
-                               "line" = "solid",
-                               "point" = "black",
-                               1
+              "line" = "solid",
+              "point" = "black",
+              1
             )
           )
       }
@@ -62,10 +61,9 @@ plot_timeseries <- function(
     # Put in
     plot_data <- do.call(rbind, list_of_data)
     # Add geom aka type
-    plot <- switch(
-      geom,
+    plot <- switch(geom,
       "point" = {
-        plot + 
+        plot +
           ggplot2::geom_point(
             data = data,
             ggplot2::aes(
@@ -74,10 +72,11 @@ plot_timeseries <- function(
               color = model,
               shape = group_var
             ),
-            size = 2.0)
+            size = 2.0
+          )
       },
       "line" = {
-        plot + 
+        plot +
           ggplot2::geom_line(
             data = data,
             ggplot2::aes(
@@ -90,7 +89,7 @@ plot_timeseries <- function(
           )
       },
       "area" = {
-        plot + 
+        plot +
           ggplot2::geom_area(
             data = data,
             ggplot2::aes(
@@ -113,22 +112,23 @@ plot_timeseries <- function(
       data <- data |>
         dplyr::mutate(
           group_var = switch(geom,
-                             "line" = "solid",
-                             "point" = "black",
-                             1
+            "line" = "solid",
+            "point" = "black",
+            1
           ),
           year = as.numeric(year)
         )
     }
-    
+
     # Start plot
     plot <- ggplot2::ggplot(
-      data = data, 
+      data = data,
       ggplot2::aes(
         .data[[x]],
-        .data[[y]])
+        .data[[y]]
+      )
     )
-    
+
     # choose right number of colors and assign fleet names to those colors
     # select_color <- function(x, data){
     #   # select group that is color
@@ -143,12 +143,11 @@ plot_timeseries <- function(
     # } else {
     #   selected_colors <- "black"
     # }
-    
+
     # Add geom aka type
-    plot <- switch(
-      geom,
+    plot <- switch(geom,
       "point" = {
-        plot + 
+        plot +
           ggplot2::geom_point(
             ggplot2::aes(
               # TODO: add more groupings
@@ -156,10 +155,11 @@ plot_timeseries <- function(
               # color = ifelse(any(grepl("color", names(group))), .data[[group[[grep("color", names(group))]]]], "black")
               shape = group_var
             ),
-            size = 2.0)
+            size = 2.0
+          )
       },
       "line" = {
-        plot + 
+        plot +
           ggplot2::geom_line(
             ggplot2::aes(
               linetype = group_var
@@ -169,21 +169,21 @@ plot_timeseries <- function(
           )
       },
       "area" = {
-        plot + 
+        plot +
           ggplot2::geom_area(
             ggplot2::aes(
               fill = group_var
             )
           )
       }
-      # Below are all one variable mapping plots 
+      # Below are all one variable mapping plots
       # Do not belong in this fxn
       # "bar" = ggplot2::geom_bar(),
       # "histogram" = ggplot2::geom_histogram(),
       # "density" = ggplot2::geom_density()
     )
   }
-  
+
   # Add labels to axis and legend
   labs <- plot + ggplot2::labs(
     x = xlab,
@@ -193,7 +193,7 @@ plot_timeseries <- function(
     fill = cap_first_letter(group),
     shape = cap_first_letter(group)
   )
-  
+
   # Calc axis breaks
   x_n_breaks <- axis_breaks(data)
   breaks <- ggplot2::scale_x_continuous(
@@ -202,17 +202,17 @@ plot_timeseries <- function(
       minor.ticks = TRUE
     )
   )
-  
+
   # Put together final plot
   final <- labs + breaks
-  
+
   # Remove legend if no group is selected
   if (is.null(group)) {
     final <- final + ggplot2::theme(legend.position = "none")
   }
-  
+
   # Check if facet(s) are desired
-  if (!is.null(facet)){
+  if (!is.null(facet)) {
     facet <- paste("~", paste(facet, collapse = " + "))
     facet_formula <- stats::reformulate(facet)
 
@@ -228,7 +228,7 @@ reference_line <- function(x, ...) {
   )
 }
 
-axis_breaks <- function(data){
+axis_breaks <- function(data) {
   # change plot breaks
   x_n_breaks <- round(length(data[["year"]]) / 10)
   if (x_n_breaks <= 5) {

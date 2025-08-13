@@ -6,15 +6,17 @@
 \usage{
 plot_recruitment_deviations(
   dat,
-  end_year = format(Sys.Date(), "\%Y"),
+  group = NULL,
+  facet = NULL,
   make_rda = FALSE,
-  figures_dir = getwd()
+  figures_dir = getwd(),
+  ...
 )
 }
 \arguments{
 \item{dat}{A data frame returned from \link[asar]{convert_output}}
 
-\item{end_year}{Last year of assessment. Default is the current year.}
+\item{facet}{description}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
@@ -24,6 +26,8 @@ Default is FALSE.}
 \item{figures_dir}{The location of the folder containing the generated figure
 rda files ("figures") that will be created if the argument `make_rda` = TRUE.
 Default is the working directory.}
+
+\item{...}{description}
 }
 \value{
 Plot recruitment deviations relative to one over time from an
