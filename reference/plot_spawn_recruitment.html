@@ -80,6 +80,7 @@
 <span>  <span class="va">dat</span>,</span>
 <span>  spawning_biomass_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
 <span>  recruitment_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
+<span>  end_year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"%Y"</span><span class="op">)</span>,</span>
 <span>  make_rda <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  figures_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -99,6 +100,10 @@
 
 <dt id="arg-recruitment-label">recruitment_label<a class="anchor" aria-label="anchor" href="#arg-recruitment-label"></a></dt>
 <dd><p>units for recruitment</p></dd>
+
+
+<dt id="arg-end-year">end_year<a class="anchor" aria-label="anchor" href="#arg-end-year"></a></dt>
+<dd><p>Last year of assessment. Default is the current year.</p></dd>
 
 
 <dt id="arg-make-rda">make_rda<a class="anchor" aria-label="anchor" href="#arg-make-rda"></a></dt>
