@@ -29,7 +29,6 @@
 #' @param figures_dir The location of the folder containing the generated figure
 #' rda files ("figures") that will be created if the argument `make_rda` = TRUE.
 #' Default is the working directory.
-#' @param ... Arguments called from ggplot2::geom_line or ggplotr2::geom_point 
 #' @return
 #' Plot spawning biomass from the results of an assessment model translated to
 #' the standard output. The [ggplot2::ggplot()] object is returned for further
@@ -61,6 +60,13 @@ plot_spawning_biomass <- function(
     figures_dir = getwd(),
     ...
     ) {
+  # if (!is.null(ref_point)) {
+  #   ref_line <- names(ref_point)
+  # } else if (length(ref_line) > 1) {
+  #   ref_line <- "msy"
+  # } else {
+  #   ref_line <- match.arg(ref_line, several.ok = FALSE)
+  # }
   # TODO: Fix the unit label if scaling. Maybe this is up to the user to do if
   #       they want something scaled then they have to supply a better unit name
   #       or we create a helper function to do this.
@@ -70,6 +76,16 @@ plot_spawning_biomass <- function(
     no = glue::glue("Spawning biomass ({unit_label})")
   )
 
+  # Indicate if spawning biomass is relative or not
+  # if (relative) {
+  #   topic_label <- "relative.spawning.biomass"
+  # } else {
+  #   topic_label <- "spawning.biomass"
+  # }
+  
+  # identify output
+  # fig_or_table <- "figure"
+  
   # check year isn't past end_year if not projections plot
   # check_year(
   #   end_year = end_year,
@@ -111,20 +127,50 @@ plot_spawning_biomass <- function(
   
   final <- suppressWarnings(add_theme(plt2))
   
-  ### Make RDA ---- 
-  if (make_rda) {
-    create_rda(
-      object = final,
-      topic.label = ifelse(relative, "relative.spawning.biomass", "spawning.biomass"),
-      fig_or_table = "figure",
-      dat = rp_dat,
-      dir = figures_dir,
-      ref_line = ref_line,
-      ref_point = ref_line, # need to remove this I think
-      scale_amount = scale_amount
-    )
-  }
-  
-  # Output final plot
+  # Only run rda export if dat is one otherwise the alt text and caption is not accurate
+  # if(length(dat) == 1) {
+  #   # export figure to rda if argument = T
+  #   if (make_rda == TRUE) {
+  #     # run write_captions.R if its output doesn't exist
+  #     if (!file.exists(
+  #       fs::path(getwd(), "captions_alt_text.csv")
+  #     )
+  #     ) {
+  #       stockplotr::write_captions(
+  #         dat = dat,
+  #         dir = figures_dir,
+  #         year = end_year
+  #       )
+  #     }
+  #     
+  #     # add more key quantities included as arguments in this fxn
+  #     add_more_key_quants(
+  #       dat,
+  #       topic = topic_label,
+  #       fig_or_table = fig_or_table,
+  #       dir = figures_dir,
+  #       end_year = end_year,
+  #       units = unit_label,
+  #       ref_pt = ref_point,
+  #       ref_line = ref_line,
+  #       scaling = scale_amount
+  #     )
+  #     
+  #     # extract this plot's caption and alt text
+  #     caps_alttext <- extract_caps_alttext(
+  #       topic_label = topic_label,
+  #       fig_or_table = fig_or_table,
+  #       dir = figures_dir
+  #     )
+  #     
+  #     export_rda(
+  #       final = final,
+  #       caps_alttext = caps_alttext,
+  #       figures_tables_dir = figures_dir,
+  #       topic_label = topic_label,
+  #       fig_or_table = fig_or_table
+  #     )
+  #   }
+  # }
   return(final)
 }
