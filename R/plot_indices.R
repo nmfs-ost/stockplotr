@@ -143,7 +143,7 @@ plot_indices <- function(
         ymax = estimate_upper
       ),
       colour = "grey",
-      alpha = 0.3
+      alpha = 0.3,
     ) +
     ggplot2::labs(
       x = "Year",

@@ -565,8 +565,3 @@ add_more_key_quants <- function(
     row.names = FALSE
   )
 }
-
-#------------------------------------------------------------------------------
-
-# create notin operator
-`%notin%` <- Negate(`%in%`)
