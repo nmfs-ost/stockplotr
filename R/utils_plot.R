@@ -171,7 +171,7 @@ plot_timeseries <- function(
   if (!is.null(facet)){
     facet <- paste("~", paste(facet, collapse = " + "))
     facet_formula <- stats::reformulate(facet)
-    
+
     final <- final + ggplot2::facet_wrap(facet_formula)
   }
   final
@@ -499,26 +499,6 @@ prepare_data <- function(
       dplyr::ungroup()
   }
   
-  # Check if there are multiple module_names present
-  if (length(unique(plot_data$module_name)) > 1) {
-    cli::cli_alert_warning("Multiple module names found in data. \n")
-    options <- c()
-    for (i in seq_along(unique(plot_data$module_name))) {
-      # options <- paste0(options, " ", i, ") ", unique(plot_data$module_name)[i], "\n")
-      options[i] <- paste0(" ", i, ") ", unique(plot_data$module_name)[i])
-    }
-    question1 <- utils::menu(
-      options,
-      title = "Please select one of the following:"
-    )
-    selected_module <- unique(plot_data$module_name)[as.numeric(question1)]
-    if (length(selected_module) > 0) {
-      plot_data <- plot_data |>
-        dplyr::filter(
-          module_name == selected_module
-        )
-    }
-  }
   if (geom == "area") {
     plot_data2 <- dplyr::mutate(
       plot_data,
