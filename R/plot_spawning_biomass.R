@@ -115,14 +115,13 @@ plot_spawning_biomass <- function(
   if (make_rda) {
     create_rda(
       object = final,
-      topic_label = ifelse(relative, "relative.spawning.biomass", "spawning.biomass"),
+      topic.label = ifelse(relative, "relative.spawning.biomass", "spawning.biomass"),
       fig_or_table = "figure",
       dat = rp_dat,
       dir = figures_dir,
       ref_line = ref_line,
       ref_point = ref_line, # need to remove this I think
-      scale_amount = scale_amount,
-      unit_label = unit_label
+      scale_amount = scale_amount
     )
   }
   

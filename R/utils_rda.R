@@ -16,7 +16,6 @@
 #' @param scale_amount A number describing how much to scale down the quantities
 #' shown on the y axis. For example, scale_amount = 100 would scale down a value
 #' from 500,000 --> 5,000. This scale will be reflected in the y axis label.
-#' @param unit_label A string containing a unit label for the y-axis
 #'
 #' @returns
 #' @export
@@ -24,15 +23,15 @@
 #' @examples
 create_rda <- function(
     object, # REQUIRED: table or plot object to export
-    topic_label, # REQUIRED
+    topic.label, # REQUIRED
     fig_or_table, # REQUIRED
     dat, # REQUIRED: only one dat file to base captions and alt text from
     dir = getwd(),
+    
     year = format(as.POSIXct(Sys.Date(), format = "%YYYY-%mm-%dd"), "%Y"),
     ref_line = "msy",
-    ref_point = "msy", # this is not used anywhere
-    scale_amount = 1,
-    unit_label = "mt"
+    ref_point = "msy",
+    scale_amount = 1
 ){
   # run write_captions.R if its output doesn't exist
   if (!file.exists(
@@ -46,19 +45,13 @@ create_rda <- function(
     )
   }
   
-  # Remove non-numeric strings from year
-  year <- dat |>
-    dplyr::filter(year %notin% c("Virg","S/Rcurve","Init","selex"),
-                  era == "time") |>
-    dplyr::mutate(year = as.numeric(year))
-  
   # add more key quantities included as arguments in this fxn
   add_more_key_quants(
     dat,
     topic = topic_label,
     fig_or_table = fig_or_table,
     dir = dir,
-    end_year = max(year$year, na.rm = TRUE),
+    end_year = max(dat$year, na.rm = TRUE),
     units = unit_label,
     ref_pt = ref_point,
     ref_line = ref_line,
@@ -87,17 +80,17 @@ create_rda <- function(
 # substitute in more key quantities (units, end_years, reference points, and more)
 # to captions/alt text
 add_more_key_quants <- function(
-    dat,
-    topic,
-    fig_or_table,
-    dir = getwd(),
+    dat = NULL,
+    topic = topic_label,
+    fig_or_table = fig_or_table,
+    dir = NULL,
     end_year = NULL,
     units = NULL,
     sr_ssb_units = NULL,
     sr_recruitment_units = NULL,
     ref_line = NULL,
     ref_pt = NULL,
-    scaling = 1) {
+    scaling = NULL) {
   # import csv
   caps_alt_df <- utils::read.csv(fs::path(dir, "captions_alt_text.csv"))
   
