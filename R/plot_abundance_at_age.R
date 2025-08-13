@@ -88,6 +88,10 @@ plot_abundance_at_age <- function(
     dat = b,
     facet = group,
     label = abundance_label
+  ) +
+  average_age_line(
+    dat = b,
+    facet = group
   )
   # export figure to rda if argument = T
   if (make_rda == TRUE) {

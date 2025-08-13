@@ -297,32 +297,20 @@ plot_aa <- function(
   # Calculate y-axis breaks
   y_n_breaks <- y_axis_breaks(dat)
 
-  # Calculate annual mean age
-  grouping <- intersect(colnames(dat), facet)
-  total_fish_per_year <- dat |>
-    dplyr::group_by(dplyr::across(dplyr::all_of(c("year", grouping)))) |>
-    dplyr::summarise(total_fish = sum(estimate))
-  annual_means <- dat |>
-    dplyr::group_by(dplyr::across(dplyr::all_of(c("age", "year", grouping)))) |>
-    dplyr::summarise(years_per_year = sum(estimate)) |>
-    dplyr::filter(age != 0) |>
-    dplyr::group_by(year) |>
-    dplyr::summarise(interm = sum(age * years_per_year)) |>
-    dplyr::full_join(total_fish_per_year) |>
-    dplyr::mutate(avg = interm / total_fish)
+ 
 
   # Create average age line
-  average_age_line <- list(
-    ggplot2::geom_line(
-      data = annual_means,
-      ggplot2::aes(
-        x = year,
-        y = avg
-      ),
-      linewidth = 1,
-      color = "red"
-    )
-  )
+  # average_age_line <- list(
+  #   ggplot2::geom_line(
+  #     data = annual_means,
+  #     ggplot2::aes(
+  #       x = year,
+  #       y = avg
+  #     ),
+  #     linewidth = 1,
+  #     color = "red"
+  #   )
+  # )
   # Initialize gg plot
   plot <- ggplot2::ggplot() +
   # Add geom
@@ -356,8 +344,6 @@ plot_aa <- function(
       guide = ggplot2::guide_axis(minor.ticks = TRUE)
       # limits = c(min(.data[[y]]), max(.data[[y]]))
     ) +
-    # add line of average age
-    average_age_line +
     # add noaa theme
     theme_noaa()
 
@@ -373,6 +359,39 @@ plot_aa <- function(
     plot <- plot + ggplot2::facet_wrap(facet_formula)
   }
   plot
+}
+
+#------------------------------------------------------------------------------
+
+# Average age line
+average_age_line <- function(
+  dat,
+  facet) {
+   # Calculate annual mean age
+  grouping <- intersect(colnames(dat), facet)
+  total_fish_per_year <- dat |>
+    dplyr::group_by(dplyr::across(dplyr::all_of(c("year", grouping)))) |>
+    dplyr::summarise(total_fish = sum(estimate))
+  annual_means <- dat |>
+    dplyr::group_by(dplyr::across(dplyr::all_of(c("age", "year", grouping)))) |>
+    dplyr::summarise(years_per_year = sum(estimate)) |>
+    dplyr::filter(age != 0) |>
+    dplyr::group_by(year) |>
+    dplyr::summarise(interm = sum(as.numeric(age) * as.numeric(years_per_year))) |>
+    dplyr::full_join(total_fish_per_year) |>
+    dplyr::mutate(avg = interm / total_fish)
+# Add average age line to plot
+  list(
+    ggplot2::geom_line(
+      data = annual_means,
+      ggplot2::aes(
+        x = year,
+        y = avg
+      ),
+      linewidth = 1,
+      color = "red"
+    )
+  )
 }
 
 #------------------------------------------------------------------------------
