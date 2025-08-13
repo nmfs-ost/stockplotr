@@ -3,15 +3,11 @@
 #' Plot spawning biomass with a reference line as a dashed line. The figure can
 #' also be made relative to this reference line rather than in absolute units.
 #'
-#' @param dat A data frame or names list of data frames returned from
-#' \link[asar]{convert_output}. The first data frame in the list is used in
-#' calculation of a reference line if one is present
-#' @param geom A string stating the geom used for the plot. Default is "line".
+#' @param dat A data frame returned from \link[stockplotr]{prepate_data}
+#' @param geom A string stating the geom used for the plot. Default is "line". 
 #' Options include "line", "point", or "area"
-#' @param group a string of a single column that groups the data (e.g. "fleet",
-#' "sex", "area", etc.). Currently can only have one level of grouping.
-#' @param facet a string or vector of strings of a column that facets the data
-#' (e.g. "year", "area", etc.)
+#' @param group description
+#' @param facet description
 #' @param ref_line A string specifying the type of reference you want to
 #'   compare spawning biomass to. The default is `"target"`, which looks for
 #'   `"spawning_biomass_target"` in the `"label"` column of `dat`. The actual
