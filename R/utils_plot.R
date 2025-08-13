@@ -221,10 +221,109 @@ plot_timeseries <- function(
   final
 }
 
-reference_line <- function(x, ...) {
-  ggplot2::geom_hline(
-    yintercept = x,
-    color = "black"
+#------------------------------------------------------------------------------
+
+#' Create plot with error
+#' 
+#' @param dat filtered data frame from standard output file(s) pre-formatted for
+#'  the target label from \link[stockplotr]{prepare_data}
+#' @param x a string of the column name of data used to plot on the x-axis (default 
+#' is "year")
+#' @param y a string of the column name of data used to plot on the y-axis (default 
+#' is "estimate")
+#' @param geom type of geom to use for plotting found in ggplot2 (e.g. "point", 
+#' "line", etc.). Default is "line". Other options are "point" and "area".
+#' @param xlab a string of the x-axis label (default is "Year")
+#' @param ylab a string of the y-axis label. If NULL, it will be set to the name
+#'  of `y`.
+#' @param group a string of a single column that groups the data (e.g. "fleet", 
+#' "sex", "area", etc.). Currently can only have one level of grouping.
+#' @param facet a string or vector of strings of a column that facets the data 
+#' (e.g. "year", "area", etc.)
+#' @param ... inherited arguments from internal functions from ggplot2::geom_xx
+#' 
+#' 
+plot_error <- function(
+    dat,
+    x = "year",
+    y = "estimate",
+    geom = "point",
+    group = NULL,
+    facet = NULL,
+    xlab = "Year",
+    ylab = NULL,
+    ...
+) {
+  plot_timeseries(
+    dat = dat,
+    x = x,
+    y = y,
+    geom = geom,
+    xlab = xlab,
+    ylab = ylab,
+    group = group,
+    facet = facet,
+    colour = "black"
+    # ...
+  ) +
+    ggplot2::geom_segment(
+      data = dat,
+      ggplot2::aes(
+        x = .data[[x]],
+        y = .data[[y]],
+        yend = estimate_upper
+      ),
+      color = "#5798fa",
+      alpha = 0.5
+    ) +
+    ggplot2::geom_segment(
+      data = dat,
+      ggplot2::aes(
+        x = .data[[x]],
+        y = .data[[y]],
+        yend = estimate_lower
+      ),
+      color = "#5798fa",
+      alpha = 0.5
+    ) +
+    ggplot2::geom_hline(
+      yintercept = 0,
+      linewidth = 1,
+      linetype = "solid", # "dashed",
+      colour = "#6e6e6e"
+    )
+}
+
+#------------------------------------------------------------------------------
+
+#' Pre-formatted reference line
+#'
+#' @param dat standard data frame where reference point should be extracted
+#' @param label_name string of the name of the quantity that users want to 
+#' extract the reference point from
+#' @param reference string. name of the reference point such as "msy", 
+#' "unfished", or "target"
+#'
+#' @returns a ggplot2 geom_hline object for a reference point that can be added 
+#' to a plot
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' reference_line(dat, "biomass", "msy")
+#' }
+reference_line <- function(
+    plot,
+    dat, 
+    label_name,
+    reference, 
+    relative = FALSE, 
+    scale_amount = 1
+    ) {
+  # calculate reference point value
+  ref_line_val <- calculate_reference_point(
+    dat = dat,
+    reference_name = glue::glue("{label_name}_{reference}")
   )
 }
 
