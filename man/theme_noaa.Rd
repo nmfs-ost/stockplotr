@@ -6,6 +6,7 @@
 \usage{
 theme_noaa(...)
 }
+
 \arguments{
 \item{...}{Arguments passed to `ggplot2::theme()`.}
 }
