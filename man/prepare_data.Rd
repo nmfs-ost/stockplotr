@@ -4,23 +4,20 @@
 \alias{prepare_data}
 \title{Prep data for input into aesthetics for ggplot2}
 \usage{
-prepare_data(dat, label_name, geom, group = NULL, interactive = TRUE)
+prepare_data(dat, label_name, geom, group = NULL)
 }
 \arguments{
-\item{dat}{a data frame or list of data frames that contains the data to be
+\item{dat}{a data frame or list of data frames that contains the data to be 
 plotted.}
 
-\item{label_name}{a string of the name of the label that is used to filter
+\item{label_name}{a string of the name of the label that is used to filter 
 the data.}
 
-\item{geom}{Type of plot user wants to create. Options are "line", "point",
+\item{geom}{Type of plot user wants to create. Options are "line", "point", 
 and "area".}
 
-\item{group}{Selected grouping for the data. If you want to just summarize
+\item{group}{Selected grouping for the data. If you want to just summarize 
 the data across all factors, set group = "none".}
-
-\item{interactive}{logical. If TRUE, the user will be prompted to select
-a module_name when there was more than one found in the filtered dataset.}
 }
 \value{
 a data frame that is pre-formatted for plotting with ggplot2.
