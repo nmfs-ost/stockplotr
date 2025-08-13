@@ -20,6 +20,8 @@
 #'   default list to ensure that the label on the figure looks correct
 #'   regardless of how it is specified in `dat`.
 #' @param unit_label units for spawning_biomass
+#' @param module The selected module or name where the data was grouped in  the 
+#' original output file.
 #' @param scale_amount A number describing how much to scale down the quantities
 #' shown on the y axis. For example, scale_amount = 100 would scale down a value
 #' from 500,000 --> 5,000. This scale will be reflected in the y axis label.
@@ -59,6 +61,7 @@ plot_spawning_biomass <- function(
     facet = NULL,
     ref_line = "msy",
     unit_label = "metric tons",
+    module = NULL,
     scale_amount = 1,
     relative = FALSE,
     make_rda = FALSE,
@@ -85,7 +88,8 @@ plot_spawning_biomass <- function(
     dat = dat,
     label_name = "spawning biomass",
     geom = geom,
-    group = group
+    group = group,
+    module = module
   )
   
   plt <- plot_timeseries(

@@ -4,7 +4,14 @@
 \alias{prepare_data}
 \title{Prep data for input into aesthetics for ggplot2}
 \usage{
-prepare_data(dat, label_name, geom, group = NULL, interactive = TRUE)
+prepare_data(
+  dat,
+  label_name,
+  module = NULL,
+  geom,
+  group = NULL,
+  interactive = TRUE
+)
 }
 \arguments{
 \item{dat}{a data frame or list of data frames that contains the data to be

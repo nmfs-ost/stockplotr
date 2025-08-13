@@ -22,6 +22,7 @@
 plot_recruitment_deviations <- function(
     dat,
     # geom = "point",
+    module = NULL,
     make_rda = FALSE,
     figures_dir = getwd(),
     ...
@@ -31,7 +32,8 @@ plot_recruitment_deviations <- function(
     dat = dat,
     label_name = "recruitment_deviations",
     geom = "point",
-    group = NULL
+    group = NULL,
+    module = module
   )
 
   if (nrow(filter_data) == 0) {
