@@ -4,12 +4,21 @@
 \alias{plot_recruitment_deviations}
 \title{Plot Recruitment Deviations}
 \usage{
-plot_recruitment_deviations(dat, make_rda = FALSE, figures_dir = getwd(), ...)
+plot_recruitment_deviations(
+  dat,
+  geom = "point",
+  make_rda = FALSE,
+  figures_dir = getwd(),
+  ...
+)
 }
 \arguments{
 \item{dat}{A data frame or names list of data frames returned from
 \link[asar]{convert_output}. The first data frame in the list is used in
 calculation of a reference line if one is present}
+
+\item{geom}{A string stating the geom used for the plot. Default is "line".
+Options include "line", "point", or "area"}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,

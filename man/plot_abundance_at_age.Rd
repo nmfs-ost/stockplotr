@@ -25,7 +25,7 @@ would scale down a value from 500,000 --> 5,000 and would report abundance in
 hundreds of fish (if "fish" was the unit_label). This scale will be reflected
 in the legend label. The default is 1,000.}
 
-\item{end_year}{last year of assessment}
+\item{end_year}{Last year of assessment. Default is the current year.}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,

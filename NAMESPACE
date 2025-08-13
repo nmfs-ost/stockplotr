@@ -2,6 +2,7 @@
 
 export(add_theme)
 export(create_rda)
+export(exp_all_figs_tables)
 export(export_rda)
 export(extract_caps_alttext)
 export(html_all_figs_tables)
