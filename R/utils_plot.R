@@ -4,14 +4,15 @@
 
 #' Plot time series trends
 #'
-#' @param dat filtered data frame from standard output file(s) pre-formatted for
-#'  the target label from \link[stockplotr]{prepare_data}
-#' @param x a string of the column name of data used to plot on the x-axis (default 
+#' @param dat filtered data frame from a standard output file or a list of 
+#' filtered data from standard output file which provide names for each model 
+#' used for labelling (i.e. list("model 1" = output_1, "model 2" = output_2))
+#' @param x a string of the column of data used to plot on the x-axis (default 
 #' is "year")
-#' @param y a string of the column name of data used to plot on the y-axis (default 
+#' @param y a string of the column of data used to plot on the y-axis (default 
 #' is "estimate")
 #' @param geom type of geom to use for plotting found in ggplot2 (e.g. "point", 
-#' "line", etc.). Default is "line". Other options are "point" and "area".
+#' "line", etc.)
 #' @param xlab a string of the x-axis label (default is "Year")
 #' @param ylab a string of the y-axis label. If NULL, it will be set to the name
 #'  of `y`.
@@ -19,7 +20,7 @@
 #' "sex", "area", etc.). Currently can only have one level of grouping.
 #' @param facet a string or vector of strings of a column that facets the data 
 #' (e.g. "year", "area", etc.)
-#' @param ... inherited arguments from internal functions from ggplot2::geom_xx
+#' @param ... inherited arguments from internal functions from ggplot2
 #'
 #' @returns
 #' @export
@@ -37,17 +38,23 @@ plot_timeseries <- function(
     ...
 ) {
   # Start plot
-  plot <- ggplot2::ggplot()
+  plot <- ggplot2::ggplot(
+    data = data, 
+    ggplot2::aes(
+      .data[[x]],
+      .data[[y]])
+  )
   # make into new geom?
   # more defaults and fxnality for ggplot
+  # Break down data
   
-  # Add geom
+  # Add geom aka type
   plot <- switch(
     geom,
     "point" = {
       plot + 
         ggplot2::geom_point(
-          data = dat,
+          data = plot_data,
           ggplot2::aes(
             .data[[x]],
             .data[[y]],
@@ -57,14 +64,12 @@ plot_timeseries <- function(
             color = model,
             shape = group_var
           ),
-          size = 2.0,
-          ...
-        )
+          size = 2.0)
     },
     "line" = {
       plot + 
         ggplot2::geom_line(
-          data = dat,
+          data = plot_data,
           ggplot2::aes(
             .data[[x]],
             .data[[y]],
@@ -72,24 +77,36 @@ plot_timeseries <- function(
             # linetype = ifelse(!is.null(group), .data[[group]], "solid")
             color = model
           ),
-          linewidth = 1.0,
-          ...
+          linewidth = 1.0
         )
     },
     "area" = {
       plot + 
         ggplot2::geom_area(
-          data = dat,
+          data = data,
           ggplot2::aes(
             .data[[x]],
             .data[[y]],
-            fill = model
-          ),
-          ...
+            fill = group_var
+          )
         )
     }
   )
   
+  # choose right number of colors and assign fleet names to those colors
+  # select_color <- function(x, data){
+  #   # select group that is color
+  #   col_group <- group[[grep("color|colour", names(group))]]
+  #   nmfs_colors <- nmfspalette::nmfs_palette(palette = "regional")
+  #   colors <- nmfs_colors(length(unique(data[[col_group]])))
+  #   names(colors) <- unique(data[[col_group]])
+  #   return(colors)
+  # }
+  # if (any(grepl("color", names(group)))) {
+  #   selected_colors <- select_color(group, data)
+  # } else {
+  #   selected_colors <- "black"
+  # }
   # Add labels to axis and legend
   labs <- plot + ggplot2::labs(
     x = xlab,
@@ -105,14 +122,14 @@ plot_timeseries <- function(
     labs <- switch(
       geom,
       "line" = labs + ggplot2::guides(linetype = "none"),
-      "point" = labs + ggplot2::guides(shape = "none"),
-      # return plot if option beyond line and point for now
+      "point" = labs + ggplot2::guides(point = "none"),
+      # return plot if option beyong line and point for now
       labs
     )
   }
   
   # Calc axis breaks
-  x_n_breaks <- axis_breaks(dat)
+  x_n_breaks <- axis_breaks(data)
   breaks <- ggplot2::scale_x_continuous(
     n.breaks = x_n_breaks,
     guide = ggplot2::guide_axis(
@@ -124,13 +141,12 @@ plot_timeseries <- function(
   final <- labs + breaks
   
   # Remove legend if no group is selected
-  if (is.null(group) & is.data.frame(dat) & any(is.na(unique(dat$model)))) {
+  if (is.null(group) & is.data.frame(dat)) {
     final <- final + ggplot2::theme(legend.position = "none")
   }
   
   # Check if facet(s) are desired
   if (!is.null(facet)){
-    if (geom == "area")
     facet <- paste("~", paste(facet, collapse = " + "))
     facet_formula <- stats::reformulate(facet)
 
@@ -141,31 +157,10 @@ plot_timeseries <- function(
 
 #------------------------------------------------------------------------------
 
-reference_line <- function(dat, label_name, reference) {
-  # calculate reference line
-  # Find a way to inherit the data from the previous plot using + operator
-  if (inherits(try(solve(as.numeric(dat[
-    grep(
-      pattern = glue::glue("^{label_name}.*{tolower(reference)}$"),
-      x = dat[["label"]]
-    ),
-    "estimate"
-  ])), silent = TRUE), "try-error")) {
-    ref_line_val <- NULL
-  } else {
-    ref_line_val <- as.numeric(dat[
-      grep(
-        pattern = glue::glue("^{label_name}*{tolower(reference)}$"),
-        x = dat[["label"]]
-      ),
-      "estimate"
-    ])
-  }
-  # Add geom for ref line
+reference_line <- function(x, ...) {
   ggplot2::geom_hline(
-    yintercept = ref_line_val,
-    color = "black",
-    linetype = "dashed"
+    yintercept = x,
+    color = "black"
   )
 }
 
@@ -173,16 +168,14 @@ reference_line <- function(dat, label_name, reference) {
 
 axis_breaks <- function(data){
   # change plot breaks
-  x_n_breaks <- round(length(unique(data[["year"]])) / 10)
+  x_n_breaks <- round(length(data[["year"]]) / 10)
   if (x_n_breaks <= 5) {
-    x_n_breaks <- round(length(unique(data[["year"]])) / 5)
+    x_n_breaks <- round(length(data[["year"]]) / 5)
     if (x_n_breaks <= 2) {
-      x_n_breaks <- round(length(unique(data[["year"]])))
+      x_n_breaks <- round(length(data[["year"]]))
     }
-  } else if (x_n_breaks > 10 & x_n_breaks < 30) {
-    x_n_breaks <- round(length(unique(data[["year"]])) / 15)
-  } else if (x_n_breaks >= 30) {
-    x_n_breaks <- round(length(unique(data[["year"]])) / 20)
+  } else if (x_n_breaks > 10) {
+    x_n_breaks <- round(length(data[["year"]]) / 15)
   }
   x_n_breaks
 }
@@ -204,11 +197,10 @@ calculate_uncertainty <- function() {
 #------------------------------------------------------------------------------
 
 # Prep data for input into aesthetics for ggplot2
-prepare_data <- function(
-    dat,
-    label_name,
-    geom,
-    group = NULL){
+prep_dat <- function(dat,
+                     label_name,
+                     geom,
+                     group = TRUE){
   list_of_data <- list()
   for (i in 1:length(dat)) {
     # start for loop to bring together each data as their own geom
@@ -229,8 +221,7 @@ prepare_data <- function(
     }
     data <- data |>
       dplyr::filter(
-        grepl(glue::glue("{label_name}$"), label),
-        era == "time"
+        label == label_name
       ) |>
       dplyr::mutate(
         year = as.numeric(year),
@@ -270,9 +261,7 @@ prepare_data <- function(
   
   # If group is false then filter out/summarize data for plotting
   # unsure if want to keep this
-  # this is filtering for time series
-  # TODO: change or remove in the future when moving to other plot types
-  if (is.null(group)) {
+  if (!group) {
     plot_data <- plot_data |>
       dplyr::filter(
         !is.na(year),
@@ -280,20 +269,18 @@ prepare_data <- function(
         is.na(sex) | length(unique(sex)) <= 1,
         is.na(area) | length(unique(area)) <= 1,
         is.na(growth_pattern) | length(unique(growth_pattern)) <= 1
-      ) |>
+      )
       dplyr::group_by(
         year,
         model,
-        group_var,
-        module_name,
-        label
+        group_var
       ) |>
       dplyr::summarise(
         estimate = mean(estimate, na.rm = TRUE),
         estimate_lower = mean(estimate_lower, na.rm = TRUE),
-        estimate_upper = mean(estimate_upper, na.rm = TRUE)
-      ) |>
-      dplyr::ungroup()
+        estimate_upper = mean(estimate_upper, na.rm = TRUE),
+        .groups = "drop"
+      )
   }
   
   # Check if there are multiple module_names present
@@ -315,12 +302,6 @@ prepare_data <- function(
           module_name == selected_module
       )
     }
-  }
-  if (geom == "area") {
-    plot_data2 <- dplyr::mutate(
-      plot_data,
-      model = reorder(.data[["model"]], .data[["estimate"]], function(x) -max(x) )
-    )
   }
   plot_data
 }
