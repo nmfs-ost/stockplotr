@@ -27,6 +27,7 @@ plot_biomass_at_age <- function(
     group = NULL,
     unit_label = "mt",
     scale_amount = 1000,
+    proportional = TRUE,
     make_rda = FALSE,
     figures_dir = getwd()) {
   magnitude <- floor(log10(scale_amount))
@@ -72,7 +73,8 @@ plot_biomass_at_age <- function(
   plot <- plot_aa(
     dat = b,
     facet = group,
-    label = biomass_label
+    label = biomass_label,
+    proportional = proportional
   )
   # export figure to rda if argument = T
   if (make_rda == TRUE) {

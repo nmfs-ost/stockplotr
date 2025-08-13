@@ -42,8 +42,10 @@ plot_abundance_at_age <- function(
     group = NULL,
     unit_label = "fish",
     scale_amount = 1000,
+    proportional = TRUE,
     make_rda = FALSE,
-    figures_dir = getwd()) {
+    figures_dir = getwd()
+    ) {
   magnitude <- floor(log10(scale_amount))
   if (magnitude == 0) {
     scale_unit <- ""
@@ -87,7 +89,8 @@ plot_abundance_at_age <- function(
   plot <- plot_aa(
     dat = b,
     facet = group,
-    label = abundance_label
+    label = abundance_label,
+    proportional = proportional
   ) +
   average_age_line(
     dat = b,

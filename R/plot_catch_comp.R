@@ -12,6 +12,7 @@ plot_catch_comp <- function(
   group = NULL,
   unit_label = "mt",
   scale_amount = 1,
+  proportional = TRUE,
   make_rda = FALSE,
   figures_dir = getwd()
 ) {
@@ -58,7 +59,8 @@ plot_catch_comp <- function(
   plot <- plot_aa(
     dat = catch,
     facet = group,
-    label = catch_label
+    label = catch_label,
+    proportional = proportional
   ) +
   cohort_line(catch)
   # export figure to rda if argument = T

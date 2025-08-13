@@ -285,12 +285,17 @@ plot_aa <- function(
   xlab = "Year",
   ylab = "Age",
   facet = NULL,
+  proportional = TRUE,
   ...
 ) {
   # Make sure age is numeric
   dat <- dat |>
     dplyr::mutate(
-      age = as.numeric(age)
+      age = as.numeric(age),
+      zvar = dplyr::case_when(
+        proportional ~ sqrt(.data[[z]]),
+        TRUE ~ .data[[z]]
+      )
     )
   # Caclaulate x-axis breaks
   x_n_breaks <- axis_breaks(dat)
@@ -306,7 +311,7 @@ plot_aa <- function(
         x = .data[[x]],
         y = .data[[y]],
         color = model,
-        size = sqrt(.data[[z]])
+        size = zvar
       ),
       shape = 21,
       alpha = 0.3,
