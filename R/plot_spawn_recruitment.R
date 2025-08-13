@@ -42,7 +42,7 @@ plot_spawn_recruitment <- function(
     )
   } else {
     recruitment <- recruitment |>
-    dplyr::rename(predicted_recruitment = estimate) |>
+    dplyr::rename(spawning_biomass = estimate) |>
     dplyr::select(-c(label))
   }
   
@@ -66,8 +66,6 @@ plot_spawn_recruitment <- function(
     y = "predicted_recruitment",
     geom = "point",
     color = "black",
-    xlab = paste0("Spawning Biomass (", spawning_biomass_label, ")"),
-    ylab = paste0("Recruitment (", recruitment_label, ")"),
     facet = {
       if (length(unique(sr$model)) > 1) {
         "model"
@@ -76,16 +74,11 @@ plot_spawn_recruitment <- function(
       }
     }
   ) +
+  ggplot2::geom_line(data = sr,
+    ggplot2::aes(x = spawning_biomass, y = expected_recruitment),
+    color = "red"
+  ) +
   theme_noaa()
-
-  if ("expected_recruitment" %in% names(sr)) {
-    final <- final +
-     ggplot2::geom_line(
-      data = sr,
-      ggplot2::aes(x = spawning_biomass, y = expected_recruitment),
-      color = "red"
-    )
-  }
   
   # Make RDA
   if (make_rda) {
