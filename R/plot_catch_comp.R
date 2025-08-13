@@ -11,7 +11,7 @@ plot_catch_comp <- function(
   dat,
   group = NULL,
   unit_label = "mt",
-  scale_amount = 1000,
+  scale_amount = 1,
   make_rda = FALSE,
   figures_dir = getwd()
 ) {

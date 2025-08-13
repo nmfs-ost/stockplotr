@@ -297,20 +297,6 @@ plot_aa <- function(
   # Calculate y-axis breaks
   y_n_breaks <- y_axis_breaks(dat)
 
- 
-
-  # Create average age line
-  # average_age_line <- list(
-  #   ggplot2::geom_line(
-  #     data = annual_means,
-  #     ggplot2::aes(
-  #       x = year,
-  #       y = avg
-  #     ),
-  #     linewidth = 1,
-  #     color = "red"
-  #   )
-  # )
   # Initialize gg plot
   plot <- ggplot2::ggplot() +
   # Add geom
@@ -320,7 +306,7 @@ plot_aa <- function(
         x = .data[[x]],
         y = .data[[y]],
         color = model,
-        size = .data[[z]]
+        size = sqrt(.data[[z]])
       ),
       shape = 21,
       alpha = 0.3,
@@ -331,7 +317,12 @@ plot_aa <- function(
     ggplot2::scale_size(
       range = c(0.2, 10),
       name = label,
-      labels = scales::label_comma()
+      labels = scales::label_comma(),
+      guide = ggplot2::guide_legend(
+        # This will make the legend show the original values
+        # instead of the square root
+        labels = scales::label_comma()
+      )
     ) +
     # Add axis breaks
     ggplot2::scale_x_continuous(
@@ -344,7 +335,9 @@ plot_aa <- function(
       guide = ggplot2::guide_axis(minor.ticks = TRUE)
       # limits = c(min(.data[[y]]), max(.data[[y]]))
     ) +
-    # ggplot2::coord_cartesian(xlim = c(0, NA)) +
+    # Remove legend since circles are calculated 
+    # proportionally to catch and not exactly catch
+    ggplot2::theme(legend.position = "none")
     # add noaa theme
     theme_noaa()
 
@@ -437,9 +430,9 @@ top_cohorts_data <- dat |>
         group = cohort
       ),
       linewidth = 1,
-      linetype = "dotted",
+      linetype = "solid",
       alpha = 0.8,
-      color = "grey"
+      color = "#747474"
     )
   #   ggplot2::geom_line(
   #     ggplot2::aes(
