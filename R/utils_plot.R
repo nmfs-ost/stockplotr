@@ -219,17 +219,28 @@ plot_error <- function(
     ylab = ylab,
     group = group,
     facet = facet,
-    colour = "black",
-    ...
+    colour = "black"
+    # ...
   ) +
     ggplot2::geom_segment(
       data = dat,
       ggplot2::aes(
         x = .data[[x]],
         y = .data[[y]],
-        yend = 0
-      )
-      # linewidth = 0.5 # leaving this up to the user aka the actual rec dev plot
+        yend = estimate_upper
+      ),
+      color = "#5798fa",
+      alpha = 0.5
+    ) +
+    ggplot2::geom_segment(
+      data = dat,
+      ggplot2::aes(
+        x = .data[[x]],
+        y = .data[[y]],
+        yend = estimate_lower
+      ),
+      color = "#5798fa",
+      alpha = 0.5
     ) +
     ggplot2::geom_hline(
       yintercept = 0,
