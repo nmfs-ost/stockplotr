@@ -6,10 +6,12 @@
 \usage{
 plot_catch_comp(
   dat,
-  unit_label = "metric tons",
-  end_year = NULL,
+  group = NULL,
+  unit_label = "mt",
+  scale_amount = 1,
+  proportional = TRUE,
   make_rda = FALSE,
-  rda_dir = getwd()
+  figures_dir = getwd()
 )
 }
 \arguments{
@@ -17,12 +19,18 @@ plot_catch_comp(
 
 \item{unit_label}{indicate the name of the units of catch as to label the axis}
 
-\item{end_year}{Last year of assessment. Default is the current year.}
+\item{scale_amount}{A number describing how much to scale down the quantities
+shown on the y axis. For example, scale_amount = 100 would scale down a value
+from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
 Default is FALSE.}
+
+\item{figures_dir}{The location of the folder containing the generated figure
+rda files ("figures") that will be created if the argument `make_rda` = TRUE.
+Default is the working directory.}
 }
 \value{
 A plot ready for a stock assessment report of catch composition by fleet.

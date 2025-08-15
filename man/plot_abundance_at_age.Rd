@@ -6,9 +6,10 @@
 \usage{
 plot_abundance_at_age(
   dat,
+  group = NULL,
   unit_label = "fish",
   scale_amount = 1000,
-  end_year = format(Sys.Date(), "\%Y"),
+  proportional = TRUE,
   make_rda = FALSE,
   figures_dir = getwd()
 )
@@ -25,12 +26,12 @@ would scale down a value from 500,000 --> 5,000 and would report abundance in
 hundreds of fish (if "fish" was the unit_label). This scale will be reflected
 in the legend label. The default is 1,000.}
 
-\item{end_year}{last year of assessment}
-
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
 the .rda will be exported to the folder indicated in the argument "rda_dir".
 Default is FALSE.}
+
+\item{end_year}{last year of assessment}
 
 \item{relative}{A logical value specifying if the resulting figures should
 be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
@@ -54,10 +55,10 @@ plot_abundance_at_age(dat)
 
 plot_abundance_at_age(
   dat,
-  unit_label = "my_unit",
-  scale_amount = 10,
-  end_year = 2024,
-  make_rda = TRUE,
+  group = "area",
+  unit_label = "fish",
+  scale_amount = 1000,
+  make_rda = FALSE,
   figures_dir = getwd()
 )
 }

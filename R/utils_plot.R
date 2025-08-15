@@ -273,7 +273,7 @@ plot_error <- function(
 #' 
 #' @return Create a plot of abundance at age for a stock assessment report.
 #' @export
-#' @example \dontrun{
+#' @examples \dontrun{
 #'  plot_aa(dat)
 #' }
 plot_aa <- function(
