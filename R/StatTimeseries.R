@@ -4,42 +4,43 @@ library(ggplot2)
 # Make stat object - used for filtering the data before creating the geom which uses this then creates the layers
 StatTimeseries <- ggproto("StatTimeseries", Stat,
   required_aes = c("x", "y"),
-  non_required_aes = c("label", "era", "module_name", "uncertainty_label", "uncertainty", "ref_pt"),
+  optional_aes = c("label", "era", "module_name", "uncertainty_label", "uncertainty", "ref_pt"),
 
   setup_params = function(data, params){
     message("--- Entering setup_params ---")
     message(glue::glue("params before modification: {paste(names(params), collapse = ', ')}"))
 
-    params$label_name <- ifelse(is.null(params$label_name), "spawning_biomass", params$label_name)
-
+    # params$label_name <- ifelse(is.null(params$label_name), "spawning_biomass", params$label_name)
+    params$label_name <- params$label_name %||% "spawning_biomass"
+    params$reference_name <- params$reference_name %||% "msy"
     message(glue::glue("params after modification: {paste(names(params), collapse = ', ')}"))
     message("--- Exiting setup_params ---")
     params
   },
-  
+
   setup_data = function(data, params, label_name) {
-    
+
     message("--- Entering setup_data ---")
     message(glue::glue("Initial data dimensions: {paste(dim(data), collapse = 'x')}"))
     message(glue::glue("Initial data columns: {paste(names(data), collapse = ', ')}"))
-    
+
     # Ensure x and y are numeric and create 'year' and 'estimate' columns
     if (!("x" %in% names(data)) || !("y" %in% names(data))) {
       stop("Data must contain 'x' and 'y' aesthetics mapped to columns.")
     }
-    
+
     data <- data |>
       dplyr::mutate(
         x = as.numeric(.data$x),
         y = as.numeric(.data$y)
     )
     message(glue::glue("After x/y mutate, data dimensions: {paste(dim(data), collapse = 'x')}"))
-    
-    
+
+
     # Initialize estimate_lower and estimate_upper
     data$ymin <- NA_real_
     data$ymax <- NA_real_
-    
+
     # Initial filtering of the data
     message(glue::glue("Checking for 'label' and 'era' columns... label present: {'label' %in% names(data)}, era present: {'era' %in% names(data)}"))
     if ("label" %in% names(data) && "era" %in% names(data)) {
@@ -60,7 +61,7 @@ StatTimeseries <- ggproto("StatTimeseries", Stat,
       # or handle this case based on your desired behavior.
       message("Warning: 'label' or 'era' aesthetic not provided. Filtering skipped.")
     }
-    
+
     # Conditional calculation of uncertainty bounds
     # Only calculate if 'uncertainty' and 'uncertainty_label' columns are present
     message(glue::glue("Checking for 'uncertainty' and 'uncertainty_label' columns... uncertainty present: {'uncertainty' %in% names(data)}, uncertainty_label present: {'uncertainty_label' %in% names(data)}"))
@@ -91,20 +92,20 @@ StatTimeseries <- ggproto("StatTimeseries", Stat,
     message(glue::glue("Final data:"))
     message(glue::glue("{paste(names(data), collapse = ', ')}"))
     message(glue::glue("{head(data)}\n"))
-    
-    
+
+
     message("--- Exiting setup_data ---")
     return(data)
   },
-  
+
   compute_group = function(data,
-                           scales, 
+                           scales,
                            params,
                            label_name){
     message("--- Entering compute_group ---")
-    
+
     message(glue::glue("Column names after computing groups: {paste(names(data), collapse = ', ')}"))
-    
+
     message("--- Exiting compute_group ---")
     # ensure the processed data returns
     return(data)
@@ -112,19 +113,19 @@ StatTimeseries <- ggproto("StatTimeseries", Stat,
 )
 
 
-stat_timeseries <- function(mapping = NULL, data = NULL, 
-                            geom = "line", position = "identity", 
-                            na.rm = FALSE, show.legend = NA, 
+stat_timeseries <- function(mapping = NULL, data = NULL,
+                            geom = "line", position = "identity",
+                            na.rm = TRUE, show.legend = NA,
                             inherit.aes = TRUE, label_name = NULL,
                             ...) {
   layer(
-    stat = StatTimeseries, 
-    data = data, 
-    mapping = mapping, 
-    geom = geom, 
-    position = position, 
-    show.legend = show.legend, 
-    inherit.aes = inherit.aes, 
+    stat = StatTimeseries,
+    data = data,
+    mapping = mapping,
+    geom = geom,
+    position = position,
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
     params = list(
       label_name = label_name,
       na.rm = na.rm,
@@ -449,67 +450,9 @@ geom_timeseries <- function(
   )
 }
 
-# Utilities -----------------------------------------------------------
-# From ggplot2
-empty <- function(df) {
-  is.null(df) || nrow(df) == 0 || ncol(df) == 0 || is_waiver(df)
-}
-
-is_waiver <- function(x) {
-  inherits(x, "waiver")
-}
-
-# My utils
-calculate_reference_point <- function(
-    dat,
-    reference_name,
-    label_name
-) {
-  # Check if the reference point exists in the data
-  if (inherits(try(solve(as.numeric(dat[
-    grep(
-      pattern = glue::glue("^{glue::glue(\"{label_name}_{reference_name}\")}$"),
-      x = dat[["label"]]
-    ),
-    "y"
-  ])), silent = TRUE), "try-error")) {
-    ref_line_val <- NULL
-  } else {
-    ref_line_val <- as.numeric(dat[
-      grep(
-        pattern = glue::glue("^{glue::glue(\"{label_name}_{reference_name}\")}$"),
-        x = dat[["label"]]
-      ),
-      "y"
-    ])
-  }
-  
-  # Check if the reference value was found
-  if (length(ref_line_val) == 0) {
-    cli::cli_alert_warning(
-      "The resulting reference value of `{label_name}_{reference_name}` was not found.",
-      wrap = TRUE
-    )
-    ref_line_val <- 0
-  } else if (length(ref_line_val) > 1) {
-    cli::cli_alert_warning("More than one of the resulting reference value of `{label_name}_{reference_name}` was found. \n")
-    options <- c()
-    for (i in seq_along(unique(dat$module_name))) {
-      # options <- paste0(options, " ", i, ") ", unique(plot_data$module_name)[i], "\n")
-      options[i] <- paste0(" ", i, ") ", unique(dat$module_name)[i])
-    }
-    ref_line_val <- utils::menu(
-      options,
-      title = "Please select one:"
-    )
-    ref_line_val <- as.numeric(ref_line_val)
-  }
-  ref_line_val
-}
-
 # test stat ------------------
-ggplot(data = sample_data, 
-       aes(x = year, 
+ggplot(data = sample_data,
+       aes(x = year,
            y = estimate,
            label = label,
            era = era,
@@ -521,9 +464,9 @@ ggplot(data = sample_data,
       color = fleet
       ),
     label_name = 'spawning_biomass', 
-    # geom = "point", 
-    geom = "line", 
-    na.rm = TRUE) + 
+    # geom = "point",
+    geom = "line",
+    na.rm = TRUE) +
   # geom_ribbon(aes(ymin = estimate_lower, ymax = estimate_upper), alpha = 0.2) +
   facet_wrap(~season)
 
@@ -537,7 +480,7 @@ ggplot(data = sample_data,
            )
        ) +
   geom_timeseries(
-    label_name = "spawning_biomass", 
+    label_name = "spawning_biomass",
     reference_name = "msy",
     na.rm = TRUE
     )
