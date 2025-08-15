@@ -17,11 +17,18 @@ plot_biomass_at_age(
 \arguments{
 \item{dat}{A data frame returned from \link[asar]{convert_output}}
 
-\item{unit_label}{units for recruitment}
+\item{group}{a string of a single column that groups the data (e.g. "fleet",
+"sex", "area", etc.). Currently can only have one level of grouping.}
+
+\item{unit_label}{units for abundance}
 
 \item{scale_amount}{A number describing how much to scale down the biomass at
 age. For example, scale_amount = 100 would scale down a value
 from 500,000 --> 5,000. This scale will be reflected in the legend label.}
+
+\item{proportional}{Set size of points relative to z when TRUE, point
+size are relative to one another while when set to FALSE, point size
+is relative to z}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,

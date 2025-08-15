@@ -6,7 +6,7 @@
 \usage{
 plot_abundance_at_age(
   dat,
-  group = NULL,
+  facet = NULL,
   unit_label = "fish",
   scale_amount = 1000,
   proportional = TRUE,
@@ -17,7 +17,7 @@ plot_abundance_at_age(
 \arguments{
 \item{dat}{A data frame returned from \link[asar]{convert_output}}
 
-\item{unit_label}{units for recruitment}
+\item{unit_label}{units for abundance}
 
 \item{scale_amount}{A number describing how much to scale down the abundance at
 age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders
@@ -26,16 +26,17 @@ would scale down a value from 500,000 --> 5,000 and would report abundance in
 hundreds of fish (if "fish" was the unit_label). This scale will be reflected
 in the legend label. The default is 1,000.}
 
+\item{proportional}{Set size of points relative to z when TRUE, point
+size are relative to one another while when set to FALSE, point size
+is relative to z}
+
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
 the .rda will be exported to the folder indicated in the argument "rda_dir".
 Default is FALSE.}
 
-\item{end_year}{last year of assessment}
-
-\item{relative}{A logical value specifying if the resulting figures should
-be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
-which reference point to use.}
+\item{group}{a string of a single column that groups the data (e.g. "fleet",
+"sex", "area", etc.). Currently can only have one level of grouping.}
 
 \item{rda_dir}{The location of the folder containing the generated .rda files
 ("rda_files") that will be created if the argument `make_rda` = TRUE.
@@ -55,9 +56,10 @@ plot_abundance_at_age(dat)
 
 plot_abundance_at_age(
   dat,
-  group = "area",
+  facet = "area",
   unit_label = "fish",
   scale_amount = 1000,
+  proportional = TRUE,
   make_rda = FALSE,
   figures_dir = getwd()
 )

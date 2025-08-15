@@ -41,6 +41,10 @@ bubbles (default is "estimate")}
 (e.g. "sex", "area", etc.). It is not recommended to include more than one
 facet due to the complexity of the plot.}
 
+\item{proportional}{Set size of points relative to z when TRUE, point
+size are relative to one another while when set to FALSE, point size
+is relative to z}
+
 \item{...}{inherited arguments from internal functions from
 \link[ggplot2]{geom_point}}
 }
