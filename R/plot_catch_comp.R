@@ -48,7 +48,7 @@ plot_catch_comp <- function(
     interactive = FALSE
   )
   # Check for extracted data, if not return warning and empty plot
-  if (nrow(b) == 0) {
+  if (nrow(catch) == 0) {
     cli::cli_alert_warning("No data found for abundance at age. Please check the input data.")
     return(
       ggplot2::ggplot()
