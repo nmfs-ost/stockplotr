@@ -6,22 +6,36 @@
 \usage{
 plot_catch_comp(
   dat,
-  unit_label = "metric tons",
-  end_year = NULL,
+  group = NULL,
+  unit_label = "mt",
+  scale_amount = 1,
+  proportional = TRUE,
   make_rda = FALSE,
-  rda_dir = getwd()
+  figures_dir = getwd()
 )
 }
 \arguments{
 \item{dat}{A data frame returned from \link[asar]{convert_output}}
 
+\item{group}{a string of a single column that groups the data (e.g. "fleet",
+"sex", "area", etc.). Currently can only have one level of grouping.}
+
 \item{unit_label}{indicate the name of the units of catch as to label the axis}
 
-\item{end_year}{Last year of assessment. Default is the current year.}
+\item{scale_amount}{A number describing how much to scale down the abundance at
+age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders
+of magnitude (e.g., 1, 10, 100, 1000, etc.). For example, scale_amount = 100
+would scale down a value from 500,000 --> 5,000 and would report abundance in
+hundreds of fish (if "fish" was the unit_label). This scale will be reflected
+in the legend label. The default is 1,000.}
+
+\item{proportional}{Set size of points relative to z when TRUE, point
+size are relative to one another while when set to FALSE, point size
+is relative to z}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
-the rda will be exported to the folder indicated in the argument "figures_dir".
+the .rda will be exported to the folder indicated in the argument "rda_dir".
 Default is FALSE.}
 }
 \value{

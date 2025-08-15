@@ -14,6 +14,8 @@ reference_line(
 )
 }
 \arguments{
+\item{plot}{a ggplot2 object where the reference line will be added}
+
 \item{dat}{standard data frame where reference point should be extracted}
 
 \item{label_name}{string of the name of the quantity that users want to 

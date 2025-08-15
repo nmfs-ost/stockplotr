@@ -10,6 +10,7 @@ prepare_data(
   module = NULL,
   geom,
   group = NULL,
+  scale_amount = 1,
   interactive = TRUE
 )
 }
@@ -25,6 +26,9 @@ and "area".}
 
 \item{group}{Selected grouping for the data. If you want to just summarize
 the data across all factors, set group = "none".}
+
+\item{scale_amount}{A number describing how much to scale down the quantities
+shown on the y axis.}
 
 \item{interactive}{logical. If TRUE, the user will be prompted to select
 a module_name when there was more than one found in the filtered dataset.}
