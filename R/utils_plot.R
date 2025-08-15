@@ -268,6 +268,9 @@ plot_error <- function(
 #' @param facet a string or vector of strings of a column that facets the data
 #' (e.g. "sex", "area", etc.). It is not recommended to include more than one
 #' facet due to the complexity of the plot.
+#' @param proportional Set size of points relative to z when TRUE, point
+#' size are relative to one another while when set to FALSE, point size
+#' is relative to z
 #' @param ... inherited arguments from internal functions from
 #' \link[ggplot2]{geom_point}
 #' 
@@ -293,7 +296,7 @@ plot_aa <- function(
     dplyr::mutate(
       age = as.numeric(age),
       zvar = dplyr::case_when(
-        proportional ~ sqrt(.data[[z]]),
+        proportional ~ .data[[z]], # sqrt(.data[[z]])
         TRUE ~ .data[[z]]
       )
     )
@@ -319,16 +322,28 @@ plot_aa <- function(
       fill = "gray40"
       # ...
     ) +
-    ggplot2::scale_size(
-      range = c(0.2, 10),
-      name = label,
-      labels = scales::label_comma(),
-      guide = ggplot2::guide_legend(
-        # This will make the legend show the original values
-        # instead of the square root
-        labels = scales::label_comma()
-      )
-    ) +
+    # ggplot2::scale_size(
+    #   range = c(0.2, 10),
+    #   name = label,
+    #   labels = scales::label_comma(),
+    #   guide = ggplot2::guide_legend(
+    #     # This will make the legend show the original values
+    #     # instead of the square root
+    #     labels = scales::label_comma()
+    #   )
+    # ) +
+      ggplot2::scale_size_continuous(
+        name = label,
+        # Use the "sqrt" transformation for a perceptually accurate visual
+        trans = "sqrt",
+        range = c(0.2, 10),
+        # Manually set breaks on the original (untransformed) scale.
+        # We use a custom function here to get a few representative values.
+        breaks = round(quantile(dat[[zvar]], probs = c(0.25, 0.5, 0.75)) / 1000) * 1000,
+        # Format the labels for the legend to show the original numbers.
+        labels = scales::label_comma(),
+        guide = "legend" # This is optional, but ensures the guide is a legend
+      ) +
     # Add axis breaks
     ggplot2::scale_x_continuous(
       n.breaks = x_n_breaks,
@@ -342,7 +357,7 @@ plot_aa <- function(
     ) +
     # Remove legend since circles are calculated 
     # proportionally to catch and not exactly catch
-    ggplot2::theme(legend.position = "none")
+    # ggplot2::theme(legend.position = "none")
     # add noaa theme
     theme_noaa()
 

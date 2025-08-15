@@ -1,11 +1,18 @@
 #' Plot Abundance (or Numbers) at Age (AAA or NAA)
 #'
 #' @param dat A data frame returned from \link[asar]{convert_output}
-#' @param unit_label units for recruitment
-#' @param end_year last year of assessment
-#' @param relative A logical value specifying if the resulting figures should
-#'   be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
-#'   which reference point to use.
+#' @param group a string of a single column that groups the data (e.g. "fleet",
+#' "sex", "area", etc.). Currently can only have one level of grouping.
+#' @param unit_label units for abundance
+#' @param scale_amount A number describing how much to scale down the abundance at
+#' age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders
+#' of magnitude (e.g., 1, 10, 100, 1000, etc.). For example, scale_amount = 100
+#' would scale down a value from 500,000 --> 5,000 and would report abundance in
+#' hundreds of fish (if "fish" was the unit_label). This scale will be reflected
+#' in the legend label. The default is 1,000.
+#' @param proportional Set size of points relative to z when TRUE, point
+#' size are relative to one another while when set to FALSE, point size
+#' is relative to z
 #' @param make_rda TRUE/FALSE; indicate whether to produce an .rda file containing
 #' a list with the figure/table, caption, and alternative text (if figure). If TRUE,
 #' the .rda will be exported to the folder indicated in the argument "rda_dir".
@@ -13,12 +20,6 @@
 #' @param rda_dir The location of the folder containing the generated .rda files
 #' ("rda_files") that will be created if the argument `make_rda` = TRUE.
 #' Default is the working directory.
-#' @param scale_amount A number describing how much to scale down the abundance at
-#' age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders
-#' of magnitude (e.g., 1, 10, 100, 1000, etc.). For example, scale_amount = 100
-#' would scale down a value from 500,000 --> 5,000 and would report abundance in
-#' hundreds of fish (if "fish" was the unit_label). This scale will be reflected
-#' in the legend label. The default is 1,000.
 #' @return Plot total abundance (or numbers) at age from a stock assessment model as found in a NOAA
 #' stock assessment report. Units of abundance can either be manually added
 #' or will be extracted from the provided file if possible.
@@ -33,6 +34,7 @@
 #'   group = "area",
 #'   unit_label = "fish",
 #'   scale_amount = 1000,
+#'   proportional = TRUE,
 #'   make_rda = FALSE,
 #'   figures_dir = getwd()
 #' )
