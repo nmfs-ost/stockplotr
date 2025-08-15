@@ -31,7 +31,7 @@
 #'
 #' plot_abundance_at_age(
 #'   dat,
-#'   group = "area",
+#'   facet = "area",
 #'   unit_label = "fish",
 #'   scale_amount = 1000,
 #'   proportional = TRUE,
@@ -41,7 +41,7 @@
 #' }
 plot_abundance_at_age <- function(
     dat,
-    group = NULL,
+    facet = NULL,
     unit_label = "fish",
     scale_amount = 1000,
     proportional = TRUE,
@@ -90,13 +90,13 @@ plot_abundance_at_age <- function(
   # Plot data
   plot <- plot_aa(
     dat = b,
-    facet = group,
+    facet = facet,
     label = abundance_label,
     proportional = proportional
   ) +
   average_age_line(
     dat = b,
-    facet = group
+    facet = facet
   )
   # export figure to rda if argument = T
   if (make_rda == TRUE) {

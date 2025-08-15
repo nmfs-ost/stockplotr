@@ -295,8 +295,9 @@ plot_aa <- function(
   dat <- dat |>
     dplyr::mutate(
       age = as.numeric(age),
+      # zvar = .data[[z]],
       zvar = dplyr::case_when(
-        proportional ~ .data[[z]], # sqrt(.data[[z]])
+        proportional ~ sqrt(.data[[z]]),
         TRUE ~ .data[[z]]
       )
     )
@@ -322,6 +323,11 @@ plot_aa <- function(
       fill = "gray40"
       # ...
     ) +
+    ggplot2::labs(
+      x = xlab,
+      y = ylab,
+      size = label
+    ) +
     # ggplot2::scale_size(
     #   range = c(0.2, 10),
     #   name = label,
@@ -332,18 +338,18 @@ plot_aa <- function(
     #     labels = scales::label_comma()
     #   )
     # ) +
-      ggplot2::scale_size_continuous(
-        name = label,
-        # Use the "sqrt" transformation for a perceptually accurate visual
-        trans = "sqrt",
-        range = c(0.2, 10),
-        # Manually set breaks on the original (untransformed) scale.
-        # We use a custom function here to get a few representative values.
-        breaks = round(quantile(dat[[zvar]], probs = c(0.25, 0.5, 0.75)) / 1000) * 1000,
-        # Format the labels for the legend to show the original numbers.
-        labels = scales::label_comma(),
-        guide = "legend" # This is optional, but ensures the guide is a legend
-      ) +
+      # ggplot2::scale_size_continuous(
+      #   name = label,
+      #   # Use the "sqrt" transformation for a perceptually accurate visual
+      #   trans = "sqrt",
+      #   range = c(0.2, 10),
+      #   # Manually set breaks on the original (untransformed) scale.
+      #   # We use a custom function here to get a few representative values.
+      #   breaks = round(quantile(dat$zvar, probs = c(0.25, 0.5, 0.75, 0.85)) / 1000) * 1000,
+      #   # Format the labels for the legend to show the original numbers.
+      #   labels = scales::label_comma(),
+      #   guide = "legend" # This is optional, but ensures the guide is a legend
+      # ) +
     # Add axis breaks
     ggplot2::scale_x_continuous(
       n.breaks = x_n_breaks,
@@ -355,11 +361,15 @@ plot_aa <- function(
       guide = ggplot2::guide_axis(minor.ticks = TRUE)
       # limits = c(min(.data[[y]]), max(.data[[y]]))
     ) +
-    # Remove legend since circles are calculated 
-    # proportionally to catch and not exactly catch
-    # ggplot2::theme(legend.position = "none")
     # add noaa theme
     theme_noaa()
+  
+  if (proportional) {
+    plot <- plot +
+      # Remove legend since circles are calculated 
+      # proportionally to catch and not exactly catch
+      ggplot2::theme(legend.position = "none")
+  }
 
   # Facet plot if groups are present
   if (!is.null(facet)) {
