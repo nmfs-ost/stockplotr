@@ -143,3 +143,27 @@ test_that("plot_abundance_at_age generates error when abundance label is not fou
     )
   )
 })
+
+test_that("plot is made proportional and does not contain a legend", {
+  plot <- plot_abundance_at_age(
+    out_new,
+    unit_label = "fish",
+    proportional = TRUE,
+    scale_amount = 1,
+    make_rda = FALSE,
+    figures_dir = getwd()
+  )
+  expect_true(plot$theme$legend.position == "none")
+})
+
+test_that("plot contains a legend", {
+  plot <- plot_abundance_at_age(
+    out_new,
+    proportional = FALSE,
+    unit_label = "fish",
+    scale_amount = 1,
+    make_rda = FALSE,
+    figures_dir = getwd()
+  )
+  expect_true(is.null(plot$theme$legend.position))
+})
