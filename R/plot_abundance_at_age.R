@@ -1,8 +1,8 @@
 #' Plot Abundance (or Numbers) at Age (AAA or NAA)
 #'
 #' @param dat A data frame returned from \link[asar]{convert_output}
-#' @param group a string of a single column that groups the data (e.g. "fleet",
-#' "sex", "area", etc.). Currently can only have one level of grouping.
+#' @param facet a string or vector of strings of column(s) that 
+#' groups the data (e.g. "fleet", "sex", "area", etc.).
 #' @param unit_label units for abundance
 #' @param scale_amount A number describing how much to scale down the abundance at
 #' age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders
