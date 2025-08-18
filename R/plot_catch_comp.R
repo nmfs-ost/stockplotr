@@ -9,7 +9,7 @@
 #'
 plot_catch_comp <- function(
   dat,
-  group = NULL,
+  facet = NULL,
   unit_label = "mt",
   scale_amount = 1,
   proportional = TRUE,
@@ -58,7 +58,7 @@ plot_catch_comp <- function(
   # Plot data
   plot <- plot_aa(
     dat = catch,
-    facet = group,
+    facet = facet,
     label = catch_label,
     proportional = proportional
   ) +

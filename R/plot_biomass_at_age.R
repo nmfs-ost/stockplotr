@@ -24,7 +24,7 @@
 #' }
 plot_biomass_at_age <- function(
     dat,
-    group = NULL,
+    facet = NULL,
     unit_label = "mt",
     scale_amount = 1000,
     proportional = TRUE,
@@ -72,13 +72,13 @@ plot_biomass_at_age <- function(
   # Plot data
   plot <- plot_aa(
     dat = b,
-    facet = group,
+    facet = facet,
     label = biomass_label,
     proportional = proportional
   ) +
   average_age_line(
     dat = b,
-    facet = group
+    facet = facet
   )
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
