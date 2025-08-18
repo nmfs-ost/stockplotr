@@ -6,7 +6,7 @@
 \usage{
 plot_biomass_at_age(
   dat,
-  group = NULL,
+  facet = NULL,
   unit_label = "mt",
   scale_amount = 1000,
   proportional = TRUE,
@@ -17,8 +17,8 @@ plot_biomass_at_age(
 \arguments{
 \item{dat}{A data frame returned from \link[asar]{convert_output}}
 
-\item{group}{a string of a single column that groups the data (e.g. "fleet",
-"sex", "area", etc.). Currently can only have one level of grouping.}
+\item{facet}{a string or vector of strings of column(s) that 
+groups the data (e.g. "fleet", "sex", "area", etc.).}
 
 \item{unit_label}{units for abundance}
 
