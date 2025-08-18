@@ -2,25 +2,30 @@
 % Please edit documentation in R/plot_spawn_recruitment.R
 \name{plot_spawn_recruitment}
 \alias{plot_spawn_recruitment}
-\title{Plot Spawn-Recruit Curve}
+\title{Plot Spawn-Recruit Relationship}
 \usage{
 plot_spawn_recruitment(
   dat,
   spawning_biomass_label = "mt",
   recruitment_label = "mt",
-  end_year = format(Sys.Date(), "\%Y"),
+  interactive = FALSE,
   make_rda = FALSE,
   figures_dir = getwd()
 )
 }
 \arguments{
-\item{dat}{A data frame returned from \link[asar]{convert_output}}
+\item{dat}{A data frame or names list of data frames returned from
+\link[asar]{convert_output}. The first data frame in the list is used in
+calculation of a reference line if one is present}
 
 \item{spawning_biomass_label}{Units for spawning biomass}
 
 \item{recruitment_label}{units for recruitment}
 
-\item{end_year}{Last year of assessment. Default is the current year.}
+\item{interactive}{Indicate whether the environment the
+plot is being made in is interactive. By default, this
+is set to false. If true, dependent on your data, a
+option menu will pop-up.}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
@@ -32,10 +37,12 @@ rda files ("figures") that will be created if the argument `make_rda` = TRUE.
 Default is the working directory.}
 }
 \value{
-Plot spawning recruitment relationship from a standardized output file originating from \link[asar]{convert_output}
+Plot spawn recruitment relationship from a 
+standardized output file originating from 
+\link[asar]{convert_output}
 }
 \description{
-Plot Spawn-Recruit Curve
+Plot Spawn-Recruit Relationship
 }
 \examples{
 \dontrun{
@@ -43,9 +50,9 @@ plot_spawn_recruitment(dat)
 
 plot_spawn_recruitment(
   dat,
+  interactive = FALSE,
   spawning_biomass_label = "sb label",
   recruitment_label = "rec label",
-  end_year = 2024,
   make_rda = TRUE,
   figures_dir = getwd()
 )
