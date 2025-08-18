@@ -55,7 +55,7 @@ plot_biomass_at_age <- function(
   # Filter data
   b <- prepare_data(
     dat = dat,
-    label_name = "biomass",
+    label_name = "^biomass",
     geom = "point",
     group = "age",
     scale_amount = scale_amount,

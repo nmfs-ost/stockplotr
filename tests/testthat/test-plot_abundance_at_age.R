@@ -137,7 +137,7 @@ test_that("plot_abundance_at_age generates error when abundance label is not fou
     plot_abundance_at_age(
       sample_data,
       unit_label = "fish",
-      scale_amount = 0.1,
+      scale_amount = 1,
       make_rda = FALSE,
       figures_dir = getwd()
     )
