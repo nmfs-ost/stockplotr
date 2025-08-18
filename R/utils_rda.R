@@ -1022,6 +1022,37 @@ write_captions <- function(dat, # converted model output object
     # fecundity.min <- # minimum fecundity
     # fecundity.max <- # maximum fecundity
 
+    
+    ## catch at age (CAA)
+    # start year of CAA plot
+    caa.start.year <- dat |>
+      dplyr::filter(label == "abundance" & !is.na(year)) |>
+      dplyr::slice(which.min(year)) |>
+      dplyr::select(year) |>
+      as.numeric()
+    
+    # end year of CAA plot
+    caa.end.year <- dat |>
+      dplyr::filter(label == "abundance" & !is.na(year)) |>
+      dplyr::slice(which.max(year)) |>
+      dplyr::select(year) |>
+      as.numeric()
+    
+    # minimum age
+    caa.age.min <- dat |>
+      dplyr::filter(label == "abundance" & !is.na(year)) |>
+      dplyr::slice(which.min(age)) |>
+      dplyr::select(age) |>
+      as.numeric()
+    
+    # maximum age
+    caa.age.max <- dat |>
+      dplyr::filter(label == "abundance" & !is.na(year)) |>
+      dplyr::slice(which.max(age)) |>
+      dplyr::select(age) |>
+      as.numeric()
+    
+    
     ## catch composition
     # minimum & maximum catch
     if (dim(dat |>
@@ -1501,9 +1532,11 @@ write_captions <- function(dat, # converted model output object
       # 'fecundity.max' = as.character(fecundity.max),
       
       ## CAA (catch at age)
-      # 'fleet.or.survey.name' = as.character(fleet.or.survey.name),
-      # 'caa.age.min' = as.character(caa.age.min),
-      # 'caa.age.max' = as.character(caa.age.max),
+      "caa.start.year" = as.character(caa.start.year),
+      "caa.end.year" = as.character(caa.end.year),
+      'caa.age.min' = as.character(caa.age.min),
+      'caa.age.max' = as.character(caa.age.max),
+
       
       ## CAL (catch at length)
       # 'cal.length.min' = as.character(cal.length.min),
