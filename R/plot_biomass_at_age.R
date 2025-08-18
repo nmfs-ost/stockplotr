@@ -84,7 +84,7 @@ plot_biomass_at_age <- function(
   if (make_rda == TRUE) {
     create_rda(
       object = plot,
-      topic_label = "pop.naa",
+      topic_label = "pop.baa",
       fig_or_table = "figure",
       dat,
       unit_label = "mt"

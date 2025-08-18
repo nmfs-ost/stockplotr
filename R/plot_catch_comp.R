@@ -1,10 +1,10 @@
-#' Plot catch composition by fleet
+#' Plot catch composition
 #'
 #' @inheritParams plot_abundance_at_age
 #' @param unit_label indicate the name of the units of catch as to label the axis
 #'
 #' @return A plot ready for a stock assessment report of catch composition.
-#' This plot is made only when landings are explicitly named in the output file.
+#' This plot is made only when catch is explicitly named in the output file.
 #' The current plot function does not combine all sources of catch.
 #'
 plot_catch_comp <- function(
@@ -67,7 +67,7 @@ plot_catch_comp <- function(
   if (make_rda == TRUE) {
     create_rda(
       object = plot,
-      topic_label = "pop.naa",
+      topic_label = "pop.caa",
       fig_or_table = "figure",
       dat,
       unit_label = "mt"

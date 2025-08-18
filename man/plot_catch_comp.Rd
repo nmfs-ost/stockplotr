@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_catch_comp.R
 \name{plot_catch_comp}
 \alias{plot_catch_comp}
-\title{Plot catch composition by fleet}
+\title{Plot catch composition}
 \usage{
 plot_catch_comp(
   dat,
@@ -39,10 +39,10 @@ the .rda will be exported to the folder indicated in the argument "rda_dir".
 Default is FALSE.}
 }
 \value{
-A plot ready for a stock assessment report of catch composition by fleet.
-This plot is made only when landings are explicitly named in the output file.
+A plot ready for a stock assessment report of catch composition.
+This plot is made only when catch is explicitly named in the output file.
 The current plot function does not combine all sources of catch.
 }
 \description{
-Plot catch composition by fleet
+Plot catch composition
 }
