@@ -1072,14 +1072,14 @@ write_captions <- function(dat, # converted model output object
     
     ## NAA (numbers at age)
     # start year of NAA plot
-    pop.naa.start.year.min <- dat |>
+    pop.naa.start.year <- dat |>
       dplyr::filter(label == "abundance" & !is.na(year)) |>
       dplyr::slice(which.min(year)) |>
       dplyr::select(year) |>
       as.numeric()
     
     # end year of NAA plot
-    pop.naa.end.year.max <- dat |>
+    pop.naa.end.year <- dat |>
       dplyr::filter(label == "abundance" & !is.na(year)) |>
       dplyr::slice(which.max(year)) |>
       dplyr::select(year) |>
@@ -1516,8 +1516,8 @@ write_captions <- function(dat, # converted model output object
       # 'cpue.max' = as.character(cpue.max),
       
       ## NAA (numbers at age)
-      "pop.naa.start.year.min" = as.character(pop.naa.start.year.min),
-      "pop.naa.end.year.max" = as.character(pop.naa.end.year.max),
+      "pop.naa.start.year" = as.character(pop.naa.start.year),
+      "pop.naa.end.year" = as.character(pop.naa.end.year),
       "pop.naa.age.min" = as.character(pop.naa.age.min),
       "pop.naa.age.max" = as.character(pop.naa.age.max),
       
