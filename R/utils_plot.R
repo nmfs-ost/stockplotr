@@ -328,16 +328,16 @@ plot_aa <- function(
       y = ylab,
       size = label
     ) +
-    # ggplot2::scale_size(
-    #   range = c(0.2, 10),
-    #   name = label,
-    #   labels = scales::label_comma(),
-    #   guide = ggplot2::guide_legend(
-    #     # This will make the legend show the original values
-    #     # instead of the square root
-    #     labels = scales::label_comma()
-    #   )
-    # ) +
+    ggplot2::scale_size(
+      # range = c(0.2, 10),
+      # name = label,
+      labels = scales::label_comma()
+      # guide = ggplot2::guide_legend(
+      #   # This will make the legend show the original values
+      #   # instead of the square root
+      #   labels = scales::label_comma()
+      # )
+    ) +
       # ggplot2::scale_size_continuous(
       #   name = label,
       #   # Use the "sqrt" transformation for a perceptually accurate visual
