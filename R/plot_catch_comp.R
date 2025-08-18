@@ -3,7 +3,7 @@
 #' @inheritParams plot_abundance_at_age
 #' @param unit_label indicate the name of the units of catch as to label the axis
 #'
-#' @return A plot ready for a stock assessment report of catch composition by fleet.
+#' @return A plot ready for a stock assessment report of catch composition.
 #' This plot is made only when landings are explicitly named in the output file.
 #' The current plot function does not combine all sources of catch.
 #'
