@@ -17,6 +17,9 @@ plot_abundance_at_age(
 \arguments{
 \item{dat}{A data frame returned from \link[asar]{convert_output}}
 
+\item{facet}{a string or vector of strings of column(s) that 
+groups the data (e.g. "fleet", "sex", "area", etc.).}
+
 \item{unit_label}{units for abundance}
 
 \item{scale_amount}{A number describing how much to scale down the abundance at
@@ -34,9 +37,6 @@ is relative to z}
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
 the .rda will be exported to the folder indicated in the argument "rda_dir".
 Default is FALSE.}
-
-\item{group}{a string of a single column that groups the data (e.g. "fleet",
-"sex", "area", etc.). Currently can only have one level of grouping.}
 
 \item{rda_dir}{The location of the folder containing the generated .rda files
 ("rda_files") that will be created if the argument `make_rda` = TRUE.

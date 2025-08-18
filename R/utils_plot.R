@@ -359,8 +359,10 @@ plot_aa <- function(
       minor_breaks = y_n_breaks[[1]],
       n.breaks = y_n_breaks[[2]],
       guide = ggplot2::guide_axis(minor.ticks = TRUE)
-      # limits = c(min(.data[[y]]), max(.data[[y]]))
+      # limits = c(min(.data[[y]]), max(.data[[y]])),
+      # expand = c(0, NA)
     ) +
+    # ggplot2::coord_cartesian(expand = FALSE)
     # add noaa theme
     theme_noaa()
   
@@ -547,6 +549,7 @@ axis_breaks <- function(data){
 }
 
 y_axis_breaks <- function(data){
+  # TODO: generalize this so we can input any column for the y-axis values
   y_n_breaks <- round(length(unique(data[["age"]])))
   if (y_n_breaks > 80) {
     y_n_breaks <- round(length(unique(data[["age"]])) / 6)
