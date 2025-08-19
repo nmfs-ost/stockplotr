@@ -314,7 +314,6 @@ plot_aa <- function(
       ggplot2::aes(
         x = .data[[x]],
         y = .data[[y]],
-        color = model,
         size = zvar
       ),
       shape = 21,
