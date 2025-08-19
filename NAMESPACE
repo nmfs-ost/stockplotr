@@ -2,7 +2,6 @@
 
 export(add_theme)
 export(create_rda)
-export(exp_all_figs_tables)
 export(export_rda)
 export(extract_caps_alttext)
 export(html_all_figs_tables)
@@ -23,4 +22,5 @@ export(save_all_plots)
 export(table_bnc)
 export(table_indices)
 export(table_landings)
+export(theme_noaa)
 export(write_captions)
