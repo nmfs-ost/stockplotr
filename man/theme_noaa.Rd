@@ -2,19 +2,26 @@
 % Please edit documentation in R/theme_noaa.R
 \name{theme_noaa}
 \alias{theme_noaa}
-\title{Add NOAA theming to ggplot2 object}
+\title{Add NOAA theming to ggplot2 object. The palette is from the 'viridis' package, which contains palettes distinguishable by those with color vision deficiency.}
 \usage{
-theme_noaa(...)
+theme_noaa(discrete = TRUE, ...)
 }
 \arguments{
+\item{discrete}{Variable indicating whether the color or fill aesthetic is discrete. Default is TRUE.}
+
 \item{...}{Arguments passed to `ggplot2::theme()`.}
 }
 \value{
-theme for NOAA Fisheries plots
+A list applying a theme to a ggplot2 object.
 }
 \description{
-Add NOAA theming to ggplot2 object
+Add NOAA theming to ggplot2 object. The palette is from the 'viridis' package, which contains palettes distinguishable by those with color vision deficiency.
 }
 \examples{
-ggplot2::ggplot() + ggplot2::geom_line(ggplot2::aes(x = 1:10, y = 1:10)) + theme_noaa()
+ggplot2::ggplot(data = OrchardSprays,
+                ggplot2::aes(x = rowpos, 
+                             y = decrease,
+                             color = treatment)) +
+  ggplot2::geom_point() +
+  theme_noaa()
 }
