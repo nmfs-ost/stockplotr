@@ -745,8 +745,8 @@ write_captions <- function(dat, # converted model output object
     #                  ) |>
     #   dplyr::pull(estimate) |>
     #   unique() |>
-    #   as.numeric() |>
-    #   round(digits = 2)
+      # as.numeric() |>
+      # round(digits = 2)
     
     # Bend <-
     
@@ -1074,12 +1074,14 @@ write_captions <- function(dat, # converted model output object
       tot.catch.min <- catch |>
         dplyr::slice(which.min(estimate)) |>
         dplyr::select(estimate) |>
-        as.numeric()
+        as.numeric() |>
+        round(digits = 2)
 
       tot.catch.max <- catch |>
         dplyr::slice(which.max(estimate)) |>
         dplyr::select(estimate) |>
-        as.numeric()
+        as.numeric() |>
+        round(digits = 2)
     } else {
       tot.catch.min <- "NA"
       tot.catch.max <- "NA"
@@ -1537,6 +1539,10 @@ write_captions <- function(dat, # converted model output object
       'caa.age.min' = as.character(caa.age.min),
       'caa.age.max' = as.character(caa.age.max),
 
+      
+      ## catch comp
+      'tot.catch.min' = as.character(tot.catch.min),
+      'tot.catch.max' = as.character(tot.catch.max),
       
       ## CAL (catch at length)
       # 'cal.length.min' = as.character(cal.length.min),
