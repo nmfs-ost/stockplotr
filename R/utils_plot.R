@@ -464,7 +464,8 @@ top_cohorts_data <- dat |>
       linewidth = 1,
       linetype = "solid",
       alpha = 0.8,
-      color = "#747474"
+      color = "black"
+      # color = "#747474"
     )
   #   ggplot2::geom_line(
   #     ggplot2::aes(
