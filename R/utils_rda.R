@@ -1113,7 +1113,8 @@ write_captions <- function(dat, # converted model output object
     
     # end year of NAA plot
     pop.naa.end.year <- dat |>
-      dplyr::filter(label == "abundance" & !is.na(year)) |>
+      dplyr::filter(label == "abundance" & !is.na(year),
+                    era == "time") |>
       dplyr::slice(which.max(year)) |>
       dplyr::select(year) |>
       as.numeric()
@@ -1132,6 +1133,23 @@ write_captions <- function(dat, # converted model output object
       dplyr::select(age) |>
       as.numeric()
     
+    # minimum abundance (number) of fish
+    pop.naa.fish.min <- dat |>
+      dplyr::filter(grepl("abundance", label) & !is.na(year),
+                    era == "time") |>
+      dplyr::slice(which.min(estimate)) |>
+      dplyr::select(estimate) |>
+      as.numeric() |>
+      round(digits = 2)
+    
+    # maximum abundance (number) of fish
+    pop.naa.fish.max <- dat |>
+      dplyr::filter(grepl("abundance", label) & !is.na(year),
+                    era == "time") |>
+      dplyr::slice(which.max(estimate)) |>
+      dplyr::select(estimate) |>
+      as.numeric() |>
+      round(digits = 2)
     
     ## mod_fit_catch (model fit to catch ts)- don't code quantities yet
     # mod.fit.catch.start.year <- # start year of model fit to catch ts plot
@@ -1353,26 +1371,32 @@ write_captions <- function(dat, # converted model output object
     ## pop.baa (population biomass at age)
     # start year of pop.baa plot
     pop.baa.start.year <- dat |>
-      dplyr::filter(label == "abundance") |>
+      dplyr::filter(grepl("^biomass", label)) |>
       dplyr::slice(which.min(year)) |>
       dplyr::select(year) |>
       as.numeric()
     
     # end year of pop.baa plot
-    pop.baa.end.year <- landings.end.year
+    pop.baa.end.year <- dat |>
+      dplyr::filter(grepl("^biomass", label),
+                    era == "time") |>
+      dplyr::slice(which.max(year)) |>
+      dplyr::select(year) |>
+      as.numeric()
     
-    # minimum number of fish
+    # minimum biomass of fish
     pop.baa.fish.min <- dat |>
-      dplyr::filter(label == "abundance" & !is.na(year)) |>
+      dplyr::filter(grepl("^biomass", label) & !is.na(year),
+                    era == "time") |>
       dplyr::slice(which.min(estimate)) |>
       dplyr::select(estimate) |>
       as.numeric() |>
       round(digits = 2)
     
-    
-    # maximum number of fish
+    # maximum biomass of fish
     pop.baa.fish.max <- dat |>
-      dplyr::filter(label == "abundance" & !is.na(year)) |>
+      dplyr::filter(grepl("^biomass", label) & !is.na(year),
+                    era == "time") |>
       dplyr::slice(which.max(estimate)) |>
       dplyr::select(estimate) |>
       as.numeric() |>
@@ -1559,6 +1583,8 @@ write_captions <- function(dat, # converted model output object
       "pop.naa.end.year" = as.character(pop.naa.end.year),
       "pop.naa.age.min" = as.character(pop.naa.age.min),
       "pop.naa.age.max" = as.character(pop.naa.age.max),
+      "pop.naa.fish.min" = as.character(pop.naa.fish.min),
+      "pop.naa.fish.max" = as.character(pop.naa.fish.max),
       
       ## mod_fit_catch (model fit to catch ts)
       # 'mod.fit.catch.start.year' = as.character(mod.fit.catch.start.year),
