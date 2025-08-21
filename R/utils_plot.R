@@ -1,28 +1,49 @@
 #############################
-# Utility functions 
+# Utility functions for plotting
 #############################
 
 #' Plot time series trends
 #'
-#' @param dat 
-#' @param x 
-#' @param y 
-#' @param geom type of geom to use for plotting found in ggplot2 (e.g. "point", "line", etc.)
+#' @param dat filtered data frame from standard output file(s) pre-formatted for
+#'  the target label from \link[stockplotr]{prepare_data}
+#' @param x a string of the column name of data used to plot on the x-axis (default 
+#' is "year")
+#' @param y a string of the column name of data used to plot on the y-axis (default 
+#' is "estimate")
+#' @param geom type of geom to use for plotting found in ggplot2 (e.g. "point", 
+#' "line", etc.). Default is "line". Other options are "point" and "area".
 #' @param xlab a string of the x-axis label (default is "Year")
-#' @param ylab a string of the y-axis label. If NULL, it will be set to the name of `y`.
-#' @param group a string of a single column that groups the data (e.g. "fleet", "sex", "area", etc.)
-#' @param facet a string of a single column that facets the data (e.g. "year", "area", etc.)
-#' @param ... 
+#' @param ylab a string of the y-axis label. If NULL, it will be set to the name
+#'  of `y`.
+#' @param group a string of a single column that groups the data (e.g. "fleet", 
+#' "sex", "area", etc.). Currently can only have one level of grouping.
+#' @param facet a string or vector of strings of a column that facets the data 
+#' (e.g. "year", "area", etc.)
+#' @param ... inherited arguments from internal functions from ggplot2::geom_xx
 #'
-#' @returns
+#'
+#' @returns Create a time series plot for a stock assessment report. The user 
+#' has options to create a line, point, or area plot where the x-axis is year 
+#' and Y can vary for any time series quantity. Currently, grouping is
+#' restricted to one group where faceting can be any number of facets.
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' plot_timeseries(dat,
+#'                x = "year",
+#'                y = "estimate",
+#'                geom = "line",
+#'                xlab = "Year",
+#'                ylab = "Biomass",
+#'                group = "fleet",
+#'                facet = "area")
+#' }
 plot_timeseries <- function(
     dat,
-    x,
-    y,
-    geom,
+    x = "year",
+    y = "estimate",
+    geom = "line",
     xlab = "Year",
     ylab = NULL,
     group = NULL,
@@ -128,21 +149,6 @@ plot_timeseries <- function(
         .data[[x]],
         .data[[y]])
     )
-    
-    # choose right number of colors and assign fleet names to those colors
-    # select_color <- function(x, data){
-    #   # select group that is color
-    #   col_group <- group[[grep("color|colour", names(group))]]
-    #   nmfs_colors <- nmfspalette::nmfs_palette(palette = "regional")
-    #   colors <- nmfs_colors(length(unique(data[[col_group]])))
-    #   names(colors) <- unique(data[[col_group]])
-    #   return(colors)
-    # }
-    # if (any(grepl("color", names(group)))) {
-    #   selected_colors <- select_color(group, data)
-    # } else {
-    #   selected_colors <- "black"
-    # }
     
     # Add geom aka type
     plot <- switch(
@@ -527,11 +533,17 @@ reference_line <- function(
     relative = FALSE,
     scale_amount = 1
     ) {
-  # calculate reference point value
-  ref_line_val <- calculate_reference_point(
-    dat = dat,
-    reference_name = glue::glue("{label_name}_{reference}")
-  )
+  if(!is.null(names(reference))) {
+    ref_line_val <- reference[[1]]
+    reference <- names(reference)
+  } else {
+    # calculate reference point value
+    ref_line_val <- calculate_reference_point(
+      dat = dat,
+      reference_name = glue::glue("{label_name}_{reference}")
+    )
+  }
+  
   # Add geom for ref line
   plot +
     ggplot2::geom_hline(
@@ -550,6 +562,8 @@ reference_line <- function(
       vjust = 0
     )
 }
+
+#------------------------------------------------------------------------------
 
 axis_breaks <- function(data){
   # change plot breaks

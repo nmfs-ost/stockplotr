@@ -13,12 +13,9 @@ plot_recruitment_deviations(
 )
 }
 \arguments{
-\item{dat}{A data frame returned from \link[asar]{convert_output}}
-
-\item{end_year}{Last year of assessment. Default is the current year.}
-
-\item{module}{The selected module or name where the data was grouped in  the 
-original output file.}
+\item{dat}{A data frame or names list of data frames returned from
+\link[asar]{convert_output}. The first data frame in the list is used in
+calculation of a reference line if one is present}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
@@ -28,6 +25,8 @@ Default is FALSE.}
 \item{figures_dir}{The location of the folder containing the generated figure
 rda files ("figures") that will be created if the argument `make_rda` = TRUE.
 Default is the working directory.}
+
+\item{...}{Arguments called from ggplot2::geom_line or ggplotr2::geom_point}
 }
 \value{
 Plot recruitment deviations relative to one over time from an
@@ -40,13 +39,12 @@ Plot Recruitment Deviations
 }
 \examples{
 \dontrun{
-plot_recruitment_deviations(dat)
-
 plot_recruitment_deviations(
-  dat,
-  end_year = 2024,
+  dat = list("model1"=dat1,"model2"=dat2),
+  geom = "point",
   make_rda = TRUE,
-  figures_dir = getwd()
+  figures_dir = getwd(),
+  size = 3
 )
 }
 }
