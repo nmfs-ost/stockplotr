@@ -24,7 +24,8 @@ groups the data (e.g. "fleet", "sex", "area", etc.).}
 
 \item{scale_amount}{A number describing how much to scale down the biomass at
 age. For example, scale_amount = 100 would scale down a value
-from 500,000 --> 5,000. This scale will be reflected in the legend label.}
+from 500,000 --> 5,000. This scale will be reflected in the legend label if
+proportion is set to FALSE.}
 
 \item{proportional}{Set size of points relative to z when TRUE, point
 size are relative to one another while when set to FALSE, point size
@@ -49,9 +50,9 @@ plot_biomass_at_age(dat)
 
 plot_biomass_at_age(
   dat,
-  unit_label = "my_unit",
+  unit_label = "mt",
   scale_amount = 100,
-  end_year = 2024,
+  proportional = FALSE, # displays legend
   make_rda = TRUE,
   figures_dir = getwd()
 )

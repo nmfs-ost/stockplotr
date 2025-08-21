@@ -27,7 +27,7 @@ age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders
 of magnitude (e.g., 1, 10, 100, 1000, etc.). For example, scale_amount = 100
 would scale down a value from 500,000 --> 5,000 and would report abundance in
 hundreds of fish (if "fish" was the unit_label). This scale will be reflected
-in the legend label. The default is 1,000.}
+in the legend label if proportional is set to FALSE. The default is 1,000.}
 
 \item{proportional}{Set size of points relative to z when TRUE, point
 size are relative to one another while when set to FALSE, point size
