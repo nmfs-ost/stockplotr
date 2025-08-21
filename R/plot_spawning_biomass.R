@@ -97,16 +97,17 @@ plot_spawning_biomass <- function(
   #   fig_or_table = fig_or_table,
   #   topic = topic_label
   # )
-  
+
   # Filter data for spawning biomass
   filter_data <- prepare_data(
     dat = dat,
     label_name = "spawning biomass",
     geom = geom,
     group = group,
-    module = module
+    module = module,
+    scale_amount = scale_amount
   )
-  
+
   plt <- plot_timeseries(
     dat = filter_data,
     y = "estimate",
@@ -123,169 +124,31 @@ plot_spawning_biomass <- function(
     topic_label <- "spawning.biomass"
   }
 
-  # identify output
-  fig_or_table <- "figure"
+  final <- reference_line(
+    plot = plt,
+    dat = rp_dat,
+    label_name = "spawning_biomass",
+    reference  = ref_line,
+    relative = relative,
+    scale_amount = scale_amount
+  ) + theme_noaa()
 
-  # check year isn't past end_year if not projections plot
-  check_year(
-    end_year = end_year,
-    fig_or_table = fig_or_table,
-    topic = topic_label
-  )
+  # final <- 
 
-  # Commenting out bc this might not be consistent now with new setup 23dec2024
-  # stopifnot(any(end_year >= all_years))
-
-  # Select value for reference line and label
-  # TODO: add case if ref_line not indicated or hard to find - find one of the
-  # options and set as ref_line
-  if (!is.null(ref_point)) {
-    ref_line_val <- as.numeric(ref_point)
-  } else {
-    if (inherits(try(solve(as.numeric(dat[
-      grep(
-        pattern = glue::glue("^spawning_biomass.*{tolower(ref_line)}$"),
-        x = dat[["label"]]
-      ),
-      "estimate"
-    ])), silent = TRUE), "try-error")) {
-      ref_line_val <- NULL
-    } else {
-      ref_line_val <- as.numeric(dat[
-        grep(
-          pattern = glue::glue("^spawning_biomass.*{tolower(ref_line)}$"),
-          x = dat[["label"]]
-        ),
-        "estimate"
-      ])
-    }
-    # ref_line_val <- as.numeric(dat[
-    #   grep(
-    #     pattern = glue::glue("^biomass.*{tolower(ref_line)}$"),
-    #     x = dat[["label"]]
-    #   ),
-    #   "estimate"
-    # ])
-  }
-  if (length(ref_line_val) == 0) {
-    cli::cli_alert_warning(
-      "The resulting reference value of `spawning_biomass_{ref_line}` was not found in `dat[[\"label\"]]`.",
-      wrap = TRUE
-    )
-    cli::cli_alert_warning("Reference line will not be plotted on the figure.")
-  } else if (length(ref_line_val) > 1) {
-    cli::cli_alert_warning(
-      "More than one of the resulting reference value of 'spawing_biomass_{ref_line}` was not in `dat[[\"label\"]]`. \n Both reference points will be plotted on the figure.",
-      wrap = TRUE
-    )
-  }
-  sb <- dat |>
-    dplyr::filter(
-      label == "spawning_biomass",
-      module_name %in% c("DERIVED_QUANTITIES", "t.series"),
-      year <= end_year
-    ) |>
-    dplyr::mutate(
-      estimate = as.numeric(estimate),
-      year = as.numeric(year),
-      estimate_y = estimate / ifelse(relative, ref_line_val, scale_amount),
-      # TODO: Determine what unit uncertainty is in, following is for normal sd
-      # TODO: This fails for Bayesian estimation
-      estimate_lower = (estimate - 1.96 * uncertainty) /
-        ifelse(relative, ref_line_val, scale_amount),
-      estimate_upper = (estimate + 1.96 * uncertainty) /
-        ifelse(relative, ref_line_val, scale_amount)
-    )
-
-  # Choose number of breaks for x-axis
-  x_n_breaks <- round(length(sb[["year"]]) / 10)
-  if (x_n_breaks <= 5) {
-    x_n_breaks <- round(length(sb[["year"]]))
-  }
-
-  plt <- ggplot2::ggplot(data = sb) +
-    ggplot2::geom_line(
-      ggplot2::aes(
-        x = year,
-        y = estimate_y
-      ),
-      linewidth = 1
-    ) +
-    {
-      if (!is.null(ref_line_val)) ggplot2::geom_hline(yintercept = ref_line_val / ifelse(relative, ref_line_val, scale_amount), linetype = 2)
-    } +
-    # Only add confidence intervals for the non NA estimates
-    # which allows for no warnings if uncertainty = NA
-    ggplot2::geom_ribbon(
-      data = sb |> dplyr::filter(!is.na(estimate_lower)),
-      ggplot2::aes(
-        x = year,
-        ymin = estimate_lower,
-        ymax = estimate_upper
-      ),
-      colour = "grey",
-      alpha = 0.3,
-    ) +
-    ggplot2::labs(
-      x = "Year",
-      y = spawning_biomass_label
-    ) +
-    ggplot2::scale_x_continuous(
-      n.breaks = x_n_breaks,
-      guide = ggplot2::guide_axis(minor.ticks = TRUE)
-    ) +
-    ggplot2::annotate(
-      geom = "text",
-      x = as.numeric(end_year) - (0.2 * length(sb$year)),
-      y = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
-      label = list(bquote(SB[.(ref_line)])),
-      parse = TRUE
-    ) +
-    ggplot2::expand_limits(y = 0)
-
-  final <- suppressWarnings(add_theme(plt))
-
-  # export figure to rda if argument = T
-  if (make_rda == TRUE) {
-    # run write_captions.R if its output doesn't exist
-    if (!file.exists(
-      fs::path(getwd(), "captions_alt_text.csv")
-    )
-    ) {
-      stockplotr::write_captions(
-        dat = dat,
-        dir = figures_dir,
-        year = end_year
-      )
-    }
-
-    # add more key quantities included as arguments in this fxn
-    add_more_key_quants(
-      dat,
-      topic = topic_label,
-      fig_or_table = fig_or_table,
-      dir = figures_dir,
-      end_year = end_year,
-      units = unit_label,
-      ref_pt = ref_point,
-      ref_line = ref_line,
-      scaling = scale_amount
-    )
-
-    # extract this plot's caption and alt text
-    caps_alttext <- extract_caps_alttext(
-      topic_label = topic_label,
-      fig_or_table = fig_or_table,
-      dir = figures_dir
-    )
-
-    export_rda(
+  ### Make RDA ----
+  if (make_rda) {
+    create_rda(
       object = final,
-      caps_alttext = caps_alttext,
-      figures_tables_dir = figures_dir,
-      topic_label = topic_label,
-      fig_or_table = fig_or_table
+      topic_label = ifelse(relative, "relative.spawning.biomass", "spawning.biomass"),
+      fig_or_table = "figure",
+      dat = rp_dat,
+      dir = figures_dir,
+      ref_line = ref_line,
+      ref_point = ref_line, # need to remove this I think
+      scale_amount = scale_amount,
+      unit_label = unit_label
     )
   }
+  # Output final plot
   final
 }

@@ -195,7 +195,7 @@ plot_timeseries <- function(
   )
   
   # Calc axis breaks
-  x_n_breaks <- axis_breaks(data)
+  x_n_breaks <- axis_breaks(dat)
   breaks <- ggplot2::scale_x_continuous(
     n.breaks = x_n_breaks,
     guide = ggplot2::guide_axis(
@@ -212,7 +212,7 @@ plot_timeseries <- function(
   }
   
   # Check if facet(s) are desired
-  if (!is.null(facet)){
+  if (!is.null(facet)) {
     facet <- paste("~", paste(facet, collapse = " + "))
     facet_formula <- stats::reformulate(facet)
 
@@ -296,8 +296,215 @@ plot_error <- function(
 
 #------------------------------------------------------------------------------
 
+#' Create "at-age" plot
+#'
+#' @param dat filtered data frame from standard output file(s) pre-formatted for
+#'  the target label from \link[stockplotr]{prepare_data}
+#' @param x a string of the column name of data used to plot on the x-axis
+#' (default is "year")
+#' @param y a string of the column name of data used to plot on the y-axis
+#' (default is "age")
+#' @param z a string of the column name of data used to control the size of the
+#' bubbles (default is "estimate")
+#' @param label a string of the label for the size of the bubbles
+#' (default is "Abundance")
+#' @param xlab a string of the x-axis label (default is "Year")
+#' @param ylab a string of the y-axis label (default is "Age")
+#' @param facet a string or vector of strings of a column that facets the data
+#' (e.g. "sex", "area", etc.). It is not recommended to include more than one
+#' facet due to the complexity of the plot.
+#' @param proportional Set size of points relative to z when TRUE, point
+#' size are relative to one another while when set to FALSE, point size
+#' is relative to z
+#' @param ... inherited arguments from internal functions from
+#' \link[ggplot2]{geom_point}
+#' 
+#' @return Create a plot of abundance at age for a stock assessment report.
+#' @export
+#' @examples \dontrun{
+#'  plot_aa(dat)
+#' }
+plot_aa <- function(
+  dat,
+  x = "year",
+  y = "age",
+  z = "estimate",
+  label = "Abundance",
+  xlab = "Year",
+  ylab = "Age",
+  facet = NULL,
+  proportional = TRUE,
+  ...
+) {
+  # Make sure age is numeric
+  dat <- dat |>
+    dplyr::mutate(
+      age = as.numeric(age),
+      # zvar = .data[[z]],
+      zvar = dplyr::case_when(
+        proportional ~ sqrt(.data[[z]]),
+        TRUE ~ .data[[z]]
+      )
+    )
+  # Caclaulate x-axis breaks
+  x_n_breaks <- axis_breaks(dat)
+  # Calculate y-axis breaks
+  y_n_breaks <- y_axis_breaks(dat)
+
+  # Initialize gg plot
+  plot <- ggplot2::ggplot() +
+  # Add geom
+    ggplot2::geom_point(
+      data = dat,
+      ggplot2::aes(
+        x = .data[[x]],
+        y = .data[[y]],
+        size = zvar
+      ),
+      shape = 21,
+      alpha = 0.3,
+      color = "black",
+      fill = "gray40"
+      # ...
+    ) +
+    ggplot2::labs(
+      x = xlab,
+      y = ylab,
+      size = label
+    ) +
+    ggplot2::scale_size(
+      # range = c(0.2, 10),
+      # name = label,
+      labels = scales::label_comma()
+    ) +
+    # Add axis breaks
+    ggplot2::scale_x_continuous(
+      n.breaks = x_n_breaks,
+      guide = ggplot2::guide_axis(minor.ticks = TRUE)
+    ) +
+    ggplot2::scale_y_continuous(
+      minor_breaks = y_n_breaks[[1]],
+      n.breaks = y_n_breaks[[2]],
+      guide = ggplot2::guide_axis(minor.ticks = TRUE)
+      # limits = c(min(.data[[y]]), max(.data[[y]])),
+      # expand = c(0, NA)
+    ) +
+    # ggplot2::coord_cartesian(expand = FALSE)
+    # add noaa theme
+    theme_noaa()
+  
+  if (proportional) {
+    plot <- plot +
+      # Remove legend since circles are calculated 
+      # proportionally to catch and not exactly catch
+      ggplot2::theme(legend.position = "none")
+  }
+
+  # Facet plot if groups are present
+  if (!is.null(facet)) {
+    if (length(unique(dat$model)) > 1) facet <- c(facet, "model")
+    # Replace spaces with underscores
+    facet <- gsub(" ", "_", facet)
+    # If facet is a vector, paste together with +
+    facet <- paste("~ ", paste(facet, collapse = " + "))
+    facet_formula <- stats::reformulate(facet)
+    # facet_formula <- stats::reformulate(facet)
+    plot <- plot + ggplot2::facet_wrap(facet_formula)
+  }
+  plot
+}
+
+#------------------------------------------------------------------------------
+
+# Average age line
+average_age_line <- function(
+  dat,
+  facet) {
+   # Calculate annual mean age
+  grouping <- intersect(colnames(dat), facet)
+  total_fish_per_year <- dat |>
+    dplyr::mutate(age = as.numeric(as.character(age))) |>
+    dplyr::group_by(dplyr::across(dplyr::all_of(c("year", grouping)))) |>
+    dplyr::summarise(total_fish = sum(estimate))
+  annual_means <- dat |>
+    dplyr::mutate(age = as.numeric(as.character(age))) |>
+    dplyr::group_by(dplyr::across(dplyr::all_of(c("age", "year", grouping)))) |>
+    dplyr::summarise(years_per_year = sum(estimate)) |>
+    # dplyr::filter(age != 0) |>
+    dplyr::group_by(dplyr::across(dplyr::all_of(c("year", grouping)))) |>
+    dplyr::summarise(interm = sum(as.numeric(age) * as.numeric(years_per_year))) |>
+    dplyr::full_join(total_fish_per_year) |>
+    dplyr::mutate(avg = interm / total_fish)
+
+# Add average age line to plot
+  list(
+    ggplot2::geom_line(
+      data = annual_means,
+      ggplot2::aes(
+        x = year,
+        y = avg
+      ),
+      linewidth = 1,
+      color = "red"
+    )
+  )
+}
+
+#------------------------------------------------------------------------------
+
+# Cohort line
+cohort_line <- function(
+  dat,
+  x = "year",
+  y = "age",
+  z = "estimate"
+){
+  # Make sure all dimensions are numeric
+  dat <- dat |>
+    dplyr::mutate(
+      age = as.numeric(age),
+      year = as.numeric(year),
+      estimate = as.numeric(estimate)
+    )
+# Calculate the total estimate for each cohort
+cohort_estimates <- dat |>
+  dplyr::mutate(cohort = as.numeric(.data[[x]]) - as.numeric(.data[[y]])) |>
+  dplyr::group_by(cohort) |>
+  dplyr::summarize(total_estimate = sum(.data[[z]], na.rm = TRUE))
+# Filter for top 5% of cohorts
+# Find the 95th percentile of total_estimate
+threshold <- quantile(cohort_estimates$total_estimate, 0.95)
+
+# Filter the original data to keep only the top 5% cohorts
+top_cohorts_data <- dat |>
+  dplyr::mutate(cohort = as.numeric(.data[[x]]) - as.numeric(.data[[y]])) |>
+  dplyr::filter(cohort %in% (cohort_estimates |>
+                       dplyr::filter(total_estimate >= threshold) |>
+                       dplyr::pull(cohort)))
+
+  list(
+    # Create line for only the top 5% of cohorts
+    ggplot2::geom_line(
+      data = top_cohorts_data,
+      ggplot2::aes(
+        x = .data[[x]],
+        y = .data[[y]],
+        group = cohort
+      ),
+      linewidth = 1,
+      linetype = "solid",
+      alpha = 0.8,
+      color = "black"
+      # color = "#747474"
+    )
+  )
+}
+
+#------------------------------------------------------------------------------
+
 #' Pre-formatted reference line
 #'
+#' @param plot a ggplot2 object where the reference line will be added
 #' @param dat standard data frame where reference point should be extracted
 #' @param label_name string of the name of the quantity that users want to 
 #' extract the reference point from
@@ -314,10 +521,10 @@ plot_error <- function(
 #' }
 reference_line <- function(
     plot,
-    dat, 
+    dat,
     label_name,
-    reference, 
-    relative = FALSE, 
+    reference,
+    relative = FALSE,
     scale_amount = 1
     ) {
   # calculate reference point value
@@ -325,6 +532,23 @@ reference_line <- function(
     dat = dat,
     reference_name = glue::glue("{label_name}_{reference}")
   )
+  # Add geom for ref line
+  plot +
+    ggplot2::geom_hline(
+      ggplot2::aes(yintercept = ref_line_val),
+      color = "black",
+      linetype = "dashed"
+    ) +
+    ggplot2::annotate(
+      geom = "text",
+      # TODO: need to change this for general process
+      x = as.numeric(max(dat$year[dat$era == "time"], na.rm = TRUE)), # - as.numeric(max(dat$year[dat$era == "time"], na.rm = TRUE))/200,
+      y = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
+      label = glue::glue("{label_name}_{reference}"), # list(bquote(label_name[.(reference)])),
+      parse = TRUE,
+      hjust = 1,
+      vjust = 0
+    )
 }
 
 axis_breaks <- function(data){
@@ -341,6 +565,25 @@ axis_breaks <- function(data){
   x_n_breaks
 }
 
+y_axis_breaks <- function(data){
+  # TODO: generalize this so we can input any column for the y-axis values
+  y_n_breaks <- round(length(unique(data[["age"]])))
+  if (y_n_breaks > 80) {
+    y_n_breaks <- round(length(unique(data[["age"]])) / 6)
+  } else if (y_n_breaks > 40) {
+    y_n_breaks <- round(length(unique(data[["age"]])) / 3)
+  }
+  y_n_breaks_minor <- as.vector(unique(data[["age"]]))
+  if (length(y_n_breaks_minor) > 40) {
+    y_n_breaks_minor <- NULL
+  } else if (length(y_n_breaks_minor) > 20) {
+    y_n_breaks_minor <- y_n_breaks_minor[c(TRUE, FALSE)]
+  }
+  list(y_n_breaks_minor, y_n_breaks)
+}
+
+#------------------------------------------------------------------------------
+
 cap_first_letter <- function(s) {
   if (length(s) == 0 || is.na(s) || nchar(s) == 0) {
     return(s) # Handle empty, NA, or zero-length strings
@@ -352,9 +595,9 @@ cap_first_letter <- function(s) {
 
 #------------------------------------------------------------------------------
 
-calculate_uncertainty <- function() {
+# calculate_uncertainty <- function() {
   
-}
+# }
 
 #------------------------------------------------------------------------------
 
@@ -368,6 +611,8 @@ calculate_uncertainty <- function() {
 #' and "area".
 #' @param group Selected grouping for the data. If you want to just summarize
 #' the data across all factors, set group = "none".
+#' @param scale_amount A number describing how much to scale down the quantities
+#' shown on the y axis.
 #' @param interactive logical. If TRUE, the user will be prompted to select
 #' a module_name when there was more than one found in the filtered dataset.
 #'
@@ -384,7 +629,9 @@ prepare_data <- function(
     module = NULL,
     geom,
     group = NULL,
-    interactive = TRUE){
+    scale_amount = 1,
+    interactive = TRUE) {
+  # TODO: add option to scale data
   # Replace all spaces with underscore if not in proper format
   label_name <- sub(" ", "_", label_name)
   list_of_data <- list()
@@ -418,15 +665,15 @@ prepare_data <- function(
       dplyr::mutate(
         year = as.numeric(year),
         model = ifelse(model_label, get_id(dat)[i], NA),
-        estimate = as.numeric(estimate),
+        estimate = as.numeric(estimate) / scale_amount,
         # calc uncertainty when se
         # TODO: calculate other sources of error to upper and lower (cv,)
         estimate_lower = dplyr::case_when(
-          grepl("se", uncertainty_label) ~ estimate - 1.96 * uncertainty,
+          grepl("se", uncertainty_label) ~ (estimate - 1.96 * uncertainty) / scale_amount,
           TRUE ~ NA
         ),
         estimate_upper = dplyr::case_when(
-          grepl("se", uncertainty_label) ~ estimate + 1.96 * uncertainty,
+          grepl("se", uncertainty_label) ~ (estimate + 1.96 * uncertainty) / scale_amount,
           TRUE ~ NA
         )
       )
