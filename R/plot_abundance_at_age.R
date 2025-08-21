@@ -48,28 +48,12 @@ plot_abundance_at_age <- function(
     make_rda = FALSE,
     figures_dir = getwd()
     ) {
-  magnitude <- floor(log10(scale_amount))
-  if (magnitude == 0) {
-    scale_unit <- ""
-    unit_mag <- ""
-  } else if (magnitude > 0 & magnitude < 10) {
-    scale_unit <- c(
-      "tens of ",
-      "hundreds of ",
-      "thousands of ",
-      "tens of thousands of ",
-      "hundreds of thousands of ",
-      "millions of ",
-      "tens of millions of ",
-      "hundreds of millions of ",
-      "billions of "
-    )
-    unit_mag <- paste(scale_unit[magnitude])
-  } else {
-    cli::cli_abort("Scale_amount is out of bounds. Please choose a value ranging from 1-1000000000 (one billion) in orders of magnitude (e.g., 1, 10, 100, 1000, etc.)", wrap = TRUE)
-  }
   # Create label for abundance units in legend
-  abundance_label <- glue::glue("Abundance \n({unit_mag}{unit_label})")
+  abundance_label <- label_magnitude(
+    label = "Abudance",
+    unit_label = unit_label,
+    scale_amount = scale_amount
+  )
   # Filter data
   b <- prepare_data(
     dat = dat,
