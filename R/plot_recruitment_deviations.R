@@ -1,9 +1,6 @@
 #' Plot Recruitment Deviations
 #'
-#' @inheritParams plot_recruitment
-#' @param group
-#' @param facet description
-#' @param ... description
+#' @inheritParams plot_spawning_biomass
 #'
 #' @return Plot recruitment deviations relative to one over time from an
 #' assessment model output file translated to a standardized output. There are
@@ -14,13 +11,12 @@
 #'
 #' @examples
 #' \dontrun{
-#' plot_recruitment_deviations(dat)
-#'
 #' plot_recruitment_deviations(
-#'   dat,
-#'   end_year = 2024,
+#'   dat = list("model1"=dat1,"model2"=dat2),
+#'   geom = "point",
 #'   make_rda = TRUE,
-#'   figures_dir = getwd()
+#'   figures_dir = getwd(),
+#'   size = 3
 #' )
 #' }
 plot_recruitment_deviations <- function(
@@ -31,82 +27,45 @@ plot_recruitment_deviations <- function(
     figures_dir = getwd(),
     ...
 ) {
-  # Make plot
-  filter_data <- prepare_data(
-    dat = dat,
-    label_name = "recruitment_deviations",
-    geom = "point",
-    group = NULL,
-    module = module
+ # Make plot
+ filter_data <- prepare_data(
+  dat = dat,
+  label_name = "recruitment_deviations",
+  geom = "point",
+  group = NULL
+)
+
+if (nrow(filter_data) == 0) {
+  cli::cli_abort("No recruitment deviations found in data.")
+}
+
+# Create final plot
+final <- plot_error(
+  filter_data,
+  geom = "point",
+  facet = if(length(unique(filter_data$model)) > 1) "model" else NULL,
+  xlab = "Year",
+  ylab = "Recruitment Deviations",
+  size = 2
+) +
+# ggplot2::facet_wrap(~ model, scales = "free_y") +
+theme_noaa()
+
+# Make RDA
+if (make_rda) {
+  if(!is.data.frame(dat)) {
+    selected_dat <- dat[[1]]
+  } else {
+    selected_dat <- dat
+  }
+  create_rda(
+    object = final,
+    topic_label = "recruitment.deviations",
+    fig_or_table = "figure",
+    dat = selected_dat,
+    dir = figures_dir,
+    unit_label = ""
   )
-
-  rec_devs <- dat |>
-    dplyr::filter(
-      label == "recruitment_deviations" | label == "log_recruitment_deviations",
-      module_name == "SPAWN_RECRUIT" | module_name == "t.series",
-      !is.na(year),
-      is.na(fleet) | length(unique(fleet)) <= 1,
-      is.na(sex) | length(unique(sex)) <= 1,
-      is.na(area) | length(unique(area)) <= 1,
-      is.na(growth_pattern) | length(unique(growth_pattern)) <= 1,
-      !year %in% year_exclusions,
-      year <= end_year
-    ) |> # SS3 and BAM target module names
-    dplyr::mutate(
-      estimate = as.numeric(estimate),
-      year = as.numeric(year)
-    )
-  if (nrow(rec_devs) == 0) {
-    cli::cli_abort("No recruitment deviations found in data.")
-  }
-
-  # Plot
-  plt <- plot_timeseries(
-    rec_devs,
-    x = year,
-    y = estimate,
-    geom = "point",
-    ylab = "Recruitment Deviations"
-    ) +
-    reference_line(0, linetype = "dashed")
-  plt <- add_theme(plt) # suppressWarnings()
-
-  # export figure to rda if argument = T
-  if (make_rda == TRUE) {
-    # run write_captions.R if its output doesn't exist
-    if (!file.exists(
-      fs::path(getwd(), "captions_alt_text.csv")
-    )
-    ) {
-      stockplotr::write_captions(
-        dat = dat,
-        dir = figures_dir,
-        year = end_year
-      )
-    }
-
-    # add more key quantities included as arguments in this fxn
-    add_more_key_quants(
-      topic = topic_label,
-      fig_or_table = fig_or_table,
-      dir = figures_dir,
-      end_year = end_year
-    )
-
-    # extract this plot's caption and alt text
-    caps_alttext <- extract_caps_alttext(
-      topic_label = topic_label,
-      fig_or_table = fig_or_table,
-      dir = figures_dir
-    )
-
-    export_rda(
-      object = final,
-      caps_alttext = caps_alttext,
-      figures_tables_dir = figures_dir,
-      topic_label = topic_label,
-      fig_or_table = fig_or_table
-    )
-  }
-  final
+}
+final
 }
