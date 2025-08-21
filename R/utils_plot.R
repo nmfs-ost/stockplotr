@@ -839,8 +839,9 @@ calculate_reference_point <- function(
 # Set magnitude of label
 label_magnitude <- function(
   label,
-  unit_label,
-  scale_amount
+  unit_label = "mt",
+  scale_amount = 1,
+  legend = FALSE
 ) {
   magnitude <- floor(log10(scale_amount))
   if (magnitude == 0) {
@@ -863,5 +864,5 @@ label_magnitude <- function(
     cli::cli_abort("Scale_amount is out of bounds. Please choose a value ranging from 1-1000000000 (one billion) in orders of magnitude (e.g., 1, 10, 100, 1000, etc.)", wrap = TRUE)
   }
   # Create label for abundance units in legend
-  abundance_label <- glue::glue("{label} \n({unit_mag}{unit_label})")
+  glue::glue("{label} {ifelse(legend, \"\n\", \"\")}({unit_mag}{unit_label})")
 }

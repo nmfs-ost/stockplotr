@@ -70,8 +70,21 @@ plot_spawning_biomass <- function(
   spawning_biomass_label <- ifelse(
     relative,
     yes = "Relative spawning biomass",
-    no = glue::glue("Spawning biomass ({unit_label})")
+    no = {
+      label_magnitude(
+        label = "Spawning Biomass",
+        unit_label = unit_label,
+        scale_amount = scale_amount,
+        legend = FALSE
+      )
+    }
   )
+  # Pull first df if in a list to find reference point
+  if (!is.data.frame(dat)) {
+    rp_dat <- dat[[1]]
+  } else {
+    rp_dat <- dat
+  }
 
   # Filter data for spawning biomass
   filter_data <- prepare_data(
@@ -83,6 +96,21 @@ plot_spawning_biomass <- function(
     scale_amount = scale_amount
   )
 
+  # Calculate estimate if relative
+  if (relative) {
+    if (!is.null(names(ref_line))) {
+      ref_line_val <- ref_line[[1]]
+      ref_line <- names(ref_line)
+    } else {
+      ref_line_val <- calculate_reference_point(
+        dat = rp_dat,
+        reference_name = ref_line
+      ) / scale_amount
+    }
+    filter_data <- filter_data |>
+      dplyr::mutate(estimate = estimate / ref_line_val)
+  }
+
   plt <- plot_timeseries(
     dat = filter_data,
     y = "estimate",
@@ -93,11 +121,7 @@ plot_spawning_biomass <- function(
   )
   # Add reference line
   # getting data set - an ifelse statement in the fxn wasn't working
-  if (!is.data.frame(dat)) {
-    rp_dat <- dat[[1]]
-  } else {
-    rp_dat <- dat
-  }
+  
 
   final <- reference_line(
     plot = plt,
