@@ -52,143 +52,72 @@ plot_timeseries <- function(
 ) {
   # Start plot
   plot <- ggplot2::ggplot()
-  # Break down data
-  if (is.list(dat)) {
-    list_of_data <- list()
-    for (i in 1:length(dat)) {
-      # start for loop to bring together each data as their own geom
-      # Add columns to data if grouping is selected
-      data <- data.frame(dat[[i]]) |>
-        dplyr::mutate(
-          year = as.numeric(year),
-          model = names(dat)[i]
-        )
-      if (!is.null(group)) {
-        data <- data
-          dplyr::mutate(
-            group_var = .data[[group]]
-          )
-      } else {
-        data <- data |>
-          dplyr::mutate(
-            group_var = switch(geom,
-                               "line" = "solid",
-                               "point" = "black",
-                               1
-            )
-          )
-      }
-      list_of_data[[names(dat)[i]]] <- data
-    }
-    # Put in
-    plot_data <- do.call(rbind, list_of_data)
-    # Add geom aka type
-    plot <- switch(
-      geom,
-      "point" = {
-        plot + 
-          ggplot2::geom_point(
-            data = data,
-            ggplot2::aes(
-              .data[[x]],
-              .data[[y]],
-              color = model,
-              shape = group_var
-            ),
-            size = 2.0)
-      },
-      "line" = {
-        plot + 
-          ggplot2::geom_line(
-            data = data,
-            ggplot2::aes(
-              .data[[x]],
-              .data[[y]],
-              linetype = group_var,
-              color = model
-            ),
-            linewidth = 1.0
-          )
-      },
-      "area" = {
-        plot + 
-          ggplot2::geom_area(
-            data = data,
-            ggplot2::aes(
-              .data[[x]],
-              .data[[y]],
-              fill = group_var
-            )
-          )
-      }
-    )
-  } else {
-    # Add columns to data if grouping is selected
-    if (!is.null(group)) {
-      data <- data |>
-        dplyr::mutate(
-          group_var = .data[[group]],
-          year = as.numeric(year)
-        )
-    } else {
-      data <- data |>
-        dplyr::mutate(
-          group_var = switch(geom,
-                             "line" = "solid",
-                             "point" = "black",
-                             1
+  # make into new geom?
+  # more defaults and fxnality for ggplot
+  
+  # Add geom
+  plot <- switch(
+    geom,
+    "point" = {
+      point_size = ifelse(
+        is.null(list(...)$size),
+        2.0,
+        list(...)$size
+      )
+      plot + 
+        ggplot2::geom_point(
+          data = dat,
+          ggplot2::aes(
+            .data[[x]],
+            .data[[y]],
+            # TODO: add more groupings
+            # shape = ifelse(any(grepl("shape", names(group))), .data[[group[[grep("shape", names(group))]]]], 1),
+            # color = ifelse(any(grepl("color", names(group))), .data[[group[[grep("color", names(group))]]]], "black")
+            color = model,
+            shape = group_var
           ),
-          year = as.numeric(year)
+          # size = point_size,
+          ...
+        )
+    },
+    "line" = {
+      plot + 
+        ggplot2::geom_line(
+          data = dat,
+          ggplot2::aes(
+            .data[[x]],
+            .data[[y]],
+            linetype = group_var,
+            # linetype = ifelse(!is.null(group), .data[[group]], "solid")
+            color = model
+          ),
+          linewidth = 1.0,
+          ...
+        ) +
+        ggplot2::geom_ribbon(
+          dat = dat|> dplyr::filter(!is.na(estimate_lower)),
+          ggplot2::aes(
+            x = .data[[x]],
+            ymin = estimate_lower,
+            ymax = estimate_upper
+          ),
+          colour = "grey",
+          alpha = 0.3
+        )
+    },
+    "area" = {
+      plot + 
+        ggplot2::geom_area(
+          data = dat,
+          ggplot2::aes(
+            .data[[x]],
+            .data[[y]],
+            fill = model
+          ),
+          ...
         )
     }
-    
-    # Start plot
-    plot <- ggplot2::ggplot(
-      data = data, 
-      ggplot2::aes(
-        .data[[x]],
-        .data[[y]])
-    )
-    
-    # Add geom aka type
-    plot <- switch(
-      geom,
-      "point" = {
-        plot + 
-          ggplot2::geom_point(
-            ggplot2::aes(
-              # TODO: add more groupings
-              # shape = ifelse(any(grepl("shape", names(group))), .data[[group[[grep("shape", names(group))]]]], 1),
-              # color = ifelse(any(grepl("color", names(group))), .data[[group[[grep("color", names(group))]]]], "black")
-              shape = group_var
-            ),
-            size = 2.0)
-      },
-      "line" = {
-        plot + 
-          ggplot2::geom_line(
-            ggplot2::aes(
-              linetype = group_var
-              # linetype = ifelse(!is.null(group), .data[[group]], "solid")
-            ),
-            linewidth = 1.0
-          )
-      },
-      "area" = {
-        plot + 
-          ggplot2::geom_area(
-            ggplot2::aes(
-              fill = group_var
-            )
-          )
-      }
-      # Below are all one variable mapping plots 
-      # Do not belong in this fxn
-      # "bar" = ggplot2::geom_bar(),
-      # "histogram" = ggplot2::geom_histogram(),
-      # "density" = ggplot2::geom_density()
-    )
-  }
+  )
   
   # Add labels to axis and legend
   labs <- plot + ggplot2::labs(
@@ -200,6 +129,27 @@ plot_timeseries <- function(
     shape = cap_first_letter(group)
   )
   
+  # Remove linetype or point when there is no grouping
+  if (is.null(group)) {
+    labs <- switch(
+      geom,
+      "line" = labs + ggplot2::guides(linetype = "none"),
+      "point" = labs + ggplot2::guides(shape = "none"),
+      # return plot if option beyond line and point for now
+      labs
+    )
+  }
+  if (length(unique(dat$model)) == 1){
+    labs <- switch(
+      geom,
+      "line" = labs + ggplot2::guides(color = "none"),
+      "point" = labs + ggplot2::guides(color = "none"),
+      "area" = labs + ggplot2::guides(fill = "none"),
+      # return plot if option beyond line and point for now
+      labs
+    )
+  }
+  
   # Calc axis breaks
   x_n_breaks <- axis_breaks(dat)
   breaks <- ggplot2::scale_x_continuous(
@@ -210,10 +160,10 @@ plot_timeseries <- function(
   )
   
   # Put together final plot
-  final <- labs + breaks
+  final <- labs + breaks + ggplot2::expand_limits(y = 0)
   
   # Remove legend if no group is selected
-  if (is.null(group)) {
+  if (is.null(group) & is.data.frame(dat) & any(is.na(unique(dat$model)))) {
     final <- final + ggplot2::theme(legend.position = "none")
   }
   
@@ -547,7 +497,9 @@ reference_line <- function(
   # Add geom for ref line
   plot +
     ggplot2::geom_hline(
-      ggplot2::aes(yintercept = ref_line_val),
+      ggplot2::aes(
+        yintercept = ref_line_val / ifelse(relative, ref_line_val, scale_amount)
+      ),
       color = "black",
       linetype = "dashed"
     ) +
