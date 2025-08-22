@@ -86,6 +86,12 @@ plot_spawning_biomass <- function(
     rp_dat <- dat
   }
 
+  if (relative & scale_amount > 1) {
+    cli::cli_alert_warning("Scale amount is not applicable when relative = TRUE. Resetting scale_amount to 1.")
+    scale_amount <- 1
+  }
+
+
   # Filter data for spawning biomass
   filter_data <- prepare_data(
     dat = dat,
@@ -104,9 +110,10 @@ plot_spawning_biomass <- function(
     } else {
       ref_line_val <- calculate_reference_point(
         dat = rp_dat,
-        reference_name = ref_line
+        reference_name = glue::glue("spawning_biomass_", ref_line)
       ) / scale_amount
     }
+    if (is.na(ref_line_val)) cli::cli_abort("Reference value not found. Cannot plot relative values.")
     filter_data <- filter_data |>
       dplyr::mutate(estimate = estimate / ref_line_val)
   }
@@ -127,7 +134,7 @@ plot_spawning_biomass <- function(
     plot = plt,
     dat = rp_dat,
     label_name = "spawning_biomass",
-    reference  = ref_line,
+    reference = ref_line,
     relative = relative,
     scale_amount = scale_amount
   ) + theme_noaa()

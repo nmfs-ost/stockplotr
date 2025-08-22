@@ -526,7 +526,14 @@ axis_breaks <- function(data){
       x_n_breaks <- round(length(data[["year"]]))
     }
   } else if (x_n_breaks > 10) {
-    x_n_breaks <- round(length(data[["year"]]) / 15)
+    if (x_n_breaks < 20) {
+      x_n_breaks <- round(length(data[["year"]]) / 15)
+    } else if (x_n_breaks >=20 & x_n_breaks < 50) {
+      x_n_breaks <- round(length(data[["year"]]) / 20)
+    } else {
+      x_n_breaks <- round(length(data[["year"]]) / 35)
+    }
+    
   }
   x_n_breaks
 }
