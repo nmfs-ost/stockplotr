@@ -1833,7 +1833,7 @@ extract_caps_alttext <- function(topic_label = NULL,
 #'   fig_or_table = "figure"
 #' )
 #' }
-export_rda <- function(final = NULL,
+export_rda <- function(object = NULL,
                        caps_alttext = NULL,
                        figures_tables_dir = NULL,
                        topic_label = NULL,
@@ -1841,7 +1841,7 @@ export_rda <- function(final = NULL,
   # make rda for figures
   if (fig_or_table == "figure") {
     rda <- list(
-      "figure" = final,
+      "figure" = object,
       "cap" = caps_alttext[[1]],
       "alt_text" = caps_alttext[[2]]
     )
@@ -1856,7 +1856,7 @@ export_rda <- function(final = NULL,
     # make rda for tables
   } else if (fig_or_table == "table") {
     rda <- list(
-      "table" = final,
+      "table" = object,
       "cap" = caps_alttext[[1]]
     )
     rda_loc <- "tables"
