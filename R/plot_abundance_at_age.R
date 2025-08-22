@@ -17,7 +17,7 @@
 #' a list with the figure/table, caption, and alternative text (if figure). If TRUE,
 #' the .rda will be exported to the folder indicated in the argument "rda_dir".
 #' Default is FALSE.
-#' @param rda_dir The location of the folder containing the generated .rda files
+#' @param figures_dir The location of the folder containing the generated .rda files
 #' ("rda_files") that will be created if the argument `make_rda` = TRUE.
 #' Default is the working directory.
 #' @return Plot total abundance (or numbers) at age from a stock assessment model as found in a NOAA

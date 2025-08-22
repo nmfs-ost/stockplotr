@@ -460,6 +460,7 @@ top_cohorts_data <- dat |>
 
 #' Pre-formatted reference line
 #'
+#' @inheritParams plot_spawning_biomass
 #' @param plot a ggplot2 object where the reference line will be added
 #' @param dat standard data frame where reference point should be extracted
 #' @param label_name string of the name of the quantity that users want to 
@@ -588,6 +589,9 @@ cap_first_letter <- function(s) {
 #' shown on the y axis.
 #' @param interactive logical. If TRUE, the user will be prompted to select
 #' a module_name when there was more than one found in the filtered dataset.
+#' @param module (Optional) A string indicating the linked module_name associated
+#' with the label for the plot if known. Default is NULL. By default, the function
+#' will select the most relevant module if more than 1 exists.
 #'
 #' @returns a data frame that is pre-formatted for plotting with ggplot2.
 #' @export

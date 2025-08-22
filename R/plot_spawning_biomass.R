@@ -36,6 +36,9 @@
 #' @param figures_dir The location of the folder containing the generated figure
 #' rda files ("figures") that will be created if the argument `make_rda` = TRUE.
 #' Default is the working directory.
+#' @param argument TRUE/FALSE; indicate whether the environment in which the
+#' function is operating  is interactive. This bypasses some options for
+#' filtering when preparing data for the plot. Default is FALSE.
 #' @param ... Arguments called from ggplot2::geom_line or ggplotr2::geom_point 
 #' @return
 #' Plot spawning biomass from the results of an assessment model translated to
@@ -67,7 +70,8 @@ plot_spawning_biomass <- function(
     relative = FALSE,
     make_rda = FALSE,
     figures_dir = getwd(),
-    interactive = FALSE) {
+    interactive = FALSE,
+    ...) {
   # TODO: Fix the unit label if scaling. Maybe this is up to the user to do if
   #       they want something scaled then they have to supply a better unit name
   #       or we create a helper function to do this.
