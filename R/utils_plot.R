@@ -799,6 +799,9 @@ calculate_reference_point <- function(
     dat,
     reference_name
 ) {
+  # Remove values with year - want single point
+  dat <- dat |>
+    dplyr::filter(is.na(year))
   # Check if the reference point exists in the data
   if (inherits(try(solve(as.numeric(dat[
     grep(

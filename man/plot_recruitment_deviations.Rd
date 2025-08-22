@@ -17,6 +17,10 @@ plot_recruitment_deviations(
 \link[asar]{convert_output}. The first data frame in the list is used in
 calculation of a reference line if one is present}
 
+\item{module}{(Optional) A string indicating the linked module_name associated
+with the label for the plot if known. Default is NULL. By default, the function
+will select the most relevant module if more than 1 exists.}
+
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
@@ -41,7 +45,6 @@ Plot Recruitment Deviations
 \dontrun{
 plot_recruitment_deviations(
   dat = list("model1"=dat1,"model2"=dat2),
-  geom = "point",
   make_rda = TRUE,
   figures_dir = getwd(),
   size = 3

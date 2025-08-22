@@ -9,6 +9,7 @@ plot_spawn_recruitment(
   spawning_biomass_label = "mt",
   recruitment_label = "mt",
   interactive = FALSE,
+  module = NULL,
   make_rda = FALSE,
   figures_dir = getwd()
 )
@@ -26,6 +27,10 @@ calculation of a reference line if one is present}
 plot is being made in is interactive. By default, this
 is set to false. If true, dependent on your data, a
 option menu will pop-up.}
+
+\item{module}{(Optional) A string indicating the linked module_name associated
+with the label for the plot if known. Default is NULL. By default, the function
+will select the most relevant module if more than 1 exists.}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
