@@ -101,7 +101,7 @@ plot_spawn_recruitment <- function(
    if (make_rda) {
      create_rda(
        object = final,
-       topic_label = ifelse(relative, "relative.spawning.biomass", "spawning.biomass"),
+       topic_label = "sr",
        fig_or_table = "figure",
        dat = rp_dat,
        dir = figures_dir# ,
