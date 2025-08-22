@@ -266,7 +266,7 @@ save_all_plots <- function(
 
   tryCatch(
     {
-      stockplotr::plot_catch_comp(
+      plot_catch_comp(
         dat,
         unit_label = catch_unit_label,
         end_year = end_year,

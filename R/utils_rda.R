@@ -5,7 +5,7 @@
 #' Create the rda package for a plot or table
 #'
 #' @param object Table or plot object
-#' @param topic.label A string that names the object
+#' @param topic_label A string that names the object
 #' @param fig_or_table A string identifying if the object is a "table" or "figure"
 #' @param dat Data frame containing data which will fill in captions and 
 #' alternative text for the object
@@ -1797,7 +1797,7 @@ extract_caps_alttext <- function(topic_label = NULL,
 #' Export a figure/table, and its caption and alternative text, to an rda object.
 #' Typically used after stockplotr::extract_caps_alttext().
 #'
-#' @param final The final figure (ggplot) or table (flextable) object.
+#' @param object The final figure (ggplot) or table (flextable) object.
 #' @param caps_alttext The object containing a figure's caption and alternative
 #' text, in a list, or a table's caption, likely generated with
 #' stockplotr::extract_caps_alttext().
