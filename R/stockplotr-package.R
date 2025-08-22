@@ -13,6 +13,7 @@ globvar <- c(
   "figures_tables_dir", "recruitment", "sex", "spawning_biomass", "topic_label", "total_catch",
   "type", "uncertainty", "uncertainty_label", "val", "where", "year",
   ":=", "Year", "avg", "estimate_orig", "interm", "season", "tables_dir", "time", "total_fish",
-  "years_per_year"
+  "years_per_year", ".data", "cohort", "era", "expected_recruitment", "group_var", "model",
+  "plot_data", "quantile", "rda_dir", "reorder", "total_estimate", "zvar"
 )
 if (getRversion() >= "2.15.1") utils::globalVariables(globvar)

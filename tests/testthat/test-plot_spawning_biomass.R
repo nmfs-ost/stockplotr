@@ -7,74 +7,75 @@ load(file.path(
 test_that("plot_spawning_biomass generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    stockplotr::plot_spawning_biomass(out_new)
+    plot_spawning_biomass(out_new)
   )
 
   # expect plot with warnings if ref_point not indicated
   expect_message(
-    stockplotr::plot_spawning_biomass(out_new)
+    plot_spawning_biomass(out_new)
   )
 
   # expect error-free plot with many arguments
   expect_no_error(
-    stockplotr::plot_spawning_biomass(
+    plot_spawning_biomass(
       out_new,
       unit_label = "metric tons",
       scale_amount = 1,
-      ref_line = "target",
-      end_year = 2024
+      ref_line = "msy"
     )
   )
 
   # expect error-free plot when setting relative to T
   expect_no_error(
-    stockplotr::plot_spawning_biomass(
+    plot_spawning_biomass(
       out_new,
       unit_label = "metric tons",
       scale_amount = 1,
-      ref_point = 100,
-      end_year = 2024,
+      ref_line = "msy",
       relative = TRUE
     )
   )
 
   # expect ggplot object is returned
   expect_s3_class(
-    stockplotr::plot_spawning_biomass(
+    plot_spawning_biomass(
       out_new,
       unit_label = "metric tons",
       scale_amount = 1,
-      ref_point = 100,
-      end_year = 2024,
+      ref_line = c("msy" = 2000000),
       relative = TRUE
     ),
     "gg"
   )
 })
 
-test_that("plot_spawning_biomass plots contain reference point when indicated", {
-  # expect plot with a reference point (horizontal line) contains 4 layers while
-  # plot w/o ref pt contains only 3 layers
+# Test now mute bc will always plot like when reference point is present
+# test_that("plot_spawning_biomass plots contain reference point when indicated", {
+#   # expect plot with a reference point (horizontal line) contains 4 layers while
+#   # plot w/o ref pt contains only 3 layers
 
-  # make sb plot with reference point
-  sb_ref <- stockplotr::plot_spawning_biomass(out_new,
-    ref_point = 18000
-  )
-  # extract number of layers (should be 4)
-  sb_ref_layers <- sb_ref[["layers"]] |>
-    length()
+#   # make sb plot with reference point
+#   sb_ref <- plot_spawning_biomass(out_new,
+#     ref_line = c("msy" = 1800099),
+#     module = "TIME_SERIES"
+#   )
+#   # extract number of layers (should be 4)
+#   sb_ref_layers <- sb_ref[["layers"]] |>
+#     length()
 
-  # make sb plot without reference point
-  sb_no_ref <- stockplotr::plot_spawning_biomass(out_new)
-  # extract number of layers (should be 3)
-  sb_no_ref_layers <- sb_no_ref[["layers"]] |>
-    length()
+#   # make sb plot without reference point
+#   sb_no_ref <- plot_spawning_biomass(
+#     out_new,
+#     module = "TIME_SERIES")
+#   # extract number of layers (should be 3)
+#   sb_no_ref_layers <- sb_no_ref[["layers"]] |>
+#     length()
 
-  expect_equal(
-    (sb_ref_layers - 1),
-    sb_no_ref_layers
-  )
-})
+#   expect_equal(
+#     (sb_ref_layers - 1),
+#     sb_no_ref_layers
+#   )
+# })
 
 test_that("rda file made when indicated", {
   # export rda
@@ -83,7 +84,7 @@ test_that("rda file made when indicated", {
     unit_label = "metric tons",
     scale_amount = 1,
     ref_line = "msy",
-    end_year = 2024,
+    module = "TIME_SERIES",
     make_rda = TRUE,
     figures_dir = getwd()
   )
@@ -97,16 +98,17 @@ test_that("rda file made when indicated", {
   unlink(fs::path(getwd(), "figures"), recursive = T)
 })
 
-test_that("plot_spawning_biomass generates error with future end_year", {
-  # expect error
-  expect_error(
-    stockplotr::plot_spawning_biomass(
-      out_new,
-      unit_label = "metric tons",
-      end_year = 2055,
-      scale_amount = 1,
-      ref_point = 100,
-      relative = TRUE
-    )
-  )
-})
+# Test no longer applicable bc end_year is not an argument
+# test_that("plot_spawning_biomass generates error with future end_year", {
+#   # expect error
+#   expect_error(
+#     plot_spawning_biomass(
+#       out_new,
+#       unit_label = "metric tons",
+#       end_year = 2055,
+#       scale_amount = 1,
+#       ref_point = 100,
+#       relative = TRUE
+#     )
+#   )
+# })

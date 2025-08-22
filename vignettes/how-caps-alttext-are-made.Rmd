@@ -27,20 +27,31 @@ The file is set up like this:
 -   Column 4 ("alt_text") contains alternative text for figures. For tables, this column is blank.
 
 +-------------+------------+-----------------------------+--------------------------------------+
-| label       | type       | caption                     | alt_text                             |
+| label | type | caption | alt_text |
 +=============+============+=============================+======================================+
-| example_fig | figure     | Example caption for figure. | Example alternative text for figure. |
+| example_fig | figure | Example caption for figure. | Example alternative text for figure. |
 +-------------+------------+-----------------------------+--------------------------------------+
-| example_tab | table      | Example caption for table.  |                                      |
+| example_tab | table | Example caption for table. |  |
 +-------------+------------+-----------------------------+--------------------------------------+
 
 : Format for csv containing table and figure captions and alternative text.
 
-## Extracting key quantities from model results
+## Workflow in four key steps
 
-Next, key quantities are extracted from the model results that have already been converted into a standardized format using `asar::convert_output()`. Key quantities replace the placeholders using two successive functions: [`write_captions()`](https://github.com/nmfs-ost/stockplotr/blob/main/R/write_captions.R) and [`add_more_key_quants()`](https://github.com/nmfs-ost/stockplotr/blob/00c02487c9dbceaddb43257abdee72594f17b076/R/utils.R#L7).
+Next, key quantities are extracted from the model results (which have already been converted into a standardized format using `asar::convert_output()`). Finally, key quantities replace the placeholders in the captions/alt text template.
+
+These steps are performed by four key functions within `create_rda()`, which is housed within `utils_rda.R`. These functions are:
+
+1. `write_captions()`
+2. `add_more_key_quants()`
+3. `extract_caps_alttext()`
+4. `export_rda`
+
+The steps are discussed, below.
 
 **NOTE**: While we extract key quantities as accurately as we can, we cannot guarantee that each quantity will be calculated perfectly. Input data varies widely. It’s always your responsibility to check the accuracy of your figures' alt text.
+
+## Extracting key quantities from model results
 
 ### `write_captions()`
 
@@ -48,11 +59,17 @@ In this function, the captions_alt_text_template.csv file is imported as a dataf
 
 ### `add_more_key_quants()`
 
-This function, which is located in the [utils.R file](https://github.com/nmfs-ost/stockplotr/blob/main/R/utils.R), imports the new captions_alt_text.csv as a dataframe, then substitutes some placeholders with key quantities that cannot be extracted from the model results because they are manually specified by the user, or are derived using such quantities (e.g., a figure's end year, units, reference point, and more). The function exports the dataframe by overwriting the csv with the same filename.
+This function imports the new captions_alt_text.csv as a dataframe. Then, it substitutes some placeholders with key quantities that cannot be extracted from the model results because they are manually specified by the user, or are derived using such quantities (e.g., a figure's end year, units, reference point, and more). The function exports the dataframe by overwriting the csv with the same filename.
 
 ## Connecting the tables & figures with the captions & alternative text
 
-Lastly, the [`extract_caps_alttext`](https://github.com/nmfs-ost/stockplotr/blob/main/R/extract_caps_alttext.R) function selects the appropriate captions and alternative text from captions_alt_text.csv when a figure or table is being plotted with the argument `make_rda = TRUE`. The [`export_rda`](https://github.com/nmfs-ost/stockplotr/blob/main/R/export_rda.R) function exports an rda containing 1) a table and caption, or 2) a figure, caption, and alternative text.
+### `extract_caps_alttext()`
+
+This function selects the appropriate captions and alternative text from captions_alt_text.csv when a figure or table. 
+
+### `export_rda`
+
+Finally, this function exports an rda containing 1) a table and caption, or 2) a figure, caption, and alternative text.
 
 # Expected outcomes
 
@@ -60,9 +77,9 @@ Lastly, the [`extract_caps_alttext`](https://github.com/nmfs-ost/stockplotr/blob
 
 When using functions that produce one table or figure at a time, like `plot_biomass()`, only certain key quantities will be substituted into the placeholders. For instance,
 
-* `write_captions()` will substitute as many key quantities as possible, regardless of whether those quantities are associated with biomass.
-* `add_more_key_quants()` will only substitute additional key quantities that are associated with biomass because only those quantities will be specified by the user. For example, if a user specifies the unit label argument in the `plot_biomass()` as "metric tons", then `add_more_key_quants()` will replace the placeholder associated with biomass units (B.units will changed to metric tons). However, no other placeholder associated with landings units, recruitment deviations units, etc. will be substituted, and those placeholders will remain in the captions_alt_text.csv file.
+-   `write_captions()` will substitute as many key quantities as possible, regardless of whether those quantities are associated with biomass.
+-   `add_more_key_quants()` will only substitute additional key quantities that are associated with biomass because only those quantities will be specified by the user. For example, if a user specifies the unit label argument in the `plot_biomass()` as "metric tons", then `add_more_key_quants()` will replace the placeholder associated with biomass units (B.units will changed to metric tons). However, no other placeholder associated with landings units, recruitment deviations units, etc. will be substituted, and those placeholders will remain in the captions_alt_text.csv file.
 
-## Multi-plot functions 
+## Multi-plot functions
 
 When using `save_all_plots()`, the `stockplotr` function that exports all figures and tables, all key quantities (or, as many key quantities as possible) will be substituted into the placeholders. As opposed to single-plot functions, `save_all_plots()` allows for the user to specify all arguments needed to substitute all key quantities.
