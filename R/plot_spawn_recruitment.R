@@ -96,14 +96,14 @@ plot_spawn_recruitment <- function(
        color = "red"
      )
    }
-   
+  
    # Make RDA
    if (make_rda) {
      create_rda(
        object = final,
        topic_label = "sr",
        fig_or_table = "figure",
-       dat = rp_dat,
+       dat = dat,
        dir = figures_dir# ,
        # unit_label = unit_label
      )
