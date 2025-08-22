@@ -82,7 +82,7 @@ create_rda <- function(
   )
   
   export_rda(
-    object = final,
+    object = object,
     caps_alttext = caps_alttext, # Load in of this is missing I think
     figures_tables_dir = dir,
     topic_label = topic_label,
