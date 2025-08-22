@@ -20,6 +20,9 @@
 #'   default list to ensure that the label on the figure looks correct
 #'   regardless of how it is specified in `dat`.
 #' @param unit_label units for spawning_biomass
+#' @param module (Optional) A string indicating the linked module_name associated
+#' with the label for the plot if known. Default is NULL. By default, the function
+#' will select the most relevant module if more than 1 exists.
 #' @param scale_amount A number describing how much to scale down the quantities
 #' shown on the y axis. For example, scale_amount = 100 would scale down a value
 #' from 500,000 --> 5,000. This scale will be reflected in the y axis label.
@@ -63,7 +66,8 @@ plot_spawning_biomass <- function(
     scale_amount = 1,
     relative = FALSE,
     make_rda = FALSE,
-    figures_dir = getwd()) {
+    figures_dir = getwd(),
+    interactive = FALSE) {
   # TODO: Fix the unit label if scaling. Maybe this is up to the user to do if
   #       they want something scaled then they have to supply a better unit name
   #       or we create a helper function to do this.
@@ -99,14 +103,15 @@ plot_spawning_biomass <- function(
     geom = geom,
     group = group,
     module = module,
-    scale_amount = scale_amount
+    scale_amount = scale_amount,
+    interactive = interactive
   )
 
   # Calculate estimate if relative
   if (relative) {
     if (!is.null(names(ref_line))) {
       ref_line_val <- ref_line[[1]]
-      ref_line <- names(ref_line)
+      # ref_line <- names(ref_line)
     } else {
       ref_line_val <- calculate_reference_point(
         dat = rp_dat,
@@ -147,7 +152,7 @@ plot_spawning_biomass <- function(
       fig_or_table = "figure",
       dat = rp_dat,
       dir = figures_dir,
-      ref_line = ref_line,
+      ref_line = ifelse(!is.null(names(ref_line)), names(ref_line), ref_line),
       scale_amount = scale_amount,
       unit_label = unit_label
     )

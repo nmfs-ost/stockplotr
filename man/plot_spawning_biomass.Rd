@@ -15,7 +15,8 @@ plot_spawning_biomass(
   scale_amount = 1,
   relative = FALSE,
   make_rda = FALSE,
-  figures_dir = getwd()
+  figures_dir = getwd(),
+  interactive = FALSE
 )
 }
 \arguments{
@@ -41,6 +42,10 @@ default list to ensure that the label on the figure looks correct
 regardless of how it is specified in `dat`.}
 
 \item{unit_label}{units for spawning_biomass}
+
+\item{module}{(Optional) A string indicating the linked module_name associated
+with the label for the plot if known. Default is NULL. By default, the function
+will select the most relevant module if more than 1 exists.}
 
 \item{scale_amount}{A number describing how much to scale down the quantities
 shown on the y axis. For example, scale_amount = 100 would scale down a value

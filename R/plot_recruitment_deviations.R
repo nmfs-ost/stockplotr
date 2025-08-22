@@ -13,7 +13,6 @@
 #' \dontrun{
 #' plot_recruitment_deviations(
 #'   dat = list("model1"=dat1,"model2"=dat2),
-#'   geom = "point",
 #'   make_rda = TRUE,
 #'   figures_dir = getwd(),
 #'   size = 3
@@ -21,7 +20,6 @@
 #' }
 plot_recruitment_deviations <- function(
     dat,
-    # geom = "point",
     module = NULL,
     make_rda = FALSE,
     figures_dir = getwd(),

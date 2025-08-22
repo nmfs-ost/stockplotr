@@ -31,6 +31,7 @@ plot_spawn_recruitment <- function(
     spawning_biomass_label = "mt",
     recruitment_label = "mt",
     interactive = FALSE,
+    module = NULL,
     make_rda = FALSE,
     figures_dir = getwd()) {
   # Extract recruitment
@@ -38,7 +39,8 @@ plot_spawn_recruitment <- function(
     dat = dat,
     label_name = "recruitment",
     geom = "point",
-    interactive = interactive
+    interactive = interactive,
+    module = module
   ) 
   if (length(unique(recruitment$label)) > 1) {
     recruitment <- recruitment |>
@@ -58,7 +60,8 @@ plot_spawn_recruitment <- function(
     dat = dat,
     label_name = "spawning biomass",
     geom = "point",
-    interactive = interactive
+    interactive = interactive,
+    module = module
   ) |>
   dplyr::rename(spawning_biomass = estimate) |>
   dplyr::select(-c(label))
