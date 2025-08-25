@@ -26,7 +26,7 @@ plot_recruitment_deviations <- function(
     figures_dir = getwd(),
     ...
 ) {
- # Make plot
+ # Filter data
  filter_data <- prepare_data(
   dat = dat,
   label_name = "recruitment_deviations",
