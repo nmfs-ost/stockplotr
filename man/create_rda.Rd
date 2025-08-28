@@ -20,6 +20,8 @@ create_rda(
 \arguments{
 \item{object}{Table or plot object}
 
+\item{topic_label}{A string that names the object}
+
 \item{fig_or_table}{A string identifying if the object is a "table" or "figure"}
 
 \item{dat}{Data frame containing data which will fill in captions and 
@@ -38,8 +40,6 @@ shown on the y axis. For example, scale_amount = 100 would scale down a value
 from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
 
 \item{unit_label}{A string containing a unit label for the y-axis}
-
-\item{topic.label}{A string that names the object}
 }
 \value{
 Create an rda package for a plot or table object. Requires an
