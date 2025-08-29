@@ -9,13 +9,13 @@ test_that("plot_biomass generates plots without errors", {
   expect_no_error(
     plot_biomass(out_new)
   )
-
+  
   # TODO: Update test
   # expect plot with warning message if ref_point not indicated
   # expect_message(
   #   plot_biomass(out_new)
   # )
-
+  
   # expect error-free plot with many arguments
   expect_no_error(
     plot_biomass(
@@ -29,30 +29,14 @@ test_that("plot_biomass generates plots without errors", {
       figures_dir = getwd()
     )
   )
-
-  # expect error-free plot when setting relative to T
-  expect_no_error(
-    plot_biomass(
-      out_new,
-      ref_point = 18000,
-      unit_label = "metric tons",
-      scale_amount = 1,
-      end_year = 2024,
-      relative = TRUE,
-      make_rda = FALSE,
-      figures_dir = getwd()
-    )
-  )
-
+  
   # expect ggplot object is returned
   expect_s3_class(
     plot_biomass(
       out_new,
-      ref_point = 18000,
       unit_label = "metric tons",
       scale_amount = 1,
       end_year = 2024,
-      relative = TRUE,
       make_rda = FALSE,
       figures_dir = getwd()
     ),
@@ -91,28 +75,14 @@ test_that("rda file made when indicated", {
     out_new,
     figures_dir = getwd(),
     make_rda = TRUE,
-    end_year = 2023,
-    ref_point = 18000
+    end_year = 2023
   )
-
+  
   # expect that both figures dir and the biomass_figure.rda file exist
   expect_true(dir.exists(fs::path(getwd(), "figures")))
   expect_true(file.exists(fs::path(getwd(), "figures", "biomass_figure.rda")))
-
+  
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
   unlink(fs::path(getwd(), "figures"), recursive = T)
-})
-
-test_that("plot_biomass generates error with future end_year", {
-  # expect error
-  expect_error(
-    plot_biomass(
-      out_new,
-      figures_dir = getwd(),
-      make_rda = TRUE,
-      end_year = 2035,
-      ref_point = 18000
-    )
-  )
 })

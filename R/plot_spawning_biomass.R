@@ -36,7 +36,7 @@
 #' @param figures_dir The location of the folder containing the generated figure
 #' rda files ("figures") that will be created if the argument `make_rda` = TRUE.
 #' Default is the working directory.
-#' @param argument TRUE/FALSE; indicate whether the environment in which the
+#' @param interactive TRUE/FALSE; indicate whether the environment in which the
 #' function is operating  is interactive. This bypasses some options for
 #' filtering when preparing data for the plot. Default is FALSE.
 #' @param ... Arguments called from ggplot2::geom_line or ggplotr2::geom_point 

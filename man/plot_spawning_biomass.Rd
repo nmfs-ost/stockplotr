@@ -65,11 +65,11 @@ Default is FALSE.}
 rda files ("figures") that will be created if the argument `make_rda` = TRUE.
 Default is the working directory.}
 
-\item{...}{Arguments called from ggplot2::geom_line or ggplotr2::geom_point}
-
-\item{argument}{TRUE/FALSE; indicate whether the environment in which the
+\item{interactive}{TRUE/FALSE; indicate whether the environment in which the
 function is operating  is interactive. This bypasses some options for
 filtering when preparing data for the plot. Default is FALSE.}
+
+\item{...}{Arguments called from ggplot2::geom_line or ggplotr2::geom_point}
 }
 \value{
 Plot spawning biomass from the results of an assessment model translated to
