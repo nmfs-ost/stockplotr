@@ -7,8 +7,7 @@ load(file.path(
 test_that("plot_recruitment generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_recruitment(out_new,
-      end_year = 2022
+    plot_recruitment(out_new
     )
   )
 
@@ -18,7 +17,6 @@ test_that("plot_recruitment generates plots without errors", {
       out_new,
       unit_label = "mt",
       scale_amount = 10,
-      end_year = 2025,
       relative = FALSE,
       make_rda = FALSE,
       figures_dir = getwd()
@@ -31,7 +29,6 @@ test_that("plot_recruitment generates plots without errors", {
       out_new,
       unit_label = "mt",
       scale_amount = 10,
-      end_year = 2025,
       relative = T,
       make_rda = FALSE,
       figures_dir = getwd()
@@ -44,7 +41,6 @@ test_that("plot_recruitment generates plots without errors", {
       out_new,
       unit_label = "mt",
       scale_amount = 10,
-      end_year = 2025,
       relative = T,
       make_rda = FALSE,
       figures_dir = getwd()
@@ -68,16 +64,4 @@ test_that("rda file made when indicated", {
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
   unlink(fs::path(getwd(), "figures"), recursive = T)
-})
-
-test_that("plot_recruitment generates error with future end_year", {
-  # expect error
-  expect_error(
-    plot_recruitment(
-      out_new,
-      end_year = 2035,
-      make_rda = TRUE,
-      figures_dir = getwd()
-    )
-  )
 })
