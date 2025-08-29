@@ -4,6 +4,31 @@ load(file.path(
   "std_output.rda"
 ))
 
+# Make another sample dataset for testing relative
+n <- 448
+
+sim_df <- data.frame(
+  label = "biomass",
+  estimate = rlnorm(n, meanlog = 6.2, sdlog = 1.6),
+  module_name = "B.age",
+  time = NA,
+  season = NA,
+  subseason = NA,
+  fleet = NA,
+  sex = NA,
+  area = NA,
+  uncertainty_label = NA,
+  uncertainty = NA,
+  growth_pattern = NA,
+  age = sample(c(0,1,2,3,4,5,6), n, replace = TRUE),
+  era = sample(c("time", "fore"), n, replace = TRUE),
+  year = as.numeric(sample(2000:2024, n, replace = TRUE)),
+  nsim = as.numeric(1:n)) |>
+  dplyr::full_join(data.frame(label = "biomass_msy",
+                              estimate = 30000))
+
+
+
 test_that("plot_biomass generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
@@ -27,6 +52,16 @@ test_that("plot_biomass generates plots without errors", {
       relative = FALSE,
       make_rda = FALSE,
       figures_dir = getwd()
+    )
+  )
+  
+  # expect error-free plot when setting relative to T
+  expect_no_error(
+    plot_biomass(
+      sim_df,
+      unit_label = "mt",
+      scale_amount = 10,
+      relative = TRUE
     )
   )
   
