@@ -31,9 +31,9 @@ alternative text for the object}
 
 \item{year}{Default to current year}
 
-\item{ref_line}{Refernce line value such as "msy", "target" or "unfished"}
+\item{ref_line}{Reference line value such as "msy", "target" or "unfished"}
 
-\item{ref_point}{Refernce point value such as "msy", "target" or "unfished"}
+\item{ref_point}{Reference point value such as "msy", "target" or "unfished"}
 
 \item{scale_amount}{A number describing how much to scale down the quantities
 shown on the y axis. For example, scale_amount = 100 would scale down a value

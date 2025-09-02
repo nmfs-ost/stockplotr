@@ -4,7 +4,7 @@
 
 #' Plot time series trends
 #'
-#' @param dat filtered data frame from standard output file(s) pre-formatted for
+#' @param dat filtered data frame from standard output file(s) preformatted for
 #'  the target label from \link[stockplotr]{prepare_data}
 #' @param x a string of the column name of data used to plot on the x-axis (default 
 #' is "year")
@@ -181,7 +181,7 @@ plot_timeseries <- function(
 
 #' Create plot with error
 #' 
-#' @param dat filtered data frame from standard output file(s) pre-formatted for
+#' @param dat filtered data frame from standard output file(s) preformatted for
 #'  the target label from \link[stockplotr]{prepare_data}
 #' @param x a string of the column name of data used to plot on the x-axis (default 
 #' is "year")
@@ -254,7 +254,7 @@ plot_error <- function(
 
 #' Create "at-age" plot
 #'
-#' @param dat filtered data frame from standard output file(s) pre-formatted for
+#' @param dat filtered data frame from standard output file(s) preformatted for
 #'  the target label from \link[stockplotr]{prepare_data}
 #' @param x a string of the column name of data used to plot on the x-axis
 #' (default is "year")
@@ -458,7 +458,7 @@ top_cohorts_data <- dat |>
 
 #------------------------------------------------------------------------------
 
-#' Pre-formatted reference line
+#' Preformatted reference line
 #'
 #' @inheritParams plot_spawning_biomass
 #' @param plot a ggplot2 object where the reference line will be added
@@ -593,7 +593,7 @@ cap_first_letter <- function(s) {
 #' with the label for the plot if known. Default is NULL. By default, the function
 #' will select the most relevant module if more than 1 exists.
 #'
-#' @returns a data frame that is pre-formatted for plotting with ggplot2.
+#' @returns a data frame that is preformatted for plotting with ggplot2.
 #' @export
 #'
 #' @examples

@@ -61,6 +61,8 @@ plot_recruitment(
   unit_label = "my_unit_label",
   scale_amount = 100,
   relative = TRUE,
+  interactive = TRUE,
+  module = "TIME_SERIES",
   make_rda = TRUE,
   figures_dir = getwd()
 )

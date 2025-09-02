@@ -19,6 +19,7 @@
 #'   scale_amount = 100,
 #'   relative = TRUE,
 #'   interactive = TRUE,
+#'   module = "TIME_SERIES",
 #'   make_rda = TRUE,
 #'   figures_dir = getwd()
 #' )

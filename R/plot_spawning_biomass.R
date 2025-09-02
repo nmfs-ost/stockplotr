@@ -39,7 +39,7 @@
 #' @param interactive TRUE/FALSE; indicate whether the environment in which the
 #' function is operating  is interactive. This bypasses some options for
 #' filtering when preparing data for the plot. Default is FALSE.
-#' @param ... Arguments called from ggplot2::geom_line or ggplotr2::geom_point 
+#' @param ... Arguments called from ggplot2::geom_line or ggplot2::geom_point 
 #' @return
 #' Plot spawning biomass from the results of an assessment model translated to
 #' the standard output. The [ggplot2::ggplot()] object is returned for further

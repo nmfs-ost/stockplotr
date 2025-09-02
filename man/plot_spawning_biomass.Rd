@@ -70,6 +70,7 @@ function is operating  is interactive. This bypasses some options for
 filtering when preparing data for the plot. Default is FALSE.}
 
 \item{...}{Arguments called from ggplot2::geom_line or ggplotr2::geom_point}
+
 }
 \value{
 Plot spawning biomass from the results of an assessment model translated to
