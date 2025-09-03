@@ -22,6 +22,10 @@ calculation of a reference line if one is present}
 with the label for the plot if known. Default is NULL. By default, the function
 will select the most relevant module if more than 1 exists.}
 
+\item{interactive}{TRUE/FALSE; indicate whether the environment in which the
+function is operating  is interactive. This bypasses some options for
+filtering when preparing data for the plot. Default is FALSE.}
+
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".

@@ -21,6 +21,10 @@ plotted.}
 \item{label_name}{a string of the name of the label that is used to filter
 the data.}
 
+\item{module}{(Optional) A string indicating the linked module_name associated
+with the label for the plot if known. Default is NULL. By default, the function
+will select the most relevant module if more than 1 exists.}
+
 \item{geom}{Type of plot user wants to create. Options are "line", "point",
 and "area".}
 

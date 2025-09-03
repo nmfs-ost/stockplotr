@@ -13,6 +13,8 @@ export_rda(
 )
 }
 \arguments{
+\item{object}{The final figure (ggplot) or table (flextable) object.}
+
 \item{caps_alttext}{The object containing a figure's caption and alternative
 text, in a list, or a table's caption, likely generated with
 stockplotr::extract_caps_alttext().}
@@ -27,8 +29,6 @@ labels are found in the "label" column of the "captions_alt_text.csv" file
 and are used to link the figure or table with its caption/alt text.}
 
 \item{fig_or_table}{A string describing whether the plot is a figure or table.}
-
-\item{final}{The final figure (ggplot) or table (flextable) object.}
 }
 \value{
 An rda file with a figure's ggplot, caption, and alternative text, or
