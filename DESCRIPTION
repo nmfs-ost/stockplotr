@@ -30,7 +30,7 @@ Description: Creates exploratory and finished tables and figures for stock
     them.
 License: MIT + file LICENSE
 Depends: 
-    R (>= 2.10)
+    R (>= 4.1.0)
 Imports: 
     asar,
     cli,

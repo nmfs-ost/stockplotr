@@ -16,7 +16,8 @@ plot_spawning_biomass(
   relative = FALSE,
   make_rda = FALSE,
   figures_dir = getwd(),
-  interactive = FALSE
+  interactive = FALSE,
+  ...
 )
 }
 \arguments{
@@ -63,6 +64,10 @@ Default is FALSE.}
 \item{figures_dir}{The location of the folder containing the generated figure
 rda files ("figures") that will be created if the argument `make_rda` = TRUE.
 Default is the working directory.}
+
+\item{interactive}{TRUE/FALSE; indicate whether the environment in which the
+function is operating  is interactive. This bypasses some options for
+filtering when preparing data for the plot. Default is FALSE.}
 
 \item{...}{Arguments called from ggplot2::geom_line or ggplotr2::geom_point}
 }

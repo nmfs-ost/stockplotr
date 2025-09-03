@@ -8,6 +8,14 @@
 \description{
 Creates exploratory and finished tables and figures for stock assessment documents from U.S. stock assessment model outputs. This packages addresses parts of the stock assessment workflow that interprets outputs of stock assessment models as well as allows the analyst to create report ready tables and figures, reducing the need to create their own and format then when adding into a report. This package is intended to be used in conjuction with `asar`, a partially automated template for writing various stock assessment reports. Throughout development, we will be creating a set of standardized figures and tables for a stock assessment report, developing functions to produce a variety of diagonostic plots, and other helpful materials. The advantage of using this package over others is that it applies to a range of stock assessment model outputs and standardizes them.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/nmfs-ost/stockplotr}
+  \item Report bugs at \url{https://github.com/nmfs-ost/stockplotr/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Samantha Schiano \email{samantha.schiano@noaa.gov} (\href{https://orcid.org/0009-0003-3744-6428}{ORCID})
 

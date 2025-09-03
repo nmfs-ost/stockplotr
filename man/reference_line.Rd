@@ -23,6 +23,14 @@ extract the reference point from}
 
 \item{reference}{string. name of the reference point such as "msy", 
 "unfished", or "target"}
+
+\item{relative}{A logical value specifying if the resulting figures should
+be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
+which reference point to use.}
+
+\item{scale_amount}{A number describing how much to scale down the quantities
+shown on the y axis. For example, scale_amount = 100 would scale down a value
+from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
 }
 \value{
 a ggplot2 geom_hline object for a reference point that can be added 
