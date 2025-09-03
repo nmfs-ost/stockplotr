@@ -29,7 +29,7 @@ plot_recruitment <- function(
     unit_label = "mt",
     scale_amount = 1,
     relative = FALSE,
-    interactive = FALSE,
+    interactive = TRUE,
     module = NULL,
     make_rda = FALSE,
     figures_dir = getwd()
@@ -70,14 +70,14 @@ plot_recruitment <- function(
   }
   
   # Plot
-  final <- plot_timeseries(
+  final <- plot_error(
     dat = recruitment,
     x = "year",
     y = "predicted_recruitment",
-    geom = "point",
     color = "black",
     xlab = "Year",
     ylab = recruitment_label,
+    hline = FALSE,
     facet = {
       if (length(unique(recruitment$model)) > 1) {
         "model"

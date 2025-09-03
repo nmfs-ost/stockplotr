@@ -9,7 +9,7 @@ plot_recruitment(
   unit_label = "mt",
   scale_amount = 1,
   relative = FALSE,
-  interactive = FALSE,
+  interactive = TRUE,
   module = NULL,
   make_rda = FALSE,
   figures_dir = getwd()

@@ -196,6 +196,7 @@ plot_timeseries <- function(
 #' "sex", "area", etc.). Currently can only have one level of grouping.
 #' @param facet a string or vector of strings of a column that facets the data 
 #' (e.g. "year", "area", etc.)
+#' @param hline indicate true or false to place a horizantal line at 1
 #' @param ... inherited arguments from internal functions from ggplot2::geom_xx
 #' 
 #' 
@@ -208,46 +209,51 @@ plot_error <- function(
     facet = NULL,
     xlab = "Year",
     ylab = NULL,
+    hline = TRUE,
     ...
 ) {
-  plot_timeseries(
-    dat = dat,
-    x = x,
-    y = y,
-    geom = geom,
-    xlab = xlab,
-    ylab = ylab,
-    group = group,
-    facet = facet,
-    colour = "black"
-    # ...
-  ) +
-    ggplot2::geom_segment(
-      data = dat,
-      ggplot2::aes(
-        x = .data[[x]],
-        y = .data[[y]],
-        yend = estimate_upper
-      ),
-      color = "#5798fa",
-      alpha = 0.5
-    ) +
-    ggplot2::geom_segment(
-      data = dat,
-      ggplot2::aes(
-        x = .data[[x]],
-        y = .data[[y]],
-        yend = estimate_lower
-      ),
-      color = "#5798fa",
-      alpha = 0.5
-    ) +
-    ggplot2::geom_hline(
-      yintercept = 0,
-      linewidth = 1,
-      linetype = "solid", # "dashed",
-      colour = "#6e6e6e"
-    )
+  plot <- plot_timeseries(
+      dat = dat,
+      x = x,
+      y = y,
+      geom = geom,
+      xlab = xlab,
+      ylab = ylab,
+      group = group,
+      facet = facet,
+      colour = "black"
+      # ...
+      ) +
+      ggplot2::geom_segment(
+        data = dat,
+        ggplot2::aes(
+          x = .data[[x]],
+          y = .data[[y]],
+          yend = estimate_upper
+        ),
+        color = "#5798fa",
+        alpha = 0.5
+      ) +
+      ggplot2::geom_segment(
+        data = dat,
+        ggplot2::aes(
+          x = .data[[x]],
+          y = .data[[y]],
+          yend = estimate_lower
+        ),
+        color = "#5798fa",
+        alpha = 0.5
+      )
+    if(hline) {
+      plot <- plot +
+        ggplot2::geom_hline(
+          yintercept = 0,
+          linewidth = 1,
+          linetype = "solid", # "dashed",
+          colour = "#6e6e6e"
+        )
+    }
+  plot
 }
 
 #------------------------------------------------------------------------------
