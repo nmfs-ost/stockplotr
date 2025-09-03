@@ -46,7 +46,7 @@ plot_biomass <- function(
     relative = FALSE,
     make_rda = FALSE,
     figures_dir = getwd(),
-    interactive = FALSE,
+    interactive = TRUE,
     ...) {
   
   # TODO: Fix the unit label if scaling. Maybe this is up to the user to do if
