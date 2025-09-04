@@ -30,6 +30,10 @@ from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
 be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
 which reference point to use.}
 
+\item{interactive}{TRUE/FALSE; indicate whether the environment in which the
+function is operating  is interactive. This bypasses some options for
+filtering when preparing data for the plot. Default is FALSE.}
+
 \item{module}{(Optional) A string indicating the linked module_name associated
 with the label for the plot if known. Default is NULL. By default, the function
 will select the most relevant module if more than 1 exists.}
