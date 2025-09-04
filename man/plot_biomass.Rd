@@ -16,7 +16,7 @@ plot_biomass(
   relative = FALSE,
   make_rda = FALSE,
   figures_dir = getwd(),
-  interactive = FALSE,
+  interactive = TRUE,
   ...
 )
 }
@@ -70,7 +70,7 @@ Default is the working directory.}
 function is operating  is interactive. This bypasses some options for
 filtering when preparing data for the plot. Default is FALSE.}
 
-\item{...}{Arguments called from ggplot2::geom_line or ggplotr2::geom_point}
+\item{...}{Arguments called from ggplot2::geom_line or ggplot2::geom_point}
 }
 \value{
 Plot total biomass from a stock assessment model as found in a NOAA

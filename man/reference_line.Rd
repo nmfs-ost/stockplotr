@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_plot.R
 \name{reference_line}
 \alias{reference_line}
-\title{Pre-formatted reference line}
+\title{Preformatted reference line}
 \usage{
 reference_line(
   plot,
@@ -37,7 +37,7 @@ a ggplot2 geom_hline object for a reference point that can be added
 to a plot
 }
 \description{
-Pre-formatted reference line
+Preformatted reference line
 }
 \examples{
 \dontrun{

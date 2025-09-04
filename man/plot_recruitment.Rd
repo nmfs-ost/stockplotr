@@ -8,14 +8,17 @@ plot_recruitment(
   dat,
   unit_label = "mt",
   scale_amount = 1,
-  end_year = format(Sys.Date(), "\%Y"),
   relative = FALSE,
+  interactive = TRUE,
+  module = NULL,
   make_rda = FALSE,
   figures_dir = getwd()
 )
 }
 \arguments{
-\item{dat}{A data frame returned from \link[asar]{convert_output}}
+\item{dat}{A data frame or names list of data frames returned from
+\link[asar]{convert_output}. The first data frame in the list is used in
+calculation of a reference line if one is present}
 
 \item{unit_label}{units for recruitment}
 
@@ -23,11 +26,17 @@ plot_recruitment(
 shown on the y axis. For example, scale_amount = 100 would scale down a value
 from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
 
-\item{end_year}{Last year of assessment. Default is the current year.}
-
 \item{relative}{A logical value specifying if the resulting figures should
 be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
 which reference point to use.}
+
+\item{interactive}{TRUE/FALSE; indicate whether the environment in which the
+function is operating  is interactive. This bypasses some options for
+filtering when preparing data for the plot. Default is FALSE.}
+
+\item{module}{(Optional) A string indicating the linked module_name associated
+with the label for the plot if known. Default is NULL. By default, the function
+will select the most relevant module if more than 1 exists.}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
@@ -55,8 +64,9 @@ plot_recruitment(
   dat,
   unit_label = "my_unit_label",
   scale_amount = 100,
-  end_year = 2023,
   relative = TRUE,
+  interactive = TRUE,
+  module = "TIME_SERIES",
   make_rda = TRUE,
   figures_dir = getwd()
 )

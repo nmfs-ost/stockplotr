@@ -38,7 +38,7 @@ shown on the y axis.}
 a module_name when there was more than one found in the filtered dataset.}
 }
 \value{
-a data frame that is pre-formatted for plotting with ggplot2.
+a data frame that is preformatted for plotting with ggplot2.
 }
 \description{
 Prep data for input into aesthetics for ggplot2

@@ -11,8 +11,8 @@
 #' alternative text for the object
 #' @param dir Directory to where the rda will be saved
 #' @param year Default to current year
-#' @param ref_line Refernce line value such as "msy", "target" or "unfished"
-#' @param ref_point Refernce point value such as "msy", "target" or "unfished"
+#' @param ref_line Reference line value such as "msy", "target" or "unfished"
+#' @param ref_point Reference point value such as "msy", "target" or "unfished"
 #' @param scale_amount A number describing how much to scale down the quantities
 #' shown on the y axis. For example, scale_amount = 100 would scale down a value
 #' from 500,000 --> 5,000. This scale will be reflected in the y axis label.

@@ -10,9 +10,9 @@ https://github.com/BenWilliams-NOAA/safe/blob/main/R/main_table.R}
 risk_table(dat, end_year, tier, c1, c2, c3)
 }
 \arguments{
-\item{dat}{A data frame returned from \link[asar]{convert_output}}
-
-\item{end_year}{Last year of assessment. Default is the current year.}
+\item{dat}{A data frame or names list of data frames returned from
+\link[asar]{convert_output}. The first data frame in the list is used in
+calculation of a reference line if one is present}
 
 \item{tier}{Tier}
 

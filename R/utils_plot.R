@@ -4,7 +4,7 @@
 
 #' Plot time series trends
 #'
-#' @param dat filtered data frame from standard output file(s) pre-formatted for
+#' @param dat filtered data frame from standard output file(s) preformatted for
 #'  the target label from \link[stockplotr]{prepare_data}
 #' @param x a string of the column name of data used to plot on the x-axis (default 
 #' is "year")
@@ -181,7 +181,7 @@ plot_timeseries <- function(
 
 #' Create plot with error
 #' 
-#' @param dat filtered data frame from standard output file(s) pre-formatted for
+#' @param dat filtered data frame from standard output file(s) preformatted for
 #'  the target label from \link[stockplotr]{prepare_data}
 #' @param x a string of the column name of data used to plot on the x-axis (default 
 #' is "year")
@@ -196,6 +196,7 @@ plot_timeseries <- function(
 #' "sex", "area", etc.). Currently can only have one level of grouping.
 #' @param facet a string or vector of strings of a column that facets the data 
 #' (e.g. "year", "area", etc.)
+#' @param hline indicate true or false to place a horizantal line at 1
 #' @param ... inherited arguments from internal functions from ggplot2::geom_xx
 #' 
 #' 
@@ -208,53 +209,58 @@ plot_error <- function(
     facet = NULL,
     xlab = "Year",
     ylab = NULL,
+    hline = TRUE,
     ...
 ) {
-  plot_timeseries(
-    dat = dat,
-    x = x,
-    y = y,
-    geom = geom,
-    xlab = xlab,
-    ylab = ylab,
-    group = group,
-    facet = facet,
-    colour = "black"
-    # ...
-  ) +
-    ggplot2::geom_segment(
-      data = dat,
-      ggplot2::aes(
-        x = .data[[x]],
-        y = .data[[y]],
-        yend = estimate_upper
-      ),
-      color = "#5798fa",
-      alpha = 0.5
-    ) +
-    ggplot2::geom_segment(
-      data = dat,
-      ggplot2::aes(
-        x = .data[[x]],
-        y = .data[[y]],
-        yend = estimate_lower
-      ),
-      color = "#5798fa",
-      alpha = 0.5
-    ) +
-    ggplot2::geom_hline(
-      yintercept = 0,
-      linewidth = 1,
-      linetype = "solid", # "dashed",
-      colour = "#6e6e6e"
-    )
+  plot <- plot_timeseries(
+      dat = dat,
+      x = x,
+      y = y,
+      geom = geom,
+      xlab = xlab,
+      ylab = ylab,
+      group = group,
+      facet = facet,
+      colour = "black"
+      # ...
+      ) +
+      ggplot2::geom_segment(
+        data = dat,
+        ggplot2::aes(
+          x = .data[[x]],
+          y = .data[[y]],
+          yend = estimate_upper
+        ),
+        color = "#5798fa",
+        alpha = 0.5
+      ) +
+      ggplot2::geom_segment(
+        data = dat,
+        ggplot2::aes(
+          x = .data[[x]],
+          y = .data[[y]],
+          yend = estimate_lower
+        ),
+        color = "#5798fa",
+        alpha = 0.5
+      )
+    if(hline) {
+      plot <- plot +
+        ggplot2::geom_hline(
+          yintercept = 0,
+          linewidth = 1,
+          linetype = "solid", # "dashed",
+          colour = "#6e6e6e"
+        )
+    }
+  plot
 }
 
 #------------------------------------------------------------------------------
 
 #' Create "at-age" plot
 #'
-#' @param dat filtered data frame from standard output file(s) pre-formatted for
+#' @param dat filtered data frame from standard output file(s) preformatted for
 #'  the target label from \link[stockplotr]{prepare_data}
 #' @param x a string of the column name of data used to plot on the x-axis
 #' (default is "year")
@@ -458,7 +464,7 @@ top_cohorts_data <- dat |>
 
 #------------------------------------------------------------------------------
 
-#' Pre-formatted reference line
+#' Preformatted reference line
 #'
 #' @inheritParams plot_spawning_biomass
 #' @param plot a ggplot2 object where the reference line will be added
@@ -593,7 +599,7 @@ cap_first_letter <- function(s) {
 #' with the label for the plot if known. Default is NULL. By default, the function
 #' will select the most relevant module if more than 1 exists.
 #'
-#' @returns a data frame that is pre-formatted for plotting with ggplot2.
+#' @returns a data frame that is preformatted for plotting with ggplot2.
 #' @export
 #'
 #' @examples

@@ -18,7 +18,7 @@ plot_aa(
 )
 }
 \arguments{
-\item{dat}{filtered data frame from standard output file(s) pre-formatted for
+\item{dat}{filtered data frame from standard output file(s) preformatted for
 the target label from \link[stockplotr]{prepare_data}}
 
 \item{x}{a string of the column name of data used to plot on the x-axis

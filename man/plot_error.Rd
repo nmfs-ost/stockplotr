@@ -13,11 +13,12 @@ plot_error(
   facet = NULL,
   xlab = "Year",
   ylab = NULL,
+  hline = TRUE,
   ...
 )
 }
 \arguments{
-\item{dat}{filtered data frame from standard output file(s) pre-formatted for
+\item{dat}{filtered data frame from standard output file(s) preformatted for
 the target label from \link[stockplotr]{prepare_data}}
 
 \item{x}{a string of the column name of data used to plot on the x-axis (default 
@@ -39,6 +40,8 @@ is "estimate")}
 
 \item{ylab}{a string of the y-axis label. If NULL, it will be set to the name
 of `y`.}
+
+\item{hline}{indicate true or false to place a horizantal line at 1}
 
 \item{...}{inherited arguments from internal functions from ggplot2::geom_xx}
 }
