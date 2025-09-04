@@ -93,7 +93,8 @@ plot_recruitment <- function(
       ggplot2::geom_line(
         data = recruitment,
         ggplot2::aes(x = year, y = expected_recruitment),
-        color = "red"
+        color = "red",
+        size = 1
       )
   }
   
