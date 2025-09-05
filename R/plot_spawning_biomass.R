@@ -12,6 +12,9 @@
 #' "sex", "area", etc.). Currently can only have one level of grouping.
 #' @param facet a string or vector of strings of a column that facets the data
 #' (e.g. "year", "area", etc.)
+#' @param era a string naming the era of data such as historical ("early"), current ("time"), or 
+#' projected ("fore") data if filtering should occur. Defualt is set to "time" which is 
+#' the current time. To plot all data, set era to NULL. 
 #' @param ref_line A string specifying the type of reference you want to
 #'   compare spawning biomass to. The default is `"target"`, which looks for
 #'   `"spawning_biomass_target"` in the `"label"` column of `dat`. The actual
@@ -65,6 +68,7 @@ plot_spawning_biomass <- function(
     facet = NULL,
     ref_line = "msy",
     unit_label = "metric tons",
+    era = "time",
     module = NULL,
     scale_amount = 1,
     relative = FALSE,
@@ -105,6 +109,7 @@ plot_spawning_biomass <- function(
     dat = dat,
     label_name = "spawning biomass",
     geom = geom,
+    era = era,
     group = group,
     module = module,
     scale_amount = scale_amount,
@@ -147,6 +152,27 @@ plot_spawning_biomass <- function(
     relative = relative,
     scale_amount = scale_amount
   ) + theme_noaa()
+
+  # Plot vertical lines if era is not filtering
+  if (is.null(era)) {
+    # Find unique era
+    eras <- unique(filter_data$era)
+    if (length(eras) > 1) {
+      year_vlines <- c()
+      for (i in 2:length(eras)){
+        erax <- filter_data |>
+        dplyr::filter(era == eras[i]) |>
+        dplyr::pull(year) |>
+        min(na.rm = TRUE)
+        year_vlines <- c(year_vlines, erax)
+      }
+    }
+    final <- final +
+      ggplot2::geom_vline(
+        xintercept = year_vlines,
+        color = "#999999"
+      )
+  }
 
   ### Make RDA ----
   if (make_rda) {

@@ -30,7 +30,8 @@ plot_spawn_recruitment <- function(
     dat,
     spawning_biomass_label = "mt",
     recruitment_label = "mt",
-    interactive = FALSE,
+    interactive = TRUE,
+    era = "time",
     module = NULL,
     make_rda = FALSE,
     figures_dir = getwd()) {
@@ -38,6 +39,7 @@ plot_spawn_recruitment <- function(
   recruitment <- prepare_data(
     dat = dat,
     label_name = "recruitment",
+    era = era,
     geom = "point",
     interactive = interactive,
     module = module
@@ -60,6 +62,7 @@ plot_spawn_recruitment <- function(
     dat = dat,
     label_name = "spawning biomass",
     geom = "point",
+    era = era,
     interactive = interactive,
     module = module
   ) |>

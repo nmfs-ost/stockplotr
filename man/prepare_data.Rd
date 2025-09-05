@@ -8,6 +8,7 @@ prepare_data(
   dat,
   label_name,
   module = NULL,
+  era = "time",
   geom,
   group = NULL,
   scale_amount = 1,

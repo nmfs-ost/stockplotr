@@ -8,7 +8,8 @@ plot_spawn_recruitment(
   dat,
   spawning_biomass_label = "mt",
   recruitment_label = "mt",
-  interactive = FALSE,
+  interactive = TRUE,
+  era = "time",
   module = NULL,
   make_rda = FALSE,
   figures_dir = getwd()
@@ -27,6 +28,10 @@ calculation of a reference line if one is present}
 plot is being made in is interactive. By default, this
 is set to false. If true, dependent on your data, a
 option menu will pop-up.}
+
+\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or 
+projected ("fore") data if filtering should occur. Defualt is set to "time" which is 
+the current time. To plot all data, set era to NULL.}
 
 \item{module}{(Optional) A string indicating the linked module_name associated
 with the label for the plot if known. Default is NULL. By default, the function

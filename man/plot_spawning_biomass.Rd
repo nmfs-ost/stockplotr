@@ -11,6 +11,7 @@ plot_spawning_biomass(
   facet = NULL,
   ref_line = "msy",
   unit_label = "metric tons",
+  era = "time",
   module = NULL,
   scale_amount = 1,
   relative = FALSE,
@@ -43,6 +44,10 @@ default list to ensure that the label on the figure looks correct
 regardless of how it is specified in `dat`.}
 
 \item{unit_label}{units for spawning_biomass}
+
+\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or 
+projected ("fore") data if filtering should occur. Defualt is set to "time" which is 
+the current time. To plot all data, set era to NULL.}
 
 \item{module}{(Optional) A string indicating the linked module_name associated
 with the label for the plot if known. Default is NULL. By default, the function

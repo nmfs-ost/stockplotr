@@ -610,6 +610,7 @@ prepare_data <- function(
     dat,
     label_name,
     module = NULL,
+    era = "time",
     geom,
     group = NULL,
     scale_amount = 1,
@@ -642,8 +643,8 @@ prepare_data <- function(
     }
     data <- data |>
       dplyr::filter(
-        grepl(glue::glue("{label_name}$"), label),
-        era == "time"
+        grepl(glue::glue("{label_name}"), label),
+        era == era
       ) |>
       dplyr::mutate(
         year = as.numeric(year),
@@ -748,6 +749,7 @@ prepare_data <- function(
         year,
         model,
         group_var,
+        era,
         module_name,
         label
       ) |>

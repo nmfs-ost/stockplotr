@@ -7,6 +7,7 @@
 plot_catch_comp(
   dat,
   facet = NULL,
+  era = "time",
   unit_label = "mt",
   scale_amount = 1,
   proportional = TRUE,

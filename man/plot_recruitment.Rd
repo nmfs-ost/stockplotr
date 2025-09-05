@@ -8,6 +8,7 @@ plot_recruitment(
   dat,
   unit_label = "mt",
   scale_amount = 1,
+  era = "time",
   relative = FALSE,
   interactive = TRUE,
   module = NULL,
@@ -25,6 +26,10 @@ calculation of a reference line if one is present}
 \item{scale_amount}{A number describing how much to scale down the quantities
 shown on the y axis. For example, scale_amount = 100 would scale down a value
 from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
+
+\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or 
+projected ("fore") data if filtering should occur. Defualt is set to "time" which is 
+the current time. To plot all data, set era to NULL.}
 
 \item{relative}{A logical value specifying if the resulting figures should
 be relative spawning biomass. The default is `FALSE`. `ref_line` indicates

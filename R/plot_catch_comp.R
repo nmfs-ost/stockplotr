@@ -26,6 +26,7 @@
 plot_catch_comp <- function(
   dat,
   facet = NULL,
+  era = "time",
   unit_label = "mt",
   scale_amount = 1,
   proportional = TRUE,
@@ -58,10 +59,11 @@ plot_catch_comp <- function(
   catch <- prepare_data(
     dat = dat,
     label_name = "catch",
+    era = era,
     geom = "point",
     group = "age",
     scale_amount = scale_amount,
-    interactive = FALSE
+    interactive = TRUE
   )
   # Check for extracted data, if not return warning and empty plot
   if (nrow(catch) == 0) {
@@ -78,6 +80,7 @@ plot_catch_comp <- function(
     proportional = proportional
   ) +
   cohort_line(catch)
+  
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
     create_rda(

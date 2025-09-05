@@ -21,6 +21,7 @@
 plot_recruitment_deviations <- function(
     dat,
     module = NULL,
+    era = "time",
     interactive = TRUE,
     make_rda = FALSE,
     figures_dir = getwd(),
@@ -31,6 +32,7 @@ plot_recruitment_deviations <- function(
   dat = dat,
   label_name = "recruitment_deviations",
   module = module,
+  era = era,
   interactive = interactive,
   geom = "point",
   group = NULL
@@ -51,6 +53,31 @@ final <- plot_error(
 ) +
 # ggplot2::facet_wrap(~ model, scales = "free_y") +
 theme_noaa()
+  
+# Plot vertical lines if era is not filtering
+if (is.null(era)) {
+  # Find unique era
+  eras <- unique(filter_data$era)
+  if (length(eras) > 1) {
+    # era1 <- filter_data |>
+    #   dplyr::filter(era == eras[1]) |>
+    #   dplyr::pull(year) |>
+    #   max(na.rm = TRUE)
+    year_vlines <- c()
+    for (i in 2:length(eras)){
+      erax <- filter_data |>
+      dplyr::filter(era == eras[i]) |>
+      dplyr::pull(year) |>
+      min(na.rm = TRUE)
+      year_vlines <- c(year_vlines, erax)
+    }
+  }
+  final <- final +
+    ggplot2::geom_vline(
+      xintercept = year_vlines,
+      color = "#999999"
+    )
+}
 
 # Make RDA
 if (make_rda) {
