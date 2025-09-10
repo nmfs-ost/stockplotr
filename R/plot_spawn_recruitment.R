@@ -8,9 +8,10 @@
 #' @param spawning_biomass_label Units for spawning biomass
 #' @param recruitment_label units for recruitment
 #'
-#' @return Plot spawn recruitment relationship from a 
-#' standardized output file originating from 
-#' \link[asar]{convert_output}
+#' @return Plot the spawn recruitment relationship  from an assessment model output file
+#' translated to a standardized output (\link[asar]{convert_output}). There are options to return a
+#' [ggplot2::ggplot()] object or export an rda object containing associated
+#' caption and alternative text for the figure.
 #' @export
 #'
 #' @examples

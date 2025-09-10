@@ -44,9 +44,10 @@
 #' filtering when preparing data for the plot. Default is FALSE.
 #' @param ... Arguments called from ggplot2::geom_line or ggplot2::geom_point 
 #' @return
-#' Plot spawning biomass from the results of an assessment model translated to
-#' the standard output. The [ggplot2::ggplot()] object is returned for further
-#' modifications if needed.
+#' Plot spawning biomass over time from the results of an assessment model translated to
+#' the a standardized output (\link[asar]{convert_output}). There are options to return a
+#' [ggplot2::ggplot()] object or export an rda object containing associated
+#' caption and alternative text for the figure.
 #' @export
 #'
 #' @examples

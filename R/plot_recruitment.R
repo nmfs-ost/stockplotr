@@ -4,7 +4,7 @@
 #' @param unit_label units for recruitment
 #' 
 #' @return Plot recruitment over time from an assessment model output file
-#' translated to a standardized output. There are options to return a
+#' translated to a standardized output (\link[asar]{convert_output}). There are options to return a
 #' [ggplot2::ggplot()] object or export an rda object containing associated
 #' caption and alternative text for the figure.
 #' @export

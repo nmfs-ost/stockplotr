@@ -3,7 +3,7 @@
 #' @inheritParams plot_spawning_biomass
 #'
 #' @return Plot recruitment deviations relative to one over time from an
-#' assessment model output file translated to a standardized output. There are
+#' assessment model output file translated to a standardized output (\link[asar]{convert_output}). There are
 #' options to return a `ggplot2` object or export an .rda object containing
 #' associated caption and alternative text for the figure.
 #' 
