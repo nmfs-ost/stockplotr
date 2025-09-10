@@ -58,6 +58,10 @@ plot_spawn_recruitment <- function(
     dplyr::rename(predicted_recruitment = estimate) |>
     dplyr::select(-c(label))
   }
+
+  if (any(grepl("^recruitment$", colnames(recruitment)))) {
+    recruitment <- dplyr::rename(recruitment, predicted_recruitment = recruitment)
+  }
   
   # Extract spawning biomass
   sb <- prepare_data(
@@ -135,5 +139,8 @@ plot_spawn_recruitment <- function(
        # unit_label = unit_label
      )
    }
-  final
+  final  +
+    ggplot2::scale_x_continuous(
+      labels = scales::label_comma()
+    )
 }

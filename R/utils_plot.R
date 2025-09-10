@@ -156,8 +156,7 @@ plot_timeseries <- function(
     n.breaks = x_n_breaks,
     guide = ggplot2::guide_axis(
       minor.ticks = TRUE
-    ),
-    labels = scales::label_comma()
+    )
   )
   
   # Put together final plot
