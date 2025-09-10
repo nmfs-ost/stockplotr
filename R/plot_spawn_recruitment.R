@@ -31,16 +31,18 @@ plot_spawn_recruitment <- function(
     spawning_biomass_label = "mt",
     recruitment_label = "mt",
     interactive = TRUE,
-    era = "time",
+    # era = "time",
     module = NULL,
+    scale_amount = 1,
     make_rda = FALSE,
     figures_dir = getwd()) {
   # Extract recruitment
   recruitment <- prepare_data(
     dat = dat,
     label_name = "recruitment",
-    era = era,
+    era = "time",
     geom = "point",
+    scale_amount = scale_amount,
     interactive = interactive,
     module = module
   ) 
@@ -62,7 +64,8 @@ plot_spawn_recruitment <- function(
     dat = dat,
     label_name = "spawning biomass",
     geom = "point",
-    era = era,
+    era = "time",
+    scale_amount = scale_amount,
     interactive = interactive,
     module = module
   ) |>
@@ -72,6 +75,20 @@ plot_spawn_recruitment <- function(
   # Merge recruitment and spawning biomass data
   sr <- dplyr::left_join(sb, recruitment)
 
+  # Labs
+  recruitment_lab <- label_magnitude(
+    label = "Recruitment",
+    unit_label = recruitment_label,
+    scale_amount = scale_amount,
+    legend = FALSE
+  )
+  sb_lab <- label_magnitude(
+    label = "Spawning Biomass",
+    unit_label = spawning_biomass_label,
+    scale_amount = scale_amount,
+    legend = FALSE
+  )
+
    # Plot
    final <- plot_timeseries(
      dat = sr,
@@ -79,8 +96,8 @@ plot_spawn_recruitment <- function(
      y = "predicted_recruitment",
      geom = "point",
      color = "black",
-     xlab = paste0("Spawning Biomass (", spawning_biomass_label, ")"),
-     ylab = paste0("Recruitment (", recruitment_label, ")"),
+     xlab = sb_lab,
+     ylab = recruitment_lab,
      facet = {
        if (length(unique(sr$model)) > 1) {
          "model"
@@ -88,6 +105,13 @@ plot_spawn_recruitment <- function(
          NULL
        }
      }
+   ) +
+  #  ggplot2::scale_y_continuous(
+  #      labels = scales::label_comma()
+  #  ) +
+  # want to overwrite the default for x-axis bc it's not year in this case
+   ggplot2::scale_x_continuous(
+     labels = scales::label_comma()
    ) +
    theme_noaa()
  

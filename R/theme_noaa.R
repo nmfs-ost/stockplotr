@@ -23,7 +23,8 @@ theme_noaa <- function(discrete = TRUE,
       panel.grid = ggplot2::element_blank(),
       panel.border = ggplot2::element_rect(colour = "black", fill = NA, linewidth = 0.5),
       complete = TRUE
-    )) 
+    )
+  ) 
     
     if (discrete){
       list(theme,

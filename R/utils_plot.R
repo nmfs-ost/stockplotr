@@ -156,11 +156,15 @@ plot_timeseries <- function(
     n.breaks = x_n_breaks,
     guide = ggplot2::guide_axis(
       minor.ticks = TRUE
-    )
+    ),
+    labels = scales::label_comma()
   )
   
   # Put together final plot
-  final <- labs + breaks + ggplot2::expand_limits(y = 0)
+  final <- labs + breaks + ggplot2::expand_limits(y = 0) +
+    ggplot2::scale_y_continuous(
+      labels = scales::label_comma()
+    )
   
   # Remove legend if no group is selected
   if (is.null(group) & is.data.frame(dat) & any(is.na(unique(dat$model)))) {
