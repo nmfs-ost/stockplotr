@@ -488,6 +488,7 @@ top_cohorts_data <- dat |>
 reference_line <- function(
     plot,
     dat,
+    era = "time",
     label_name,
     reference,
     relative = FALSE,
@@ -504,6 +505,9 @@ reference_line <- function(
     )
   }
   
+  # Rename era arg
+  era_name <- era
+
   # Add geom for ref line
   plot +
     ggplot2::geom_hline(
@@ -516,7 +520,7 @@ reference_line <- function(
     ggplot2::annotate(
       geom = "text",
       # TODO: need to change this for general process
-      x = as.numeric(max(dat$year[dat$era == "time"], na.rm = TRUE)), # - as.numeric(max(dat$year[dat$era == "time"], na.rm = TRUE))/200,
+      x = as.numeric(max(dat$year[dat$era == era_name], na.rm = TRUE)), # - as.numeric(max(dat$year[dat$era == "time"], na.rm = TRUE))/200,
       y = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
       label = glue::glue("{label_name}_{reference}"), # list(bquote(label_name[.(reference)])),
       parse = TRUE,
@@ -646,8 +650,8 @@ prepare_data <- function(
     }
     data <- data |>
       dplyr::filter(
-        grepl(glue::glue("{label_name}"), label),
-        era == era
+        grepl(glue::glue("{label_name}"), label)
+        # era == era
       ) |>
       dplyr::mutate(
         year = as.numeric(year),
@@ -666,6 +670,14 @@ prepare_data <- function(
           TRUE ~ NA
         )
       )
+    # must rename era arg bc dplyr gets confused
+    era_selection <- era
+    if (!is.null(era)) {
+      data <- dplyr::filter(
+        data,
+        grepl(era_selection, era)
+      )
+    }
     if (nrow(data) < 1) cli::cli_abort("{label_name} not found.")
     if (is.null(group)) {
       data <- data |>

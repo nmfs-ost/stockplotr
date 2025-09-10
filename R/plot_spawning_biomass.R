@@ -107,7 +107,7 @@ plot_spawning_biomass <- function(
   # Filter data for spawning biomass
   filter_data <- prepare_data(
     dat = dat,
-    label_name = "spawning biomass",
+    label_name = "spawning_biomass$",
     geom = geom,
     era = era,
     group = group,
@@ -147,6 +147,7 @@ plot_spawning_biomass <- function(
   final <- reference_line(
     plot = plt,
     dat = rp_dat,
+    era = era,
     label_name = "spawning_biomass",
     reference = ref_line,
     relative = relative,
