@@ -302,7 +302,7 @@ add_more_key_quants <- function(
   }
   
   ## spawning biomass
-  if (topic_cap_alt$label == "spawning.biomass") {
+  if (topic_cap_alt$label == "spawning.biomass" | topic_cap_alt$label == "sr") {
     if (is.null(dat)) {
       cli::cli_alert_warning("Some key quantities associated with spawning biomass were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).", wrap = TRUE)
     } else {
@@ -407,7 +407,7 @@ add_more_key_quants <- function(
   }
   
   ## recruitment
-  if (topic_cap_alt$label == "recruitment") {
+  if (topic_cap_alt$label == "recruitment" | topic_cap_alt$label == "sr") {
     if (is.null(dat)) {
       cli::cli_alert_warning("Some key quantities associated with recruitment were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).", wrap = TRUE)
     } else {
