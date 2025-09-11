@@ -13,7 +13,7 @@
 #' @param facet a string or vector of strings of a column that facets the data
 #' (e.g. "year", "area", etc.)
 #' @param era a string naming the era of data such as historical ("early"), current ("time"), or 
-#' projected ("fore") data if filtering should occur. Defualt is set to "time" which is 
+#' projected ("fore") data if filtering should occur. Default is set to "time" which is 
 #' the current time. To plot all data, set era to NULL. 
 #' @param ref_line A string specifying the type of reference you want to
 #'   compare spawning biomass to. The default is `"target"`, which looks for

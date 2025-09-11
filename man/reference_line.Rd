@@ -7,6 +7,7 @@
 reference_line(
   plot,
   dat,
+  era = "time",
   label_name,
   reference,
   relative = FALSE,
@@ -17,6 +18,10 @@ reference_line(
 \item{plot}{a ggplot2 object where the reference line will be added}
 
 \item{dat}{standard data frame where reference point should be extracted}
+
+\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or 
+projected ("fore") data if filtering should occur. Default is set to "time" which is 
+the current time. To plot all data, set era to NULL.}
 
 \item{label_name}{string of the name of the quantity that users want to 
 extract the reference point from}

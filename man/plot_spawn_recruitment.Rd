@@ -9,8 +9,8 @@ plot_spawn_recruitment(
   spawning_biomass_label = "mt",
   recruitment_label = "mt",
   interactive = TRUE,
-  era = "time",
   module = NULL,
+  scale_amount = 1,
   make_rda = FALSE,
   figures_dir = getwd()
 )
@@ -29,13 +29,13 @@ plot is being made in is interactive. By default, this
 is set to false. If true, dependent on your data, a
 option menu will pop-up.}
 
-\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or 
-projected ("fore") data if filtering should occur. Defualt is set to "time" which is 
-the current time. To plot all data, set era to NULL.}
-
 \item{module}{(Optional) A string indicating the linked module_name associated
 with the label for the plot if known. Default is NULL. By default, the function
 will select the most relevant module if more than 1 exists.}
+
+\item{scale_amount}{A number describing how much to scale down the quantities
+shown on the y axis. For example, scale_amount = 100 would scale down a value
+from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
@@ -47,9 +47,10 @@ rda files ("figures") that will be created if the argument `make_rda` = TRUE.
 Default is the working directory.}
 }
 \value{
-Plot spawn recruitment relationship from a 
-standardized output file originating from 
-\link[asar]{convert_output}
+Plot the spawn recruitment relationship  from an assessment model output file
+translated to a standardized output (\link[asar]{convert_output}). There are options to return a
+[ggplot2::ggplot()] object or export an rda object containing associated
+caption and alternative text for the figure.
 }
 \description{
 Plot Spawn-Recruit Relationship

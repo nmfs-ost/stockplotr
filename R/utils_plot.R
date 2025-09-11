@@ -199,7 +199,7 @@ plot_timeseries <- function(
 #' "sex", "area", etc.). Currently can only have one level of grouping.
 #' @param facet a string or vector of strings of a column that facets the data 
 #' (e.g. "year", "area", etc.)
-#' @param hline indicate true or false to place a horizantal line at 1
+#' @param hline indicate true or false to place a horizontal line at 1
 #' @param ... inherited arguments from internal functions from ggplot2::geom_xx
 #' 
 #' 

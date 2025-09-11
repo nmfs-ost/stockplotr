@@ -46,7 +46,7 @@ regardless of how it is specified in `dat`.}
 \item{unit_label}{units for spawning_biomass}
 
 \item{era}{a string naming the era of data such as historical ("early"), current ("time"), or 
-projected ("fore") data if filtering should occur. Defualt is set to "time" which is 
+projected ("fore") data if filtering should occur. Default is set to "time" which is 
 the current time. To plot all data, set era to NULL.}
 
 \item{module}{(Optional) A string indicating the linked module_name associated
@@ -77,9 +77,10 @@ filtering when preparing data for the plot. Default is FALSE.}
 \item{...}{Arguments called from ggplot2::geom_line or ggplot2::geom_point}
 }
 \value{
-Plot spawning biomass from the results of an assessment model translated to
-the standard output. The [ggplot2::ggplot()] object is returned for further
-modifications if needed.
+Plot spawning biomass over time from the results of an assessment model translated to
+the a standardized output (\link[asar]{convert_output}). There are options to return a
+[ggplot2::ggplot()] object or export an rda object containing associated
+caption and alternative text for the figure.
 }
 \description{
 Plot spawning biomass with a reference line as a dashed line. The figure can

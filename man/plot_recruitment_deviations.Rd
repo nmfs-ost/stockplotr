@@ -24,7 +24,7 @@ with the label for the plot if known. Default is NULL. By default, the function
 will select the most relevant module if more than 1 exists.}
 
 \item{era}{a string naming the era of data such as historical ("early"), current ("time"), or 
-projected ("fore") data if filtering should occur. Defualt is set to "time" which is 
+projected ("fore") data if filtering should occur. Default is set to "time" which is 
 the current time. To plot all data, set era to NULL.}
 
 \item{interactive}{TRUE/FALSE; indicate whether the environment in which the
@@ -44,7 +44,7 @@ Default is the working directory.}
 }
 \value{
 Plot recruitment deviations relative to one over time from an
-assessment model output file translated to a standardized output. There are
+assessment model output file translated to a standardized output (\link[asar]{convert_output}). There are
 options to return a `ggplot2` object or export an .rda object containing
 associated caption and alternative text for the figure.
 }
