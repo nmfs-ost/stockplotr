@@ -53,6 +53,8 @@ of `y`.}
 (e.g. "year", "area", etc.)}
 
 \item{...}{inherited arguments from internal functions from ggplot2::geom_xx}
+
+\item{hline}{indicate true or false to place a horizontal line at 1}
 }
 \value{
 Create a time series plot for a stock assessment report. The user
@@ -84,6 +86,7 @@ plot_timeseries(dat,
 }
 \dontrun{
 plot_timeseries(dat,
+<<<<<<< HEAD
   x = "year",
   y = "estimate",
   geom = "line",
@@ -92,5 +95,14 @@ plot_timeseries(dat,
   group = "fleet",
   facet = "area"
 )
+=======
+               x = "year",
+               y = "estimate",
+               geom = "line",
+               xlab = "Year",
+               ylab = "Biomass",
+               group = "fleet",
+               facet = "area")
+>>>>>>> 73d71fc (Revamped sr, aa plots, recruitment ts, and more (#130))
 }
 }
