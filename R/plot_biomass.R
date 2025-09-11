@@ -80,10 +80,9 @@ plot_biomass <- function(
   # Filter data for spawning biomass
   filter_data <- prepare_data(
     dat = dat,
-    label_name = "^biomass$|^biomass_retained$|^biomass_dead$",
+    label_name = "^biomass",
     geom = geom,
     group = group,
-    facet = facet,
     module = module,
     scale_amount = scale_amount,
     interactive = interactive
