@@ -50,18 +50,17 @@
 #' caption and alternative text for the figure.
 #' @export
 #'
-#' @examples
-#' \dontrun{
+#' @examplesIf interactive()
+#' library(ggplot2)
 #' plot_spawning_biomass(
-#'   dat = list('base_model'=dat1,'sensitivity1'=dat2,'sensitivity2'=dat3),
+#'   dat = hake,
 #'   geom = "line",
-#'   group= "sex",
-#'   facet = "fleet",
-#'   ref_line = "target",
+#'   group= NULL,
+#'   facet = NULL,
+#'   ref_line = "msy",
 #'   unit_label = "mt",
-#'   scale_amount = 1000
+#'   scale_amount = 1
 #' )
-#' }
 plot_spawning_biomass <- function(
     dat,
     geom = "line",

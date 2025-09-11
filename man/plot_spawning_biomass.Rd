@@ -87,15 +87,16 @@ Plot spawning biomass with a reference line as a dashed line. The figure can
 also be made relative to this reference line rather than in absolute units.
 }
 \examples{
-\dontrun{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+library(ggplot2)
 plot_spawning_biomass(
-  dat = list('base_model'=dat1,'sensitivity1'=dat2,'sensitivity2'=dat3),
+  dat = hake,
   geom = "line",
-  group= "sex",
-  facet = "fleet",
-  ref_line = "target",
+  group= NULL,
+  facet = NULL,
+  ref_line = "msy",
   unit_label = "mt",
-  scale_amount = 1000
+  scale_amount = 1
 )
-}
+\dontshow{\}) # examplesIf}
 }
