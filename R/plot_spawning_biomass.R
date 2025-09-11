@@ -97,6 +97,7 @@ plot_spawning_biomass <- function(
         label = "Spawning Biomass",
         unit_label = unit_label,
         scale_amount = scale_amount,
+
         legend = TRUE
       )
     }
