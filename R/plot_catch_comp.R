@@ -9,8 +9,8 @@
 #' hundreds of the 'unit_label'. This scale will be reflected
 #' in the legend label if proportional is set to FALSE. The default is 1.
 #'
-#' @return A plot ready for a stock assessment report of catch composition.
-#' This plot is made only when catch is explicitly named in the output file.
+#' @return A plot ready for a stock assessment report of catch or landings  composition.
+#' This plot is made only when catch or landings are explicitly named in the output file.
 #' The current plot function does not combine all sources of catch.
 #'
 #' @examples
@@ -33,32 +33,17 @@ plot_catch_comp <- function(
   make_rda = FALSE,
   figures_dir = getwd()
 ) {
-  magnitude <- floor(log10(scale_amount))
-  if (magnitude == 0) {
-    scale_unit <- ""
-    unit_mag <- ""
-  } else if (magnitude > 0 & magnitude < 10) {
-    scale_unit <- c(
-      "tens of ",
-      "hundreds of ",
-      "thousands of ",
-      "tens of thousands of ",
-      "hundreds of thousands of ",
-      "millions of ",
-      "tens of millions of ",
-      "hundreds of millions of ",
-      "billions of "
-    )
-    unit_mag <- paste(scale_unit[magnitude])
-  } else {
-    cli::cli_abort("Scale_amount is out of bounds. Please choose a value ranging from 1-1000000000 (one billion) in orders of magnitude (e.g., 1, 10, 100, 1000, etc.)", wrap = TRUE)
-  }
   # Create label for abundance units in legend
-  catch_label <- glue::glue("Catch \n({unit_mag}{unit_label})")
+  catch_label <- label_magnitude(
+    label = "catch",
+    unit_label = unit_label,
+    scale_amount = scale_amount,
+    legend = TRUE
+  )
   # Filter data
   catch <- prepare_data(
     dat = dat,
-    label_name = "catch",
+    label_name = "catch|landings",
     era = era,
     geom = "point",
     group = "age",
