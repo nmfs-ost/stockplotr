@@ -41,7 +41,7 @@ is "estimate")}
 \item{ylab}{a string of the y-axis label. If NULL, it will be set to the name
 of `y`.}
 
-\item{hline}{indicate true or false to place a horizontal line at 1}
+\item{hline}{indicate true or false to place a horizantal line at 1}
 
 \item{...}{inherited arguments from internal functions from ggplot2::geom_xx}
 }
