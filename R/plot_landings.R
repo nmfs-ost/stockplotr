@@ -149,16 +149,6 @@
 #     )
 #   }
 
-#   # add more key quantities included as arguments in this fxn
-#   add_more_key_quants(
-#     dat = dat,
-#     topic = topic_label,
-#     fig_or_table = fig_or_table,
-#     dir = figures_dir,
-#     end_year = end_year,
-#     units = unit_label
-#   ) |> suppressWarnings()
-
 #   # extract this plot's caption and alt text
 #   caps_alttext <- extract_caps_alttext(
 #     topic_label = topic_label,

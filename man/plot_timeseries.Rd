@@ -15,9 +15,21 @@ plot_timeseries(
   facet = NULL,
   ...
 )
+
+plot_timeseries(
+  dat,
+  x = "year",
+  y = "estimate",
+  geom = "line",
+  xlab = "Year",
+  ylab = NULL,
+  group = NULL,
+  facet = NULL,
+  ...
+)
 }
 \arguments{
-\item{dat}{filtered data frame from standard output file(s) preformatted for
+\item{dat}{filtered data frame from standard output file(s) pre-formatted for
 the target label from \link[stockplotr]{prepare_data}}
 
 \item{x}{a string of the column name of data used to plot on the x-axis (default 
@@ -41,8 +53,15 @@ of `y`.}
 (e.g. "year", "area", etc.)}
 
 \item{...}{inherited arguments from internal functions from ggplot2::geom_xx}
+
+\item{hline}{indicate true or false to place a horizontal line at 1}
 }
 \value{
+Create a time series plot for a stock assessment report. The user 
+has options to create a line, point, or area plot where the x-axis is year 
+and Y can vary for any time series quantity. Currently, grouping is
+restricted to one group where faceting can be any number of facets.
+
 Create a time series plot for a stock assessment report. The user 
 has options to create a line, point, or area plot where the x-axis is year 
 and Y can vary for any time series quantity. Currently, grouping is
@@ -50,8 +69,20 @@ restricted to one group where faceting can be any number of facets.
 }
 \description{
 Plot time series trends
+
+Create plot with error
 }
 \examples{
+\dontrun{
+plot_timeseries(dat,
+               x = "year",
+               y = "estimate",
+               geom = "line",
+               xlab = "Year",
+               ylab = "Biomass",
+               group = "fleet",
+               facet = "area")
+}
 \dontrun{
 plot_timeseries(dat,
                x = "year",
