@@ -8,15 +8,14 @@ test_that("plot_recruitment_deviations generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
     plot_recruitment_deviations(out_new,
-      end_year = 2022
-    )
+      module = "SPAWN_RECRUIT")
   )
 
   # expect error-free plot with many arguments
   expect_no_error(
     plot_recruitment_deviations(
       out_new,
-      end_year = 2022,
+      module = "SPAWN_RECRUIT",
       make_rda = FALSE,
       figures_dir = getwd()
     )
@@ -26,7 +25,7 @@ test_that("plot_recruitment_deviations generates plots without errors", {
   expect_s3_class(
     plot_recruitment_deviations(
       out_new,
-      end_year = 2022,
+      module = "SPAWN_RECRUIT",
       make_rda = FALSE,
       figures_dir = getwd()
     ),
@@ -38,7 +37,7 @@ test_that("rda file made when indicated", {
   # export rda
   plot_recruitment_deviations(
     out_new,
-    end_year = 2022,
+    module = "SPAWN_RECRUIT",
     make_rda = TRUE,
     figures_dir = getwd()
   )
@@ -52,14 +51,3 @@ test_that("rda file made when indicated", {
   unlink(fs::path(getwd(), "figures"), recursive = T)
 })
 
-test_that("plot_recruitment_deviations generates error with future end_year", {
-  # expect error
-  expect_error(
-    plot_recruitment_deviations(
-      out_new,
-      end_year = 2035,
-      make_rda = TRUE,
-      figures_dir = getwd()
-    )
-  )
-})

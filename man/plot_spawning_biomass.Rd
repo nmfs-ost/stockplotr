@@ -6,40 +6,56 @@
 \usage{
 plot_spawning_biomass(
   dat,
-  unit_label = "mt",
-  scale_amount = 1,
+  geom = "line",
+  group = NULL,
+  facet = NULL,
   ref_line = "msy",
-  ref_point = NULL,
-  end_year = format(Sys.Date(), "\%Y"),
+  unit_label = "metric tons",
+  era = "time",
+  module = NULL,
+  scale_amount = 1,
   relative = FALSE,
   make_rda = FALSE,
-  figures_dir = getwd()
+  figures_dir = getwd(),
+  interactive = FALSE,
+  ...
 )
 }
 \arguments{
-\item{dat}{A data frame returned from \link[asar]{convert_output}}
+\item{dat}{A data frame or names list of data frames returned from
+\link[asar]{convert_output}. The first data frame in the list is used in
+calculation of a reference line if one is present}
 
-\item{unit_label}{units for spawning_biomass}
+\item{geom}{A string stating the geom used for the plot. Default is "line".
+Options include "line", "point", or "area"}
 
-\item{scale_amount}{A number describing how much to scale down the quantities
-shown on the y axis. For example, scale_amount = 100 would scale down a value
-from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
+\item{group}{a string of a single column that groups the data (e.g. "fleet",
+"sex", "area", etc.). Currently can only have one level of grouping.}
+
+\item{facet}{a string or vector of strings of a column that facets the data
+(e.g. "year", "area", etc.)}
 
 \item{ref_line}{A string specifying the type of reference you want to
-compare spawning biomass to. The default is `"msy"`, which looks for
+compare spawning biomass to. The default is `"target"`, which looks for
 `"spawning_biomass_target"` in the `"label"` column of `dat`. The actual
 searching in `dat` is case agnostic and will work with either upper- or
 lower-case letters but you must use one of the options specified in the
 default list to ensure that the label on the figure looks correct
-regardless of how it is specified in `dat`. Other possibilities may include
-"target", "MSY", and "unfished".}
+regardless of how it is specified in `dat`.}
 
-\item{ref_point}{A known value of the reference point along with the label
-for the reference point as specified in the output file. Please use this
-option if the ref_line cannot find your desired point. Indicate the
-reference point in the form c("label" = value).}
+\item{unit_label}{units for spawning_biomass}
 
-\item{end_year}{Last year of assessment. Default is the current year.}
+\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or 
+projected ("fore") data if filtering should occur. Defualt is set to "time" which is 
+the current time. To plot all data, set era to NULL.}
+
+\item{module}{(Optional) A string indicating the linked module_name associated
+with the label for the plot if known. Default is NULL. By default, the function
+will select the most relevant module if more than 1 exists.}
+
+\item{scale_amount}{A number describing how much to scale down the quantities
+shown on the y axis. For example, scale_amount = 100 would scale down a value
+from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
 
 \item{relative}{A logical value specifying if the resulting figures should
 be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
@@ -53,6 +69,12 @@ Default is FALSE.}
 \item{figures_dir}{The location of the folder containing the generated figure
 rda files ("figures") that will be created if the argument `make_rda` = TRUE.
 Default is the working directory.}
+
+\item{interactive}{TRUE/FALSE; indicate whether the environment in which the
+function is operating  is interactive. This bypasses some options for
+filtering when preparing data for the plot. Default is FALSE.}
+
+\item{...}{Arguments called from ggplot2::geom_line or ggplot2::geom_point}
 }
 \value{
 Plot spawning biomass from the results of an assessment model translated to
@@ -65,25 +87,14 @@ also be made relative to this reference line rather than in absolute units.
 }
 \examples{
 \dontrun{
-plot_spawning_biomass(dat)
-
 plot_spawning_biomass(
-  dat,
-  unit_label = "my_unit",
-  ref_line = "msy",
-  end_year = 2024,
-  figures_dir = getwd()
-)
-
-plot_spawning_biomass(
-  dat,
-  unit_label = "my_unit",
-  scale_amount = 100,
-  ref_point = 1000,
-  end_year = 2024,
-  relative = TRUE,
-  make_rda = TRUE,
-  figures_dir = getwd()
+  dat = list('base_model'=dat1,'sensitivity1'=dat2,'sensitivity2'=dat3),
+  geom = "line",
+  group= "sex",
+  facet = "fleet",
+  ref_line = "target",
+  unit_label = "mt",
+  scale_amount = 1000
 )
 }
 }

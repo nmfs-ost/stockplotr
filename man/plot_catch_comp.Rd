@@ -2,33 +2,63 @@
 % Please edit documentation in R/plot_catch_comp.R
 \name{plot_catch_comp}
 \alias{plot_catch_comp}
-\title{Plot catch composition by fleet}
+\title{Plot catch composition}
 \usage{
 plot_catch_comp(
   dat,
-  unit_label = "metric tons",
-  end_year = NULL,
+  facet = NULL,
+  era = "time",
+  unit_label = "mt",
+  scale_amount = 1,
+  proportional = TRUE,
   make_rda = FALSE,
-  rda_dir = getwd()
+  figures_dir = getwd()
 )
 }
 \arguments{
 \item{dat}{A data frame returned from \link[asar]{convert_output}}
 
+\item{facet}{a string or vector of strings of column(s) that 
+groups the data (e.g. "fleet", "sex", "area", etc.).}
+
 \item{unit_label}{indicate the name of the units of catch as to label the axis}
 
-\item{end_year}{Last year of assessment. Default is the current year.}
+\item{scale_amount}{A number describing how much to scale down the catch at
+age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders
+of magnitude (e.g., 1, 10, 100, 1000, etc.). For example, scale_amount = 100
+would scale down a value from 500,000 --> 5,000 and would report catch in
+hundreds of the 'unit_label'. This scale will be reflected
+in the legend label if proportional is set to FALSE. The default is 1.}
+
+\item{proportional}{Set size of points relative to z when TRUE, point
+size are relative to one another while when set to FALSE, point size
+is relative to z}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
-the rda will be exported to the folder indicated in the argument "figures_dir".
+the .rda will be exported to the folder indicated in the argument "rda_dir".
 Default is FALSE.}
+
+\item{figures_dir}{The location of the folder containing the generated .rda files
+("rda_files") that will be created if the argument `make_rda` = TRUE.
+Default is the working directory.}
 }
 \value{
-A plot ready for a stock assessment report of catch composition by fleet.
-This plot is made only when landings are explicitly named in the output file.
+A plot ready for a stock assessment report of catch composition.
+This plot is made only when catch is explicitly named in the output file.
 The current plot function does not combine all sources of catch.
 }
 \description{
-Plot catch composition by fleet
+Plot catch composition
+}
+\examples{
+\dontrun{
+plot_catch_comp(
+  dat,
+  facet = "area",
+  unit_label = "mt",
+  scale_amount = 100,
+  make_rda = TRUE,
+  figures_dir = getwd())
+}
 }

@@ -29,7 +29,9 @@ save_all_plots(
 )
 }
 \arguments{
-\item{dat}{A data frame returned from \link[asar]{convert_output}}
+\item{dat}{A data frame or names list of data frames returned from
+\link[asar]{convert_output}. The first data frame in the list is used in
+calculation of a reference line if one is present}
 
 \item{recruitment_unit_label}{Units for recruitment}
 
@@ -37,8 +39,6 @@ save_all_plots(
 the recruitment quantities shown on the y axis. For example,
 recruitment_scale_amount = 100 would scale down a value from 500,000 -->
 5,000. This scale will be reflected in the y axis label.}
-
-\item{end_year}{Last year of assessment. Default is the current year.}
 
 \item{relative}{A logical value specifying if the resulting figures should
 be relative spawning biomass. The default is `FALSE`. `ref_line` indicates

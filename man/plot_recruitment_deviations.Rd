@@ -6,15 +6,30 @@
 \usage{
 plot_recruitment_deviations(
   dat,
-  end_year = format(Sys.Date(), "\%Y"),
+  module = NULL,
+  era = "time",
+  interactive = TRUE,
   make_rda = FALSE,
-  figures_dir = getwd()
+  figures_dir = getwd(),
+  ...
 )
 }
 \arguments{
-\item{dat}{A data frame returned from \link[asar]{convert_output}}
+\item{dat}{A data frame or names list of data frames returned from
+\link[asar]{convert_output}. The first data frame in the list is used in
+calculation of a reference line if one is present}
 
-\item{end_year}{Last year of assessment. Default is the current year.}
+\item{module}{(Optional) A string indicating the linked module_name associated
+with the label for the plot if known. Default is NULL. By default, the function
+will select the most relevant module if more than 1 exists.}
+
+\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or 
+projected ("fore") data if filtering should occur. Defualt is set to "time" which is 
+the current time. To plot all data, set era to NULL.}
+
+\item{interactive}{TRUE/FALSE; indicate whether the environment in which the
+function is operating  is interactive. This bypasses some options for
+filtering when preparing data for the plot. Default is FALSE.}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
@@ -24,6 +39,8 @@ Default is FALSE.}
 \item{figures_dir}{The location of the folder containing the generated figure
 rda files ("figures") that will be created if the argument `make_rda` = TRUE.
 Default is the working directory.}
+
+\item{...}{Arguments called from ggplot2::geom_line or ggplot2::geom_point}
 }
 \value{
 Plot recruitment deviations relative to one over time from an
@@ -36,13 +53,11 @@ Plot Recruitment Deviations
 }
 \examples{
 \dontrun{
-plot_recruitment_deviations(dat)
-
 plot_recruitment_deviations(
-  dat,
-  end_year = 2024,
+  dat = list("model1"=dat1,"model2"=dat2),
   make_rda = TRUE,
-  figures_dir = getwd()
+  figures_dir = getwd(),
+  size = 3
 )
 }
 }
