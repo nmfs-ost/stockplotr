@@ -334,7 +334,7 @@ plot_timeseries <- function(
   # Calc axis breaks
   x_n_breaks <- axis_breaks(dat)
   breaks <- ggplot2::scale_x_continuous(
-    n.breaks = x_n_breaks,
+    breaks = x_n_breaks,
     guide = ggplot2::guide_axis(
       minor.ticks = TRUE
     )
