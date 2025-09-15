@@ -153,7 +153,7 @@ plot_timeseries <- function(
   # Calc axis breaks
   x_n_breaks <- axis_breaks(dat)
   breaks <- ggplot2::scale_x_continuous(
-    n.breaks = x_n_breaks,
+    breaks = x_n_breaks,
     guide = ggplot2::guide_axis(
       minor.ticks = TRUE
     )
@@ -344,7 +344,7 @@ plot_aa <- function(
     ) +
     # Add axis breaks
     ggplot2::scale_x_continuous(
-      n.breaks = x_n_breaks,
+      breaks = x_n_breaks,
       guide = ggplot2::guide_axis(minor.ticks = TRUE)
     ) +
     ggplot2::scale_y_continuous(
@@ -532,24 +532,30 @@ reference_line <- function(
 #------------------------------------------------------------------------------
 
 axis_breaks <- function(data){
+
+  # Get the range of the x-axis data (assuming it's a numeric vector)
+  x_range <- range(data[["year"]], na.rm = TRUE)
+  
+  # Calculate pretty breaks for the x-axis
+  scales::breaks_pretty()(x_range)
+
   # change plot breaks
-  x_n_breaks <- round(length(data[["year"]]) / 10)
-  if (x_n_breaks <= 5) {
-    x_n_breaks <- round(length(data[["year"]]) / 5)
-    if (x_n_breaks <= 2) {
-      x_n_breaks <- round(length(data[["year"]]))
-    }
-  } else if (x_n_breaks > 10) {
-    if (x_n_breaks < 20) {
-      x_n_breaks <- round(length(data[["year"]]) / 15)
-    } else if (x_n_breaks >=20 & x_n_breaks < 50) {
-      x_n_breaks <- round(length(data[["year"]]) / 20)
-    } else {
-      x_n_breaks <- round(length(data[["year"]]) / 35)
-    }
-    
-  }
-  x_n_breaks
+  # x_n_breaks <- round(length(data[["year"]]) / 10)
+  # if (x_n_breaks <= 5) {
+  #   x_n_breaks <- round(length(data[["year"]]) / 5)
+  #   if (x_n_breaks <= 2) {
+  #     x_n_breaks <- round(length(data[["year"]]))
+  #   }
+  # } else if (x_n_breaks > 10) {
+  #   if (x_n_breaks < 20) {
+  #     x_n_breaks <- round(length(data[["year"]]) / 15)
+  #   } else if (x_n_breaks >=20 & x_n_breaks < 50) {
+  #     x_n_breaks <- round(length(data[["year"]]) / 20)
+  #   } else {
+  #     x_n_breaks <- round(length(data[["year"]]) / 35)
+  #   }
+  # }
+  # x_n_breaks
 }
 
 y_axis_breaks <- function(data){
