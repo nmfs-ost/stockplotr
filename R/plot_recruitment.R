@@ -56,7 +56,8 @@ plot_recruitment <- function(
     geom = "line",
     era = era,
     interactive = interactive,
-    module = module
+    module = module,
+    scale_amount = scale_amount
   ) 
   if (length(unique(recruitment$label)) > 1) {
     recruitment <- recruitment |>
@@ -103,6 +104,9 @@ plot_recruitment <- function(
         color = "red",
         size = 1
       )
+    caption_label <- "recruitment.comp"
+  } else {
+    caption_label <- "recruitment"
   }
 
   # Plot vertical lines if era is not filtering
@@ -130,7 +134,7 @@ plot_recruitment <- function(
   if (make_rda) {
     create_rda(
       object = final,
-      topic_label = "recruitment",
+      topic_label = caption_label,
       fig_or_table = "figure",
       dat = dat,
       dir = figures_dir# ,
