@@ -59,6 +59,14 @@ plot_recruitment <- function(
     module = module,
     scale_amount = scale_amount
   ) 
+  # Check if contains 'rec devs' and filter out
+  if (any(grepl("recruitment_deviations", unique(recruitment$label)))) {
+    if (length(unique(recruitment$label)) > 1) {
+      recruitment <- dplyr::filter(recruitment, !grepl("recruitment_deviations", label))
+    } else {
+      cli::cli_abort("Recruitment not present in selected module. Please re-run and select a new module.")
+    }
+  }
   if (length(unique(recruitment$label)) > 1) {
     recruitment <- recruitment |>
       tidyr::pivot_wider(
