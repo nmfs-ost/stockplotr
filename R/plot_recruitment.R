@@ -146,7 +146,7 @@ plot_recruitment <- function(
   if (make_rda) {
     create_rda(
       object = final,
-      topic_label = "recruitment",
+      topic_label = caption_label,
       fig_or_table = "figure",
       dat = dat,
       dir = figures_dir # ,
