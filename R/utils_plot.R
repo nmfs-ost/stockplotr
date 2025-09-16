@@ -440,19 +440,7 @@ plot_timeseries <- function(
         )
     },
     "line" = {
-      plot + 
-        ggplot2::geom_line(
-          data = dat,
-          ggplot2::aes(
-            .data[[x]],
-            .data[[y]],
-            linetype = group_var,
-            # linetype = ifelse(!is.null(group), .data[[group]], "solid")
-            color = model
-          ),
-          linewidth = 1.0,
-          ...
-        ) +
+      plot +
         ggplot2::geom_ribbon(
           dat = dat|> dplyr::filter(!is.na(estimate_lower)),
           ggplot2::aes(
@@ -462,6 +450,18 @@ plot_timeseries <- function(
           ),
           colour = "grey",
           alpha = 0.3
+        ) + 
+        ggplot2::geom_line(
+          data = dat,
+          ggplot2::aes(
+            .data[[x]],
+            .data[[y]],
+            linetype = group_var,
+            # linetype = ifelse(!is.null(group), .data[[group]], "solid")
+            color = model
+          ),
+          # linewidth = 1.0,
+          ...
         )
     },
     "area" = {
