@@ -22,7 +22,8 @@ theme_noaa <- function(discrete = TRUE,
       panel.background = ggplot2::element_rect(fill = "transparent"),
       panel.grid = ggplot2::element_blank(),
       panel.border = ggplot2::element_rect(colour = "black", fill = NA, linewidth = 0.5),
-      complete = TRUE
+      complete = TRUE,
+      text = ggplot2::element_text(size = 14)
     )
   ) 
     

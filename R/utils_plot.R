@@ -59,11 +59,11 @@ plot_timeseries <- function(
   plot <- switch(
     geom,
     "point" = {
-      point_size = ifelse(
-        is.null(list(...)$size),
-        2.0,
-        list(...)$size
-      )
+      # point_size = ifelse(
+      #   is.null(list(...)$size),
+      #   2.0,
+      #   list(...)$size
+      # )
       plot + 
         ggplot2::geom_point(
           data = dat,
@@ -81,19 +81,7 @@ plot_timeseries <- function(
         )
     },
     "line" = {
-      plot + 
-        ggplot2::geom_line(
-          data = dat,
-          ggplot2::aes(
-            .data[[x]],
-            .data[[y]],
-            linetype = group_var,
-            # linetype = ifelse(!is.null(group), .data[[group]], "solid")
-            color = model
-          ),
-          linewidth = 1.0,
-          ...
-        ) +
+      plot +
         ggplot2::geom_ribbon(
           dat = dat|> dplyr::filter(!is.na(estimate_lower)),
           ggplot2::aes(
@@ -103,6 +91,18 @@ plot_timeseries <- function(
           ),
           colour = "grey",
           alpha = 0.3
+        ) + 
+        ggplot2::geom_line(
+          data = dat,
+          ggplot2::aes(
+            .data[[x]],
+            .data[[y]],
+            linetype = group_var,
+            # linetype = ifelse(!is.null(group), .data[[group]], "solid")
+            color = model
+          ),
+          # linewidth = 1.0,
+          ...
         )
     },
     "area" = {
@@ -224,8 +224,8 @@ plot_error <- function(
       ylab = ylab,
       group = group,
       facet = facet,
-      colour = "black"
-      # ...
+      colour = "black",
+      ...
       ) +
       ggplot2::geom_segment(
         data = dat,

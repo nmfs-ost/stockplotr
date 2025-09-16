@@ -49,7 +49,8 @@ final <- plot_error(
   facet = if(length(unique(filter_data$model)) > 1) "model" else NULL,
   xlab = "Year",
   ylab = "Recruitment Deviations",
-  size = 2
+  # size = 2
+  ...
 ) +
 # ggplot2::facet_wrap(~ model, scales = "free_y") +
 theme_noaa()

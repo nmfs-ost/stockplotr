@@ -88,7 +88,7 @@ plot_spawning_biomass <- function(
         label = "Spawning Biomass",
         unit_label = unit_label,
         scale_amount = scale_amount,
-        legend = FALSE
+        legend = TRUE
       )
     }
   )
@@ -139,7 +139,8 @@ plot_spawning_biomass <- function(
     geom = geom,
     ylab = spawning_biomass_label,
     group = group,
-    facet = facet
+    facet = facet,
+    ...
   )
   # Add reference line
   # getting data set - an ifelse statement in the fxn wasn't working
