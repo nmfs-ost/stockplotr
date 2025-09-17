@@ -87,14 +87,7 @@ plot_biomass <- function(
     scale_amount = scale_amount,
     interactive = interactive
   )
-  # Filter data if there is both a time series of biomass and/or a grouped timeseries of biomass
-  if (!is.null(group) & any(is.na(unique(filter_data[[group]])))) {
-    filter_data <- filter_data |> dplyr::filter(!is.na(.data[[group]]))
-  }
-  if (!is.null(facet) & length(unique(filter_data[[facet]])) > 1) {
-    filter_data <- filter_data |> dplyr::filter(!is.na(.data[[facet]]))
-  }
-  
+ 
   # Calculate estimate if relative
   if (relative) {
     if (!is.null(names(ref_line))) {

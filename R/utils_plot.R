@@ -743,7 +743,7 @@ prepare_data <- function(
   # unsure if want to keep this
   # this is filtering for time series
   # TODO: change or remove in the future when moving to other plot types
-  if (is.null(group)){
+  if (is.null(group) & is.null(facet)){
     plot_data <- plot_data |>
       dplyr::filter(
         !is.na(year),
@@ -766,28 +766,15 @@ prepare_data <- function(
         estimate_upper = mean(estimate_upper, na.rm = TRUE)
       ) |>
       dplyr::ungroup()
-  } else if (group == "none") {
-    plot_data <- plot_data |>
-      dplyr::filter(
-        !is.na(year),
-        is.na(fleet) | length(unique(fleet)) <= 1,
-        is.na(sex) | length(unique(sex)) <= 1,
-        is.na(area) | length(unique(area)) <= 1,
-        is.na(growth_pattern) | length(unique(growth_pattern)) <= 1
-      ) |>
-      dplyr::group_by(
-        year,
-        model,
-        group_var,
-        module_name,
-        label
-      ) |>
-      dplyr::summarise(
-        estimate = mean(estimate, na.rm = TRUE),
-        estimate_lower = mean(estimate_lower, na.rm = TRUE),
-        estimate_upper = mean(estimate_upper, na.rm = TRUE)
-      ) |>
-      dplyr::ungroup()
+  } else if (!is.null(group)) {
+    # Filter data if there is extra data in group/facet
+    if (any(is.na(unique(plot_data[[group]])))) {
+      plot_data <- plot_data |> dplyr::filter(!is.na(.data[[group]]))
+    }
+  } else if (!is.null(facet)) {
+    if (any(is.na(unique(plot_data[[facet]])))) {
+      plot_data <- plot_data |> dplyr::filter(!is.na(.data[[facet]]))
+    }
   }
   
   if (geom == "area") {
