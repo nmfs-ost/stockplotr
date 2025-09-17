@@ -80,7 +80,7 @@ plot_biomass <- function(
   # Filter data for spawning biomass
   filter_data <- prepare_data(
     dat = dat,
-    label_name = "^biomass",
+    label_name = "^biomass$",
     geom = geom,
     group = group,
     module = module,
@@ -123,7 +123,6 @@ plot_biomass <- function(
   if (!is.null(group)) {
     if (group %notin% colnames(filter_data)) group = NULL
   }
- 
   # Calculate estimate if relative
   if (relative) {
     if (!is.null(names(ref_line))) {
