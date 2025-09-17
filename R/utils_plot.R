@@ -151,7 +151,7 @@ plot_timeseries <- function(
   }
   
   # Calc axis breaks
-  x_n_breaks <- axis_breaks(dat)
+  x_n_breaks <- axis_breaks(dat[[x]])
   breaks <- ggplot2::scale_x_continuous(
     breaks = x_n_breaks,
     guide = ggplot2::guide_axis(
@@ -312,9 +312,9 @@ plot_aa <- function(
       )
     )
   # Caclaulate x-axis breaks
-  x_n_breaks <- axis_breaks(dat)
+  x_n_breaks <- axis_breaks(dat[[x]])
   # Calculate y-axis breaks
-  y_n_breaks <- y_axis_breaks(dat)
+  y_n_breaks <- axis_breaks(dat[[y]])
 
   # Initialize gg plot
   plot <- ggplot2::ggplot() +
@@ -522,58 +522,41 @@ reference_line <- function(
       # TODO: need to change this for general process
       x = as.numeric(max(dat$year[dat$era == era_name], na.rm = TRUE)), # - as.numeric(max(dat$year[dat$era == "time"], na.rm = TRUE))/200,
       y = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
-      label = glue::glue("{label_name}_{reference}"), # list(bquote(label_name[.(reference)])),
+      label = glue::glue("{label_name}[{reference}]"), # list(bquote(label_name[.(reference)])),
       parse = TRUE,
       hjust = 1,
-      vjust = 0
+      vjust = 0,
+      size = 5 # this is not foolproof
     )
 }
 
 #------------------------------------------------------------------------------
 
-axis_breaks <- function(data){
+axis_breaks <- function(data_col){
 
   # Get the range of the x-axis data (assuming it's a numeric vector)
-  x_range <- range(data[["year"]], na.rm = TRUE)
+  x_range <- range(data_col, na.rm = TRUE)
   
   # Calculate pretty breaks for the x-axis
   scales::breaks_pretty()(x_range)
-
-  # change plot breaks
-  # x_n_breaks <- round(length(data[["year"]]) / 10)
-  # if (x_n_breaks <= 5) {
-  #   x_n_breaks <- round(length(data[["year"]]) / 5)
-  #   if (x_n_breaks <= 2) {
-  #     x_n_breaks <- round(length(data[["year"]]))
-  #   }
-  # } else if (x_n_breaks > 10) {
-  #   if (x_n_breaks < 20) {
-  #     x_n_breaks <- round(length(data[["year"]]) / 15)
-  #   } else if (x_n_breaks >=20 & x_n_breaks < 50) {
-  #     x_n_breaks <- round(length(data[["year"]]) / 20)
-  #   } else {
-  #     x_n_breaks <- round(length(data[["year"]]) / 35)
-  #   }
-  # }
-  # x_n_breaks
 }
 
-y_axis_breaks <- function(data){
-  # TODO: generalize this so we can input any column for the y-axis values
-  y_n_breaks <- round(length(unique(data[["age"]])))
-  if (y_n_breaks > 80) {
-    y_n_breaks <- round(length(unique(data[["age"]])) / 6)
-  } else if (y_n_breaks > 40) {
-    y_n_breaks <- round(length(unique(data[["age"]])) / 3)
-  }
-  y_n_breaks_minor <- as.vector(unique(data[["age"]]))
-  if (length(y_n_breaks_minor) > 40) {
-    y_n_breaks_minor <- NULL
-  } else if (length(y_n_breaks_minor) > 20) {
-    y_n_breaks_minor <- y_n_breaks_minor[c(TRUE, FALSE)]
-  }
-  list(y_n_breaks_minor, y_n_breaks)
-}
+# y_axis_breaks <- function(data){
+#   # TODO: generalize this so we can input any column for the y-axis values
+#   y_n_breaks <- round(length(unique(data[["age"]])))
+#   if (y_n_breaks > 80) {
+#     y_n_breaks <- round(length(unique(data[["age"]])) / 6)
+#   } else if (y_n_breaks > 40) {
+#     y_n_breaks <- round(length(unique(data[["age"]])) / 3)
+#   }
+#   y_n_breaks_minor <- as.vector(unique(data[["age"]]))
+#   if (length(y_n_breaks_minor) > 40) {
+#     y_n_breaks_minor <- NULL
+#   } else if (length(y_n_breaks_minor) > 20) {
+#     y_n_breaks_minor <- y_n_breaks_minor[c(TRUE, FALSE)]
+#   }
+#   list(y_n_breaks_minor, y_n_breaks)
+# }
 
 #------------------------------------------------------------------------------
 
