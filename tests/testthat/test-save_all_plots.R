@@ -7,11 +7,9 @@
 # test_that("save_all_plots works when all figures/tables are plotted", {
 #   stockplotr::save_all_plots(
 #     out_new,
-#     end_year = 2022,
 #     recruitment_unit_label = "mt",
 #     recruitment_scale_amount = 1,
-#     ref_line = "unfished",
-#     ref_point = 1000,
+#     ref_line = c("unfished"=1000),
 #     ref_line_sb = "target",
 #     indices_unit_label = "CPUE",
 #     figures_tables_dir = getwd()
@@ -57,7 +55,6 @@
 # test_that("save_all_plots works when some figures/tables are not plotted", {
 #   # plot all figs/tables except for plot_biomass
 #   stockplotr::save_all_plots(out_new,
-#     end_year = 2022,
 #     # add an unreal ref_line so plot_biomass doesn't work
 #     ref_line = "not_a_real_ref_line",
 #     ref_line_sb = "target",

@@ -2,7 +2,7 @@
 #'
 #' Export all figures and tables to Rda files within one function.
 #'
-#' @inheritParams plot_recruitment
+#' @inheritParams plot_spawning_biomass
 #' @param recruitment_scale_amount A number describing how much to scale down
 #' the recruitment quantities shown on the y axis. For example,
 #' recruitment_scale_amount = 100 would scale down a value from 500,000 -->
@@ -17,11 +17,8 @@
 #' lower-case letters but you must use one of the options specified in the
 #' default list to ensure that the label on the figure looks correct
 #' regardless of how it is specified in `dat`. Other possibilities may include
-#' "target", "MSY", and "unfished".
-#' @param ref_point A known value of the reference point along with the label
-#' for the reference point as specified in the output file. Please use this
-#' option if the ref_line cannot find your desired point. Indicate the
-#' reference point in the form c("label" = value).
+#' "target", "MSY", and "unfished". When the reference cannot be found, 
+#' indicate the reference line in the form c("label" = value).
 #' @param biomass_scale_amount A number describing how much to scale down the
 #' biomass quantities shown on the y axis. See `recruitment_scale_amount`.
 #' @param landings_unit_label Units for landings
@@ -30,8 +27,6 @@
 #' @param spawning_biomass_scale_amount  A number describing how much to scale down the
 #' spawning biomass quantities shown on the y axis. See `recruitment_scale_amount`.
 #' @param ref_line_sb Identical definition as `ref_line`, but this argument is
-#' applied to plot_spawning_biomass.
-#' @param ref_point_sb Identical definition as `ref_point`, but this argument is
 #' applied to plot_spawning_biomass.
 #' @param abundance_at_age_scale_amount  A number describing how much to scale down the
 #' abundance quantities shown via bubble size. See `recruitment_scale_amount`.
@@ -53,8 +48,6 @@
 #' save_all_plots(dat,
 #'   end_year = 2022,
 #'   ref_line = "unfished",
-#'   ref_point = 13000,
-#'   ref_point_sb = 13000,
 #'   ref_line_sb = "target",
 #'   indices_unit_label = "CPUE",
 #'   biomass_at_age_scale_amount = 1,
@@ -71,7 +64,6 @@ save_all_plots <- function(
     figures_tables_dir = getwd(),
     # imported from plot_biomass
     ref_line = "msy",
-    ref_point = NULL,
     biomass_scale_amount = 1,
     # imported from plot_landings
     landings_unit_label = "mt",
@@ -81,7 +73,6 @@ save_all_plots <- function(
     spawning_biomass_scale_amount = 1,
     # imported from plot_spawning_biomass
     ref_line_sb = "msy",
-    ref_point_sb = NULL,
     # imported from plot_abundance_at_age
     abundance_at_age_scale_amount = 1000,
     abundance_at_age_unit_label = "fish",
@@ -111,7 +102,6 @@ save_all_plots <- function(
         dat,
         unit_label = recruitment_unit_label,
         scale_amount = recruitment_scale_amount,
-        end_year,
         relative,
         make_rda = TRUE,
         figures_dir = figures_tables_dir
@@ -139,8 +129,6 @@ save_all_plots <- function(
         unit_label = biomass_unit_label,
         scale_amount = biomass_scale_amount,
         ref_line,
-        ref_point,
-        end_year,
         relative,
         make_rda,
         figures_dir = figures_tables_dir
@@ -154,8 +142,6 @@ save_all_plots <- function(
       cli::cli_li("biomass_unit_label = {biomass_unit_label}")
       cli::cli_li("biomass_scale_amount = {biomass_scale_amount}")
       cli::cli_li("ref_line = {ref_line}")
-      cli::cli_li("ref_point = {ref_point}")
-      cli::cli_li("end_year = {end_year}")
       cli::cli_li("relative = {relative}")
       print(e)
     }
@@ -167,7 +153,6 @@ save_all_plots <- function(
       cli::cli_h2("plot_landings")
       stockplotr::plot_landings(dat,
         unit_label = landings_unit_label,
-        end_year,
         make_rda,
         figures_dir = figures_tables_dir
       ) # |>
@@ -188,7 +173,6 @@ save_all_plots <- function(
       cli::cli_h2("plot_recruitment_deviations")
       stockplotr::plot_recruitment_deviations(
         dat,
-        end_year,
         make_rda,
         figures_dir = figures_tables_dir
       ) #|>
@@ -218,8 +202,6 @@ save_all_plots <- function(
         unit_label = spawning_biomass_label,
         scale_amount = spawning_biomass_scale_amount,
         ref_line = ref_line_sb,
-        ref_point = ref_point_sb,
-        end_year,
         relative,
         make_rda,
         figures_dir = figures_tables_dir
@@ -233,8 +215,6 @@ save_all_plots <- function(
       cli::cli_li("spawning_biomass_label = {spawning_biomass_label}")
       cli::cli_li("spawning_biomass_scale_amount = {spawning_biomass_scale_amount}")
       cli::cli_li("ref_line_sb = {ref_line_sb}")
-      cli::cli_li("ref_point_sb = {ref_point_sb}")
-      cli::cli_li("end_year = {end_year}")
       cli::cli_li("relative = {relative}")
       print(e)
     }
@@ -247,7 +227,6 @@ save_all_plots <- function(
         dat,
         unit_label = abundance_at_age_unit_label,
         scale_amount = abundance_at_age_scale_amount,
-        end_year,
         make_rda,
         figures_dir = figures_tables_dir
       ) # |>
@@ -269,7 +248,6 @@ save_all_plots <- function(
       plot_catch_comp(
         dat,
         unit_label = catch_unit_label,
-        end_year = end_year,
         make_rda,
         rda_dir
       ) # |>
@@ -318,7 +296,6 @@ save_all_plots <- function(
       cli::cli_h2("table_bnc")
       stockplotr::table_bnc(
         dat,
-        end_year,
         biomass_unit_label,
         catch_unit_label,
         spawning_biomass_label,
@@ -344,7 +321,6 @@ save_all_plots <- function(
       cli::cli_h2("table_indices")
       stockplotr::table_indices(
         dat,
-        end_year,
         make_rda,
         tables_dir = figures_tables_dir
       ) # |>
@@ -364,7 +340,6 @@ save_all_plots <- function(
       cli::cli_h2("table_landings")
       stockplotr::table_landings(dat,
         unit_label = landings_unit_label,
-        end_year,
         make_rda,
         tables_dir = figures_tables_dir
       ) # |>
