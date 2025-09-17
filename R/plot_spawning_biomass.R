@@ -139,8 +139,8 @@ plot_spawning_biomass <- function(
     geom = geom,
     ylab = spawning_biomass_label,
     group = group,
-    facet = facet,
-    ...
+    facet = facet#,
+    # ...
   )
   # Add reference line
   # getting data set - an ifelse statement in the fxn wasn't working

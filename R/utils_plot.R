@@ -743,6 +743,22 @@ prepare_data <- function(
   # unsure if want to keep this
   # this is filtering for time series
   # TODO: change or remove in the future when moving to other plot types
+  if (!is.null(group)) {
+    # Filter data if there is extra data in group/facet
+    if (all(is.na(plot_data[[group]]))) {
+      cli::cli_alert_warning("Data is not indexed by {group}. Setting group to NULL.")
+      group <- NULL
+    } else if (any(is.na(unique(plot_data[[group]])))) {
+      plot_data <- plot_data |> dplyr::filter(!is.na(.data[[group]]))
+    }
+  } else if (!is.null(facet)) {
+    if (dplyr::all_of(is.na(plot_data[[facet]]))) {
+      cli::cli_alert_warning("Data is not indexed by {facet}. Setting facet to NULL.")
+      facet <- NULL
+    } else if (any(is.na(unique(plot_data[[facet]])))) {
+      plot_data <- plot_data |> dplyr::filter(!is.na(.data[[facet]]))
+    }
+  }
   if (is.null(group) & is.null(facet)){
     plot_data <- plot_data |>
       dplyr::filter(
@@ -766,15 +782,6 @@ prepare_data <- function(
         estimate_upper = mean(estimate_upper, na.rm = TRUE)
       ) |>
       dplyr::ungroup()
-  } else if (!is.null(group)) {
-    # Filter data if there is extra data in group/facet
-    if (any(is.na(unique(plot_data[[group]])))) {
-      plot_data <- plot_data |> dplyr::filter(!is.na(.data[[group]]))
-    }
-  } else if (!is.null(facet)) {
-    if (any(is.na(unique(plot_data[[facet]])))) {
-      plot_data <- plot_data |> dplyr::filter(!is.na(.data[[facet]]))
-    }
   }
   
   if (geom == "area") {
