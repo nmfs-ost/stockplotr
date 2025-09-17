@@ -59,7 +59,6 @@ save_all_plots <- function(
     dat,
     recruitment_unit_label = "mt", # changed from unit_label to recruitment_unit_label for specificity
     recruitment_scale_amount = 1,
-    end_year = format(Sys.Date(), "%Y"),
     relative = FALSE,
     figures_tables_dir = getwd(),
     # imported from plot_biomass
