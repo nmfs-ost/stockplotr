@@ -587,6 +587,9 @@ cap_first_letter <- function(s) {
 #' and "area".
 #' @param group Selected grouping for the data. If you want to just summarize
 #' the data across all factors, set group = "none".
+#' @param era A string naming the era of data such as historical ("early"), current ("time"), or 
+#' projected ("fore") data if filtering should occur. Default is set to "time" which is 
+#' the current time. To plot all data, set era to NULL. 
 #' @param scale_amount A number describing how much to scale down the quantities
 #' shown on the y axis.
 #' @param interactive logical. If TRUE, the user will be prompted to select

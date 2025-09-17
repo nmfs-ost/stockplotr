@@ -21,6 +21,10 @@ plot_catch_comp(
 \item{facet}{a string or vector of strings of column(s) that 
 groups the data (e.g. "fleet", "sex", "area", etc.).}
 
+\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or 
+projected ("fore") data if filtering should occur. Default is set to "time" which is 
+the current time. To plot all data, set era to NULL.}
+
 \item{unit_label}{indicate the name of the units of catch as to label the axis}
 
 \item{scale_amount}{A number describing how much to scale down the catch at

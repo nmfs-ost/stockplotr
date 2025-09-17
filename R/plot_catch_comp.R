@@ -8,6 +8,9 @@
 #' would scale down a value from 500,000 --> 5,000 and would report catch in
 #' hundreds of the 'unit_label'. This scale will be reflected
 #' in the legend label if proportional is set to FALSE. The default is 1.
+#' @param era a string naming the era of data such as historical ("early"), current ("time"), or 
+#' projected ("fore") data if filtering should occur. Default is set to "time" which is 
+#' the current time. To plot all data, set era to NULL. 
 #'
 #' @return A plot ready for a stock assessment report of catch or landings  composition.
 #' This plot is made only when catch or landings are explicitly named in the output file.

@@ -17,7 +17,7 @@ plot_spawning_biomass(
   relative = FALSE,
   make_rda = FALSE,
   figures_dir = getwd(),
-  interactive = FALSE,
+  interactive = TRUE,
   ...
 )
 }
