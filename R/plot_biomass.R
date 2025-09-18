@@ -83,6 +83,7 @@ plot_biomass <- function(
     label_name = "^biomass$",
     geom = geom,
     group = group,
+    facet = facet,
     module = module,
     scale_amount = scale_amount,
     interactive = interactive

@@ -279,7 +279,7 @@ plot_timeseries <- function(
             .data[[x]],
             .data[[y]],
             linetype = group_var,
-            # linetype = ifelse(!is.null(group), .data[[group]], "solid")
+            # linetype = ifelse(!is.null(group), group_var, "solid"),
             color = model
           ),
           # linewidth = 1.0,
@@ -291,8 +291,8 @@ plot_timeseries <- function(
         ggplot2::geom_area(
           data = dat,
           ggplot2::aes(
-            .data[[x]],
-            .data[[y]],
+            x = .data[[x]],
+            y = .data[[y]],
             fill = model
           ),
           ...
@@ -923,7 +923,6 @@ prepare_data <- function(
       }
     }
   }
-
   # If group/facet is NULL then filter out/summarize data for plotting
   # unsure if want to keep this
   # TODO: change or remove in the future when moving to other plot types
