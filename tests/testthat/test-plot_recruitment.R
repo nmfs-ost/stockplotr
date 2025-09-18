@@ -7,7 +7,8 @@ load(file.path(
 test_that("plot_recruitment generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_recruitment(out_new
+    plot_recruitment(out_new,
+                     module = "TIME_SERIES"
     )
   )
 
@@ -17,6 +18,7 @@ test_that("plot_recruitment generates plots without errors", {
       out_new,
       unit_label = "mt",
       scale_amount = 10,
+      module = "TIME_SERIES",
       relative = FALSE,
       make_rda = FALSE,
       figures_dir = getwd()
@@ -29,7 +31,8 @@ test_that("plot_recruitment generates plots without errors", {
       out_new,
       unit_label = "mt",
       scale_amount = 10,
-      relative = T,
+      relative = TRUE,
+      module = "TIME_SERIES",
       make_rda = FALSE,
       figures_dir = getwd()
     )
@@ -41,7 +44,8 @@ test_that("plot_recruitment generates plots without errors", {
       out_new,
       unit_label = "mt",
       scale_amount = 10,
-      relative = T,
+      relative = TRUE,
+      module = "TIME_SERIES",
       make_rda = FALSE,
       figures_dir = getwd()
     ),
@@ -53,6 +57,7 @@ test_that("rda file made when indicated", {
   # export rda
   plot_recruitment(
     out_new,
+    module = "TIME_SERIES",
     figures_dir = getwd(),
     make_rda = TRUE
   )
