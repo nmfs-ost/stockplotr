@@ -279,7 +279,7 @@ plot_timeseries <- function(
             .data[[x]],
             .data[[y]],
             linetype = group_var,
-            # linetype = ifelse(!is.null(group), .data[[group]], "solid")
+            # linetype = ifelse(!is.null(group), group_var, "solid"),
             color = model
           ),
           # linewidth = 1.0,
@@ -291,8 +291,8 @@ plot_timeseries <- function(
         ggplot2::geom_area(
           data = dat,
           ggplot2::aes(
-            .data[[x]],
-            .data[[y]],
+            x = .data[[x]],
+            y = .data[[y]],
             fill = model
           ),
           ...
