@@ -95,10 +95,10 @@ plot_timeseries <- function(
         ggplot2::geom_line(
           data = dat,
           ggplot2::aes(
-            .data[[x]],
-            .data[[y]],
+            x = .data[[x]],
+            y = .data[[y]],
             linetype = group_var,
-            # linetype = ifelse(!is.null(group), .data[[group]], "solid")
+            # linetype = ifelse(!is.null(group), group_var, "solid"),
             color = model
           ),
           # linewidth = 1.0,
@@ -110,8 +110,8 @@ plot_timeseries <- function(
         ggplot2::geom_area(
           data = dat,
           ggplot2::aes(
-            .data[[x]],
-            .data[[y]],
+            x = .data[[x]],
+            y = .data[[y]],
             fill = model
           ),
           ...
@@ -587,6 +587,8 @@ cap_first_letter <- function(s) {
 #' and "area".
 #' @param group Selected grouping for the data. If you want to just summarize
 #' the data across all factors, set group = "none".
+#' @param facet a string or vector of strings of a column that facets the data
+#' (e.g. "year", "area", etc.)
 #' @param era A string naming the era of data such as historical ("early"), current ("time"), or 
 #' projected ("fore") data if filtering should occur. Default is set to "time" which is 
 #' the current time. To plot all data, set era to NULL. 
@@ -612,6 +614,7 @@ prepare_data <- function(
     era = "time",
     geom,
     group = NULL,
+    facet = NULL,
     scale_amount = 1,
     interactive = TRUE) {
   # TODO: add option to scale data
@@ -680,7 +683,7 @@ prepare_data <- function(
                              1
           )
         )
-    } else if (group == "none"){
+    } else if (all(is.na(data[[group]]))) {
       data <- data |>
         dplyr::mutate(
           group_var = switch(geom,
@@ -689,11 +692,13 @@ prepare_data <- function(
                              1
           )
         )
+      # Set group to NULL if second condition is met
+      group = NULL
     } else {
       data <- data |>
-        dplyr::mutate(
-          group_var = .data[[group]]
-        )
+          dplyr::mutate(
+            group_var = .data[[group]]
+          )
     }
     list_of_data[[get_id(dat)[i]]] <- data
   }
@@ -739,23 +744,26 @@ prepare_data <- function(
     }
   }
   
-  # If group is false then filter out/summarize data for plotting
+  # If group/facet is NULL then filter out/summarize data for plotting
   # unsure if want to keep this
-  # this is filtering for time series
   # TODO: change or remove in the future when moving to other plot types
-  if (!is.null(group)) {
+  if (!is.null(group) & is.null(facet)) {
     # Filter data if there is extra data in group/facet
     if (all(is.na(plot_data[[group]]))) {
       cli::cli_alert_warning("Data is not indexed by {group}. Setting group to NULL.")
-      group <- NULL
+      # Override group to NULL as stated in warning
+      group = NULL
     } else if (any(is.na(unique(plot_data[[group]])))) {
+      # Remove NAs from grouping variable
       plot_data <- plot_data |> dplyr::filter(!is.na(.data[[group]]))
     }
   } else if (!is.null(facet)) {
-    if (dplyr::all_of(is.na(plot_data[[facet]]))) {
+    if (all(is.na(plot_data[[facet]]))) {
       cli::cli_alert_warning("Data is not indexed by {facet}. Setting facet to NULL.")
-      facet <- NULL
+      # Override facet to NULL as stated in the warning
+      facet = NULL
     } else if (any(is.na(unique(plot_data[[facet]])))) {
+      # Remove NAs from faceting variable
       plot_data <- plot_data |> dplyr::filter(!is.na(.data[[facet]]))
     }
   }

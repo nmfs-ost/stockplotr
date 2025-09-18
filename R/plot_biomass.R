@@ -83,10 +83,15 @@ plot_biomass <- function(
     label_name = "^biomass$",
     geom = geom,
     group = group,
+    facet = facet,
     module = module,
     scale_amount = scale_amount,
     interactive = interactive
   )
+  # Override grouping variable when there is only NA's
+  if (!is.null(group)) {
+    if (group %notin% colnames(filter_data)) group = NULL
+  }
  
   # Calculate estimate if relative
   if (relative) {

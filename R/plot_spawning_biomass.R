@@ -104,7 +104,6 @@ plot_spawning_biomass <- function(
     scale_amount <- 1
   }
 
-
   # Filter data for spawning biomass
   filter_data <- prepare_data(
     dat = dat,
@@ -112,10 +111,16 @@ plot_spawning_biomass <- function(
     geom = geom,
     era = era,
     group = group,
+    facet = facet,
     module = module,
     scale_amount = scale_amount,
     interactive = interactive
   )
+
+  # Override grouping variable when there is only NA's
+  if (!is.null(group)) {
+    if (group %notin% colnames(filter_data)) group = NULL
+  }
 
   # Calculate estimate if relative
   if (relative) {
@@ -139,8 +144,8 @@ plot_spawning_biomass <- function(
     geom = geom,
     ylab = spawning_biomass_label,
     group = group,
-    facet = facet#,
-    # ...
+    facet = facet,
+    ...
   )
   # Add reference line
   # getting data set - an ifelse statement in the fxn wasn't working
