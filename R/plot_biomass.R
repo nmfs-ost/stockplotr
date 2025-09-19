@@ -80,7 +80,7 @@ plot_biomass <- function(
   # Filter data for spawning biomass
   filter_data <- prepare_data(
     dat = dat,
-    label_name = "^biomass$",
+    label_name = "^biomass$|^biomass_retained$|^biomass_dead$",
     geom = geom,
     group = group,
     facet = facet,
@@ -88,6 +88,30 @@ plot_biomass <- function(
     scale_amount = scale_amount,
     interactive = interactive
   )
+  # Check df if there is >1 unique(label)
+  if (length(unique(filter_data$label)) > 1 & is.null(facet)) {
+    # summarize data by grouping
+    # specifically aiming to add together SS3 retained, dead, and selected biomass
+    filter_data <- filter_data |>
+      dplyr::group_by(year, model, group_var, era, module_name) |>
+      dplyr::summarise(
+        label = "biomass",
+        estimate = sum(estimate),
+        estimate_lower = mean(estimate_lower),
+        estimate_upper = mean(estimate_upper)
+      )
+  } else if (length(unique(filter_data$label)) > 1 & !is.null(facet)) {
+    # summarize data by grouping and facet(s)
+    # specifically aiming to add together SS3 retained, dead, and selected biomass
+    filter_data <- filter_data |>
+      dplyr::group_by(year, model, group_var, era, module_name, .data[[facet]]) |>
+      dplyr::summarise(
+        label = "biomass",
+        estimate = sum(estimate),
+        estimate_lower = mean(estimate_lower),
+        estimate_upper = mean(estimate_upper)
+      )
+  }
   # Override grouping variable when there is only NA's
   if (!is.null(group)) {
     if (group %notin% colnames(filter_data)) group = NULL
