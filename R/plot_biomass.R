@@ -80,7 +80,7 @@ plot_biomass <- function(
   # Filter data for spawning biomass
   filter_data <- prepare_data(
     dat = dat,
-    label_name = "^biomass$",
+    label_name = "^biomass$|^biomass_retained$|^biomass_dead$",
     geom = geom,
     group = group,
     facet = facet,
@@ -95,7 +95,7 @@ plot_biomass <- function(
       } else {
         filter_data <- dplyr::filter(filter_data, !is.na(fleet))
       }
-    }  
+    }
   # Check df if there is >1 unique(label)
   if (length(unique(filter_data$label)) > 1 & is.null(facet)) {
     # summarize data by grouping
