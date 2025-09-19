@@ -743,7 +743,7 @@ prepare_data <- function(
       }
     }
   }
-  
+
   # If group/facet is NULL then filter out/summarize data for plotting
   # unsure if want to keep this
   # TODO: change or remove in the future when moving to other plot types
@@ -753,6 +753,17 @@ prepare_data <- function(
       cli::cli_alert_warning("Data is not indexed by {group}. Setting group to NULL.")
       # Override group to NULL as stated in warning
       group = NULL
+    } else if (length(unique(plot_data[[group]])) == 1) {
+      cli::cli_alert_warning("Selected grouping variable only contains one unique value.")
+      # Summarize/group data by NULL when there is only 1 unique value to prevent plots with multiple points per year
+      # This might be specific to time series
+      plot_data <- plot_data |>
+        dplyr::group_by(year, model, group_var, era, module_name, label) |>
+        dplyr::summarise(
+          estimate = sum(unique(estimate)), # taking sum of unique values makes sure that when other grouping contain NA, then it doesn't double values?
+          estimate_lower = mean(estimate_lower),
+          estimate_upper = mean(estimate_upper)
+        )
     } else if (any(is.na(unique(plot_data[[group]])))) {
       # Remove NAs from grouping variable
       plot_data <- plot_data |> dplyr::filter(!is.na(.data[[group]]))
@@ -798,6 +809,7 @@ prepare_data <- function(
       model = reorder(.data[["model"]], .data[["estimate"]], function(x) -max(x) )
     )
   }
+
   plot_data
 }
 
