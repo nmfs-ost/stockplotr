@@ -1191,6 +1191,7 @@ filter_data <- function(
       model = reorder(.data[["model"]], .data[["estimate"]], function(x) -max(x))
     )
   }
+
   plot_data
 }
 
