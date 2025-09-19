@@ -78,7 +78,7 @@ plot_biomass <- function(
   # Filter data for spawning biomass
   prepared_data <- filter_data(
     dat = dat,
-    label_name = "^biomass$",
+    label_name = "^biomass$|^biomass_retained$|^biomass_dead$",
     geom = geom,
     group = group,
     facet = facet,
@@ -86,7 +86,7 @@ plot_biomass <- function(
     scale_amount = scale_amount,
     interactive = interactive
   )
-  
+
   # check if all 3 are present and subset for one or two
   if (length(unique(prepared_data$label)) > 1 & any(grepl("biomass$", unique(prepared_data$label)))) {
     # cli::cli_alert_info("> 1 label name. Selecting total biomass only.")
