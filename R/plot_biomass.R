@@ -88,6 +88,14 @@ plot_biomass <- function(
     scale_amount = scale_amount,
     interactive = interactive
   )
+    # Filter out fleet if grouping or faceting variable is not it
+    if (!is.null(group) & "fleet" %in% colnames(filter_data)) {
+      if (group!= "fleet") {
+        filter_data <- dplyr::filter(filter_data, is.na(fleet))
+      } else {
+        filter_data <- dplyr::filter(filter_data, !is.na(fleet))
+      }
+    }  
   # Check df if there is >1 unique(label)
   if (length(unique(filter_data$label)) > 1 & is.null(facet)) {
     # summarize data by grouping
