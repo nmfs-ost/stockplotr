@@ -5,6 +5,7 @@
 #' @param tables_dir The location of the folder containing the generated table
 #' rda files ("tables") that will be created if the argument `make_rda` = TRUE.
 #' Default is the working directory.
+#' @param latex Should the table, before it's formatted with `flextable`, be converted into LaTeX and saved as a text file in `tables_dir`? Default is FALSE.
 #'
 #' @return Create a table ready for a stock assessment report of landed catch by
 #' fleet and year.
@@ -19,14 +20,16 @@
 #'   unit_label = "landings label",
 #'   end_year = 2024,
 #'   make_rda = TRUE,
-#'   tables_dir = getwd()
+#'   tables_dir = getwd(),
+#'   latex = FALSE
 #' )
 #' }
 table_landings <- function(dat,
                            unit_label = "mt",
                            end_year = format(Sys.Date(), "%Y"),
                            make_rda = FALSE,
-                           tables_dir = getwd()) {
+                           tables_dir = getwd(),
+                           latex = FALSE) {
   # TODO: add an option to stratify by gear type
 
   # Units
@@ -48,7 +51,7 @@ table_landings <- function(dat,
   # read standard data file and extract target quantity
   land_dat <- dat |>
     dplyr::filter(
-      c(module_name == "t.series" & grepl("landings_observed", label)) | c(module_name == "CATCH" & grepl("ret_bio", label)),
+      c(module_name == "TIME_SERIES" & grepl("landings_observed_weight", label)) | c(module_name == "CATCH" & grepl("ret_bio", label)),
       # t.series is associated with a conversion from BAM output and CATCH with SS3 converted output
       !is.na(fleet)
     ) |>
@@ -152,6 +155,25 @@ table_landings <- function(dat,
       "Landings",
       land_label
     ))
+  
+  if (latex){
+    if (!file.exists(
+      fs::path(tables_dir, "tables")
+    )) {
+      dir.create(fs::path(tables_dir, "tables"))
+    }
+    
+    # export df with updated captions and alt text to csv
+    utils::write.csv(
+      x = land,
+      file = fs::path(
+        tables_dir,
+        "tables",
+        "table_landings_raw.csv"
+      ),
+      row.names = FALSE
+    )
+  }
 
   # add theming to final table
   final <- land |>
