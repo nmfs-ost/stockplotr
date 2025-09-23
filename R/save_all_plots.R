@@ -39,6 +39,10 @@
 #' @param catch_unit_label Abbreviated units for catch
 #' @param catch_scale_amount A number describing how much to scale down the
 #' catch quantities shown via bubble size. See `recruitment_scale_amount`.
+<<<<<<< HEAD
+=======
+#' @param landings_unit_label Units for landings
+>>>>>>> 6ca5b6c (update save_all_plots and work on tests)
 #' @param proportional T/F to scale size of bubble plots
 #'
 #' @return Rda files for each figure/table.
@@ -68,7 +72,7 @@ save_all_plots <- function(
     ref_line = "msy",
     biomass_scale_amount = 1,
     # imported from plot_landings
-    landings_unit_label = "mt",
+    # landings_unit_label = "mt",
     # imported from plot_recruitment_deviations- zero unique arguments
     # imported from plot_spawn_recruitment
     spawning_biomass_label = "mt",
@@ -82,7 +86,7 @@ save_all_plots <- function(
     biomass_at_age_scale_amount = 1,
     biomass_at_age_unit_label = "mt",
     # imported from plot_indices
-    indices_unit_label = "",
+    # indices_unit_label = "",
     # imported from table_afsc_tier- add potential unique arguments after dev
     # imported from table_bnc
     biomass_unit_label = "mt",
@@ -167,6 +171,10 @@ save_all_plots <- function(
   #     cli::cli_alert_danger("plot_landings failed to run.")
   #     cli::cli_alert("Tip: check that your arguments are correct.")
   #     cli::cli_li("landings_unit_label = {landings_unit_label}")
+<<<<<<< HEAD
+=======
+  #     cli::cli_li("end_year = {end_year}")
+>>>>>>> 6ca5b6c (update save_all_plots and work on tests)
   #     print(e)
   #   }
   # )
@@ -312,6 +320,10 @@ save_all_plots <- function(
   #   error = function(e) {
   #     cli::cli_alert_danger("table_bnc failed to run.")
   #     cli::cli_alert("Tip: check that your arguments are correct.")
+<<<<<<< HEAD
+=======
+  #     cli::cli_li("end_year = {end_year}")
+>>>>>>> 6ca5b6c (update save_all_plots and work on tests)
   #     cli::cli_li("biomass_unit_label = {biomass_unit_label}")
   #     cli::cli_li("catch_unit_label = {catch_unit_label}")
   #     cli::cli_li("spawning_biomass_label = {spawning_biomass_label}")
@@ -333,6 +345,10 @@ save_all_plots <- function(
   #   error = function(e) {
   #     cli::cli_alert_danger("table_indices failed to run.")
   #     cli::cli_alert("Tip: check that your arguments are correct.")
+<<<<<<< HEAD
+=======
+  #     cli::cli_li("end_year = {end_year}")
+>>>>>>> 6ca5b6c (update save_all_plots and work on tests)
   #     print(e)
   #   }
   # )
@@ -352,6 +368,10 @@ save_all_plots <- function(
   #     cli::cli_alert_danger("table_landings failed to run.")
   #     cli::cli_alert("Tip: check that your arguments are correct.")
   #     cli::cli_li("landings_unit_label = {landings_unit_label}")
+<<<<<<< HEAD
+=======
+  #     cli::cli_li("end_year = {end_year}")
+>>>>>>> 6ca5b6c (update save_all_plots and work on tests)
   #     print(e)
   #   }
   # )
