@@ -57,42 +57,42 @@
 #' )
 #' }
 save_all_plots <- function(
-  # imported from plot_recruitment
-  dat,
-  recruitment_unit_label = "mt", # changed from unit_label to recruitment_unit_label for specificity
-  recruitment_scale_amount = 1,
-  relative = FALSE,
-  proportional = TRUE,
-  interactive = FALSE,
-  figures_tables_dir = getwd(),
-  # imported from plot_biomass
-  ref_line = "msy",
-  biomass_scale_amount = 1,
-  # imported from plot_landings
-  landings_unit_label = "mt",
-  # imported from plot_recruitment_deviations- zero unique arguments
-  # imported from plot_stock_recruitment
-  spawning_biomass_label = "mt",
-  spawning_biomass_scale_amount = 1,
-  # imported from plot_spawning_biomass
-  ref_line_sb = "msy",
-  # imported from plot_abundance_at_age
-  abundance_at_age_scale_amount = 1,
-  abundance_at_age_unit_label = "fish",
-  # imported from plot_biomass_at_age
-  biomass_at_age_scale_amount = 1,
-  biomass_at_age_unit_label = "mt",
-  # imported from plot_indices
-  indices_unit_label = "",
-  # imported from table_afsc_tier- add potential unique arguments after dev
-  # imported from table_bnc
-  biomass_unit_label = "mt",
-  catch_unit_label = "mt",
-  catch_scale_amount = 1
-  # imported from table_harvest_projection- add potential unique arguments after dev
-  # imported from table_indices- zero unique arguments
-  # imported from table_landings- zero unique arguments
-) {
+    # imported from plot_recruitment
+    dat,
+    recruitment_unit_label = "mt", # changed from unit_label to recruitment_unit_label for specificity
+    recruitment_scale_amount = 1,
+    relative = FALSE,
+    proportional = TRUE,
+    interactive = FALSE,
+    figures_tables_dir = getwd(),
+    # imported from plot_biomass
+    ref_line = "msy",
+    biomass_scale_amount = 1,
+    # imported from plot_landings
+    # landings_unit_label = "mt",
+    # imported from plot_recruitment_deviations- zero unique arguments
+    # imported from plot_spawn_recruitment
+    spawning_biomass_label = "mt",
+    spawning_biomass_scale_amount = 1,
+    # imported from plot_spawning_biomass
+    ref_line_sb = "msy",
+    # imported from plot_abundance_at_age
+    abundance_at_age_scale_amount = 1,
+    abundance_at_age_unit_label = "fish",
+    # imported from plot_biomass_at_age
+    biomass_at_age_scale_amount = 1,
+    biomass_at_age_unit_label = "mt",
+    # imported from plot_indices
+    # indices_unit_label = "",
+    # imported from table_afsc_tier- add potential unique arguments after dev
+    # imported from table_bnc
+    biomass_unit_label = "mt",
+    catch_unit_label = "mt",
+    catch_scale_amount = 1
+    # imported from table_harvest_projection- add potential unique arguments after dev
+    # imported from table_indices- zero unique arguments
+    # imported from table_landings- zero unique arguments
+    ) {
   make_rda <- TRUE
 
   cli::cli_h1("Starting export of figures and tables")
