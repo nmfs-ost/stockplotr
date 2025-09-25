@@ -69,7 +69,7 @@ save_all_plots <- function(
     ref_line = "msy",
     biomass_scale_amount = 1,
     # imported from plot_landings
-    # landings_unit_label = "mt",
+    landings_unit_label = "mt",
     # imported from plot_recruitment_deviations- zero unique arguments
     # imported from plot_spawn_recruitment
     spawning_biomass_label = "mt",
@@ -83,7 +83,7 @@ save_all_plots <- function(
     biomass_at_age_scale_amount = 1,
     biomass_at_age_unit_label = "mt",
     # imported from plot_indices
-    # indices_unit_label = "",
+    indices_unit_label = "",
     # imported from table_afsc_tier- add potential unique arguments after dev
     # imported from table_bnc
     biomass_unit_label = "mt",
