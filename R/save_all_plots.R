@@ -49,7 +49,6 @@
 #' @examples
 #' \dontrun{
 #' save_all_plots(dat,
-#'   end_year = 2022,
 #'   ref_line = "unfished",
 #'   ref_line_sb = "target",
 #'   indices_unit_label = "CPUE",
@@ -120,7 +119,6 @@ save_all_plots <- function(
       cli::cli_alert("Tip: check that your arguments are correct.")
       cli::cli_li("recruitment_unit_label = {recruitment_unit_label}")
       cli::cli_li("recruitment_scale_amount = {recruitment_scale_amount}")
-      cli::cli_li("end_year = {end_year}")
       cli::cli_li("relative = {relative}")
       print(e)
     }
@@ -170,7 +168,6 @@ save_all_plots <- function(
   #     cli::cli_alert_danger("plot_landings failed to run.")
   #     cli::cli_alert("Tip: check that your arguments are correct.")
   #     cli::cli_li("landings_unit_label = {landings_unit_label}")
-  #     cli::cli_li("end_year = {end_year}")
   #     print(e)
   #   }
   # )
@@ -190,7 +187,6 @@ save_all_plots <- function(
     error = function(e) {
       cli::cli_alert_danger("plot_recruitment_deviations failed to run.")
       cli::cli_alert("Tip: check that your arguments are correct.")
-      cli::cli_li("end_year = {end_year}")
       print(e)
     }
   )
@@ -198,7 +194,6 @@ save_all_plots <- function(
   # plot_spawn_recruitment(dat,
   #                        spawning_biomass_label,
   #                        recruitment_label = recruitment_unit_label,
-  #                        end_year,
   #                        make_rda,
   #                        figures_dir = figures_tables_dir)# |> suppressWarnings() |> invisible()
 
@@ -248,7 +243,6 @@ save_all_plots <- function(
       cli::cli_alert("Tip: check that your arguments are correct.")
       cli::cli_li("abundance_at_age_unit_label = {abundance_at_age_unit_label}")
       cli::cli_li("abundance_at_age_scale_amount = {abundance_at_age_scale_amount}")
-      cli::cli_li("end_year = {end_year}")
       print(e)
     }
   )
@@ -291,7 +285,6 @@ save_all_plots <- function(
   cli::cli_alert("Tip: check that your arguments are correct.")
   cli::cli_li("biomass_at_age_unit_label = {biomass_at_age_unit_label}")
   cli::cli_li("biomass_at_age_scale_amount = {biomass_at_age_scale_amount}")
-  cli::cli_li("end_year = {end_year}")
   print(e)
     }
   )
@@ -320,7 +313,6 @@ save_all_plots <- function(
   #   error = function(e) {
   #     cli::cli_alert_danger("table_bnc failed to run.")
   #     cli::cli_alert("Tip: check that your arguments are correct.")
-  #     cli::cli_li("end_year = {end_year}")
   #     cli::cli_li("biomass_unit_label = {biomass_unit_label}")
   #     cli::cli_li("catch_unit_label = {catch_unit_label}")
   #     cli::cli_li("spawning_biomass_label = {spawning_biomass_label}")
@@ -342,7 +334,6 @@ save_all_plots <- function(
   #   error = function(e) {
   #     cli::cli_alert_danger("table_indices failed to run.")
   #     cli::cli_alert("Tip: check that your arguments are correct.")
-  #     cli::cli_li("end_year = {end_year}")
   #     print(e)
   #   }
   # )
@@ -362,7 +353,6 @@ save_all_plots <- function(
   #     cli::cli_alert_danger("table_landings failed to run.")
   #     cli::cli_alert("Tip: check that your arguments are correct.")
   #     cli::cli_li("landings_unit_label = {landings_unit_label}")
-  #     cli::cli_li("end_year = {end_year}")
   #     print(e)
   #   }
   # )
