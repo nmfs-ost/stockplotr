@@ -8,8 +8,9 @@ save_all_plots(
   dat,
   recruitment_unit_label = "mt",
   recruitment_scale_amount = 1,
-  end_year = format(Sys.Date(), "\%Y"),
   relative = FALSE,
+  proportional = TRUE,
+  interactive = FALSE,
   figures_tables_dir = getwd(),
   ref_line = "msy",
   biomass_scale_amount = 1,
@@ -17,13 +18,14 @@ save_all_plots(
   spawning_biomass_label = "mt",
   spawning_biomass_scale_amount = 1,
   ref_line_sb = "msy",
-  abundance_at_age_scale_amount = 1000,
+  abundance_at_age_scale_amount = 1,
   abundance_at_age_unit_label = "fish",
   biomass_at_age_scale_amount = 1,
   biomass_at_age_unit_label = "mt",
   indices_unit_label = "",
   biomass_unit_label = "mt",
-  catch_unit_label = "mt"
+  catch_unit_label = "mt",
+  catch_scale_amount = 1
 )
 }
 \arguments{
@@ -41,6 +43,12 @@ recruitment_scale_amount = 100 would scale down a value from 500,000 -->
 \item{relative}{A logical value specifying if the resulting figures should
 be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
 which reference point to use.}
+
+\item{proportional}{T/F to scale size of bubble plots}
+
+\item{interactive}{TRUE/FALSE; indicate whether the environment in which the
+function is operating  is interactive. This bypasses some options for
+filtering when preparing data for the plot. Default is FALSE.}
 
 \item{figures_tables_dir}{The location of the folder containing
 figures and tables ("figures" and "tables").}
@@ -83,6 +91,9 @@ biomass quantities shown via bubble size. See `recruitment_scale_amount`.}
 \item{biomass_unit_label}{Abbreviated units for biomass}
 
 \item{catch_unit_label}{Abbreviated units for catch}
+
+\item{catch_scale_amount}{A number describing how much to scale down the
+catch quantities shown via bubble size. See `recruitment_scale_amount`.}
 }
 \value{
 Rda files for each figure/table.
@@ -93,7 +104,6 @@ Export all figures and tables to Rda files within one function.
 \examples{
 \dontrun{
 save_all_plots(dat,
-  end_year = 2022,
   ref_line = "unfished",
   ref_line_sb = "target",
   indices_unit_label = "CPUE",

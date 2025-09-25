@@ -11,6 +11,7 @@ prepare_data(
   era = "time",
   geom,
   group = NULL,
+  facet = NULL,
   scale_amount = 1,
   interactive = TRUE
 )
@@ -35,6 +36,9 @@ and "area".}
 
 \item{group}{Selected grouping for the data. If you want to just summarize
 the data across all factors, set group = "none".}
+
+\item{facet}{a string or vector of strings of a column that facets the data
+(e.g. "year", "area", etc.)}
 
 \item{scale_amount}{A number describing how much to scale down the quantities
 shown on the y axis.}
