@@ -29,6 +29,7 @@ plot_biomass_at_age <- function(
     unit_label = "mt",
     scale_amount = 1000,
     proportional = TRUE,
+    interactive = FALSE,
     make_rda = FALSE,
     figures_dir = getwd()) {
   # Create label for abundance units in legend
@@ -44,7 +45,7 @@ plot_biomass_at_age <- function(
     geom = "point",
     group = "age",
     scale_amount = scale_amount,
-    interactive = FALSE
+    interactive = interactive
   )
   # Check for extracted data, if not return warning and empty plot
   if (nrow(b) == 0) {

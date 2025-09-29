@@ -10,6 +10,7 @@ plot_biomass_at_age(
   unit_label = "mt",
   scale_amount = 1000,
   proportional = TRUE,
+  interactive = FALSE,
   make_rda = FALSE,
   figures_dir = getwd()
 )
