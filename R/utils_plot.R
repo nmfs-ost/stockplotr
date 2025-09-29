@@ -348,8 +348,7 @@ plot_aa <- function(
       guide = ggplot2::guide_axis(minor.ticks = TRUE)
     ) +
     ggplot2::scale_y_continuous(
-      minor_breaks = y_n_breaks[[1]],
-      n.breaks = y_n_breaks[[2]],
+      breaks = y_n_breaks,
       guide = ggplot2::guide_axis(minor.ticks = TRUE)
       # limits = c(min(.data[[y]]), max(.data[[y]])),
       # expand = c(0, NA)

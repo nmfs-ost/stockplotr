@@ -57,7 +57,7 @@ plot_catch_comp <- function(
   if (nrow(catch) == 0) {
     cli::cli_alert_warning("No data found for catch at age. Please check the input data.")
     # Did you use a BAM model?
-    cli::cli_abort()
+    cli::cli_abort("catch was not found in the data.")
   }
 
   # Plot data
