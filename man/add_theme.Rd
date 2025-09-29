@@ -4,10 +4,12 @@
 \alias{add_theme}
 \title{Add NOAA formatting to figure or table}
 \usage{
-add_theme(x)
+add_theme(x, discrete = TRUE)
 }
 \arguments{
 \item{x}{table or figures object from ggplot, base r plot, gt table, flextable, or kable extra}
+
+\item{discrete}{TRUE/FALSE indicate if data input is discrete. Specifically applied to plots.}
 }
 \value{
 Add the standard formatting for stock assessment reports for any

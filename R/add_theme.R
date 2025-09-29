@@ -1,6 +1,7 @@
 #' Add NOAA formatting to figure or table
 #'
 #' @param x table or figures object from ggplot, base r plot, gt table, flextable, or kable extra
+#' @param discrete TRUE/FALSE indicate if data input is discrete. Specifically applied to plots.
 #'
 #' @return Add the standard formatting for stock assessment reports for any
 #' figure or table. Currently, the function is able to format objects from:
@@ -9,7 +10,7 @@
 #'
 #' @examples add_theme(ggplot2::ggplot(data = cars, ggplot2::aes(x = speed, y = dist)) +
 #'   ggplot2::geom_point())
-add_theme <- function(x) {
+add_theme <- function(x, discrete = TRUE) {
   # this is bad coding practice, but what I have for now
   if (class(x)[1] == "flextable") {
     FitFlextableToPage <- function(ft, pgwidth = 6) {
@@ -36,26 +37,39 @@ add_theme <- function(x) {
   } else if (class(x)[1] == "gg" | class(x)[2] == "ggplot") { #  - removed bc wouldn't work with only 1 entry in the class for other object classes
     theme_obj <- x +
       ggplot2::theme(
-        plot.background = ggplot2::element_rect(fill = "transparent"),
-        panel.background = ggplot2::element_rect(fill = "transparent"),
-        panel.grid = ggplot2::element_blank(),
-        panel.border = ggplot2::element_rect(colour = "black", fill = NA, linewidth = 0.5)
-        # text = ggplot2::element_text(size = 12, family = "Cambria")
-      ) +
-      # add nmfs color palette (palette will be default)
-      # I believe including both functions is fine and will
-      # works regardless of the type of plot (one won't be used)
-      nmfspalette::scale_color_nmfs() +
-      nmfspalette::scale_fill_nmfs()
-    # Determining how to treat a legend if there is one
-    # check if one is present
-    # check_for_legend <- function(x) {
-    #   'gtable' %in% class(try(cowplot::get_legend(x), silent = TRUE))
-    # }
-    # if (check_for_legend(x)) {
-    #   move_legend <- theme_obj +
-    #     ggplot2::theme()
-    # }
+          plot.background = ggplot2::element_rect(fill = "transparent"),
+          panel.background = ggplot2::element_rect(fill = "transparent"),
+          panel.grid = ggplot2::element_blank(),
+          panel.border = ggplot2::element_rect(colour = "black", fill = NA, linewidth = 0.5),
+          complete = TRUE,
+          text = ggplot2::element_text(size = 14),
+          plot.margin = ggplot2::margin(0.5,1,0.5, 0.5, "cm")
+        ) 
+    if (discrete){
+      theme_obj <- theme_obj + 
+            ggplot2::scale_color_viridis_d(
+              option = "mako",
+              begin = 0.1,
+              end = 0.85
+            ) +
+            ggplot2::scale_fill_viridis_d(
+              option = "mako",
+              begin = 0.1,
+              end = 0.85
+            )
+    } else {
+      theme_obj <- theme_obj 
+        ggplot2::scale_color_viridis_c(
+          option = "mako",
+          begin = 0.1,
+          end = 0.85
+        ) +
+        ggplot2::scale_fill_viridis_c(
+          option = "mako",
+          begin = 0.1,
+          end = 0.85
+        )
+    }
   } else {
     cli::cli_alert_danger("NOAA formatting cannot be applied to this object.")
   }
