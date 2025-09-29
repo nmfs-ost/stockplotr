@@ -40,7 +40,6 @@ Imports:
     ggplot2,
     glue,
     naniar,
-    nmfspalette,
     quarto,
     scales,
     stringr,
@@ -58,8 +57,7 @@ Suggests:
 VignetteBuilder: 
     knitr
 Remotes:
-    nmfs-ost/asar,
-    nmfs-ost/nmfspalette
+    nmfs-ost/asar
 Config/testthat/edition: 3
 Config/testthat/parallel: false
 Encoding: UTF-8
