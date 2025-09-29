@@ -48,7 +48,7 @@ plot_biomass_at_age <- function(
   )
   # Check for extracted data, if not return warning and empty plot
   if (nrow(b) == 0) {
-    cli::cli_alert_warning("No data found for abundance at age. Please check the input data.")
+    cli::cli_alert_warning("No data found for biomass at age. Please check the input data.")
     return(
       ggplot2::ggplot()
     )
