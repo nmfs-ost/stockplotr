@@ -11,8 +11,7 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
-<meta property="og:title" content="How captions and alternative text are generated">
+<script src="../pkgdown.js"></script><meta property="og:title" content="How captions and alternative text are generated">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -78,6 +77,12 @@
     Issues
   </a>
 </li>
+<li>
+  <a href="https://github.com/nmfs-ost/stockplotr/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+
+  </a>
+</li>
       </ul>
 </div>
 <!--/.nav-collapse -->
@@ -95,7 +100,7 @@
 generated</h1>
             
       
-
+      <small class="dont-index">Source: <a href="https://github.com/nmfs-ost/stockplotr/blob/main/vignettes/how-caps-alttext-are-made.Rmd" class="external-link"><code>vignettes/how-caps-alttext-are-made.Rmd</code></a></small>
       <div class="hidden name"><code>how-caps-alttext-are-made.Rmd</code></div>
 
     </div>
@@ -150,39 +155,46 @@ alternative text.</caption>
 <col width="39%">
 </colgroup>
 <thead><tr class="header">
-<th>label</th>
-<th>type</th>
-<th>caption</th>
-<th>alt_text</th>
+<th colspan="4">label | type | caption | alt_text |</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td>example_fig</td>
-<td>figure</td>
-<td>Example caption for figure.</td>
-<td>Example alternative text for figure.</td>
+<td colspan="3">figure | Example caption for figure. | Example
+alternative text for figure. |</td>
 </tr>
 <tr class="even">
 <td>example_tab</td>
-<td>table</td>
-<td>Example caption for table.</td>
-<td></td>
+<td colspan="3">table | Example caption for table. | |</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section level3">
-<h3 id="extracting-key-quantities-from-model-results">Extracting key quantities from model results<a class="anchor" aria-label="anchor" href="#extracting-key-quantities-from-model-results"></a>
+<h3 id="workflow-in-four-key-steps">Workflow in four key steps<a class="anchor" aria-label="anchor" href="#workflow-in-four-key-steps"></a>
 </h3>
-<p>Next, key quantities are extracted from the model results that have
+<p>Next, key quantities are extracted from the model results (which have
 already been converted into a standardized format using
-<code><a href="https://rdrr.io/pkg/asar/man/convert_output.html" class="external-link">asar::convert_output()</a></code>. Key quantities replace the
-placeholders using two successive functions: <a href="https://github.com/nmfs-ost/stockplotr/blob/main/R/write_captions.R" class="external-link"><code>write_captions()</code></a>
-and <a href="https://github.com/nmfs-ost/stockplotr/blob/00c02487c9dbceaddb43257abdee72594f17b076/R/utils.R#L7" class="external-link"><code>add_more_key_quants()</code></a>.</p>
+<code><a href="https://rdrr.io/pkg/asar/man/convert_output.html" class="external-link">asar::convert_output()</a></code>). Finally, key quantities replace
+the placeholders in the captions/alt text template.</p>
+<p>These steps are performed by four key functions within
+<code><a href="../reference/create_rda.html">create_rda()</a></code>, which is housed within
+<code>utils_rda.R</code>. These functions are:</p>
+<ol style="list-style-type: decimal">
+<li><code><a href="../reference/write_captions.html">write_captions()</a></code></li>
+<li><code>add_more_key_quants()</code></li>
+<li><code><a href="../reference/extract_caps_alttext.html">extract_caps_alttext()</a></code></li>
+<li><code>export_rda</code></li>
+</ol>
+<p>The steps are discussed, below.</p>
 <p><strong>NOTE</strong>: While we extract key quantities as accurately
 as we can, we cannot guarantee that each quantity will be calculated
 perfectly. Input data varies widely. It’s always your responsibility to
 check the accuracy of your figures’ alt text.</p>
+</div>
+<div class="section level3">
+<h3 id="extracting-key-quantities-from-model-results">Extracting key quantities from model results<a class="anchor" aria-label="anchor" href="#extracting-key-quantities-from-model-results"></a>
+</h3>
 <div class="section level4">
 <h4 id="write_captions">
 <code>write_captions()</code><a class="anchor" aria-label="anchor" href="#write_captions"></a>
@@ -197,11 +209,10 @@ Finally, the function exports the updated dataframe as a new csv
 <h4 id="add_more_key_quants">
 <code>add_more_key_quants()</code><a class="anchor" aria-label="anchor" href="#add_more_key_quants"></a>
 </h4>
-<p>This function, which is located in the <a href="https://github.com/nmfs-ost/stockplotr/blob/main/R/utils.R" class="external-link">utils.R
-file</a>, imports the new captions_alt_text.csv as a dataframe, then
-substitutes some placeholders with key quantities that cannot be
-extracted from the model results because they are manually specified by
-the user, or are derived using such quantities (e.g., a figure’s end
+<p>This function imports the new captions_alt_text.csv as a dataframe.
+Then, it substitutes some placeholders with key quantities that cannot
+be extracted from the model results because they are manually specified
+by the user, or are derived using such quantities (e.g., a figure’s end
 year, units, reference point, and more). The function exports the
 dataframe by overwriting the csv with the same filename.</p>
 </div>
@@ -210,12 +221,20 @@ dataframe by overwriting the csv with the same filename.</p>
 <h3 id="connecting-the-tables-figures-with-the-captions-alternative-text">Connecting the tables &amp; figures with the captions &amp;
 alternative text<a class="anchor" aria-label="anchor" href="#connecting-the-tables-figures-with-the-captions-alternative-text"></a>
 </h3>
-<p>Lastly, the <a href="https://github.com/nmfs-ost/stockplotr/blob/main/R/extract_caps_alttext.R" class="external-link"><code>extract_caps_alttext</code></a>
-function selects the appropriate captions and alternative text from
-captions_alt_text.csv when a figure or table is being plotted with the
-argument <code>make_rda = TRUE</code>. The <a href="https://github.com/nmfs-ost/stockplotr/blob/main/R/export_rda.R" class="external-link"><code>export_rda</code></a>
-function exports an rda containing 1) a table and caption, or 2) a
-figure, caption, and alternative text.</p>
+<div class="section level4">
+<h4 id="extract_caps_alttext">
+<code>extract_caps_alttext()</code><a class="anchor" aria-label="anchor" href="#extract_caps_alttext"></a>
+</h4>
+<p>This function selects the appropriate captions and alternative text
+from captions_alt_text.csv when a figure or table.</p>
+</div>
+<div class="section level4">
+<h4 id="export_rda">
+<code>export_rda</code><a class="anchor" aria-label="anchor" href="#export_rda"></a>
+</h4>
+<p>Finally, this function exports an rda containing 1) a table and
+caption, or 2) a figure, caption, and alternative text.</p>
+</div>
 </div>
 </div>
 <div class="section level2">

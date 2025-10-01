@@ -11,8 +11,7 @@
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
-<meta property="og:title" content="Tables and Figures for Stock Assessments">
+<script src="pkgdown.js"></script><meta property="og:title" content="Tables and Figures for Stock Assessments">
 <meta property="og:description" content="Creates exploratory and finished tables and figures for stock assessment documents from U.S. stock assessment model outputs. This packages addresses parts of the stock assessment workflow that interprets outputs of stock assessment models as well as allows the analyst to create report ready tables and figures, reducing the need to create their own and format then when adding into a report. This package is intended to be used in conjuction with `asar`, a partially automated template for writing various stock assessment reports. Throughout development, we will be creating a set of standardized figures and tables for a stock assessment report, developing functions to produce a variety of diagonostic plots, and other helpful materials. The advantage of using this package over others is that it applies to a range of stock assessment model outputs and standardizes them.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -79,6 +78,12 @@
     Issues
   </a>
 </li>
+<li>
+  <a href="https://github.com/nmfs-ost/stockplotr/" class="external-link">
+    <span class="fab fa-github fa-lg"></span>
+
+  </a>
+</li>
       </ul>
 </div>
 <!--/.nav-collapse -->
@@ -117,7 +122,7 @@
 </ol>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"nmfs-ost/stockplotr"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"nmfs-ost/stockplotr"</span><span class="op">)</span></span></code></pre></div>
 <ol start="3" style="list-style-type: decimal">
 <li>From the nmfs-ost r-universe</li>
 </ol>
@@ -146,10 +151,10 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># create a landings figure from your object</span></span>
-<span><span class="fu"><a href="reference/plot_landings.html">plot_landings</a></span><span class="op">(</span><span class="va">converted_output</span><span class="op">)</span></span>
+<span><span class="fu">plot_landings</span><span class="op">(</span><span class="va">converted_output</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># create a landings table from your object</span></span>
-<span><span class="fu"><a href="reference/table_landings.html">table_landings</a></span><span class="op">(</span><span class="va">converted_output</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">table_landings</span><span class="op">(</span><span class="va">converted_output</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="44%">
@@ -195,7 +200,15 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <div class="license">
+    <div class="links">
+<h2 data-toc-skip>Links</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/nmfs-ost/stockplotr/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/nmfs-ost/stockplotr/issues" class="external-link">Report a bug</a></li>
+</ul>
+</div>
+
+<div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
