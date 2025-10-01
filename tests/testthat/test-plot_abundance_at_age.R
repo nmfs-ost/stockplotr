@@ -6,7 +6,6 @@ load(file.path(
 
 # TODO: Fix tests
 test_that("plot_abundance_at_age generates plots without errors", {
-
   # expect error-free plot with minimal arguments
   expect_no_error(
     plot_abundance_at_age(out_new)
@@ -38,7 +37,6 @@ test_that("plot_abundance_at_age generates plots without errors", {
 })
 
 test_that("rda file made when indicated", {
-
   # export rda
   plot_abundance_at_age(
     out_new,
@@ -56,7 +54,6 @@ test_that("rda file made when indicated", {
 })
 
 test_that("plot_abundance_at_age generates error with scaling <1", {
-
   # expect error
   expect_error(
     plot_abundance_at_age(
@@ -85,7 +82,7 @@ test_that("plot_abundance_at_age generates error when abundance label is not fou
     year = years,
     fleet = fleets,
     season = seasons
-  )  |>
+  ) |>
     dplyr::mutate(
       # 'age' is NA for TIME_SERIES
       age = NA_integer_,
@@ -104,7 +101,7 @@ test_that("plot_abundance_at_age generates error when abundance label is not fou
     fleet = fleets,
     season = seasons,
     age = ages
-  )  |>
+  ) |>
     dplyr::mutate(
       # Simulate estimate values for age series (potentially age-dependent)
       estimate = rnorm(dplyr::n(), mean = 500 / age, sd = 100 / age), # Example: older ages have lower biomass
@@ -114,23 +111,25 @@ test_that("plot_abundance_at_age generates error when abundance label is not fou
     )
 
   # Combine the two datasets
-  sample_data <- dplyr::bind_rows(time_series_data, age_series_data)  |>
+  sample_data <- dplyr::bind_rows(time_series_data, age_series_data) |>
     # Arrange for better readability (optional)
-    dplyr::arrange(label, module_name, year, fleet, season, age)  |>
+    dplyr::arrange(label, module_name, year, fleet, season, age) |>
     # Ensure column order matches the request
     dplyr::select(label, estimate, module_name, year, fleet, age, season, uncertainty, uncertainty_label) |>
     # Add era so code doesn't break for now
     dplyr::mutate(era = "time") |>
-    rbind(data.frame(label = "spawning_biomass_msy", 
-                      estimate = 1024, 
-                      module_name = "TIME_SERIES", # DERIVED_QUANTITIES
-                      year = NA_integer_, 
-                      fleet = NA, 
-                      age = NA_integer_, 
-                      season = NA, 
-                      uncertainty = NA_real_, 
-                      uncertainty_label = NA, 
-                      era = "time"))
+    rbind(data.frame(
+      label = "spawning_biomass_msy",
+      estimate = 1024,
+      module_name = "TIME_SERIES", # DERIVED_QUANTITIES
+      year = NA_integer_,
+      fleet = NA,
+      age = NA_integer_,
+      season = NA,
+      uncertainty = NA_real_,
+      uncertainty_label = NA,
+      era = "time"
+    ))
 
   # expect error
   expect_error(

@@ -18,7 +18,7 @@ plot_biomass_at_age(
 \arguments{
 \item{dat}{A data frame returned from \link[asar]{convert_output}}
 
-\item{facet}{a string or vector of strings of column(s) that 
+\item{facet}{a string or vector of strings of column(s) that
 groups the data (e.g. "fleet", "sex", "area", etc.).}
 
 \item{unit_label}{units for abundance}
