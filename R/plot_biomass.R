@@ -12,7 +12,7 @@
 #'   "target", "MSY", and "unfished".
 #' @return Plot total biomass from a stock assessment model as found in a NOAA
 #' stock assessment report. Units of total biomass can either be manually added
-#' or will be extracted from the provided file if possible. There are options #' to return a [ggplot2::ggplot()] object or export an rda object containing 
+#' or will be extracted from the provided file if possible. There are options #' to return a [ggplot2::ggplot()] object or export an rda object containing
 #' associated caption and alternative text for the figure.
 #' @export
 #'
@@ -48,7 +48,6 @@ plot_biomass <- function(
     figures_dir = getwd(),
     interactive = TRUE,
     ...) {
-  
   # TODO: Fix the unit label if scaling. Maybe this is up to the user to do if
   #       they want something scaled then they have to supply a better unit name
   #       or we create a helper function to do this.
@@ -64,19 +63,19 @@ plot_biomass <- function(
       )
     }
   )
-  
+
   # Pull first df if in a list to find reference point
   if (!is.data.frame(dat)) {
     rp_dat <- dat[[1]]
   } else {
     rp_dat <- dat
   }
-  
+
   if (relative & scale_amount > 1) {
     cli::cli_alert_warning("Scale amount is not applicable when relative = TRUE. Resetting scale_amount to 1.")
     scale_amount <- 1
   }
-  
+
   # Filter data for spawning biomass
   filter_data <- prepare_data(
     dat = dat,
@@ -88,14 +87,14 @@ plot_biomass <- function(
     scale_amount = scale_amount,
     interactive = interactive
   )
-    # Filter out fleet if grouping or faceting variable is not it
-    if (!is.null(group) & "fleet" %in% colnames(filter_data)) {
-      if (group!= "fleet") {
-        filter_data <- dplyr::filter(filter_data, is.na(fleet))
-      } else {
-        filter_data <- dplyr::filter(filter_data, !is.na(fleet))
-      }
-    }  
+  # Filter out fleet if grouping or faceting variable is not it
+  if (!is.null(group) & "fleet" %in% colnames(filter_data)) {
+    if (group != "fleet") {
+      filter_data <- dplyr::filter(filter_data, is.na(fleet))
+    } else {
+      filter_data <- dplyr::filter(filter_data, !is.na(fleet))
+    }
+  }
   # Check df if there is >1 unique(label)
   if (length(unique(filter_data$label)) > 1 & is.null(facet)) {
     # summarize data by grouping
@@ -122,9 +121,9 @@ plot_biomass <- function(
   }
   # Override grouping variable when there is only NA's
   if (!is.null(group)) {
-    if (group %notin% colnames(filter_data)) group = NULL
+    if (group %notin% colnames(filter_data)) group <- NULL
   }
- 
+
   # Calculate estimate if relative
   if (relative) {
     if (!is.null(names(ref_line))) {
@@ -140,7 +139,7 @@ plot_biomass <- function(
     filter_data <- filter_data |>
       dplyr::mutate(estimate = estimate / ref_line_val)
   }
-  
+
   plt <- plot_timeseries(
     dat = filter_data,
     y = "estimate",
@@ -151,7 +150,7 @@ plot_biomass <- function(
   )
   # Add reference line
   # getting data set - an ifelse statement in the fxn wasn't working
-  
+
   final <- reference_line(
     plot = plt,
     dat = rp_dat,
@@ -161,7 +160,7 @@ plot_biomass <- function(
     scale_amount = scale_amount
   ) +
     theme_noaa()
-  
+
   ### Make RDA ----
   if (make_rda) {
     create_rda(
