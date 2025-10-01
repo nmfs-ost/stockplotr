@@ -6,9 +6,10 @@
 \usage{
 plot_abundance_at_age(
   dat,
+  facet = NULL,
   unit_label = "fish",
   scale_amount = 1000,
-  end_year = format(Sys.Date(), "\%Y"),
+  proportional = TRUE,
   make_rda = FALSE,
   figures_dir = getwd()
 )
@@ -16,30 +17,36 @@ plot_abundance_at_age(
 \arguments{
 \item{dat}{A data frame returned from \link[asar]{convert_output}}
 
-\item{unit_label}{units for recruitment}
+\item{facet}{a string or vector of strings of column(s) that 
+groups the data (e.g. "fleet", "sex", "area", etc.).}
+
+\item{unit_label}{units for abundance}
 
 \item{scale_amount}{A number describing how much to scale down the abundance at
 age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders
 of magnitude (e.g., 1, 10, 100, 1000, etc.). For example, scale_amount = 100
 would scale down a value from 500,000 --> 5,000 and would report abundance in
 hundreds of fish (if "fish" was the unit_label). This scale will be reflected
-in the legend label. The default is 1,000.}
+in the legend label if proportional is set to FALSE. The default is 1,000.}
 
-\item{end_year}{Last year of assessment. Default is the current year.}
+\item{proportional}{Set size of points relative to z when TRUE, point
+size are relative to one another while when set to FALSE, point size
+is relative to z}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
-the rda will be exported to the folder indicated in the argument "figures_dir".
+the .rda will be exported to the folder indicated in the argument "rda_dir".
 Default is FALSE.}
 
-\item{figures_dir}{The location of the folder containing the generated figure
-rda files ("figures") that will be created if the argument `make_rda` = TRUE.
+\item{figures_dir}{The location of the folder containing the generated .rda files
+("rda_files") that will be created if the argument `make_rda` = TRUE.
 Default is the working directory.}
 }
 \value{
-Plot total abundance (or numbers) at age from a stock assessment model as found in a NOAA
-stock assessment report. Units of abundance can either be manually added
-or will be extracted from the provided file if possible.
+Plot total abundance (or numbers) at age from a stock assessment model
+using a standardized output made from \link[asar]{convert_output}). Units of
+abundance can either be manually added or will be extracted from the provided
+file if possible.
 }
 \description{
 Plot Abundance (or Numbers) at Age (AAA or NAA)
@@ -50,10 +57,11 @@ plot_abundance_at_age(dat)
 
 plot_abundance_at_age(
   dat,
-  unit_label = "my_unit",
-  scale_amount = 10,
-  end_year = 2024,
-  make_rda = TRUE,
+  facet = "area",
+  unit_label = "fish",
+  scale_amount = 1000,
+  proportional = TRUE,
+  make_rda = FALSE,
   figures_dir = getwd()
 )
 }

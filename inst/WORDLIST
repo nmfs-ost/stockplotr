@@ -8,6 +8,7 @@ Modelling
 NAA
 NOAA
 ORCID
+Preformatted
 Rda
 alttext
 asar
@@ -21,6 +22,7 @@ diagonostic
 flextable
 ggplot
 github
+hline
 https
 is’
 kable
@@ -30,9 +32,11 @@ msy
 natively
 nmfs
 ost
+preformatted
 qmd
 rda
 rda's
 satf
 socio
+theming
 unfished

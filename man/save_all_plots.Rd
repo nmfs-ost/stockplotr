@@ -8,28 +8,30 @@ save_all_plots(
   dat,
   recruitment_unit_label = "mt",
   recruitment_scale_amount = 1,
-  end_year = format(Sys.Date(), "\%Y"),
   relative = FALSE,
+  proportional = TRUE,
+  interactive = FALSE,
   figures_tables_dir = getwd(),
   ref_line = "msy",
-  ref_point = NULL,
   biomass_scale_amount = 1,
   landings_unit_label = "mt",
   spawning_biomass_label = "mt",
   spawning_biomass_scale_amount = 1,
   ref_line_sb = "msy",
-  ref_point_sb = NULL,
-  abundance_at_age_scale_amount = 1000,
+  abundance_at_age_scale_amount = 1,
   abundance_at_age_unit_label = "fish",
   biomass_at_age_scale_amount = 1,
   biomass_at_age_unit_label = "mt",
   indices_unit_label = "",
   biomass_unit_label = "mt",
-  catch_unit_label = "mt"
+  catch_unit_label = "mt",
+  catch_scale_amount = 1
 )
 }
 \arguments{
-\item{dat}{A data frame returned from \link[asar]{convert_output}}
+\item{dat}{A data frame or names list of data frames returned from
+\link[asar]{convert_output}. The first data frame in the list is used in
+calculation of a reference line if one is present}
 
 \item{recruitment_unit_label}{Units for recruitment}
 
@@ -38,11 +40,15 @@ the recruitment quantities shown on the y axis. For example,
 recruitment_scale_amount = 100 would scale down a value from 500,000 -->
 5,000. This scale will be reflected in the y axis label.}
 
-\item{end_year}{Last year of assessment. Default is the current year.}
-
 \item{relative}{A logical value specifying if the resulting figures should
 be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
 which reference point to use.}
+
+\item{proportional}{T/F to scale size of bubble plots}
+
+\item{interactive}{TRUE/FALSE; indicate whether the environment in which the
+function is operating  is interactive. This bypasses some options for
+filtering when preparing data for the plot. Default is FALSE.}
 
 \item{figures_tables_dir}{The location of the folder containing
 figures and tables ("figures" and "tables").}
@@ -54,12 +60,8 @@ searching in `dat` is case agnostic and will work with either upper- or
 lower-case letters but you must use one of the options specified in the
 default list to ensure that the label on the figure looks correct
 regardless of how it is specified in `dat`. Other possibilities may include
-"target", "MSY", and "unfished".}
-
-\item{ref_point}{A known value of the reference point along with the label
-for the reference point as specified in the output file. Please use this
-option if the ref_line cannot find your desired point. Indicate the
-reference point in the form c("label" = value).}
+"target", "MSY", and "unfished". When the reference cannot be found, 
+indicate the reference line in the form c("label" = value).}
 
 \item{biomass_scale_amount}{A number describing how much to scale down the
 biomass quantities shown on the y axis. See `recruitment_scale_amount`.}
@@ -72,9 +74,6 @@ biomass quantities shown on the y axis. See `recruitment_scale_amount`.}
 spawning biomass quantities shown on the y axis. See `recruitment_scale_amount`.}
 
 \item{ref_line_sb}{Identical definition as `ref_line`, but this argument is
-applied to plot_spawning_biomass.}
-
-\item{ref_point_sb}{Identical definition as `ref_point`, but this argument is
 applied to plot_spawning_biomass.}
 
 \item{abundance_at_age_scale_amount}{A number describing how much to scale down the
@@ -92,6 +91,9 @@ biomass quantities shown via bubble size. See `recruitment_scale_amount`.}
 \item{biomass_unit_label}{Abbreviated units for biomass}
 
 \item{catch_unit_label}{Abbreviated units for catch}
+
+\item{catch_scale_amount}{A number describing how much to scale down the
+catch quantities shown via bubble size. See `recruitment_scale_amount`.}
 }
 \value{
 Rda files for each figure/table.
@@ -102,10 +104,7 @@ Export all figures and tables to Rda files within one function.
 \examples{
 \dontrun{
 save_all_plots(dat,
-  end_year = 2022,
   ref_line = "unfished",
-  ref_point = 13000,
-  ref_point_sb = 13000,
   ref_line_sb = "target",
   indices_unit_label = "CPUE",
   biomass_at_age_scale_amount = 1,

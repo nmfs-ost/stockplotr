@@ -3,247 +3,198 @@
 #' Plot spawning biomass with a reference line as a dashed line. The figure can
 #' also be made relative to this reference line rather than in absolute units.
 #'
-#' @inheritParams plot_recruitment
+#' @param dat A data frame or names list of data frames returned from
+#' \link[asar]{convert_output}. The first data frame in the list is used in
+#' calculation of a reference line if one is present
+#' @param geom A string stating the geom used for the plot. Default is "line".
+#' Options include "line", "point", or "area"
+#' @param group a string of a single column that groups the data (e.g. "fleet",
+#' "sex", "area", etc.). Currently can only have one level of grouping.
+#' @param facet a string or vector of strings of a column that facets the data
+#' (e.g. "year", "area", etc.)
+#' @param era a string naming the era of data such as historical ("early"), current ("time"), or 
+#' projected ("fore") data if filtering should occur. Default is set to "time" which is 
+#' the current time. To plot all data, set era to NULL. 
 #' @param ref_line A string specifying the type of reference you want to
-#'   compare spawning biomass to. The default is `"msy"`, which looks for
+#'   compare spawning biomass to. The default is `"target"`, which looks for
 #'   `"spawning_biomass_target"` in the `"label"` column of `dat`. The actual
 #'   searching in `dat` is case agnostic and will work with either upper- or
 #'   lower-case letters but you must use one of the options specified in the
 #'   default list to ensure that the label on the figure looks correct
-#'   regardless of how it is specified in `dat`. Other possibilities may include
-#'   "target", "MSY", and "unfished".
-#' @param ref_point A known value of the reference point along with the label
-#'   for the reference point as specified in the output file. Please use this
-#'   option if the ref_line cannot find your desired point. Indicate the
-#'   reference point in the form c("label" = value).
+#'   regardless of how it is specified in `dat`.
 #' @param unit_label units for spawning_biomass
+#' @param module (Optional) A string indicating the linked module_name associated
+#' with the label for the plot if known. Default is NULL. By default, the function
+#' will select the most relevant module if more than 1 exists.
+#' @param scale_amount A number describing how much to scale down the quantities
+#' shown on the y axis. For example, scale_amount = 100 would scale down a value
+#' from 500,000 --> 5,000. This scale will be reflected in the y axis label.
+#' @param relative A logical value specifying if the resulting figures should
+#'   be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
+#'   which reference point to use.
+#' @param make_rda TRUE/FALSE; indicate whether to produce an .rda file containing
+#' a list with the figure/table, caption, and alternative text (if figure). If TRUE,
+#' the rda will be exported to the folder indicated in the argument "figures_dir".
+#' Default is FALSE.
+#' @param figures_dir The location of the folder containing the generated figure
+#' rda files ("figures") that will be created if the argument `make_rda` = TRUE.
+#' Default is the working directory.
+#' @param interactive TRUE/FALSE; indicate whether the environment in which the
+#' function is operating  is interactive. This bypasses some options for
+#' filtering when preparing data for the plot. Default is FALSE.
+#' @param ... Arguments called from ggplot2::geom_line or ggplot2::geom_point 
 #' @return
-#' Plot spawning biomass from the results of an assessment model translated to
-#' the standard output. The [ggplot2::ggplot()] object is returned for further
-#' modifications if needed.
+#' Plot spawning biomass over time from the results of an assessment model translated to
+#' the a standardized output (\link[asar]{convert_output}). There are options to return a
+#' [ggplot2::ggplot()] object or export an rda object containing associated
+#' caption and alternative text for the figure.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' plot_spawning_biomass(dat)
-#'
 #' plot_spawning_biomass(
-#'   dat,
-#'   unit_label = "my_unit",
-#'   ref_line = "msy",
-#'   end_year = 2024,
-#'   figures_dir = getwd()
-#' )
-#'
-#' plot_spawning_biomass(
-#'   dat,
-#'   unit_label = "my_unit",
-#'   scale_amount = 100,
-#'   ref_point = 1000,
-#'   end_year = 2024,
-#'   relative = TRUE,
-#'   make_rda = TRUE,
-#'   figures_dir = getwd()
+#'   dat = list('base_model'=dat1,'sensitivity1'=dat2,'sensitivity2'=dat3),
+#'   geom = "line",
+#'   group= "sex",
+#'   facet = "fleet",
+#'   ref_line = "target",
+#'   unit_label = "mt",
+#'   scale_amount = 1000
 #' )
 #' }
 plot_spawning_biomass <- function(
     dat,
-    unit_label = "mt",
-    scale_amount = 1,
+    geom = "line",
+    group = NULL,
+    facet = NULL,
     ref_line = "msy",
-    ref_point = NULL,
-    end_year = format(Sys.Date(), "%Y"),
+    unit_label = "metric tons",
+    era = "time",
+    module = NULL,
+    scale_amount = 1,
     relative = FALSE,
     make_rda = FALSE,
-    figures_dir = getwd()) {
-  if (!is.null(ref_point)) {
-    ref_line <- names(ref_point)
-  } else if (length(ref_line) > 1) {
-    ref_line <- "target"
-  }
+    figures_dir = getwd(),
+    interactive = TRUE,
+    ...) {
   # TODO: Fix the unit label if scaling. Maybe this is up to the user to do if
   #       they want something scaled then they have to supply a better unit name
   #       or we create a helper function to do this.
   spawning_biomass_label <- ifelse(
     relative,
     yes = "Relative spawning biomass",
-    no = glue::glue("Spawning biomass ({unit_label})")
-  )
-
-  # output <- dat
-  all_years <- dat[["year"]][grepl("^[0-9\\.]+$", dat[["year"]])]
-
-  # create plot-specific variables to use throughout fxn for naming and IDing
-  # Indicate if spawning biomass is relative or not
-  if (relative) {
-    topic_label <- "relative.spawning.biomass"
-  } else {
-    topic_label <- "spawning.biomass"
-  }
-
-  # identify output
-  fig_or_table <- "figure"
-
-  # check year isn't past end_year if not projections plot
-  check_year(
-    end_year = end_year,
-    fig_or_table = fig_or_table,
-    topic = topic_label
-  )
-
-  # Commenting out bc this might not be consistent now with new setup 23dec2024
-  # stopifnot(any(end_year >= all_years))
-
-  # Select value for reference line and label
-  # TODO: add case if ref_line not indicated or hard to find - find one of the
-  # options and set as ref_line
-  if (!is.null(ref_point)) {
-    ref_line_val <- as.numeric(ref_point)
-  } else {
-    if (inherits(try(solve(as.numeric(dat[
-      grep(
-        pattern = glue::glue("^spawning_biomass.*{tolower(ref_line)}$"),
-        x = dat[["label"]]
-      ),
-      "estimate"
-    ])), silent = TRUE), "try-error")) {
-      ref_line_val <- NULL
-    } else {
-      ref_line_val <- as.numeric(dat[
-        grep(
-          pattern = glue::glue("^spawning_biomass.*{tolower(ref_line)}$"),
-          x = dat[["label"]]
-        ),
-        "estimate"
-      ])
-    }
-    # ref_line_val <- as.numeric(dat[
-    #   grep(
-    #     pattern = glue::glue("^biomass.*{tolower(ref_line)}$"),
-    #     x = dat[["label"]]
-    #   ),
-    #   "estimate"
-    # ])
-  }
-  if (length(ref_line_val) == 0) {
-    cli::cli_alert_warning(
-      "The resulting reference value of `spawning_biomass_{ref_line}` was not found in `dat[[\"label\"]]`.",
-      wrap = TRUE
-    )
-    cli::cli_alert_warning("Reference line will not be plotted on the figure.")
-  } else if (length(ref_line_val) > 1) {
-    cli::cli_alert_warning(
-      "More than one of the resulting reference value of 'spawing_biomass_{ref_line}` was not in `dat[[\"label\"]]`. \n Both reference points will be plotted on the figure.",
-      wrap = TRUE
-    )
-  }
-  sb <- dat |>
-    dplyr::filter(
-      label == "spawning_biomass",
-      module_name %in% c("DERIVED_QUANTITIES", "t.series"),
-      year <= end_year
-    ) |>
-    dplyr::mutate(
-      estimate = as.numeric(estimate),
-      year = as.numeric(year),
-      estimate_y = estimate / ifelse(relative, ref_line_val, scale_amount),
-      # TODO: Determine what unit uncertainty is in, following is for normal sd
-      # TODO: This fails for Bayesian estimation
-      estimate_lower = (estimate - 1.96 * uncertainty) /
-        ifelse(relative, ref_line_val, scale_amount),
-      estimate_upper = (estimate + 1.96 * uncertainty) /
-        ifelse(relative, ref_line_val, scale_amount)
-    )
-
-  # Choose number of breaks for x-axis
-  x_n_breaks <- round(length(sb[["year"]]) / 10)
-  if (x_n_breaks <= 5) {
-    x_n_breaks <- round(length(sb[["year"]]))
-  }
-
-  plt <- ggplot2::ggplot(data = sb) +
-    ggplot2::geom_line(
-      ggplot2::aes(
-        x = year,
-        y = estimate_y
-      ),
-      linewidth = 1
-    ) +
-    {
-      if (!is.null(ref_line_val)) ggplot2::geom_hline(yintercept = ref_line_val / ifelse(relative, ref_line_val, scale_amount), linetype = 2)
-    } +
-    # Only add confidence intervals for the non NA estimates
-    # which allows for no warnings if uncertainty = NA
-    ggplot2::geom_ribbon(
-      data = sb |> dplyr::filter(!is.na(estimate_lower)),
-      ggplot2::aes(
-        x = year,
-        ymin = estimate_lower,
-        ymax = estimate_upper
-      ),
-      colour = "grey",
-      alpha = 0.3,
-    ) +
-    ggplot2::labs(
-      x = "Year",
-      y = spawning_biomass_label
-    ) +
-    ggplot2::scale_x_continuous(
-      n.breaks = x_n_breaks,
-      guide = ggplot2::guide_axis(minor.ticks = TRUE)
-    ) +
-    ggplot2::annotate(
-      geom = "text",
-      x = as.numeric(end_year) - (0.2 * length(sb$year)),
-      y = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
-      label = list(bquote(SB[.(ref_line)])),
-      parse = TRUE
-    ) +
-    ggplot2::expand_limits(y = 0)
-
-  final <- suppressWarnings(add_theme(plt))
-
-  # export figure to rda if argument = T
-  if (make_rda == TRUE) {
-    # run write_captions.R if its output doesn't exist
-    if (!file.exists(
-      fs::path(getwd(), "captions_alt_text.csv")
-    )
-    ) {
-      stockplotr::write_captions(
-        dat = dat,
-        dir = figures_dir,
-        year = end_year
+    no = {
+      label_magnitude(
+        label = "Spawning Biomass",
+        unit_label = unit_label,
+        scale_amount = scale_amount,
+        legend = TRUE
       )
     }
+  )
+  # Pull first df if in a list to find reference point
+  if (!is.data.frame(dat)) {
+    rp_dat <- dat[[1]]
+  } else {
+    rp_dat <- dat
+  }
 
-    # add more key quantities included as arguments in this fxn
-    add_more_key_quants(
-      dat,
-      topic = topic_label,
-      fig_or_table = fig_or_table,
-      dir = figures_dir,
-      end_year = end_year,
-      units = unit_label,
-      ref_pt = ref_point,
-      ref_line = ref_line,
-      scaling = scale_amount
-    )
+  if (relative & scale_amount > 1) {
+    cli::cli_alert_warning("Scale amount is not applicable when relative = TRUE. Resetting scale_amount to 1.")
+    scale_amount <- 1
+  }
 
-    # extract this plot's caption and alt text
-    caps_alttext <- extract_caps_alttext(
-      topic_label = topic_label,
-      fig_or_table = fig_or_table,
-      dir = figures_dir
-    )
+  # Filter data for spawning biomass
+  filter_data <- prepare_data(
+    dat = dat,
+    label_name = "spawning_biomass$",
+    geom = geom,
+    era = era,
+    group = group,
+    facet = facet,
+    module = module,
+    scale_amount = scale_amount,
+    interactive = interactive
+  )
 
-    export_rda(
+  # Override grouping variable when there is only NA's
+  if (!is.null(group)) {
+    if (group %notin% colnames(filter_data)) group = NULL
+  }
+
+  # Calculate estimate if relative
+  if (relative) {
+    if (!is.null(names(ref_line))) {
+      ref_line_val <- ref_line[[1]]
+      # ref_line <- names(ref_line)
+    } else {
+      ref_line_val <- calculate_reference_point(
+        dat = rp_dat,
+        reference_name = glue::glue("spawning_biomass_", ref_line)
+      ) / scale_amount
+    }
+    if (is.na(ref_line_val)) cli::cli_abort("Reference value not found. Cannot plot relative values.")
+    filter_data <- filter_data |>
+      dplyr::mutate(estimate = estimate / ref_line_val)
+  }
+
+  plt <- plot_timeseries(
+    dat = filter_data,
+    y = "estimate",
+    geom = geom,
+    ylab = spawning_biomass_label,
+    group = group,
+    facet = facet,
+    ...
+  )
+  # Add reference line
+  # getting data set - an ifelse statement in the fxn wasn't working
+  
+
+  final <- reference_line(
+    plot = plt,
+    dat = rp_dat,
+    era = era,
+    label_name = "spawning_biomass",
+    reference = ref_line,
+    relative = relative,
+    scale_amount = scale_amount
+  ) + theme_noaa()
+
+  # Plot vertical lines if era is not filtering
+  if (is.null(era)) {
+    # Find unique era
+    eras <- unique(filter_data$era)
+    if (length(eras) > 1) {
+      year_vlines <- c()
+      for (i in 2:length(eras)){
+        erax <- filter_data |>
+        dplyr::filter(era == eras[i]) |>
+        dplyr::pull(year) |>
+        min(na.rm = TRUE)
+        year_vlines <- c(year_vlines, erax)
+      }
+    }
+    final <- final +
+      ggplot2::geom_vline(
+        xintercept = year_vlines,
+        color = "#999999"
+      )
+  }
+
+  ### Make RDA ----
+  if (make_rda) {
+    create_rda(
       object = final,
-      caps_alttext = caps_alttext,
-      figures_tables_dir = figures_dir,
-      topic_label = topic_label,
-      fig_or_table = fig_or_table
+      topic_label = ifelse(relative, "relative.spawning.biomass", "spawning.biomass"),
+      fig_or_table = "figure",
+      dat = rp_dat,
+      dir = figures_dir,
+      ref_line = ifelse(!is.null(names(ref_line)), names(ref_line), ref_line),
+      scale_amount = scale_amount,
+      unit_label = unit_label
     )
   }
+  # Output final plot
   final
 }
