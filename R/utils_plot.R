@@ -958,7 +958,7 @@ prepare_data <- function(
     }
   }
   if (is.null(group) & is.null(facet)){
-    plot_data <- plot_data |>
+    plot_data2 <- plot_data |>
       dplyr::filter(
         !is.na(year),
         is.na(fleet) | length(unique(fleet)) <= 1,
