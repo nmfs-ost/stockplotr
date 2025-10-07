@@ -97,6 +97,7 @@ plot_landings <- function(
     plt <- plt + ggplot2::theme(legend.position = "none")
   }
     
+
   ### Make RDA ----
   if (make_rda) {
     create_rda(
