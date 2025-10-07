@@ -87,9 +87,9 @@ plot_timeseries <- function(
           ggplot2::aes(
             x = .data[[x]],
             ymin = estimate_lower,
-            ymax = estimate_upper
+            ymax = estimate_upper,
+            fill = group_var
           ),
-          colour = "grey",
           alpha = 0.3
         ) + 
         ggplot2::geom_line(
@@ -981,6 +981,9 @@ prepare_data <- function(
       ) |>
       dplyr::ungroup()
   }
+
+  # summarize final data for selected grouping and or facet
+
   
   if (geom == "area") {
     plot_data2 <- dplyr::mutate(
