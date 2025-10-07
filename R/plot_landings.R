@@ -1,10 +1,11 @@
-#' Plot observed landings by fleet
+#' Plot observed landings
 #'
 #' @inheritParams plot_spawning_biomass
 #'
 #' @return Create a plot ready for a stock assessment report of cumulative landings
-#' over time by fleet.Includes options to plot by fleet, total observed landings
-#' with and without predicted landings. Indicate if fleet should be faceted or on one plot (default). Warning: i
+#' over time (\link[asar]{convert_output}). There are options to return a
+#' [ggplot2::ggplot()] object or export an rda object containing associated
+#' caption and alternative text for the figure.
 #' @export
 #'
 #' @examples
@@ -14,7 +15,8 @@
 #' plot_landings(
 #'   dat,
 #'   unit_label = "my_unit",
-#'   end_year = 2024,
+#'   group = "fleet",
+#'   facet = "area",
 #'   make_rda = TRUE,
 #'   figures_dir = getwd()
 #' )
