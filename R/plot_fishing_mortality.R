@@ -1,3 +1,28 @@
+#' Plot fishing mortality timeseries
+#'
+#' @inheritParams plot_spawning_biomass
+#'
+#' @return Create a plot ready for a stock assessment report of fishing mortality over time 
+#' from the results of an assessment model translated to the a standardized output 
+#' (\link[asar]{convert_output}). Includes options to group or facet data where available.
+#' There are options to return a
+#' [ggplot2::ggplot()] object or export an rda object containing associated
+#' caption and alternative text for the figure.
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' plot_fishing_mortality(dat)
+#'
+#' plot_fishing_mortality(
+#'   dat,
+#'   ref_line = c("target" = 0.2),
+#'   group = "fleet",
+#'   make_rda = TRUE,
+#'   figures_dir = getwd()
+#' )
+#' }
+
 plot_fishing_mortality <- function(
   dat,
   geom = "line",
