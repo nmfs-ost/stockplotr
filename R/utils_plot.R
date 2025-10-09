@@ -835,13 +835,15 @@ prepare_data <- function(
         # calc uncertainty when se
         # TODO: calculate other sources of error to upper and lower (cv,)
         estimate_lower = dplyr::case_when(
-          grepl("se", uncertainty_label) ~ (estimate - 1.96 * uncertainty) / scale_amount,
+          grepl("se", uncertainty_label) ~ (estimate - (1.96 * uncertainty)) / scale_amount,
           grepl("sd", tolower(uncertainty_label)) | grepl("std", tolower(uncertainty_label)) ~ (estimate - uncertainty) / scale_amount,
+          grepl("cv", tolower(uncertainty_label)) ~ (estimate - (1.96 * (uncertainty * estimate))) / scale_amount,
           TRUE ~ NA
         ),
         estimate_upper = dplyr::case_when(
-          grepl("se", uncertainty_label) ~ (estimate + 1.96 * uncertainty) / scale_amount,
+          grepl("se", uncertainty_label) ~ (estimate + (1.96 * uncertainty)) / scale_amount,
           grepl("sd", tolower(uncertainty_label)) | grepl("std", tolower(uncertainty_label)) ~ (estimate + uncertainty) / scale_amount,
+          grepl("cv", tolower(uncertainty_label)) ~ (estimate + (1.96 * (uncertainty * estimate))) / scale_amount,
           TRUE ~ NA
         )
       )
