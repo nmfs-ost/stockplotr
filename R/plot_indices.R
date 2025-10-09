@@ -4,20 +4,21 @@
 #' @param facet a string or vector of strings of a column that facets the data
 #' (e.g. "year", "area", etc.) "fleet" is always added on to any faceting selections
 #' @param unit_label units for index of abundance/CPUE
+#' @param focus a string or vector of strings indicating how data should be 
+#' filtered. (i.e. select names of fleets to zoom into the plot)
 #'
-#' @return Plot the estimated indices as indicated from a standard assessment
-#' model output file.
+#' @return Plot the expected and predicted indices as indicated from a standard 
+#' assessment model output file.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' plot_indices(dat)
-#'
 #' plot_indices(
-#'   dat,
-#'   unit_label = "my_unit",
-#'   end_year = 2024,
-#'   make_rda = TRUE,
+#'   petrale,
+#'   unit_label = "fish/hr",
+#'   interactive= TRUE,
+#'   module = NULL,
+#'   make_rda = FALSE,
 #'   figures_dir = getwd()
 #' )
 #' }
@@ -28,6 +29,7 @@ plot_indices <- function(
     # facet always assigned to fleet since that is how indices are calc'd -- unless replaced with NULL
     facet = "fleet",
     interactive = TRUE,
+    module = NULL,
     focus = NULL,
     make_rda = FALSE,
     figures_dir = NULL,
@@ -52,10 +54,11 @@ plot_indices <- function(
     label_name = "indices",
     era = NULL,
     geom = "line",
-    # ifelse guarentees the code doesn't miss grouping when label has > 1 value
+    # ifelse guarantees the code doesn't miss grouping when label has > 1 value
     group = ifelse(length(unique(filter_data$label)) > 1, "label", group),
     facet = facet, 
-    interactive = interactive
+    interactive = interactive,
+    module = module
   )
   
   # Subset data if focus
@@ -71,8 +74,8 @@ plot_indices <- function(
       ylab = u_units,
       group = "label",
       facet = facet,
-      size = 1#,
-      # ...
+      size = 1,
+      ...
     ) +
       # commenting out but might need this later -- not sure if this will always be true
     # labs(

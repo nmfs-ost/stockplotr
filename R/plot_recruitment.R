@@ -29,24 +29,20 @@ plot_recruitment <- function(
     unit_label = "mt",
     scale_amount = 1,
     era = "time",
-    relative = FALSE,
+    group = NULL,
+    facet = NULL,
+    # relative = FALSE,
     interactive = TRUE,
     module = NULL,
     make_rda = FALSE,
     figures_dir = getwd()
     ) {
   # TODO: Fix the unit label if scaling
-  recruitment_label <- ifelse(
-    relative,
-    yes = "Relative recruitment",
-    no = {
-      label_magnitude(
-        label = "Recruitment",
-        unit_label = unit_label,
-        scale_amount = scale_amount,
-        legend = FALSE
-      )
-    }
+  recruitment_label <- label_magnitude(
+    label = "Recruitment",
+    unit_label = unit_label,
+    scale_amount = scale_amount,
+    legend = FALSE
   )
   
   # Extract recruitment
@@ -55,6 +51,8 @@ plot_recruitment <- function(
     label_name = "recruitment",
     geom = "line",
     era = era,
+    group = group,
+    facet = facet,
     interactive = interactive,
     module = module,
     scale_amount = scale_amount
@@ -93,14 +91,8 @@ plot_recruitment <- function(
     geom = geom,
     xlab = "Year",
     ylab = recruitment_label,
-    hline = FALSE,
-    facet = {
-      if (length(unique(recruitment$model)) > 1) {
-        "model"
-      } else {
-        NULL
-      }
-    }
+    group = group,
+    facet = facet
   ) +
     theme_noaa()
   

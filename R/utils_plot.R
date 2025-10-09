@@ -130,7 +130,7 @@ plot_timeseries <- function(
   )
   
   # Remove linetype or point when there is no grouping
-  if (is.null(group)) {
+  if (is.null(group) & length(unique(dat$model)) == 1) {
     labs <- switch(
       geom,
       "line" = labs + ggplot2::guides(linetype = "none"),
@@ -857,14 +857,21 @@ prepare_data <- function(
     }
     if (nrow(data) < 1) cli::cli_abort("{label_name} not found.")
     if (is.null(group)) {
-      data <- data |>
-        dplyr::mutate(
-          group_var = switch(geom,
-                             "line" = "solid",
-                             "point" = "black",
-                             1
+      if (length(dat) > 1) {
+        data <- data |>
+          dplyr::mutate(
+            group_var = as.character(.data[["model"]])
           )
-        )
+      } else {
+        data <- data |>
+          dplyr::mutate(
+            group_var = switch(geom,
+                               "line" = "solid",
+                               "point" = "black",
+                               1
+            )
+          )
+      }
     } else if (all(is.na(data[[group]]))) {
       data <- data |>
         dplyr::mutate(
