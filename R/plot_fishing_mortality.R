@@ -42,7 +42,7 @@ plot_fishing_mortality <- function(
     dat = dat,
     label_name = "^fishing_mortality$",
     geom = geom,
-    era = NULL,
+    era = era,
     group = group,
     facet = facet,
     module = module,
@@ -67,8 +67,8 @@ plot_fishing_mortality <- function(
     geom = geom,
     ylab = "Fishing Mortality",
     group = group,
-    facet = facet#,
-    # ...
+    facet = facet,
+    ...
   )
   # Add reference line and theme
   final <- reference_line(
