@@ -23,8 +23,8 @@ calculation of a reference line if one is present}
 with the label for the plot if known. Default is NULL. By default, the function
 will select the most relevant module if more than 1 exists.}
 
-\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or 
-projected ("fore") data if filtering should occur. Default is set to "time" which is 
+\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or
+projected ("fore") data if filtering should occur. Default is set to "time" which is
 the current time. To plot all data, set era to NULL.}
 
 \item{interactive}{TRUE/FALSE; indicate whether the environment in which the
@@ -54,7 +54,7 @@ Plot Recruitment Deviations
 \examples{
 \dontrun{
 plot_recruitment_deviations(
-  dat = list("model1"=dat1,"model2"=dat2),
+  dat = list("model1" = dat1, "model2" = dat2),
   make_rda = TRUE,
   figures_dir = getwd(),
   size = 3

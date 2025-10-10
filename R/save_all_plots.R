@@ -17,7 +17,7 @@
 #' lower-case letters but you must use one of the options specified in the
 #' default list to ensure that the label on the figure looks correct
 #' regardless of how it is specified in `dat`. Other possibilities may include
-#' "target", "MSY", and "unfished". When the reference cannot be found, 
+#' "target", "MSY", and "unfished". When the reference cannot be found,
 #' indicate the reference line in the form c("label" = value).
 #' @param biomass_scale_amount A number describing how much to scale down the
 #' biomass quantities shown on the y axis. See `recruitment_scale_amount`.
@@ -280,11 +280,11 @@ save_all_plots <- function(
       # invisible()
     },
     error = function(e) {
-  cli::cli_alert_danger("plot_biomass_at_age failed to run.")
-  cli::cli_alert("Tip: check that your arguments are correct.")
-  cli::cli_li("biomass_at_age_unit_label = {biomass_at_age_unit_label}")
-  cli::cli_li("biomass_at_age_scale_amount = {biomass_at_age_scale_amount}")
-  print(e)
+      cli::cli_alert_danger("plot_biomass_at_age failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      cli::cli_li("biomass_at_age_unit_label = {biomass_at_age_unit_label}")
+      cli::cli_li("biomass_at_age_scale_amount = {biomass_at_age_scale_amount}")
+      print(e)
     }
   )
 
