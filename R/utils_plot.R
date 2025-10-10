@@ -857,7 +857,7 @@ prepare_data <- function(
     }
     if (nrow(data) < 1) cli::cli_abort("{label_name} not found.")
     if (is.null(group)) {
-      if (length(dat) > 1) {
+      if (!is.data.frame(dat)) {
         data <- data |>
           dplyr::mutate(
             group_var = as.character(.data[["model"]])
@@ -967,7 +967,7 @@ prepare_data <- function(
     }
   }
   if (is.null(group) & is.null(facet)){
-    plot_data2 <- plot_data |>
+    plot_data <- plot_data |>
       dplyr::filter(
         !is.na(year),
         is.na(fleet) | length(unique(fleet)) <= 1,
@@ -991,11 +991,10 @@ prepare_data <- function(
       dplyr::ungroup()
   }
 
-  # summarize final data for selected grouping and or facet
-
+  # TODO: add lines to summarize final data for selected grouping and or facet
   
   if (geom == "area") {
-    plot_data2 <- dplyr::mutate(
+    plot_data <- dplyr::mutate(
       plot_data,
       model = reorder(.data[["model"]], .data[["estimate"]], function(x) -max(x) )
     )
