@@ -87,9 +87,9 @@ plot_timeseries <- function(
           ggplot2::aes(
             x = .data[[x]],
             ymin = estimate_lower,
-            ymax = estimate_upper
+            ymax = estimate_upper,
+            fill = group_var
           ),
-          colour = "grey",
           alpha = 0.3
         ) + 
         ggplot2::geom_line(
@@ -130,7 +130,7 @@ plot_timeseries <- function(
   )
   
   # Remove linetype or point when there is no grouping
-  if (is.null(group)) {
+  if (is.null(group) & length(unique(dat$model)) == 1) {
     labs <- switch(
       geom,
       "line" = labs + ggplot2::guides(linetype = "none"),
@@ -590,7 +590,7 @@ cap_first_letter <- function(s) {
 #' (e.g. "year", "area", etc.)
 #' @param era A string naming the era of data such as historical ("early"), current ("time"), or 
 #' projected ("fore") data if filtering should occur. Default is set to "time" which is 
-#' the current time. To plot all data, set era to NULL. 
+#' the current time. To plot all data, set era to NULL.
 #' @param scale_amount A number describing how much to scale down the quantities
 #' shown on the y axis.
 #' @param interactive logical. If TRUE, the user will be prompted to select
@@ -654,13 +654,15 @@ prepare_data <- function(
         # calc uncertainty when se
         # TODO: calculate other sources of error to upper and lower (cv,)
         estimate_lower = dplyr::case_when(
-          grepl("se", uncertainty_label) ~ (estimate - 1.96 * uncertainty) / scale_amount,
+          grepl("se", uncertainty_label) ~ (estimate - (1.96 * uncertainty)) / scale_amount,
           grepl("sd", tolower(uncertainty_label)) | grepl("std", tolower(uncertainty_label)) ~ (estimate - uncertainty) / scale_amount,
+          grepl("cv", tolower(uncertainty_label)) ~ (estimate - (1.96 * (uncertainty * estimate))) / scale_amount,
           TRUE ~ NA
         ),
         estimate_upper = dplyr::case_when(
-          grepl("se", uncertainty_label) ~ (estimate + 1.96 * uncertainty) / scale_amount,
+          grepl("se", uncertainty_label) ~ (estimate + (1.96 * uncertainty)) / scale_amount,
           grepl("sd", tolower(uncertainty_label)) | grepl("std", tolower(uncertainty_label)) ~ (estimate + uncertainty) / scale_amount,
+          grepl("cv", tolower(uncertainty_label)) ~ (estimate + (1.96 * (uncertainty * estimate))) / scale_amount,
           TRUE ~ NA
         )
       )
@@ -674,14 +676,21 @@ prepare_data <- function(
     }
     if (nrow(data) < 1) cli::cli_abort("{label_name} not found.")
     if (is.null(group)) {
-      data <- data |>
-        dplyr::mutate(
-          group_var = switch(geom,
-                             "line" = "solid",
-                             "point" = "black",
-                             1
+      if (!is.data.frame(dat)) {
+        data <- data |>
+          dplyr::mutate(
+            group_var = as.character(.data[["model"]])
           )
-        )
+      } else {
+        data <- data |>
+          dplyr::mutate(
+            group_var = switch(geom,
+                               "line" = "solid",
+                               "point" = "black",
+                               1
+            )
+          )
+      }
     } else if (all(is.na(data[[group]]))) {
       data <- data |>
         dplyr::mutate(
@@ -742,7 +751,6 @@ prepare_data <- function(
       }
     }
   }
-
   # If group/facet is NULL then filter out/summarize data for plotting
   # unsure if want to keep this
   # TODO: change or remove in the future when moving to other plot types
@@ -801,9 +809,11 @@ prepare_data <- function(
       ) |>
       dplyr::ungroup()
   }
+
+  # TODO: add lines to summarize final data for selected grouping and or facet
   
   if (geom == "area") {
-    plot_data2 <- dplyr::mutate(
+    plot_data <- dplyr::mutate(
       plot_data,
       model = reorder(.data[["model"]], .data[["estimate"]], function(x) -max(x) )
     )

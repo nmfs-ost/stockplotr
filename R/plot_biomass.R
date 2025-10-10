@@ -95,7 +95,7 @@ plot_biomass <- function(
       } else {
         filter_data <- dplyr::filter(filter_data, !is.na(fleet))
       }
-    }  
+    }
   # Check df if there is >1 unique(label)
   if (length(unique(filter_data$label)) > 1 & is.null(facet)) {
     # summarize data by grouping
@@ -124,7 +124,6 @@ plot_biomass <- function(
   if (!is.null(group)) {
     if (group %notin% colnames(filter_data)) group = NULL
   }
- 
   # Calculate estimate if relative
   if (relative) {
     if (!is.null(names(ref_line))) {
