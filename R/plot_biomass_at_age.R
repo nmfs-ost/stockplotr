@@ -62,10 +62,10 @@ plot_biomass_at_age <- function(
     label = biomass_label,
     proportional = proportional
   ) +
-    average_age_line(
-      dat = b,
-      facet = facet
-    )
+  average_age_line(
+    dat = b,
+    facet = facet
+  )
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
     create_rda(

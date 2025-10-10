@@ -8,9 +8,9 @@
 #' would scale down a value from 500,000 --> 5,000 and would report catch in
 #' hundreds of the 'unit_label'. This scale will be reflected
 #' in the legend label if proportional is set to FALSE. The default is 1.
-#' @param era a string naming the era of data such as historical ("early"), current ("time"), or
-#' projected ("fore") data if filtering should occur. Default is set to "time" which is
-#' the current time. To plot all data, set era to NULL.
+#' @param era a string naming the era of data such as historical ("early"), current ("time"), or 
+#' projected ("fore") data if filtering should occur. Default is set to "time" which is 
+#' the current time. To plot all data, set era to NULL. 
 #'
 #' @return A plot ready for a stock assessment report of catch or landings  composition.
 #' This plot is made only when catch or landings are explicitly named in the output file.
@@ -24,18 +24,18 @@
 #'   unit_label = "mt",
 #'   scale_amount = 100,
 #'   make_rda = TRUE,
-#'   figures_dir = getwd()
-#' )
+#'   figures_dir = getwd())
 #' }
 plot_catch_comp <- function(
-    dat,
-    facet = NULL,
-    era = "time",
-    unit_label = "mt",
-    scale_amount = 1,
-    proportional = TRUE,
-    make_rda = FALSE,
-    figures_dir = getwd()) {
+  dat,
+  facet = NULL,
+  era = "time",
+  unit_label = "mt",
+  scale_amount = 1,
+  proportional = TRUE,
+  make_rda = FALSE,
+  figures_dir = getwd()
+) {
   # Create label for abundance units in legend
   catch_label <- label_magnitude(
     label = "catch",
@@ -67,8 +67,8 @@ plot_catch_comp <- function(
     label = catch_label,
     proportional = proportional
   ) +
-    cohort_line(catch)
-
+  cohort_line(catch)
+  
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
     create_rda(

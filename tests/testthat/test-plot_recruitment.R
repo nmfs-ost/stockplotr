@@ -8,7 +8,7 @@ test_that("plot_recruitment generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
     plot_recruitment(out_new,
-      module = "TIME_SERIES"
+                     module = "TIME_SERIES"
     )
   )
 

@@ -56,6 +56,6 @@ Create "at-age" plot
 }
 \examples{
 \dontrun{
-plot_aa(dat)
+ plot_aa(dat)
 }
 }

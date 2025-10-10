@@ -60,7 +60,7 @@ searching in `dat` is case agnostic and will work with either upper- or
 lower-case letters but you must use one of the options specified in the
 default list to ensure that the label on the figure looks correct
 regardless of how it is specified in `dat`. Other possibilities may include
-"target", "MSY", and "unfished". When the reference cannot be found,
+"target", "MSY", and "unfished". When the reference cannot be found, 
 indicate the reference line in the form c("label" = value).}
 
 \item{biomass_scale_amount}{A number describing how much to scale down the

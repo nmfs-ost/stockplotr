@@ -27,8 +27,8 @@ calculation of a reference line if one is present}
 shown on the y axis. For example, scale_amount = 100 would scale down a value
 from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
 
-\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or
-projected ("fore") data if filtering should occur. Default is set to "time" which is
+\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or 
+projected ("fore") data if filtering should occur. Default is set to "time" which is 
 the current time. To plot all data, set era to NULL.}
 
 \item{relative}{A logical value specifying if the resulting figures should

@@ -2,7 +2,7 @@
 #'
 #' @inheritParams plot_spawning_biomass
 #' @param unit_label units for recruitment
-#'
+#' 
 #' @return Plot recruitment over time from an assessment model output file
 #' translated to a standardized output (\link[asar]{convert_output}). There are options to return a
 #' [ggplot2::ggplot()] object or export an rda object containing associated
@@ -33,7 +33,8 @@ plot_recruitment <- function(
     interactive = TRUE,
     module = NULL,
     make_rda = FALSE,
-    figures_dir = getwd()) {
+    figures_dir = getwd()
+    ) {
   # TODO: Fix the unit label if scaling
   recruitment_label <- ifelse(
     relative,
@@ -47,7 +48,7 @@ plot_recruitment <- function(
       )
     }
   )
-
+  
   # Extract recruitment
   recruitment <- prepare_data(
     dat = dat,
@@ -57,7 +58,7 @@ plot_recruitment <- function(
     interactive = interactive,
     module = module,
     scale_amount = scale_amount
-  )
+  ) 
   # Check if contains 'rec devs' and filter out
   if (any(grepl("recruitment_deviations", unique(recruitment$label)))) {
     if (length(unique(recruitment$label)) > 1) {
@@ -82,7 +83,7 @@ plot_recruitment <- function(
     # change geom when pred. R available
     geom <- "line"
   }
-
+  
   # Plot
   final <- plot_timeseries(
     dat = recruitment,
@@ -102,7 +103,7 @@ plot_recruitment <- function(
     }
   ) +
     theme_noaa()
-
+  
   if ("expected_recruitment" %in% names(recruitment)) {
     final <- final +
       ggplot2::geom_line(
@@ -122,11 +123,11 @@ plot_recruitment <- function(
     eras <- unique(filter_data$era)
     if (length(eras) > 1) {
       year_vlines <- c()
-      for (i in 2:length(eras)) {
+      for (i in 2:length(eras)){
         erax <- filter_data |>
-          dplyr::filter(era == eras[i]) |>
-          dplyr::pull(year) |>
-          min(na.rm = TRUE)
+        dplyr::filter(era == eras[i]) |>
+        dplyr::pull(year) |>
+        min(na.rm = TRUE)
         year_vlines <- c(year_vlines, erax)
       }
     }
@@ -136,7 +137,7 @@ plot_recruitment <- function(
         color = "#999999"
       )
   }
-
+  
   # Make RDA
   if (make_rda) {
     create_rda(
@@ -144,7 +145,7 @@ plot_recruitment <- function(
       topic_label = caption_label,
       fig_or_table = "figure",
       dat = dat,
-      dir = figures_dir # ,
+      dir = figures_dir# ,
       # unit_label = unit_label
     )
   }
