@@ -45,8 +45,8 @@ regardless of how it is specified in `dat`.}
 
 \item{unit_label}{units for spawning_biomass}
 
-\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or 
-projected ("fore") data if filtering should occur. Default is set to "time" which is 
+\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or
+projected ("fore") data if filtering should occur. Default is set to "time" which is
 the current time. To plot all data, set era to NULL.}
 
 \item{module}{(Optional) A string indicating the linked module_name associated
@@ -89,9 +89,9 @@ also be made relative to this reference line rather than in absolute units.
 \examples{
 \dontrun{
 plot_spawning_biomass(
-  dat = list('base_model'=dat1,'sensitivity1'=dat2,'sensitivity2'=dat3),
+  dat = list("base_model" = dat1, "sensitivity1" = dat2, "sensitivity2" = dat3),
   geom = "line",
-  group= "sex",
+  group = "sex",
   facet = "fleet",
   ref_line = "target",
   unit_label = "mt",
