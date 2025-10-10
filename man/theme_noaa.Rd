@@ -18,10 +18,14 @@ A list applying a theme to a ggplot2 object.
 Add NOAA theming to ggplot2 object. The palette is from the 'viridis' package, which contains palettes distinguishable by those with color vision deficiency.
 }
 \examples{
-ggplot2::ggplot(data = OrchardSprays,
-                ggplot2::aes(x = rowpos, 
-                             y = decrease,
-                             color = treatment)) +
+ggplot2::ggplot(
+  data = OrchardSprays,
+  ggplot2::aes(
+    x = rowpos,
+    y = decrease,
+    color = treatment
+  )
+) +
   ggplot2::geom_point() +
   theme_noaa()
 }

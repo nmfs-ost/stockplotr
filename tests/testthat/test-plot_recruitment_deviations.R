@@ -8,7 +8,8 @@ test_that("plot_recruitment_deviations generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
     plot_recruitment_deviations(out_new,
-      module = "SPAWN_RECRUIT")
+      module = "SPAWN_RECRUIT"
+    )
   )
 
   # expect error-free plot with many arguments
@@ -50,4 +51,3 @@ test_that("rda file made when indicated", {
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
   unlink(fs::path(getwd(), "figures"), recursive = T)
 })
-

@@ -29,6 +29,8 @@ Description: Creates exploratory and finished tables and figures for stock
     applies to a range of stock assessment model outputs and standardizes
     them.
 License: MIT + file LICENSE
+URL: https://github.com/nmfs-ost/stockplotr
+BugReports: https://github.com/nmfs-ost/stockplotr/issues
 Depends: 
     R (>= 4.1.0)
 Imports: 
@@ -64,5 +66,3 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 RoxygenNote: 7.3.3
-URL: https://github.com/nmfs-ost/stockplotr
-BugReports: https://github.com/nmfs-ost/stockplotr/issues
