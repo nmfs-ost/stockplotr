@@ -5,7 +5,7 @@ test_that("add_theme applies NOAA formatting correctly", {
   result_ggplot <- add_theme(ggplot_obj)
 
   expect_true(inherits(result_ggplot, "ggplot"))
-  expect_true(ggplot2::is.ggplot(result_ggplot))
+  expect_true(ggplot2::is_ggplot(result_ggplot))
 
   # Test with a flextable object
   flex_obj <- flextable::flextable(head(cars))

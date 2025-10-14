@@ -19,25 +19,26 @@ test_that("plot_recruitment generates plots without errors", {
       unit_label = "mt",
       scale_amount = 10,
       module = "TIME_SERIES",
-      relative = FALSE,
+      # relative = FALSE,
       make_rda = FALSE,
       figures_dir = getwd()
     )
   )
 
   # expect error-free plot when setting relative to T
-  expect_no_error(
-    plot_recruitment(
-      out_new,
-      unit_label = "mt",
-      scale_amount = 10,
-      relative = TRUE,
-      module = "TIME_SERIES",
-      relative = T,
-      make_rda = FALSE,
-      figures_dir = getwd()
-    )
-  )
+  # Relative is no longer an option
+  # expect_no_error(
+  #   plot_recruitment(
+  #     out_new,
+  #     unit_label = "mt",
+  #     scale_amount = 10,
+  #     # relative = TRUE,
+  #     module = "TIME_SERIES",
+  #     relative = T,
+  #     make_rda = FALSE,
+  #     figures_dir = getwd()
+  #   )
+  # )
 
   # expect ggplot object is returned
   expect_s3_class(
@@ -45,9 +46,8 @@ test_that("plot_recruitment generates plots without errors", {
       out_new,
       unit_label = "mt",
       scale_amount = 10,
-      relative = TRUE,
+      # relative = TRUE,
       module = "TIME_SERIES",
-      relative = T,
       make_rda = FALSE,
       figures_dir = getwd()
     ),
