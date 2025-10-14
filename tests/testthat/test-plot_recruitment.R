@@ -48,7 +48,6 @@ test_that("plot_recruitment generates plots without errors", {
       scale_amount = 10,
       # relative = TRUE,
       module = "TIME_SERIES",
-      relative = T,
       make_rda = FALSE,
       figures_dir = getwd()
     ),
