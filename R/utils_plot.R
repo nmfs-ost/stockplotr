@@ -82,6 +82,7 @@ plot_timeseries <- function(
     },
     "line" = {
       plot +
+      if (any(c("estimate_lower", "estimate_upper") %in% colnames(dat))){
         ggplot2::geom_ribbon(
           dat = dat|> dplyr::filter(!is.na(estimate_lower)),
           ggplot2::aes(
@@ -91,7 +92,8 @@ plot_timeseries <- function(
             fill = group_var
           ),
           alpha = 0.3
-        ) + 
+        )
+      } +
         ggplot2::geom_line(
           data = dat,
           ggplot2::aes(
