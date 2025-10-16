@@ -19,6 +19,7 @@ plot_natural_mortality <- function(
     group = NULL,
     facet = NULL,
     era = "time",
+    geom = "line",
     interactive = TRUE,
     make_rda = FALSE,
     rda_dir = getwd()
@@ -36,59 +37,112 @@ plot_natural_mortality <- function(
     era = era,
     group = "age",
     facet = facet,
-    geom = geom
+    geom = geom,
+    interactive = TRUE
   )
-  if (!is.null(group)) {
-    filter_data <- dplyr::mutate(
-      filter_data,
-      group_var = .data[[group]]
-    ) 
-  }
+  # if (!is.null(group)) {
+  #   filter_data <- dplyr::mutate(
+  #     filter_data,
+  #     group_var = .data[[group]]
+  #   ) 
+  # } else {
+  #   index_variables <- check_grouping(filter_data)
+  #   if (length(index_variables) > 0) {
+  #     filter_data <- filter_data |>
+  #       dplyr::select(dplyr::all_of(c(
+  #         "estimate", # "uncertainty", "uncertainty_label",
+  #         "estimate_upper", "estimate_lower", "group_var",
+  #         # need to maintain columns made from prep data
+  #         "model", "group_var",
+  #         index_variables
+  #         )))
+  #   }
+  # }
+  # 
+  # # Check if there is age or year or both
+  # # Then either plot over ages with lines for year or single year
+  # if (any(!is.na(filter_data$age))) {
+  #   filter_data <- dplyr::filter(filter_data, !is.na(age))
+  #   index_variables <- index_variables[-grep("age", index_variables)]
+  #   if (any(!is.na(filter_data$year))) {
+  #     filter_data <- dplyr::filter(filter_data, !is.na(year))
+  #     # check if all values are the same
+  #     variable <- ifelse(
+  #       length(unique(filter_data$estimate)) != length(unique(filter_data$age)),
+  #       TRUE, # more M values than ages
+  #       FALSE # same # or less M values than ages
+  #       )
+  #     if (!is.null(group)) {
+  #       facet <- c(facet, group)
+  #     }
+  #     group <- "year"
+  #     index_variables <- index_variables[-grep("year", index_variables)]
+  #   } else {
+  #     variable <- FALSE
+  #   }
+  # }
+  # 
+  # # Check if this is still the case if a group not NULL
+  # if (!is.null(group) & group != "year") {
+  #   check_group_data <- filter_data |>
+  #     tidyr::pivot_wider(
+  #       id_cols = c(year, age, model),
+  #       names_from = dplyr::any_of(group),
+  #       values_from = estimate
+  #     )
+  #   # overwrite variable if grouping is what makes it variable in above conditions
+  #   variable <- ifelse(
+  #     any(unique(
+  #       dplyr::select(
+  #         check_group_data, 
+  #         dplyr::any_of(unique(filter_data[[group]]))
+  #         )
+  #       ) > 1),
+  #     TRUE,
+  #     FALSE
+  #   )
+  # } else if (length(index_variables) > 0) {
+  #   # overwrite variable if a grouping/indexing column was identified
+  #   # based on only the first group if >1 identified
+  #   variable <- ifelse(
+  #     length(unique(filter_data[[index_variables[1]]])) > 1,
+  #     TRUE,
+  #     FALSE
+  #   )
+  #   if (group == "year") {
+  #     facet <- c(facet, index_variables)
+  #   } else {
+  #     group <- index_variables[1]
+  #     facet <- ifelse(
+  #       !is.null(facet),
+  #       c(facet, index_variables[-1]),
+  #       index_variables[-1]
+  #     )
+  #   }
+  #   
+  # }
   
-  # Check if there is age or year or both
-  # Then either plot over ages with lines for year or single year
-  if (any(!is.na(filter_data$age))) {
-    filter_data <- dplyr::filter(filter_data, !is.na(age))
-    if (any(!is.na(filter_data$year))) {
-      filter_data <- dplyr::filter(filter_data, !is.na(year))
-      # check if all values are the same
-      variable <- ifelse(
-        length(unique(filter_data$estimate)) != length(unique(filter_data$age)),
-        TRUE, # more M values than ages
-        FALSE # same # or less M values than ages
-        )
-    } else {
-      variable <- FALSE
-    }
-  }
+  processing <- process_data(filter_data, group, facet)
+  variable <- processing[[1]]
+  processed_data <- processing[[2]]
+  group <- processing[[3]]
+  facet <- processing[[4]]
   
   if (variable) {
-    filter_data <- filter_data |>
-      dplyr::group_by(year, age, model, group_var, .data[[group]]) |>
-      dplyr::reframe(estimate = unique(estimate))
     # plt <- 
     plot_timeseries(
-      dat = filter_data,
+      dat = processed_data |> dplyr::mutate(age = as.numeric(age)),
       x = "age",
       y = "estimate",
       geom = geom,
       xlab = "Age",
       ylab = "Natural Mortality",
-      group = "year",
-      facet = c(facet, group)
+      group = group,
+      facet = facet
     )
   } else {
-    filter_data <- filter_data |>
-      dplyr::group_by(model, group_var, age) |>
-      dplyr::summarise(estimate = unique(estimate)) |>
-      dplyr::mutate(
-        age = as.numeric(age),
-        estimate_lower =  NA_real_,
-        estimate_upper = NA_real_
-        )
-    
     plt <- plot_timeseries(
-      dat = filter_data,
+      dat = filter_data |> dplyr::mutate(age = as.numeric(age)),
       x = "age",
       y = "estimate",
       geom = geom,
@@ -99,7 +153,7 @@ plot_natural_mortality <- function(
     )
   }
   
-  final <- plt + theme_noaa()
+  final <- plt + theme_noaa(discrete = TRUE)
   
   ### Make RDA ----
   if (make_rda) {
@@ -113,89 +167,4 @@ plot_natural_mortality <- function(
   }
   # Output final plot
   final
-  
-  # bam examples have label as natural_mortality but other formats don't (in input)
-  # minimum age of M
-  # if ("natural_mortality" %in% dat$label) {
-  #   m <- dat |>
-  #     dplyr::filter(label == "natural_mortality",
-  #                   !is.na(age)) |>
-  #     dplyr::mutate(
-  #       estimate = as.numeric(estimate),
-  #       age = as.numeric(age)
-  #     )
-  # } else {
-  #   m <- dat
-  # }
-  # 
-  # # Choose number of breaks for x-axis
-  # x_n_breaks <- round(length(unique(m[["age"]])))
-  # if (x_n_breaks > 20) {
-  #   x_n_breaks <- round(length(unique(m[["age"]])) / 5)
-  # } else if (x_n_breaks > 10) {
-  #   x_n_breaks <- round(length(unique(m[["age"]])) / 2)
-  # }
-  # 
-  # # Make generic plot
-  # plt <- ggplot2::ggplot(data = m) +
-  #   ggplot2::geom_line(
-  #     ggplot2::aes(
-  #       x = age,
-  #       y = estimate
-  #     ),
-  #     size = 1
-  #   ) +
-  #   ggplot2::labs(
-  #     x = "Age (years)",
-  #     y = "Natural mortality"
-  #   ) +
-  #   ggplot2::scale_x_continuous(
-  #     n.breaks = x_n_breaks
-  #   )
-  # 
-  # final <- suppressWarnings(add_theme(plt))
-  # 
-  # # create plot-specific variables to use throughout fxn for naming and IDing
-  # topic_label <- "natural.mortality"
-  # 
-  # # identify output
-  # fig_or_table <- "figure"
-  # 
-  # # run write_captions.R if its output doesn't exist
-  # if (!file.exists(
-  #   fs::path(getwd(), "captions_alt_text.csv")
-  # )
-  # ) {
-  #   stockplotr::write_captions(
-  #     dat = dat,
-  #     dir = rda_dir,
-  #     year = NULL
-  #   )
-  # }
-  # 
-  # # add more key quantities included as arguments in this fxn
-  # add_more_key_quants(
-  #   topic = topic_label,
-  #   fig_or_table = fig_or_table,
-  #   dir = rda_dir
-  # )
-  # 
-  # # extract this plot's caption and alt text
-  # caps_alttext <- extract_caps_alttext(
-  #   topic_label = topic_label,
-  #   fig_or_table = fig_or_table,
-  #   dir = rda_dir
-  # )
-  # 
-  # # export figure to rda if argument = T
-  # if (make_rda == TRUE) {
-  #   export_rda(
-  #     final = final,
-  #     caps_alttext = caps_alttext,
-  #     rda_dir = rda_dir,
-  #     topic_label = topic_label,
-  #     fig_or_table = fig_or_table
-  #   )
-  # }
-  # return(final)
 }

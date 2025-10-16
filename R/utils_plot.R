@@ -82,7 +82,7 @@ plot_timeseries <- function(
     },
     "line" = {
       plot +
-      if (any(c("estimate_lower", "estimate_upper") %in% colnames(dat))){
+      # if (any(c("estimate_lower", "estimate_upper") %in% colnames(dat))){
         ggplot2::geom_ribbon(
           dat = dat|> dplyr::filter(!is.na(estimate_lower)),
           ggplot2::aes(
@@ -92,8 +92,8 @@ plot_timeseries <- function(
             fill = group_var
           ),
           alpha = 0.3
-        )
-      } +
+        ) +
+      # }
         ggplot2::geom_line(
           data = dat,
           ggplot2::aes(
@@ -921,4 +921,28 @@ label_magnitude <- function(
   }
   # Create label for abundance units in legend
   glue::glue("{label} {ifelse(legend, \"\n\", \"\")}({unit_mag}{unit_label})")
+}
+
+#------------------------------------------------------------------------------
+
+# Check if grouped data in plot
+
+check_grouping <- function(dat) {
+  # Identify potential indexing variables
+  index_variables <- c(
+    "year", # also not sure of this one
+    "age", # not sure if want to add age here
+    "fleet", "sex",
+    "area", "growth_pattern", "month",
+    "season", "platoon", "bio_pattern",
+    "settlement", "morph", "block"
+  )
+  # Create emppty vector
+  dat_index <- c()
+  # Cycle through indexing variables and identify ones that have more than 1 unique value
+  for (i in index_variables) {
+    indexed <- ifelse(length(unique(dat[[i]])) > 1, TRUE, FALSE)
+    if (indexed) dat_index <- c(dat_index, i)
+  }
+  dat_index
 }
