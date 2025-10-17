@@ -5,15 +5,19 @@ process_data <- function(
     group,
     facet
 ) {
+  # Set group_var to identified grouping
   if (!is.null(group)) {
     data <- dplyr::mutate(
       dat,
       group_var = .data[[group]]
     ) 
+  } else {
+    data <- dat
   }
+  # check for additional indexed variables
   index_variables <- check_grouping(filter_data)
   if (length(index_variables) > 0) {
-    data <- dat |>
+    data <- data |>
       dplyr::select(dplyr::all_of(c(
         "estimate", # "uncertainty", "uncertainty_label",
         "estimate_upper", "estimate_lower",
@@ -21,6 +25,11 @@ process_data <- function(
         "model", "group_var",
         index_variables
       )))
+    # TODO: figure out more efficient way to do these checks
+    # cannot have test for null and group == something in same line when group is NULL
+    if (!is.null(group)) {
+      if (group %in% index_variables) index_variables <- index_variables[-grep(group, index_variables)]
+    }
   }
   
   # Check if there is age or year or both
@@ -89,24 +98,28 @@ process_data <- function(
   }
   
   # Check if this is still the case if a group not NULL
-  if (!is.null(group) & group != "year") {
-    check_group_data <- data |>
-      tidyr::pivot_wider(
-        id_cols = c(year, age, model),
-        names_from = dplyr::any_of(group),
-        values_from = estimate
-      )
-    # overwrite variable if grouping is what makes it variable in above conditions
-    variable <- ifelse(
-      any(unique(
-        dplyr::select(
-          check_group_data, 
-          dplyr::any_of(unique(data[[group]]))
+  if (!is.null(group)) {
+    if (group != "year") {
+      check_group_data <- data |>
+        tidyr::pivot_wider(
+          id_cols = c(year, age, model),
+          names_from = dplyr::any_of(group),
+          values_from = estimate
         )
-      ) > 1),
-      TRUE,
-      FALSE
-    )
+      # overwrite variable if grouping is what makes it variable in above conditions
+      variable <- ifelse(
+        any(unique(
+          dplyr::select(
+            check_group_data, 
+            dplyr::any_of(unique(data[[group]]))
+          )
+        ) > 1),
+        TRUE,
+        FALSE
+      )
+    }
+    # add any remaining index_variables into facet
+    if (length(index_variables) > 0) facet <- c(facet, index_variables)
   } else if (length(index_variables) > 0) {
     # overwrite variable if a grouping/indexing column was identified
     # based on only the first group if >1 identified
@@ -115,8 +128,10 @@ process_data <- function(
       TRUE,
       FALSE
     )
-    if (group == "year") {
-      facet <- c(facet, index_variables)
+    if (!is.null(group)) {
+      if (group == "year") {
+        facet <- c(facet, index_variables)
+      }
     } else {
       group <- index_variables[1]
       facet <- ifelse(
@@ -125,23 +140,21 @@ process_data <- function(
         index_variables[-1]
       )
     }
-    # final data prep
-    # skipping this for now. Not sure if it's neccessary with the new process
-    # processed_data <- data |>
-    #   dplyr::group_by(year, age, model, group_var, .data[[group]]) |>
-    #   dplyr::reframe(estimate = unique(estimate),
-    #                  estimate_lower = unique(estimate_lower),
-    #                  estimate_upper = unique(estimate_upper)) |>
-    #   dplyr::mutate(
-    #     age = as.numeric(age),
-    #     # set year to as numeric bc it will create too many variations when applied to a discrete scale
-    #     year = as.numeric(year)
-    #   )
-    return(list(
-      variable,
-      data,
-      group,
-      facet
-    ))
+    # check that group_var matches the group col
+    if (all(data[[group]]!=data[["group_var"]])) {
+      # overwrite group_var to match group so plot is correct
+      data <- data |>
+        dplyr::mutate(group_var = .data[[group]])
+    }
   }
+  
+  # Final check if group = NULL, then set group var to 1
+  if (is.null(group)) data <- dplyr::mutate(data, group_var = "1")
+  
+  list(
+    variable,
+    data,
+    group,
+    facet
+  )
 }
