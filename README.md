@@ -21,8 +21,9 @@ a package that reads outputs, plots key parameters, and more to increase
 throughput and reduce tedious tasks for an analyst.
 
 Please note that this package is still in development. As such, some functions 
-are still in development, such as the functions that create indices figures 
-(i.e., `plot_indices`) and landings tables (i.e., `table_landings`).
+are unstable and might not perform as intended. We encourage anyone who tests 
+out this package to leave an [issue](https://github.com/nmfs-ost/stockplotr/issues)
+for any errors you find or for a feature request.
 
 ## Installation
 
@@ -55,7 +56,7 @@ Please refer to the [`asar` tutorial](https://connect.fisheries.noaa.gov/asar_tu
 Then, once your converted model results are saved as an object in your R environment, you can use `stockplotr` functions to create plots from the object.
 
 > [!TIP]
-> `stockplotr` plots or tables are exported as `ggplot2` or `flextables` objects 
+> `stockplotr` plots or tables are exported as `ggplot2` or `flextable` objects 
 > meaning that users can use the same process to add new data, formatting, or 
 > other customizations to the plot beyond the baseline made by this package
 
