@@ -63,18 +63,19 @@ Then, once your converted model results are saved as an object in your R environ
 ### Example
 
 ```r
-stockplotr::example_data
+data <- stockplotr::example_data
 
 # create a landings figure from your object
-plot_landings(converted_output)
-
-# create a landings table from your object
-table_landings(converted_output)
+plot_spawning_biomass(data)
 ```
 
 Example Plot | Example Table |
 :------------|---------------:
 ![Example landings plot from stockplotr](man/figures/landings_plot_ex.png) | ![Example landings tables from stockplotr](man/figures/landings_table_ex.png)
+
+> [!NOTE]
+> Tables are not currently included in the package due to a major overhaul.
+> We plan to incorporate them by the end of 2025.
 
 ## Contributions
 
@@ -96,11 +97,10 @@ stakeholders. We encourage interested users to contribute to this package using
 their custom code when they find it may be useful across the nation.
 
 > [!NOTE]
-> An additional package to plot model diagnostics is being worked on for the 
-> Fisheries Integrated Modelling System [FIMS] that will natively work with the 
-> output used for stockplotr since the model output for FIMS works together with
-> stockplotr. More information can be found soon and a link to the repo will be 
-> located here once available.
+> An additional package to plot model diagnostics called [FIMSdiags](https://github.com/NOAA-FIMS/FIMSdiags) 
+> is being worked on for the Fisheries Integrated Modelling System [FIMS] that 
+> will natively work with the output used for stockplotr since the model output 
+> for FIMS works together with stockplotr.
 
 ## Disclaimer
 
