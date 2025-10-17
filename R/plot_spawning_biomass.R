@@ -51,17 +51,13 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' plot_spawning_biomass(
-#'   dat = list('base_model'=dat1,'sensitivity1'=dat2,'sensitivity2'=dat3),
+#'   dat = example_data,
 #'   geom = "line",
-#'   group= "sex",
-#'   facet = "fleet",
 #'   ref_line = "target",
 #'   unit_label = "mt",
 #'   scale_amount = 1000
 #' )
-#' }
 plot_spawning_biomass <- function(
     dat,
     geom = "line",
