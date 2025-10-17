@@ -19,11 +19,10 @@ plot_natural_mortality <- function(
     group = NULL,
     facet = NULL,
     era = NULL,
-    geom = "line",
     interactive = TRUE,
     module = NULL,
     make_rda = FALSE,
-    rda_dir = getwd(),
+    figures_dir = getwd(),
     ...
   ) {
   
@@ -39,7 +38,7 @@ plot_natural_mortality <- function(
     era = era,
     group = "age",
     facet = facet,
-    geom = geom,
+    geom = "line",
     interactive = interactive,
     module = module
   )
@@ -59,7 +58,7 @@ plot_natural_mortality <- function(
     dat = processed_data |> dplyr::mutate(age = as.numeric(age)),
     x = "age",
     y = "estimate",
-    geom = geom,
+    geom = "line",
     xlab = "Age",
     ylab = "Natural Mortality",
     group = group,
