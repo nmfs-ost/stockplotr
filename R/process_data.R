@@ -1,4 +1,4 @@
-# post processing filtered data for groupings
+# Post processing filtered data for groupings
 # ready data for ggplot
 process_data <- function(
     dat,
@@ -27,9 +27,7 @@ process_data <- function(
       )))
     # TODO: figure out more efficient way to do these checks
     # cannot have test for null and group == something in same line when group is NULL
-    if (!is.null(group)) {
-      if (group %in% index_variables) index_variables <- index_variables[-grep(group, index_variables)]
-    }
+    if (!is.null(group) && group %in% index_variables) index_variables <- index_variables[-grep(group, index_variables)]
   }
   
   # Check if there is age or year or both
@@ -37,7 +35,7 @@ process_data <- function(
   if (any(!is.na(filter_data$age))) {
     data <- dplyr::filter(data, !is.na(age))
     index_variables <- index_variables[-grep("age", index_variables)]
-    if (any(!is.na(data$year))) {
+    if ("year" %in% colnames(data) && any(!is.na(data$year))) {
       index_variables <- index_variables[-grep("year", index_variables)]
       data <- dplyr::filter(data, !is.na(year))
       # check if M varies in ANY year
@@ -98,8 +96,8 @@ process_data <- function(
   }
   
   # Check if this is still the case if a group not NULL
-  if (!is.null(group)) {
-    if (group != "year") {
+  if (!is.null(group) && group != "year") {
+    # if () {
       check_group_data <- data |>
         tidyr::pivot_wider(
           id_cols = c(year, age, model),
@@ -117,7 +115,7 @@ process_data <- function(
         TRUE,
         FALSE
       )
-    }
+    # }
     # add any remaining index_variables into facet
     if (length(index_variables) > 0) facet <- c(facet, index_variables)
   } else if (length(index_variables) > 0) {
@@ -128,12 +126,13 @@ process_data <- function(
       TRUE,
       FALSE
     )
-    if (!is.null(group)) {
-      if (group == "year") {
-        facet <- c(facet, index_variables)
-      }
+    # Move remaining indexing variables to facet
+    if (!is.null(group) && group == "year") {
+      facet <- c(facet, index_variables)
     } else {
+      # Set first indexing variable to group
       group <- index_variables[1]
+      # Remaining id'd index variables moved to facet
       facet <- ifelse(
         !is.null(facet),
         c(facet, index_variables[-1]),
@@ -150,7 +149,7 @@ process_data <- function(
   
   # Final check if group = NULL, then set group var to 1
   if (is.null(group)) data <- dplyr::mutate(data, group_var = "1")
-  
+  # Export list of objects
   list(
     variable,
     data,

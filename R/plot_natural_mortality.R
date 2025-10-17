@@ -21,8 +21,10 @@ plot_natural_mortality <- function(
     era = NULL,
     geom = "line",
     interactive = TRUE,
+    module = NULL,
     make_rda = FALSE,
-    rda_dir = getwd()
+    rda_dir = getwd(),
+    ...
   ) {
   
   # TODO:
@@ -38,8 +40,12 @@ plot_natural_mortality <- function(
     group = "age",
     facet = facet,
     geom = geom,
-    interactive = TRUE
+    interactive = interactive,
+    module = module
   )
+  
+  # STOP if there are no ages -- indicating this is a single M and would not be plotted
+  if (all(is.na(filter_data$age))) cli::cli_abort("Natural mortality by age not found.")
   
   # This process overrides grouping if it is inaccurate
   processing <- process_data(filter_data, group, facet)
@@ -49,18 +55,18 @@ plot_natural_mortality <- function(
   group <- processing[[3]]
   facet <- processing[[4]]
   
-  # plt <- plot_timeseries(
-  #   dat = processed_data |> dplyr::mutate(age = as.numeric(age)),
-  #   x = "age",
-  #   y = "estimate",
-  #   geom = geom,
-  #   xlab = "Age",
-  #   ylab = "Natural Mortality",
-  #   group = group,
-  #   facet = facet
-  # )
+  plt <- plot_timeseries(
+    dat = processed_data |> dplyr::mutate(age = as.numeric(age)),
+    x = "age",
+    y = "estimate",
+    geom = geom,
+    xlab = "Age",
+    ylab = "Natural Mortality",
+    group = group,
+    facet = facet
+  )
   
-  # final <- plt + theme_noaa(discrete = TRUE)
+  final <- plt + theme_noaa(discrete = TRUE)
   
   ### Make RDA ----
   if (make_rda) {
@@ -73,14 +79,5 @@ plot_natural_mortality <- function(
     )
   }
   # Output final plot
-  plot_timeseries(
-    dat = processed_data |> dplyr::mutate(age = as.numeric(age)),
-    x = "age",
-    y = "estimate",
-    geom = geom,
-    xlab = "Age",
-    ylab = "Natural Mortality",
-    group = group,
-    facet = facet
-  ) + theme_noaa(discrete = TRUE)
+  final
 }
