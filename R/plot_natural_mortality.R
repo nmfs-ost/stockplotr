@@ -82,7 +82,6 @@ plot_natural_mortality <- function(
       dplyr::mutate(group_var = .data[[group]])
   }
 
-
   plt <- plot_timeseries(
     dat = processed_data |> dplyr::mutate(age = as.numeric(age)),
     x = "age",
