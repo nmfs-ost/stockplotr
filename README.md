@@ -63,14 +63,7 @@ Then, once your converted model results are saved as an object in your R environ
 ### Example
 
 ```r
-output_file <- system.file("extdata", "Report.sso", package = "stockplotr")
-
-# convert your model results file into a `stockplotr` object
-pak::pak("nmfs-ost/asar")
-converted_output <- asar::convert_output(
-  file = output_file,
-  model = "SS3"
-)
+stockplotr::example_data
 
 # create a landings figure from your object
 plot_landings(converted_output)
