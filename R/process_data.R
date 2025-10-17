@@ -310,6 +310,7 @@ process_data <- function(
       group <- NULL
     }
   }
+
   # Export list of objects
   list(
     # variable,
