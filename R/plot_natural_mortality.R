@@ -42,7 +42,7 @@ plot_natural_mortality <- function(
     interactive = interactive,
     module = module
   )
-  
+
   # Set group back to NULL if it is age since this is an at age plot
   # if (group == "age") {
   #   prepared_data <- prepared_data |>
@@ -95,7 +95,7 @@ plot_natural_mortality <- function(
     facet = facet
   )
   
-  final <- plt + theme_noaa(discrete = TRUE)
+  # final <- plt + theme_noaa(discrete = TRUE)
   
   ### Make RDA ----
   if (make_rda) {
@@ -108,5 +108,14 @@ plot_natural_mortality <- function(
     )
   }
   # Output final plot
-  final
+  plot_timeseries(
+    dat = processed_data |> dplyr::mutate(age = as.numeric(age)),
+    x = "age",
+    y = "estimate",
+    geom = geom,
+    xlab = "Age",
+    ylab = "Natural Mortality",
+    group = group,
+    facet = facet
+  ) + theme_noaa(discrete = TRUE)
 }
