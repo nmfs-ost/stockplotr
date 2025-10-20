@@ -54,7 +54,7 @@
 #' plot_spawning_biomass(
 #'   dat = stockplotr:::example_data,
 #'   geom = "line",
-#'   ref_line = "target",
+#'   ref_line = "sy",
 #'   unit_label = "mt",
 #'   scale_amount = 1000,
 #'   interactive = FALSE,
