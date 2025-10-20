@@ -5,15 +5,13 @@
 #' @return Plot natural mortality at age from a stock assessment model as 
 #' found in a NOAA stock assessment report.
 #' @export
-#' @examples
-#' \dontrun{
-#' plot_natural_mortality(
-#'   dat = petrale,
-#'   module = "Natural_Mortality"
-#' )
-#' }
 #' 
-#'
+#' @examples
+#' plot_natural_mortality(
+#'   dat = stockplotr:::example_data,
+#'   module = "Natural_Mortality",
+#'   interactive = FALSE
+#' )
 plot_natural_mortality <- function(
     dat,
     group = NULL,

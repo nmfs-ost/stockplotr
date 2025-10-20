@@ -58,12 +58,9 @@ found in a NOAA stock assessment report.
 Plot natural mortality (M) at age
 }
 \examples{
-\dontrun{
 plot_natural_mortality(
-  dat = petrale,
-  module = "Natural_Mortality"
+  dat = stockplotr:::example_data,
+  module = "Natural_Mortality",
+  interactive = FALSE
 )
-}
-
-
 }
