@@ -56,7 +56,9 @@
 #'   geom = "line",
 #'   ref_line = "target",
 #'   unit_label = "mt",
-#'   scale_amount = 1000
+#'   scale_amount = 1000,
+#'   interactive = FALSE,
+#'   module = "TIME_SERIES" 
 #' )
 plot_spawning_biomass <- function(
     dat,
