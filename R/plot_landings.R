@@ -9,18 +9,14 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' plot_landings(dat)
-#'
 #' plot_landings(
-#'   dat,
-#'   unit_label = "my_unit",
+#'   dat = stockplotr:::example_data,
+#'   unit_label = "metric tons",
 #'   group = "fleet",
 #'   facet = "area",
-#'   make_rda = TRUE,
-#'   figures_dir = getwd()
+#'   interactive = FALSE,
+#'   make_rda = FALSE
 #' )
-#' }
 plot_landings <- function(
   dat,
   unit_label = "metric tons",

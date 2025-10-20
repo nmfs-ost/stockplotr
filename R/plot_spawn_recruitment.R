@@ -15,18 +15,12 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' plot_spawn_recruitment(dat)
-#'
 #' plot_spawn_recruitment(
-#'   dat,
+#'   dat = stockplotr:::example_data,
 #'   interactive = FALSE,
-#'   spawning_biomass_label = "sb label",
-#'   recruitment_label = "rec label",
-#'   make_rda = TRUE,
-#'   figures_dir = getwd()
+#'   spawning_biomass_label = "metric tons",
+#'   recruitment_label = "metric tons"
 #' )
-#' }
 plot_spawn_recruitment <- function(
     dat,
     spawning_biomass_label = "mt",
