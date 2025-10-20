@@ -88,7 +88,7 @@ also be made relative to this reference line rather than in absolute units.
 }
 \examples{
 plot_spawning_biomass(
-  dat = stockplotr::example_data,
+  dat = stockplotr:::example_data,
   geom = "line",
   ref_line = "target",
   unit_label = "mt",
