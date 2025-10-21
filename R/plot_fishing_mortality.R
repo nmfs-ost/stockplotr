@@ -15,8 +15,7 @@
 #'   dat = stockplotr:::example_data,
 #'   ref_line = c("target" = 0.2),
 #'   group = "fleet",
-#'   interactive = FALSE,
-#'   group = "fleet" # not sure if works for example data
+#'   interactive = FALSE
 #' )
 plot_fishing_mortality <- function(
   dat,
