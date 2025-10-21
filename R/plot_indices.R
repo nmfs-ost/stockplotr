@@ -55,7 +55,9 @@ plot_indices <- function(
     era = NULL,
     geom = "line",
     # ifelse guarantees the code doesn't miss grouping when label has > 1 value
-    group = ifelse(length(unique(filter_data$label)) > 1, "label", group),
+    # ifelse(length(unique(filter_data$label)) > 1, "label", group)
+    # above does not work if it happens during this step lol
+    group = group,
     facet = facet, 
     interactive = interactive,
     module = module
@@ -74,7 +76,7 @@ plot_indices <- function(
       ylab = u_units,
       group = "label",
       facet = facet,
-      size = 1,
+      linewidth = 1,
       ...
     ) +
       # commenting out but might need this later -- not sure if this will always be true
