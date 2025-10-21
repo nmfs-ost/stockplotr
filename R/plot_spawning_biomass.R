@@ -51,7 +51,6 @@
 #' @export
 #'
 #' @examples
-#' ```{r, fig.width=5, fig.height=4, out.width="60%"}
 #' plot_spawning_biomass(
 #'   dat = stockplotr:::example_data,
 #'   geom = "line",
@@ -68,7 +67,6 @@
 #'   ref_line = "msy",
 #'   module = "TIME_SERIES"  
 #')
-#' ```
 plot_spawning_biomass <- function(
     dat,
     geom = "line",

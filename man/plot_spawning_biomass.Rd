@@ -87,7 +87,6 @@ Plot spawning biomass with a reference line as a dashed line. The figure can
 also be made relative to this reference line rather than in absolute units.
 }
 \examples{
-```{r, fig.width=5, fig.height=4, out.width="60\%"}
 plot_spawning_biomass(
   dat = stockplotr:::example_data,
   geom = "line",
@@ -104,5 +103,4 @@ plot_spawning_biomass(
   ref_line = "msy",
   module = "TIME_SERIES"  
 )
-```
 }
