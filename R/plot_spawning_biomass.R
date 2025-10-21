@@ -55,11 +55,12 @@
 #' plot_spawning_biomass(
 #'   dat = stockplotr:::example_data,
 #'   geom = "line",
-#'   ref_line = "sy",
+#'   ref_line = "msy",
 #'   unit_label = "mt",
 #'   scale_amount = 1000,
 #'   interactive = FALSE,
-#'   module = "TIME_SERIES" 
+#'   module = "TIME_SERIES",
+#'   linewidth = 1.5
 #' )
 #' plot_spawning_biomass(
 #'   dat = stockplotr:::example_data,
