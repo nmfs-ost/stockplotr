@@ -1,7 +1,6 @@
-AFSC
-BenWilliams
 CPUE
 FIMS
+FIMSdiags
 Lifecycle
 MSY
 Modelling
@@ -21,9 +20,7 @@ dataframe's
 diagonostic
 flextable
 ggplot
-github
 hline
-https
 is’
 kable
 kableExtra
