@@ -51,7 +51,7 @@
 #' @export
 #'
 #' @examples
-#' ```{r, out.width="70%"}
+#' ```{r, fig.width=5, fig.height=4, out.width="60%"}
 #' plot_spawning_biomass(
 #'   dat = stockplotr:::example_data,
 #'   geom = "line",
