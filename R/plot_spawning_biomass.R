@@ -51,7 +51,7 @@
 #' @export
 #'
 #' @examples
-#' ```{r example-plot-dynamic, fig.width=6, fig.height=4, out.width="70%"}
+#' ```{r, out.width="70%"}
 #' plot_spawning_biomass(
 #'   dat = stockplotr:::example_data,
 #'   geom = "line",
