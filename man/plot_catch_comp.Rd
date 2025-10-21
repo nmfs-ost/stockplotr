@@ -11,6 +11,8 @@ plot_catch_comp(
   unit_label = "mt",
   scale_amount = 1,
   proportional = TRUE,
+  interactive = FALSE,
+  module = NULL,
   make_rda = FALSE,
   figures_dir = getwd()
 )
@@ -56,13 +58,13 @@ The current plot function does not combine all sources of catch.
 Plot catch composition
 }
 \examples{
-\dontrun{
 plot_catch_comp(
-  dat,
+  dat = stockplotr:::example_data,
   facet = "area",
   unit_label = "mt",
   scale_amount = 100,
-  make_rda = TRUE,
-  figures_dir = getwd())
-}
+  interactive = FALSE,
+  make_rda = FALSE,
+  figures_dir = getwd()
+)
 }

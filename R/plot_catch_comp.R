@@ -17,15 +17,15 @@
 #' The current plot function does not combine all sources of catch.
 #'
 #' @examples
-#' \dontrun{
 #' plot_catch_comp(
-#'   dat,
+#'   dat = stockplotr:::example_data,
 #'   facet = "area",
 #'   unit_label = "mt",
 #'   scale_amount = 100,
-#'   make_rda = TRUE,
-#'   figures_dir = getwd())
-#' }
+#'   interactive = FALSE,
+#'   make_rda = FALSE,
+#'   figures_dir = getwd()
+#' )
 plot_catch_comp <- function(
   dat,
   facet = NULL,
@@ -33,6 +33,8 @@ plot_catch_comp <- function(
   unit_label = "mt",
   scale_amount = 1,
   proportional = TRUE,
+  interactive = FALSE,
+  module = NULL,
   make_rda = FALSE,
   figures_dir = getwd()
 ) {
@@ -51,7 +53,8 @@ plot_catch_comp <- function(
     geom = "point",
     group = "age",
     scale_amount = scale_amount,
-    interactive = TRUE
+    interactive = interactive,
+    module = module
   )
   # Check for extracted data, if not return warning and empty plot
   if (nrow(catch) == 0) {
