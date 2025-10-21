@@ -50,16 +50,11 @@ or will be extracted from the provided file if possible.
 Plot Total Biomass at Age (BAA)
 }
 \examples{
-\dontrun{
-plot_biomass_at_age(dat)
-
 plot_biomass_at_age(
-  dat,
+  dat = stockplotr:::example_data,
   unit_label = "mt",
   scale_amount = 100,
   proportional = FALSE, # displays legend
-  make_rda = TRUE,
-  figures_dir = getwd()
+  make_rda = FALSE
 )
-}
 }
