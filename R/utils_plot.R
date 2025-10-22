@@ -578,7 +578,7 @@ cap_first_letter <- function(s) {
 
 #------------------------------------------------------------------------------
 
-#' Prep data for input into aesthetics for ggplot2
+#' Filter data for input into aesthetics for ggplot2
 #'
 #' @param dat a data frame or list of data frames that contains the data to be
 #' plotted.

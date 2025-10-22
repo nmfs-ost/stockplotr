@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils_plot.R
 \name{filter_data}
 \alias{filter_data}
-\title{Prep data for input into aesthetics for ggplot2}
+\title{Filter data for input into aesthetics for ggplot2}
 \usage{
 filter_data(
   dat,
@@ -50,7 +50,7 @@ a module_name when there was more than one found in the filtered dataset.}
 a data frame that is preformatted for plotting with ggplot2.
 }
 \description{
-Prep data for input into aesthetics for ggplot2
+Filter data for input into aesthetics for ggplot2
 }
 \examples{
 \dontrun{
