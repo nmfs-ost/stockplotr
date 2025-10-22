@@ -117,6 +117,7 @@ process_data <- function(
   } else {
     data <- dat
   }
+
   if (length(index_variables) > 0) {
     data <- data |>
       dplyr::select(tidyselect::all_of(c(
@@ -138,6 +139,7 @@ process_data <- function(
   if ("age" %in% colnames(data) && any(!is.na(data$age))) {
     # subset out nas if ages exist for this
     # not sure if  this works for all cases -- are there situations where we want the NA and not age?
+
     data <- dplyr::filter(data, !is.na(age))
     if (!is.null(group) && group == "age") {
       if ("age" %in% index_variables) index_variables <- index_variables[-grep("age", index_variables)]
