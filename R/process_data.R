@@ -15,7 +15,7 @@ process_data <- function(
     data <- dat
   }
   # check for additional indexed variables
-  index_variables <- check_grouping(filter_data)
+  index_variables <- check_grouping(data)
   if (length(index_variables) > 0) {
     data <- data |>
       dplyr::select(dplyr::all_of(c(
@@ -32,7 +32,7 @@ process_data <- function(
   
   # Check if there is age or year or both
   # Then either plot over ages with lines for year or single year
-  if (any(!is.na(filter_data$age))) {
+  if (any(!is.na(data$age))) {
     data <- dplyr::filter(data, !is.na(age))
     index_variables <- index_variables[-grep("age", index_variables)]
     if ("year" %in% colnames(data) && any(!is.na(data$year))) {
