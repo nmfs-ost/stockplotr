@@ -5,7 +5,7 @@
 #' Plot time series trends
 #'
 #' @param dat filtered data frame from standard output file(s) preformatted for
-#'  the target label from \link[stockplotr]{prepare_data}
+#'  the target label from \link[stockplotr]{filter_data}
 #' @param x a string of the column name of data used to plot on the x-axis (default 
 #' is "year")
 #' @param y a string of the column name of data used to plot on the y-axis (default 
@@ -187,7 +187,7 @@ plot_timeseries <- function(
 #' Create plot with error
 #' 
 #' @param dat filtered data frame from standard output file(s) preformatted for
-#'  the target label from \link[stockplotr]{prepare_data}
+#'  the target label from \link[stockplotr]{filter_data}
 #' @param x a string of the column name of data used to plot on the x-axis (default 
 #' is "year")
 #' @param y a string of the column name of data used to plot on the y-axis (default 
@@ -266,7 +266,7 @@ plot_error <- function(
 #' Create "at-age" plot
 #'
 #' @param dat filtered data frame from standard output file(s) preformatted for
-#'  the target label from \link[stockplotr]{prepare_data}
+#'  the target label from \link[stockplotr]{filter_data}
 #' @param x a string of the column name of data used to plot on the x-axis
 #' (default is "year")
 #' @param y a string of the column name of data used to plot on the y-axis
@@ -606,9 +606,9 @@ cap_first_letter <- function(s) {
 #'
 #' @examples
 #' \dontrun{
-#' prepare_data(dat, "biomass", "line", group = "fleet")
+#' filter_data(dat, "biomass", "line", group = "fleet")
 #' }
-prepare_data <- function(
+filter_data <- function(
     dat,
     label_name,
     module = NULL,

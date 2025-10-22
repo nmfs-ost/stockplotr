@@ -44,7 +44,7 @@ plot_landings <- function(
   )
 
   # Filter data for landings
-  filter_data <- prepare_data(
+  prepared_data <- filter_data(
     dat = dat,
     label_name = "landings",
     geom = geom,
@@ -59,20 +59,20 @@ plot_landings <- function(
     dplyr::filter(!is.na(year))
     
   # Check if there is >1 label
-  if (length(filter_data$label) > 1) {
-    filter_data <- filter_data |>
+  if (length(prepared_data$label) > 1) {
+    prepared_data <- prepared_data |>
       # always select the first label if TRUE
       dplyr::filter(label == unique(label)[1])
   }
     
   # Override grouping variable when there is only NA's
   if (!is.null(group)) {
-    if (group %notin% colnames(filter_data)) group = NULL
+    if (group %notin% colnames(prepared_data)) group = NULL
   }
     
   # inital base plot
   plt <- plot_timeseries(
-    dat = filter_data,
+    dat = prepared_data,
     y = "estimate",
     geom = geom,
     ylab = landings_label,

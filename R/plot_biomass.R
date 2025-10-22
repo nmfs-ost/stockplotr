@@ -78,7 +78,7 @@ plot_biomass <- function(
   }
   
   # Filter data for spawning biomass
-  filter_data <- prepare_data(
+  prepared_data <- filter_data(
     dat = dat,
     label_name = "^biomass$|^biomass_retained$|^biomass_dead$",
     geom = geom,
@@ -89,18 +89,18 @@ plot_biomass <- function(
     interactive = interactive
   )
     # Filter out fleet if grouping or faceting variable is not it
-    if (!is.null(group) & "fleet" %in% colnames(filter_data)) {
+    if (!is.null(group) & "fleet" %in% colnames(prepared_data)) {
       if (group!= "fleet") {
-        filter_data <- dplyr::filter(filter_data, is.na(fleet))
+        prepared_data <- dplyr::filter(prepared_data, is.na(fleet))
       } else {
-        filter_data <- dplyr::filter(filter_data, !is.na(fleet))
+        prepared_data <- dplyr::filter(prepared_data, !is.na(fleet))
       }
     }
   # Check df if there is >1 unique(label)
-  if (length(unique(filter_data$label)) > 1 & is.null(facet)) {
+  if (length(unique(prepared_data$label)) > 1 & is.null(facet)) {
     # summarize data by grouping
     # specifically aiming to add together SS3 retained, dead, and selected biomass
-    filter_data <- filter_data |>
+    prepared_data <- prepared_data |>
       dplyr::group_by(year, model, group_var, era, module_name) |>
       dplyr::summarise(
         label = "biomass",
@@ -108,10 +108,10 @@ plot_biomass <- function(
         estimate_lower = mean(estimate_lower),
         estimate_upper = mean(estimate_upper)
       )
-  } else if (length(unique(filter_data$label)) > 1 & !is.null(facet)) {
+  } else if (length(unique(prepared_data$label)) > 1 & !is.null(facet)) {
     # summarize data by grouping and facet(s)
     # specifically aiming to add together SS3 retained, dead, and selected biomass
-    filter_data <- filter_data |>
+    prepared_data <- prepared_data |>
       dplyr::group_by(year, model, group_var, era, module_name, .data[[facet]]) |>
       dplyr::summarise(
         label = "biomass",
@@ -122,7 +122,7 @@ plot_biomass <- function(
   }
   # Override grouping variable when there is only NA's
   if (!is.null(group)) {
-    if (group %notin% colnames(filter_data)) group = NULL
+    if (group %notin% colnames(prepared_data)) group = NULL
   }
   # Calculate estimate if relative
   if (relative) {
@@ -136,12 +136,12 @@ plot_biomass <- function(
       ) / scale_amount
     }
     if (is.na(ref_line_val)) cli::cli_abort("Reference value not found. Cannot plot relative values.")
-    filter_data <- filter_data |>
+    prepared_data <- prepared_data |>
       dplyr::mutate(estimate = estimate / ref_line_val)
   }
   
   plt <- plot_timeseries(
-    dat = filter_data,
+    dat = prepared_data,
     y = "estimate",
     geom = geom,
     ylab = biomass_label,
