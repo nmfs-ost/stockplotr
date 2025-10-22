@@ -24,14 +24,15 @@
 #' )
 #' }
 plot_biomass_at_age <- function(
-    dat,
-    facet = NULL,
-    unit_label = "mt",
-    scale_amount = 1000,
-    proportional = TRUE,
-    interactive = FALSE,
-    make_rda = FALSE,
-    figures_dir = getwd()) {
+  dat,
+  facet = NULL,
+  unit_label = "mt",
+  scale_amount = 1000,
+  proportional = TRUE,
+  interactive = FALSE,
+  make_rda = FALSE,
+  figures_dir = getwd()
+) {
   # Create label for abundance units in legend
   biomass_label <- label_magnitude(
     label = "Biomass",
@@ -62,10 +63,10 @@ plot_biomass_at_age <- function(
     label = biomass_label,
     proportional = proportional
   ) +
-  average_age_line(
-    dat = b,
-    facet = facet
-  )
+    average_age_line(
+      dat = b,
+      facet = facet
+    )
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
     create_rda(
