@@ -104,7 +104,7 @@
 <p><img src="reference/figures/stockplotr-hex.png" align="right" height="200" style="float:right; height:200px;"></p>
 <p><strong><em>Previously named ‘satf’</em></strong></p>
 <p>The goal of <code>stockplotr</code> is to create a centralized package that contains all of the figures and tables for a stock assessment report used to inform management. There are multiple current packages that perform a similar function, but they are typically region and/or model dependent. Across the US, there are multiple packages that create plots that are directly used in a stock assessment report used for management. For example, an analyst that uses Stock Synthesis (SS3) to assess a stock will utilize <a href="https://github.com/r4ss/r4ss/" class="external-link"><code>r4ss</code></a>, a package that reads outputs, plots key parameters, and more to increase throughput and reduce tedious tasks for an analyst.</p>
-<p>Please note that this package is still in development. As such, some functions are still in development, such as the functions that create indices figures (i.e., <code>plot_indices</code>) and landings tables (i.e., <code>table_landings</code>).</p>
+<p>Please note that this package is still in development. As such, some functions are unstable and might not perform as intended. We encourage anyone who tests out this package to leave an <a href="https://github.com/nmfs-ost/stockplotr/issues" class="external-link">issue</a> for any errors you find or for a feature request.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -122,7 +122,7 @@
 </ol>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"nmfs-ost/stockplotr"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"nmfs-ost/stockplotr"</span><span class="op">)</span></span></code></pre></div>
 <ol start="3" style="list-style-type: decimal">
 <li>From the nmfs-ost r-universe</li>
 </ol>
@@ -135,26 +135,16 @@
 <p>Please refer to the <a href="https://connect.fisheries.noaa.gov/asar_tutorial/#section-preparing-to-run-create_template" class="external-link"><code>asar</code> tutorial</a> to learn how to produce the input file necessary to create figures and tables with <code>stockplotr</code>.</p>
 <p>Then, once your converted model results are saved as an object in your R environment, you can use <code>stockplotr</code> functions to create plots from the object.</p>
 <blockquote>
-<p>[!TIP] <code>stockplotr</code> plots or tables are exported as <code>ggplot2</code> or <code>flextables</code> objects meaning that users can use the same process to add new data, formatting, or other customizations to the plot beyond the baseline made by this package</p>
+<p>[!TIP] <code>stockplotr</code> plots or tables are exported as <code>ggplot2</code> or <code>flextable</code> objects meaning that users can use the same process to add new data, formatting, or other customizations to the plot beyond the baseline made by this package</p>
 </blockquote>
 <div class="section level3">
 <h3 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">output_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Report.sso"</span>, package <span class="op">=</span> <span class="st">"stockplotr"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># convert your model results file into a `stockplotr` object</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"nmfs-ost/asar"</span><span class="op">)</span></span>
-<span><span class="va">converted_output</span> <span class="op">&lt;-</span> <span class="fu">asar</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/asar/man/convert_output.html" class="external-link">convert_output</a></span><span class="op">(</span></span>
-<span>  file <span class="op">=</span> <span class="va">output_file</span>,</span>
-<span>  model <span class="op">=</span> <span class="st">"SS3"</span></span>
-<span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va">example_data</span></span>
 <span></span>
 <span><span class="co"># create a landings figure from your object</span></span>
-<span><span class="fu">plot_landings</span><span class="op">(</span><span class="va">converted_output</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># create a landings table from your object</span></span>
-<span><span class="fu">table_landings</span><span class="op">(</span><span class="va">converted_output</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/plot_spawning_biomass.html">plot_spawning_biomass</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="44%">
@@ -169,6 +159,9 @@
 <td align="right"><img src="reference/figures/landings_table_ex.png" alt="Example landings tables from stockplotr"></td>
 </tr></tbody>
 </table>
+<blockquote>
+<p>[!NOTE] Tables are not currently included in the package due to a major overhaul. We plan to incorporate them by the end of 2025.</p>
+</blockquote>
 </div>
 </div>
 <div class="section level2">
@@ -188,7 +181,7 @@
 </h2>
 <p>We hope that this package will be able to be a one stop shop for plots regarding interpreting assessment models and presenting the results to managers and relevant stakeholders. We encourage interested users to contribute to this package using their custom code when they find it may be useful across the nation.</p>
 <blockquote>
-<p>[!NOTE] An additional package to plot model diagnostics is being worked on for the Fisheries Integrated Modelling System [FIMS] that will natively work with the output used for stockplotr since the model output for FIMS works together with stockplotr. More information can be found soon and a link to the repo will be located here once available.</p>
+<p>[!NOTE] An additional package to plot model diagnostics called <a href="https://github.com/NOAA-FIMS/FIMSdiags" class="external-link">FIMSdiags</a> is being worked on for the Fisheries Integrated Modelling System [FIMS] that will natively work with the output used for stockplotr since the model output for FIMS works together with stockplotr.</p>
 </blockquote>
 </div>
 <div class="section level2">
