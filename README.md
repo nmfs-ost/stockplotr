@@ -21,8 +21,9 @@ a package that reads outputs, plots key parameters, and more to increase
 throughput and reduce tedious tasks for an analyst.
 
 Please note that this package is still in development. As such, some functions 
-are still in development, such as the functions that create indices figures 
-(i.e., `plot_indices`) and landings tables (i.e., `table_landings`).
+are unstable and might not perform as intended. We encourage anyone who tests 
+out this package to leave an [issue](https://github.com/nmfs-ost/stockplotr/issues)
+for any errors you find or for a feature request.
 
 ## Installation
 
@@ -55,32 +56,26 @@ Please refer to the [`asar` tutorial](https://connect.fisheries.noaa.gov/asar_tu
 Then, once your converted model results are saved as an object in your R environment, you can use `stockplotr` functions to create plots from the object.
 
 > [!TIP]
-> `stockplotr` plots or tables are exported as `ggplot2` or `flextables` objects 
+> `stockplotr` plots or tables are exported as `ggplot2` or `flextable` objects 
 > meaning that users can use the same process to add new data, formatting, or 
 > other customizations to the plot beyond the baseline made by this package
 
 ### Example
 
 ```r
-output_file <- system.file("extdata", "Report.sso", package = "stockplotr")
-
-# convert your model results file into a `stockplotr` object
-pak::pak("nmfs-ost/asar")
-converted_output <- asar::convert_output(
-  file = output_file,
-  model = "SS3"
-)
+data <- stockplotr:::example_data
 
 # create a landings figure from your object
-plot_landings(converted_output)
-
-# create a landings table from your object
-table_landings(converted_output)
+plot_spawning_biomass(data)
 ```
 
 Example Plot | Example Table |
 :------------|---------------:
 ![Example landings plot from stockplotr](man/figures/landings_plot_ex.png) | ![Example landings tables from stockplotr](man/figures/landings_table_ex.png)
+
+> [!NOTE]
+> Tables are not currently included in the package due to a major overhaul.
+> We plan to incorporate them by the end of 2025.
 
 ## Contributions
 
@@ -102,11 +97,10 @@ stakeholders. We encourage interested users to contribute to this package using
 their custom code when they find it may be useful across the nation.
 
 > [!NOTE]
-> An additional package to plot model diagnostics is being worked on for the 
-> Fisheries Integrated Modelling System [FIMS] that will natively work with the 
-> output used for stockplotr since the model output for FIMS works together with
-> stockplotr. More information can be found soon and a link to the repo will be 
-> located here once available.
+> An additional package to plot model diagnostics called [FIMSdiags](https://github.com/NOAA-FIMS/FIMSdiags) 
+> is being worked on for the Fisheries Integrated Modelling System [FIMS] that 
+> will natively work with the output used for stockplotr since the model output 
+> for FIMS works together with stockplotr.
 
 ## Disclaimer
 
