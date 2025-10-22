@@ -19,14 +19,14 @@ reference_line(
 
 \item{dat}{standard data frame where reference point should be extracted}
 
-\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or 
-projected ("fore") data if filtering should occur. Default is set to "time" which is 
+\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or
+projected ("fore") data if filtering should occur. Default is set to "time" which is
 the current time. To plot all data, set era to NULL.}
 
-\item{label_name}{string of the name of the quantity that users want to 
+\item{label_name}{string of the name of the quantity that users want to
 extract the reference point from}
 
-\item{reference}{string. name of the reference point such as "msy", 
+\item{reference}{string. name of the reference point such as "msy",
 "unfished", or "target"}
 
 \item{relative}{A logical value specifying if the resulting figures should
@@ -38,7 +38,7 @@ shown on the y axis. For example, scale_amount = 100 would scale down a value
 from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
 }
 \value{
-a ggplot2 geom_hline object for a reference point that can be added 
+a ggplot2 geom_hline object for a reference point that can be added
 to a plot
 }
 \description{

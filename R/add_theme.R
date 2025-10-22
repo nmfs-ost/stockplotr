@@ -37,33 +37,33 @@ add_theme <- function(x, discrete = TRUE) {
   } else if (class(x)[1] == "gg" | class(x)[2] == "ggplot") { #  - removed bc wouldn't work with only 1 entry in the class for other object classes
     theme_obj <- x +
       ggplot2::theme(
-          plot.background = ggplot2::element_rect(fill = "transparent"),
-          panel.background = ggplot2::element_rect(fill = "transparent"),
-          panel.grid = ggplot2::element_blank(),
-          panel.border = ggplot2::element_rect(colour = "black", fill = NA, linewidth = 0.5),
-          complete = TRUE,
-          text = ggplot2::element_text(size = 14),
-          plot.margin = ggplot2::margin(0.5,1,0.5, 0.5, "cm")
-        ) 
-    if (discrete){
-      theme_obj <- theme_obj + 
-            ggplot2::scale_color_viridis_d(
-              option = "mako",
-              begin = 0.1,
-              end = 0.85
-            ) +
-            ggplot2::scale_fill_viridis_d(
-              option = "mako",
-              begin = 0.1,
-              end = 0.85
-            )
-    } else {
-      theme_obj <- theme_obj 
-        ggplot2::scale_color_viridis_c(
+        plot.background = ggplot2::element_rect(fill = "transparent"),
+        panel.background = ggplot2::element_rect(fill = "transparent"),
+        panel.grid = ggplot2::element_blank(),
+        panel.border = ggplot2::element_rect(colour = "black", fill = NA, linewidth = 0.5),
+        complete = TRUE,
+        text = ggplot2::element_text(size = 14),
+        plot.margin = ggplot2::margin(0.5, 1, 0.5, 0.5, "cm")
+      )
+    if (discrete) {
+      theme_obj <- theme_obj +
+        ggplot2::scale_color_viridis_d(
           option = "mako",
           begin = 0.1,
           end = 0.85
         ) +
+        ggplot2::scale_fill_viridis_d(
+          option = "mako",
+          begin = 0.1,
+          end = 0.85
+        )
+    } else {
+      theme_obj <- theme_obj
+      ggplot2::scale_color_viridis_c(
+        option = "mako",
+        begin = 0.1,
+        end = 0.85
+      ) +
         ggplot2::scale_fill_viridis_c(
           option = "mako",
           begin = 0.1,

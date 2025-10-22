@@ -1,7 +1,7 @@
 #' Plot Abundance (or Numbers) at Age (AAA or NAA)
 #'
 #' @param dat A data frame returned from \link[asar]{convert_output}
-#' @param facet a string or vector of strings of column(s) that 
+#' @param facet a string or vector of strings of column(s) that
 #' groups the data (e.g. "fleet", "sex", "area", etc.).
 #' @param unit_label units for abundance
 #' @param scale_amount A number describing how much to scale down the abundance at
@@ -41,14 +41,14 @@
 #' )
 #' }
 plot_abundance_at_age <- function(
-    dat,
-    facet = NULL,
-    unit_label = "fish",
-    scale_amount = 1000,
-    proportional = TRUE,
-    make_rda = FALSE,
-    figures_dir = getwd()
-    ) {
+  dat,
+  facet = NULL,
+  unit_label = "fish",
+  scale_amount = 1000,
+  proportional = TRUE,
+  make_rda = FALSE,
+  figures_dir = getwd()
+) {
   # Create label for abundance units in legend
   abundance_label <- label_magnitude(
     label = "Abudance",
@@ -79,10 +79,10 @@ plot_abundance_at_age <- function(
     label = abundance_label,
     proportional = proportional
   ) +
-  average_age_line(
-    dat = b,
-    facet = facet
-  )
+    average_age_line(
+      dat = b,
+      facet = facet
+    )
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
     create_rda(

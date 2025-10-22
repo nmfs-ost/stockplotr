@@ -20,13 +20,15 @@ sim_df <- data.frame(
   uncertainty_label = NA,
   uncertainty = NA,
   growth_pattern = NA,
-  age = sample(c(0,1,2,3,4,5,6), n, replace = TRUE),
+  age = sample(c(0, 1, 2, 3, 4, 5, 6), n, replace = TRUE),
   era = sample(c("time", "fore"), n, replace = TRUE),
   year = as.numeric(sample(2000:2024, n, replace = TRUE)),
-  nsim = as.numeric(1:n)) |>
-  dplyr::full_join(data.frame(label = "biomass_msy",
-                              estimate = 30000))
-
+  nsim = as.numeric(1:n)
+) |>
+  dplyr::full_join(data.frame(
+    label = "biomass_msy",
+    estimate = 30000
+  ))
 
 
 test_that("plot_biomass generates plots without errors", {
@@ -34,13 +36,13 @@ test_that("plot_biomass generates plots without errors", {
   expect_no_error(
     plot_biomass(out_new)
   )
-  
+
   # TODO: Update test
   # expect plot with warning message if ref_point not indicated
   # expect_message(
   #   plot_biomass(out_new)
   # )
-  
+
   # expect error-free plot with many arguments
   expect_no_error(
     plot_biomass(
@@ -54,7 +56,7 @@ test_that("plot_biomass generates plots without errors", {
       figures_dir = getwd()
     )
   )
-  
+
   # expect error-free plot when setting relative to T
   expect_no_error(
     plot_biomass(
@@ -64,7 +66,7 @@ test_that("plot_biomass generates plots without errors", {
       relative = TRUE
     )
   )
-  
+
   # expect ggplot object is returned
   expect_s3_class(
     plot_biomass(
@@ -112,11 +114,11 @@ test_that("rda file made when indicated", {
     make_rda = TRUE,
     end_year = 2023
   )
-  
+
   # expect that both figures dir and the biomass_figure.rda file exist
   expect_true(dir.exists(fs::path(getwd(), "figures")))
   expect_true(file.exists(fs::path(getwd(), "figures", "biomass_figure.rda")))
-  
+
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
   unlink(fs::path(getwd(), "figures"), recursive = T)
