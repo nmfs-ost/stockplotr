@@ -19,7 +19,8 @@
 #'   dat = stockplotr:::example_data,
 #'   interactive = FALSE,
 #'   spawning_biomass_label = "metric tons",
-#'   recruitment_label = "metric tons"
+#'   recruitment_label = "metric tons",
+#'   module = "SPAWN_RECRUIT"
 #' )
 plot_spawn_recruitment <- function(
     dat,
