@@ -16,6 +16,7 @@
 #' This plot is made only when catch or landings are explicitly named in the output file.
 #' The current plot function does not combine all sources of catch.
 #'
+#' @export
 #' @examples
 #' plot_catch_comp(
 #'   dat = stockplotr:::example_data,
