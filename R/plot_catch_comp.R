@@ -11,6 +11,12 @@
 #' @param era a string naming the era of data such as historical ("early"), current ("time"), or 
 #' projected ("fore") data if filtering should occur. Default is set to "time" which is 
 #' the current time. To plot all data, set era to NULL.
+#' @param interactive TRUE/FALSE; indicate whether the environment in which the
+#' function is operating  is interactive. This bypasses some options for
+#' filtering when preparing data for the plot. Default is FALSE.
+#' @param module (Optional) A string indicating the linked module_name associated
+#' with the label for the plot if known. Default is NULL. By default, the function
+#' will select the most relevant module if more than 1 exists.
 #'
 #' @return A plot ready for a stock assessment report of catch or landings  composition.
 #' This plot is made only when catch or landings are explicitly named in the output file.

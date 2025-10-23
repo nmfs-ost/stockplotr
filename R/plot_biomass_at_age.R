@@ -5,6 +5,9 @@
 #' age. For example, scale_amount = 100 would scale down a value
 #' from 500,000 --> 5,000. This scale will be reflected in the legend label if
 #' proportion is set to FALSE.
+#' @param interactive TRUE/FALSE; indicate whether the environment in which the
+#' function is operating  is interactive. This bypasses some options for
+#' filtering when preparing data for the plot. Default is FALSE.
 #' @return Plot total biomass at age from a stock assessment model as found in a NOAA
 #' stock assessment report. Units of total biomass can either be manually added
 #' or will be extracted from the provided file if possible.
