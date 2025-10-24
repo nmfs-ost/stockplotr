@@ -105,7 +105,7 @@ plot_spawning_biomass <- function(
   }
 
   # Filter data for spawning biomass
-  filter_data <- prepare_data(
+  prepared_data <- filter_data(
     dat = dat,
     label_name = "spawning_biomass$",
     geom = geom,
@@ -119,7 +119,7 @@ plot_spawning_biomass <- function(
 
   # Override grouping variable when there is only NA's
   if (!is.null(group)) {
-    if (group %notin% colnames(filter_data)) group = NULL
+    if (group %notin% colnames(prepared_data)) group = NULL
   }
 
   # Calculate estimate if relative
@@ -134,12 +134,12 @@ plot_spawning_biomass <- function(
       ) / scale_amount
     }
     if (is.na(ref_line_val)) cli::cli_abort("Reference value not found. Cannot plot relative values.")
-    filter_data <- filter_data |>
+    prepared_data <- prepared_data |>
       dplyr::mutate(estimate = estimate / ref_line_val)
   }
 
   plt <- plot_timeseries(
-    dat = filter_data,
+    dat = prepared_data,
     y = "estimate",
     geom = geom,
     ylab = spawning_biomass_label,
@@ -164,11 +164,11 @@ plot_spawning_biomass <- function(
   # Plot vertical lines if era is not filtering
   if (is.null(era)) {
     # Find unique era
-    eras <- unique(filter_data$era)
+    eras <- unique(prepared_data$era)
     if (length(eras) > 1) {
       year_vlines <- c()
       for (i in 2:length(eras)){
-        erax <- filter_data |>
+        erax <- prepared_data |>
         dplyr::filter(era == eras[i]) |>
         dplyr::pull(year) |>
         min(na.rm = TRUE)

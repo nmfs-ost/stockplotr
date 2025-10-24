@@ -28,7 +28,7 @@ plot_recruitment_deviations <- function(
     ...
 ) {
  # Filter data
- filter_data <- prepare_data(
+ filter_data <- filter_data(
   dat = dat,
   label_name = "recruitment_deviations",
   module = module,

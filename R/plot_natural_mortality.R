@@ -32,7 +32,7 @@ plot_natural_mortality <- function(
   # -add to exp_all_figs_tables
   
   # Extract natural mortality
-  filter_data <- prepare_data(
+  prepared_data <- filter_data(
     dat,
     label_name = "natural_mortality",
     era = era,
@@ -44,10 +44,10 @@ plot_natural_mortality <- function(
   )
   
   # STOP if there are no ages -- indicating this is a single M and would not be plotted
-  if (all(is.na(filter_data$age))) cli::cli_abort("Natural mortality by age not found.")
+  if (all(is.na(prepared_data$age))) cli::cli_abort("Natural mortality by age not found.")
   
   # This process overrides grouping if it is inaccurate
-  processing <- process_data(filter_data, group, facet)
+  processing <- process_data(prepared_data, group, facet)
   # TODO: remove variable from process_data fxn output
   # variable <- processing[[1]]
   processed_data <- processing[[2]]

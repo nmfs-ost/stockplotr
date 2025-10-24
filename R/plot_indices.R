@@ -49,13 +49,13 @@ plot_indices <- function(
   }
   facet <- "fleet"
   # Filter data
-  filter_data <- prepare_data(
+  prepared_data <- filter_data(
     dat,
     label_name = "indices",
     era = NULL,
     geom = "line",
     # ifelse guarantees the code doesn't miss grouping when label has > 1 value
-    # ifelse(length(unique(filter_data$label)) > 1, "label", group)
+    # ifelse(length(unique(prepared_data$label)) > 1, "label", group)
     # above does not work if it happens during this step lol
     group = group,
     facet = facet, 
@@ -65,14 +65,14 @@ plot_indices <- function(
   
   # Subset data if focus
   if (!is.null(focus)) {
-    filter_data <- filter_data |> 
+    prepared_data <- prepared_data |> 
       dplyr::filter(fleet %in% focus)
   }
 
   # identify if there is >1 label and create plot
-  if (length(unique(filter_data$label)) > 1) {
+  if (length(unique(prepared_data$label)) > 1) {
     plt <- plot_timeseries(
-      dat = filter_data,
+      dat = prepared_data,
       ylab = u_units,
       group = "label",
       facet = facet,
@@ -99,7 +99,7 @@ plot_indices <- function(
   } else {
     # plot time series
     plt <- plot_error(
-      dat = filter_data,
+      dat = prepared_data,
       ylab = u_units,
       group = group,
       facet = facet,

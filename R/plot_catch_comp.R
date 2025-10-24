@@ -44,7 +44,7 @@ plot_catch_comp <- function(
     legend = TRUE
   )
   # Filter data
-  catch <- prepare_data(
+  catch <- filter_data(
     dat = dat,
     label_name = "catch|landings",
     era = era,
