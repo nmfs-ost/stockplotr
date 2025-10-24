@@ -82,21 +82,12 @@ associated caption and alternative text for the figure.
 Plot Total Biomass
 }
 \examples{
-\dontrun{
-plot_biomass(dat)
-
 plot_biomass(
-  dat,
-  unit_label = "my_unit",
-  figures_dir = getwd()
-)
-
-plot_biomass(
-  dat,
-  unit_label = "my_unit",
+  dat = stockplotr:::example_data,
+  unit_label = "mt",
+  ref_line = "target",
   scale_amount = 100,
-  make_rda = TRUE,
+  module = "TIME_SERIES",
   figures_dir = getwd()
 )
-}
 }

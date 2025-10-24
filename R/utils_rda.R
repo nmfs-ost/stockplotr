@@ -1914,3 +1914,7 @@ export_rda <- function(object = NULL,
     cli::cli_alert_success("{output_file_name} was exported.")
   }
 }
+
+
+# values within dat$year that are excluded from multiple plotting datasets
+year_exclusions <- c('S/Rcurve', 'Init', 'Virg')

@@ -11,18 +11,12 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' plot_fishing_mortality(dat)
-#'
 #' plot_fishing_mortality(
-#'   dat,
+#'   dat = stockplotr:::example_data,
 #'   ref_line = c("target" = 0.2),
 #'   group = "fleet",
-#'   make_rda = TRUE,
-#'   figures_dir = getwd()
+#'   interactive = FALSE
 #' )
-#' }
-
 plot_fishing_mortality <- function(
   dat,
   geom = "line",

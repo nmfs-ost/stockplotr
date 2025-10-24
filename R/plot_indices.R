@@ -12,16 +12,11 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' plot_indices(
-#'   petrale,
+#'   dat = stockplotr:::example_data,
 #'   unit_label = "fish/hr",
-#'   interactive= TRUE,
-#'   module = NULL,
-#'   make_rda = FALSE,
-#'   figures_dir = getwd()
+#'   interactive= FALSE
 #' )
-#' }
 plot_indices <- function(
     dat,
     unit_label = "",

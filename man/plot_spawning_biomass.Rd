@@ -87,15 +87,20 @@ Plot spawning biomass with a reference line as a dashed line. The figure can
 also be made relative to this reference line rather than in absolute units.
 }
 \examples{
-\dontrun{
 plot_spawning_biomass(
-  dat = list('base_model'=dat1,'sensitivity1'=dat2,'sensitivity2'=dat3),
+  dat = stockplotr:::example_data,
   geom = "line",
-  group= "sex",
-  facet = "fleet",
-  ref_line = "target",
+  ref_line = "msy",
   unit_label = "mt",
-  scale_amount = 1000
+  scale_amount = 1000,
+  interactive = FALSE,
+  module = "TIME_SERIES",
+  linewidth = 1.5
 )
-}
+plot_spawning_biomass(
+  dat = stockplotr:::example_data,
+  relative = TRUE,
+  ref_line = "msy",
+  module = "TIME_SERIES"  
+)
 }

@@ -105,7 +105,6 @@ save_all_plots <- function(
         dat,
         unit_label = recruitment_unit_label,
         scale_amount = recruitment_scale_amount,
-        relative = relative,
         interactive = interactive,
         make_rda = TRUE,
         figures_dir = figures_tables_dir
