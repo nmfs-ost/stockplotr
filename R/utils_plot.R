@@ -5,7 +5,7 @@
 #' Plot time series trends
 #'
 #' @param dat filtered data frame from standard output file(s) preformatted for
-#'  the target label from \link[stockplotr]{prepare_data}
+#'  the target label from \link[stockplotr]{filter_data}
 #' @param x a string of the column name of data used to plot on the x-axis (default 
 #' is "year")
 #' @param y a string of the column name of data used to plot on the y-axis (default 
@@ -82,16 +82,18 @@ plot_timeseries <- function(
     },
     "line" = {
       plot +
+      # if (any(c("estimate_lower", "estimate_upper") %in% colnames(dat))){
         ggplot2::geom_ribbon(
           dat = dat|> dplyr::filter(!is.na(estimate_lower)),
           ggplot2::aes(
             x = .data[[x]],
             ymin = estimate_lower,
-            ymax = estimate_upper
+            ymax = estimate_upper,
+            fill = group_var
           ),
-          colour = "grey",
           alpha = 0.3
-        ) + 
+        ) +
+      # }
         ggplot2::geom_line(
           data = dat,
           ggplot2::aes(
@@ -130,7 +132,7 @@ plot_timeseries <- function(
   )
   
   # Remove linetype or point when there is no grouping
-  if (is.null(group)) {
+  if (is.null(group) & length(unique(dat$model)) == 1) {
     labs <- switch(
       geom,
       "line" = labs + ggplot2::guides(linetype = "none"),
@@ -185,7 +187,7 @@ plot_timeseries <- function(
 #' Create plot with error
 #' 
 #' @param dat filtered data frame from standard output file(s) preformatted for
-#'  the target label from \link[stockplotr]{prepare_data}
+#'  the target label from \link[stockplotr]{filter_data}
 #' @param x a string of the column name of data used to plot on the x-axis (default 
 #' is "year")
 #' @param y a string of the column name of data used to plot on the y-axis (default 
@@ -264,7 +266,7 @@ plot_error <- function(
 #' Create "at-age" plot
 #'
 #' @param dat filtered data frame from standard output file(s) preformatted for
-#'  the target label from \link[stockplotr]{prepare_data}
+#'  the target label from \link[stockplotr]{filter_data}
 #' @param x a string of the column name of data used to plot on the x-axis
 #' (default is "year")
 #' @param y a string of the column name of data used to plot on the y-axis
@@ -576,7 +578,7 @@ cap_first_letter <- function(s) {
 
 #------------------------------------------------------------------------------
 
-#' Prep data for input into aesthetics for ggplot2
+#' Filter data for input into aesthetics for ggplot2
 #'
 #' @param dat a data frame or list of data frames that contains the data to be
 #' plotted.
@@ -590,7 +592,7 @@ cap_first_letter <- function(s) {
 #' (e.g. "year", "area", etc.)
 #' @param era A string naming the era of data such as historical ("early"), current ("time"), or 
 #' projected ("fore") data if filtering should occur. Default is set to "time" which is 
-#' the current time. To plot all data, set era to NULL. 
+#' the current time. To plot all data, set era to NULL.
 #' @param scale_amount A number describing how much to scale down the quantities
 #' shown on the y axis.
 #' @param interactive logical. If TRUE, the user will be prompted to select
@@ -604,9 +606,9 @@ cap_first_letter <- function(s) {
 #'
 #' @examples
 #' \dontrun{
-#' prepare_data(dat, "biomass", "line", group = "fleet")
+#' filter_data(dat, "biomass", "line", group = "fleet")
 #' }
-prepare_data <- function(
+filter_data <- function(
     dat,
     label_name,
     module = NULL,
@@ -654,13 +656,15 @@ prepare_data <- function(
         # calc uncertainty when se
         # TODO: calculate other sources of error to upper and lower (cv,)
         estimate_lower = dplyr::case_when(
-          grepl("se", uncertainty_label) ~ (estimate - 1.96 * uncertainty) / scale_amount,
+          grepl("se", uncertainty_label) ~ (estimate - (1.96 * uncertainty)) / scale_amount,
           grepl("sd", tolower(uncertainty_label)) | grepl("std", tolower(uncertainty_label)) ~ (estimate - uncertainty) / scale_amount,
+          grepl("cv", tolower(uncertainty_label)) ~ (estimate - (1.96 * (uncertainty * estimate))) / scale_amount,
           TRUE ~ NA
         ),
         estimate_upper = dplyr::case_when(
-          grepl("se", uncertainty_label) ~ (estimate + 1.96 * uncertainty) / scale_amount,
+          grepl("se", uncertainty_label) ~ (estimate + (1.96 * uncertainty)) / scale_amount,
           grepl("sd", tolower(uncertainty_label)) | grepl("std", tolower(uncertainty_label)) ~ (estimate + uncertainty) / scale_amount,
+          grepl("cv", tolower(uncertainty_label)) ~ (estimate + (1.96 * (uncertainty * estimate))) / scale_amount,
           TRUE ~ NA
         )
       )
@@ -674,14 +678,21 @@ prepare_data <- function(
     }
     if (nrow(data) < 1) cli::cli_abort("{label_name} not found.")
     if (is.null(group)) {
-      data <- data |>
-        dplyr::mutate(
-          group_var = switch(geom,
-                             "line" = "solid",
-                             "point" = "black",
-                             1
+      if (!is.data.frame(dat)) {
+        data <- data |>
+          dplyr::mutate(
+            group_var = as.character(.data[["model"]])
           )
-        )
+      } else {
+        data <- data |>
+          dplyr::mutate(
+            group_var = switch(geom,
+                               "line" = "solid",
+                               "point" = "black",
+                               1
+            )
+          )
+      }
     } else if (all(is.na(data[[group]]))) {
       data <- data |>
         dplyr::mutate(
@@ -742,7 +753,6 @@ prepare_data <- function(
       }
     }
   }
-
   # If group/facet is NULL then filter out/summarize data for plotting
   # unsure if want to keep this
   # TODO: change or remove in the future when moving to other plot types
@@ -801,9 +811,11 @@ prepare_data <- function(
       ) |>
       dplyr::ungroup()
   }
+
+  # TODO: add lines to summarize final data for selected grouping and or facet
   
   if (geom == "area") {
-    plot_data2 <- dplyr::mutate(
+    plot_data <- dplyr::mutate(
       plot_data,
       model = reorder(.data[["model"]], .data[["estimate"]], function(x) -max(x) )
     )
@@ -909,4 +921,28 @@ label_magnitude <- function(
   }
   # Create label for abundance units in legend
   glue::glue("{label} {ifelse(legend, \"\n\", \"\")}({unit_mag}{unit_label})")
+}
+
+#------------------------------------------------------------------------------
+
+# Check if grouped data in plot
+
+check_grouping <- function(dat) {
+  # Identify potential indexing variables
+  index_variables <- c(
+    "year", # also not sure of this one
+    "age", # not sure if want to add age here
+    "fleet", "sex",
+    "area", "growth_pattern", "month",
+    "season", "platoon", "bio_pattern",
+    "settlement", "morph", "block"
+  )
+  # Create emppty vector
+  dat_index <- c()
+  # Cycle through indexing variables and identify ones that have more than 1 unique value
+  for (i in index_variables) {
+    indexed <- ifelse(length(unique(dat[[i]])) > 1, TRUE, FALSE)
+    if (indexed) dat_index <- c(dat_index, i)
+  }
+  dat_index
 }

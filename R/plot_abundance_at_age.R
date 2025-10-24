@@ -27,19 +27,15 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' plot_abundance_at_age(dat)
-#'
 #' plot_abundance_at_age(
-#'   dat,
-#'   facet = "area",
+#'   dat = stockplotr:::example_data,
+#'   facet = "growth_pattern",
 #'   unit_label = "fish",
 #'   scale_amount = 1000,
 #'   proportional = TRUE,
 #'   make_rda = FALSE,
 #'   figures_dir = getwd()
 #' )
-#' }
 plot_abundance_at_age <- function(
     dat,
     facet = NULL,
@@ -56,7 +52,7 @@ plot_abundance_at_age <- function(
     scale_amount = scale_amount
   )
   # Filter data
-  b <- prepare_data(
+  b <- filter_data(
     dat = dat,
     label_name = "abundance",
     geom = "point",
