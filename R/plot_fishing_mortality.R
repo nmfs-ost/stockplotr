@@ -38,7 +38,7 @@ plot_fishing_mortality <- function(
   ...
 ) {
   # Filter out data for fishing mortality
-  filter_data <- prepare_data(
+  prepared_data <- filter_data(
     dat = dat,
     label_name = "^fishing_mortality$",
     geom = geom,
@@ -62,7 +62,7 @@ plot_fishing_mortality <- function(
 
   # Create base plot
   plt <- plot_timeseries(
-    dat = filter_data,
+    dat = prepared_data,
     y = "estimate",
     geom = geom,
     ylab = "Fishing Mortality",

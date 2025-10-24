@@ -38,7 +38,7 @@ plot_spawn_recruitment <- function(
     make_rda = FALSE,
     figures_dir = getwd()) {
   # Extract recruitment
-  recruitment <- prepare_data(
+  recruitment <- filter_data(
     dat = dat,
     label_name = "recruitment",
     era = "time",
@@ -65,7 +65,7 @@ plot_spawn_recruitment <- function(
   }
   
   # Extract spawning biomass
-  sb <- prepare_data(
+  sb <- filter_data(
     dat = dat,
     label_name = "spawning biomass",
     geom = "point",

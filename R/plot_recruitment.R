@@ -46,7 +46,7 @@ plot_recruitment <- function(
   )
   
   # Extract recruitment
-  recruitment <- prepare_data(
+  recruitment <- filter_data(
     dat = dat,
     label_name = "recruitment",
     geom = "line",
