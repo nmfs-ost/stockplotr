@@ -11,6 +11,8 @@ plot_catch_comp(
   unit_label = "mt",
   scale_amount = 1,
   proportional = TRUE,
+  interactive = FALSE,
+  module = NULL,
   make_rda = FALSE,
   figures_dir = getwd()
 )
@@ -38,6 +40,14 @@ in the legend label if proportional is set to FALSE. The default is 1.}
 size are relative to one another while when set to FALSE, point size
 is relative to z}
 
+\item{interactive}{TRUE/FALSE; indicate whether the environment in which the
+function is operating  is interactive. This bypasses some options for
+filtering when preparing data for the plot. Default is FALSE.}
+
+\item{module}{(Optional) A string indicating the linked module_name associated
+with the label for the plot if known. Default is NULL. By default, the function
+will select the most relevant module if more than 1 exists.}
+
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
 the .rda will be exported to the folder indicated in the argument "rda_dir".
@@ -56,13 +66,13 @@ The current plot function does not combine all sources of catch.
 Plot catch composition
 }
 \examples{
-\dontrun{
 plot_catch_comp(
-  dat,
+  dat = stockplotr:::example_data,
   facet = "area",
   unit_label = "mt",
   scale_amount = 100,
-  make_rda = TRUE,
-  figures_dir = getwd())
-}
+  interactive = FALSE,
+  make_rda = FALSE,
+  figures_dir = getwd()
+)
 }

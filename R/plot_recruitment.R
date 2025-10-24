@@ -10,20 +10,14 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' plot_recruitment(dat)
-#'
 #' plot_recruitment(
-#'   dat,
-#'   unit_label = "my_unit_label",
+#'   dat = stockplotr:::example_data,
+#'   unit_label = "metric tons",
 #'   scale_amount = 100,
-#'   relative = TRUE,
 #'   interactive = TRUE,
 #'   module = "TIME_SERIES",
-#'   make_rda = TRUE,
-#'   figures_dir = getwd()
+#'   make_rda = FALSE
 #' )
-#' }
 plot_recruitment <- function(
     dat,
     unit_label = "mt",

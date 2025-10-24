@@ -11,21 +11,28 @@
 #' @param era a string naming the era of data such as historical ("early"), current ("time"), or 
 #' projected ("fore") data if filtering should occur. Default is set to "time" which is 
 #' the current time. To plot all data, set era to NULL.
+#' @param interactive TRUE/FALSE; indicate whether the environment in which the
+#' function is operating  is interactive. This bypasses some options for
+#' filtering when preparing data for the plot. Default is FALSE.
+#' @param module (Optional) A string indicating the linked module_name associated
+#' with the label for the plot if known. Default is NULL. By default, the function
+#' will select the most relevant module if more than 1 exists.
 #'
 #' @return A plot ready for a stock assessment report of catch or landings  composition.
 #' This plot is made only when catch or landings are explicitly named in the output file.
 #' The current plot function does not combine all sources of catch.
 #'
+#' @export
 #' @examples
-#' \dontrun{
 #' plot_catch_comp(
-#'   dat,
+#'   dat = stockplotr:::example_data,
 #'   facet = "area",
 #'   unit_label = "mt",
 #'   scale_amount = 100,
-#'   make_rda = TRUE,
-#'   figures_dir = getwd())
-#' }
+#'   interactive = FALSE,
+#'   make_rda = FALSE,
+#'   figures_dir = getwd()
+#' )
 plot_catch_comp <- function(
   dat,
   facet = NULL,
@@ -33,6 +40,8 @@ plot_catch_comp <- function(
   unit_label = "mt",
   scale_amount = 1,
   proportional = TRUE,
+  interactive = FALSE,
+  module = NULL,
   make_rda = FALSE,
   figures_dir = getwd()
 ) {
@@ -51,7 +60,8 @@ plot_catch_comp <- function(
     geom = "point",
     group = "age",
     scale_amount = scale_amount,
-    interactive = TRUE
+    interactive = interactive,
+    module = module
   )
   # Check for extracted data, if not return warning and empty plot
   if (nrow(catch) == 0) {

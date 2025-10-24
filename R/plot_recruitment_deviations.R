@@ -10,14 +10,11 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' plot_recruitment_deviations(
-#'   dat = list("model1"=dat1,"model2"=dat2),
-#'   make_rda = TRUE,
-#'   figures_dir = getwd(),
-#'   size = 3
+#'   dat = stockplotr:::example_data,
+#'   interactive = FALSE,
+#'   size = 1.5
 #' )
-#' }
 plot_recruitment_deviations <- function(
     dat,
     module = NULL,
