@@ -79,6 +79,20 @@ plot_biomass <- function(
     scale_amount = scale_amount,
     interactive = interactive
   )
+
+  # Process data for indexing/grouping
+  # TODO: check and add into process_data step to summarize when theres >1 label
+  processing <- process_data(
+    prepared_data,
+    group,
+    facet
+  )
+  
+  # variable <- processing[[1]]
+  prepared_data <- processing[[2]]
+  group <- processing[[3]]
+  if (!is.na(processing[[4]])) facet <- processing[[4]]
+  
     # Filter out fleet if grouping or faceting variable is not it
     if (!is.null(group) & "fleet" %in% colnames(prepared_data)) {
       if (group!= "fleet") {
