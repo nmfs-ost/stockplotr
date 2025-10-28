@@ -79,6 +79,15 @@ plot_biomass <- function(
     scale_amount = scale_amount,
     interactive = interactive
   )
+  
+  # check if all 3 are present and subset for one or two
+  if (length(unique(prepared_data$label)) > 1 & any(grepl("biomass$", unique(prepared_data$label)))) {
+    cli::cli_alert_info(">1 label name. Selecting total biomass only.")
+    prepared_data <- prepared_data |>
+      dplyr::filter(
+        grepl("biomass$", label)
+      )
+  }
 
   # Process data for indexing/grouping
   # TODO: check and add into process_data step to summarize when theres >1 label

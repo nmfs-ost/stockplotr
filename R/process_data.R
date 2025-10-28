@@ -34,21 +34,32 @@ process_data <- function(
     group = NULL,
     facet = NULL
 ) {
+  # check for additional indexed variables
+  index_variables <- check_grouping(dat)
+  # If user input "none" to group this makes the plot remove any facetting or summarize?
+  if (!is.null(group) && group == "none") {
+    group <- NULL
+    index_variables <- intersect(c("year", "age"), index_variables)
+  }
+  # Warn  user when group not indexed in data
+  if (!is.null(group) && group %notin% index_variables) {
+    cli::cli_alert_warning("{group} not an index of data.")
+    # reset group to NULL so it's not added to grouping incorrectly
+    group <- NULL
+  }
   # Set group_var to identified grouping
   if (!is.null(group)) {
     data <- dplyr::mutate(
-      dat,
+      data,
       group_var = .data[[group]]
     ) 
   } else {
-    data <- dat
+    data <- data
   }
-  # check for additional indexed variables
-  index_variables <- check_grouping(data)
   if (length(index_variables) > 0) {
     data <- data |>
       dplyr::select(dplyr::all_of(c(
-        "estimate", # "uncertainty", "uncertainty_label",
+        "label", "estimate", # "uncertainty", "uncertainty_label",
         "estimate_upper", "estimate_lower",
         # need to maintain columns made from prep data
         "model", "group_var",
@@ -148,7 +159,7 @@ process_data <- function(
     # if () {
       check_group_data <- data |>
         tidyr::pivot_wider(
-          id_cols = c(year, age, model),
+          id_cols = tidyselect::any_of(c("label","year", "age", "model")),
           names_from = dplyr::any_of(group),
           values_from = estimate
         )
