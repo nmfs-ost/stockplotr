@@ -38,23 +38,31 @@ process_data <- function(
   index_variables <- check_grouping(dat)
   # If user input "none" to group this makes the plot remove any facetting or summarize?
   if (!is.null(group) && group == "none") {
-    group <- NULL
+    # group <- NULL
+    id_group <- index_variables[-grepl("year|age", index_variables)]
     index_variables <- intersect(c("year", "age"), index_variables)
   }
   # Warn  user when group not indexed in data
   if (!is.null(group) && group %notin% index_variables) {
-    cli::cli_alert_warning("{group} not an index of data.")
-    # reset group to NULL so it's not added to grouping incorrectly
-    group <- NULL
+    if (group != "none") {
+      cli::cli_alert_warning("{group} not an index of data.")
+      # reset group to NULL so it's not added to grouping incorrectly
+      group <- NULL
+    }
   }
   # Set group_var to identified grouping
-  if (!is.null(group)) {
+  if (!is.null(group) && group == "none") {
+    data <- dplyr::filter(
+      dat,
+      is.na(.data[[id_group[1]]])
+    )
+  } else if (!is.null(group)) {
     data <- dplyr::mutate(
-      data,
+      dat,
       group_var = .data[[group]]
     ) 
   } else {
-    data <- data
+    data <- dat
   }
   if (length(index_variables) > 0) {
     data <- data |>
@@ -68,6 +76,8 @@ process_data <- function(
     # TODO: figure out more efficient way to do these checks
     # cannot have test for null and group == something in same line when group is NULL
     if (!is.null(group) && group %in% index_variables) index_variables <- index_variables[-grep(group, index_variables)]
+  } else {
+    cli::cli_abort("Please check df. This scenario hasn't been considered.")
   }
   
   # Check if there is age or year or both
@@ -115,16 +125,17 @@ process_data <- function(
       # if TRUE filter out to only one year bc everything else redundant
       # check if same through all years
       if (length(unique(first_year_data)) > 1) {
-        data <- data |>
-          dplyr::mutate(group_var = dplyr::case_when(
-            # !is.null(group) & group == index_variables[1] ~ .data[[index_variables[1]]],
-            is.null(group) & length(index_variables) > 0 ~ .data[[index_variables[1]]],
-            TRUE ~ group_var
-          ))
+        # this step might be redundant
+        # data <- data |>
+        #   dplyr::mutate(group_var = dplyr::case_when(
+        #     # !is.null(group) & group == index_variables[1] ~ .data[[index_variables[1]]],
+        #     is.null(group) & length(index_variables) > 0 ~ .data[[index_variables[1]]],
+        #     TRUE ~ group_var
+        #   ))
         if (is.na(unique(data[["group_var"]])[1])) {
           data <- data |> dplyr::filter(is.na(group_var))
         } else {
-          data <- data |> dplyr::filter(group_var == unique(.data[["group_var"]])[1])
+          data <- data |> dplyr::filter(group_var == unique(data[["group_var"]])[1])
         }
       } else {
         data <- data |> dplyr::filter(year == max(year))
@@ -157,6 +168,10 @@ process_data <- function(
   # Check if this is still the case if a group not NULL
   if (!is.null(group) && group != "year") {
     # if () {
+    # Remove NAs from grouping or keep NA if none
+    if (group != "none") {
+      data <- dplyr::filter(data, !is.na(.data[[group]]))
+      
       check_group_data <- data |>
         tidyr::pivot_wider(
           id_cols = tidyselect::any_of(c("label","year", "age", "model")),
@@ -165,16 +180,17 @@ process_data <- function(
         )
       # overwrite variable if grouping is what makes it variable in above conditions
       variable <- ifelse(
-        any(unique(
+        any(length(unique(
           dplyr::select(
             check_group_data, 
             dplyr::any_of(unique(data[[group]]))
           )
-        ) > 1),
+        )) > 1),
         TRUE,
         FALSE
       )
-    # }
+    }
+    
     # add any remaining index_variables into facet
     if (length(index_variables) > 0) facet <- c(facet, index_variables)
   } else if (length(index_variables) > 0) {
@@ -199,11 +215,13 @@ process_data <- function(
       # Set first indexing variable to group
       group <- index_variables[1]
       # Remaining id'd index variables moved to facet
-      facet <- ifelse(
-        !is.null(facet),
-        c(facet, index_variables[-1]),
-        index_variables[-1]
-      )
+      if (length(index_variables) > 1) {
+        facet <- ifelse(
+          !is.null(facet),
+          c(facet, index_variables[-1]),
+          index_variables[-1]
+        )
+      }
     }
   }
   # check that group_var matches the group col
@@ -220,13 +238,9 @@ process_data <- function(
   } else if (length(unique(data[[group]])) == 1) {
     data <- dplyr::mutate(data, group_var = "1")
     group <- NULL
-    # check that group_var matches the group col
-    # at this point, group should be properly identified
-    # below should always pass unless group is already correct
-  } else { # if (all(data[[group]]!=data[["group_var"]])) {
-    # overwrite group_var to match group so plot is correct
-    data <- data |>
-      dplyr::mutate(group_var = .data[[group]])
+  } else {
+    data <- dplyr::mutate(data, group_var = .data[[group]]) |>
+      dplyr::filter(!is.na(group_var))
   }
   # Export list of objects
   list(
