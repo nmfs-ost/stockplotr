@@ -1,7 +1,48 @@
 #' Extract key quantities
 #'
 #' @inheritParams write_captions
-#' @param kq Key quantity that will be extracted. Possibilities include: _____________________________________________
+#' @param kq Key quantity that will be extracted. Possibilities include:
+#'   \itemize{
+#'     \item{`B.start.year`: start year of biomass plot}
+#'     \item{`F.start.year`: start year of F plot}
+#'     \item{`F.min`: minimum F}
+#'     \item{`F.max`: maximum F}
+#'     \item{`landings.start.year`: start year of landings plot}
+#'     \item{`landings.end.year`: end year of landings plot}
+#'     \item{`landings.min`: minimum landings}
+#'     \item{`landings.max`: maximum landings}
+#'     \item{`M.age.min`: minimum age of M}
+#'     \item{`M.age.max`: maximum age of M}
+#'     \item{`caa.start.year`: start year of CAA plot}
+#'     \item{`caa.end.year`: end year of CAA plot}
+#'     \item{`caa.age.min`: minimum CAA age}
+#'     \item{`caa.age.max`: maximum CAA age}
+#'     \item{`tot.catch.min`: }
+#'     \item{`tot.catch.max`: }
+#'     \item{`pop.naa.start.year`: }
+#'     \item{`pop.naa.end.year`: }
+#'     \item{`pop.naa.age.min`: }
+#'     \item{`pop.naa.age.max`: }
+#'     \item{`pop.naa.fish.min`: }
+#'     \item{`pop.naa.fish.max`: }
+#'     \item{`sr.age.min`: }
+#'     \item{`recruitment.start.year`: }
+#'     \item{`recruit.dev.start.year`: }
+#'     \item{`recruit.dev.min`: }
+#'     \item{`recruit.dev.max`: }
+#'     \item{`ssb.start.year`: }
+#'     \item{`spr.min`: }
+#'     \item{`spr.max`: }
+#'     \item{`pop.baa.start.year`: }
+#'     \item{`pop.baa.end.year`: }
+#'     \item{`pop.baa.fish.min`: }
+#'     \item{`pop.baa.fish.max`: }
+#'     \item{`pop.baa.age.min`: }
+#'     \item{`pop.baa.age.max`: }
+#'     \item{`proj.catch.end.year`: }
+#'     \item{`proj.catch.min`: minimum projected catch}
+#'     \item{`proj.catch.max`: maximum projected catch}
+#'     }
 #' @return A string containing a value for a chosen key quantity.
 #' @export
 #'
