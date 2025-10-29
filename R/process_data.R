@@ -52,10 +52,15 @@ process_data <- function(
   }
   # Set group_var to identified grouping
   if (!is.null(group) && group == "none") {
-    data <- dplyr::filter(
-      dat,
-      is.na(.data[[id_group[1]]])
-    )
+    # if group is none and there exists an index group, filter to nas of index group
+    if (length(id_group) > 0) {
+      data <- dplyr::filter(
+        dat,
+        is.na(.data[[id_group[1]]])
+      )
+    } else {
+      data <- dat
+    }
   } else if (!is.null(group)) {
     data <- dplyr::mutate(
       dat,
@@ -92,6 +97,9 @@ process_data <- function(
   if ("year" %in% colnames(data) && any(!is.na(data$year))) {
     index_variables <- index_variables[-grep("year", index_variables)]
     data <- dplyr::filter(data, !is.na(year))
+  }
+  
+  if(!is.null(group) && group != "none") {
     # check if value varies in ANY year
     # pivot data for 1st indexed data and check if all the same
     if (length(index_variables) > 0) {
@@ -161,10 +169,7 @@ process_data <- function(
       TRUE, # more M values than ages
       FALSE # same # or less M values than ages
     )
-  } else {
-    variable <- FALSE
   }
-  
   # Check if this is still the case if a group not NULL
   if (!is.null(group) && group != "year") {
     # if () {
@@ -239,8 +244,13 @@ process_data <- function(
     data <- dplyr::mutate(data, group_var = "1")
     group <- NULL
   } else {
-    data <- dplyr::mutate(data, group_var = .data[[group]]) |>
-      dplyr::filter(!is.na(group_var))
+    if (group != "none") {
+      data <- dplyr::mutate(data, group_var = .data[[group]]) |>
+        dplyr::filter(!is.na(group_var))
+    } else {
+      # change group back to NULL bc no longer needs data processing
+      group <- NULL
+    }
   }
   # Export list of objects
   list(
