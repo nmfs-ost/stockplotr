@@ -78,16 +78,7 @@ write_captions <- function(dat, # converted model output object
     # B.ref.pt : added with add_more_key_quants
 
     # start year of biomass plot
-    B.start.year <- dat |>
-      dplyr::filter(
-        label == "biomass",
-        module_name == "TIME_SERIES" | module_name == "t.series", # SS3 and BAM target module names
-        is.na(fleet),
-        is.na(age)
-      ) |>
-      dplyr::slice(which.min(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
+    B.start.year <- extract_key_quantity(kq = "B.start.year")
 
     # end year of biomass plot
     # B.end.year : added with add_more_key_quants
@@ -159,59 +150,16 @@ write_captions <- function(dat, # converted model output object
     #   round(digits = 2)
 
     # start year of F plot
-    F.start.year <- dat |>
-      dplyr::filter(label == "fishing_mortality") |>
-      dplyr::slice(which.min(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
+    F.start.year <- extract_key_quantity(kq = "F.start.year")
 
     # terminal fishing mortality
     # F.end.year : added with add_more_key_quants
 
     # minimum F
-    F.min <- dat |>
-      dplyr::filter(label == "fishing_mortality")
-
-    if (length(unique(F.min$age)) == 1) {
-      if (is.na(unique(F.min$age))) {
-        F.min <- F.min |>
-          dplyr::filter(module_name %in% c("TIME_SERIES", "t.series")) |>
-          dplyr::slice(which.min(estimate)) |>
-          as.numeric() |>
-          round(digits = 2)
-      }
-    } else {
-      F.min <- F.min |>
-        dplyr::group_by(age) |>
-        dplyr::summarize(val = max(estimate)) |>
-        dplyr::slice(which.min(val)) |>
-        dplyr::select(val) |>
-        as.numeric() |>
-        round(digits = 2)
-    }
-
+    F.min <- extract_key_quantity(kq = "F.min")
 
     # maximum F
-    F.max <- dat |>
-      dplyr::filter(label == "fishing_mortality")
-
-    if (length(unique(F.max$age)) == 1) {
-      if (is.na(unique(F.max$age))) {
-        F.min <- F.min |>
-          dplyr::filter(module_name %in% c("TIME_SERIES", "t.series")) |>
-          dplyr::slice(which.max(estimate)) |>
-          as.numeric() |>
-          round(digits = 2)
-      }
-    } else {
-      F.max <- F.max |>
-        dplyr::group_by(age) |>
-        dplyr::summarize(val = max(estimate)) |>
-        dplyr::slice(which.max(val)) |>
-        dplyr::select(val) |>
-        as.numeric() |>
-        round(digits = 2)
-    }
+    F.max <- extract_key_quantity(kq = "F.max")
 
     # TODO: uncomment and recode once we get clarity about how to extract this value properly
     # fishing mortality at msy
@@ -230,95 +178,27 @@ write_captions <- function(dat, # converted model output object
     ## landings plot
 
     # start year of landings plot
-    landings.start.year <- dat |>
-      dplyr::filter(
-        c(module_name == "t.series" & grepl("landings_observed", label)) | c(module_name == "CATCH" & grepl("ret_bio", label)),
-        # t.series is associated with a conversion from BAM output and CATCH with SS3 converted output
-        !is.na(fleet)
-      ) |>
-      dplyr::slice(which.min(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
+    landings.start.year <- extract_key_quantity(kq = "landings.start.year")
 
     # end year of landings plot
-    landings.end.year <- dat |>
-      dplyr::filter(
-        c(module_name == "t.series" & grepl("landings_observed", label)) | c(module_name == "CATCH" & grepl("ret_bio", label)),
-        # t.series is associated with a conversion from BAM output and CATCH with SS3 converted output
-        !is.na(fleet)
-      ) |>
-      dplyr::slice(which.max(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
+    landings.end.year <- extract_key_quantity(kq = "landings.end.year")
 
     # units of landings (plural)
     # landings.units : added with add_more_key_quants
 
     # minimum landings
-    landings.min <- dat |>
-      dplyr::filter(
-        c(module_name == "t.series" & grepl("landings_observed", label)) | c(module_name == "CATCH" & grepl("ret_bio", label)),
-        # t.series is associated with a conversion from BAM output and CATCH with SS3 converted output
-        !is.na(fleet)
-      ) |>
-      dplyr::slice(which.min(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
+    landings.min <- extract_key_quantity(kq = "landings.min")
 
     # maximum landings
-    landings.max <- dat |>
-      dplyr::filter(
-        c(module_name == "t.series" & grepl("landings_observed", label)) | c(module_name == "CATCH" & grepl("ret_bio", label)),
-        # t.series is associated with a conversion from BAM output and CATCH with SS3 converted output
-        !is.na(fleet)
-      ) |>
-      dplyr::group_by(fleet, year) |>
-      dplyr::summarise(max_est = max(estimate)) |>
-      dplyr::filter(!is.na(max_est)) |>
-      dplyr::group_by(year) |>
-      dplyr::summarise(max_est_yr = sum(max_est)) |>
-      dplyr::slice(which.max(max_est_yr)) |>
-      dplyr::select(max_est_yr) |>
-      as.numeric() |>
-      round(digits = 2)
+    landings.max <- extract_key_quantity(kq = "landings.max")
 
-    ## natural mortality (M)- bam examples have label as natural_mortality
-    ## but other formats don't (in input)
+    ## natural mortality (M)
     # minimum age of M
-    if ("natural_mortality" %in% dat$label) {
-      M.age.min <- dat |>
-        dplyr::filter(label == "natural_mortality") |>
-        dplyr::select(age) |>
-        dplyr::filter(!is.na(age)) |>
-        dplyr::slice(which.min(age)) |>
-        as.numeric()
-    } else {
-      M.age.min <- dat |>
-        #  dplyr::filter(label == "natural_mortality") |>
-        dplyr::select(age) |>
-        dplyr::filter(!is.na(age)) |>
-        dplyr::slice(which.min(age)) |>
-        as.numeric()
-    }
+    M.age.min <- extract_key_quantity(kq = "M.age.min")
 
     # maximum age of M
-    if ("natural_mortality" %in% dat$label) {
-      M.age.max <- dat |>
-        dplyr::filter(label == "natural_mortality") |>
-        dplyr::select(age) |>
-        dplyr::filter(!is.na(age)) |>
-        dplyr::slice(which.max(age)) |>
-        as.numeric()
-    } else {
-      M.age.max <- dat |>
-        #  dplyr::filter(label == "natural_mortality") |>
-        dplyr::select(age) |>
-        dplyr::filter(!is.na(age)) |>
-        dplyr::slice(which.max(age)) |>
-        as.numeric()
-    }
-
+    M.age.max <- extract_key_quantity(kq = "M.age.max")
+    
     # minimum M rate- don't code quantities yet (see how it's coded in future fig)
     # M.rate.min <- dat |>
     #   dplyr::filter(
@@ -392,67 +272,23 @@ write_captions <- function(dat, # converted model output object
     
     ## catch at age (CAA)
     # start year of CAA plot
-    caa.start.year <- dat |>
-      dplyr::filter(label == "abundance" & !is.na(year)) |>
-      dplyr::slice(which.min(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
-    
+    caa.start.year <- extract_key_quantity(kq = "caa.start.year")
+      
     # end year of CAA plot
-    caa.end.year <- dat |>
-      dplyr::filter(label == "abundance" & !is.na(year)) |>
-      dplyr::slice(which.max(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
+    caa.end.year <- extract_key_quantity(kq = "caa.end.year")
     
     # minimum age
-    caa.age.min <- dat |>
-      dplyr::filter(label == "abundance" & !is.na(year)) |>
-      dplyr::slice(which.min(age)) |>
-      dplyr::select(age) |>
-      as.numeric()
+    caa.age.min <- extract_key_quantity(kq = "caa.age.min")
     
     # maximum age
-    caa.age.max <- dat |>
-      dplyr::filter(label == "abundance" & !is.na(year)) |>
-      dplyr::slice(which.max(age)) |>
-      dplyr::select(age) |>
-      as.numeric()
-    
+    caa.age.max <- extract_key_quantity(kq = "caa.age.max")
     
     ## catch composition
-    # minimum & maximum catch
-    if (dim(dat |>
-      dplyr::filter(label == "catch"))[1] > 1) {
-      catch <- dat |>
-        dplyr::filter(
-          label == "catch",
-          !is.na(fleet)
-        ) |>
-        dplyr::mutate(
-          estimate = as.numeric(estimate),
-          year = as.numeric(year),
-          fleet = as.factor(fleet)
-        ) |>
-        dplyr::group_by(label, year, fleet) |>
-        dplyr::summarise(estimate = sum(estimate)) |>
-        dplyr::ungroup()
-
-      tot.catch.min <- catch |>
-        dplyr::slice(which.min(estimate)) |>
-        dplyr::select(estimate) |>
-        as.numeric() |>
-        round(digits = 2)
-
-      tot.catch.max <- catch |>
-        dplyr::slice(which.max(estimate)) |>
-        dplyr::select(estimate) |>
-        as.numeric() |>
-        round(digits = 2)
-    } else {
-      tot.catch.min <- "NA"
-      tot.catch.max <- "NA"
-    }
+    # minimum catch
+    tot.catch.min <- extract_key_quantity(kq = "tot.catch.min")
+    
+    # maximum catch
+    tot.catch.max <- extract_key_quantity(kq = "tot.catch.max")
 
     ## CAL (catch at length)- don't code quantities yet
     # cal.length.min <- # minimum length group
@@ -473,51 +309,22 @@ write_captions <- function(dat, # converted model output object
 
     ## NAA (numbers at age)
     # start year of NAA plot
-    pop.naa.start.year <- dat |>
-      dplyr::filter(label == "abundance" & !is.na(year)) |>
-      dplyr::slice(which.min(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
+    pop.naa.start.year <- extract_key_quantity(kq = "pop.naa.start.year")
 
     # end year of NAA plot
-    pop.naa.end.year <- dat |>
-      dplyr::filter(label == "abundance" & !is.na(year),
-                    era == "time") |>
-      dplyr::slice(which.max(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
+    pop.naa.end.year <- extract_key_quantity(kq = "pop.naa.end.year")
 
     # minimum age
-    pop.naa.age.min <- dat |>
-      dplyr::filter(label == "abundance" & !is.na(year)) |>
-      dplyr::slice(which.min(age)) |>
-      dplyr::select(age) |>
-      as.numeric()
+    pop.naa.age.min <- extract_key_quantity(kq = "pop.naa.age.min")
 
     # maximum age
-    pop.naa.age.max <- dat |>
-      dplyr::filter(label == "abundance" & !is.na(year)) |>
-      dplyr::slice(which.max(age)) |>
-      dplyr::select(age) |>
-      as.numeric()
+    pop.naa.age.max <- extract_key_quantity(kq = "pop.naa.age.max")
     
     # minimum abundance (number) of fish
-    pop.naa.fish.min <- dat |>
-      dplyr::filter(grepl("abundance", label) & !is.na(year),
-                    era == "time") |>
-      dplyr::slice(which.min(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
+    pop.naa.fish.min <- extract_key_quantity(kq = "pop.naa.fish.min")
     
     # maximum abundance (number) of fish
-    pop.naa.fish.max <- dat |>
-      dplyr::filter(grepl("abundance", label) & !is.na(year),
-                    era == "time") |>
-      dplyr::slice(which.max(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
+    pop.naa.fish.max <- extract_key_quantity(kq = "pop.naa.fish.max")
     
     ## mod_fit_catch (model fit to catch ts)- don't code quantities yet
     # mod.fit.catch.start.year <- # start year of model fit to catch ts plot
@@ -559,11 +366,7 @@ write_captions <- function(dat, # converted model output object
 
     ## estimated stock recruitment
     # youngest-age recruited fish (instead of age-0)
-    sr.age.min <- dat |>
-      dplyr::filter(!is.na(year) & !is.na(age)) |>
-      dplyr::slice(which.min(age)) |>
-      dplyr::select(age) |>
-      as.numeric()
+    sr.age.min <- extract_key_quantity(kq = "sr.age.min")
 
     # ssb units (plural)
     # sr.ssb.units : added with add_more_key_quants
@@ -584,20 +387,7 @@ write_captions <- function(dat, # converted model output object
     # recruitment.units : added with add_more_key_quants
 
     # start year of recruitment ts plot
-    recruitment.start.year <- dat |>
-      dplyr::filter(
-        label == "recruitment",
-        module_name == "TIME_SERIES" | module_name == "t.series",
-        !is.na(year),
-        is.na(fleet) | length(unique(fleet)) <= 1,
-        is.na(sex) | length(unique(sex)) <= 1,
-        is.na(area) | length(unique(area)) <= 1,
-        is.na(growth_pattern) | length(unique(growth_pattern)) <= 1,
-        !year %in% year_exclusions
-      ) |> # SS3 and BAM target module names
-      dplyr::slice(which.min(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
+    recruitment.start.year <- extract_key_quantity(kq = "recruitment.start.year")
 
     # end year of recruitment ts plot
     # recruitment.end.year : added with add_more_key_quants
@@ -615,71 +405,22 @@ write_captions <- function(dat, # converted model output object
 
     ## recruitment deviations
     # start year of recruitment deviations plot
-    recruit.dev.start.year <- dat |>
-      dplyr::filter(
-        label == "recruitment_deviations" | label == "log_recruitment_deviations",
-        module_name == "SPAWN_RECRUIT" | module_name == "t.series",
-        !is.na(year),
-        is.na(fleet) | length(unique(fleet)) <= 1,
-        is.na(sex) | length(unique(sex)) <= 1,
-        is.na(area) | length(unique(area)) <= 1,
-        is.na(growth_pattern) | length(unique(growth_pattern)) <= 1,
-        !year %in% year_exclusions
-      ) |> # SS3 and BAM target module names
-      dplyr::slice(which.min(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
+    recruit.dev.start.year <- extract_key_quantity(kq = "recruit.dev.start.year")
 
     # end year of recruitment deviations plot
     # recruit.dev.end.year : added with add_more_key_quants
 
     # minimum recruitment deviation
-    recruit.dev.min <- dat |>
-      dplyr::filter(
-        label == "recruitment_deviations" | label == "log_recruitment_deviations",
-        module_name == "SPAWN_RECRUIT" | module_name == "t.series",
-        !is.na(year),
-        is.na(fleet) | length(unique(fleet)) <= 1,
-        is.na(sex) | length(unique(sex)) <= 1,
-        is.na(area) | length(unique(area)) <= 1,
-        is.na(growth_pattern) | length(unique(growth_pattern)) <= 1,
-        !year %in% year_exclusions
-      ) |> # SS3 and BAM target module names
-      dplyr::slice(which.min(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
+    recruit.dev.min <- extract_key_quantity(kq = "recruit.dev.min")
 
     # maximum recruitment deviation
-    recruit.dev.max <- dat |>
-      dplyr::filter(
-        label == "recruitment_deviations" | label == "log_recruitment_deviations",
-        module_name == "SPAWN_RECRUIT" | module_name == "t.series",
-        !is.na(year),
-        is.na(fleet) | length(unique(fleet)) <= 1,
-        is.na(sex) | length(unique(sex)) <= 1,
-        is.na(area) | length(unique(area)) <= 1,
-        is.na(growth_pattern) | length(unique(growth_pattern)) <= 1,
-        !year %in% year_exclusions
-      ) |> # SS3 and BAM target module names
-      dplyr::slice(which.max(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
+    recruit.dev.max <- extract_key_quantity(kq = "recruit.dev.max")
 
     ## tot_b (total biomass): same as B plot above
 
     ## spawning_biomass (ssb)
     # start year of ssb plot
-    ssb.start.year <- dat |>
-      dplyr::filter(
-        label == "spawning_biomass",
-        module_name %in% c("DERIVED_QUANTITIES", "t.series")
-      ) |>
-      dplyr::slice(which.min(year)) |>
-      dplyr::select(year) |>
-      as.numeric() |>
-      round(digits = 2)
+    ssb.start.year <- extract_key_quantity(kq = "ssb.start.year")
 
     # end year of ssb plot
     # ssb.end.year : added with add_more_key_quants
@@ -708,24 +449,10 @@ write_captions <- function(dat, # converted model output object
 
     ## spr (spawning potential ratio)
     # minimum spr
-    spr.min <- dat |>
-      dplyr::filter(c(grepl("spr", label) |
-        label == "spr") &
-        !is.na(year) &
-        !is.na(estimate)) |>
-      dplyr::slice(which.min(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
+    spr.min <- extract_key_quantity(kq = "spr.min")
 
     # maximum spr
-    spr.max <- dat |>
-      dplyr::filter(c(grepl("spr", label) |
-        label == "spr") & !is.na(year) & !is.na(estimate)) |>
-      dplyr::slice(which.max(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
+    spr.max <- extract_key_quantity(kq = "spr.max")
 
     # TODO: uncomment and recode once we get clarity about how to extract this value properly
     # spr reference point
@@ -735,63 +462,24 @@ write_captions <- function(dat, # converted model output object
     #   as.numeric()# |>
     #   round(digits = 2)
 
-
     ## pop.baa (population biomass at age)
     # start year of pop.baa plot
-    pop.baa.start.year <- dat |>
-      dplyr::filter(grepl("^biomass", label)) |>
-      dplyr::slice(which.min(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
+    pop.baa.start.year <- extract_key_quantity(kq = "pop.baa.start.year")
 
     # end year of pop.baa plot
-    pop.baa.end.year <- dat |>
-      dplyr::filter(grepl("^biomass", label),
-                    era == "time") |>
-      dplyr::slice(which.max(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
+    pop.baa.end.year <- extract_key_quantity(kq = "pop.baa.end.year")
     
     # minimum biomass of fish
-    pop.baa.fish.min <- dat |>
-      dplyr::filter(grepl("^biomass", label) & !is.na(year),
-                    era == "time") |>
-      dplyr::slice(which.min(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
+    pop.baa.fish.min <- extract_key_quantity(kq = "pop.baa.fish.min")
     
     # maximum biomass of fish
-    pop.baa.fish.max <- dat |>
-      dplyr::filter(grepl("^biomass", label) & !is.na(year),
-                    era == "time") |>
-      dplyr::slice(which.max(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
+    pop.baa.fish.max <- extract_key_quantity(kq = "pop.baa.fish.max")
 
     # minimum age
-    pop.baa.age.min <- dat |>
-      dplyr::filter(
-        label == "biomass",
-        module_name == "BIOMASS_AT_AGE" | module_name == "B.age", # SS3 and BAM target module names
-        !is.na(age)
-      ) |>
-      dplyr::slice(which.min(age)) |>
-      dplyr::select(age) |>
-      as.numeric()
+    pop.baa.age.min <- extract_key_quantity(kq = "pop.baa.age.min")
 
     # maximum age
-    pop.baa.age.max <- dat |>
-      dplyr::filter(
-        label == "biomass",
-        module_name == "BIOMASS_AT_AGE" | module_name == "B.age", # SS3 and BAM target module names
-        !is.na(age)
-      ) |>
-      dplyr::slice(which.max(age)) |>
-      dplyr::select(age) |>
-      as.numeric()
-
+    pop.baa.age.max <- extract_key_quantity(kq = "pop.baa.age.max")
 
     ## proj_catch (projected catch)
     # projected catch units (plural)
@@ -802,27 +490,14 @@ write_captions <- function(dat, # converted model output object
     proj.catch.start.year <- landings.end.year + 1
 
     # end year of projected catch plot
-    proj.catch.end.year <- dat |>
-      dplyr::filter(label == "catch" & module_name == "DERIVED_QUANTITIES") |>
-      dplyr::slice(which.max(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
+    proj.catch.end.year <- extract_key_quantity(kq = "proj.catch.end.year")
 
     # minimum projected catch
-    proj.catch.min <- dat |>
-      # no BAM file has catch; will be NA
-      dplyr::filter(label == "catch" & module_name == "DERIVED_QUANTITIES") |>
-      dplyr::slice(which.min(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric()
+    proj.catch.min <- extract_key_quantity(kq = "proj.catch.min")
 
     # maximum projected catch
-    proj.catch.max <- dat |>
-      dplyr::filter(label == "catch" & module_name == "DERIVED_QUANTITIES") |>
-      dplyr::slice(which.max(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric()
-
+    proj.catch.max <- extract_key_quantity(kq = "proj.catch.max")
+      
     # TABLES-----
 
     ## catch
