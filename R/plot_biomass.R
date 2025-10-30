@@ -102,45 +102,6 @@ plot_biomass <- function(
   group <- processing[[3]]
   if (!is.null(processing[[4]])) facet <- processing[[4]]
   
-  # Filter out fleet if grouping or faceting variable is not it
-  # This should be fixed in process_data
-  # if (!is.null(group) & "fleet" %in% colnames(prepared_data)) {
-  #   if (group!= "fleet") {
-  #     prepared_data <- dplyr::filter(prepared_data, is.na(fleet))
-  #   } else {
-  #     prepared_data <- dplyr::filter(prepared_data, !is.na(fleet))
-  #   }
-  # }
-  # Check df if there is >1 unique(label)
-  # This might also be mute with process_data
-  # if (length(unique(prepared_data$label)) > 1 & is.null(facet)) {
-  #   # summarize data by grouping
-  #   # specifically aiming to add together SS3 retained, dead, and selected biomass
-  #   prepared_data <- prepared_data |>
-  #     dplyr::group_by(year, model, group_var, era, module_name) |>
-  #     dplyr::summarise(
-  #       label = "biomass",
-  #       estimate = sum(estimate),
-  #       estimate_lower = mean(estimate_lower),
-  #       estimate_upper = mean(estimate_upper)
-  #     )
-  # } else if (length(unique(prepared_data$label)) > 1 & !is.null(facet)) {
-  #   # summarize data by grouping and facet(s)
-  #   # specifically aiming to add together SS3 retained, dead, and selected biomass
-  #   prepared_data <- prepared_data |>
-  #     dplyr::group_by(year, model, group_var, era, module_name, .data[[facet]]) |>
-  #     dplyr::summarise(
-  #       label = "biomass",
-  #       estimate = sum(estimate),
-  #       estimate_lower = mean(estimate_lower),
-  #       estimate_upper = mean(estimate_upper)
-  #     )
-  # }
-  # Override grouping variable when there is only NA's
-  # Should be fixed through process data
-  # if (!is.null(group)) {
-  #   if (group %notin% colnames(prepared_data)) group = NULL
-  # }
   # Calculate estimate if relative
   if (relative) {
     if (!is.null(names(ref_line))) {

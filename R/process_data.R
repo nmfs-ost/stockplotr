@@ -148,21 +148,7 @@ process_data <- function(
       } else {
         data <- data |> dplyr::filter(year == max(year))
       }
-    } # else {
-    #   # if FALSE filter data for only the years which it started then changed
-    # not applicable to everything and in this case, there would only be visible
-    # lines for unique sequences
-    #   # first year
-    #   year_initial <- min(data$year, na.rm = TRUE)
-    #   data <- data |> dplyr::mutate(group_var = as.character(year))
-    #   if (!is.null(group)) {
-    #     facet <- c(facet, group)
-    #   }
-    #   group <- "year"
-    #   # TODO: update this part in the cases that M is time-varying
-    #   # Year that differ from the first to the next to the next ect
-    #   cli::cli_alert_warning("Function not currently compatible with time-varying parameter.")
-    # } 
+    }
     # check if all values are the same
     variable <- ifelse(
       length(unique(data$estimate)) != length(unique(data$age)),
@@ -229,13 +215,6 @@ process_data <- function(
       }
     }
   }
-  # check that group_var matches the group col
-  # at this point, group should be properly identified
-  # if (all(data[[group]]!=data[["group_var"]])) {
-  #   # overwrite group_var to match group so plot is correct
-  #   data <- data |>
-  #     dplyr::mutate(group_var = .data[[group]])
-  # }
   
   # Final check if group = NULL, then set group var to 1
   if (is.null(group)) {
