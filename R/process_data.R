@@ -32,7 +32,8 @@
 process_data <- function(
     dat,
     group = NULL,
-    facet = NULL
+    facet = NULL,
+    avg = "sum"
 ) {
   # check for additional indexed variables
   index_variables <- check_grouping(dat)
@@ -41,6 +42,25 @@ process_data <- function(
     # group <- NULL
     id_group <- index_variables[-grepl("year|age", index_variables)]
     index_variables <- intersect(c("year", "age"), index_variables)
+    if (length(id_group) > 0) {
+      dat <- switch(
+        avg,
+        "mean" = dat |>
+          dplyr::group_by(dplyr::across(dplyr::all_of(c("group_var", index_variables)))) |>
+          dplyr::summarize(
+            estimate = mean(estimate),
+            estimate_lower = mean(estimate_lower),
+            estimate_upper = mean(estimate_upper)
+          ),
+        "sum" = dat |>
+          dplyr::group_by(dplyr::across(dplyr::all_of(c("group_var", index_variables)))) |>
+          dplyr::summarize(
+            estimate = sum(estimate),
+            estimate_lower = sum(estimate_lower),
+            estimate_upper = sum(estimate_upper)
+         )
+        )
+    }
   }
   # Warn  user when group not indexed in data
   if (!is.null(group) && group %notin% index_variables) {

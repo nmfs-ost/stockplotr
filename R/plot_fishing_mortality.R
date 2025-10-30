@@ -47,7 +47,8 @@ plot_fishing_mortality <- function(
   processed_data <- process_data(
     dat = prepared_data,
     group = group,
-    facet = facet
+    facet = facet,
+    avg = "mean"
   )
   prepared_data <- processed_data[[2]]
   group <- processed_data[[3]]
