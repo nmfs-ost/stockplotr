@@ -50,10 +50,19 @@ plot_landings <- function(
     module = module,
     scale_amount = scale_amount,
     interactive = interactive
-  ) |> 
+  ) # |> 
     # filter NA from year
-    dplyr::filter(!is.na(year))
-    
+    # dplyr::filter(!is.na(year))
+  # Process data
+  processed_data <- process_data(
+    dat = prepared_data,
+    group = group,
+    facet = facet
+  )
+  prepared_data <- processed_data[[2]]
+  group <- processed_data[[3]]
+  facet <- processed_data[[4]]
+  
   # Check if there is >1 label
   if (length(prepared_data$label) > 1) {
     prepared_data <- prepared_data |>

@@ -43,6 +43,15 @@ plot_fishing_mortality <- function(
     scale_amount = 1,
     interactive = interactive
   )
+  # Process data
+  processed_data <- process_data(
+    dat = prepared_data,
+    group = group,
+    facet = facet
+  )
+  prepared_data <- processed_data[[2]]
+  group <- processed_data[[3]]
+  facet <- processed_data[[4]]
 
   # Extract reference point unless explicit
   if (!is.null(names(ref_line))) {
