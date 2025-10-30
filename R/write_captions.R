@@ -78,7 +78,7 @@ write_captions <- function(dat, # converted model output object
     # B.ref.pt : added with add_more_key_quants
 
     # start year of biomass plot
-    B.start.year <- extract_key_quantity(kq = "B.start.year")
+    B.start.year <- extract_key_quantity(dat, kq = "B.start.year")
 
     # end year of biomass plot
     # B.end.year : added with add_more_key_quants
@@ -150,16 +150,16 @@ write_captions <- function(dat, # converted model output object
     #   round(digits = 2)
 
     # start year of F plot
-    F.start.year <- extract_key_quantity(kq = "F.start.year")
+    F.start.year <- extract_key_quantity(dat, kq = "F.start.year")
 
     # terminal fishing mortality
     # F.end.year : added with add_more_key_quants
 
     # minimum F
-    F.min <- extract_key_quantity(kq = "F.min")
+    F.min <- extract_key_quantity(dat, kq = "F.min")
 
     # maximum F
-    F.max <- extract_key_quantity(kq = "F.max")
+    F.max <- extract_key_quantity(dat, kq = "F.max")
 
     # TODO: uncomment and recode once we get clarity about how to extract this value properly
     # fishing mortality at msy
@@ -178,26 +178,26 @@ write_captions <- function(dat, # converted model output object
     ## landings plot
 
     # start year of landings plot
-    landings.start.year <- extract_key_quantity(kq = "landings.start.year")
+    landings.start.year <- extract_key_quantity(dat, kq = "landings.start.year")
 
     # end year of landings plot
-    landings.end.year <- extract_key_quantity(kq = "landings.end.year")
+    landings.end.year <- extract_key_quantity(dat, kq = "landings.end.year")
 
     # units of landings (plural)
     # landings.units : added with add_more_key_quants
 
     # minimum landings
-    landings.min <- extract_key_quantity(kq = "landings.min")
+    landings.min <- extract_key_quantity(dat, kq = "landings.min")
 
     # maximum landings
-    landings.max <- extract_key_quantity(kq = "landings.max")
+    landings.max <- extract_key_quantity(dat, kq = "landings.max")
 
     ## natural mortality (M)
     # minimum age of M
-    M.age.min <- extract_key_quantity(kq = "M.age.min")
+    M.age.min <- extract_key_quantity(dat, kq = "M.age.min")
 
     # maximum age of M
-    M.age.max <- extract_key_quantity(kq = "M.age.max")
+    M.age.max <- extract_key_quantity(dat, kq = "M.age.max")
     
     # minimum M rate- don't code quantities yet (see how it's coded in future fig)
     # M.rate.min <- dat |>
@@ -272,23 +272,23 @@ write_captions <- function(dat, # converted model output object
     
     ## catch at age (CAA)
     # start year of CAA plot
-    caa.start.year <- extract_key_quantity(kq = "caa.start.year")
+    caa.start.year <- extract_key_quantity(dat, kq = "caa.start.year")
       
     # end year of CAA plot
-    caa.end.year <- extract_key_quantity(kq = "caa.end.year")
+    caa.end.year <- extract_key_quantity(dat, kq = "caa.end.year")
     
     # minimum age
-    caa.age.min <- extract_key_quantity(kq = "caa.age.min")
+    caa.age.min <- extract_key_quantity(dat, kq = "caa.age.min")
     
     # maximum age
-    caa.age.max <- extract_key_quantity(kq = "caa.age.max")
+    caa.age.max <- extract_key_quantity(dat, kq = "caa.age.max")
     
     ## catch composition
     # minimum catch
-    tot.catch.min <- extract_key_quantity(kq = "tot.catch.min")
+    tot.catch.min <- extract_key_quantity(dat, kq = "tot.catch.min")
     
     # maximum catch
-    tot.catch.max <- extract_key_quantity(kq = "tot.catch.max")
+    tot.catch.max <- extract_key_quantity(dat, kq = "tot.catch.max")
 
     ## CAL (catch at length)- don't code quantities yet
     # cal.length.min <- # minimum length group
@@ -309,22 +309,22 @@ write_captions <- function(dat, # converted model output object
 
     ## NAA (numbers at age)
     # start year of NAA plot
-    pop.naa.start.year <- extract_key_quantity(kq = "pop.naa.start.year")
+    pop.naa.start.year <- extract_key_quantity(dat, kq = "pop.naa.start.year")
 
     # end year of NAA plot
-    pop.naa.end.year <- extract_key_quantity(kq = "pop.naa.end.year")
+    pop.naa.end.year <- extract_key_quantity(dat, kq = "pop.naa.end.year")
 
     # minimum age
-    pop.naa.age.min <- extract_key_quantity(kq = "pop.naa.age.min")
+    pop.naa.age.min <- extract_key_quantity(dat, kq = "pop.naa.age.min")
 
     # maximum age
-    pop.naa.age.max <- extract_key_quantity(kq = "pop.naa.age.max")
+    pop.naa.age.max <- extract_key_quantity(dat, kq = "pop.naa.age.max")
     
     # minimum abundance (number) of fish
-    pop.naa.fish.min <- extract_key_quantity(kq = "pop.naa.fish.min")
+    pop.naa.fish.min <- extract_key_quantity(dat, kq = "pop.naa.fish.min")
     
     # maximum abundance (number) of fish
-    pop.naa.fish.max <- extract_key_quantity(kq = "pop.naa.fish.max")
+    pop.naa.fish.max <- extract_key_quantity(dat, kq = "pop.naa.fish.max")
     
     ## mod_fit_catch (model fit to catch ts)- don't code quantities yet
     # mod.fit.catch.start.year <- # start year of model fit to catch ts plot
@@ -366,7 +366,7 @@ write_captions <- function(dat, # converted model output object
 
     ## estimated stock recruitment
     # youngest-age recruited fish (instead of age-0)
-    sr.age.min <- extract_key_quantity(kq = "sr.age.min")
+    sr.age.min <- extract_key_quantity(dat, kq = "sr.age.min")
 
     # ssb units (plural)
     # sr.ssb.units : added with add_more_key_quants
@@ -387,7 +387,7 @@ write_captions <- function(dat, # converted model output object
     # recruitment.units : added with add_more_key_quants
 
     # start year of recruitment ts plot
-    recruitment.start.year <- extract_key_quantity(kq = "recruitment.start.year")
+    recruitment.start.year <- extract_key_quantity(dat, kq = "recruitment.start.year")
 
     # end year of recruitment ts plot
     # recruitment.end.year : added with add_more_key_quants
@@ -405,22 +405,22 @@ write_captions <- function(dat, # converted model output object
 
     ## recruitment deviations
     # start year of recruitment deviations plot
-    recruit.dev.start.year <- extract_key_quantity(kq = "recruit.dev.start.year")
+    recruit.dev.start.year <- extract_key_quantity(dat, kq = "recruit.dev.start.year")
 
     # end year of recruitment deviations plot
     # recruit.dev.end.year : added with add_more_key_quants
 
     # minimum recruitment deviation
-    recruit.dev.min <- extract_key_quantity(kq = "recruit.dev.min")
+    recruit.dev.min <- extract_key_quantity(dat, kq = "recruit.dev.min")
 
     # maximum recruitment deviation
-    recruit.dev.max <- extract_key_quantity(kq = "recruit.dev.max")
+    recruit.dev.max <- extract_key_quantity(dat, kq = "recruit.dev.max")
 
     ## tot_b (total biomass): same as B plot above
 
     ## spawning_biomass (ssb)
     # start year of ssb plot
-    ssb.start.year <- extract_key_quantity(kq = "ssb.start.year")
+    ssb.start.year <- extract_key_quantity(dat, kq = "ssb.start.year")
 
     # end year of ssb plot
     # ssb.end.year : added with add_more_key_quants
@@ -449,10 +449,10 @@ write_captions <- function(dat, # converted model output object
 
     ## spr (spawning potential ratio)
     # minimum spr
-    spr.min <- extract_key_quantity(kq = "spr.min")
+    spr.min <- extract_key_quantity(dat, kq = "spr.min")
 
     # maximum spr
-    spr.max <- extract_key_quantity(kq = "spr.max")
+    spr.max <- extract_key_quantity(dat, kq = "spr.max")
 
     # TODO: uncomment and recode once we get clarity about how to extract this value properly
     # spr reference point
@@ -464,22 +464,22 @@ write_captions <- function(dat, # converted model output object
 
     ## pop.baa (population biomass at age)
     # start year of pop.baa plot
-    pop.baa.start.year <- extract_key_quantity(kq = "pop.baa.start.year")
+    pop.baa.start.year <- extract_key_quantity(dat, kq = "pop.baa.start.year")
 
     # end year of pop.baa plot
-    pop.baa.end.year <- extract_key_quantity(kq = "pop.baa.end.year")
+    pop.baa.end.year <- extract_key_quantity(dat, kq = "pop.baa.end.year")
     
     # minimum biomass of fish
-    pop.baa.fish.min <- extract_key_quantity(kq = "pop.baa.fish.min")
+    pop.baa.fish.min <- extract_key_quantity(dat, kq = "pop.baa.fish.min")
     
     # maximum biomass of fish
-    pop.baa.fish.max <- extract_key_quantity(kq = "pop.baa.fish.max")
+    pop.baa.fish.max <- extract_key_quantity(dat, kq = "pop.baa.fish.max")
 
     # minimum age
-    pop.baa.age.min <- extract_key_quantity(kq = "pop.baa.age.min")
+    pop.baa.age.min <- extract_key_quantity(dat, kq = "pop.baa.age.min")
 
     # maximum age
-    pop.baa.age.max <- extract_key_quantity(kq = "pop.baa.age.max")
+    pop.baa.age.max <- extract_key_quantity(dat, kq = "pop.baa.age.max")
 
     ## proj_catch (projected catch)
     # projected catch units (plural)
@@ -490,13 +490,13 @@ write_captions <- function(dat, # converted model output object
     proj.catch.start.year <- landings.end.year + 1
 
     # end year of projected catch plot
-    proj.catch.end.year <- extract_key_quantity(kq = "proj.catch.end.year")
+    proj.catch.end.year <- extract_key_quantity(dat, kq = "proj.catch.end.year")
 
     # minimum projected catch
-    proj.catch.min <- extract_key_quantity(kq = "proj.catch.min")
+    proj.catch.min <- extract_key_quantity(dat, kq = "proj.catch.min")
 
     # maximum projected catch
-    proj.catch.max <- extract_key_quantity(kq = "proj.catch.max")
+    proj.catch.max <- extract_key_quantity(dat, kq = "proj.catch.max")
       
     # TABLES-----
 
