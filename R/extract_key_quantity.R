@@ -17,29 +17,29 @@
 #'     \item{`caa.end.year`: end year of CAA plot}
 #'     \item{`caa.age.min`: minimum CAA age}
 #'     \item{`caa.age.max`: maximum CAA age}
-#'     \item{`tot.catch.min`: }
-#'     \item{`tot.catch.max`: }
-#'     \item{`pop.naa.start.year`: }
-#'     \item{`pop.naa.end.year`: }
-#'     \item{`pop.naa.age.min`: }
-#'     \item{`pop.naa.age.max`: }
-#'     \item{`pop.naa.fish.min`: }
-#'     \item{`pop.naa.fish.max`: }
-#'     \item{`sr.age.min`: }
-#'     \item{`recruitment.start.year`: }
-#'     \item{`recruit.dev.start.year`: }
-#'     \item{`recruit.dev.min`: }
-#'     \item{`recruit.dev.max`: }
-#'     \item{`ssb.start.year`: }
-#'     \item{`spr.min`: }
-#'     \item{`spr.max`: }
-#'     \item{`pop.baa.start.year`: }
-#'     \item{`pop.baa.end.year`: }
-#'     \item{`pop.baa.fish.min`: }
-#'     \item{`pop.baa.fish.max`: }
-#'     \item{`pop.baa.age.min`: }
-#'     \item{`pop.baa.age.max`: }
-#'     \item{`proj.catch.end.year`: }
+#'     \item{`tot.catch.min`: catch composition minimum catch}
+#'     \item{`tot.catch.max`: catch composition maximum catch}
+#'     \item{`pop.naa.start.year`: start year of NAA plot}
+#'     \item{`pop.naa.end.year`: end year of NAA plot}
+#'     \item{`pop.naa.age.min`: minimum age of NAA plot}
+#'     \item{`pop.naa.age.max`: maximum age of NAA plot}
+#'     \item{`pop.naa.fish.min`: minimum abundance (number) of fish of NAA plot}
+#'     \item{`pop.naa.fish.max`: maximum abundance (number) of fish of NAA plot}
+#'     \item{`sr.age.min`: youngest-age recruited fish of estimated stock recruitment plot}
+#'     \item{`recruitment.start.year`: start year of recruitment plot}
+#'     \item{`recruit.dev.start.year`: end year of recruitment plot}
+#'     \item{`recruit.dev.min`: minimum recruitment deviation}
+#'     \item{`recruit.dev.max`: maximum recruitment deviation}
+#'     \item{`ssb.start.year`: start year of spawning biomass plot}
+#'     \item{`spr.min`: minimum spawning potential ratio}
+#'     \item{`spr.max`: maximum spawning potential ratio}
+#'     \item{`pop.baa.start.year`: start year of biomass at age plot}
+#'     \item{`pop.baa.end.year`: end year of biomass at age plot}
+#'     \item{`pop.baa.fish.min`: minimum biomass of biomass at age plot}
+#'     \item{`pop.baa.fish.max`: maximum biomass of biomass at age plot}
+#'     \item{`pop.baa.age.min`: minimum age of biomass at age plot}
+#'     \item{`pop.baa.age.max`: maximum age of biomass at age plot}
+#'     \item{`proj.catch.end.year`: end year of projected catch plot}
 #'     \item{`proj.catch.min`: minimum projected catch}
 #'     \item{`proj.catch.max`: maximum projected catch}
 #'     }
