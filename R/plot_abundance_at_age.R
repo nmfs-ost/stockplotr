@@ -60,6 +60,17 @@ plot_abundance_at_age <- function(
     scale_amount = scale_amount,
     interactive = FALSE
   )
+  # Process data to recognize grouping and faceting variables
+  processed_data <- process_data(
+    dat = b,
+    group = "age",
+    facet = facet
+  )
+  variable <- processed_data[[1]]
+  data <- processed_data[[2]]
+  group <- processed_data[[3]]
+  facet <- processed_data[[4]]
+  
   # Check for extracted data, if not return warning and empty plot
   if (nrow(b) == 0) {
     cli::cli_alert_warning("No data found for abundance at age. Please check the input data.")
@@ -70,13 +81,13 @@ plot_abundance_at_age <- function(
 
   # Plot data
   plot <- plot_aa(
-    dat = b,
+    dat = data,
     facet = facet,
     label = abundance_label,
     proportional = proportional
   ) +
   average_age_line(
-    dat = b,
+    dat = data,
     facet = facet
   )
   # export figure to rda if argument = T

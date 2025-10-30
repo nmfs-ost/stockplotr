@@ -17,7 +17,7 @@
 #' overwrite it to a different, valid indexed variable or NULL.}
 #' \item{facet}{A string or vector of strings identifying the faceting
 #' variable(s) of the data. If NULL, no faceting variable is identified. Any
-#' identified indexed variables found in this funcion will be added to facet.}
+#' identified indexed variables found in this function will be added to facet.}
 #' @export
 #'
 #' @examples {
@@ -91,7 +91,7 @@ process_data <- function(
     # subset out nas if ages exist for this 
     # not sure if  this works for all cases -- are there situations where we want the NA and not age?
     data <- dplyr::filter(data, !is.na(age))
-    index_variables <- index_variables[-grep("age", index_variables)]
+    if ("age" %in% index_variables) index_variables <- index_variables[-grep("age", index_variables)]
   }
   # move year to another check -- age always used?
   if ("year" %in% colnames(data) && any(!is.na(data$year))) {
