@@ -126,12 +126,13 @@ plot_spawning_biomass <- function(
   processing <- process_data(
     dat = prepared_data,
     group = group,
-    facet = facet
+    facet = facet,
+    avg = "sum"
   )
   # variable <- processing[[1]]
-  plot_data <- processing[[2]]
-  group <- processing[[3]]
-  if (!is.null(processing[[4]])) facet <- processing[[4]]
+  plot_data <- processing[[1]]
+  group <- processing[[2]]
+  if (!is.null(processing[[3]])) facet <- processing[[3]]
 
   # Override grouping variable when there is only NA's
   if (!is.null(group)) {
