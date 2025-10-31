@@ -46,14 +46,14 @@ process_data <- function(
       dat <- switch(
         avg,
         "mean" = dat |>
-          dplyr::group_by(dplyr::across(dplyr::all_of(c("group_var", index_variables)))) |>
+          dplyr::group_by(dplyr::across(dplyr::all_of(c("label", "model", "group_var", index_variables)))) |>
           dplyr::summarize(
             estimate = mean(estimate),
             estimate_lower = mean(estimate_lower),
             estimate_upper = mean(estimate_upper)
           ),
         "sum" = dat |>
-          dplyr::group_by(dplyr::across(dplyr::all_of(c("group_var", index_variables)))) |>
+          dplyr::group_by(dplyr::across(dplyr::all_of(c("label", "model", "group_var", index_variables)))) |>
           dplyr::summarize(
             estimate = sum(estimate),
             estimate_lower = sum(estimate_lower),
@@ -71,17 +71,19 @@ process_data <- function(
     }
   }
   # Set group_var to identified grouping
-  if (!is.null(group) && group == "none") {
-    # if group is none and there exists an index group, filter to nas of index group
-    if (length(id_group) > 0) {
-      data <- dplyr::filter(
-        dat,
-        is.na(.data[[id_group[1]]])
-      )
-    } else {
-      data <- dat
-    }
-  } else if (!is.null(group)) {
+  # if (!is.null(group) && group == "none") {
+  #   # if group is none and there exists an index group, filter to nas of index group
+  #   # commented out bc this issue is solved in the above 1st step
+  #   if (length(id_group) > 0) {
+  #     data <- dplyr::filter(
+  #       dat,
+  #       is.na(.data[[id_group[1]]])
+  #     )
+  #   } else {
+  #     data <- dat
+  #   }
+  # } else 
+  if (!is.null(group) && group != "none") {
     data <- dplyr::mutate(
       dat,
       group_var = .data[[group]]
@@ -107,7 +109,7 @@ process_data <- function(
   
   # Check if there is age or year or both
   # Then either plot over ages with lines for year or single year
-  if (any(!is.na(data$age))) {
+  if ("age" %in% colnames(data) &&any(!is.na(data$age))) {
     # subset out nas if ages exist for this 
     # not sure if  this works for all cases -- are there situations where we want the NA and not age?
     data <- dplyr::filter(data, !is.na(age))
