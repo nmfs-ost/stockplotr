@@ -4,7 +4,7 @@
 \alias{process_data}
 \title{Post processing filtered data for indexed data}
 \usage{
-process_data(dat, group = NULL, facet = NULL)
+process_data(dat, group = NULL, facet = NULL, method = "sum")
 }
 \arguments{
 \item{dat}{Pre-filtered data from \link[stockplotr]{filter_data} following a
@@ -14,12 +14,12 @@ long format data.}
 
 \item{facet}{A string or vector of strings identifying the faceting
 variable(s) of the data.}
+
+\item{method}{A string describing the method of summarizing data when group
+is set to "none". Options are "sum" or "mean". Default is "sum".}
 }
 \value{
-A list of 4 objects:
-\item{variable}{A logical indicating if the data varies over age or year.
-If TRUE, data varies over age or year. If FALSE, data does not vary
-over age or year.}
+A list of 3 objects:
 \item{data}{A data frame of the processed data ready for plotting.}
 \item{group}{A string identifying the grouping variable of the data.
 If NULL, no grouping variable is identified. If not NULL, the function
@@ -27,7 +27,7 @@ will verify that the data is indexed by this variables, otherwise it will
 overwrite it to a different, valid indexed variable or NULL.}
 \item{facet}{A string or vector of strings identifying the faceting
 variable(s) of the data. If NULL, no faceting variable is identified. Any
-identified indexed variables found in this funcion will be added to facet.}
+identified indexed variables found in this function will be added to facet.}
 }
 \description{
 Post processing filtered data for indexed data
@@ -40,6 +40,6 @@ filtered <- stockplotr::filter_data(
  geom = "line",
  module = "TIME_SERIES"
 )
-process_data(dat = filtered)
+process_data(dat = filtered, method = "sum")
 }
 }

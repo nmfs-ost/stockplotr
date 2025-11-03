@@ -69,10 +69,9 @@ plot_catch_comp <- function(
     group = "age",
     facet = facet
   )
-  # variable <- processed_data[[1]]
-  data <- processed_data[[2]]
+  data <- processed_data[[1]]
   group <- processed_data[[3]]
-  facet <- processed_data[[4]]
+  facet <- processed_data[[2]]
   # Check for extracted data, if not return warning and empty plot
   if (nrow(catch) == 0) {
     cli::cli_alert_warning("No data found for catch at age. Please check the input data.")

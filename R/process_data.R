@@ -26,7 +26,7 @@
 #'  geom = "line",
 #'  module = "TIME_SERIES"
 #' )
-#' process_data(dat = filtered)
+#' process_data(dat = filtered, method = "sum")
 #' }
 process_data <- function(
     dat,
