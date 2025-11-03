@@ -127,7 +127,7 @@ plot_spawning_biomass <- function(
     dat = prepared_data,
     group = group,
     facet = facet,
-    avg = "sum"
+    method = "sum"
   )
   # variable <- processing[[1]]
   plot_data <- processing[[1]]

@@ -98,9 +98,9 @@ plot_biomass <- function(
   )
   
   # variable <- processing[[1]]
-  prepared_data <- processing[[2]]
-  group <- processing[[3]]
-  if (!is.null(processing[[4]])) facet <- processing[[4]]
+  prepared_data <- processing[[1]]
+  group <- processing[[2]]
+  if (!is.null(processing[[3]])) facet <- processing[[3]]
   
   # Calculate estimate if relative
   if (relative) {

@@ -5,6 +5,8 @@
 #' @param group A string identifying the indexing variable of the data.
 #' @param facet A string or vector of strings identifying the faceting
 #' variable(s) of the data.
+#' @param method A string describing the method of summarizing data when group
+#' is set to "none". Options are "sum" or "mean". Default is "sum".
 #'
 #' @returns A list of 3 objects:
 #' \item{data}{A data frame of the processed data ready for plotting.}
@@ -30,7 +32,7 @@ process_data <- function(
     dat,
     group = NULL,
     facet = NULL,
-    avg = "sum"
+    method = "sum"
 ) {
   # check for additional indexed variables
   index_variables <- check_grouping(dat)
@@ -41,7 +43,7 @@ process_data <- function(
     index_variables <- intersect(c("year", "age"), index_variables)
     if (length(id_group) > 0) {
       dat <- switch(
-        avg,
+        method,
         "mean" = dat |>
           dplyr::group_by(dplyr::across(dplyr::all_of(c("label", "model", "group_var", index_variables)))) |>
           dplyr::summarize(
@@ -176,10 +178,20 @@ process_data <- function(
           c(facet, index_variables[-1]),
           index_variables[-1]
         )
+        # add message for what vaues are in facet
+        cli::cli_alert_info("Faceting by {paste(facet, collapse = ', ')}.")
+        # filter out NA for each value in facet
+        for (f in facet) {
+          if (any(is.na(unique(data[[f]]))) & length(unique(data[[f]])) == 2) {
+            data <- dplyr::filter(data, is.na(.data[[f]]))
+            facet <- facet[-grepl(f, facet)]
+          } else {
+            data <- dplyr::filter(data, !is.na(.data[[f]]))
+          }
+        }
       }
     }
   }
-  
   
   if(!is.null(group) && group != "none") {
     # check if value varies in ANY year
