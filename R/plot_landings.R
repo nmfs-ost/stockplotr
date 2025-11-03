@@ -59,9 +59,9 @@ plot_landings <- function(
     group = group,
     facet = facet
   )
-  prepared_data <- processed_data[[2]]
-  group <- processed_data[[3]]
-  facet <- processed_data[[4]]
+  prepared_data <- processed_data[[1]]
+  group <- processed_data[2]
+  facet <- processed_data[[3]]
   
   # Check if there is >1 label
   if (length(prepared_data$label) > 1) {
