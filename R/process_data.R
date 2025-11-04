@@ -45,14 +45,14 @@ process_data <- function(
       dat <- switch(
         method,
         "mean" = dat |>
-          dplyr::group_by(dplyr::across(dplyr::all_of(c("label", "model", "group_var", index_variables)))) |>
+          dplyr::group_by(dplyr::across(tidyselect::all_of(c("label", "model", "group_var", index_variables)))) |>
           dplyr::summarize(
             estimate = mean(estimate),
             estimate_lower = mean(estimate_lower),
             estimate_upper = mean(estimate_upper)
           ),
         "sum" = dat |>
-          dplyr::group_by(dplyr::across(dplyr::all_of(c("label", "model", "group_var", index_variables)))) |>
+          dplyr::group_by(dplyr::across(tidyselect::all_of(c("label", "model", "group_var", index_variables)))) |>
           dplyr::summarize(
             estimate = sum(estimate),
             estimate_lower = sum(estimate_lower),
@@ -92,7 +92,7 @@ process_data <- function(
   }
   if (length(index_variables) > 0) {
     data <- data |>
-      dplyr::select(dplyr::all_of(c(
+      dplyr::select(tidyselect::all_of(c(
         "label", "estimate", # "uncertainty", "uncertainty_label",
         "estimate_upper", "estimate_lower",
         # need to maintain columns made from prep data
@@ -131,7 +131,7 @@ process_data <- function(
       check_group_data <- data |>
         tidyr::pivot_wider(
           id_cols = tidyselect::any_of(c("label","year", "age", "model")),
-          names_from = dplyr::any_of(group),
+          names_from = tidyselect::any_of(group),
           values_from = estimate,
           values_fn = list
         )

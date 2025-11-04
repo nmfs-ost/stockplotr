@@ -512,9 +512,9 @@ reference_line <- function(
   # Add geom for ref line
   plot +
     ggplot2::geom_hline(
-      ggplot2::aes(
-        yintercept = ref_line_val / ifelse(relative, ref_line_val, scale_amount)
-      ),
+      # ggplot2::aes(
+        yintercept = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
+      # ),
       color = "black",
       linetype = "dashed"
     ) +
