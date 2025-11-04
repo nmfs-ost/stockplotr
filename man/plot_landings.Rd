@@ -76,7 +76,6 @@ plot_landings(
   dat = stockplotr:::example_data,
   unit_label = "metric tons",
   group = "fleet",
-  facet = "area",
   interactive = FALSE,
   make_rda = FALSE
 )
