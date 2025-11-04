@@ -132,7 +132,8 @@ process_data <- function(
         tidyr::pivot_wider(
           id_cols = tidyselect::any_of(c("label","year", "age", "model")),
           names_from = dplyr::any_of(group),
-          values_from = estimate
+          values_from = estimate,
+          values_fn = list
         )
       # overwrite variable if grouping is what makes it variable in above conditions
       # variable <- ifelse(
@@ -148,7 +149,12 @@ process_data <- function(
     }
     
     # add any remaining index_variables into facet
-    if (length(index_variables) > 0) facet <- c(facet, index_variables)
+    if (length(index_variables) > 0) {
+      if (!is.null(facet) && facet %in% index_variables) {
+        index_variables <- index_variables[-grep(facet, index_variables)]
+      }
+      facet <- c(facet, index_variables)
+    }
   } else if (length(index_variables) > 0) {
     # overwrite variable if a grouping/indexing column was identified
     # based on only the first group if >1 identified
@@ -173,11 +179,12 @@ process_data <- function(
       data <- dplyr::filter(data, !is.na(.data[[group]]))
       # Remaining id'd index variables moved to facet
       if (length(index_variables) > 1) {
-        facet <- ifelse(
-          !is.null(facet),
-          c(facet, index_variables[-1]),
-          index_variables[-1]
-        )
+        if (!is.null(facet)) {
+          if (facet %in% index_variables) index_variables <- index_variables[-grep(facet, index_variables)]
+          facet <- c(facet, index_variables[-1])
+        } else {
+          facet <- index_variables[-1]
+        }
         # add message for what vaues are in facet
         cli::cli_alert_info("Faceting by {paste(facet, collapse = ', ')}.")
         # filter out NA for each value in facet
@@ -200,7 +207,7 @@ process_data <- function(
       pivot_data <- data |>
         dplyr::select(tidyselect::any_of(c("year", "age", "estimate", index_variables))) |>
         tidyr::pivot_wider(id_cols = c(year),
-                           names_from = dplyr::any_of(index_variables),
+                           names_from = tidyselect::any_of(index_variables),
                            values_from = estimate) |> suppressWarnings()
       column_data <- pivot_data[-1]
     } else {

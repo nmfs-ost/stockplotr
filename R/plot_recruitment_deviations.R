@@ -38,7 +38,7 @@ plot_recruitment_deviations <- function(
  processed_data <- process_data(
   dat = filter_data,
   group = "none",
-  facet = facet,
+  facet = NULL,
   method = "avg"
  )
  filter_data <- processed_data[[1]]
