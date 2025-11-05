@@ -62,6 +62,7 @@ process_data <- function(
       group <- "none"
     }
   }
+
   # check for additional indexed variables
   index_variables <- check_grouping(dat)
   # If user input "none" to group this makes the plot remove any facetting or summarize?
