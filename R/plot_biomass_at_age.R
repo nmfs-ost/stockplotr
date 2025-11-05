@@ -45,6 +45,15 @@ plot_biomass_at_age <- function(
     scale_amount = scale_amount,
     interactive = interactive
   )
+  # Process data to recognize grouping and faceting variables
+  processed_data <- process_data(
+    dat = b,
+    group = "age",
+    facet = facet
+  )
+  data <- processed_data[[1]]
+  group <- processed_data[[2]]
+  facet <- processed_data[[3]]
   # Check for extracted data, if not return warning and empty plot
   if (nrow(b) == 0) {
     cli::cli_alert_warning("No data found for biomass at age. Please check the input data.")
@@ -55,13 +64,13 @@ plot_biomass_at_age <- function(
 
   # Plot data
   plot <- plot_aa(
-    dat = b,
+    dat = data,
     facet = facet,
     label = biomass_label,
     proportional = proportional
   ) +
   average_age_line(
-    dat = b,
+    dat = data,
     facet = facet
   )
   # export figure to rda if argument = T

@@ -34,6 +34,16 @@ plot_recruitment_deviations <- function(
   geom = "point",
   group = NULL
 )
+ # Process data
+ processed_data <- process_data(
+  dat = filter_data,
+  group = "none",
+  facet = NULL,
+  method = "avg"
+ )
+ filter_data <- processed_data[[1]]
+ group <- processed_data[[2]]
+ facet <- processed_data[[3]]
 
 if (nrow(filter_data) == 0) {
   cli::cli_abort("No recruitment deviations found in data.")

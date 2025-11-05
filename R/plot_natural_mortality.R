@@ -48,9 +48,9 @@ plot_natural_mortality <- function(
   processing <- process_data(prepared_data, group, facet)
   # TODO: remove variable from process_data fxn output
   # variable <- processing[[1]]
-  processed_data <- processing[[2]]
-  group <- processing[[3]]
-  facet <- processing[[4]]
+  processed_data <- processing[[1]]
+  group <- processing[[2]]
+  if (!is.null(processing[[3]])) facet <- processing[[3]]
   
   plt <- plot_timeseries(
     dat = processed_data |> dplyr::mutate(age = as.numeric(age)),

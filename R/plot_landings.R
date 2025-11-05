@@ -13,7 +13,6 @@
 #'   dat = stockplotr:::example_data,
 #'   unit_label = "metric tons",
 #'   group = "fleet",
-#'   facet = "area",
 #'   interactive = FALSE,
 #'   make_rda = FALSE
 #' )
@@ -50,10 +49,20 @@ plot_landings <- function(
     module = module,
     scale_amount = scale_amount,
     interactive = interactive
-  ) |> 
+  ) # |> 
     # filter NA from year
-    dplyr::filter(!is.na(year))
-    
+    # dplyr::filter(!is.na(year))
+  # Process data
+  processed_data <- process_data(
+    dat = prepared_data,
+    group = group,
+    facet = facet,
+    method = "sum"
+  )
+  prepared_data <- processed_data[[1]]
+  group <- processed_data[2]
+  facet <- processed_data[[3]]
+  
   # Check if there is >1 label
   if (length(prepared_data$label) > 1) {
     prepared_data <- prepared_data |>

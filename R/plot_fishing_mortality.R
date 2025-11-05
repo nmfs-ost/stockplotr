@@ -43,16 +43,26 @@ plot_fishing_mortality <- function(
     scale_amount = 1,
     interactive = interactive
   )
+  # Process data
+  processed_data <- process_data(
+    dat = prepared_data,
+    group = group,
+    facet = facet,
+    method = "mean"
+  )
+  prepared_data <- processed_data[[1]]
+  group <- processed_data[[2]]
+  facet <- processed_data[[3]]
 
   # Extract reference point unless explicit
-  if (!is.null(names(ref_line))) {
-    ref_line_val <- ref_line[[1]]
-  } else {
-    reference_point <- calculate_reference_point(
-      dat = dat,
-      reference_name = glue::glue("fishing_mortality_", ref_line)
-    )
-  }
+  # if (!is.null(names(ref_line))) {
+  #   ref_line_val <- ref_line[[1]]
+  # } else {
+  #   reference_point <- calculate_reference_point(
+  #     dat = dat,
+  #     reference_name = glue::glue("fishing_mortality_", ref_line)
+  #   )
+  # }
 
   # Create base plot
   plt <- plot_timeseries(

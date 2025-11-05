@@ -121,10 +121,22 @@ plot_spawning_biomass <- function(
     scale_amount = scale_amount,
     interactive = interactive
   )
+  
+  # process the data for grouping
+  processing <- process_data(
+    dat = prepared_data,
+    group = group,
+    facet = facet,
+    method = "sum"
+  )
+  # variable <- processing[[1]]
+  plot_data <- processing[[1]]
+  group <- processing[[2]]
+  if (!is.null(processing[[3]])) facet <- processing[[3]]
 
   # Override grouping variable when there is only NA's
   if (!is.null(group)) {
-    if (group %notin% colnames(prepared_data)) group = NULL
+    if (group %notin% colnames(plot_data)) group = NULL
   }
 
   # Calculate estimate if relative
@@ -139,12 +151,12 @@ plot_spawning_biomass <- function(
       ) / scale_amount
     }
     if (is.na(ref_line_val)) cli::cli_abort("Reference value not found. Cannot plot relative values.")
-    prepared_data <- prepared_data |>
+    plot_data <- plot_data |>
       dplyr::mutate(estimate = estimate / ref_line_val)
   }
 
   plt <- plot_timeseries(
-    dat = prepared_data,
+    dat = plot_data,
     y = "estimate",
     geom = geom,
     ylab = spawning_biomass_label,
@@ -154,8 +166,6 @@ plot_spawning_biomass <- function(
   )
   # Add reference line
   # getting data set - an ifelse statement in the fxn wasn't working
-  
-
   final <- reference_line(
     plot = plt,
     dat = rp_dat,
@@ -169,11 +179,11 @@ plot_spawning_biomass <- function(
   # Plot vertical lines if era is not filtering
   if (is.null(era)) {
     # Find unique era
-    eras <- unique(prepared_data$era)
+    eras <- unique(plot_data$era)
     if (length(eras) > 1) {
       year_vlines <- c()
       for (i in 2:length(eras)){
-        erax <- prepared_data |>
+        erax <- plot_data |>
         dplyr::filter(era == eras[i]) |>
         dplyr::pull(year) |>
         min(na.rm = TRUE)

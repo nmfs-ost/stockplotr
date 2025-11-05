@@ -51,6 +51,17 @@ plot_recruitment <- function(
     module = module,
     scale_amount = scale_amount
   ) 
+  # process data
+  processed_data <- process_data(
+    dat = recruitment,
+    group = group,
+    facet = facet,
+    method = "sum"
+  )
+  recruitment <- processed_data[[1]]
+  group <- processed_data[[2]]
+  facet <- processed_data[[3]]
+  
   # Check if contains 'rec devs' and filter out
   if (any(grepl("recruitment_deviations", unique(recruitment$label)))) {
     if (length(unique(recruitment$label)) > 1) {
@@ -96,7 +107,7 @@ plot_recruitment <- function(
         data = recruitment,
         ggplot2::aes(x = year, y = expected_recruitment),
         color = "red",
-        size = 1
+        linewidth = 1
       )
     caption_label <- "recruitment.comp"
   } else {

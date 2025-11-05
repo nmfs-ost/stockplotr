@@ -79,42 +79,29 @@ plot_biomass <- function(
     scale_amount = scale_amount,
     interactive = interactive
   )
-    # Filter out fleet if grouping or faceting variable is not it
-    if (!is.null(group) & "fleet" %in% colnames(prepared_data)) {
-      if (group!= "fleet") {
-        prepared_data <- dplyr::filter(prepared_data, is.na(fleet))
-      } else {
-        prepared_data <- dplyr::filter(prepared_data, !is.na(fleet))
-      }
-    }
-  # Check df if there is >1 unique(label)
-  if (length(unique(prepared_data$label)) > 1 & is.null(facet)) {
-    # summarize data by grouping
-    # specifically aiming to add together SS3 retained, dead, and selected biomass
+  
+  # check if all 3 are present and subset for one or two
+  if (length(unique(prepared_data$label)) > 1 & any(grepl("biomass$", unique(prepared_data$label)))) {
+    # cli::cli_alert_info("> 1 label name. Selecting total biomass only.")
     prepared_data <- prepared_data |>
-      dplyr::group_by(year, model, group_var, era, module_name) |>
-      dplyr::summarise(
-        label = "biomass",
-        estimate = sum(estimate),
-        estimate_lower = mean(estimate_lower),
-        estimate_upper = mean(estimate_upper)
-      )
-  } else if (length(unique(prepared_data$label)) > 1 & !is.null(facet)) {
-    # summarize data by grouping and facet(s)
-    # specifically aiming to add together SS3 retained, dead, and selected biomass
-    prepared_data <- prepared_data |>
-      dplyr::group_by(year, model, group_var, era, module_name, .data[[facet]]) |>
-      dplyr::summarise(
-        label = "biomass",
-        estimate = sum(estimate),
-        estimate_lower = mean(estimate_lower),
-        estimate_upper = mean(estimate_upper)
+      dplyr::filter(
+        grepl("biomass$", label)
       )
   }
-  # Override grouping variable when there is only NA's
-  if (!is.null(group)) {
-    if (group %notin% colnames(prepared_data)) group = NULL
-  }
+
+  # Process data for indexing/grouping
+  # TODO: check and add into process_data step to summarize when theres >1 label
+  processing <- process_data(
+    prepared_data,
+    group,
+    facet
+  )
+  
+  # variable <- processing[[1]]
+  prepared_data <- processing[[1]]
+  group <- processing[[2]]
+  if (!is.null(processing[[3]])) facet <- processing[[3]]
+  
   # Calculate estimate if relative
   if (relative) {
     if (!is.null(names(ref_line))) {
