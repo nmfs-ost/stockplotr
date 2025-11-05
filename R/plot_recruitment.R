@@ -107,7 +107,7 @@ plot_recruitment <- function(
         data = recruitment,
         ggplot2::aes(x = year, y = expected_recruitment),
         color = "red",
-        size = 1
+        linewidth = 1
       )
     caption_label <- "recruitment.comp"
   } else {
