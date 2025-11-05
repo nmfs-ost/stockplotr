@@ -2,7 +2,7 @@
 % Please edit documentation in R/process_data.R
 \name{process_data}
 \alias{process_data}
-\title{Post processing filtered data for indexed data}
+\title{Post processing of filtered data}
 \usage{
 process_data(dat, group = NULL, facet = NULL, method = "sum")
 }
@@ -19,7 +19,9 @@ variable(s) of the data.}
 is set to "none". Options are "sum" or "mean". Default is "sum".}
 }
 \value{
-A list of 3 objects:
+Automatically detects potential grouping and faceting data from a 
+dataframe output from \link[stockplotr]{filter_data}. It returns the following 
+list of 3 objects:
 \item{data}{A data frame of the processed data ready for plotting.}
 \item{group}{A string identifying the grouping variable of the data.
 If NULL, no grouping variable is identified. If not NULL, the function
@@ -30,7 +32,7 @@ variable(s) of the data. If NULL, no faceting variable is identified. Any
 identified indexed variables found in this function will be added to facet.}
 }
 \description{
-Post processing filtered data for indexed data
+Post processing of filtered data
 }
 \examples{
 {
