@@ -66,7 +66,7 @@ plot_abundance_at_age <- function(
     scale_amount = scale_amount,
     interactive = FALSE
   )
-  
+
   if (!is.null(facet) && facet == "none") {
     data <- b |>
       dplyr::group_by(year, age) |>
