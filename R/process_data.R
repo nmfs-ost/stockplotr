@@ -110,16 +110,26 @@ process_data <- function(
   
   # Check if there is age or year or both
   # Then either plot over ages with lines for year or single year
-  if ("age" %in% colnames(data) &&any(!is.na(data$age))) {
+  if ("age" %in% colnames(data) && any(!is.na(data$age))) {
     # subset out nas if ages exist for this 
     # not sure if  this works for all cases -- are there situations where we want the NA and not age?
     data <- dplyr::filter(data, !is.na(age))
-    if ("age" %in% index_variables) index_variables <- index_variables[-grep("age", index_variables)]
+    if (!is.null(group) && group == "age") {
+      if ("age" %in% index_variables) index_variables <- index_variables[-grep("age", index_variables)]
+    }
+    if (!is.null(facet) && facet == "age") {
+      if ("age" %in% index_variables) index_variables <- index_variables[-grep("age", index_variables)]
+    }
   }
   # move year to another check -- age always used?
   if ("year" %in% colnames(data) && any(!is.na(data$year))) {
-    index_variables <- index_variables[-grep("year", index_variables)]
     data <- dplyr::filter(data, !is.na(year))
+    # if (!is.null(group) && group == "year") {
+      if ("year" %in% index_variables) index_variables <- index_variables[-grep("year", index_variables)]
+    # }
+    # if (!is.null(facet) && facet == "year") {
+    #   if ("year" %in% index_variables) index_variables <- index_variables[-grep("year", index_variables)]
+    # }
   }
   
   # Set any remaining index variables to group (first) and facet
