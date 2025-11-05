@@ -38,10 +38,27 @@ process_data <- function(
 ) {
   # check if >1 model
   if (length(unique(dat$model)) > 1) {
-    if (!is.null(group) && group != "none") {
-      cli::cli_alert_info("No functionality for auto detecting indexing for multiple models. Setting group to \"none\".")
+    # Check for indexing variables equivalent
+    index_list <- c()
+    for (mod in unique(dat$model)) {
+      mod_data <- dplyr::filter(dat, model == mod)
+      mod_index <- check_grouping(mod_data)
+      index_list <- c(index_list, list(mod_index))
     }
-    group <- "none"
+    if (!all(vapply(
+      index_list,
+      identical,
+      logical(1),
+      index_list[[1]]))
+    ) {
+      cli::cli_alert_warning("Multiple models with differing indexing variables detected.")
+      if (!is.null(group) && group != "none") {
+        cli::cli_alert_info("Setting group to \"none\".")
+      } else if (is.null(group)) {
+        cli::cli_alert_info("No grouping variable specified. Setting group to \"none\".")
+      }
+      group <- "none"
+    }
   }
   # check for additional indexed variables
   index_variables <- check_grouping(dat)
