@@ -721,7 +721,7 @@ filter_data <- function(
     if (!is.null(module)) {
       plot_data <- plot_data |>
         dplyr::filter(
-          module_name == module
+          module_name %in% module
         )
     } else {
       cli::cli_alert_warning("Multiple module names found in data. \n")

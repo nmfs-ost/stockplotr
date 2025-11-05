@@ -36,6 +36,13 @@ process_data <- function(
     facet = NULL,
     method = "sum"
 ) {
+  # check if >1 model
+  if (length(unique(dat$model)) > 1) {
+    if (!is.null(group) && group != "none") {
+      cli::cli_alert_info("No functionality for auto detecting indexing for multiple models. Setting group to \"none\".")
+    }
+    group <- "none"
+  }
   # check for additional indexed variables
   index_variables <- check_grouping(dat)
   # If user input "none" to group this makes the plot remove any facetting or summarize?
