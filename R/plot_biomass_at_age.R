@@ -21,6 +21,13 @@
 #'   proportional = FALSE, # displays legend
 #'   make_rda = FALSE
 #' )
+plot_biomass_at_age(
+  dat = stockplotr:::example_data,
+  unit_label = "mt",
+  scale_amount = 100,
+  proportional = FALSE, # displays legend
+  make_rda = FALSE
+)
 plot_biomass_at_age <- function(
     dat,
     facet = NULL,

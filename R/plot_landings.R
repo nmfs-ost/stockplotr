@@ -16,6 +16,13 @@
 #'   interactive = FALSE,
 #'   make_rda = FALSE
 #' )
+#' plot_landings(
+#'   dat = stockplotr:::example_data,
+#'   unit_label = "metric tons",
+#'   facet = "fleet",
+#'   interactive = FALSE,
+#'   make_rda = FALSE
+#' )
 plot_landings <- function(
   dat,
   unit_label = "metric tons",
