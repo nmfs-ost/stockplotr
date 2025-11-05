@@ -29,7 +29,11 @@ is used in calculation of a reference line if one is present}
 Options include "line", "point", or "area"}
 
 \item{group}{a string of a single column that groups the data (e.g. "fleet",
-"sex", "area", etc.). Currently can only have one level of grouping.}
+"sex", "area", etc.). Currently can only have one level of grouping. If you want to just summarize
+the data across all factors, set group = "none". In the case there is only
+one unique value of the grouping and/or NA is available, the function will
+default to the NAs and in some cases the grouping when there is not an equal
+number of rows for NA and the grouped data.}
 
 \item{facet}{a string or vector of strings of a column that facets the data
 (e.g. "year", "area", etc.)}

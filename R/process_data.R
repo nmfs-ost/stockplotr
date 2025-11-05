@@ -2,7 +2,8 @@
 #'
 #' @param dat Pre-filtered data from \link[stockplotr]{filter_data} following a
 #' long format data.
-#' @param group A string identifying the indexing variable of the data.
+#' @param group A string identifying the indexing variable of the data. If you
+#' want to just summarize the data across all factors, set group = "none".
 #' @param facet A string or vector of strings identifying the faceting
 #' variable(s) of the data.
 #' @param method A string describing the method of summarizing data when group

@@ -586,8 +586,7 @@ cap_first_letter <- function(s) {
 #' the data.
 #' @param geom Type of plot user wants to create. Options are "line", "point",
 #' and "area".
-#' @param group Selected grouping for the data. If you want to just summarize
-#' the data across all factors, set group = "none".
+#' @param group Name of a column selected grouping for the data.
 #' @param facet a string or vector of strings of a column that facets the data
 #' (e.g. "year", "area", etc.)
 #' @param era A string naming the era of data such as historical ("early"), current ("time"), or 
