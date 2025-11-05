@@ -728,15 +728,24 @@ filter_data <- function(
       options <- c()
       for (i in seq_along(unique(plot_data$module_name))) {
         # options <- paste0(options, " ", i, ") ", unique(plot_data$module_name)[i], "\n")
-        options[i] <- paste0(" ", i, ") ", unique(plot_data$module_name)[i])
+        options[i] <- paste0(unique(plot_data$module_name)[i])
       }
       if (interactive()) {
         if(interactive) {
-          question1 <- utils::menu(
-                  options,
-                  title = "Please select one of the following:"
-                )
-          selected_module <- unique(plot_data$module_name)[as.numeric(question1)]
+          # question1 <- utils::menu(
+          #         options,
+          #         title = "Please select one of the following:"
+          #       )
+          question1 <- utils::select.list(
+            options,
+            multiple = TRUE,
+            title = "Select one or more of the following module names"
+          )
+          # selected_module <- unique(plot_data$module_name)[as.numeric(question1)]
+          selected_module <- intersect(
+            unique(plot_data$module_name),
+            question1
+          )
         } else {
           selected_module <- unique(plot_data$module_name)[1]
           cli::cli_alert_info("Selection bypassed. Filtering by {selected_module}.")
@@ -748,7 +757,7 @@ filter_data <- function(
       if (length(selected_module) > 0) {
         plot_data <- plot_data |>
           dplyr::filter(
-            module_name == selected_module
+            module_name %in% selected_module
           )
       }
     }
