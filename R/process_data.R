@@ -1,4 +1,4 @@
-#' Post processing filtered data for indexed data
+#' Post processing of filtered data
 #'
 #' @param dat Pre-filtered data from \link[stockplotr]{filter_data} following a
 #' long format data.
@@ -8,7 +8,9 @@
 #' @param method A string describing the method of summarizing data when group
 #' is set to "none". Options are "sum" or "mean". Default is "sum".
 #'
-#' @returns A list of 3 objects:
+#' @returns Automatically detects potential grouping and faceting data from a 
+#' dataframe output from \link[stockplotr]{filter_data}. It returns the following 
+#' list of 3 objects:
 #' \item{data}{A data frame of the processed data ready for plotting.}
 #' \item{group}{A string identifying the grouping variable of the data.
 #' If NULL, no grouping variable is identified. If not NULL, the function
