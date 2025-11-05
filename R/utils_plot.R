@@ -620,7 +620,7 @@ filter_data <- function(
     interactive = TRUE) {
   # TODO: add option to scale data
   # Replace all spaces with underscore if not in proper format
-  label_name <- sub(" ", "_", label_name)
+  label_name <- sub(" ", "_", tolower(label_name))
   list_of_data <- list()
   length_dat <- ifelse(
     is.data.frame(dat),
