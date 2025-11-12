@@ -63,15 +63,27 @@ plot_catch_comp <- function(
     interactive = interactive,
     module = module
   )
-  # Process data to recognize grouping and faceting variables
-  processed_data <- process_data(
-    dat = catch,
-    group = "age",
-    facet = facet
-  )
-  data <- processed_data[[1]]
-  group <- processed_data[[3]]
-  facet <- processed_data[[2]]
+  if (!is.null(facet) && facet == "none") {
+    data <- b |>
+      dplyr::group_by(year, age) |>
+      dplyr::summarise(
+        estimate = sum(estimate),
+        estimate_lower = sum(estimate_lower),
+        estimate_upper = sum(estimate_upper)
+      )
+    group <- NULL
+    facet <- NULL
+  } else {
+    # Process data to recognize grouping and faceting variables
+    processed_data <- process_data(
+      dat = catch,
+      group = "age",
+      facet = facet
+    )
+    data <- processed_data[[1]]
+    group <- processed_data[[3]]
+    facet <- processed_data[[2]]
+  }
   # Check for extracted data, if not return warning and empty plot
   if (nrow(catch) == 0) {
     cli::cli_alert_warning("No data found for catch at age. Please check the input data.")
