@@ -2,7 +2,8 @@
 #'
 #' @param dat A data frame returned from \link[asar]{convert_output}
 #' @param facet a string or vector of strings of column(s) that 
-#' groups the data (e.g. "fleet", "sex", "area", etc.).
+#' groups the data (e.g. "fleet", "sex", "area", etc.). Set facet = "none" to
+#' summarize the data in a single plot.
 #' @param unit_label units for abundance
 #' @param scale_amount A number describing how much to scale down the abundance at
 #' age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders

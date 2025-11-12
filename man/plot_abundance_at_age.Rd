@@ -18,7 +18,8 @@ plot_abundance_at_age(
 \item{dat}{A data frame returned from \link[asar]{convert_output}}
 
 \item{facet}{a string or vector of strings of column(s) that 
-groups the data (e.g. "fleet", "sex", "area", etc.).}
+groups the data (e.g. "fleet", "sex", "area", etc.). Set facet = "none" to
+summarize the data in a single plot.}
 
 \item{unit_label}{units for abundance}
 

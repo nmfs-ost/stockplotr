@@ -21,7 +21,8 @@ plot_catch_comp(
 \item{dat}{A data frame returned from \link[asar]{convert_output}}
 
 \item{facet}{a string or vector of strings of column(s) that 
-groups the data (e.g. "fleet", "sex", "area", etc.).}
+groups the data (e.g. "fleet", "sex", "area", etc.). Set facet = "none" to
+summarize the data in a single plot.}
 
 \item{era}{a string naming the era of data such as historical ("early"), current ("time"), or 
 projected ("fore") data if filtering should occur. Default is set to "time" which is 
