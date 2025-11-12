@@ -16,9 +16,9 @@ plot_spawn_recruitment(
 )
 }
 \arguments{
-\item{dat}{A data frame or names list of data frames returned from
-\link[asar]{convert_output}. The first data frame in the list is used in
-calculation of a reference line if one is present}
+\item{dat}{A data frame or names list of data frames (input as `list()`)
+returned from \link[asar]{convert_output}. The first data frame in the list 
+is used in calculation of a reference line if one is present}
 
 \item{spawning_biomass_label}{Units for spawning biomass}
 

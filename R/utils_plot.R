@@ -580,8 +580,8 @@ cap_first_letter <- function(s) {
 
 #' Filter data for input into aesthetics for ggplot2
 #'
-#' @param dat a data frame or list of data frames that contains the data to be
-#' plotted.
+#' @param dat a data frame or list of data frames input as `list()` that
+#' contains the data to be plotted.
 #' @param label_name a string of the name of the label that is used to filter
 #' the data.
 #' @param geom Type of plot user wants to create. Options are "line", "point",
@@ -596,10 +596,11 @@ cap_first_letter <- function(s) {
 #' @param scale_amount A number describing how much to scale down the quantities
 #' shown on the y axis.
 #' @param interactive logical. If TRUE, the user will be prompted to select
-#' a module_name when there was more than one found in the filtered dataset.
+#' a module_name when there was more than one found in the filtered data set.
 #' @param module (Optional) A string indicating the linked module_name associated
 #' with the label for the plot if known. Default is NULL. By default, the function
-#' will select the most relevant module if more than 1 exists.
+#' will select the most relevant module if more than 1 exists. If selecting more
+#' than one module, place them in a vector such as c("module1", "module2").
 #'
 #' @returns a data frame that is preformatted for plotting with ggplot2.
 #' @export
