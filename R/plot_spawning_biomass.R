@@ -3,9 +3,9 @@
 #' Plot spawning biomass with a reference line as a dashed line. The figure can
 #' also be made relative to this reference line rather than in absolute units.
 #'
-#' @param dat A data frame or names list of data frames returned from
-#' \link[asar]{convert_output}. The first data frame in the list is used in
-#' calculation of a reference line if one is present
+#' @param dat A data frame or names list of data frames (input as `list()`)
+#' returned from \link[asar]{convert_output}. The first data frame in the list 
+#' is used in calculation of a reference line if one is present
 #' @param geom A string stating the geom used for the plot. Default is "line".
 #' Options include "line", "point", or "area"
 #' @param group a string of a single column that groups the data (e.g. "fleet",

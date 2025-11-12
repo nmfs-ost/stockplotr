@@ -17,15 +17,16 @@ filter_data(
 )
 }
 \arguments{
-\item{dat}{a data frame or list of data frames that contains the data to be
-plotted.}
+\item{dat}{a data frame or list of data frames input as `list()` that
+contains the data to be plotted.}
 
 \item{label_name}{a string of the name of the label that is used to filter
 the data.}
 
 \item{module}{(Optional) A string indicating the linked module_name associated
 with the label for the plot if known. Default is NULL. By default, the function
-will select the most relevant module if more than 1 exists.}
+will select the most relevant module if more than 1 exists. If selecting more
+than one module, place them in a vector such as c("module1", "module2").}
 
 \item{era}{A string naming the era of data such as historical ("early"), current ("time"), or 
 projected ("fore") data if filtering should occur. Default is set to "time" which is 
@@ -44,7 +45,7 @@ the data across all factors, set group = "none".}
 shown on the y axis.}
 
 \item{interactive}{logical. If TRUE, the user will be prompted to select
-a module_name when there was more than one found in the filtered dataset.}
+a module_name when there was more than one found in the filtered data set.}
 }
 \value{
 a data frame that is preformatted for plotting with ggplot2.

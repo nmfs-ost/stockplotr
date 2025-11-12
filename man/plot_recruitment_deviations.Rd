@@ -15,9 +15,9 @@ plot_recruitment_deviations(
 )
 }
 \arguments{
-\item{dat}{A data frame or names list of data frames returned from
-\link[asar]{convert_output}. The first data frame in the list is used in
-calculation of a reference line if one is present}
+\item{dat}{A data frame or names list of data frames (input as `list()`)
+returned from \link[asar]{convert_output}. The first data frame in the list 
+is used in calculation of a reference line if one is present}
 
 \item{module}{(Optional) A string indicating the linked module_name associated
 with the label for the plot if known. Default is NULL. By default, the function

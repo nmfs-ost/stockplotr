@@ -9,9 +9,9 @@ write_captions(dat, dir = getwd(), year = format(Sys.Date(), "\%Y"))
 write_captions(dat, dir = getwd(), year = format(Sys.Date(), "\%Y"))
 }
 \arguments{
-\item{dat}{A data frame or names list of data frames returned from
-\link[asar]{convert_output}. The first data frame in the list is used in
-calculation of a reference line if one is present}
+\item{dat}{A data frame or names list of data frames (input as `list()`)
+returned from \link[asar]{convert_output}. The first data frame in the list 
+is used in calculation of a reference line if one is present}
 
 \item{dir}{Directory where the output captions and alt text file should be
 saved. Defaults to working directory.}
