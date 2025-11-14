@@ -11,7 +11,7 @@ plot_catch_comp(
   unit_label = "mt",
   scale_amount = 1,
   proportional = TRUE,
-  interactive = FALSE,
+  interactive = TRUE,
   module = NULL,
   make_rda = FALSE,
   figures_dir = getwd()
@@ -69,7 +69,7 @@ Plot catch composition
 \examples{
 plot_catch_comp(
   dat = stockplotr:::example_data,
-  facet = "area",
+  facet = "fleet",
   unit_label = "mt",
   scale_amount = 100,
   interactive = FALSE,
