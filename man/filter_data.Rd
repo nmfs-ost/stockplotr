@@ -35,8 +35,7 @@ the current time. To plot all data, set era to NULL.}
 \item{geom}{Type of plot user wants to create. Options are "line", "point",
 and "area".}
 
-\item{group}{Selected grouping for the data. If you want to just summarize
-the data across all factors, set group = "none".}
+\item{group}{Name of a column selected grouping for the data.}
 
 \item{facet}{a string or vector of strings of a column that facets the data
 (e.g. "year", "area", etc.)}

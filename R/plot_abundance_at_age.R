@@ -2,7 +2,8 @@
 #'
 #' @param dat A data frame returned from \link[asar]{convert_output}
 #' @param facet a string or vector of strings of column(s) that 
-#' groups the data (e.g. "fleet", "sex", "area", etc.).
+#' groups the data (e.g. "fleet", "sex", "area", etc.). Set facet = "none" to
+#' summarize the data in a single plot.
 #' @param unit_label units for abundance
 #' @param scale_amount A number describing how much to scale down the abundance at
 #' age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders
@@ -60,15 +61,29 @@ plot_abundance_at_age <- function(
     scale_amount = scale_amount,
     interactive = FALSE
   )
-  # Process data to recognize grouping and faceting variables
-  processed_data <- process_data(
-    dat = b,
-    group = "age",
-    facet = facet
-  )
-  data <- processed_data[[1]]
-  group <- processed_data[[2]]
-  facet <- processed_data[[3]]
+  
+  if (!is.null(facet) && facet == "none") {
+    data <- b |>
+      dplyr::group_by(year, age) |>
+      dplyr::summarise(
+        estimate = sum(estimate),
+        estimate_lower = sum(estimate_lower),
+        estimate_upper = sum(estimate_upper)
+      )
+    group <- NULL
+    facet <- NULL
+  } else {
+    # Process data to recognize grouping and faceting variables
+    processed_data <- process_data(
+      dat = b,
+      group = "age",
+      facet = facet
+    )
+    data <- processed_data[[1]]
+    group <- processed_data[[2]]
+    facet <- processed_data[[3]]
+  }
+  
   
   # Check for extracted data, if not return warning and empty plot
   if (nrow(b) == 0) {

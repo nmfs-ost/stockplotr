@@ -9,7 +9,11 @@
 #' @param geom A string stating the geom used for the plot. Default is "line".
 #' Options include "line", "point", or "area"
 #' @param group a string of a single column that groups the data (e.g. "fleet",
-#' "sex", "area", etc.). Currently can only have one level of grouping.
+#' "sex", "area", etc.). Currently can only have one level of grouping. If you want to just summarize
+#' the data across all factors, set group = "none". In the case there is only
+#' one unique value of the grouping and/or NA is available, the function will
+#' default to the NAs and in some cases the grouping when there is not an equal
+#' number of rows for NA and the grouped data.
 #' @param facet a string or vector of strings of a column that facets the data
 #' (e.g. "year", "area", etc.)
 #' @param era a string naming the era of data such as historical ("early"), current ("time"), or 

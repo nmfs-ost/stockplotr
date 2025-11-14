@@ -11,7 +11,7 @@ plot_catch_comp(
   unit_label = "mt",
   scale_amount = 1,
   proportional = TRUE,
-  interactive = FALSE,
+  interactive = TRUE,
   module = NULL,
   make_rda = FALSE,
   figures_dir = getwd()
@@ -21,7 +21,8 @@ plot_catch_comp(
 \item{dat}{A data frame returned from \link[asar]{convert_output}}
 
 \item{facet}{a string or vector of strings of column(s) that 
-groups the data (e.g. "fleet", "sex", "area", etc.).}
+groups the data (e.g. "fleet", "sex", "area", etc.). Set facet = "none" to
+summarize the data in a single plot.}
 
 \item{era}{a string naming the era of data such as historical ("early"), current ("time"), or 
 projected ("fore") data if filtering should occur. Default is set to "time" which is 
@@ -68,7 +69,7 @@ Plot catch composition
 \examples{
 plot_catch_comp(
   dat = stockplotr:::example_data,
-  facet = "area",
+  facet = "fleet",
   unit_label = "mt",
   scale_amount = 100,
   interactive = FALSE,

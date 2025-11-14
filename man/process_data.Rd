@@ -10,7 +10,8 @@ process_data(dat, group = NULL, facet = NULL, method = "sum")
 \item{dat}{Pre-filtered data from \link[stockplotr]{filter_data} following a
 long format data.}
 
-\item{group}{A string identifying the indexing variable of the data.}
+\item{group}{A string identifying the indexing variable of the data. If you
+want to just summarize the data across all factors, set group = "none".}
 
 \item{facet}{A string or vector of strings identifying the faceting
 variable(s) of the data.}

@@ -26,7 +26,7 @@
 #' @examples
 #' plot_catch_comp(
 #'   dat = stockplotr:::example_data,
-#'   facet = "area",
+#'   facet = "fleet",
 #'   unit_label = "mt",
 #'   scale_amount = 100,
 #'   interactive = FALSE,
@@ -40,7 +40,7 @@ plot_catch_comp <- function(
   unit_label = "mt",
   scale_amount = 1,
   proportional = TRUE,
-  interactive = FALSE,
+  interactive = TRUE,
   module = NULL,
   make_rda = FALSE,
   figures_dir = getwd()
@@ -63,22 +63,33 @@ plot_catch_comp <- function(
     interactive = interactive,
     module = module
   )
-  # Process data to recognize grouping and faceting variables
-  processed_data <- process_data(
-    dat = catch,
-    group = "age",
-    facet = facet
-  )
-  data <- processed_data[[1]]
-  group <- processed_data[[3]]
-  facet <- processed_data[[2]]
   # Check for extracted data, if not return warning and empty plot
   if (nrow(catch) == 0) {
     cli::cli_alert_warning("No data found for catch at age. Please check the input data.")
     # Did you use a BAM model?
     cli::cli_abort("catch was not found in the data.")
   }
-
+  if (!is.null(facet) && facet == "none") {
+    data <- catch |>
+      dplyr::group_by(year, age) |>
+      dplyr::summarise(
+        estimate = sum(estimate),
+        estimate_lower = sum(estimate_lower),
+        estimate_upper = sum(estimate_upper)
+      )
+    group <- NULL
+    facet <- NULL
+  } else {
+    # Process data to recognize grouping and faceting variables
+    processed_data <- process_data(
+      dat = catch,
+      group = "age",
+      facet = facet
+    )
+    data <- processed_data[[1]]
+    group <- processed_data[[2]]
+    facet <- processed_data[[3]]
+  }
   # Plot data
   plot <- plot_aa(
     dat = data,
