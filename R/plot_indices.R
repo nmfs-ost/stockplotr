@@ -42,7 +42,6 @@ plot_indices <- function(
       facet <- c(facet, "fleet")
     }
   }
-  facet <- "fleet"
   # Filter data
   prepared_data <- filter_data(
     dat,
@@ -66,6 +65,16 @@ plot_indices <- function(
 
   # identify if there is >1 label and create plot
   if (length(unique(prepared_data$label)) > 1) {
+    # move label to grouping and set grouping into facet
+    if (!is.null(group)) {
+      facet <- c(facet, group)
+    }
+    # transform prep data so group_var = label
+    prepared_data <- prepared_data |>
+      dplyr::mutate(
+        group_var = label
+      )
+    # plot time series with multiple labels
     plt <- plot_timeseries(
       dat = prepared_data,
       ylab = u_units,
@@ -75,10 +84,10 @@ plot_indices <- function(
       ...
     ) +
       # commenting out but might need this later -- not sure if this will always be true
-    # labs(
-    #   linetype = "",
-    #   fill = ""
-    # ) +
+    labs(
+      linetype = "",
+      fill = ""
+    ) +
     theme_noaa() +
       ggplot2::scale_x_continuous(
         breaks = ggplot2::waiver(),
