@@ -50,6 +50,13 @@ plot_natural_mortality <- function(
   #   group <- NULL
   # }
   
+  # Set group back to NULL if it is age since this is an at age plot
+  # if (group == "age") {
+  #   prepared_data <- prepared_data |>
+  #     dplyr::mutate(group_var = "1")
+  #   group <- NULL
+  # }
+  
   # STOP if there are no ages -- indicating this is a single M and would not be plotted
   if (all(is.na(prepared_data$age))) cli::cli_abort("Natural mortality by age not found.")
   
