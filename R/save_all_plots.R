@@ -252,7 +252,7 @@ save_all_plots <- function(
         unit_label = catch_unit_label,
         scale_amount = catch_scale_amount,
         proportional = proportional,
-        interactive = TRUE,
+        interactive = interactive,
         make_rda = TRUE,
         figures_dir = figures_tables_dir
       ) # |>
