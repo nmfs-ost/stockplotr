@@ -80,7 +80,7 @@ plot_indices <- function(
       ylab = u_units,
       group = "label",
       facet = facet,
-      linewidth = 1,
+      # linewidth = 1,
       ...
     ) +
       # commenting out but might need this later -- not sure if this will always be true
