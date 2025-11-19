@@ -57,4 +57,10 @@ plot_recruitment_deviations(
   interactive = FALSE,
   size = 1.5
 )
+plot_recruitment_deviations(
+  dat = stockplotr:::example_data,
+  era = "early",
+  interactive = FALSE,
+  shape = 2
+)
 }

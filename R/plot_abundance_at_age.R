@@ -37,15 +37,11 @@
 #'   make_rda = FALSE,
 #'   figures_dir = getwd()
 #' )
-plot_abundance_at_age(
-  dat = stockplotr:::example_data,
- # facet = NULL,
- # unit_label = "fish",
- # scale_amount = 10,
- # proportional = TRUE,
-  make_rda = FALSE,
-  figures_dir = getwd()
-)
+#' plot_abundance_at_age(
+#'   dat = stockplotr:::example_data,
+#'   facet = "none",
+#'   proportional = FALSE
+#' )
 plot_abundance_at_age <- function(
     dat,
     facet = NULL,

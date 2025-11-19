@@ -33,15 +33,16 @@
 #'   make_rda = FALSE,
 #'   figures_dir = getwd()
 #' )
-plot_catch_comp(
-  dat = stockplotr:::example_data,
-  facet = "sex",
-  unit_label = "mt",
-  scale_amount = 100,
-  interactive = FALSE,
-  make_rda = FALSE,
-  figures_dir = getwd()
-)
+#' 
+#' plot_catch_comp(
+#'   dat = stockplotr:::example_data,
+#'   facet = "none",
+#'   unit_label = "mt",
+#'   scale_amount = 100,
+#'   interactive = FALSE,
+#'   era = "fore",
+#'   proportional = FALSE
+#' )
 plot_catch_comp <- function(
   dat,
   facet = NULL,

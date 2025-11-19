@@ -12,13 +12,6 @@
 #'   module = "Natural_Mortality",
 #'   interactive = FALSE
 #' )
-#' this doesn't look right
-plot_natural_mortality(
-  dat = stockplotr:::example_data,
-  group = "fleet",
-  module = "Natural_Mortality",
-  interactive = FALSE
-)
 plot_natural_mortality <- function(
     dat,
     group = NULL,
