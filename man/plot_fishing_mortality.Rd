@@ -88,6 +88,7 @@ plot_fishing_mortality(
   dat = stockplotr:::example_data,
   ref_line = c("target" = 0.2),
   group = "fleet",
-  interactive = FALSE
+  interactive = FALSE,
+  module = "TIME_SERIES"
 )
 }

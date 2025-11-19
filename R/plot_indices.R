@@ -84,7 +84,7 @@ plot_indices <- function(
       ...
     ) +
       # commenting out but might need this later -- not sure if this will always be true
-    labs(
+    ggplot2::labs(
       linetype = "",
       fill = ""
     ) +
