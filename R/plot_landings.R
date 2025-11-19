@@ -85,6 +85,10 @@ plot_landings <- function(
     facet = facet,
     ...
   ) + theme_noaa()
+  
+  if (length(unique(prepared_data$group_var)) == 1) {
+    plt <- plt + ggplot2::theme(legend.position = "none")
+  }
     
   ### Make RDA ----
   if (make_rda) {
