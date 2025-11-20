@@ -120,7 +120,7 @@ table_landings <- function(
       scale_amount = 1,
       unit_label = unit_label,
       table_df = final_df
-    )
+  )
   }
   # Send table(s) to viewer
   if (!is.data.frame(table_data)) {

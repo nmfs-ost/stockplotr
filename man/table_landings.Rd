@@ -53,7 +53,8 @@ the rda will be exported to the folder indicated in the argument "figures_dir".
 Default is FALSE.}
 
 \item{tables_dir}{The location of the folder containing the generated table
-rda files ("tables") that will be created if the argument `make_rda` = TRUE.}
+rda files ("tables") that will be created if the argument `make_rda` = TRUE.
+Default is the working directory.}
 }
 \value{
 Create a table ready for a stock assessment report of landed catch by
