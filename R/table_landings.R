@@ -109,6 +109,7 @@ table_landings <- function(
       add_theme()
   })
 
+
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
     create_rda(
