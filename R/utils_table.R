@@ -54,6 +54,8 @@ create_latex_table <- function(data,
                   "\n",
                   "\\end{center}")
   
+  table
+  
   # ncols <- ncol(data)
   # column_names <- paste(colnames(data), collapse = " & ")
   # latex_format_data <- paste(
@@ -96,6 +98,4 @@ create_latex_table <- function(data,
   #   "\\end{tabular}\n",
   #   collapse = "\n"
   # )
-  # 
-  cat(table)
 }

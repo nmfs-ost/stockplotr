@@ -45,114 +45,116 @@ table_landings <- function(dat,
     topic = topic_label
   )
 
-  # read standard data file and extract target quantity
-  land_dat <- dat |>
-    dplyr::filter(
-      c(module_name == "t.series" & grepl("landings_observed", label)) | c(module_name == "CATCH" & grepl("ret_bio", label)),
-      # t.series is associated with a conversion from BAM output and CATCH with SS3 converted output
-      !is.na(fleet)
-    ) |>
-    dplyr::mutate(
-      estimate = as.numeric(estimate),
-      year = as.numeric(year)
-    ) |>
-    suppressWarnings() |>
-    dplyr::filter(
-      !is.na(year)
-    ) |>
-    dplyr::filter(year <= end_year)
-
-
-  # if (is.numeric(land_dat$fleet)){
-  #   land_dat$fleet <- paste0("00", land_dat$fleet)
+  # # read standard data file and extract target quantity
+  # land_dat <- dat |>
+  #   dplyr::filter(
+  #     c(module_name == "t.series" & grepl("landings_observed", label)) | c(module_name == "CATCH" & grepl("ret_bio", label)),
+  #     # t.series is associated with a conversion from BAM output and CATCH with SS3 converted output
+  #     !is.na(fleet)
+  #   ) |>
+  #   dplyr::mutate(
+  #     estimate = as.numeric(estimate),
+  #     year = as.numeric(year)
+  #   ) |>
+  #   suppressWarnings() |>
+  #   dplyr::filter(
+  #     !is.na(year)
+  #   ) |>
+  #   dplyr::filter(year <= end_year)
+  # 
+  # 
+  # # if (is.numeric(land_dat$fleet)){
+  # #   land_dat$fleet <- paste0("00", land_dat$fleet)
+  # # }
+  # 
+  # if ("uncertainty" %in% names(land_dat)) {
+  #   if ("uncertainty_label" %in% names(land_dat)) {
+  #     uncert_label <- land_dat |>
+  #       dplyr::select(uncertainty_label) |>
+  #       unique() |>
+  #       as.character() |>
+  #       toupper()
+  # 
+  #     land_dat <- land_dat |>
+  #       dplyr::mutate(uncertainty = round(uncertainty, 2))
+  # 
+  #     if (uncert_label != "NA") {
+  #       land_dat <- land_dat |>
+  #         dplyr::rename(!!(uncert_label) := "uncertainty")
+  # 
+  #       piv_vals <- c(
+  #         "Landings",
+  #         uncert_label
+  #       )
+  #     } else {
+  #       uncert_label <- NULL
+  #       piv_vals <- "Landings"
+  #     }
+  #   }
+  # } else {
+  #   uncert_label <- NULL
+  #   piv_vals <- "Landings"
   # }
+  # 
+  # # TODO: Reorder column names so that numeric fleets show up in chronological
+  # # order (currently, lists 1, 10, 11, 12, etc.)
+  # 
+  # # Check number of areas and season - if any are >1 then need to use alternative plot (or summarize)
+  # narea <- length(unique(land_dat$area))
+  # nseas <- length(unique(land_dat$season))
+  # 
+  # if (narea > 1) {
+  #   # factors <- TRUE
+  #   idcols <- c("year", "Area")
+  #   # will need facet if TRUE
+  # } else {
+  #   idcols <- c("year")
+  #   # factors <- FALSE
+  # }
+  # 
+  # # Check for nseas > 1 - mean of landings through the year
+  # if (nseas > 1) {
+  #   land_dat <- land_dat |>
+  #     dplyr::group_by(year, fleet, sex, area, growth_pattern) |>
+  #     dplyr::summarize(estimate = mean(estimate)) |>
+  #     dplyr::mutate(fleet = as.factor(fleet)) |>
+  #     dplyr::rename("Area" = area)
+  # }
+  # 
+  # # Extract fleet names
+  # fleet_names <- unique(as.character(land_dat$fleet))
+  # 
+  # land <- land_dat |>
+  #   # dplyr::mutate(
+  #   #   fleet = as.factor(fleet),
+  #   #   #  fleet = paste0("Fleet_", fleet),
+  #   #   year = as.factor(year),
+  #   #   estimate = round(estimate, digits = 0)
+  #   # ) |>
+  #   dplyr::rename("Landings" = estimate) |>
+  #   dplyr::relocate(fleet, .after = season) |>
+  #   tidyr::pivot_wider(
+  #     id_cols = dplyr::all_of(idcols),
+  #     names_from = fleet,
+  #     #  names_prefix = "Fleet_",
+  #     values_from = piv_vals,
+  #     names_glue = "Fleet {fleet}_{.value}"
+  #   ) |>
+  #   dplyr::rename("Year" = year)
+  # 
+  # land <- land |>
+  #   dplyr::select(order(colnames(land),
+  #     method = "auto"
+  #   )) |>
+  #   dplyr::relocate(Year, .before = 1) |>
+  #   dplyr::rename_with(~ stringr::str_replace(
+  #     .,
+  #     "Landings",
+  #     land_label
+  #   ))
 
-  if ("uncertainty" %in% names(land_dat)) {
-    if ("uncertainty_label" %in% names(land_dat)) {
-      uncert_label <- land_dat |>
-        dplyr::select(uncertainty_label) |>
-        unique() |>
-        as.character() |>
-        toupper()
-
-      land_dat <- land_dat |>
-        dplyr::mutate(uncertainty = round(uncertainty, 2))
-
-      if (uncert_label != "NA") {
-        land_dat <- land_dat |>
-          dplyr::rename(!!(uncert_label) := "uncertainty")
-
-        piv_vals <- c(
-          "Landings",
-          uncert_label
-        )
-      } else {
-        uncert_label <- NULL
-        piv_vals <- "Landings"
-      }
-    }
-  } else {
-    uncert_label <- NULL
-    piv_vals <- "Landings"
-  }
-
-  # TODO: Reorder column names so that numeric fleets show up in chronological
-  # order (currently, lists 1, 10, 11, 12, etc.)
-
-  # Check number of areas and season - if any are >1 then need to use alternative plot (or summarize)
-  narea <- length(unique(land_dat$area))
-  nseas <- length(unique(land_dat$season))
-
-  if (narea > 1) {
-    # factors <- TRUE
-    idcols <- c("year", "Area")
-    # will need facet if TRUE
-  } else {
-    idcols <- c("year")
-    # factors <- FALSE
-  }
-
-  # Check for nseas > 1 - mean of landings through the year
-  if (nseas > 1) {
-    land_dat <- land_dat |>
-      dplyr::group_by(year, fleet, sex, area, growth_pattern) |>
-      dplyr::summarize(estimate = mean(estimate)) |>
-      dplyr::mutate(fleet = as.factor(fleet)) |>
-      dplyr::rename("Area" = area)
-  }
-
-  # Extract fleet names
-  fleet_names <- unique(as.character(land_dat$fleet))
-
-  land <- land_dat |>
-    dplyr::mutate(
-      fleet = as.factor(fleet),
-      #  fleet = paste0("Fleet_", fleet),
-      year = as.factor(year),
-      estimate = round(estimate, digits = 0)
-    ) |>
-    dplyr::rename("Landings" = estimate) |>
-    dplyr::relocate(fleet, .after = season) |>
-    tidyr::pivot_wider(
-      id_cols = dplyr::all_of(idcols),
-      names_from = fleet,
-      #  names_prefix = "Fleet_",
-      values_from = piv_vals,
-      names_glue = "Fleet {fleet}_{.value}"
-    ) |>
-    dplyr::rename("Year" = year)
-
-  land <- land |>
-    dplyr::select(order(colnames(land),
-      method = "auto"
-    )) |>
-    dplyr::relocate(Year, .before = 1) |>
-    dplyr::rename_with(~ stringr::str_replace(
-      .,
-      "Landings",
-      land_label
-    ))
-
+  land <- head(dat)
+  
   # add theming to final table
   final <- land |>
     flextable::flextable() |>
@@ -193,13 +195,19 @@ table_landings <- function(dat,
       fig_or_table = fig_or_table,
       dir = tables_dir
     )
+    
+    # create LaTeX-based table
+    latex_table <- create_latex_table(data = land,
+                       caption = caps_alttext[1],
+                       label = "landings_latex")
 
     export_rda(
       object = final,
       caps_alttext = caps_alttext,
       figures_tables_dir = tables_dir,
       topic_label = topic_label,
-      fig_or_table = fig_or_table
+      fig_or_table = fig_or_table,
+      latex_table = latex_table
     )
   }
   # Return finished table
