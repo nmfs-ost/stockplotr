@@ -26,9 +26,6 @@ export(process_data)
 export(process_table)
 export(reference_line)
 export(save_all_plots)
-<<<<<<< HEAD
 export(table_landings)
-=======
->>>>>>> d5577bb (Apply viridis palette to figures (#135))
 export(theme_noaa)
 export(write_captions)

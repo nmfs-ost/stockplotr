@@ -44,6 +44,7 @@ Imports:
     gt,
     httr,
     kableExtra,
+    knitr,
     naniar,
     prodlim,
     quarto,
@@ -56,7 +57,6 @@ Imports:
     withr
 Suggests:
     here,
-    knitr,
     rmarkdown,
     testthat (>= 3.0.0)
 VignetteBuilder: 
