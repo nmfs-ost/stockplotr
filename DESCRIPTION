@@ -39,6 +39,7 @@ Imports:
     fs,
     ggplot2,
     glue,
+    knitr,
     naniar,
     quarto,
     scales,
@@ -52,7 +53,6 @@ Suggests:
     gt,
     here,
     kableExtra,
-    knitr,
     rmarkdown,
     testthat (>= 3.0.0)
 VignetteBuilder: 
