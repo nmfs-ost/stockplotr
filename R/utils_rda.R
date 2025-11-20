@@ -1821,6 +1821,7 @@ extract_caps_alttext <- function(topic_label = NULL,
 #' labels are found in the "label" column of the "captions_alt_text.csv" file
 #' and are used to link the figure or table with its caption/alt text.
 #' @param fig_or_table A string describing whether the plot is a figure or table.
+#' @param latex_table The object containing a LaTeX-based table.
 #'
 #' @return An rda file with a figure's ggplot, caption, and alternative text, or
 #' a table's flextable and caption.
@@ -1834,7 +1835,8 @@ extract_caps_alttext <- function(topic_label = NULL,
 #'   caps_alttext = caps_alttext_object,
 #'   figures_tables_dir = here::here(),
 #'   topic_label = "bnc",
-#'   fig_or_table = "table"
+#'   fig_or_table = "table",
+#'   latex_table = "latex_table"
 #' )
 #'
 #' export_rda(
@@ -1849,7 +1851,8 @@ export_rda <- function(object = NULL,
                        caps_alttext = NULL,
                        figures_tables_dir = NULL,
                        topic_label = NULL,
-                       fig_or_table = NULL) {
+                       fig_or_table = NULL,
+                       latex_table = NULL) {
   # make rda for figures
   if (fig_or_table == "figure") {
     rda <- list(
@@ -1869,7 +1872,8 @@ export_rda <- function(object = NULL,
   } else if (fig_or_table == "table") {
     rda <- list(
       "table" = object,
-      "caption" = caps_alttext[[1]]
+      "caption" = caps_alttext[[1]],
+      "latex_table" = latex_table
     )
     rda_loc <- "tables"
     # check if a tables folder already exists; if not, make one
