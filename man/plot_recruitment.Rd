@@ -77,4 +77,10 @@ plot_recruitment(
   module = "TIME_SERIES",
   make_rda = FALSE
 )
+plot_recruitment(
+ dat = stockplotr:::example_data,
+ era = "fore",
+ module = "TIME_SERIES",
+ make_rda = FALSE
+)
 }

@@ -62,4 +62,10 @@ plot_biomass_at_age(
   proportional = FALSE, # displays legend
   make_rda = FALSE
 )
+plot_biomass_at_age(
+  dat = stockplotr:::example_data,
+  unit_label = "mt",
+  facet = "none",
+  proportional = FALSE
+)
 }

@@ -1,0 +1,15 @@
+$if(has-frontmatter)$
+  \begin{frontmatter}
+  \begin{titlepage}
+  $_titlepage.tex()$
+  \end{titlepage}
+  \end{frontmatter}
+$else$
+  \begin{titlepage}
+  $_titlepage.tex()$
+  \end{titlepage}
+$endif$
+
+\newgeometry{top=1in,bottom=1in,right=1in,left=1in}
+
+\pdfbookmark[1]{Table of Contents}{toc}

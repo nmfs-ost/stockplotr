@@ -25,6 +25,13 @@
 #'   module = "TIME_SERIES",
 #'   figures_dir = getwd()
 #' )
+#' plot_biomass(
+#'   dat = stockplotr:::example_data,
+#'   facet = "fleet",
+#'   ref_line = "target",
+#'   module = "TIME_SERIES",
+#'   figures_dir = getwd()
+#' )
 plot_biomass <- function(
     dat,
     geom = "line",
