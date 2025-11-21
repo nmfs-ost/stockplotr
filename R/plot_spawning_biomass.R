@@ -3,13 +3,17 @@
 #' Plot spawning biomass with a reference line as a dashed line. The figure can
 #' also be made relative to this reference line rather than in absolute units.
 #'
-#' @param dat A data frame or names list of data frames returned from
-#' \link[asar]{convert_output}. The first data frame in the list is used in
-#' calculation of a reference line if one is present
+#' @param dat A data frame or names list of data frames (input as `list()`)
+#' returned from \link[asar]{convert_output}. The first data frame in the list 
+#' is used in calculation of a reference line if one is present
 #' @param geom A string stating the geom used for the plot. Default is "line".
 #' Options include "line", "point", or "area"
 #' @param group a string of a single column that groups the data (e.g. "fleet",
-#' "sex", "area", etc.). Currently can only have one level of grouping.
+#' "sex", "area", etc.). Currently can only have one level of grouping. If you want to just summarize
+#' the data across all factors, set group = "none". In the case there is only
+#' one unique value of the grouping and/or NA is available, the function will
+#' default to the NAs and in some cases the grouping when there is not an equal
+#' number of rows for NA and the grouped data.
 #' @param facet a string or vector of strings of a column that facets the data
 #' (e.g. "year", "area", etc.)
 #' @param era a string naming the era of data such as historical ("early"), current ("time"), or 
@@ -51,17 +55,22 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' plot_spawning_biomass(
-#'   dat = list('base_model'=dat1,'sensitivity1'=dat2,'sensitivity2'=dat3),
+#'   dat = stockplotr:::example_data,
 #'   geom = "line",
-#'   group= "sex",
-#'   facet = "fleet",
-#'   ref_line = "target",
+#'   ref_line = "msy",
 #'   unit_label = "mt",
-#'   scale_amount = 1000
+#'   scale_amount = 1000,
+#'   interactive = FALSE,
+#'   module = "TIME_SERIES",
+#'   linewidth = 1.5
 #' )
-#' }
+#' plot_spawning_biomass(
+#'   dat = stockplotr:::example_data,
+#'   relative = TRUE,
+#'   ref_line = "msy",
+#'   module = "TIME_SERIES"  
+#')
 plot_spawning_biomass <- function(
     dat,
     geom = "line",
@@ -105,7 +114,7 @@ plot_spawning_biomass <- function(
   }
 
   # Filter data for spawning biomass
-  filter_data <- prepare_data(
+  prepared_data <- filter_data(
     dat = dat,
     label_name = "spawning_biomass$",
     geom = geom,
@@ -116,10 +125,22 @@ plot_spawning_biomass <- function(
     scale_amount = scale_amount,
     interactive = interactive
   )
+  
+  # process the data for grouping
+  processing <- process_data(
+    dat = prepared_data,
+    group = group,
+    facet = facet,
+    method = "sum"
+  )
+  # variable <- processing[[1]]
+  plot_data <- processing[[1]]
+  group <- processing[[2]]
+  if (!is.null(processing[[3]])) facet <- processing[[3]]
 
   # Override grouping variable when there is only NA's
   if (!is.null(group)) {
-    if (group %notin% colnames(filter_data)) group = NULL
+    if (group %notin% colnames(plot_data)) group = NULL
   }
 
   # Calculate estimate if relative
@@ -134,12 +155,12 @@ plot_spawning_biomass <- function(
       ) / scale_amount
     }
     if (is.na(ref_line_val)) cli::cli_abort("Reference value not found. Cannot plot relative values.")
-    filter_data <- filter_data |>
+    plot_data <- plot_data |>
       dplyr::mutate(estimate = estimate / ref_line_val)
   }
 
   plt <- plot_timeseries(
-    dat = filter_data,
+    dat = plot_data,
     y = "estimate",
     geom = geom,
     ylab = spawning_biomass_label,
@@ -149,8 +170,6 @@ plot_spawning_biomass <- function(
   )
   # Add reference line
   # getting data set - an ifelse statement in the fxn wasn't working
-  
-
   final <- reference_line(
     plot = plt,
     dat = rp_dat,
@@ -164,11 +183,11 @@ plot_spawning_biomass <- function(
   # Plot vertical lines if era is not filtering
   if (is.null(era)) {
     # Find unique era
-    eras <- unique(filter_data$era)
+    eras <- unique(plot_data$era)
     if (length(eras) > 1) {
       year_vlines <- c()
       for (i in 2:length(eras)){
-        erax <- filter_data |>
+        erax <- plot_data |>
         dplyr::filter(era == eras[i]) |>
         dplyr::pull(year) |>
         min(na.rm = TRUE)

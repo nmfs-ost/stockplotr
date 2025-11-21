@@ -10,22 +10,39 @@
 #' in the legend label if proportional is set to FALSE. The default is 1.
 #' @param era a string naming the era of data such as historical ("early"), current ("time"), or 
 #' projected ("fore") data if filtering should occur. Default is set to "time" which is 
-#' the current time. To plot all data, set era to NULL. 
+#' the current time. To plot all data, set era to NULL.
+#' @param interactive TRUE/FALSE; indicate whether the environment in which the
+#' function is operating  is interactive. This bypasses some options for
+#' filtering when preparing data for the plot. Default is FALSE.
+#' @param module (Optional) A string indicating the linked module_name associated
+#' with the label for the plot if known. Default is NULL. By default, the function
+#' will select the most relevant module if more than 1 exists.
 #'
 #' @return A plot ready for a stock assessment report of catch or landings  composition.
 #' This plot is made only when catch or landings are explicitly named in the output file.
 #' The current plot function does not combine all sources of catch.
 #'
+#' @export
 #' @examples
-#' \dontrun{
 #' plot_catch_comp(
-#'   dat,
-#'   facet = "area",
+#'   dat = stockplotr:::example_data,
+#'   facet = "fleet",
 #'   unit_label = "mt",
 #'   scale_amount = 100,
-#'   make_rda = TRUE,
-#'   figures_dir = getwd())
-#' }
+#'   interactive = FALSE,
+#'   make_rda = FALSE,
+#'   figures_dir = getwd()
+#' )
+#' 
+#' plot_catch_comp(
+#'   dat = stockplotr:::example_data,
+#'   facet = "none",
+#'   unit_label = "mt",
+#'   scale_amount = 100,
+#'   interactive = FALSE,
+#'   era = "fore",
+#'   proportional = FALSE
+#' )
 plot_catch_comp <- function(
   dat,
   facet = NULL,
@@ -33,6 +50,8 @@ plot_catch_comp <- function(
   unit_label = "mt",
   scale_amount = 1,
   proportional = TRUE,
+  interactive = TRUE,
+  module = NULL,
   make_rda = FALSE,
   figures_dir = getwd()
 ) {
@@ -44,14 +63,15 @@ plot_catch_comp <- function(
     legend = TRUE
   )
   # Filter data
-  catch <- prepare_data(
+  catch <- filter_data(
     dat = dat,
     label_name = "catch|landings",
     era = era,
     geom = "point",
     group = "age",
     scale_amount = scale_amount,
-    interactive = TRUE
+    interactive = interactive,
+    module = module
   )
   # Check for extracted data, if not return warning and empty plot
   if (nrow(catch) == 0) {
@@ -59,15 +79,35 @@ plot_catch_comp <- function(
     # Did you use a BAM model?
     cli::cli_abort("catch was not found in the data.")
   }
-
+  if (!is.null(facet) && facet == "none") {
+    data <- catch |>
+      dplyr::group_by(year, age) |>
+      dplyr::summarise(
+        estimate = sum(estimate),
+        estimate_lower = sum(estimate_lower),
+        estimate_upper = sum(estimate_upper)
+      )
+    group <- NULL
+    facet <- NULL
+  } else {
+    # Process data to recognize grouping and faceting variables
+    processed_data <- process_data(
+      dat = catch,
+      group = "age",
+      facet = facet
+    )
+    data <- processed_data[[1]]
+    group <- processed_data[[2]]
+    facet <- processed_data[[3]]
+  }
   # Plot data
   plot <- plot_aa(
-    dat = catch,
+    dat = data,
     facet = facet,
     label = catch_label,
     proportional = proportional
   ) +
-  cohort_line(catch)
+  cohort_line(data)
   
   # export figure to rda if argument = T
   if (make_rda == TRUE) {

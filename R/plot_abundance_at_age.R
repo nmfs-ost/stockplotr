@@ -2,7 +2,8 @@
 #'
 #' @param dat A data frame returned from \link[asar]{convert_output}
 #' @param facet a string or vector of strings of column(s) that 
-#' groups the data (e.g. "fleet", "sex", "area", etc.).
+#' groups the data (e.g. "fleet", "sex", "area", etc.). Set facet = "none" to
+#' summarize the data in a single plot.
 #' @param unit_label units for abundance
 #' @param scale_amount A number describing how much to scale down the abundance at
 #' age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders
@@ -27,19 +28,20 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' plot_abundance_at_age(dat)
-#'
 #' plot_abundance_at_age(
-#'   dat,
-#'   facet = "area",
+#'   dat = stockplotr:::example_data,
+#'   facet = "growth_pattern",
 #'   unit_label = "fish",
 #'   scale_amount = 1000,
 #'   proportional = TRUE,
 #'   make_rda = FALSE,
 #'   figures_dir = getwd()
 #' )
-#' }
+#' plot_abundance_at_age(
+#'   dat = stockplotr:::example_data,
+#'   facet = "none",
+#'   proportional = FALSE
+#' )
 plot_abundance_at_age <- function(
     dat,
     facet = NULL,
@@ -56,7 +58,7 @@ plot_abundance_at_age <- function(
     scale_amount = scale_amount
   )
   # Filter data
-  b <- prepare_data(
+  b <- filter_data(
     dat = dat,
     label_name = "abundance",
     geom = "point",
@@ -64,6 +66,30 @@ plot_abundance_at_age <- function(
     scale_amount = scale_amount,
     interactive = FALSE
   )
+  
+  if (!is.null(facet) && facet == "none") {
+    data <- b |>
+      dplyr::group_by(year, age) |>
+      dplyr::summarise(
+        estimate = sum(estimate),
+        estimate_lower = sum(estimate_lower),
+        estimate_upper = sum(estimate_upper)
+      )
+    group <- NULL
+    facet <- NULL
+  } else {
+    # Process data to recognize grouping and faceting variables
+    processed_data <- process_data(
+      dat = b,
+      group = "age",
+      facet = facet
+    )
+    data <- processed_data[[1]]
+    group <- processed_data[[2]]
+    facet <- processed_data[[3]]
+  }
+  
+  
   # Check for extracted data, if not return warning and empty plot
   if (nrow(b) == 0) {
     cli::cli_alert_warning("No data found for abundance at age. Please check the input data.")
@@ -74,13 +100,13 @@ plot_abundance_at_age <- function(
 
   # Plot data
   plot <- plot_aa(
-    dat = b,
+    dat = data,
     facet = facet,
     label = abundance_label,
     proportional = proportional
   ) +
   average_age_line(
-    dat = b,
+    dat = data,
     facet = facet
   )
   # export figure to rda if argument = T

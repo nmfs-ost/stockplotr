@@ -18,7 +18,8 @@ plot_abundance_at_age(
 \item{dat}{A data frame returned from \link[asar]{convert_output}}
 
 \item{facet}{a string or vector of strings of column(s) that 
-groups the data (e.g. "fleet", "sex", "area", etc.).}
+groups the data (e.g. "fleet", "sex", "area", etc.). Set facet = "none" to
+summarize the data in a single plot.}
 
 \item{unit_label}{units for abundance}
 
@@ -52,17 +53,18 @@ file if possible.
 Plot Abundance (or Numbers) at Age (AAA or NAA)
 }
 \examples{
-\dontrun{
-plot_abundance_at_age(dat)
-
 plot_abundance_at_age(
-  dat,
-  facet = "area",
+  dat = stockplotr:::example_data,
+  facet = "growth_pattern",
   unit_label = "fish",
   scale_amount = 1000,
   proportional = TRUE,
   make_rda = FALSE,
   figures_dir = getwd()
 )
-}
+plot_abundance_at_age(
+  dat = stockplotr:::example_data,
+  facet = "none",
+  proportional = FALSE
+)
 }

@@ -45,6 +45,7 @@ Imports:
     stringr,
     tibble,
     tidyr,
+    tidyselect,
     utils,
     withr
 Suggests:

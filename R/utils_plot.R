@@ -5,7 +5,7 @@
 #' Plot time series trends
 #'
 #' @param dat filtered data frame from standard output file(s) preformatted for
-#'  the target label from \link[stockplotr]{prepare_data}
+#'  the target label from \link[stockplotr]{filter_data}
 #' @param x a string of the column name of data used to plot on the x-axis (default 
 #' is "year")
 #' @param y a string of the column name of data used to plot on the y-axis (default 
@@ -82,16 +82,18 @@ plot_timeseries <- function(
     },
     "line" = {
       plot +
+      # if (any(c("estimate_lower", "estimate_upper") %in% colnames(dat))){
         ggplot2::geom_ribbon(
           dat = dat|> dplyr::filter(!is.na(estimate_lower)),
           ggplot2::aes(
             x = .data[[x]],
             ymin = estimate_lower,
-            ymax = estimate_upper
+            ymax = estimate_upper,
+            fill = group_var
           ),
-          colour = "grey",
           alpha = 0.3
-        ) + 
+        ) +
+      # }
         ggplot2::geom_line(
           data = dat,
           ggplot2::aes(
@@ -130,7 +132,7 @@ plot_timeseries <- function(
   )
   
   # Remove linetype or point when there is no grouping
-  if (is.null(group)) {
+  if (is.null(group) & length(unique(dat$model)) == 1) {
     labs <- switch(
       geom,
       "line" = labs + ggplot2::guides(linetype = "none"),
@@ -185,7 +187,7 @@ plot_timeseries <- function(
 #' Create plot with error
 #' 
 #' @param dat filtered data frame from standard output file(s) preformatted for
-#'  the target label from \link[stockplotr]{prepare_data}
+#'  the target label from \link[stockplotr]{filter_data}
 #' @param x a string of the column name of data used to plot on the x-axis (default 
 #' is "year")
 #' @param y a string of the column name of data used to plot on the y-axis (default 
@@ -264,7 +266,7 @@ plot_error <- function(
 #' Create "at-age" plot
 #'
 #' @param dat filtered data frame from standard output file(s) preformatted for
-#'  the target label from \link[stockplotr]{prepare_data}
+#'  the target label from \link[stockplotr]{filter_data}
 #' @param x a string of the column name of data used to plot on the x-axis
 #' (default is "year")
 #' @param y a string of the column name of data used to plot on the y-axis
@@ -510,9 +512,9 @@ reference_line <- function(
   # Add geom for ref line
   plot +
     ggplot2::geom_hline(
-      ggplot2::aes(
-        yintercept = ref_line_val / ifelse(relative, ref_line_val, scale_amount)
-      ),
+      # ggplot2::aes(
+        yintercept = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
+      # ),
       color = "black",
       linetype = "dashed"
     ) +
@@ -576,37 +578,37 @@ cap_first_letter <- function(s) {
 
 #------------------------------------------------------------------------------
 
-#' Prep data for input into aesthetics for ggplot2
+#' Filter data for input into aesthetics for ggplot2
 #'
-#' @param dat a data frame or list of data frames that contains the data to be
-#' plotted.
+#' @param dat a data frame or list of data frames input as `list()` that
+#' contains the data to be plotted.
 #' @param label_name a string of the name of the label that is used to filter
 #' the data.
 #' @param geom Type of plot user wants to create. Options are "line", "point",
 #' and "area".
-#' @param group Selected grouping for the data. If you want to just summarize
-#' the data across all factors, set group = "none".
+#' @param group Name of a column selected grouping for the data.
 #' @param facet a string or vector of strings of a column that facets the data
 #' (e.g. "year", "area", etc.)
 #' @param era A string naming the era of data such as historical ("early"), current ("time"), or 
 #' projected ("fore") data if filtering should occur. Default is set to "time" which is 
-#' the current time. To plot all data, set era to NULL. 
+#' the current time. To plot all data, set era to NULL.
 #' @param scale_amount A number describing how much to scale down the quantities
 #' shown on the y axis.
 #' @param interactive logical. If TRUE, the user will be prompted to select
-#' a module_name when there was more than one found in the filtered dataset.
+#' a module_name when there was more than one found in the filtered data set.
 #' @param module (Optional) A string indicating the linked module_name associated
 #' with the label for the plot if known. Default is NULL. By default, the function
-#' will select the most relevant module if more than 1 exists.
+#' will select the most relevant module if more than 1 exists. If selecting more
+#' than one module, place them in a vector such as c("module1", "module2").
 #'
 #' @returns a data frame that is preformatted for plotting with ggplot2.
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' prepare_data(dat, "biomass", "line", group = "fleet")
+#' filter_data(dat, "biomass", "line", group = "fleet")
 #' }
-prepare_data <- function(
+filter_data <- function(
     dat,
     label_name,
     module = NULL,
@@ -618,7 +620,7 @@ prepare_data <- function(
     interactive = TRUE) {
   # TODO: add option to scale data
   # Replace all spaces with underscore if not in proper format
-  label_name <- sub(" ", "_", label_name)
+  label_name <- sub(" ", "_", tolower(label_name))
   list_of_data <- list()
   length_dat <- ifelse(
     is.data.frame(dat),
@@ -654,13 +656,15 @@ prepare_data <- function(
         # calc uncertainty when se
         # TODO: calculate other sources of error to upper and lower (cv,)
         estimate_lower = dplyr::case_when(
-          grepl("se", uncertainty_label) ~ (estimate - 1.96 * uncertainty) / scale_amount,
+          grepl("se", uncertainty_label) ~ (estimate - (1.96 * uncertainty)) / scale_amount,
           grepl("sd", tolower(uncertainty_label)) | grepl("std", tolower(uncertainty_label)) ~ (estimate - uncertainty) / scale_amount,
+          grepl("cv", tolower(uncertainty_label)) ~ (estimate - (1.96 * (uncertainty * estimate))) / scale_amount,
           TRUE ~ NA
         ),
         estimate_upper = dplyr::case_when(
-          grepl("se", uncertainty_label) ~ (estimate + 1.96 * uncertainty) / scale_amount,
+          grepl("se", uncertainty_label) ~ (estimate + (1.96 * uncertainty)) / scale_amount,
           grepl("sd", tolower(uncertainty_label)) | grepl("std", tolower(uncertainty_label)) ~ (estimate + uncertainty) / scale_amount,
+          grepl("cv", tolower(uncertainty_label)) ~ (estimate + (1.96 * (uncertainty * estimate))) / scale_amount,
           TRUE ~ NA
         )
       )
@@ -674,14 +678,21 @@ prepare_data <- function(
     }
     if (nrow(data) < 1) cli::cli_abort("{label_name} not found.")
     if (is.null(group)) {
-      data <- data |>
-        dplyr::mutate(
-          group_var = switch(geom,
-                             "line" = "solid",
-                             "point" = "black",
-                             1
+      if (!is.data.frame(dat)) {
+        data <- data |>
+          dplyr::mutate(
+            group_var = as.character(.data[["model"]])
           )
-        )
+      } else {
+        data <- data |>
+          dplyr::mutate(
+            group_var = switch(geom,
+                               "line" = "solid",
+                               "point" = "black",
+                               1
+            )
+          )
+      }
     } else if (all(is.na(data[[group]]))) {
       data <- data |>
         dplyr::mutate(
@@ -710,22 +721,31 @@ prepare_data <- function(
     if (!is.null(module)) {
       plot_data <- plot_data |>
         dplyr::filter(
-          module_name == module
+          module_name %in% module
         )
     } else {
       cli::cli_alert_warning("Multiple module names found in data. \n")
       options <- c()
       for (i in seq_along(unique(plot_data$module_name))) {
         # options <- paste0(options, " ", i, ") ", unique(plot_data$module_name)[i], "\n")
-        options[i] <- paste0(" ", i, ") ", unique(plot_data$module_name)[i])
+        options[i] <- paste0(unique(plot_data$module_name)[i])
       }
       if (interactive()) {
         if(interactive) {
-          question1 <- utils::menu(
-                  options,
-                  title = "Please select one of the following:"
-                )
-          selected_module <- unique(plot_data$module_name)[as.numeric(question1)]
+          # question1 <- utils::menu(
+          #         options,
+          #         title = "Please select one of the following:"
+          #       )
+          question1 <- utils::select.list(
+            options,
+            multiple = TRUE,
+            title = "Select one or more of the following module names"
+          )
+          # selected_module <- unique(plot_data$module_name)[as.numeric(question1)]
+          selected_module <- intersect(
+            unique(plot_data$module_name),
+            question1
+          )
         } else {
           selected_module <- unique(plot_data$module_name)[1]
           cli::cli_alert_info("Selection bypassed. Filtering by {selected_module}.")
@@ -737,73 +757,74 @@ prepare_data <- function(
       if (length(selected_module) > 0) {
         plot_data <- plot_data |>
           dplyr::filter(
-            module_name == selected_module
+            module_name %in% selected_module
           )
       }
     }
   }
-
   # If group/facet is NULL then filter out/summarize data for plotting
   # unsure if want to keep this
   # TODO: change or remove in the future when moving to other plot types
-  if (!is.null(group) & is.null(facet)) {
-    # Filter data if there is extra data in group/facet
-    if (all(is.na(plot_data[[group]]))) {
-      cli::cli_alert_warning("Data is not indexed by {group}. Setting group to NULL.")
-      # Override group to NULL as stated in warning
-      group = NULL
-    } else if (length(unique(plot_data[[group]])) == 1) {
-      cli::cli_alert_warning("Selected grouping variable only contains one unique value.")
-      # Summarize/group data by NULL when there is only 1 unique value to prevent plots with multiple points per year
-      # This might be specific to time series
-      plot_data <- plot_data |>
-        dplyr::group_by(year, model, group_var, era, module_name, label) |>
-        dplyr::summarise(
-          estimate = sum(unique(estimate)), # taking sum of unique values makes sure that when other grouping contain NA, then it doesn't double values?
-          estimate_lower = mean(estimate_lower),
-          estimate_upper = mean(estimate_upper)
-        )
-    } else if (any(is.na(unique(plot_data[[group]])))) {
-      # Remove NAs from grouping variable
-      plot_data <- plot_data |> dplyr::filter(!is.na(.data[[group]]))
-    }
-  } else if (!is.null(facet)) {
-    if (all(is.na(plot_data[[facet]]))) {
-      cli::cli_alert_warning("Data is not indexed by {facet}. Setting facet to NULL.")
-      # Override facet to NULL as stated in the warning
-      facet = NULL
-    } else if (any(is.na(unique(plot_data[[facet]])))) {
-      # Remove NAs from faceting variable
-      plot_data <- plot_data |> dplyr::filter(!is.na(.data[[facet]]))
-    }
-  }
-  if (is.null(group) & is.null(facet)){
-    plot_data <- plot_data |>
-      dplyr::filter(
-        !is.na(year),
-        is.na(fleet) | length(unique(fleet)) <= 1,
-        is.na(sex) | length(unique(sex)) <= 1,
-        is.na(area) | length(unique(area)) <= 1,
-        is.na(growth_pattern) | length(unique(growth_pattern)) <= 1
-      ) |>
-      dplyr::group_by(
-        year,
-        model,
-        group_var,
-        era,
-        module_name,
-        label
-      ) |>
-      dplyr::summarise(
-        estimate = mean(estimate, na.rm = TRUE),
-        estimate_lower = mean(estimate_lower, na.rm = TRUE),
-        estimate_upper = mean(estimate_upper, na.rm = TRUE)
-      ) |>
-      dplyr::ungroup()
-  }
+  # if (!is.null(group) & is.null(facet)) {
+  #   # Filter data if there is extra data in group/facet
+  #   if (all(is.na(plot_data[[group]]))) {
+  #     cli::cli_alert_warning("Data is not indexed by {group}. Setting group to NULL.")
+  #     # Override group to NULL as stated in warning
+  #     group = NULL
+  #   } else if (length(unique(plot_data[[group]])) == 1) {
+  #     cli::cli_alert_warning("Selected grouping variable only contains one unique value.")
+  #     # Summarize/group data by NULL when there is only 1 unique value to prevent plots with multiple points per year
+  #     # This might be specific to time series
+  #     plot_data <- plot_data |>
+  #       dplyr::group_by(year, model, group_var, era, module_name, label) |>
+  #       dplyr::summarise(
+  #         estimate = sum(unique(estimate)), # taking sum of unique values makes sure that when other grouping contain NA, then it doesn't double values?
+  #         estimate_lower = mean(estimate_lower),
+  #         estimate_upper = mean(estimate_upper)
+  #       )
+  #   } else if (any(is.na(unique(plot_data[[group]])))) {
+  #     # Remove NAs from grouping variable
+  #     plot_data <- plot_data |> dplyr::filter(!is.na(.data[[group]]))
+  #   }
+  # } else if (!is.null(facet)) {
+  #   if (all(is.na(plot_data[[facet]]))) {
+  #     cli::cli_alert_warning("Data is not indexed by {facet}. Setting facet to NULL.")
+  #     # Override facet to NULL as stated in the warning
+  #     facet = NULL
+  #   } else if (any(is.na(unique(plot_data[[facet]])))) {
+  #     # Remove NAs from faceting variable
+  #     plot_data <- plot_data |> dplyr::filter(!is.na(.data[[facet]]))
+  #   }
+  # }
+  # if (is.null(group) & is.null(facet)){
+  #   plot_data <- plot_data |>
+  #     dplyr::filter(
+  #       !is.na(year),
+  #       is.na(fleet) | length(unique(fleet)) <= 1,
+  #       is.na(sex) | length(unique(sex)) <= 1,
+  #       is.na(area) | length(unique(area)) <= 1,
+  #       is.na(growth_pattern) | length(unique(growth_pattern)) <= 1
+  #     ) |>
+  #     dplyr::group_by(
+  #       year,
+  #       model,
+  #       group_var,
+  #       era,
+  #       module_name,
+  #       label
+  #     ) |>
+  #     dplyr::summarise(
+  #       estimate = mean(estimate, na.rm = TRUE),
+  #       estimate_lower = mean(estimate_lower, na.rm = TRUE),
+  #       estimate_upper = mean(estimate_upper, na.rm = TRUE)
+  #     ) |>
+  #     dplyr::ungroup()
+  # }
+
+  # TODO: add lines to summarize final data for selected grouping and or facet
   
   if (geom == "area") {
-    plot_data2 <- dplyr::mutate(
+    plot_data <- dplyr::mutate(
       plot_data,
       model = reorder(.data[["model"]], .data[["estimate"]], function(x) -max(x) )
     )
@@ -909,4 +930,28 @@ label_magnitude <- function(
   }
   # Create label for abundance units in legend
   glue::glue("{label} {ifelse(legend, \"\n\", \"\")}({unit_mag}{unit_label})")
+}
+
+#------------------------------------------------------------------------------
+
+# Check if grouped data in plot
+
+check_grouping <- function(dat) {
+  # Identify potential indexing variables
+  index_variables <- c(
+    "year", # also not sure of this one
+    "age", # not sure if want to add age here
+    "fleet", "sex",
+    "area", "growth_pattern", "month",
+    "season", "platoon", "bio_pattern",
+    "settlement", "morph", "block"
+  )
+  # Create emppty vector
+  dat_index <- c()
+  # Cycle through indexing variables and identify ones that have more than 1 unique value
+  for (i in index_variables) {
+    indexed <- ifelse(length(unique(dat[[i]])) > 1, TRUE, FALSE)
+    if (indexed) dat_index <- c(dat_index, i)
+  }
+  dat_index
 }

@@ -11,6 +11,8 @@ plot_catch_comp(
   unit_label = "mt",
   scale_amount = 1,
   proportional = TRUE,
+  interactive = TRUE,
+  module = NULL,
   make_rda = FALSE,
   figures_dir = getwd()
 )
@@ -19,7 +21,8 @@ plot_catch_comp(
 \item{dat}{A data frame returned from \link[asar]{convert_output}}
 
 \item{facet}{a string or vector of strings of column(s) that 
-groups the data (e.g. "fleet", "sex", "area", etc.).}
+groups the data (e.g. "fleet", "sex", "area", etc.). Set facet = "none" to
+summarize the data in a single plot.}
 
 \item{era}{a string naming the era of data such as historical ("early"), current ("time"), or 
 projected ("fore") data if filtering should occur. Default is set to "time" which is 
@@ -37,6 +40,14 @@ in the legend label if proportional is set to FALSE. The default is 1.}
 \item{proportional}{Set size of points relative to z when TRUE, point
 size are relative to one another while when set to FALSE, point size
 is relative to z}
+
+\item{interactive}{TRUE/FALSE; indicate whether the environment in which the
+function is operating  is interactive. This bypasses some options for
+filtering when preparing data for the plot. Default is FALSE.}
+
+\item{module}{(Optional) A string indicating the linked module_name associated
+with the label for the plot if known. Default is NULL. By default, the function
+will select the most relevant module if more than 1 exists.}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
@@ -56,13 +67,23 @@ The current plot function does not combine all sources of catch.
 Plot catch composition
 }
 \examples{
-\dontrun{
 plot_catch_comp(
-  dat,
-  facet = "area",
+  dat = stockplotr:::example_data,
+  facet = "fleet",
   unit_label = "mt",
   scale_amount = 100,
-  make_rda = TRUE,
-  figures_dir = getwd())
-}
+  interactive = FALSE,
+  make_rda = FALSE,
+  figures_dir = getwd()
+)
+
+plot_catch_comp(
+  dat = stockplotr:::example_data,
+  facet = "none",
+  unit_label = "mt",
+  scale_amount = 100,
+  interactive = FALSE,
+  era = "fore",
+  proportional = FALSE
+)
 }

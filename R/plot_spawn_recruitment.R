@@ -15,18 +15,13 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' plot_spawn_recruitment(dat)
-#'
 #' plot_spawn_recruitment(
-#'   dat,
+#'   dat = stockplotr:::example_data,
 #'   interactive = FALSE,
-#'   spawning_biomass_label = "sb label",
-#'   recruitment_label = "rec label",
-#'   make_rda = TRUE,
-#'   figures_dir = getwd()
+#'   spawning_biomass_label = "metric tons",
+#'   recruitment_label = "metric tons",
+#'   module = "SPAWN_RECRUIT"
 #' )
-#' }
 plot_spawn_recruitment <- function(
     dat,
     spawning_biomass_label = "mt",
@@ -38,7 +33,7 @@ plot_spawn_recruitment <- function(
     make_rda = FALSE,
     figures_dir = getwd()) {
   # Extract recruitment
-  recruitment <- prepare_data(
+  recruitment <- filter_data(
     dat = dat,
     label_name = "recruitment",
     era = "time",
@@ -65,7 +60,7 @@ plot_spawn_recruitment <- function(
   }
   
   # Extract spawning biomass
-  sb <- prepare_data(
+  sb <- filter_data(
     dat = dat,
     label_name = "spawning biomass",
     geom = "point",

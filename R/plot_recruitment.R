@@ -10,55 +10,64 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' plot_recruitment(dat)
-#'
 #' plot_recruitment(
-#'   dat,
-#'   unit_label = "my_unit_label",
+#'   dat = stockplotr:::example_data,
+#'   unit_label = "metric tons",
 #'   scale_amount = 100,
-#'   relative = TRUE,
 #'   interactive = TRUE,
 #'   module = "TIME_SERIES",
-#'   make_rda = TRUE,
-#'   figures_dir = getwd()
+#'   make_rda = FALSE
 #' )
-#' }
+#'plot_recruitment(
+#'  dat = stockplotr:::example_data,
+#'  era = "fore",
+#'  module = "TIME_SERIES",
+#'  make_rda = FALSE
+#')
 plot_recruitment <- function(
     dat,
     unit_label = "mt",
     scale_amount = 1,
     era = "time",
-    relative = FALSE,
+    group = NULL,
+    facet = NULL,
+    # relative = FALSE,
     interactive = TRUE,
     module = NULL,
     make_rda = FALSE,
     figures_dir = getwd()
     ) {
   # TODO: Fix the unit label if scaling
-  recruitment_label <- ifelse(
-    relative,
-    yes = "Relative recruitment",
-    no = {
-      label_magnitude(
-        label = "Recruitment",
-        unit_label = unit_label,
-        scale_amount = scale_amount,
-        legend = FALSE
-      )
-    }
+  recruitment_label <- label_magnitude(
+    label = "Recruitment",
+    unit_label = unit_label,
+    scale_amount = scale_amount,
+    legend = FALSE
   )
   
   # Extract recruitment
-  recruitment <- prepare_data(
+  recruitment <- filter_data(
     dat = dat,
     label_name = "recruitment",
     geom = "line",
     era = era,
+    group = group,
+    facet = facet,
     interactive = interactive,
     module = module,
     scale_amount = scale_amount
   ) 
+  # process data
+  processed_data <- process_data(
+    dat = recruitment,
+    group = group,
+    facet = facet,
+    method = "sum"
+  )
+  recruitment <- processed_data[[1]]
+  group <- processed_data[[2]]
+  facet <- processed_data[[3]]
+  
   # Check if contains 'rec devs' and filter out
   if (any(grepl("recruitment_deviations", unique(recruitment$label)))) {
     if (length(unique(recruitment$label)) > 1) {
@@ -93,14 +102,8 @@ plot_recruitment <- function(
     geom = geom,
     xlab = "Year",
     ylab = recruitment_label,
-    hline = FALSE,
-    facet = {
-      if (length(unique(recruitment$model)) > 1) {
-        "model"
-      } else {
-        NULL
-      }
-    }
+    group = group,
+    facet = facet
   ) +
     theme_noaa()
   
@@ -110,7 +113,7 @@ plot_recruitment <- function(
         data = recruitment,
         ggplot2::aes(x = year, y = expected_recruitment),
         color = "red",
-        size = 1
+        linewidth = 1
       )
     caption_label <- "recruitment.comp"
   } else {

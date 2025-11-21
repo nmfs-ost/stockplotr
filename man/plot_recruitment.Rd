@@ -9,7 +9,8 @@ plot_recruitment(
   unit_label = "mt",
   scale_amount = 1,
   era = "time",
-  relative = FALSE,
+  group = NULL,
+  facet = NULL,
   interactive = TRUE,
   module = NULL,
   make_rda = FALSE,
@@ -17,9 +18,9 @@ plot_recruitment(
 )
 }
 \arguments{
-\item{dat}{A data frame or names list of data frames returned from
-\link[asar]{convert_output}. The first data frame in the list is used in
-calculation of a reference line if one is present}
+\item{dat}{A data frame or names list of data frames (input as `list()`)
+returned from \link[asar]{convert_output}. The first data frame in the list 
+is used in calculation of a reference line if one is present}
 
 \item{unit_label}{units for recruitment}
 
@@ -31,9 +32,15 @@ from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
 projected ("fore") data if filtering should occur. Default is set to "time" which is 
 the current time. To plot all data, set era to NULL.}
 
-\item{relative}{A logical value specifying if the resulting figures should
-be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
-which reference point to use.}
+\item{group}{a string of a single column that groups the data (e.g. "fleet",
+"sex", "area", etc.). Currently can only have one level of grouping. If you want to just summarize
+the data across all factors, set group = "none". In the case there is only
+one unique value of the grouping and/or NA is available, the function will
+default to the NAs and in some cases the grouping when there is not an equal
+number of rows for NA and the grouped data.}
+
+\item{facet}{a string or vector of strings of a column that facets the data
+(e.g. "year", "area", etc.)}
 
 \item{interactive}{TRUE/FALSE; indicate whether the environment in which the
 function is operating  is interactive. This bypasses some options for
@@ -62,18 +69,18 @@ caption and alternative text for the figure.
 Plot Recruitment
 }
 \examples{
-\dontrun{
-plot_recruitment(dat)
-
 plot_recruitment(
-  dat,
-  unit_label = "my_unit_label",
+  dat = stockplotr:::example_data,
+  unit_label = "metric tons",
   scale_amount = 100,
-  relative = TRUE,
   interactive = TRUE,
   module = "TIME_SERIES",
-  make_rda = TRUE,
-  figures_dir = getwd()
+  make_rda = FALSE
 )
-}
+plot_recruitment(
+ dat = stockplotr:::example_data,
+ era = "fore",
+ module = "TIME_SERIES",
+ make_rda = FALSE
+)
 }

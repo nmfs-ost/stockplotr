@@ -15,9 +15,9 @@ plot_recruitment_deviations(
 )
 }
 \arguments{
-\item{dat}{A data frame or names list of data frames returned from
-\link[asar]{convert_output}. The first data frame in the list is used in
-calculation of a reference line if one is present}
+\item{dat}{A data frame or names list of data frames (input as `list()`)
+returned from \link[asar]{convert_output}. The first data frame in the list 
+is used in calculation of a reference line if one is present}
 
 \item{module}{(Optional) A string indicating the linked module_name associated
 with the label for the plot if known. Default is NULL. By default, the function
@@ -52,12 +52,15 @@ associated caption and alternative text for the figure.
 Plot Recruitment Deviations
 }
 \examples{
-\dontrun{
 plot_recruitment_deviations(
-  dat = list("model1"=dat1,"model2"=dat2),
-  make_rda = TRUE,
-  figures_dir = getwd(),
-  size = 3
+  dat = stockplotr:::example_data,
+  interactive = FALSE,
+  size = 1.5
 )
-}
+plot_recruitment_deviations(
+  dat = stockplotr:::example_data,
+  era = "early",
+  interactive = FALSE,
+  shape = 2
+)
 }

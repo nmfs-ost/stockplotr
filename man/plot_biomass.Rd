@@ -21,15 +21,19 @@ plot_biomass(
 )
 }
 \arguments{
-\item{dat}{A data frame or names list of data frames returned from
-\link[asar]{convert_output}. The first data frame in the list is used in
-calculation of a reference line if one is present}
+\item{dat}{A data frame or names list of data frames (input as `list()`)
+returned from \link[asar]{convert_output}. The first data frame in the list 
+is used in calculation of a reference line if one is present}
 
 \item{geom}{A string stating the geom used for the plot. Default is "line".
 Options include "line", "point", or "area"}
 
 \item{group}{a string of a single column that groups the data (e.g. "fleet",
-"sex", "area", etc.). Currently can only have one level of grouping.}
+"sex", "area", etc.). Currently can only have one level of grouping. If you want to just summarize
+the data across all factors, set group = "none". In the case there is only
+one unique value of the grouping and/or NA is available, the function will
+default to the NAs and in some cases the grouping when there is not an equal
+number of rows for NA and the grouped data.}
 
 \item{facet}{a string or vector of strings of a column that facets the data
 (e.g. "year", "area", etc.)}
@@ -82,21 +86,19 @@ associated caption and alternative text for the figure.
 Plot Total Biomass
 }
 \examples{
-\dontrun{
-plot_biomass(dat)
-
 plot_biomass(
-  dat,
-  unit_label = "my_unit",
-  figures_dir = getwd()
-)
-
-plot_biomass(
-  dat,
-  unit_label = "my_unit",
+  dat = stockplotr:::example_data,
+  unit_label = "mt",
+  ref_line = "target",
   scale_amount = 100,
-  make_rda = TRUE,
+  module = "TIME_SERIES",
   figures_dir = getwd()
 )
-}
+plot_biomass(
+  dat = stockplotr:::example_data,
+  facet = "fleet",
+  ref_line = "target",
+  module = "TIME_SERIES",
+  figures_dir = getwd()
+)
 }

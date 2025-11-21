@@ -19,7 +19,8 @@ plot_biomass_at_age(
 \item{dat}{A data frame returned from \link[asar]{convert_output}}
 
 \item{facet}{a string or vector of strings of column(s) that 
-groups the data (e.g. "fleet", "sex", "area", etc.).}
+groups the data (e.g. "fleet", "sex", "area", etc.). Set facet = "none" to
+summarize the data in a single plot.}
 
 \item{unit_label}{units for abundance}
 
@@ -31,6 +32,10 @@ proportion is set to FALSE.}
 \item{proportional}{Set size of points relative to z when TRUE, point
 size are relative to one another while when set to FALSE, point size
 is relative to z}
+
+\item{interactive}{TRUE/FALSE; indicate whether the environment in which the
+function is operating  is interactive. This bypasses some options for
+filtering when preparing data for the plot. Default is FALSE.}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
@@ -50,16 +55,17 @@ or will be extracted from the provided file if possible.
 Plot Total Biomass at Age (BAA)
 }
 \examples{
-\dontrun{
-plot_biomass_at_age(dat)
-
 plot_biomass_at_age(
-  dat,
+  dat = stockplotr:::example_data,
   unit_label = "mt",
   scale_amount = 100,
   proportional = FALSE, # displays legend
-  make_rda = TRUE,
-  figures_dir = getwd()
+  make_rda = FALSE
 )
-}
+plot_biomass_at_age(
+  dat = stockplotr:::example_data,
+  unit_label = "mt",
+  facet = "none",
+  proportional = FALSE
+)
 }

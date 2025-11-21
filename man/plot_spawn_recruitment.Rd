@@ -16,9 +16,9 @@ plot_spawn_recruitment(
 )
 }
 \arguments{
-\item{dat}{A data frame or names list of data frames returned from
-\link[asar]{convert_output}. The first data frame in the list is used in
-calculation of a reference line if one is present}
+\item{dat}{A data frame or names list of data frames (input as `list()`)
+returned from \link[asar]{convert_output}. The first data frame in the list 
+is used in calculation of a reference line if one is present}
 
 \item{spawning_biomass_label}{Units for spawning biomass}
 
@@ -56,16 +56,11 @@ caption and alternative text for the figure.
 Plot Spawn-Recruit Relationship
 }
 \examples{
-\dontrun{
-plot_spawn_recruitment(dat)
-
 plot_spawn_recruitment(
-  dat,
+  dat = stockplotr:::example_data,
   interactive = FALSE,
-  spawning_biomass_label = "sb label",
-  recruitment_label = "rec label",
-  make_rda = TRUE,
-  figures_dir = getwd()
+  spawning_biomass_label = "metric tons",
+  recruitment_label = "metric tons",
+  module = "SPAWN_RECRUIT"
 )
-}
 }
