@@ -98,9 +98,9 @@
 
 
 <dl><dt id="arg-dat">dat<a class="anchor" aria-label="anchor" href="#arg-dat"></a></dt>
-<dd><p>A data frame or names list of data frames returned from
-<a href="https://rdrr.io/pkg/asar/man/convert_output.html" class="external-link">convert_output</a>. The first data frame in the list is used in
-calculation of a reference line if one is present</p></dd>
+<dd><p>A data frame or names list of data frames (input as `list()`)
+returned from <a href="https://rdrr.io/pkg/asar/man/convert_output.html" class="external-link">convert_output</a>. The first data frame in the list
+is used in calculation of a reference line if one is present</p></dd>
 
 
 <dt id="arg-module">module<a class="anchor" aria-label="anchor" href="#arg-module"></a></dt>
@@ -148,14 +148,27 @@ associated caption and alternative text for the figure.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="fu">plot_recruitment_deviations</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"model1"</span><span class="op">=</span><span class="va">dat1</span>,<span class="st">"model2"</span><span class="op">=</span><span class="va">dat2</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  make_rda <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>  figures_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  size <span class="op">=</span> <span class="fl">3</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">plot_recruitment_deviations</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va">example_data</span>,</span></span>
+<span class="r-in"><span>  interactive <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>  size <span class="op">=</span> <span class="fl">1.5</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Multiple module names found in data. </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Environment not interactive. Selecting PARAMETERS.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Ignoring unknown labels:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">colour</span> : <span style="color: #0000BB;">"Model"</span></span>
+<span class="r-plt img"><img src="plot_recruitment_deviations-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu">plot_recruitment_deviations</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va">example_data</span>,</span></span>
+<span class="r-in"><span>  era <span class="op">=</span> <span class="st">"early"</span>,</span></span>
+<span class="r-in"><span>  interactive <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>  shape <span class="op">=</span> <span class="fl">2</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Multiple module names found in data. </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Environment not interactive. Selecting PARAMETERS.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Ignoring unknown labels:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">colour</span> : <span style="color: #0000BB;">"Model"</span></span>
+<span class="r-plt img"><img src="plot_recruitment_deviations-2.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </div>
@@ -170,7 +183,7 @@ associated caption and alternative text for the figure.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer></div>

@@ -89,6 +89,8 @@
 <span>  unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
 <span>  scale_amount <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  proportional <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  interactive <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  module <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  make_rda <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  figures_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -104,7 +106,8 @@
 
 <dt id="arg-facet">facet<a class="anchor" aria-label="anchor" href="#arg-facet"></a></dt>
 <dd><p>a string or vector of strings of column(s) that
-groups the data (e.g. "fleet", "sex", "area", etc.).</p></dd>
+groups the data (e.g. "fleet", "sex", "area", etc.). Set facet = "none" to
+summarize the data in a single plot.</p></dd>
 
 
 <dt id="arg-era">era<a class="anchor" aria-label="anchor" href="#arg-era"></a></dt>
@@ -132,6 +135,18 @@ size are relative to one another while when set to FALSE, point size
 is relative to z</p></dd>
 
 
+<dt id="arg-interactive">interactive<a class="anchor" aria-label="anchor" href="#arg-interactive"></a></dt>
+<dd><p>TRUE/FALSE; indicate whether the environment in which the
+function is operating  is interactive. This bypasses some options for
+filtering when preparing data for the plot. Default is FALSE.</p></dd>
+
+
+<dt id="arg-module">module<a class="anchor" aria-label="anchor" href="#arg-module"></a></dt>
+<dd><p>(Optional) A string indicating the linked module_name associated
+with the label for the plot if known. Default is NULL. By default, the function
+will select the most relevant module if more than 1 exists.</p></dd>
+
+
 <dt id="arg-make-rda">make_rda<a class="anchor" aria-label="anchor" href="#arg-make-rda"></a></dt>
 <dd><p>TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
@@ -154,15 +169,31 @@ The current plot function does not combine all sources of catch.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="fu">plot_catch_comp</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">dat</span>,</span></span>
-<span class="r-in"><span>  facet <span class="op">=</span> <span class="st">"area"</span>,</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">plot_catch_comp</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va">example_data</span>,</span></span>
+<span class="r-in"><span>  facet <span class="op">=</span> <span class="st">"fleet"</span>,</span></span>
 <span class="r-in"><span>  unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span></span>
 <span class="r-in"><span>  scale_amount <span class="op">=</span> <span class="fl">100</span>,</span></span>
-<span class="r-in"><span>  make_rda <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>  figures_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-in"><span>  interactive <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>  make_rda <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>  figures_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Multiple module names found in data. </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Environment not interactive. Selecting CATCH_AT_AGE.</span>
+<span class="r-plt img"><img src="plot_catch_comp-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">plot_catch_comp</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va">example_data</span>,</span></span>
+<span class="r-in"><span>  facet <span class="op">=</span> <span class="st">"none"</span>,</span></span>
+<span class="r-in"><span>  unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span></span>
+<span class="r-in"><span>  scale_amount <span class="op">=</span> <span class="fl">100</span>,</span></span>
+<span class="r-in"><span>  interactive <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>  era <span class="op">=</span> <span class="st">"fore"</span>,</span></span>
+<span class="r-in"><span>  proportional <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Multiple module names found in data. </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Environment not interactive. Selecting CATCH_AT_AGE.</span>
+<span class="r-plt img"><img src="plot_catch_comp-2.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </div>
@@ -177,7 +208,7 @@ The current plot function does not combine all sources of catch.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer></div>

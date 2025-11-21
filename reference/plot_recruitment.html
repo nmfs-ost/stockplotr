@@ -87,7 +87,8 @@
 <span>  unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
 <span>  scale_amount <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  era <span class="op">=</span> <span class="st">"time"</span>,</span>
-<span>  relative <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  group <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  facet <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  interactive <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  module <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  make_rda <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -100,9 +101,9 @@
 
 
 <dl><dt id="arg-dat">dat<a class="anchor" aria-label="anchor" href="#arg-dat"></a></dt>
-<dd><p>A data frame or names list of data frames returned from
-<a href="https://rdrr.io/pkg/asar/man/convert_output.html" class="external-link">convert_output</a>. The first data frame in the list is used in
-calculation of a reference line if one is present</p></dd>
+<dd><p>A data frame or names list of data frames (input as `list()`)
+returned from <a href="https://rdrr.io/pkg/asar/man/convert_output.html" class="external-link">convert_output</a>. The first data frame in the list
+is used in calculation of a reference line if one is present</p></dd>
 
 
 <dt id="arg-unit-label">unit_label<a class="anchor" aria-label="anchor" href="#arg-unit-label"></a></dt>
@@ -121,10 +122,18 @@ projected ("fore") data if filtering should occur. Default is set to "time" whic
 the current time. To plot all data, set era to NULL.</p></dd>
 
 
-<dt id="arg-relative">relative<a class="anchor" aria-label="anchor" href="#arg-relative"></a></dt>
-<dd><p>A logical value specifying if the resulting figures should
-be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
-which reference point to use.</p></dd>
+<dt id="arg-group">group<a class="anchor" aria-label="anchor" href="#arg-group"></a></dt>
+<dd><p>a string of a single column that groups the data (e.g. "fleet",
+"sex", "area", etc.). Currently can only have one level of grouping. If you want to just summarize
+the data across all factors, set group = "none". In the case there is only
+one unique value of the grouping and/or NA is available, the function will
+default to the NAs and in some cases the grouping when there is not an equal
+number of rows for NA and the grouped data.</p></dd>
+
+
+<dt id="arg-facet">facet<a class="anchor" aria-label="anchor" href="#arg-facet"></a></dt>
+<dd><p>a string or vector of strings of a column that facets the data
+(e.g. "year", "area", etc.)</p></dd>
 
 
 <dt id="arg-interactive">interactive<a class="anchor" aria-label="anchor" href="#arg-interactive"></a></dt>
@@ -162,20 +171,26 @@ caption and alternative text for the figure.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="fu">plot_recruitment</span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">plot_recruitment</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="va">dat</span>,</span></span>
-<span class="r-in"><span>  unit_label <span class="op">=</span> <span class="st">"my_unit_label"</span>,</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">plot_recruitment</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va">example_data</span>,</span></span>
+<span class="r-in"><span>  unit_label <span class="op">=</span> <span class="st">"metric tons"</span>,</span></span>
 <span class="r-in"><span>  scale_amount <span class="op">=</span> <span class="fl">100</span>,</span></span>
-<span class="r-in"><span>  relative <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  interactive <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  module <span class="op">=</span> <span class="st">"TIME_SERIES"</span>,</span></span>
-<span class="r-in"><span>  make_rda <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>  figures_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  make_rda <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Ignoring unknown labels:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">colour</span> : <span style="color: #0000BB;">"Model"</span></span>
+<span class="r-plt img"><img src="plot_recruitment-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu">plot_recruitment</span><span class="op">(</span></span></span>
+<span class="r-in"><span> dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va">example_data</span>,</span></span>
+<span class="r-in"><span> era <span class="op">=</span> <span class="st">"fore"</span>,</span></span>
+<span class="r-in"><span> module <span class="op">=</span> <span class="st">"TIME_SERIES"</span>,</span></span>
+<span class="r-in"><span> make_rda <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Ignoring unknown labels:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">colour</span> : <span style="color: #0000BB;">"Model"</span></span>
+<span class="r-plt img"><img src="plot_recruitment-2.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </div>
@@ -190,7 +205,7 @@ caption and alternative text for the figure.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer></div>
