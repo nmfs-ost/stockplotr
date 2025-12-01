@@ -645,6 +645,10 @@ filter_data <- function(
       model_label = TRUE
     }
     data <- data |>
+      # make sure all labels only contain lower case
+      dplyr::mutate(
+        label = tolower(gsub(" ", "_", label))
+      ) |>
       dplyr::filter(
         grepl(glue::glue("{label_name}"), label)
         # era == era
