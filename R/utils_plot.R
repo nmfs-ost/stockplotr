@@ -620,7 +620,7 @@ filter_data <- function(
     interactive = TRUE) {
   # TODO: add option to scale data
   # Replace all spaces with underscore if not in proper format
-  label_name <- sub(" ", "_", tolower(label_name))
+  label_name <- gsub(" ", "_", tolower(label_name))
   list_of_data <- list()
   length_dat <- ifelse(
     is.data.frame(dat),
@@ -859,7 +859,7 @@ calculate_reference_point <- function(
     reference_name
 ) {
   # set reference name to lower case
-  reference_name <- tolower(reference_name)
+  reference_name <- tolower(gsub(" ", "_",reference_name))
   # Remove values with year - want single point
   dat <- dat |>
     dplyr::mutate(label = tolower(label)) |>
