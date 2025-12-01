@@ -858,8 +858,11 @@ calculate_reference_point <- function(
     dat,
     reference_name
 ) {
+  # set reference name to lower case
+  reference_name <- tolower(reference_name)
   # Remove values with year - want single point
   dat <- dat |>
+    dplyr::mutate(label = tolower(label)) |>
     dplyr::filter(is.na(year))
   # Check if the reference point exists in the data
   if (inherits(try(solve(as.numeric(dat[
