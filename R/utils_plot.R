@@ -645,7 +645,7 @@ filter_data <- function(
       model_label = TRUE
     }
     data <- data |>
-      # make sure all labels only contain lower case
+      # make sure all labels are lowercase and spaces are replaced with underscores
       dplyr::mutate(
         label = tolower(gsub(" ", "_", label))
       ) |>
