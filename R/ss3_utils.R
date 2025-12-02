@@ -31,9 +31,10 @@ SS3_extract_df <- function(dat, label) {
 
 
 SS3_extract_bio_info <- function(
-    dat,
-    parameter = c("SPB", "Recr", "SPRratio", "F", "Bratio", "SSB", "TotBio", "SmryBio", "SPR", "Fstd", "TotYield", "RetYield", "ForeCatch", "OFLCatch", "ForeCatchret", "Bzero"),
-    reference.points = TRUE) {
+  dat,
+  parameter = c("SPB", "Recr", "SPRratio", "F", "Bratio", "SSB", "TotBio", "SmryBio", "SPR", "Fstd", "TotYield", "RetYield", "ForeCatch", "OFLCatch", "ForeCatchret", "Bzero"),
+  reference.points = TRUE
+) {
   # dat parameter is already extracted df from the Report.sso file
 
   parameter <- match.arg(parameter, several.ok = FALSE)
@@ -61,8 +62,6 @@ SS3_extract_bio_info <- function(
     dplyr::filter(label == parameter)
   bio_info <- Filter(function(x) !all(is.na(x)), bio_info)
 
-  if (isTRUE(reference.points)) {
-
-  }
+  if (isTRUE(reference.points)) {}
   bio_info
 }

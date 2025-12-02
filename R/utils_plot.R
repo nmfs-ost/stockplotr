@@ -6,24 +6,24 @@
 #'
 #' @param dat filtered data frame from standard output file(s) preformatted for
 #'  the target label from \link[stockplotr]{filter_data}
-#' @param x a string of the column name of data used to plot on the x-axis (default 
+#' @param x a string of the column name of data used to plot on the x-axis (default
 #' is "year")
-#' @param y a string of the column name of data used to plot on the y-axis (default 
+#' @param y a string of the column name of data used to plot on the y-axis (default
 #' is "estimate")
-#' @param geom type of geom to use for plotting found in ggplot2 (e.g. "point", 
+#' @param geom type of geom to use for plotting found in ggplot2 (e.g. "point",
 #' "line", etc.). Default is "line". Other options are "point" and "area".
 #' @param xlab a string of the x-axis label (default is "Year")
 #' @param ylab a string of the y-axis label. If NULL, it will be set to the name
 #'  of `y`.
-#' @param group a string of a single column that groups the data (e.g. "fleet", 
+#' @param group a string of a single column that groups the data (e.g. "fleet",
 #' "sex", "area", etc.). Currently can only have one level of grouping.
-#' @param facet a string or vector of strings of a column that facets the data 
+#' @param facet a string or vector of strings of a column that facets the data
 #' (e.g. "year", "area", etc.)
 #' @param ... inherited arguments from internal functions from ggplot2::geom_xx
 #'
 #'
-#' @returns Create a time series plot for a stock assessment report. The user 
-#' has options to create a line, point, or area plot where the x-axis is year 
+#' @returns Create a time series plot for a stock assessment report. The user
+#' has options to create a line, point, or area plot where the x-axis is year
 #' and Y can vary for any time series quantity. Currently, grouping is
 #' restricted to one group where faceting can be any number of facets.
 #' @export
@@ -31,40 +31,40 @@
 #' @examples
 #' \dontrun{
 #' plot_timeseries(dat,
-#'                x = "year",
-#'                y = "estimate",
-#'                geom = "line",
-#'                xlab = "Year",
-#'                ylab = "Biomass",
-#'                group = "fleet",
-#'                facet = "area")
+#'   x = "year",
+#'   y = "estimate",
+#'   geom = "line",
+#'   xlab = "Year",
+#'   ylab = "Biomass",
+#'   group = "fleet",
+#'   facet = "area"
+#' )
 #' }
 plot_timeseries <- function(
-    dat,
-    x = "year",
-    y = "estimate",
-    geom = "line",
-    xlab = "Year",
-    ylab = NULL,
-    group = NULL,
-    facet = NULL,
-    ...
+  dat,
+  x = "year",
+  y = "estimate",
+  geom = "line",
+  xlab = "Year",
+  ylab = NULL,
+  group = NULL,
+  facet = NULL,
+  ...
 ) {
   # Start plot
   plot <- ggplot2::ggplot()
   # make into new geom?
   # more defaults and fxnality for ggplot
-  
+
   # Add geom
-  plot <- switch(
-    geom,
+  plot <- switch(geom,
     "point" = {
       # point_size = ifelse(
       #   is.null(list(...)$size),
       #   2.0,
       #   list(...)$size
       # )
-      plot + 
+      plot +
         ggplot2::geom_point(
           data = dat,
           ggplot2::aes(
@@ -82,9 +82,9 @@ plot_timeseries <- function(
     },
     "line" = {
       plot +
-      # if (any(c("estimate_lower", "estimate_upper") %in% colnames(dat))){
+        # if (any(c("estimate_lower", "estimate_upper") %in% colnames(dat))){
         ggplot2::geom_ribbon(
-          dat = dat|> dplyr::filter(!is.na(estimate_lower)),
+          dat = dat |> dplyr::filter(!is.na(estimate_lower)),
           ggplot2::aes(
             x = .data[[x]],
             ymin = estimate_lower,
@@ -93,7 +93,7 @@ plot_timeseries <- function(
           ),
           alpha = 0.3
         ) +
-      # }
+        # }
         ggplot2::geom_line(
           data = dat,
           ggplot2::aes(
@@ -108,7 +108,7 @@ plot_timeseries <- function(
         )
     },
     "area" = {
-      plot + 
+      plot +
         ggplot2::geom_area(
           data = dat,
           ggplot2::aes(
@@ -120,7 +120,7 @@ plot_timeseries <- function(
         )
     }
   )
-  
+
   # Add labels to axis and legend
   labs <- plot + ggplot2::labs(
     x = xlab,
@@ -130,20 +130,18 @@ plot_timeseries <- function(
     fill = cap_first_letter(group),
     shape = cap_first_letter(group)
   )
-  
+
   # Remove linetype or point when there is no grouping
   if (is.null(group) & length(unique(dat$model)) == 1) {
-    labs <- switch(
-      geom,
+    labs <- switch(geom,
       "line" = labs + ggplot2::guides(linetype = "none"),
       "point" = labs + ggplot2::guides(shape = "none"),
       # return plot if option beyond line and point for now
       labs
     )
   }
-  if (length(unique(dat$model)) == 1){
-    labs <- switch(
-      geom,
+  if (length(unique(dat$model)) == 1) {
+    labs <- switch(geom,
       "line" = labs + ggplot2::guides(color = "none"),
       "point" = labs + ggplot2::guides(color = "none"),
       "area" = labs + ggplot2::guides(fill = "none"),
@@ -151,7 +149,7 @@ plot_timeseries <- function(
       labs
     )
   }
-  
+
   # Calc axis breaks
   x_n_breaks <- axis_breaks(dat[[x]])
   breaks <- ggplot2::scale_x_continuous(
@@ -160,18 +158,18 @@ plot_timeseries <- function(
       minor.ticks = TRUE
     )
   )
-  
+
   # Put together final plot
   final <- labs + breaks + ggplot2::expand_limits(y = 0) +
     ggplot2::scale_y_continuous(
       labels = scales::label_comma()
     )
-  
+
   # Remove legend if no group is selected
   if (is.null(group) & is.data.frame(dat) & any(is.na(unique(dat$model)))) {
     final <- final + ggplot2::theme(legend.position = "none")
   }
-  
+
   # Check if facet(s) are desired
   if (!is.null(facet)) {
     facet <- paste("~", paste(facet, collapse = " + "))
@@ -185,79 +183,79 @@ plot_timeseries <- function(
 #------------------------------------------------------------------------------
 
 #' Create plot with error
-#' 
+#'
 #' @param dat filtered data frame from standard output file(s) preformatted for
 #'  the target label from \link[stockplotr]{filter_data}
-#' @param x a string of the column name of data used to plot on the x-axis (default 
+#' @param x a string of the column name of data used to plot on the x-axis (default
 #' is "year")
-#' @param y a string of the column name of data used to plot on the y-axis (default 
+#' @param y a string of the column name of data used to plot on the y-axis (default
 #' is "estimate")
-#' @param geom type of geom to use for plotting found in ggplot2 (e.g. "point", 
+#' @param geom type of geom to use for plotting found in ggplot2 (e.g. "point",
 #' "line", etc.). Default is "line". Other options are "point" and "area".
 #' @param xlab a string of the x-axis label (default is "Year")
 #' @param ylab a string of the y-axis label. If NULL, it will be set to the name
 #'  of `y`.
-#' @param group a string of a single column that groups the data (e.g. "fleet", 
+#' @param group a string of a single column that groups the data (e.g. "fleet",
 #' "sex", "area", etc.). Currently can only have one level of grouping.
-#' @param facet a string or vector of strings of a column that facets the data 
+#' @param facet a string or vector of strings of a column that facets the data
 #' (e.g. "year", "area", etc.)
 #' @param hline indicate true or false to place a horizontal line at 1
 #' @param ... inherited arguments from internal functions from ggplot2::geom_xx
-#' 
-#' 
+#'
+#'
 plot_error <- function(
-    dat,
-    x = "year",
-    y = "estimate",
-    geom = "point",
-    group = NULL,
-    facet = NULL,
-    xlab = "Year",
-    ylab = NULL,
-    hline = TRUE,
-    ...
+  dat,
+  x = "year",
+  y = "estimate",
+  geom = "point",
+  group = NULL,
+  facet = NULL,
+  xlab = "Year",
+  ylab = NULL,
+  hline = TRUE,
+  ...
 ) {
   plot <- plot_timeseries(
-      dat = dat,
-      x = x,
-      y = y,
-      geom = geom,
-      xlab = xlab,
-      ylab = ylab,
-      group = group,
-      facet = facet,
-      colour = "black",
-      ...
-      ) +
-      ggplot2::geom_segment(
-        data = dat,
-        ggplot2::aes(
-          x = .data[[x]],
-          y = .data[[y]],
-          yend = estimate_upper
-        ),
-        color = "#5798fa",
-        alpha = 0.5
-      ) +
-      ggplot2::geom_segment(
-        data = dat,
-        ggplot2::aes(
-          x = .data[[x]],
-          y = .data[[y]],
-          yend = estimate_lower
-        ),
-        color = "#5798fa",
-        alpha = 0.5
+    dat = dat,
+    x = x,
+    y = y,
+    geom = geom,
+    xlab = xlab,
+    ylab = ylab,
+    group = group,
+    facet = facet,
+    colour = "black",
+    ...
+  ) +
+    ggplot2::geom_segment(
+      data = dat,
+      ggplot2::aes(
+        x = .data[[x]],
+        y = .data[[y]],
+        yend = estimate_upper
+      ),
+      color = "#5798fa",
+      alpha = 0.5
+    ) +
+    ggplot2::geom_segment(
+      data = dat,
+      ggplot2::aes(
+        x = .data[[x]],
+        y = .data[[y]],
+        yend = estimate_lower
+      ),
+      color = "#5798fa",
+      alpha = 0.5
+    )
+  if (hline) {
+    plot <- plot +
+      ggplot2::geom_hline(
+        yintercept = 0,
+        linewidth = 1,
+        linetype = "solid", # "dashed",
+        colour = "#6e6e6e"
       )
-    if(hline) {
-      plot <- plot +
-        ggplot2::geom_hline(
-          yintercept = 0,
-          linewidth = 1,
-          linetype = "solid", # "dashed",
-          colour = "#6e6e6e"
-        )
-    }
+  }
   plot
 }
 
@@ -285,11 +283,11 @@ plot_error <- function(
 #' is relative to z
 #' @param ... inherited arguments from internal functions from
 #' \link[ggplot2]{geom_point}
-#' 
+#'
 #' @return Create a plot of abundance at age for a stock assessment report.
 #' @export
 #' @examples \dontrun{
-#'  plot_aa(dat)
+#' plot_aa(dat)
 #' }
 plot_aa <- function(
   dat,
@@ -320,7 +318,7 @@ plot_aa <- function(
 
   # Initialize gg plot
   plot <- ggplot2::ggplot() +
-  # Add geom
+    # Add geom
     ggplot2::geom_point(
       data = dat,
       ggplot2::aes(
@@ -358,10 +356,10 @@ plot_aa <- function(
     # ggplot2::coord_cartesian(expand = FALSE)
     # add noaa theme
     theme_noaa()
-  
+
   if (proportional) {
     plot <- plot +
-      # Remove legend since circles are calculated 
+      # Remove legend since circles are calculated
       # proportionally to catch and not exactly catch
       ggplot2::theme(legend.position = "none")
   }
@@ -385,8 +383,9 @@ plot_aa <- function(
 # Average age line
 average_age_line <- function(
   dat,
-  facet) {
-   # Calculate annual mean age
+  facet
+) {
+  # Calculate annual mean age
   grouping <- intersect(colnames(dat), facet)
   total_fish_per_year <- dat |>
     dplyr::mutate(age = as.numeric(as.character(age))) |>
@@ -402,7 +401,7 @@ average_age_line <- function(
     dplyr::full_join(total_fish_per_year) |>
     dplyr::mutate(avg = interm / total_fish)
 
-# Add average age line to plot
+  # Add average age line to plot
   list(
     ggplot2::geom_line(
       data = annual_means,
@@ -424,7 +423,7 @@ cohort_line <- function(
   x = "year",
   y = "age",
   z = "estimate"
-){
+) {
   # Make sure all dimensions are numeric
   dat <- dat |>
     dplyr::mutate(
@@ -432,21 +431,21 @@ cohort_line <- function(
       year = as.numeric(year),
       estimate = as.numeric(estimate)
     )
-# Calculate the total estimate for each cohort
-cohort_estimates <- dat |>
-  dplyr::mutate(cohort = as.numeric(.data[[x]]) - as.numeric(.data[[y]])) |>
-  dplyr::group_by(cohort) |>
-  dplyr::summarize(total_estimate = sum(.data[[z]], na.rm = TRUE))
-# Filter for top 5% of cohorts
-# Find the 95th percentile of total_estimate
-threshold <- quantile(cohort_estimates$total_estimate, 0.95)
+  # Calculate the total estimate for each cohort
+  cohort_estimates <- dat |>
+    dplyr::mutate(cohort = as.numeric(.data[[x]]) - as.numeric(.data[[y]])) |>
+    dplyr::group_by(cohort) |>
+    dplyr::summarize(total_estimate = sum(.data[[z]], na.rm = TRUE))
+  # Filter for top 5% of cohorts
+  # Find the 95th percentile of total_estimate
+  threshold <- quantile(cohort_estimates$total_estimate, 0.95)
 
-# Filter the original data to keep only the top 5% cohorts
-top_cohorts_data <- dat |>
-  dplyr::mutate(cohort = as.numeric(.data[[x]]) - as.numeric(.data[[y]])) |>
-  dplyr::filter(cohort %in% (cohort_estimates |>
-                       dplyr::filter(total_estimate >= threshold) |>
-                       dplyr::pull(cohort)))
+  # Filter the original data to keep only the top 5% cohorts
+  top_cohorts_data <- dat |>
+    dplyr::mutate(cohort = as.numeric(.data[[x]]) - as.numeric(.data[[y]])) |>
+    dplyr::filter(cohort %in% (cohort_estimates |>
+      dplyr::filter(total_estimate >= threshold) |>
+      dplyr::pull(cohort)))
 
   list(
     # Create line for only the top 5% of cohorts
@@ -473,12 +472,12 @@ top_cohorts_data <- dat |>
 #' @inheritParams plot_spawning_biomass
 #' @param plot a ggplot2 object where the reference line will be added
 #' @param dat standard data frame where reference point should be extracted
-#' @param label_name string of the name of the quantity that users want to 
+#' @param label_name string of the name of the quantity that users want to
 #' extract the reference point from
-#' @param reference string. name of the reference point such as "msy", 
+#' @param reference string. name of the reference point such as "msy",
 #' "unfished", or "target"
 #'
-#' @returns a ggplot2 geom_hline object for a reference point that can be added 
+#' @returns a ggplot2 geom_hline object for a reference point that can be added
 #' to a plot
 #' @export
 #'
@@ -487,15 +486,15 @@ top_cohorts_data <- dat |>
 #' reference_line(dat, "biomass", "msy")
 #' }
 reference_line <- function(
-    plot,
-    dat,
-    era = "time",
-    label_name,
-    reference,
-    relative = FALSE,
-    scale_amount = 1
-    ) {
-  if(!is.null(names(reference))) {
+  plot,
+  dat,
+  era = "time",
+  label_name,
+  reference,
+  relative = FALSE,
+  scale_amount = 1
+) {
+  if (!is.null(names(reference))) {
     ref_line_val <- reference[[1]]
     reference <- names(reference)
   } else {
@@ -505,7 +504,7 @@ reference_line <- function(
       reference_name = glue::glue("{label_name}_{reference}")
     )
   }
-  
+
   # Rename era arg
   era_name <- era
 
@@ -513,7 +512,7 @@ reference_line <- function(
   plot +
     ggplot2::geom_hline(
       # ggplot2::aes(
-        yintercept = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
+      yintercept = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
       # ),
       color = "black",
       linetype = "dashed"
@@ -533,11 +532,10 @@ reference_line <- function(
 
 #------------------------------------------------------------------------------
 
-axis_breaks <- function(data_col){
-
+axis_breaks <- function(data_col) {
   # Get the range of the x-axis data (assuming it's a numeric vector)
   x_range <- range(data_col, na.rm = TRUE)
-  
+
   # Calculate pretty breaks for the x-axis
   scales::breaks_pretty()(x_range)
 }
@@ -573,7 +571,7 @@ cap_first_letter <- function(s) {
 #------------------------------------------------------------------------------
 
 # calculate_uncertainty <- function() {
-  
+
 # }
 
 #------------------------------------------------------------------------------
@@ -589,8 +587,8 @@ cap_first_letter <- function(s) {
 #' @param group Name of a column selected grouping for the data.
 #' @param facet a string or vector of strings of a column that facets the data
 #' (e.g. "year", "area", etc.)
-#' @param era A string naming the era of data such as historical ("early"), current ("time"), or 
-#' projected ("fore") data if filtering should occur. Default is set to "time" which is 
+#' @param era A string naming the era of data such as historical ("early"), current ("time"), or
+#' projected ("fore") data if filtering should occur. Default is set to "time" which is
 #' the current time. To plot all data, set era to NULL.
 #' @param scale_amount A number describing how much to scale down the quantities
 #' shown on the y axis.
@@ -609,15 +607,16 @@ cap_first_letter <- function(s) {
 #' filter_data(dat, "biomass", "line", group = "fleet")
 #' }
 filter_data <- function(
-    dat,
-    label_name,
-    module = NULL,
-    era = "time",
-    geom,
-    group = NULL,
-    facet = NULL,
-    scale_amount = 1,
-    interactive = TRUE) {
+  dat,
+  label_name,
+  module = NULL,
+  era = "time",
+  geom,
+  group = NULL,
+  facet = NULL,
+  scale_amount = 1,
+  interactive = TRUE
+) {
   # TODO: add option to scale data
   # Replace all spaces with underscore if not in proper format
   label_name <- gsub(" ", "_", tolower(label_name))
@@ -636,13 +635,13 @@ filter_data <- function(
     # vignette to show how you can filter the data instead of the devs
     # vignette is the effort to show what to do and has example
     # would have to use the plus operator
-    
+
     if (is.data.frame(dat)) {
       data <- dat
-      model_label = FALSE
+      model_label <- FALSE
     } else {
       data <- dat[[i]]
-      model_label = TRUE
+      model_label <- TRUE
     }
     data <- data |>
       # make sure all labels are lowercase and spaces are replaced with underscores
@@ -691,9 +690,9 @@ filter_data <- function(
         data <- data |>
           dplyr::mutate(
             group_var = switch(geom,
-                               "line" = "solid",
-                               "point" = "black",
-                               1
+              "line" = "solid",
+              "point" = "black",
+              1
             )
           )
       }
@@ -701,25 +700,25 @@ filter_data <- function(
       data <- data |>
         dplyr::mutate(
           group_var = switch(geom,
-                             "line" = "solid",
-                             "point" = "black",
-                             1
+            "line" = "solid",
+            "point" = "black",
+            1
           )
         )
       # Set group to NULL if second condition is met
-      group = NULL
+      group <- NULL
     } else {
       data <- data |>
-          dplyr::mutate(
-            group_var = .data[[group]]
-          )
+        dplyr::mutate(
+          group_var = .data[[group]]
+        )
     }
     list_of_data[[get_id(dat)[i]]] <- data
   }
   # Put in
   plot_data <- dplyr::bind_rows(list_of_data, .id = "model")
   # do.call(rbind, list_of_data)
-  
+
   # Check if there are multiple module_names present
   if (length(unique(plot_data$module_name)) > 1) {
     if (!is.null(module)) {
@@ -735,7 +734,7 @@ filter_data <- function(
         options[i] <- paste0(unique(plot_data$module_name)[i])
       }
       if (interactive()) {
-        if(interactive) {
+        if (interactive) {
           # question1 <- utils::menu(
           #         options,
           #         title = "Please select one of the following:"
@@ -826,11 +825,11 @@ filter_data <- function(
   # }
 
   # TODO: add lines to summarize final data for selected grouping and or facet
-  
+
   if (geom == "area") {
     plot_data <- dplyr::mutate(
       plot_data,
-      model = reorder(.data[["model"]], .data[["estimate"]], function(x) -max(x) )
+      model = reorder(.data[["model"]], .data[["estimate"]], function(x) -max(x))
     )
   }
 
@@ -855,11 +854,11 @@ get_id <- function(dat) {
 # Calculate reference value point
 
 calculate_reference_point <- function(
-    dat,
-    reference_name
+  dat,
+  reference_name
 ) {
   # set reference name to lower case
-  reference_name <- tolower(gsub(" ", "_",reference_name))
+  reference_name <- tolower(gsub(" ", "_", reference_name))
   # Remove values with year - want single point
   dat <- dat |>
     dplyr::mutate(label = tolower(label)) |>
@@ -882,7 +881,7 @@ calculate_reference_point <- function(
       "estimate"
     ])
   }
-  
+
   # Check if the reference value was found
   if (length(ref_line_val) == 0) {
     cli::cli_alert_warning(

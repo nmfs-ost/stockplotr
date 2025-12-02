@@ -1,5 +1,5 @@
 #' Add NOAA theming to ggplot2 object. The palette is from the 'viridis' package, which contains palettes distinguishable by those with color vision deficiency.
-#' 
+#'
 #' @param discrete Variable indicating whether the color or fill aesthetic is discrete. Default is TRUE.
 #' @param ... Arguments passed to `ggplot2::theme()`.
 #'
@@ -7,10 +7,14 @@
 #' @export
 #'
 #' @examples
-#' ggplot2::ggplot(data = OrchardSprays,
-#'                 ggplot2::aes(x = rowpos, 
-#'                              y = decrease,
-#'                              color = treatment)) +
+#' ggplot2::ggplot(
+#'   data = OrchardSprays,
+#'   ggplot2::aes(
+#'     x = rowpos,
+#'     y = decrease,
+#'     color = treatment
+#'   )
+#' ) +
 #'   ggplot2::geom_point() +
 #'   theme_noaa()
 theme_noaa <- function(discrete = TRUE,
@@ -24,27 +28,37 @@ theme_noaa <- function(discrete = TRUE,
       panel.border = ggplot2::element_rect(colour = "black", fill = NA, linewidth = 0.5),
       complete = TRUE,
       text = ggplot2::element_text(size = 14),
-      plot.margin = ggplot2::margin(0.5,1,0.5, 0.5, "cm")
+      plot.margin = ggplot2::margin(0.5, 1, 0.5, 0.5, "cm")
     )
-  ) 
-    
-    if (discrete){
-      list(theme,
-           ggplot2::scale_color_viridis_d(option = "mako",
-                              begin = 0.1,
-                              end = 0.85),
-           ggplot2::scale_fill_viridis_d(option = "mako",
-                             begin = 0.1,
-                             end = 0.85)
-           )
-    } else {
-      list(theme,
-           ggplot2::scale_color_viridis_c(option = "mako",
-                                          begin = 0.1,
-                                          end = 0.85),
-           ggplot2::scale_fill_viridis_c(option = "mako",
-                                         begin = 0.1,
-                                         end = 0.85)
-           )
-    }
+  )
+
+  if (discrete) {
+    list(
+      theme,
+      ggplot2::scale_color_viridis_d(
+        option = "mako",
+        begin = 0.1,
+        end = 0.85
+      ),
+      ggplot2::scale_fill_viridis_d(
+        option = "mako",
+        begin = 0.1,
+        end = 0.85
+      )
+    )
+  } else {
+    list(
+      theme,
+      ggplot2::scale_color_viridis_c(
+        option = "mako",
+        begin = 0.1,
+        end = 0.85
+      ),
+      ggplot2::scale_fill_viridis_c(
+        option = "mako",
+        begin = 0.1,
+        end = 0.85
+      )
+    )
+  }
 }

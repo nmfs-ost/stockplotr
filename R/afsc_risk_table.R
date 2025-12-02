@@ -146,7 +146,6 @@
 #     flextable::vline_left(part = "header") -> tbl
 
 
-
 #   if (tier == 3) {
 #     tier <- "3a"
 #     flextable::font(

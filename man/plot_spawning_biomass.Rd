@@ -23,7 +23,7 @@ plot_spawning_biomass(
 }
 \arguments{
 \item{dat}{A data frame or names list of data frames (input as `list()`)
-returned from \link[asar]{convert_output}. The first data frame in the list 
+returned from \link[asar]{convert_output}. The first data frame in the list
 is used in calculation of a reference line if one is present}
 
 \item{geom}{A string stating the geom used for the plot. Default is "line".
@@ -49,8 +49,8 @@ regardless of how it is specified in `dat`.}
 
 \item{unit_label}{units for spawning_biomass}
 
-\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or 
-projected ("fore") data if filtering should occur. Default is set to "time" which is 
+\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or
+projected ("fore") data if filtering should occur. Default is set to "time" which is
 the current time. To plot all data, set era to NULL.}
 
 \item{module}{(Optional) A string indicating the linked module_name associated
@@ -105,6 +105,6 @@ plot_spawning_biomass(
   dat = stockplotr:::example_data,
   relative = TRUE,
   ref_line = "msy",
-  module = "TIME_SERIES"  
+  module = "TIME_SERIES"
 )
 }
