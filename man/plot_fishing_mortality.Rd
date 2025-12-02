@@ -91,4 +91,11 @@ plot_fishing_mortality(
   interactive = FALSE,
   module = "TIME_SERIES"
 )
+plot_fishing_mortality(
+  dat = stockplotr:::example_data,
+  ref_line = c("target" = 0.2),
+  group = "none",
+  interactive = FALSE,
+  module = "TIME_SERIES"
+)
 }

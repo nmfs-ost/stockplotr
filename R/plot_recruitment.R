@@ -103,7 +103,8 @@ plot_recruitment <- function(
     xlab = "Year",
     ylab = recruitment_label,
     group = group,
-    facet = facet
+    facet = facet#,
+    # ...
   ) +
     theme_noaa()
   

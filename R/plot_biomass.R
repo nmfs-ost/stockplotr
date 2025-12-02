@@ -131,7 +131,8 @@ plot_biomass <- function(
     geom = geom,
     ylab = biomass_label,
     group = group,
-    facet = facet
+    facet = facet,
+    ...
   )
   # Add reference line
   # getting data set - an ifelse statement in the fxn wasn't working
