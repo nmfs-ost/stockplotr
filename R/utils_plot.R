@@ -620,7 +620,7 @@ filter_data <- function(
     interactive = TRUE) {
   # TODO: add option to scale data
   # Replace all spaces with underscore if not in proper format
-  label_name <- sub(" ", "_", tolower(label_name))
+  label_name <- gsub(" ", "_", tolower(label_name))
   list_of_data <- list()
   length_dat <- ifelse(
     is.data.frame(dat),
@@ -645,6 +645,10 @@ filter_data <- function(
       model_label = TRUE
     }
     data <- data |>
+      # make sure all labels are lowercase and spaces are replaced with underscores
+      dplyr::mutate(
+        label = tolower(gsub(" ", "_", label))
+      ) |>
       dplyr::filter(
         grepl(glue::glue("{label_name}"), label)
         # era == era
@@ -854,8 +858,11 @@ calculate_reference_point <- function(
     dat,
     reference_name
 ) {
+  # set reference name to lower case
+  reference_name <- tolower(gsub(" ", "_",reference_name))
   # Remove values with year - want single point
   dat <- dat |>
+    dplyr::mutate(label = tolower(label)) |>
     dplyr::filter(is.na(year))
   # Check if the reference point exists in the data
   if (inherits(try(solve(as.numeric(dat[
