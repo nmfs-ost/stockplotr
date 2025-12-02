@@ -19,7 +19,7 @@ plot_recruitment(
 }
 \arguments{
 \item{dat}{A data frame or names list of data frames (input as `list()`)
-returned from \link[asar]{convert_output}. The first data frame in the list 
+returned from \link[asar]{convert_output}. The first data frame in the list
 is used in calculation of a reference line if one is present}
 
 \item{unit_label}{units for recruitment}
@@ -28,8 +28,8 @@ is used in calculation of a reference line if one is present}
 shown on the y axis. For example, scale_amount = 100 would scale down a value
 from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
 
-\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or 
-projected ("fore") data if filtering should occur. Default is set to "time" which is 
+\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or
+projected ("fore") data if filtering should occur. Default is set to "time" which is
 the current time. To plot all data, set era to NULL.}
 
 \item{group}{a string of a single column that groups the data (e.g. "fleet",
@@ -78,9 +78,9 @@ plot_recruitment(
   make_rda = FALSE
 )
 plot_recruitment(
- dat = stockplotr:::example_data,
- era = "fore",
- module = "TIME_SERIES",
- make_rda = FALSE
+  dat = stockplotr:::example_data,
+  era = "fore",
+  module = "TIME_SERIES",
+  make_rda = FALSE
 )
 }
