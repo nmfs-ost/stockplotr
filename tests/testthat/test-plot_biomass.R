@@ -45,13 +45,13 @@ test_that("plot_biomass generates plots without errors", {
   expect_no_error(
     plot_biomass(
       out_new,
-      ref_point = 18000,
+      ref_point = c("target" = 18000),
       unit_label = "metric tons",
       scale_amount = 1,
-      end_year = 2024,
       relative = FALSE,
       make_rda = FALSE,
-      figures_dir = getwd()
+      figures_dir = getwd(),
+      module = "TIME_SERIES"
     )
   )
   
@@ -71,9 +71,9 @@ test_that("plot_biomass generates plots without errors", {
       out_new,
       unit_label = "metric tons",
       scale_amount = 1,
-      end_year = 2024,
       make_rda = FALSE,
-      figures_dir = getwd()
+      figures_dir = getwd(),
+      module = "TIME_SERIES"
     ),
     "gg"
   )
@@ -110,7 +110,7 @@ test_that("rda file made when indicated", {
     out_new,
     figures_dir = getwd(),
     make_rda = TRUE,
-    end_year = 2023
+    module = "TIME_SERIES"
   )
   
   # expect that both figures dir and the biomass_figure.rda file exist
