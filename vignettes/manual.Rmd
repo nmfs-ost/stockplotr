@@ -40,7 +40,7 @@ Directly edit the rda's caption or alt_text objects. To do so, assign a new valu
 
 2. Load it into your R environment. You can do this by clicking the file or by using a command like this: `load("biomass_figure.rda")`. It will probably be called `rda`.
 
-3. If you want to change the caption to "my new caption", you'd enter the following command: `rda[["caption"]] <- "my new caption"`. To change the alt text, you'd change "cap" to "alt_text" (e.g., `rda[["alt_text"]] <- "my new alt text"`.).
+3. If you want to change the caption to "my new caption", you'd enter the following command: `rda[["caption"]] <- "my new caption"`. To change the alt text, you'd change "caption" to "alt_text" (e.g., `rda[["alt_text"]] <- "my new alt text"`.).
 
 4. Save the changes to the rda's file (most likely you'll want to overwrite your original rda) by entering the following command: `save(rda, file = 'biomass_figure.rda')`.
 
