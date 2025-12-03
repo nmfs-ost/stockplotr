@@ -43,10 +43,10 @@ install.packages("remotes")
 remotes::install_github("nmfs-ost/stockplotr")
 ```
 
-(3) From the nmfs-ost r-universe
+(3) From the noaa-fisheries-integrated-toolbox r-universe
 
 ```r
-install.packages("stockplotr", repos = c("https://nmfs-ost.r-universe.dev", "https://cloud.r-project.org"))
+install.packages('stockplotr', repos = c('https://noaa-fisheries-integrated-toolbox.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
 ## Usage
