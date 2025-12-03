@@ -1762,7 +1762,7 @@ extract_caps_alttext <- function(topic_label = NULL,
   )
   
   # extract plot or table's caption and alt text
-  cap <- captions_alttext_df |>
+  caption <- captions_alttext_df |>
     dplyr::filter(
       label == topic_label,
       type == fig_or_table
@@ -1780,11 +1780,11 @@ extract_caps_alttext <- function(topic_label = NULL,
       as.character()
     
     caps_alttext_list <- list(
-      cap,
+      caption,
       alt_text
     )
   } else {
-    caps_alttext_list <- list(cap)
+    caps_alttext_list <- list(caption)
   }
   
   return(caps_alttext_list)
@@ -1842,7 +1842,7 @@ export_rda <- function(object = NULL,
   if (fig_or_table == "figure") {
     rda <- list(
       "figure" = object,
-      "cap" = caps_alttext[[1]],
+      "caption" = caps_alttext[[1]],
       "alt_text" = caps_alttext[[2]]
     )
     rda_loc <- "figures"
@@ -1857,7 +1857,7 @@ export_rda <- function(object = NULL,
   } else if (fig_or_table == "table") {
     rda <- list(
       "table" = object,
-      "cap" = caps_alttext[[1]]
+      "caption" = caps_alttext[[1]]
     )
     rda_loc <- "tables"
     # check if a tables folder already exists; if not, make one
