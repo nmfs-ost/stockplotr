@@ -101,6 +101,209 @@ table_landings <- function(
     label = "landings",
     unit_label
   )
+  
+  # filter_data <- function(
+  #   dat,
+  #   label_name,
+  #   module = NULL,
+  #   era = "time",
+  #   geom,
+  #   group = NULL,
+  #   facet = NULL,
+  #   scale_amount = 1,
+  #   interactive = TRUE) {
+
+  # read standard data file and extract target quantity
+  prepared_data <- dat |>
+    dplyr::filter(
+      c(module_name == "TIME_SERIES" & grepl("landings_observed", label)) | c(module_name == "CATCH" & grepl("ret_bio", label)),
+      # t.series is associated with a conversion from BAM output and CATCH with SS3 converted output
+      !is.na(fleet)
+    ) |>
+    dplyr::mutate(
+      estimate = as.numeric(estimate),
+      year = as.numeric(year)
+    ) |>
+    suppressWarnings() |>
+    dplyr::filter(
+      !is.na(year)
+    ) |>
+    dplyr::filter(year <= end_year) 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  #   # TODO: add option to scale data
+  #   # Replace all spaces with underscore if not in proper format
+  #   label_name <- gsub(" ", "_", tolower(label_name))
+  #   list_of_data <- list()
+  #   length_dat <- ifelse(
+  #     is.data.frame(dat),
+  #     1,
+  #     length(dat)
+  #   )
+  #   for (i in 1:length_dat) {
+  #     # start for loop to bring together each data as their own geom
+  #     # Add columns to data if grouping is selected
+  #     # format geoms the way we want
+  #     # ggplot easier and more consistent to use
+  #     # defaults are focused for stock assessment
+  #     # vignette to show how you can filter the data instead of the devs
+  #     # vignette is the effort to show what to do and has example
+  #     # would have to use the plus operator
+  #     
+  #     if (is.data.frame(dat)) {
+  #       data <- dat
+  #       model_label = FALSE
+  #     } else {
+  #       data <- dat[[i]]
+  #       model_label = TRUE
+  #     }
+  #     data <- data |>
+  #       # make sure all labels are lowercase and spaces are replaced with underscores
+  #       dplyr::mutate(
+  #         label = tolower(gsub(" ", "_", label))
+  #       ) |>
+  #       dplyr::filter(
+  #         grepl(glue::glue("{label_name}"), label)
+  #         # era == era
+  #       ) |>
+  #       dplyr::mutate(
+  #         year = as.numeric(year),
+  #         model = ifelse(model_label, get_id(dat)[i], NA),
+  #         estimate = as.numeric(estimate) / scale_amount,
+  #         # calc uncertainty when se
+  #         # TODO: calculate other sources of error to upper and lower (cv,)
+  #         estimate_lower = dplyr::case_when(
+  #           grepl("se", uncertainty_label) ~ (estimate - (1.96 * uncertainty)) / scale_amount,
+  #           grepl("sd", tolower(uncertainty_label)) | grepl("std", tolower(uncertainty_label)) ~ (estimate - uncertainty) / scale_amount,
+  #           grepl("cv", tolower(uncertainty_label)) ~ (estimate - (1.96 * (uncertainty * estimate))) / scale_amount,
+  #           TRUE ~ NA
+  #         ),
+  #         estimate_upper = dplyr::case_when(
+  #           grepl("se", uncertainty_label) ~ (estimate + (1.96 * uncertainty)) / scale_amount,
+  #           grepl("sd", tolower(uncertainty_label)) | grepl("std", tolower(uncertainty_label)) ~ (estimate + uncertainty) / scale_amount,
+  #           grepl("cv", tolower(uncertainty_label)) ~ (estimate + (1.96 * (uncertainty * estimate))) / scale_amount,
+  #           TRUE ~ NA
+  #         )
+  #       )
+  #     # must rename era arg bc dplyr gets confused
+  #     era_selection <- era
+  #     if (!is.null(era)) {
+  #       data <- dplyr::filter(
+  #         data,
+  #         grepl(era_selection, era)
+  #       )
+  #     }
+  #     if (nrow(data) < 1) cli::cli_abort("{label_name} not found.")
+  #     if (is.null(group)) {
+  #       if (!is.data.frame(dat)) {
+  #         data <- data |>
+  #           dplyr::mutate(
+  #             group_var = as.character(.data[["model"]])
+  #           )
+  #       } else {
+  #         data <- data |>
+  #           dplyr::mutate(
+  #             group_var = switch(geom,
+  #                                "line" = "solid",
+  #                                "point" = "black",
+  #                                1
+  #             )
+  #           )
+  #       }
+  #     } else if (all(is.na(data[[group]]))) {
+  #       data <- data |>
+  #         dplyr::mutate(
+  #           group_var = switch(geom,
+  #                              "line" = "solid",
+  #                              "point" = "black",
+  #                              1
+  #           )
+  #         )
+  #       # Set group to NULL if second condition is met
+  #       group = NULL
+  #     } else {
+  #       data <- data |>
+  #         dplyr::mutate(
+  #           group_var = .data[[group]]
+  #         )
+  #     }
+  #     list_of_data[[get_id(dat)[i]]] <- data
+  #   }
+  #   # Put in
+  #   plot_data <- dplyr::bind_rows(list_of_data, .id = "model")
+  #   # do.call(rbind, list_of_data)
+  #   
+  #   # Check if there are multiple module_names present
+  #   if (length(unique(plot_data$module_name)) > 1) {
+  #     if (!is.null(module)) {
+  #       plot_data <- plot_data |>
+  #         dplyr::filter(
+  #           module_name %in% module
+  #         )
+  #     } else {
+  #       cli::cli_alert_warning("Multiple module names found in data. \n")
+  #       options <- c()
+  #       for (i in seq_along(unique(plot_data$module_name))) {
+  #         # options <- paste0(options, " ", i, ") ", unique(plot_data$module_name)[i], "\n")
+  #         options[i] <- paste0(unique(plot_data$module_name)[i])
+  #       }
+  #       if (interactive()) {
+  #         if(interactive) {
+  #           # question1 <- utils::menu(
+  #           #         options,
+  #           #         title = "Please select one of the following:"
+  #           #       )
+  #           question1 <- utils::select.list(
+  #             options,
+  #             multiple = TRUE,
+  #             title = "Select one or more of the following module names"
+  #           )
+  #           # selected_module <- unique(plot_data$module_name)[as.numeric(question1)]
+  #           selected_module <- intersect(
+  #             unique(plot_data$module_name),
+  #             question1
+  #           )
+  #         } else {
+  #           selected_module <- unique(plot_data$module_name)[1]
+  #           cli::cli_alert_info("Selection bypassed. Filtering by {selected_module}.")
+  #         }
+  #       } else {
+  #         selected_module <- unique(plot_data$module_name)[1]
+  #         cli::cli_alert_info(glue::glue("Environment not interactive. Selecting {selected_module}."))
+  #       }
+  #       if (length(selected_module) > 0) {
+  #         plot_data <- plot_data |>
+  #           dplyr::filter(
+  #             module_name %in% selected_module
+  #           )
+  #       }
+  #     }
+  #   }
+  # }
+  # 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  # TODO: add an option to stratify by gear type
+
+  # Units
+  land_label <- glue::glue("Landings ({unit_label})")
 
   # transform dfs into tables
   final <- lapply(df_list, function(df) {
