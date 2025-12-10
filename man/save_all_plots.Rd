@@ -30,7 +30,7 @@ save_all_plots(
 }
 \arguments{
 \item{dat}{A data frame or names list of data frames (input as `list()`)
-returned from \link[asar]{convert_output}. The first data frame in the list 
+returned from \link[asar]{convert_output}. The first data frame in the list
 is used in calculation of a reference line if one is present}
 
 \item{recruitment_unit_label}{Units for recruitment}
@@ -60,7 +60,7 @@ searching in `dat` is case agnostic and will work with either upper- or
 lower-case letters but you must use one of the options specified in the
 default list to ensure that the label on the figure looks correct
 regardless of how it is specified in `dat`. Other possibilities may include
-"target", "MSY", and "unfished". When the reference cannot be found, 
+"target", "MSY", and "unfished". When the reference cannot be found,
 indicate the reference line in the form c("label" = value).}
 
 \item{biomass_scale_amount}{A number describing how much to scale down the
