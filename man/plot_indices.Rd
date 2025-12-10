@@ -19,7 +19,7 @@ plot_indices(
 }
 \arguments{
 \item{dat}{A data frame or names list of data frames (input as `list()`)
-returned from \link[asar]{convert_output}. The first data frame in the list 
+returned from \link[asar]{convert_output}. The first data frame in the list
 is used in calculation of a reference line if one is present}
 
 \item{unit_label}{units for index of abundance/CPUE}
@@ -42,7 +42,7 @@ filtering when preparing data for the plot. Default is FALSE.}
 with the label for the plot if known. Default is NULL. By default, the function
 will select the most relevant module if more than 1 exists.}
 
-\item{focus}{a string or vector of strings indicating how data should be 
+\item{focus}{a string or vector of strings indicating how data should be
 filtered. (i.e. select names of fleets to zoom into the plot)}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
@@ -57,7 +57,7 @@ Default is the working directory.}
 \item{...}{Arguments called from ggplot2::geom_line or ggplot2::geom_point}
 }
 \value{
-Plot the expected and predicted indices as indicated from a standard 
+Plot the expected and predicted indices as indicated from a standard
 assessment model output file.
 }
 \description{
@@ -67,6 +67,6 @@ Plot Index of Abundance
 plot_indices(
   dat = stockplotr:::example_data,
   unit_label = "fish/hr",
-  interactive= FALSE
+  interactive = FALSE
 )
 }

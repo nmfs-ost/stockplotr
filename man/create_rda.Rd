@@ -24,7 +24,7 @@ create_rda(
 
 \item{fig_or_table}{A string identifying if the object is a "table" or "figure"}
 
-\item{dat}{Data frame containing data which will fill in captions and 
+\item{dat}{Data frame containing data which will fill in captions and
 alternative text for the object}
 
 \item{dir}{Directory to where the rda will be saved}
@@ -51,11 +51,11 @@ Create the rda package for a plot or table
 \examples{
 \dontrun{
 create_rda(
- object = my_plot,
- topic_label = "my_plot",
- fig_or_table = "figure",
- dat = my_data,
- dir = "path/to/save"
+  object = my_plot,
+  topic_label = "my_plot",
+  fig_or_table = "figure",
+  dat = my_data,
+  dir = "path/to/save"
 )
 }
 }

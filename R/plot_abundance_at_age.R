@@ -1,7 +1,7 @@
 #' Plot Abundance (or Numbers) at Age (AAA or NAA)
 #'
 #' @param dat A data frame returned from \link[asar]{convert_output}
-#' @param facet a string or vector of strings of column(s) that 
+#' @param facet a string or vector of strings of column(s) that
 #' groups the data (e.g. "fleet", "sex", "area", etc.). Set facet = "none" to
 #' summarize the data in a single plot.
 #' @param unit_label units for abundance
@@ -43,14 +43,14 @@
 #'   proportional = FALSE
 #' )
 plot_abundance_at_age <- function(
-    dat,
-    facet = NULL,
-    unit_label = "fish",
-    scale_amount = 1000,
-    proportional = TRUE,
-    make_rda = FALSE,
-    figures_dir = getwd()
-    ) {
+  dat,
+  facet = NULL,
+  unit_label = "fish",
+  scale_amount = 1000,
+  proportional = TRUE,
+  make_rda = FALSE,
+  figures_dir = getwd()
+) {
   # Create label for abundance units in legend
   abundance_label <- label_magnitude(
     label = "Abudance",
@@ -66,7 +66,7 @@ plot_abundance_at_age <- function(
     scale_amount = scale_amount,
     interactive = FALSE
   )
-  
+
   if (!is.null(facet) && facet == "none") {
     data <- b |>
       dplyr::group_by(year, age) |>
@@ -88,8 +88,8 @@ plot_abundance_at_age <- function(
     group <- processed_data[[2]]
     facet <- processed_data[[3]]
   }
-  
-  
+
+
   # Check for extracted data, if not return warning and empty plot
   if (nrow(b) == 0) {
     cli::cli_alert_warning("No data found for abundance at age. Please check the input data.")
@@ -105,10 +105,10 @@ plot_abundance_at_age <- function(
     label = abundance_label,
     proportional = proportional
   ) +
-  average_age_line(
-    dat = data,
-    facet = facet
-  )
+    average_age_line(
+      dat = data,
+      facet = facet
+    )
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
     create_rda(

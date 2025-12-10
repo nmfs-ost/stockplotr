@@ -2,10 +2,10 @@
 #'
 #' @inheritParams plot_spawning_biomass
 #'
-#' @return Plot natural mortality at age from a stock assessment model as 
+#' @return Plot natural mortality at age from a stock assessment model as
 #' found in a NOAA stock assessment report.
 #' @export
-#' 
+#'
 #' @examples
 #' plot_natural_mortality(
 #'   dat = stockplotr:::example_data,
@@ -13,25 +13,24 @@
 #'   interactive = FALSE
 #' )
 plot_natural_mortality <- function(
-    dat,
-    group = NULL,
-    facet = NULL,
-    era = NULL,
-    interactive = TRUE,
-    module = NULL,
-    make_rda = FALSE,
-    figures_dir = getwd(),
-    ...
-  ) {
-  
+  dat,
+  group = NULL,
+  facet = NULL,
+  era = NULL,
+  interactive = TRUE,
+  module = NULL,
+  make_rda = FALSE,
+  figures_dir = getwd(),
+  ...
+) {
   # TODO:
   # -update M.rate.min, max in write_captions once prev point done
   # -Make test
   # -add to exp_all_figs_tables
-  
+
   # Extract natural mortality
   # if (is.null(group)) group <- "age"
-  
+
   prepared_data <- filter_data(
     dat,
     label_name = "natural_mortality",
@@ -42,17 +41,17 @@ plot_natural_mortality <- function(
     interactive = interactive,
     module = module
   )
-  
+
   # Set group back to NULL if it is age since this is an at age plot
   # if (group == "age") {
   #   prepared_data <- prepared_data |>
   #     dplyr::mutate(group_var = "1")
   #   group <- NULL
   # }
-  
+
   # STOP if there are no ages -- indicating this is a single M and would not be plotted
   if (all(is.na(prepared_data$age))) cli::cli_abort("Natural mortality by age not found.")
-  
+
   # Alert if group = "none"
   if (!is.null(group) && group == "none") {
     cli::cli_alert_warning("Setting group to 'none' is not functional for this plot. Setting group to NULL.")
@@ -82,8 +81,8 @@ plot_natural_mortality <- function(
     processed_data <- processed_data |>
       dplyr::mutate(group_var = .data[[group]])
   }
-  
-  
+
+
   plt <- plot_timeseries(
     dat = processed_data |> dplyr::mutate(age = as.numeric(age)),
     x = "age",
@@ -94,9 +93,9 @@ plot_natural_mortality <- function(
     group = group,
     facet = facet
   )
-  
+
   final <- plt + theme_noaa(discrete = TRUE)
-  
+
   ### Make RDA ----
   if (make_rda) {
     create_rda(

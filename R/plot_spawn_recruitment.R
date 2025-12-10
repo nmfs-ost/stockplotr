@@ -23,15 +23,16 @@
 #'   module = "SPAWN_RECRUIT"
 #' )
 plot_spawn_recruitment <- function(
-    dat,
-    spawning_biomass_label = "mt",
-    recruitment_label = "mt",
-    interactive = TRUE,
-    # era = "time",
-    module = NULL,
-    scale_amount = 1,
-    make_rda = FALSE,
-    figures_dir = getwd()) {
+  dat,
+  spawning_biomass_label = "mt",
+  recruitment_label = "mt",
+  interactive = TRUE,
+  # era = "time",
+  module = NULL,
+  scale_amount = 1,
+  make_rda = FALSE,
+  figures_dir = getwd()
+) {
   # Extract recruitment
   recruitment <- filter_data(
     dat = dat,
@@ -41,24 +42,24 @@ plot_spawn_recruitment <- function(
     scale_amount = scale_amount,
     interactive = interactive,
     module = module
-  ) 
+  )
   if (length(unique(recruitment$label)) > 1) {
     recruitment <- recruitment |>
       tidyr::pivot_wider(
-      id_cols = c(year, model, group_var, estimate_lower, estimate_upper),
-      names_from = label,
-      values_from = estimate
-    )
+        id_cols = c(year, model, group_var, estimate_lower, estimate_upper),
+        names_from = label,
+        values_from = estimate
+      )
   } else {
     recruitment <- recruitment |>
-    dplyr::rename(predicted_recruitment = estimate) |>
-    dplyr::select(-c(label))
+      dplyr::rename(predicted_recruitment = estimate) |>
+      dplyr::select(-c(label))
   }
 
   if (any(grepl("^recruitment$", colnames(recruitment)))) {
     recruitment <- dplyr::rename(recruitment, predicted_recruitment = recruitment)
   }
-  
+
   # Extract spawning biomass
   sb <- filter_data(
     dat = dat,
@@ -69,8 +70,8 @@ plot_spawn_recruitment <- function(
     interactive = interactive,
     module = module
   ) |>
-  dplyr::rename(spawning_biomass = estimate) |>
-  dplyr::select(-c(label))
+    dplyr::rename(spawning_biomass = estimate) |>
+    dplyr::select(-c(label))
 
   # Merge recruitment and spawning biomass data
   sr <- dplyr::left_join(sb, recruitment)
@@ -89,53 +90,53 @@ plot_spawn_recruitment <- function(
     legend = FALSE
   )
 
-   # Plot
-   final <- plot_timeseries(
-     dat = sr,
-     x = "spawning_biomass",
-     y = "predicted_recruitment",
-     geom = "point",
-     color = "black",
-     xlab = sb_lab,
-     ylab = recruitment_lab,
-     facet = {
-       if (length(unique(sr$model)) > 1) {
-         "model"
-       } else {
-         NULL
-       }
-     }
-   ) +
-  #  ggplot2::scale_y_continuous(
-  #      labels = scales::label_comma()
-  #  ) +
-  # want to overwrite the default for x-axis bc it's not year in this case
-   ggplot2::scale_x_continuous(
-     labels = scales::label_comma()
-   ) +
-   theme_noaa()
- 
-   if ("expected_recruitment" %in% names(sr)) {
-     final <- final +
+  # Plot
+  final <- plot_timeseries(
+    dat = sr,
+    x = "spawning_biomass",
+    y = "predicted_recruitment",
+    geom = "point",
+    color = "black",
+    xlab = sb_lab,
+    ylab = recruitment_lab,
+    facet = {
+      if (length(unique(sr$model)) > 1) {
+        "model"
+      } else {
+        NULL
+      }
+    }
+  ) +
+    #  ggplot2::scale_y_continuous(
+    #      labels = scales::label_comma()
+    #  ) +
+    # want to overwrite the default for x-axis bc it's not year in this case
+    ggplot2::scale_x_continuous(
+      labels = scales::label_comma()
+    ) +
+    theme_noaa()
+
+  if ("expected_recruitment" %in% names(sr)) {
+    final <- final +
       ggplot2::geom_line(
-       data = sr,
-       ggplot2::aes(x = spawning_biomass, y = expected_recruitment),
-       color = "red"
-     )
-   }
-  
-   # Make RDA
-   if (make_rda) {
-     create_rda(
-       object = final,
-       topic_label = "sr",
-       fig_or_table = "figure",
-       dat = dat,
-       dir = figures_dir# ,
-       # unit_label = unit_label
-     )
-   }
-  final  +
+        data = sr,
+        ggplot2::aes(x = spawning_biomass, y = expected_recruitment),
+        color = "red"
+      )
+  }
+
+  # Make RDA
+  if (make_rda) {
+    create_rda(
+      object = final,
+      topic_label = "sr",
+      fig_or_table = "figure",
+      dat = dat,
+      dir = figures_dir # ,
+      # unit_label = unit_label
+    )
+  }
+  final +
     ggplot2::scale_x_continuous(
       labels = scales::label_comma()
     )

@@ -4,10 +4,10 @@
 #' @param facet a string or vector of strings of a column that facets the data
 #' (e.g. "year", "area", etc.) "fleet" is always added on to any faceting selections
 #' @param unit_label units for index of abundance/CPUE
-#' @param focus a string or vector of strings indicating how data should be 
+#' @param focus a string or vector of strings indicating how data should be
 #' filtered. (i.e. select names of fleets to zoom into the plot)
 #'
-#' @return Plot the expected and predicted indices as indicated from a standard 
+#' @return Plot the expected and predicted indices as indicated from a standard
 #' assessment model output file.
 #' @export
 #'
@@ -15,28 +15,28 @@
 #' plot_indices(
 #'   dat = stockplotr:::example_data,
 #'   unit_label = "fish/hr",
-#'   interactive= FALSE
+#'   interactive = FALSE
 #' )
 plot_indices <- function(
-    dat,
-    unit_label = "",
-    group = NULL,
-    # facet always assigned to fleet since that is how indices are calc'd -- unless replaced with NULL
-    facet = "fleet",
-    interactive = TRUE,
-    module = NULL,
-    focus = NULL,
-    make_rda = FALSE,
-    figures_dir = NULL,
-    ...
-    ) {
+  dat,
+  unit_label = "",
+  group = NULL,
+  # facet always assigned to fleet since that is how indices are calc'd -- unless replaced with NULL
+  facet = "fleet",
+  interactive = TRUE,
+  module = NULL,
+  focus = NULL,
+  make_rda = FALSE,
+  figures_dir = NULL,
+  ...
+) {
   # Set cpue unit label for plot
   u_units <- ifelse(
     is.null(unit_label) | unit_label == "",
     glue::glue("Estimated Index"),
     glue::glue("Estimated Index ({unit_label})")
   )
-  
+
   if (!is.null(facet)) {
     if (facet != "fleet") {
       facet <- c(facet, "fleet")
@@ -52,14 +52,14 @@ plot_indices <- function(
     # ifelse(length(unique(prepared_data$label)) > 1, "label", group)
     # above does not work if it happens during this step lol
     group = group,
-    facet = facet, 
+    facet = facet,
     interactive = interactive,
     module = module
   )
-  
+
   # Subset data if focus
   if (!is.null(focus)) {
-    prepared_data <- prepared_data |> 
+    prepared_data <- prepared_data |>
       dplyr::filter(fleet %in% focus)
   }
 
@@ -84,11 +84,11 @@ plot_indices <- function(
       ...
     ) +
       # commenting out but might need this later -- not sure if this will always be true
-    ggplot2::labs(
-      linetype = "",
-      fill = ""
-    ) +
-    theme_noaa() +
+      ggplot2::labs(
+        linetype = "",
+        fill = ""
+      ) +
+      theme_noaa() +
       ggplot2::scale_x_continuous(
         breaks = ggplot2::waiver(),
         # labels = scales::label_number(accuracy = 1),
@@ -110,7 +110,7 @@ plot_indices <- function(
       ...
     )
   }
-  
+
   ### Make RDA ----
   if (make_rda) {
     create_rda(

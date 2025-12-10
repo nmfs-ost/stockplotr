@@ -56,9 +56,9 @@ plot_landings <- function(
     module = module,
     scale_amount = scale_amount,
     interactive = interactive
-  ) # |> 
-    # filter NA from year
-    # dplyr::filter(!is.na(year))
+  ) # |>
+  # filter NA from year
+  # dplyr::filter(!is.na(year))
   # Process data
   processed_data <- process_data(
     dat = prepared_data,
@@ -69,19 +69,19 @@ plot_landings <- function(
   prepared_data <- processed_data[[1]]
   group <- processed_data[2]
   facet <- processed_data[[3]]
-  
+
   # Check if there is >1 label
   if (length(prepared_data$label) > 1) {
     prepared_data <- prepared_data |>
       # always select the first label if TRUE
       dplyr::filter(label == unique(label)[1])
   }
-    
+
   # Override grouping variable when there is only NA's
   if (!is.null(group)) {
-    if (group %notin% colnames(prepared_data)) group = NULL
+    if (group %notin% colnames(prepared_data)) group <- NULL
   }
-    
+
   # inital base plot
   plt <- plot_timeseries(
     dat = prepared_data,
@@ -92,11 +92,11 @@ plot_landings <- function(
     facet = facet,
     ...
   ) + theme_noaa()
-  
+
   if (length(unique(prepared_data$group_var)) == 1) {
     plt <- plt + ggplot2::theme(legend.position = "none")
   }
-    
+
   ### Make RDA ----
   if (make_rda) {
     create_rda(
