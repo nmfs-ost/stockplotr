@@ -3,8 +3,8 @@
 #' @inheritParams plot_recruitment
 #' @param unit_label Abbreviated units of landings
 #' @param tables_dir The location of the folder containing the generated table
-#' rda files ("tables") that will be created if the argument `make_rda` = TRUE.
-#' Default is the working directory.
+#' rda files ("tables") that will be created if the argument `make_rda` = TRUE. 
+#' @param label The label that will be chosen from the input file. If unspecified, the function will search the "label" column and use the first matching label in this ordered list: "landings_weight",  "landings_numbers", "landings_expected", "landings_predicted", "landings".
 #'
 #' @return Create a table ready for a stock assessment report of landed catch by
 #' fleet and year.
@@ -28,6 +28,7 @@ table_landings <- function(dat,
                            interactive = TRUE,
                            module = NULL,
                            scale_amount = 1,
+                           label = "landings_weight",
                            make_rda = FALSE,
                            tables_dir = getwd()) {
   
@@ -51,41 +52,60 @@ table_landings <- function(dat,
     interactive = interactive
   )
   
+  # order potential labels by applicability
+  ordered_labels <- c("landings_weight", 
+                      "landings_numbers",
+                      "landings_expected",
+                      "landings_predicted",
+                      "landings")
+  
+  # Choose label to filter by, based on presence in prepared_data
+  for (lab in ordered_labels) {
+    if (lab %in% prepared_data$label) {
+      target_label <- lab
+      break
+    }
+  }
+  prepared_data2 <- prepared_data |>
+    dplyr::filter(label == target_label)
+  
   #TODO: add check for if length of label > 1 (if TRUE, then a specific value (e.g., observed?) will need to be selected)
 
   # add a check for which landings-related name to extract (e.g., expected, observed, cv...)
   
   table_data <- process_table(
-    dat = prepared_data,
+    dat = prepared_data2,
     group = group,
     method = method)
   
-  # put table_data into a nice table (kable)
+  # put table_data into a nice table
   # ensure cols in order: estimate, error, est, error, etc.
   # try to keep it to one column
-  capitalized_names <- c(year = "Year",
-                         sex = "Sex",
-                         fleet = "Fleet",
-                         model = "Model")
+  capitalized_names <- c("Year" = "year",
+                         "Sex" = "sex",
+                         "Fleet" = "fleet",
+                         "Model" = "model")
   
-  final <- table_data |>
-    dplyr::rename(dplyr::any_of(capitalized_names)) |>
-    dplyr::rename_with(~ gsub("_NA|_label|estimate_", "", .)) #|>
-    kableExtra::kable(format = "latex")
+  landings_colname <- paste0("Landings (", unit_label, ")")
+  
+  #TODO: Update add_theme() for gt tables
+  final_df <- table_data |>
+      dplyr::rename(dplyr::any_of(capitalized_names)) |>
+      dplyr::rename_with(~ gsub("_NA|_label|estimate_", "", .)) |>
+      dplyr::rename(dplyr::any_of(stats::setNames(target_label, landings_colname))) |>
+      dplyr::rename_with(~ gsub(target_label, "", .)) |>
+      dplyr::rename_with(~ gsub("^uncertainty_$", "Uncertainty", .))
+  
+  final <- final_df |>
+      gt::gt() 
 
+  # Progress:
+    # for bsb, hake, vsnap, and stockplotr::example_data, cols are:
+    #    "Year", "Landings (<unit>)", "Uncertainty"
+
+      
   # TODO: Reorder column names so that numeric fleets show up in chronological
   # order (currently, lists 1, 10, 11, 12, etc.)
-
-  # land <- land |>
-  #   dplyr::select(order(colnames(land),
-  #     method = "auto"
-  #   )) |>
-  #   dplyr::relocate(Year, .before = 1) |>
-  #   dplyr::rename_with(~ stringr::str_replace(
-  #     .,
-  #     "Landings",
-  #     land_label
-  #   ))
   
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
@@ -119,7 +139,7 @@ table_landings <- function(dat,
     )
     
     # create LaTeX-based table
-    latex_table <- create_latex_table(data = land,
+    latex_table <- create_latex_table(data = final_df,
                        caption = caps_alttext[1],
                        label = "landings_latex")
 
