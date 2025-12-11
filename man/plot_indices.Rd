@@ -69,5 +69,4 @@ plot_indices(
   unit_label = "fish/hr",
   interactive = FALSE
 )
-
 }

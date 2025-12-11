@@ -15,6 +15,18 @@ plot_timeseries(
   facet = NULL,
   ...
 )
+
+plot_timeseries(
+  dat,
+  x = "year",
+  y = "estimate",
+  geom = "line",
+  xlab = "Year",
+  ylab = NULL,
+  group = NULL,
+  facet = NULL,
+  ...
+)
 }
 \arguments{
 \item{dat}{filtered data frame from standard output file(s) preformatted for
@@ -41,6 +53,8 @@ of `y`.}
 (e.g. "year", "area", etc.)}
 
 \item{...}{inherited arguments from internal functions from ggplot2::geom_xx}
+
+\item{hline}{indicate true or false to place a horizontal line at 1}
 }
 \value{
 Create a time series plot for a stock assessment report. The user
@@ -48,13 +62,20 @@ has options to create a line, point, or area plot where the x-axis is year
 and Y can vary for any time series quantity. Currently, grouping is
 restricted to one group where faceting can be any number of facets.
 
+<<<<<<< HEAD
 Create a time series plot for a stock assessment report. The user
 has options to create a line, point, or area plot where the x-axis is year
+=======
+Create a time series plot for a stock assessment report. The user 
+has options to create a line, point, or area plot where the x-axis is year 
+>>>>>>> 3b39d6c (Update documentation)
 and Y can vary for any time series quantity. Currently, grouping is
 restricted to one group where faceting can be any number of facets.
 }
 \description{
 Plot time series trends
+
+Create plot with error
 }
 \examples{
 \dontrun{
