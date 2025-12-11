@@ -1131,7 +1131,7 @@ check_grouping <- function(dat) {
     "fleet", "sex",
     "area", "growth_pattern", "month",
     "season", "platoon", "bio_pattern",
-    "settlement", "morph", "block"
+    "settlement", "morph", "block", "length_bins"
   )
   # Create emppty vector
   dat_index <- c()
