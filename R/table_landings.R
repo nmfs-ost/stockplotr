@@ -102,35 +102,22 @@ table_landings <- function(
     unit_label
   )
   
-  # filter_data <- function(
-  #   dat,
-  #   label_name,
-  #   module = NULL,
-  #   era = "time",
-  #   geom,
-  #   group = NULL,
-  #   facet = NULL,
-  #   scale_amount = 1,
-  #   interactive = TRUE) {
+  #TODO: add check for if length of label > 1 (if TRUE, then a specific value (e.g., observed?) will need to be selected)
 
-  # read standard data file and extract target quantity
-  prepared_data <- dat |>
-    dplyr::filter(
-      c(module_name == "TIME_SERIES" & grepl("landings_observed", label)) | c(module_name == "CATCH" & grepl("ret_bio", label)),
-      # t.series is associated with a conversion from BAM output and CATCH with SS3 converted output
-      !is.na(fleet)
-    ) |>
-    dplyr::mutate(
-      estimate = as.numeric(estimate),
-      year = as.numeric(year)
-    ) |>
-    suppressWarnings() |>
-    dplyr::filter(
-      !is.na(year)
-    ) |>
-    dplyr::filter(year <= end_year) 
+  # add a check for which landings-related name to extract (e.g., expected, observed, cv...)
   
+  table_data <- process_table(
+    dat = prepared_data,
+    group = group,
+    method = method)
   
+  # put table_data into a nice table (kable)
+  # ensure cols in order: estimate, error, est, error, etc.
+  # try to keep it to one column
+  capitalized_names <- c(year = "Year",
+                         sex = "Sex",
+                         fleet = "Fleet",
+                         model = "Model")
   
   
   
