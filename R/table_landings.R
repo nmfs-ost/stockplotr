@@ -102,22 +102,39 @@ table_landings <- function(
     unit_label
   )
   
+  # order potential labels by applicability
+  ordered_labels <- c("landings_weight", 
+                      "landings_numbers",
+                      "landings_expected",
+                      "landings_predicted",
+                      "landings")
+  
+  # Choose label to filter by, based on presence in prepared_data
+  for (lab in ordered_labels) {
+    if (lab %in% prepared_data$label) {
+      target_label <- lab
+      break
+    }
+  }
+  prepared_data2 <- prepared_data |>
+    dplyr::filter(label == target_label)
+  
   #TODO: add check for if length of label > 1 (if TRUE, then a specific value (e.g., observed?) will need to be selected)
 
   # add a check for which landings-related name to extract (e.g., expected, observed, cv...)
   
   table_data <- process_table(
-    dat = prepared_data,
+    dat = prepared_data2,
     group = group,
     method = method)
   
-  # put table_data into a nice table (kable)
+  # put table_data into a nice table
   # ensure cols in order: estimate, error, est, error, etc.
   # try to keep it to one column
-  capitalized_names <- c(year = "Year",
-                         sex = "Sex",
-                         fleet = "Fleet",
-                         model = "Model")
+  capitalized_names <- c("Year" = "year",
+                         "Sex" = "sex",
+                         "Fleet" = "fleet",
+                         "Model" = "model")
   
   
   
