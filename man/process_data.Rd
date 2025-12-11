@@ -2,7 +2,7 @@
 % Please edit documentation in R/process_data.R
 \name{process_data}
 \alias{process_data}
-\title{Post processing of filtered data}
+\title{Processing for figures}
 \usage{
 process_data(dat, group = NULL, facet = NULL, method = "sum")
 }
@@ -33,7 +33,7 @@ variable(s) of the data. If NULL, no faceting variable is identified. Any
 identified indexed variables found in this function will be added to facet.}
 }
 \description{
-Post processing of filtered data
+Processing for figures
 }
 \examples{
 {
