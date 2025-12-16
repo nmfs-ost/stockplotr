@@ -28,7 +28,7 @@ table_landings <- function(dat,
                            interactive = TRUE,
                            module = NULL,
                            scale_amount = 1,
-                           label = "landings_weight",
+                           label = NULL,
                            make_rda = FALSE,
                            tables_dir = getwd()) {
   
@@ -52,6 +52,10 @@ table_landings <- function(dat,
     interactive = interactive
   )
   
+  
+  #TODO: add check for if length of label > 1 (if TRUE, then a specific value (e.g., observed?) will need to be selected)
+  
+  
   # order potential labels by applicability
   ordered_labels <- c("landings_weight", 
                       "landings_numbers",
@@ -59,28 +63,45 @@ table_landings <- function(dat,
                       "landings_predicted",
                       "landings")
   
-  # Choose label to filter by, based on presence in prepared_data
-  for (lab in ordered_labels) {
-    if (lab %in% prepared_data$label) {
-      target_label <- lab
-      break
+  if (is.null(label)){
+    cli::cli_alert_info("`label` not specified.")
+    # Choose label to filter by, based on presence in prepared_data
+    for (lab in ordered_labels) {
+      if (lab %in% prepared_data$label) {
+        target_label <- lab
+        break
+      }
     }
+    cli::cli_alert_info("`label` selected as {target_label}.")
+  } else {
+    target_label <- label
   }
+
   prepared_data2 <- prepared_data |>
     dplyr::filter(label == target_label)
   
-  #TODO: add check for if length of label > 1 (if TRUE, then a specific value (e.g., observed?) will need to be selected)
-
-  # add a check for which landings-related name to extract (e.g., expected, observed, cv...)
+  # get uncertainty label
+  uncert_lab <- prepared_data2$uncertainty_label |> 
+    unique()
   
+  if (length(uncert_lab) > 1){
+    cli::cli_alert_warning("More than one value for uncertainty exists: {uncert_lab}")
+    uncert_lab <- uncert_lab[[1]]
+    cli::cli_alert_warning("The first value ({uncert_lab}) will be chosen.")
+  }
+  
+  # get fleet names
+  fleets <- prepared_data2$fleet |>
+    unique() |>
+    sort()
+
   table_data <- process_table(
-    dat = prepared_data2,
-    group = group,
-    method = method)
+    dat = prepared_data2#,
+   # group = group,
+   # method = method
+    )
   
   # put table_data into a nice table
-  # ensure cols in order: estimate, error, est, error, etc.
-  # try to keep it to one column
   capitalized_names <- c("Year" = "year",
                          "Sex" = "sex",
                          "Fleet" = "fleet",
@@ -90,22 +111,58 @@ table_landings <- function(dat,
   
   #TODO: Update add_theme() for gt tables
   final_df <- table_data |>
-      dplyr::rename(dplyr::any_of(capitalized_names)) |>
-      dplyr::rename_with(~ gsub("_NA|_label|estimate_", "", .)) |>
-      dplyr::rename(dplyr::any_of(stats::setNames(target_label, landings_colname))) |>
-      dplyr::rename_with(~ gsub(target_label, "", .)) |>
-      dplyr::rename_with(~ gsub("^uncertainty_$", "Uncertainty", .))
+    dplyr::rename(dplyr::any_of(capitalized_names)) |>
+    dplyr::rename_with(~ gsub(target_label, "", .)) |>
+    dplyr::rename_with(
+      .fn = ~ paste0(landings_colname, "_", stringr::str_extract(., "[^_]+$")),
+      .cols = contains("estimate")) |>
+    dplyr::rename_with(~ gsub("_NA|_label", "", .)) |>
+    dplyr::rename_with(
+      # replace an underscore only if it's at the end of the colname
+      .fn = ~ stringr::str_replace(., pattern = "_$", replacement = ""),
+      .cols = everything()
+    ) |>
+    dplyr::rename_with(~ gsub("uncertainty_", "", .)) |>
+    dplyr::rename_with(~ gsub("_", " - ", .)) |>    
+    dplyr::rename_with(
+      .fn = ~ stringr::str_replace(., 
+                          pattern = "^ - ", 
+                          replacement = ""),
+      .cols = everything()
+    )
+
+  #  dplyr::rename_with(~ gsub("__", "_", .)) |>
+     
+  
+  # Order columns by landings / cv / landings, etc. and with alphabetical fleets
+  if (length(fleets) > 0){
+    cols_to_sort <- final_df |>
+      dplyr::select(-Year) |>
+      colnames()
+    fleet_codes <- stringr::str_extract(cols_to_sort, "(?<=- )[^ ]+")
+    order_index <- order(fleet_codes, 
+                         cols_to_sort,
+                         decreasing = c(FALSE, FALSE),
+                         method = "radix")
+    ordered_cols_to_sort <- cols_to_sort[order_index]
+    final_df <- final_df |>
+      dplyr::select(
+        Year,
+        dplyr::all_of(ordered_cols_to_sort)
+        )
+  }
   
   final <- final_df |>
       gt::gt() 
-
+  final
   # Progress:
     # for bsb, hake, vsnap, and stockplotr::example_data, cols are:
-    #    "Year", "Landings (<unit>)", "Uncertainty"
-
+    #    "Year", "Landings (<unit>)", "uncertainty"
+    # for am, cols are:
+    #    "Landings (mt) - cbn",	"cv - cbn",	"Landings (mt) - cbs",	"cv - cbs", etc
       
-  # TODO: Reorder column names so that numeric fleets show up in chronological
-  # order (currently, lists 1, 10, 11, 12, etc.)
+  # TODO: Check that numeric fleets show up in chronological
+  # order (currently, may list 1, 10, 11, 12, etc.)
   
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
