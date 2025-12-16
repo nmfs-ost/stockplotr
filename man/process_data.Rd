@@ -20,13 +20,13 @@ variable(s) of the data.}
 is set to "none". Options are "sum" or "mean". Default is "sum".}
 }
 \value{
-Automatically detects potential grouping and faceting data from a 
-dataframe output from \link[stockplotr]{filter_data}. It returns the following 
+Automatically detects potential grouping and faceting data from a
+dataframe output from \link[stockplotr]{filter_data}. It returns the following
 list of 3 objects:
 \item{data}{A data frame of the processed data ready for plotting.}
 \item{group}{A string identifying the grouping variable of the data.
 If NULL, no grouping variable is identified. If not NULL, the function
-will verify that the data is indexed by this variables, otherwise it will 
+will verify that the data is indexed by this variables, otherwise it will
 overwrite it to a different, valid indexed variable or NULL.}
 \item{facet}{A string or vector of strings identifying the faceting
 variable(s) of the data. If NULL, no faceting variable is identified. Any
@@ -37,12 +37,12 @@ Post processing of filtered data
 }
 \examples{
 {
-filtered <- stockplotr::filter_data(
- dat = stockplotr:::example_data,
- label_name = "fishing_mortality$",
- geom = "line",
- module = "TIME_SERIES"
-)
-process_data(dat = filtered, method = "sum")
+  filtered <- stockplotr::filter_data(
+    dat = stockplotr:::example_data,
+    label_name = "fishing_mortality$",
+    geom = "line",
+    module = "TIME_SERIES"
+  )
+  process_data(dat = filtered, method = "sum")
 }
 }

@@ -8,8 +8,8 @@
 #' would scale down a value from 500,000 --> 5,000 and would report catch in
 #' hundreds of the 'unit_label'. This scale will be reflected
 #' in the legend label if proportional is set to FALSE. The default is 1.
-#' @param era a string naming the era of data such as historical ("early"), current ("time"), or 
-#' projected ("fore") data if filtering should occur. Default is set to "time" which is 
+#' @param era a string naming the era of data such as historical ("early"), current ("time"), or
+#' projected ("fore") data if filtering should occur. Default is set to "time" which is
 #' the current time. To plot all data, set era to NULL.
 #' @param interactive TRUE/FALSE; indicate whether the environment in which the
 #' function is operating  is interactive. This bypasses some options for
@@ -33,7 +33,7 @@
 #'   make_rda = FALSE,
 #'   figures_dir = getwd()
 #' )
-#' 
+#'
 #' plot_catch_comp(
 #'   dat = stockplotr:::example_data,
 #'   facet = "none",
@@ -107,8 +107,8 @@ plot_catch_comp <- function(
     label = catch_label,
     proportional = proportional
   ) +
-  cohort_line(data)
-  
+    cohort_line(data)
+
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
     create_rda(

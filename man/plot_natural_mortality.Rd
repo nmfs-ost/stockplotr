@@ -18,7 +18,7 @@ plot_natural_mortality(
 }
 \arguments{
 \item{dat}{A data frame or names list of data frames (input as `list()`)
-returned from \link[asar]{convert_output}. The first data frame in the list 
+returned from \link[asar]{convert_output}. The first data frame in the list
 is used in calculation of a reference line if one is present}
 
 \item{group}{a string of a single column that groups the data (e.g. "fleet",
@@ -31,8 +31,8 @@ number of rows for NA and the grouped data.}
 \item{facet}{a string or vector of strings of a column that facets the data
 (e.g. "year", "area", etc.)}
 
-\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or 
-projected ("fore") data if filtering should occur. Default is set to "time" which is 
+\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or
+projected ("fore") data if filtering should occur. Default is set to "time" which is
 the current time. To plot all data, set era to NULL.}
 
 \item{interactive}{TRUE/FALSE; indicate whether the environment in which the
@@ -55,7 +55,7 @@ Default is the working directory.}
 \item{...}{Arguments called from ggplot2::geom_line or ggplot2::geom_point}
 }
 \value{
-Plot natural mortality at age from a stock assessment model as 
+Plot natural mortality at age from a stock assessment model as
 found in a NOAA stock assessment report.
 }
 \description{
