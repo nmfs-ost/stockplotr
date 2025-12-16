@@ -102,6 +102,10 @@ table_landings <- function(
     unit_label
   )
   
+  
+  #TODO: add check for if length of label > 1 (if TRUE, then a specific value (e.g., observed?) will need to be selected)
+  
+  
   # order potential labels by applicability
   ordered_labels <- c("landings_weight", 
                       "landings_numbers",
@@ -109,28 +113,45 @@ table_landings <- function(
                       "landings_predicted",
                       "landings")
   
-  # Choose label to filter by, based on presence in prepared_data
-  for (lab in ordered_labels) {
-    if (lab %in% prepared_data$label) {
-      target_label <- lab
-      break
+  if (is.null(label)){
+    cli::cli_alert_info("`label` not specified.")
+    # Choose label to filter by, based on presence in prepared_data
+    for (lab in ordered_labels) {
+      if (lab %in% prepared_data$label) {
+        target_label <- lab
+        break
+      }
     }
+    cli::cli_alert_info("`label` selected as {target_label}.")
+  } else {
+    target_label <- label
   }
+
   prepared_data2 <- prepared_data |>
     dplyr::filter(label == target_label)
   
-  #TODO: add check for if length of label > 1 (if TRUE, then a specific value (e.g., observed?) will need to be selected)
-
-  # add a check for which landings-related name to extract (e.g., expected, observed, cv...)
+  # get uncertainty label
+  uncert_lab <- prepared_data2$uncertainty_label |> 
+    unique()
   
+  if (length(uncert_lab) > 1){
+    cli::cli_alert_warning("More than one value for uncertainty exists: {uncert_lab}")
+    uncert_lab <- uncert_lab[[1]]
+    cli::cli_alert_warning("The first value ({uncert_lab}) will be chosen.")
+  }
+  
+  # get fleet names
+  fleets <- prepared_data2$fleet |>
+    unique() |>
+    sort()
+
   table_data <- process_table(
-    dat = prepared_data2,
-    group = group,
-    method = method)
+    dat = prepared_data2#,
+   # group = group,
+   # method = method
+    )
   
   # put table_data into a nice table
-  # ensure cols in order: estimate, error, est, error, etc.
-  # try to keep it to one column
   capitalized_names <- c("Year" = "year",
                          "Sex" = "sex",
                          "Fleet" = "fleet",
@@ -315,6 +336,7 @@ table_landings <- function(
       gt::gt() |>
       add_theme()
   })
+
 
 
   # export figure to rda if argument = T
