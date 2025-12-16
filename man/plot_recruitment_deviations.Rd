@@ -16,15 +16,15 @@ plot_recruitment_deviations(
 }
 \arguments{
 \item{dat}{A data frame or names list of data frames (input as `list()`)
-returned from \link[asar]{convert_output}. The first data frame in the list 
+returned from \link[asar]{convert_output}. The first data frame in the list
 is used in calculation of a reference line if one is present}
 
 \item{module}{(Optional) A string indicating the linked module_name associated
 with the label for the plot if known. Default is NULL. By default, the function
 will select the most relevant module if more than 1 exists.}
 
-\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or 
-projected ("fore") data if filtering should occur. Default is set to "time" which is 
+\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or
+projected ("fore") data if filtering should occur. Default is set to "time" which is
 the current time. To plot all data, set era to NULL.}
 
 \item{interactive}{TRUE/FALSE; indicate whether the environment in which the

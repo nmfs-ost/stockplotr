@@ -2,8 +2,8 @@
 #'
 #' @inheritParams plot_spawning_biomass
 #'
-#' @return Create a plot ready for a stock assessment report of fishing mortality over time 
-#' from the results of an assessment model translated to the a standardized output 
+#' @return Create a plot ready for a stock assessment report of fishing mortality over time
+#' from the results of an assessment model translated to the a standardized output
 #' (\link[asar]{convert_output}). Includes options to group or facet data where available.
 #' There are options to return a
 #' [ggplot2::ggplot()] object or export an rda object containing associated
@@ -108,4 +108,4 @@ plot_fishing_mortality <- function(
   }
   # Output final plot
   final
-  }
+}

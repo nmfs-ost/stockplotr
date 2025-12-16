@@ -21,7 +21,7 @@ plot_fishing_mortality(
 }
 \arguments{
 \item{dat}{A data frame or names list of data frames (input as `list()`)
-returned from \link[asar]{convert_output}. The first data frame in the list 
+returned from \link[asar]{convert_output}. The first data frame in the list
 is used in calculation of a reference line if one is present}
 
 \item{geom}{A string stating the geom used for the plot. Default is "line".
@@ -45,8 +45,8 @@ lower-case letters but you must use one of the options specified in the
 default list to ensure that the label on the figure looks correct
 regardless of how it is specified in `dat`.}
 
-\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or 
-projected ("fore") data if filtering should occur. Default is set to "time" which is 
+\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or
+projected ("fore") data if filtering should occur. Default is set to "time" which is
 the current time. To plot all data, set era to NULL.}
 
 \item{module}{(Optional) A string indicating the linked module_name associated
@@ -73,8 +73,8 @@ filtering when preparing data for the plot. Default is FALSE.}
 \item{...}{Arguments called from ggplot2::geom_line or ggplot2::geom_point}
 }
 \value{
-Create a plot ready for a stock assessment report of fishing mortality over time 
-from the results of an assessment model translated to the a standardized output 
+Create a plot ready for a stock assessment report of fishing mortality over time
+from the results of an assessment model translated to the a standardized output
 (\link[asar]{convert_output}). Includes options to group or facet data where available.
 There are options to return a
 [ggplot2::ggplot()] object or export an rda object containing associated

@@ -9,7 +9,7 @@ test_that("save_all_plots works when all figures/tables are plotted", {
     out_new,
     recruitment_unit_label = "mt",
     recruitment_scale_amount = 1,
-    ref_line = c("unfished"=1000),
+    ref_line = c("unfished" = 1000),
     ref_line_sb = "target",
     # indices_unit_label = "CPUE",
     figures_tables_dir = getwd(),
@@ -76,7 +76,7 @@ test_that("save_all_plots works when some figures/tables are not plotted", {
     "pop.baa_figure.rda",
     # "catch_figure.rda",
     # "landings_figure.rda",
-    "pop.caa_figure.rda",  # not exporting in fxn for some reason
+    "pop.caa_figure.rda", # not exporting in fxn for some reason
     "pop.naa_figure.rda",
     "recruitment.deviations_figure.rda",
     # "recruitment_figure.rda", # not working when not interactive bc first module doesn't contain any values
