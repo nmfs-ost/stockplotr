@@ -29,9 +29,12 @@ add_theme <- function(x, discrete = TRUE) {
       flextable::align(align = "center", part = "body") |>
       flextable::autofit()
     # FitFlextableToPage()
-  } else if (class(x)[1] == "gt_tbl") {
-    theme_obj <- x
+  } else if (class(x)[1][1] == "gt_tbl") {
     # gt object
+    theme_obj <- x |>
+      gt::cols_align(align = "center") |>
+      gt::tab_style(style = gt::cell_text(weight = "bold"),
+                    locations = gt::cells_column_labels())
   } else if (class(x)[1] == "kableExtra" | as.character(class(x)[2]) == "knitr_kable") {
     theme_obj <- x
   } else if (class(x)[1] == "gg" | class(x)[2] == "ggplot") { #  - removed bc wouldn't work with only 1 entry in the class for other object classes
