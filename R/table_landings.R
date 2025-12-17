@@ -157,7 +157,7 @@ table_landings <- function(
                          "Fleet" = "fleet",
                          "Model" = "model")
   
-  
+
   
   
   
