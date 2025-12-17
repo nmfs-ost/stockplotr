@@ -225,7 +225,7 @@ save_all_plots <- function(
       # invisible()
     },
     error = function(e) {
-      cli::cli_alert_danger("plot_recruitment_deviations failed to run.")
+      cli::cli_alert_danger("plot_fishing_mortality failed to run.")
       cli::cli_alert("Tip: check that your arguments are correct.")
       print(e)
     }
@@ -280,28 +280,23 @@ save_all_plots <- function(
     }
   )
 
-  tryCatch(
-    {
-      cli::cli_h2("plot_abundance_at_age")
-      plot_abundance_at_age(
-        dat,
-        unit_label = abundance_at_age_unit_label,
-        scale_amount = abundance_at_age_scale_amount,
-        proportional = proportional,
-        make_rda = TRUE,
-        figures_dir = figures_tables_dir
-      ) # |>
-      # suppressWarnings() |>
-      # invisible()
-    },
-    error = function(e) {
-      cli::cli_alert_danger("plot_abundance_at_age failed to run.")
-      cli::cli_alert("Tip: check that your arguments are correct.")
-      cli::cli_li("abundance_at_age_unit_label = {abundance_at_age_unit_label}")
-      cli::cli_li("abundance_at_age_scale_amount = {abundance_at_age_scale_amount}")
-      print(e)
-    }
-  )
+  # tryCatch(
+  #   {
+  #     cli::cli_h2("plot_natural_mortality")
+  #     plot_natural_mortality(dat,
+  #                            module = "Natural_Mortality",
+  #                            make_rda = TRUE,
+  #                            figures_dir = figures_tables_dir,
+  #                            interactive = FALSE) # |>
+  #     # suppressWarnings() |>
+  #     # invisible()
+  #   },
+  #   error = function(e) {
+  #     cli::cli_alert_danger("plot_natural_mortality failed to run.")
+  #     cli::cli_alert("Tip: check that your arguments are correct.")
+  #     print(e)
+  #   }
+  # )
 
   tryCatch(
     {
