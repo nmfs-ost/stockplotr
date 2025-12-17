@@ -133,13 +133,13 @@ identified indexed variables found in this function will be added to facet.</p><
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="op">{</span></span></span>
-<span class="r-in"><span><span class="va">filtered</span> <span class="op">&lt;-</span> <span class="fu">stockplotr</span><span class="fu">::</span><span class="fu"><a href="filter_data.html">filter_data</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span> dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va">example_data</span>,</span></span>
-<span class="r-in"><span> label_name <span class="op">=</span> <span class="st">"fishing_mortality$"</span>,</span></span>
-<span class="r-in"><span> geom <span class="op">=</span> <span class="st">"line"</span>,</span></span>
-<span class="r-in"><span> module <span class="op">=</span> <span class="st">"TIME_SERIES"</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">process_data</span><span class="op">(</span>dat <span class="op">=</span> <span class="va">filtered</span>, method <span class="op">=</span> <span class="st">"sum"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">filtered</span> <span class="op">&lt;-</span> <span class="fu">stockplotr</span><span class="fu">::</span><span class="fu"><a href="filter_data.html">filter_data</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va">example_data</span>,</span></span>
+<span class="r-in"><span>    label_name <span class="op">=</span> <span class="st">"fishing_mortality$"</span>,</span></span>
+<span class="r-in"><span>    geom <span class="op">=</span> <span class="st">"line"</span>,</span></span>
+<span class="r-in"><span>    module <span class="op">=</span> <span class="st">"TIME_SERIES"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">process_data</span><span class="op">(</span>dat <span class="op">=</span> <span class="va">filtered</span>, method <span class="op">=</span> <span class="st">"sum"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 294 × 8</span></span>
