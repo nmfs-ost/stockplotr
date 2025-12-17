@@ -345,7 +345,7 @@ process_data <- function(
 #'
 #' @examples {
 #' filtered <- filter_data(
-#' dat = dat,
+#' dat = stockplotr:::example_data,
 #' label_name = "landings",
 #' geom = "line",
 #' era = "time"
