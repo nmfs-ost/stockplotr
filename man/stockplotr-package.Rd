@@ -12,6 +12,7 @@ Creates exploratory and finished tables and figures for stock assessment documen
 Useful links:
 \itemize{
   \item \url{https://github.com/nmfs-ost/stockplotr}
+  \item \url{https://noaa-fisheries-integrated-toolbox.r-universe.dev/stockplotr}
   \item Report bugs at \url{https://github.com/nmfs-ost/stockplotr/issues}
 }
 

@@ -22,7 +22,7 @@ plot_biomass(
 }
 \arguments{
 \item{dat}{A data frame or names list of data frames (input as `list()`)
-returned from \link[asar]{convert_output}. The first data frame in the list 
+returned from \link[asar]{convert_output}. The first data frame in the list
 is used in calculation of a reference line if one is present}
 
 \item{geom}{A string stating the geom used for the plot. Default is "line".
@@ -79,7 +79,7 @@ filtering when preparing data for the plot. Default is FALSE.}
 \value{
 Plot total biomass from a stock assessment model as found in a NOAA
 stock assessment report. Units of total biomass can either be manually added
-or will be extracted from the provided file if possible. There are options #' to return a [ggplot2::ggplot()] object or export an rda object containing 
+or will be extracted from the provided file if possible. There are options #' to return a [ggplot2::ggplot()] object or export an rda object containing
 associated caption and alternative text for the figure.
 }
 \description{

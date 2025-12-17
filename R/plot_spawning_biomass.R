@@ -4,7 +4,7 @@
 #' also be made relative to this reference line rather than in absolute units.
 #'
 #' @param dat A data frame or names list of data frames (input as `list()`)
-#' returned from \link[asar]{convert_output}. The first data frame in the list 
+#' returned from \link[asar]{convert_output}. The first data frame in the list
 #' is used in calculation of a reference line if one is present
 #' @param geom A string stating the geom used for the plot. Default is "line".
 #' Options include "line", "point", or "area"
@@ -16,9 +16,9 @@
 #' number of rows for NA and the grouped data.
 #' @param facet a string or vector of strings of a column that facets the data
 #' (e.g. "year", "area", etc.)
-#' @param era a string naming the era of data such as historical ("early"), current ("time"), or 
-#' projected ("fore") data if filtering should occur. Default is set to "time" which is 
-#' the current time. To plot all data, set era to NULL. 
+#' @param era a string naming the era of data such as historical ("early"), current ("time"), or
+#' projected ("fore") data if filtering should occur. Default is set to "time" which is
+#' the current time. To plot all data, set era to NULL.
 #' @param ref_line A string specifying the type of reference you want to
 #'   compare spawning biomass to. The default is `"target"`, which looks for
 #'   `"spawning_biomass_target"` in the `"label"` column of `dat`. The actual
@@ -46,7 +46,7 @@
 #' @param interactive TRUE/FALSE; indicate whether the environment in which the
 #' function is operating  is interactive. This bypasses some options for
 #' filtering when preparing data for the plot. Default is FALSE.
-#' @param ... Arguments called from ggplot2::geom_line or ggplot2::geom_point 
+#' @param ... Arguments called from ggplot2::geom_line or ggplot2::geom_point
 #' @return
 #' Plot spawning biomass over time from the results of an assessment model translated to
 #' the a standardized output (\link[asar]{convert_output}). There are options to return a
@@ -69,23 +69,24 @@
 #'   dat = stockplotr:::example_data,
 #'   relative = TRUE,
 #'   ref_line = "msy",
-#'   module = "TIME_SERIES"  
-#')
+#'   module = "TIME_SERIES"
+#' )
 plot_spawning_biomass <- function(
-    dat,
-    geom = "line",
-    group = NULL,
-    facet = NULL,
-    ref_line = "msy",
-    unit_label = "metric tons",
-    era = "time",
-    module = NULL,
-    scale_amount = 1,
-    relative = FALSE,
-    make_rda = FALSE,
-    figures_dir = getwd(),
-    interactive = TRUE,
-    ...) {
+  dat,
+  geom = "line",
+  group = NULL,
+  facet = NULL,
+  ref_line = "msy",
+  unit_label = "metric tons",
+  era = "time",
+  module = NULL,
+  scale_amount = 1,
+  relative = FALSE,
+  make_rda = FALSE,
+  figures_dir = getwd(),
+  interactive = TRUE,
+  ...
+) {
   # TODO: Fix the unit label if scaling. Maybe this is up to the user to do if
   #       they want something scaled then they have to supply a better unit name
   #       or we create a helper function to do this.
@@ -125,7 +126,7 @@ plot_spawning_biomass <- function(
     scale_amount = scale_amount,
     interactive = interactive
   )
-  
+
   # process the data for grouping
   processing <- process_data(
     dat = prepared_data,
@@ -140,7 +141,7 @@ plot_spawning_biomass <- function(
 
   # Override grouping variable when there is only NA's
   if (!is.null(group)) {
-    if (group %notin% colnames(plot_data)) group = NULL
+    if (group %notin% colnames(plot_data)) group <- NULL
   }
 
   # Calculate estimate if relative
@@ -186,11 +187,11 @@ plot_spawning_biomass <- function(
     eras <- unique(plot_data$era)
     if (length(eras) > 1) {
       year_vlines <- c()
-      for (i in 2:length(eras)){
+      for (i in 2:length(eras)) {
         erax <- plot_data |>
-        dplyr::filter(era == eras[i]) |>
-        dplyr::pull(year) |>
-        min(na.rm = TRUE)
+          dplyr::filter(era == eras[i]) |>
+          dplyr::pull(year) |>
+          min(na.rm = TRUE)
         year_vlines <- c(year_vlines, erax)
       }
     }

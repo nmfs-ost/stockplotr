@@ -9,13 +9,13 @@
 #' @param method A string describing the method of summarizing data when group
 #' is set to "none". Options are "sum" or "mean". Default is "sum".
 #'
-#' @returns Automatically detects potential grouping and faceting data from a 
-#' dataframe output from \link[stockplotr]{filter_data}. It returns the following 
+#' @returns Automatically detects potential grouping and faceting data from a
+#' dataframe output from \link[stockplotr]{filter_data}. It returns the following
 #' list of 3 objects:
 #' \item{data}{A data frame of the processed data ready for plotting.}
 #' \item{group}{A string identifying the grouping variable of the data.
 #' If NULL, no grouping variable is identified. If not NULL, the function
-#' will verify that the data is indexed by this variables, otherwise it will 
+#' will verify that the data is indexed by this variables, otherwise it will
 #' overwrite it to a different, valid indexed variable or NULL.}
 #' \item{facet}{A string or vector of strings identifying the faceting
 #' variable(s) of the data. If NULL, no faceting variable is identified. Any
@@ -23,19 +23,19 @@
 #' @export
 #'
 #' @examples {
-#' filtered <- stockplotr::filter_data(
-#'  dat = stockplotr:::example_data,
-#'  label_name = "fishing_mortality$",
-#'  geom = "line",
-#'  module = "TIME_SERIES"
-#' )
-#' process_data(dat = filtered, method = "sum")
+#'   filtered <- stockplotr::filter_data(
+#'     dat = stockplotr:::example_data,
+#'     label_name = "fishing_mortality$",
+#'     geom = "line",
+#'     module = "TIME_SERIES"
+#'   )
+#'   process_data(dat = filtered, method = "sum")
 #' }
 process_data <- function(
-    dat,
-    group = NULL,
-    facet = NULL,
-    method = "sum"
+  dat,
+  group = NULL,
+  facet = NULL,
+  method = "sum"
 ) {
   # check if >1 model
   if (length(unique(dat$model)) > 1) {
@@ -50,7 +50,8 @@ process_data <- function(
       index_list,
       identical,
       logical(1),
-      index_list[[1]]))
+      index_list[[1]]
+    ))
     ) {
       cli::cli_alert_warning("Multiple models with differing indexing variables detected.")
       if (!is.null(group) && group != "none") {
@@ -69,8 +70,7 @@ process_data <- function(
     id_group <- index_variables[-grepl("year|age", index_variables)]
     index_variables <- intersect(c("year", "age"), index_variables)
     if (length(id_group) > 0) {
-      dat <- switch(
-        method,
+      dat <- switch(method,
         "mean" = dat |>
           dplyr::group_by(dplyr::across(tidyselect::all_of(c("label", "model", "group_var", index_variables)))) |>
           dplyr::summarize(
@@ -84,8 +84,8 @@ process_data <- function(
             estimate = sum(estimate),
             estimate_lower = sum(estimate_lower),
             estimate_upper = sum(estimate_upper)
-         )
-        )
+          )
+      )
     }
   }
   # Warn  user when group not indexed in data
@@ -108,12 +108,12 @@ process_data <- function(
   #   } else {
   #     data <- dat
   #   }
-  # } else 
+  # } else
   if (!is.null(group) && group != "none") {
     data <- dplyr::mutate(
       dat,
       group_var = .data[[group]]
-    ) 
+    )
   } else {
     data <- dat
   }
@@ -132,11 +132,11 @@ process_data <- function(
   } else {
     cli::cli_abort("Please check df. This scenario hasn't been considered.")
   }
-  
+
   # Check if there is age or year or both
   # Then either plot over ages with lines for year or single year
   if ("age" %in% colnames(data) && any(!is.na(data$age))) {
-    # subset out nas if ages exist for this 
+    # subset out nas if ages exist for this
     # not sure if  this works for all cases -- are there situations where we want the NA and not age?
     data <- dplyr::filter(data, !is.na(age))
     if (!is.null(group) && group == "age") {
@@ -150,13 +150,13 @@ process_data <- function(
   if ("year" %in% colnames(data) && any(!is.na(data$year))) {
     data <- dplyr::filter(data, !is.na(year))
     # if (!is.null(group) && group == "year") {
-      if ("year" %in% index_variables) index_variables <- index_variables[-grep("year", index_variables)]
+    if ("year" %in% index_variables) index_variables <- index_variables[-grep("year", index_variables)]
     # }
     # if (!is.null(facet) && facet == "year") {
     #   if ("year" %in% index_variables) index_variables <- index_variables[-grep("year", index_variables)]
     # }
   }
-  
+
   # Set any remaining index variables to group (first) and facet
   # Check if this is still the case if a group not NULL
   if (!is.null(group) && group != "year") {
@@ -164,10 +164,10 @@ process_data <- function(
     # Remove NAs from grouping or keep NA if none
     if (group != "none") {
       data <- dplyr::filter(data, !is.na(.data[[group]]))
-      
+
       check_group_data <- data |>
         tidyr::pivot_wider(
-          id_cols = tidyselect::any_of(c("label","year", "age", "model")),
+          id_cols = tidyselect::any_of(c("label", "year", "age", "model")),
           names_from = tidyselect::any_of(group),
           values_from = estimate,
           values_fn = list
@@ -176,7 +176,7 @@ process_data <- function(
       # variable <- ifelse(
       #   any(length(unique(
       #     dplyr::select(
-      #       check_group_data, 
+      #       check_group_data,
       #       dplyr::any_of(unique(data[[group]]))
       #     )
       #   )) > 1),
@@ -184,7 +184,7 @@ process_data <- function(
       #   FALSE
       # )
     }
-    
+
     # add any remaining index_variables into facet
     if (length(index_variables) > 0) {
       if (!is.null(facet) && facet %in% index_variables) {
@@ -236,24 +236,30 @@ process_data <- function(
       }
     }
   }
-  
-  if(!is.null(group) && group != "none") {
+
+  if (!is.null(group) && group != "none") {
     # check if value varies in ANY year
     # pivot data for 1st indexed data and check if all the same
     if (length(index_variables) > 0) {
       pivot_data <- data |>
         dplyr::select(tidyselect::any_of(c("year", "age", "estimate", index_variables))) |>
-        tidyr::pivot_wider(id_cols = c(year),
-                           names_from = tidyselect::any_of(index_variables),
-                           values_from = estimate) |> suppressWarnings()
+        tidyr::pivot_wider(
+          id_cols = c(year),
+          names_from = tidyselect::any_of(index_variables),
+          values_from = estimate
+        ) |>
+        suppressWarnings()
       column_data <- pivot_data[-1]
     } else {
-      # Look at group_var and identify if there is a needed grouping or can just plot one year 
+      # Look at group_var and identify if there is a needed grouping or can just plot one year
       pivot_data <- data |>
         dplyr::select(tidyselect::any_of(c("year", "age", "estimate", "group_var"))) |>
-        tidyr::pivot_wider(id_cols = c(year),
-                           names_from = group_var,
-                           values_from = estimate) |> suppressWarnings()
+        tidyr::pivot_wider(
+          id_cols = c(year),
+          names_from = group_var,
+          values_from = estimate
+        ) |>
+        suppressWarnings()
       column_data <- pivot_data[-1]
       # column_data <- pivot_data[[
       #   unique(
@@ -266,7 +272,8 @@ process_data <- function(
       column_data,
       identical,
       logical(1),
-      first_year_data))
+      first_year_data
+    ))
     ) {
       # if TRUE filter out to only one year bc everything else redundant
       # check if same through all years
@@ -294,7 +301,7 @@ process_data <- function(
     #   FALSE # same # or less M values than ages
     # )
   }
-  
+
   # Final check if group = NULL, then set group var to 1
   if (is.null(group)) {
     data <- dplyr::mutate(data, group_var = "1")
