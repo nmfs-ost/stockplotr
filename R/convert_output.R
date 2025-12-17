@@ -1781,16 +1781,16 @@ convert_output <- function(
     ) |>
     suppressWarnings()
   if (tolower(model) == "ss3") {
-    con_file <- system.file("resources", "ss3_var_names.csv", package = "asar", mustWork = TRUE)
+    con_file <- system.file("resources", "ss3_var_names.csv", package = "stockplotr", mustWork = TRUE)
     var_names_sheet <- utils::read.csv(con_file, na.strings = "")
   } else if (tolower(model) == "bam") {
-    con_file <- system.file("resources", "bam_var_names.csv", package = "asar", mustWork = TRUE)
+    con_file <- system.file("resources", "bam_var_names.csv", package = "stockplotr", mustWork = TRUE)
     var_names_sheet <- utils::read.csv(con_file, na.strings = "") |>
       dplyr::mutate(
         label = tolower(label)
       )
   } else if (tolower(model) == "fims") {
-    con_file <- system.file("resources", "fims_var_names.csv", package = "asar", mustWork = TRUE)
+    con_file <- system.file("resources", "fims_var_names.csv", package = "stockplotr", mustWork = TRUE)
     var_names_sheet <- utils::read.csv(con_file, na.strings = "")
   }
 
