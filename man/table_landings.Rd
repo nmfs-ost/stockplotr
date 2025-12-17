@@ -12,6 +12,7 @@ table_landings(
   group = NULL,
   method = "sum",
   module = NULL,
+  scale_amount = 1,
   label = NULL,
   make_rda = FALSE,
   tables_dir = getwd()
