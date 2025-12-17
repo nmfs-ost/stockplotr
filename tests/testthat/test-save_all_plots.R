@@ -24,12 +24,12 @@ test_that("save_all_plots works when all figures/tables are plotted", {
   fig_base_temp_files <- c(
     "biomass_figure.rda",
     "pop.baa_figure.rda",
-    # "catch_figure.rda",
-    # "landings_figure.rda",
+    "catch_figure.rda",
+    "landings_figure.rda",
     "pop.caa_figure.rda", # not exporting in fxn for some reason
     "pop.naa_figure.rda",
     "recruitment.deviations_figure.rda",
-    # "recruitment_figure.rda", # recruitment won't work when interactive = F bc first module doesn't contain any values
+    "recruitment_figure.rda",
     "spawning.biomass_figure.rda"
   )
   expect_equal(
@@ -74,12 +74,12 @@ test_that("save_all_plots works when some figures/tables are not plotted", {
   fig_base_temp_files <- c(
     "biomass_figure.rda",
     "pop.baa_figure.rda",
-    # "catch_figure.rda",
-    # "landings_figure.rda",
-    "pop.caa_figure.rda", # not exporting in fxn for some reason
+    "catch_figure.rda",
+    "landings_figure.rda",
+    "pop.caa_figure.rda",
     "pop.naa_figure.rda",
     "recruitment.deviations_figure.rda",
-    # "recruitment_figure.rda", # not working when not interactive bc first module doesn't contain any values
+    "recruitment_figure.rda",
     "spawning.biomass_figure.rda"
   )
   expect_equal(
