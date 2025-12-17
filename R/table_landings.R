@@ -110,6 +110,7 @@ table_landings <- function(dat,
   landings_colname <- paste0("Landings (", unit_label, ")")
   
   #TODO: Update add_theme() for gt tables
+  #TODO: ensure numeric columns rounded 
   final_df <- table_data |>
     dplyr::rename(dplyr::any_of(capitalized_names)) |>
     dplyr::rename_with(~ gsub(target_label, "", .)) |>
@@ -153,8 +154,9 @@ table_landings <- function(dat,
   }
   
   final <- final_df |>
-      gt::gt() 
-  final
+    gt::gt() |>
+    add_theme()
+ # final
   # Progress:
     # for bsb, hake, vsnap, and stockplotr::example_data, cols are:
     #    "Year", "Landings (<unit>)", "uncertainty"
