@@ -22,7 +22,7 @@ Population,Biomass,biomass
 Population,NAA,abundance
 Population,Recruitment,recruitment
 Population,SSB,spawning_biomass
-Population,log_M,log_natural_moratlity
+Population,log_M,log_natural_mortality
 Population,log_init_naa,log_abundance_init
 maturity,inflection_point,
 maturity,slope,

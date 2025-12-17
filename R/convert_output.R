@@ -1023,7 +1023,7 @@ convert_output <- function(
               colnames(df1) <- c("label", "estimate")
               # find where rescale is located
               col_rescale <- grep("rescaled_to_sum_to:", extract)
-              rescaled_months <- extract[4, row_rescale + 1] |> dplyr::pull()
+              rescaled_months <- extract[4, col_rescale + 1] |> dplyr::pull()
               # remove : from all labels and tolower and add in rescaled months
               df2 <- df1 |>
                 rbind(data.frame(
@@ -1256,7 +1256,7 @@ convert_output <- function(
     ##### BAM loop ----
     # Extract data from list fit to output df
     # Loop over all items to output each object/transform
-    # Not transforming or inclusing info chunk
+    # Not transforming or including info chunk
     for (p in 2:length(dat)) {
       extract <- dat[p]
       cli::cli_alert_info(glue::glue("Processing {names(extract)}"))
@@ -1722,10 +1722,10 @@ convert_output <- function(
     # asap_output <- dget(file.path(casedir, "output", subdir, paste("s", keep_sim_id[om_sim], sep = ""), "asap3.rdat"))
     # setwd(file.path(casedir, "output", subdir, paste("s", keep_sim_id[om_sim], sep = "")))
     # asap_std <- readRep("asap3", suffix = ".std")
-    cli::cli_abort("File not currently compatible.")
+    cli::cli_abort("WHAM output not currently compatible.")
     #### AMAK ####
   } else if (model == "amak") {
-    cli::cli_abort("WHAM output not currently compatible.")
+    cli::cli_abort("AMAK output not currently compatible.")
     #### JABBA ####
   } else if (tolower(model) == "jabba") {
     cli::cli_abort("JABBA output not currently compatible.")
@@ -1750,7 +1750,7 @@ convert_output <- function(
   }
 
   #### Exporting ####
-  # Combind DFs into one
+  # Combine DFs into one
   out_new <- out_new |>
     dplyr::mutate(
       estimate = dplyr::case_when(
