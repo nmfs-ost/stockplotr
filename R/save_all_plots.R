@@ -99,66 +99,68 @@ save_all_plots <- function(
 
   # figures
 
-  tryCatch(
-    {
-      cli::cli_h2("plot_recruitment")
-      plot_recruitment(
-        dat,
-        unit_label = recruitment_unit_label,
-        scale_amount = recruitment_scale_amount,
-        interactive = interactive,
-        make_rda = TRUE,
-        figures_dir = figures_tables_dir
-      ) #|>
-      # suppressWarnings() |>
-      # invisible()
-    },
-    error = function(e) {
-      cli::cli_alert_danger("plot_recruitment failed to run.")
-      cli::cli_alert("Tip: check that your arguments are correct.")
-      cli::cli_li("recruitment_unit_label = {recruitment_unit_label}")
-      cli::cli_li("recruitment_scale_amount = {recruitment_scale_amount}")
-      cli::cli_li("relative = {relative}")
-      print(e)
-    }
-  )
-
-
-  tryCatch(
-    {
-      cli::cli_h2("plot_biomass")
-      plot_biomass(
-        dat,
-        unit_label = biomass_unit_label,
-        scale_amount = biomass_scale_amount,
-        ref_line = ref_line,
-        relative = relative,
-        interactive = interactive,
-        make_rda = TRUE,
-        figures_dir = figures_tables_dir
-      ) #|>
-      # suppressWarnings() |>
-      # invisible()
-    },
-    error = function(e) {
-      cli::cli_alert_danger("plot_biomass failed to run.")
-      cli::cli_alert("Tip: check that your arguments are correct.")
-      cli::cli_li("biomass_unit_label = {biomass_unit_label}")
-      cli::cli_li("biomass_scale_amount = {biomass_scale_amount}")
-      cli::cli_li("ref_line = {ref_line}")
-      cli::cli_li("relative = {relative}")
-      print(e)
-    }
-  )
-
-
+  # tryCatch(
+  #   {
+  #     cli::cli_h2("plot_recruitment")
+  #     plot_recruitment(
+  #       dat,
+  #       unit_label = recruitment_unit_label,
+  #       scale_amount = recruitment_scale_amount,
+  #       interactive = FALSE,
+  #       module = "TIME_SERIES",
+  #       make_rda = TRUE,
+  #       figures_dir = figures_tables_dir
+  #     ) #|>
+  #     # suppressWarnings() |>
+  #     # invisible()
+  #   },
+  #   error = function(e) {
+  #     cli::cli_alert_danger("plot_recruitment failed to run.")
+  #     cli::cli_alert("Tip: check that your arguments are correct.")
+  #     cli::cli_li("recruitment_unit_label = {recruitment_unit_label}")
+  #     cli::cli_li("recruitment_scale_amount = {recruitment_scale_amount}")
+  #     cli::cli_li("relative = {relative}")
+  #     print(e)
+  #   }
+  # )
+  # 
+  # 
+  # tryCatch(
+  #   {
+  #     cli::cli_h2("plot_biomass")
+  #     plot_biomass(
+  #       dat,
+  #       unit_label = biomass_unit_label,
+  #       scale_amount = biomass_scale_amount,
+  #       ref_line = ref_line,
+  #       relative = relative,
+  #       interactive = interactive,
+  #       make_rda = TRUE,
+  #       figures_dir = figures_tables_dir
+  #     ) #|>
+  #     # suppressWarnings() |>
+  #     # invisible()
+  #   },
+  #   error = function(e) {
+  #     cli::cli_alert_danger("plot_biomass failed to run.")
+  #     cli::cli_alert("Tip: check that your arguments are correct.")
+  #     cli::cli_li("biomass_unit_label = {biomass_unit_label}")
+  #     cli::cli_li("biomass_scale_amount = {biomass_scale_amount}")
+  #     cli::cli_li("ref_line = {ref_line}")
+  #     cli::cli_li("relative = {relative}")
+  #     print(e)
+  #   }
+  # )
+  # 
+  # 
   # tryCatch(
   #   {
   #     cli::cli_h2("plot_landings")
   #     plot_landings(dat,
   #       unit_label = landings_unit_label,
-  #       make_rda,
-  #       figures_dir = figures_tables_dir
+  #       make_rda = TRUE,
+  #       figures_dir = figures_tables_dir,
+  #       interactive = FALSE
   #     ) # |>
   #     # suppressWarnings() |>
   #     # invisible()
@@ -173,127 +175,194 @@ save_all_plots <- function(
 
   tryCatch(
     {
-      cli::cli_h2("plot_recruitment_deviations")
-      plot_recruitment_deviations(
-        dat,
-        interactive = interactive,
-        make_rda = TRUE,
-        figures_dir = figures_tables_dir
-      ) #|>
+      cli::cli_h2("plot_fishing_mortality")
+      plot_fishing_mortality(dat,
+                    make_rda = TRUE,
+                    relative = relative,
+                    figures_dir = figures_tables_dir,
+                    interactive = FALSE) # |>
       # suppressWarnings() |>
       # invisible()
     },
     error = function(e) {
-      cli::cli_alert_danger("plot_recruitment_deviations failed to run.")
+      cli::cli_alert_danger("plot_fishing_mortality failed to run.")
       cli::cli_alert("Tip: check that your arguments are correct.")
-      print(e)
-    }
-  )
-
-  # plot_spawn_recruitment(dat,
-  #                        spawning_biomass_label,
-  #                        recruitment_label = recruitment_unit_label,
-  #                        make_rda,
-  #                        figures_dir = figures_tables_dir)# |> suppressWarnings() |> invisible()
-
-  tryCatch(
-    {
-      cli::cli_h2("plot_spawning_biomass")
-      plot_spawning_biomass(
-        dat,
-        unit_label = spawning_biomass_label,
-        scale_amount = spawning_biomass_scale_amount,
-        ref_line = ref_line_sb,
-        relative = relative,
-        interactive = interactive,
-        make_rda = TRUE,
-        figures_dir = figures_tables_dir
-      ) # |>
-      # suppressWarnings() |>
-      # invisible()
-    },
-    error = function(e) {
-      cli::cli_alert_danger("plot_spawning_biomass failed to run.")
-      cli::cli_alert("Tip: check that your arguments are correct.")
-      cli::cli_li("spawning_biomass_label = {spawning_biomass_label}")
-      cli::cli_li("spawning_biomass_scale_amount = {spawning_biomass_scale_amount}")
-      cli::cli_li("ref_line_sb = {ref_line_sb}")
       cli::cli_li("relative = {relative}")
       print(e)
     }
   )
 
-  tryCatch(
-    {
-      cli::cli_h2("plot_abundance_at_age")
-      plot_abundance_at_age(
-        dat,
-        unit_label = abundance_at_age_unit_label,
-        scale_amount = abundance_at_age_scale_amount,
-        proportional = proportional,
-        make_rda = TRUE,
-        figures_dir = figures_tables_dir
-      ) # |>
-      # suppressWarnings() |>
-      # invisible()
-    },
-    error = function(e) {
-      cli::cli_alert_danger("plot_abundance_at_age failed to run.")
-      cli::cli_alert("Tip: check that your arguments are correct.")
-      cli::cli_li("abundance_at_age_unit_label = {abundance_at_age_unit_label}")
-      cli::cli_li("abundance_at_age_scale_amount = {abundance_at_age_scale_amount}")
-      print(e)
-    }
-  )
+  # tryCatch(
+  #   {
+  #     cli::cli_h2("plot_natural_mortality")
+  #     plot_natural_mortality(dat,
+  #                            module = "Natural_Mortality",
+  #                            make_rda = TRUE,
+  #                            figures_dir = figures_tables_dir,
+  #                            interactive = FALSE) # |>
+  #     # suppressWarnings() |>
+  #     # invisible()
+  #   },
+  #   error = function(e) {
+  #     cli::cli_alert_danger("plot_natural_mortality failed to run.")
+  #     cli::cli_alert("Tip: check that your arguments are correct.")
+  #     print(e)
+  #   }
+  # )
 
-  tryCatch(
-    {
-      plot_catch_comp(
-        dat,
-        unit_label = catch_unit_label,
-        scale_amount = catch_scale_amount,
-        proportional = proportional,
-        interactive = interactive,
-        make_rda = TRUE,
-        figures_dir = figures_tables_dir
-      ) # |>
-      # suppressWarnings() |>
-      # invisible()
-    },
-    error = function(e) {
-      message("plot_catch_comp failed to run. Tip: check that your arguments are correct.")
-      print(e)
-    }
-  )
+  # tryCatch(
+  #   {
+  #     cli::cli_h2("plot_recruitment_deviations")
+  #     plot_recruitment_deviations(
+  #       dat,
+  #       interactive = FALSE,
+  #       make_rda = TRUE,
+  #       figures_dir = figures_tables_dir
+  #     ) #|>
+  #     # suppressWarnings() |>
+  #     # invisible()
+  #   },
+  #   error = function(e) {
+  #     cli::cli_alert_danger("plot_recruitment_deviations failed to run.")
+  #     cli::cli_alert("Tip: check that your arguments are correct.")
+  #     print(e)
+  #   }
+  # )
+  # 
+  # tryCatch(
+  #   {
+  #     cli::cli_h2("plot_spawn_recruitment")
+  #     plot_spawn_recruitment(dat,
+  #                            spawning_biomass_label,
+  #                            recruitment_label = recruitment_unit_label,
+  #                            make_rda = TRUE,
+  #                            interactive = FALSE,
+  #                            module = "SPAWN_RECRUIT",
+  #                            figures_dir = figures_tables_dir)
+  #     #                        |> suppressWarnings() |> invisible()
+  #   },
+  #   error = function(e) {
+  #     cli::cli_alert_danger("plot_spawn_recruitment failed to run.")
+  #     cli::cli_alert("Tip: check that your arguments are correct.")
+  #     cli::cli_li("spawning_biomass_label = {spawning_biomass_label}")
+  #     cli::cli_li("recruitment_label = {recruitment_label}")
+  #     print(e)
+  #   }
+  # )
+  # 
+  # tryCatch(
+  #   {
+  #     cli::cli_h2("plot_spawning_biomass")
+  #     plot_spawning_biomass(
+  #       dat,
+  #       unit_label = spawning_biomass_label,
+  #       scale_amount = spawning_biomass_scale_amount,
+  #       ref_line = ref_line_sb,
+  #       relative = relative,
+  #       interactive = interactive,
+  #       make_rda = TRUE,
+  #       figures_dir = figures_tables_dir
+  #     ) # |>
+  #     # suppressWarnings() |>
+  #     # invisible()
+  #   },
+  #   error = function(e) {
+  #     cli::cli_alert_danger("plot_spawning_biomass failed to run.")
+  #     cli::cli_alert("Tip: check that your arguments are correct.")
+  #     cli::cli_li("spawning_biomass_label = {spawning_biomass_label}")
+  #     cli::cli_li("spawning_biomass_scale_amount = {spawning_biomass_scale_amount}")
+  #     cli::cli_li("ref_line_sb = {ref_line_sb}")
+  #     cli::cli_li("relative = {relative}")
+  #     print(e)
+  #   }
+  # )
+  # 
+  # tryCatch(
+  #   {
+  #     cli::cli_h2("plot_abundance_at_age")
+  #     plot_abundance_at_age(
+  #       dat,
+  #       unit_label = abundance_at_age_unit_label,
+  #       scale_amount = abundance_at_age_scale_amount,
+  #       proportional = proportional,
+  #       make_rda = TRUE,
+  #       figures_dir = figures_tables_dir
+  #     ) # |>
+  #     # suppressWarnings() |>
+  #     # invisible()
+  #   },
+  #   error = function(e) {
+  #     cli::cli_alert_danger("plot_abundance_at_age failed to run.")
+  #     cli::cli_alert("Tip: check that your arguments are correct.")
+  #     cli::cli_li("abundance_at_age_unit_label = {abundance_at_age_unit_label}")
+  #     cli::cli_li("abundance_at_age_scale_amount = {abundance_at_age_scale_amount}")
+  #     print(e)
+  #   }
+  # )
+  # 
+  # tryCatch(
+  #   {
+  #     plot_catch_comp(
+  #       dat,
+  #       unit_label = catch_unit_label,
+  #       scale_amount = catch_scale_amount,
+  #       proportional = proportional,
+  #       interactive = FALSE,
+  #       make_rda = TRUE,
+  #       figures_dir = figures_tables_dir
+  #     ) # |>
+  #     # suppressWarnings() |>
+  #     # invisible()
+  #   },
+  #   error = function(e) {
+  #     message("plot_catch_comp failed to run.")
+  #     cli::cli_alert("Tip: check that your arguments are correct.")
+  #     cli::cli_li("catch_unit_label = {catch_unit_label}")
+  #     cli::cli_li("catch_scale_amount = {catch_scale_amount}")
+  #     cli::cli_li("proportional = {proportional}")
+  #     print(e)
+  #   }
+  # )
+  # 
+  # tryCatch(
+  #   {
+  #     cli::cli_h2("plot_biomass_at_age")
+  #     plot_biomass_at_age(
+  #       dat,
+  #       unit_label = biomass_at_age_unit_label,
+  #       scale_amount = biomass_at_age_scale_amount,
+  #       proportional = proportional,
+  #       make_rda = TRUE,
+  #       figures_dir = figures_tables_dir
+  #     ) # |>
+  #     # suppressWarnings() |>
+  #     # invisible()
+  #   },
+  #   error = function(e) {
+  # cli::cli_alert_danger("plot_biomass_at_age failed to run.")
+  # cli::cli_alert("Tip: check that your arguments are correct.")
+  # cli::cli_li("biomass_at_age_unit_label = {biomass_at_age_unit_label}")
+  # cli::cli_li("biomass_at_age_scale_amount = {biomass_at_age_scale_amount}")
+  # print(e)
+  #   }
+  # )
 
-  tryCatch(
-    {
-      cli::cli_h2("plot_biomass_at_age")
-      plot_biomass_at_age(
-        dat,
-        unit_label = biomass_at_age_unit_label,
-        scale_amount = biomass_at_age_scale_amount,
-        proportional = proportional,
-        make_rda = TRUE,
-        figures_dir = figures_tables_dir
-      ) # |>
-      # suppressWarnings() |>
-      # invisible()
-    },
-    error = function(e) {
-      cli::cli_alert_danger("plot_biomass_at_age failed to run.")
-      cli::cli_alert("Tip: check that your arguments are correct.")
-      cli::cli_li("biomass_at_age_unit_label = {biomass_at_age_unit_label}")
-      cli::cli_li("biomass_at_age_scale_amount = {biomass_at_age_scale_amount}")
-      print(e)
-    }
-  )
-
-  # uncomment when this is working properly
-  # plot_indices(dat,
-  #                    unit_label = indices_unit_label,
-  #                    make_rda,
-  #                    figures_dir = figures_tables_dir)# |> suppressWarnings() |> invisible()
+  # tryCatch(
+  #   {
+  #     cli::cli_h2("plot_indices")
+  #     plot_indices(dat,
+  #              unit_label = indices_unit_label,
+  #              make_rda = TRUE,
+  #              interactive = FALSE,
+  #              figures_dir = figures_tables_dir)# |> suppressWarnings() |> invisible()
+  #   },
+  #   error = function(e) {
+  #     cli::cli_alert_danger("plot_indices failed to run.")
+  #     cli::cli_alert("Tip: check that your arguments are correct.")
+  #     cli::cli_li("indices_unit_label = {indices_unit_label}")
+  #     print(e)
+  #   }
+  # )
 
   # tables
   # tryCatch(
@@ -304,7 +373,7 @@ save_all_plots <- function(
   #       biomass_unit_label,
   #       catch_unit_label,
   #       spawning_biomass_label,
-  #       make_rda,
+  #       make_rda = TRUE,
   #       tables_dir = figures_tables_dir
   #     ) # |>
   #     # suppressWarnings() |>
@@ -325,7 +394,7 @@ save_all_plots <- function(
   #     cli::cli_h2("table_indices")
   #     table_indices(
   #       dat,
-  #       make_rda,
+  #       make_rda = TRUE,
   #       tables_dir = figures_tables_dir
   #     ) # |>
   #     # suppressWarnings() |>
@@ -343,7 +412,7 @@ save_all_plots <- function(
   #     cli::cli_h2("table_landings")
   #     table_landings(dat,
   #       unit_label = landings_unit_label,
-  #       make_rda,
+  #       make_rda = TRUE,
   #       tables_dir = figures_tables_dir
   #     ) # |>
   #     # suppressWarnings() |>
