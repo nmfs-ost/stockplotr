@@ -146,7 +146,7 @@ PARAMETERS,SD_young,sd_young
 PARAMETERS,SD_old,sd_old
 PARAMETERS,Wtlen,weight_length
 PARAMETERS,Mat50%,maturity_50
-PARAMETERS,Mat_slope,maurity_slope
+PARAMETERS,Mat_slope,maturity_slope
 PARAMETERS,Eggs_scalar,eggs_scalar
 PARAMETERS,Eggs_exp_len,eggs_exp_len
 PARAMETERS,CohortGrowDev,cohort_grow_dev

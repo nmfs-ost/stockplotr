@@ -20,7 +20,6 @@ test_that("convert_output works for SS3", {
   # Test saving the output in a global environment
   output <- convert_output(
     file = file.path(all_models[1], "Report.sso")
-  )
 
   expect_equal(dim(output)[2], 33)
 })
@@ -42,7 +41,7 @@ test_that("convert_output saves model ss3 hake output file", {
 test_that("missing arguments trigger warnings or errors", {
   # TODO: Debug why this doesn't work
   # expect_error(
-  #   asar::convert_output(
+  #   convert_output(
   #     model = "ss3",
   #     save_dir = fs::path("fixtures", "ss3_models_converted", "Hake_2018")
   #   ),
@@ -51,7 +50,7 @@ test_that("missing arguments trigger warnings or errors", {
 
   # TODO: Debug why this doesn't work
   # expect_error(
-  #   asar::convert_output(
+  #   convert_output(
   #     file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
   #     model = "fake_model",
   #     save_dir = fs::path("fixtures", "ss3_models_converted", "Hake_2018")
@@ -60,7 +59,7 @@ test_that("missing arguments trigger warnings or errors", {
   # )
 
   expect_error(
-    asar::convert_output(
+    convert_output(
       file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.rdat"),
       model = "ss3",
       save_dir = fs::path("fixtures", "ss3_models_converted", "Hake_2018")
