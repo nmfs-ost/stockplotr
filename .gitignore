@@ -12,3 +12,4 @@ inst/doc
 docs
 stockplotr.Rproj
 *.Rproj
+!vignettes/figures/
