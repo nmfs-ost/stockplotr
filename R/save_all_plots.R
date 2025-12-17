@@ -324,6 +324,101 @@ save_all_plots <- function(
 
   tryCatch(
     {
+      cli::cli_h2("plot_spawn_recruitment")
+      plot_spawn_recruitment(dat,
+                             spawning_biomass_label,
+                             recruitment_label = recruitment_unit_label,
+                             make_rda = TRUE,
+                             interactive = FALSE,
+                             module = "SPAWN_RECRUIT",
+                             figures_dir = figures_tables_dir)
+      #                        |> suppressWarnings() |> invisible()
+    },
+    error = function(e) {
+      cli::cli_alert_danger("plot_spawn_recruitment failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      cli::cli_li("spawning_biomass_label = {spawning_biomass_label}")
+      cli::cli_li("recruitment_label = {recruitment_label}")
+      print(e)
+    }
+  )
+
+  tryCatch(
+    {
+      cli::cli_h2("plot_spawning_biomass")
+      plot_spawning_biomass(
+        dat,
+        unit_label = spawning_biomass_label,
+        scale_amount = spawning_biomass_scale_amount,
+        ref_line = ref_line_sb,
+        relative = relative,
+        interactive = interactive,
+        make_rda = TRUE,
+        figures_dir = figures_tables_dir
+      ) # |>
+      # suppressWarnings() |>
+      # invisible()
+    },
+    error = function(e) {
+      cli::cli_alert_danger("plot_spawning_biomass failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      cli::cli_li("spawning_biomass_label = {spawning_biomass_label}")
+      cli::cli_li("spawning_biomass_scale_amount = {spawning_biomass_scale_amount}")
+      cli::cli_li("ref_line_sb = {ref_line_sb}")
+      cli::cli_li("relative = {relative}")
+      print(e)
+    }
+  )
+
+  tryCatch(
+    {
+      cli::cli_h2("plot_abundance_at_age")
+      plot_abundance_at_age(
+        dat,
+        unit_label = abundance_at_age_unit_label,
+        scale_amount = abundance_at_age_scale_amount,
+        proportional = proportional,
+        make_rda = TRUE,
+        figures_dir = figures_tables_dir
+      ) # |>
+      # suppressWarnings() |>
+      # invisible()
+    },
+    error = function(e) {
+      cli::cli_alert_danger("plot_abundance_at_age failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      cli::cli_li("abundance_at_age_unit_label = {abundance_at_age_unit_label}")
+      cli::cli_li("abundance_at_age_scale_amount = {abundance_at_age_scale_amount}")
+      print(e)
+    }
+  )
+
+  tryCatch(
+    {
+      plot_catch_comp(
+        dat,
+        unit_label = catch_unit_label,
+        scale_amount = catch_scale_amount,
+        proportional = proportional,
+        interactive = FALSE,
+        make_rda = TRUE,
+        figures_dir = figures_tables_dir
+      ) # |>
+      # suppressWarnings() |>
+      # invisible()
+    },
+    error = function(e) {
+      message("plot_catch_comp failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      cli::cli_li("catch_unit_label = {catch_unit_label}")
+      cli::cli_li("catch_scale_amount = {catch_scale_amount}")
+      cli::cli_li("proportional = {proportional}")
+      print(e)
+    }
+  )
+
+  tryCatch(
+    {
       cli::cli_h2("plot_biomass_at_age")
       plot_biomass_at_age(
         dat,
