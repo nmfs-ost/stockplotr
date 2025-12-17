@@ -15,8 +15,8 @@
 #' plot_indices(
 #'   dat = stockplotr:::example_data,
 #'   unit_label = "fish/hr",
-#'   interactive = FALSE
-#' )
+#'   interactive= FALSE)
+#'   
 plot_indices <- function(
   dat,
   unit_label = "",
@@ -115,7 +115,7 @@ plot_indices <- function(
   if (make_rda) {
     create_rda(
       object = plt,
-      topic_label = "indices",
+      topic_label = "CPUE.indices",
       fig_or_table = "figure",
       dat = dat,
       dir = figures_dir,

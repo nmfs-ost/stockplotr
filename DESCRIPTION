@@ -38,10 +38,11 @@ Imports:
     asar,
     cli,
     dplyr,
-    flextable,
     fs,
     ggplot2,
     glue,
+    gt,
+    knitr,
     naniar,
     quarto,
     scales,
@@ -52,10 +53,8 @@ Imports:
     utils,
     withr
 Suggests:
-    gt,
     here,
     kableExtra,
-    knitr,
     rmarkdown,
     testthat (>= 3.0.0)
 VignetteBuilder: 
