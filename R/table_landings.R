@@ -80,7 +80,9 @@ table_landings <- function(dat,
   }
 
   prepared_data2 <- prepared_data |>
-    dplyr::filter(label == target_label)
+    dplyr::filter(label == target_label) |>
+    dplyr::mutate(estimate = round(as.numeric(estimate), digits = 0)) |>
+    dplyr::mutate(uncertainty = round(as.numeric(uncertainty), digits = 2))
   
   # get uncertainty label
   uncert_lab <- prepared_data2$uncertainty_label |> 
