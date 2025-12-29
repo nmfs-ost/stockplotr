@@ -69,6 +69,11 @@ table_landings(stockplotr::example_data)
 table_landings(
   stockplotr::example_data,
   unit_label = "landings label",
+<<<<<<< HEAD
   group =
   )
+=======
+  group = 
+)
+>>>>>>> c236542 (Update table_landings() so that fleets are ordered properly, with a mix of numerically and alphabetically)
 }

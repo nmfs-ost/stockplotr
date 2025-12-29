@@ -143,12 +143,14 @@ table_landings <- function(
   # get fleet names
   fleets <- prepared_data2$fleet |>
     unique() |>
-    sort()
+    # sort numerically even if fleets are 100% characters
+    stringr::str_sort(numeric = TRUE)
 
+  #TODO: fix this so that fleet names aren't removed if, e.g., group = "fleet"
   table_data <- process_table(
-    dat = prepared_data2#,
+    dat = prepared_data2,
    # group = group,
-   # method = method
+    method = method
     )
   
   # put table_data into a nice table
@@ -156,9 +158,6 @@ table_landings <- function(
                          "Sex" = "sex",
                          "Fleet" = "fleet",
                          "Model" = "model")
-  
-
-  
   
   
   
