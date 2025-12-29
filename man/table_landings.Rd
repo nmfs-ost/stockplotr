@@ -9,6 +9,8 @@ table_landings(
   unit_label = "mt",
   era = "time",
   interactive = TRUE,
+  group = NULL,
+  method = "sum",
   module = NULL,
   scale_amount = 1,
   label = NULL,
@@ -30,6 +32,12 @@ the current time. To plot all data, set era to NULL.}
 \item{interactive}{TRUE/FALSE; indicate whether the environment in which the
 function is operating  is interactive. This bypasses some options for
 filtering when preparing data for the plot. Default is FALSE.}
+
+\item{group}{A string identifying the indexing variable of the data. If you
+want to just summarize the data across all factors, set group = "none".}
+
+\item{method}{A string describing the method of summarizing data when group
+is set to "none". Options are "sum" or "mean". Default is "sum".}
 
 \item{module}{(Optional) A string indicating the linked module_name associated
 with the label for the plot if known. Default is NULL. By default, the function
@@ -57,15 +65,11 @@ fleet and year.
 Landed catch by fleet and year table
 }
 \examples{
-\dontrun{
-table_landings(dat)
+table_landings(stockplotr::example_data)
 
 table_landings(
-  dat,
+  stockplotr::example_data,
   unit_label = "landings label",
-  end_year = 2024,
-  make_rda = TRUE,
-  tables_dir = getwd()
+  group = 
 )
-}
 }
