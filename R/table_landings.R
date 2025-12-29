@@ -102,10 +102,6 @@ table_landings <- function(
     unit_label
   )
   
-  
-  #TODO: add check for if length of label > 1 (if TRUE, then a specific value (e.g., observed?) will need to be selected)
-  
-  
   # order potential labels by applicability
   ordered_labels <- c("landings_weight", 
                       "landings_numbers",
@@ -123,6 +119,10 @@ table_landings <- function(
       }
     }
     cli::cli_alert_info("`label` selected as {target_label}.")
+  } else if (length(label) > 1){
+    cli::cli_alert_info("More than one `label` exists.")
+    target_label <- label[1]  
+    cli::cli_alert_info("The first `label` value will be selected {target_label}.")
   } else {
     target_label <- label
   }
