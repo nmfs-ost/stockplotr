@@ -2,6 +2,10 @@
 #'
 #' @inheritParams plot_recruitment
 #' @param unit_label Abbreviated units of landings
+#' @param group A string identifying the indexing variable of the data. If you
+#' want to just summarize the data across all factors, set group = "none".
+#' @param method A string describing the method of summarizing data when group
+#' is set to "none". Options are "sum" or "mean". Default is "sum".
 #' @param tables_dir The location of the folder containing the generated table
 #' rda files ("tables") that will be created if the argument `make_rda` = TRUE. 
 #' @param label The label that will be chosen from the input file. If unspecified, the function will search the "label" column and use the first matching label in this ordered list: "landings_weight",  "landings_numbers", "landings_expected", "landings_predicted", "landings".
@@ -11,21 +15,19 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' table_landings(dat)
+#' table_landings(stockplotr::example_data)
 #'
 #' table_landings(
-#'   dat,
+#'   stockplotr::example_data,
 #'   unit_label = "landings label",
-#'   end_year = 2024,
-#'   make_rda = TRUE,
-#'   tables_dir = getwd()
+#'   group = 
 #' )
-#' }
 table_landings <- function(dat,
                            unit_label = "mt",
                            era = "time",
                            interactive = TRUE,
+                           group = NULL,
+                           method = "sum",
                            module = NULL,
                            scale_amount = 1,
                            label = NULL,
@@ -38,7 +40,7 @@ table_landings <- function(dat,
   # identify output
   fig_or_table <- "table"
   
-  #TODO: add these args to the table_landings() args
+  #TODO: do group and facet need to be uncommented and updated?
   # Filter data for landings
   prepared_data <- filter_data(
     dat = dat,
@@ -93,12 +95,14 @@ table_landings <- function(dat,
   # get fleet names
   fleets <- prepared_data2$fleet |>
     unique() |>
-    sort()
+    # sort numerically even if fleets are 100% characters
+    stringr::str_sort(numeric = TRUE)
 
+  #TODO: fix this so that fleet names aren't removed if, e.g., group = "fleet"
   table_data <- process_table(
-    dat = prepared_data2#,
+    dat = prepared_data2,
    # group = group,
-   # method = method
+    method = method
     )
   
   # put table_data into a nice table
@@ -109,7 +113,6 @@ table_landings <- function(dat,
   
   landings_colname <- paste0("Landings (", unit_label, ")")
   
-  #TODO: Update add_theme() for gt tables
   #TODO: ensure numeric columns rounded 
   final_df <- table_data |>
     dplyr::rename(dplyr::any_of(capitalized_names)) |>
@@ -131,9 +134,6 @@ table_landings <- function(dat,
                           replacement = ""),
       .cols = everything()
     )
-
-  #  dplyr::rename_with(~ gsub("__", "_", .)) |>
-     
   
   # Order columns by landings / cv / landings, etc. and with alphabetical fleets
   if (length(fleets) > 0){
@@ -141,10 +141,9 @@ table_landings <- function(dat,
       dplyr::select(-Year) |>
       colnames()
     fleet_codes <- stringr::str_extract(cols_to_sort, "(?<=- )[^ ]+")
-    order_index <- order(fleet_codes, 
-                         cols_to_sort,
-                         decreasing = c(FALSE, FALSE),
-                         method = "radix")
+    fleet_ranks <- stringr::str_rank(fleet_codes, numeric = TRUE)
+    # Order by those ranks, then by col names
+    order_index <- order(fleet_ranks, cols_to_sort)
     ordered_cols_to_sort <- cols_to_sort[order_index]
     final_df <- final_df |>
       dplyr::select(
@@ -162,9 +161,6 @@ table_landings <- function(dat,
     #    "Year", "Landings (<unit>)", "uncertainty"
     # for am, cols are:
     #    "Landings (mt) - cbn",	"cv - cbn",	"Landings (mt) - cbs",	"cv - cbs", etc
-      
-  # TODO: Check that numeric fleets show up in chronological
-  # order (currently, may list 1, 10, 11, 12, etc.)
   
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
