@@ -1,7 +1,7 @@
 Type: Package
 Package: stockplotr
 Title: Tables and Figures for Stock Assessments
-Version: 0.1.0
+Version: 0.7.0
 Authors@R: c(
     person("Samantha", "Schiano", , "samantha.schiano@noaa.gov", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0003-3744-6428")),
@@ -42,7 +42,9 @@ Imports:
     fs,
     ggplot2,
     glue,
+    httr,
     naniar,
+    prodlim,
     quarto,
     scales,
     stringr,
@@ -60,8 +62,6 @@ Suggests:
     testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr
-Remotes:
-    nmfs-ost/asar
 Config/testthat/edition: 3
 Config/testthat/parallel: false
 Encoding: UTF-8

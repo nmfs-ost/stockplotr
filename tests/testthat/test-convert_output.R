@@ -20,6 +20,7 @@ test_that("convert_output works for SS3", {
   # Test saving the output in a global environment
   output <- convert_output(
     file = file.path(all_models[1], "Report.sso")
+  )
 
   expect_equal(dim(output)[2], 33)
 })
