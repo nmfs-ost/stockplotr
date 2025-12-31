@@ -9,7 +9,8 @@ export_rda(
   caps_alttext = NULL,
   figures_tables_dir = NULL,
   topic_label = NULL,
-  fig_or_table = NULL
+  fig_or_table = NULL,
+  latex_table = NULL
 )
 }
 \arguments{
@@ -29,6 +30,8 @@ labels are found in the "label" column of the "captions_alt_text.csv" file
 and are used to link the figure or table with its caption/alt text.}
 
 \item{fig_or_table}{A string describing whether the plot is a figure or table.}
+
+\item{latex_table}{The object containing a LaTeX-based table.}
 }
 \value{
 An rda file with a figure's ggplot, caption, and alternative text, or
@@ -45,7 +48,8 @@ export_rda(
   caps_alttext = caps_alttext_object,
   figures_tables_dir = here::here(),
   topic_label = "bnc",
-  fig_or_table = "table"
+  fig_or_table = "table",
+  latex_table = "latex_table"
 )
 
 export_rda(

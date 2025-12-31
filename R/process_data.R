@@ -1,4 +1,8 @@
-#' Post processing of filtered data
+##################################
+# Post processing of filtered data
+##################################
+
+#' Processing for figures
 #'
 #' @param dat Pre-filtered data from \link[stockplotr]{filter_data} following a
 #' long format data.
@@ -62,6 +66,7 @@ process_data <- function(
       group <- "none"
     }
   }
+
   # check for additional indexed variables
   index_variables <- check_grouping(dat)
   # If user input "none" to group this makes the plot remove any facetting or summarize?
@@ -117,6 +122,7 @@ process_data <- function(
   } else {
     data <- dat
   }
+
   if (length(index_variables) > 0) {
     data <- data |>
       dplyr::select(tidyselect::all_of(c(
@@ -138,6 +144,7 @@ process_data <- function(
   if ("age" %in% colnames(data) && any(!is.na(data$age))) {
     # subset out nas if ages exist for this
     # not sure if  this works for all cases -- are there situations where we want the NA and not age?
+
     data <- dplyr::filter(data, !is.na(age))
     if (!is.null(group) && group == "age") {
       if ("age" %in% index_variables) index_variables <- index_variables[-grep("age", index_variables)]
@@ -317,6 +324,7 @@ process_data <- function(
       group <- NULL
     }
   }
+
   # Export list of objects
   list(
     # variable,
@@ -324,4 +332,71 @@ process_data <- function(
     group,
     facet
   )
+}
+
+
+
+#' Processing for tables
+#'
+#' @inheritParams process_data
+#'
+#' @returns A dataframe of processed data ready for formatting into a table. Input is an object created with \link[stockplotr]{filter_data}.
+#' @export
+#'
+#' @examples {
+#' filtered <- filter_data(
+#' dat = stockplotr:::example_data,
+#' label_name = "landings",
+#' geom = "line",
+#' era = "time"
+#' )
+#' process_table(dat = filtered, method = "sum")
+#' }
+process_table <- function(
+    dat,
+    group = NULL,
+    method = "sum"){
+  
+  index_variables <- check_grouping(dat)
+  
+  #TODO: calculate error properly, if summarized
+  if (!is.null(group) && group == "none"){
+    dat <- switch(
+      method,
+      "mean" = dat |>
+        dplyr::group_by(dplyr::across(tidyselect::all_of(c("label", "model", index_variables)))) |>
+        dplyr::summarize(
+          estimate = mean(estimate),
+          uncertainty_label = unique(uncertainty_label),
+          uncertainty = mean(uncertainty)
+        ),
+      "sum" = dat |>
+        dplyr::group_by(dplyr::across(tidyselect::all_of(c("label", "model", index_variables)))) |>
+        dplyr::summarize(
+          estimate = sum(estimate),
+          uncertainty_label = unique(uncertainty_label),
+          uncertainty = sum(uncertainty)
+        )
+    )
+  } else if (!is.null(group)) {
+    # check if grouping is in index_variables
+    if (group %notin% index_variables) {
+      cli::cli_alert_warning("Selected `group` not present within the data.")
+      cli::cli_alert_info("Output will contain indexing variables ({index_variables}).")
+    }
+  }
+  
+  id_group <- index_variables[-grepl("year|age|length_bin", index_variables)]
+  cols <- index_variables[grepl("year|age|length_bin", index_variables)]
+  
+  table_data <- dat |>
+    dplyr::select(dplyr::all_of(c(
+      "label", "model", index_variables, "estimate", "uncertainty_label", "uncertainty"
+    ))) |>
+    tidyr::pivot_wider(
+      id_cols = dplyr::all_of(c(cols)),
+      values_from = dplyr::all_of(c("estimate", "uncertainty")),
+      names_from = dplyr::all_of(c("label", "uncertainty_label", "model", id_group)))
+  
+  table_data
 }
