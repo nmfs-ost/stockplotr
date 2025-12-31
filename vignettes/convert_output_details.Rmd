@@ -48,6 +48,7 @@ The data is manipulated to follow the format in @tbl-cols. The majority of the c
 
 
 ```{r, echo=TRUE}
+#| eval: false
 load("example_conout.rda")
 head(hake_conout)
 ```

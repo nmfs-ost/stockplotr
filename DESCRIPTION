@@ -41,7 +41,9 @@ Imports:
     fs,
     ggplot2,
     glue,
+    gt,
     httr,
+    kableExtra,
     naniar,
     prodlim,
     quarto,
@@ -53,9 +55,7 @@ Imports:
     utils,
     withr
 Suggests:
-    gt,
     here,
-    kableExtra,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
