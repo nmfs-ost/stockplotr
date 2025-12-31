@@ -1,7 +1,7 @@
 Type: Package
 Package: stockplotr
 Title: Tables and Figures for Stock Assessments
-Version: 0.1.0
+Version: 0.7.0
 Authors@R: c(
     person("Samantha", "Schiano", , "samantha.schiano@noaa.gov", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0003-3744-6428")),
@@ -34,15 +34,18 @@ URL: https://github.com/nmfs-ost/stockplotr,
 BugReports: https://github.com/nmfs-ost/stockplotr/issues
 Depends: 
     R (>= 4.1.0)
-Imports: 
-    asar,
+Imports:
     cli,
     dplyr,
     flextable,
     fs,
     ggplot2,
     glue,
+    gt,
+    httr,
+    kableExtra,
     naniar,
+    prodlim,
     quarto,
     scales,
     stringr,
@@ -52,16 +55,12 @@ Imports:
     utils,
     withr
 Suggests:
-    gt,
     here,
-    kableExtra,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr
-Remotes:
-    nmfs-ost/asar
 Config/testthat/edition: 3
 Config/testthat/parallel: false
 Encoding: UTF-8
