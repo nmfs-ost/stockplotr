@@ -8,7 +8,10 @@
 #' is set to "none". Options are "sum" or "mean". Default is "sum".
 #' @param tables_dir The location of the folder containing the generated table
 #' rda files ("tables") that will be created if the argument `make_rda` = TRUE. 
-#' @param label The label that will be chosen from the input file. If unspecified, the function will search the "label" column and use the first matching label in this ordered list: "landings_weight",  "landings_numbers", "landings_expected", "landings_predicted", "landings".
+#' @param label The label that will be chosen from the input file. If unspecified,
+#' the function will search the "label" column and use the first matching label
+#' in this ordered list: "landings_weight",  "landings_numbers", "landings_expected",
+#' "landings_predicted", "landings".
 #'
 #' @return Create a table ready for a stock assessment report of landed catch by
 #' fleet and year.
@@ -54,14 +57,54 @@ table_landings <- function(dat,
     interactive = interactive
   )
   
-  # order potential labels by applicability
-  ordered_labels <- c("landings_weight", 
-                      "landings_numbers",
-                      "landings_expected",
-                      "landings_predicted",
-                      "landings")
+  # Add check for length label >1
+  # below method will only work when unqiue(label) == 2
+  if (length(unique(prepared_data$label)) > 1){
+    cli::cli_alert_info("Multiple labels found in prepared data: {unique(prepared_data$label)}")
+    # check if the multiple labels are equal for all indexing
+    # all non-indexing variables
+    indexing_vars <- colnames(prepared_data)[-grep(
+      paste(
+        c("year", "estimate", 
+          "uncertainty", "uncertainty_label", 
+          "label", "module_name", 
+          "likelihood", "initial"),
+        collapse = "|"), colnames(prepared_data))]
+
+    # compare estimate across all indexing vars and see if they are different over years
+    label_differences <- prepared_data |>
+      tidyr::pivot_wider(
+        id_cols = dplyr::all_of(indexing_vars),
+        names_from = label,
+        values_from = estimate
+      ) |>
+      dplyr::mutate(
+        diff = .data[[unique(prepared_data$label)[1]]] - .data[[unique(prepared_data$label)[2]]]
+      )
+    
+    if (all(label_differences$diff == 0)){
+      cli::cli_alert_info("Labels have identical values. Using only the first label: {unique(prepared_data$label)[1]}")
+      prepared_data <- prepared_data |>
+        dplyr::filter(label == unique(prepared_data$label)[1])
+      multi_label <- FALSE
+    } else  {
+      multi_label <- TRUE
+    }
+  }
   
-  if (is.null(label)){
+  # order potential labels by applicability
+  ordered_labels <- c(
+    # "landings_weight",
+    # "landings_numbers",
+    # "landings_expected",
+    # "landings_predicted",
+    "landings_observed_weight",
+    "landings_predicted_weight",
+    "landings_observed_number",
+    "landings_predicted_number",
+    "landings")
+  
+  if (is.null(label) & multi_label){
     cli::cli_alert_info("`label` not specified.")
     # Choose label to filter by, based on presence in prepared_data
     for (lab in ordered_labels) {
@@ -71,12 +114,14 @@ table_landings <- function(dat,
       }
     }
     cli::cli_alert_info("`label` selected as {target_label}.")
-  } else if (length(label) > 1){
+  } else if (length(label) > 1 & multi_label){
     cli::cli_alert_info("More than one `label` exists.")
     target_label <- label[1]  
     cli::cli_alert_info("The first `label` value will be selected {target_label}.")
-  } else {
+  } else if (!is.null(label)){
     target_label <- label
+  } else {
+    target_label <- unique(prepared_data$label)
   }
 
   prepared_data2 <- prepared_data |>

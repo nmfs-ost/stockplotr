@@ -388,15 +388,17 @@ process_table <- function(
   
   id_group <- index_variables[-grepl("year|age|length_bin", index_variables)]
   cols <- index_variables[grepl("year|age|length_bin", index_variables)]
+  uncert_lab <- unique(dat$uncertainty_label)
   
   table_data <- dat |>
     dplyr::select(dplyr::all_of(c(
-      "label", "model", index_variables, "estimate", "uncertainty_label", "uncertainty"
+      "label", "model", index_variables, "estimate", "uncertainty"
     ))) |>
+    dplyr::rename(!!uncert_lab := uncertainty) |>
     tidyr::pivot_wider(
-      id_cols = dplyr::all_of(c(cols)),
-      values_from = dplyr::all_of(c("estimate", "uncertainty")),
-      names_from = dplyr::all_of(c("label", "uncertainty_label", "model", id_group)))
+      id_cols = dplyr::all_of(c(cols, "model")),
+      values_from = dplyr::all_of(c("estimate", uncert_lab)),
+      names_from = dplyr::all_of(c("label", id_group)))
   
   table_data
 }

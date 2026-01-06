@@ -149,7 +149,7 @@ convert_output <- function(
       blank.lines.skip = FALSE
     )
     # Check SS3 model version
-    vers <- stringr::str_extract(dat[1, 1], "[0-9].[0-9][0-9].[0-9][0-9].[0-9]")
+    vers <- stringr::str_extract(dat[1, 1], "[0-9].[0-9][0-9].[0-9][0-9]") # .[0-9]
     if (vers < 3.3) {
       cli::cli_abort("This function in its current state can not process the data.")
     }
