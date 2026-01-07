@@ -25,21 +25,25 @@
 #'   unit_label = "landings label",
 #'   group = 
 #' )
-table_landings <- function(dat,
-                           unit_label = "mt",
-                           era = "time",
-                           interactive = TRUE,
-                           group = NULL,
-                           method = "sum",
-                           module = NULL,
-                           scale_amount = 1,
-                           label = NULL,
-                           make_rda = FALSE,
-                           tables_dir = getwd()) {
+table_landings <- function(
+    dat,
+    unit_label = "mt",
+    era = "time",
+    interactive = TRUE,
+    group = NULL,
+    method = "sum",
+    module = NULL,
+    scale_amount = 1,
+    # Consider moving label out and make it automated - I set foundations for this
+    label = NULL,
+    make_rda = FALSE,
+    tables_dir = getwd()) {
   
+  # TODO: remove -- this gets called in create_rda @ end
   # create plot-specific variables to use throughout fxn for naming and IDing
   topic_label <- "landings"
   
+  # TODO: remove -- this gets called in create_rda @ end
   # identify output
   fig_or_table <- "table"
   
@@ -104,6 +108,7 @@ table_landings <- function(dat,
     "landings_predicted_number",
     "landings")
   
+  # TODO: evaluate this step and see if it can be condensed with the changes
   if (is.null(label) & multi_label){
     cli::cli_alert_info("`label` not specified.")
     # Choose label to filter by, based on presence in prepared_data
@@ -146,12 +151,13 @@ table_landings <- function(dat,
     stringr::str_sort(numeric = TRUE)
 
   #TODO: fix this so that fleet names aren't removed if, e.g., group = "fleet"
-  table_data <- process_table(
+  table_data_info <- process_table(
     dat = prepared_data2,
    # group = group,
     method = method
     )
-  
+  table_data <- table_data_info[[1]]
+  indexed_vars <- table_data_info[[2]]
   # put table_data into a nice table
   capitalized_names <- c("Year" = "year",
                          "Sex" = "sex",
