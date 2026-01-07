@@ -447,7 +447,6 @@ process_table <- function(
       cli::cli_alert_info("Output will contain indexing variables ({index_variables}).")
     }
   }
-<<<<<<< HEAD
 
   uncert_lab <- unique(dat$uncertainty_label)
   estimate_lab <- stringr::str_to_title(stringr::str_replace_all(unique(dat$label), "_", " "))
@@ -512,22 +511,4 @@ process_table <- function(
     stringr::str_to_title(id_group),
     id_group_list
   )
-=======
-  
-  id_group <- index_variables[-grepl("year|age|length_bin", index_variables)]
-  cols <- index_variables[grepl("year|age|length_bin", index_variables)]
-  uncert_lab <- unique(dat$uncertainty_label)
-  
-  table_data <- dat |>
-    dplyr::select(dplyr::all_of(c(
-      "label", "model", index_variables, "estimate", "uncertainty"
-    ))) |>
-    dplyr::rename(!!uncert_lab := uncertainty) |>
-    tidyr::pivot_wider(
-      id_cols = dplyr::all_of(c(cols, "model")),
-      values_from = dplyr::all_of(c("estimate", uncert_lab)),
-      names_from = dplyr::all_of(c("label", id_group)))
-  
-  table_data
->>>>>>> a6a1cf2 (make adjustments to table_landings)
 }
