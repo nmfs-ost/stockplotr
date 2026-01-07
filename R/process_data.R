@@ -414,6 +414,14 @@ process_table <- function(
     table_data <- dplyr::filter(table_data, !is.na(.data[[c]]))
   }
   
+  # group indexing data together (i.e. fleet)
+  if (length(id_group) > 0){
+    for (f in unique(dat$fleet)) {
+      table_data <- table_data |> 
+        dplyr::relocate(contains(f), .after = last_col())
+    }
+  }
+  
   # If length of model > 1 then split into multiple dfs to a list
   if (length(unique(table_data$model)) > 1){
     table_list <- list()
