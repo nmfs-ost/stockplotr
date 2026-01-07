@@ -334,7 +334,7 @@ process_data <- function(
   )
 }
 
-
+#-------------------------------------------------------------------------------
 
 #' Processing for tables
 #'
@@ -389,16 +389,49 @@ process_table <- function(
   id_group <- index_variables[-grepl("year|age|length_bin", index_variables)]
   cols <- index_variables[grepl("year|age|length_bin", index_variables)]
   uncert_lab <- unique(dat$uncertainty_label)
+  estimate_lab <- stringr::str_to_title(unique(dat$label)[1])
   
   table_data <- dat |>
+    dplyr::rename_with(
+      ~ stringr::str_to_title(.x), 
+      .cols = dplyr::all_of(index_variables)
+    ) |>
     dplyr::select(dplyr::all_of(c(
-      "label", "model", index_variables, "estimate", "uncertainty"
+      "model", stringr::str_to_title(index_variables), "estimate", "uncertainty"
     ))) |>
-    dplyr::rename(!!uncert_lab := uncertainty) |>
+    # rename uncertainty and capitalize indexing variables + estimate
+    dplyr::rename(
+      !!uncert_lab := uncertainty,
+      !!estimate_lab := estimate
+      ) |>
     tidyr::pivot_wider(
-      id_cols = dplyr::all_of(c(cols, "model")),
-      values_from = dplyr::all_of(c("estimate", uncert_lab)),
-      names_from = dplyr::all_of(c("label", id_group)))
+      id_cols = dplyr::all_of(c(stringr::str_to_title(cols), "model")),
+      values_from = dplyr::all_of(c(estimate_lab, uncert_lab)),
+      names_from = dplyr::all_of(c(stringr::str_to_title(id_group))))
   
-  table_data
+  # filter out NAs for cols columns
+  for (c in stringr::str_to_title(cols)){
+    table_data <- dplyr::filter(table_data, !is.na(.data[[c]]))
+  }
+  
+  # If length of model > 1 then split into multiple dfs to a list
+  if (length(unique(table_data$model)) > 1){
+    table_list <- list()
+    for (mod in unique(table_data$model)){
+      mod_data <- dplyr::filter(table_data, model == mod) |>
+        dplyr::select(-model)
+      table_list[[mod]] <- mod_data
+    }
+    table_data <- table_list
+  } else {
+    table_list <- table_data |>
+      dplyr::select(-model)
+  }
+  
+  # Export as list
+  list(
+    table_list,
+    index_variables
+  )
+  
 }
