@@ -149,6 +149,7 @@ table_landings <- function(
     "landings_predicted_number",
     "landings")
   
+  # TODO: evaluate this step and see if it can be condensed with the changes
   if (is.null(label) & multi_label){
     cli::cli_alert_info("`label` not specified.")
     # Choose label to filter by, based on presence in prepared_data
@@ -191,12 +192,13 @@ table_landings <- function(
     stringr::str_sort(numeric = TRUE)
 
   #TODO: fix this so that fleet names aren't removed if, e.g., group = "fleet"
-  table_data <- process_table(
+  table_data_info <- process_table(
     dat = prepared_data2,
    # group = group,
     method = method
     )
-  
+  table_data <- table_data_info[[1]]
+  indexed_vars <- table_data_info[[2]]
   # put table_data into a nice table
   capitalized_names <- c("Year" = "year",
                          "Sex" = "sex",
