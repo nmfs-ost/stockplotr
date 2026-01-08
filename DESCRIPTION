@@ -37,7 +37,6 @@ Depends:
 Imports:
     cli,
     dplyr,
-    flextable,
     fs,
     ggplot2,
     glue,
