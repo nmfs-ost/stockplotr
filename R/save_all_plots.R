@@ -70,7 +70,7 @@ save_all_plots <- function(
   # imported from plot_landings
   landings_unit_label = "mt",
   # imported from plot_recruitment_deviations- zero unique arguments
-  # imported from plot_stock_recruitment 
+  # imported from plot_stock_recruitment
   spawning_biomass_label = "mt",
   spawning_biomass_scale_amount = 1,
   # imported from plot_spawning_biomass
