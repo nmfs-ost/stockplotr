@@ -355,9 +355,60 @@ process_data <- function(
 process_table <- function(
     dat,
     group = NULL,
-    method = "sum"){
+    method = "sum",
+    label = NULL){
   
   index_variables <- check_grouping(dat)
+  
+  # Add check for length label >1
+  # below method will only work when unqiue(label) == 2
+  if (!is.null(label)) {
+    dat <- dat |>
+      dplyr::filter(label %in% label)
+  } else {
+    if (length(unique(prepared_data$label)) > 1){
+      if (length(unique(prepared_data$label)) == 2){
+        # compare estimate across all indexing vars and see if they are different over years
+        label_differences <- dat |>
+          tidyr::pivot_wider(
+            id_cols = dplyr::all_of(index_variables),
+            names_from = label,
+            values_from = estimate
+          ) |>
+          dplyr::mutate(
+            diff = .data[[unique(dat$label)[1]]] - .data[[unique(dat$label)[2]]]
+          )
+        
+        if (all(label_differences$diff == 0)){
+          cli::cli_alert_info("Labels have identical values. Using only the first label: {unique(prepared_data$label)[1]}")
+          dat <- dat |>
+            dplyr::filter(label == unique(dat$label)[1])
+        }
+      } else {
+        cli::cli_alert_info("Multiple labels detected.")
+        if (interactive()) {
+          options <- c()
+          for (i in seq_along(unique(dat$label))) {
+            options[i] <- paste0(unique(dat$label)[i])
+          }
+          question1 <- utils::select.list(
+            options,
+            multiple = TRUE,
+            title = "Select one or more of the following label names"
+          )
+          selected_label <- intersect(
+            unique(dat$label),
+            question1
+          )
+        } else {
+          cli::cli_alert_info("Non-interactive session detected. Using the first label: {unique(prepared_data$label)[1]}")
+          selected_label <- unique(dat$label)[1]
+        }
+        dat <- dat |>
+          dplyr::filter(label %in% selected_label)
+      }
+    }
+  }
   
   #TODO: calculate error properly, if summarized
   if (!is.null(group) && group == "none"){
