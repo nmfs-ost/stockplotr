@@ -199,12 +199,12 @@ table_landings <- function(
     )
   table_data <- table_data_info[[1]]
   indexed_vars <- table_data_info[[2]]
+  
   # put table_data into a nice table
   capitalized_names <- c("Year" = "year",
                          "Sex" = "sex",
                          "Fleet" = "fleet",
                          "Model" = "model")
-  
   
   
   
