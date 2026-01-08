@@ -403,11 +403,17 @@ process_table <- function(
     dplyr::rename(
       !!uncert_lab := uncertainty,
       !!estimate_lab := estimate
-      ) |>
-    tidyr::pivot_wider(
-      id_cols = dplyr::all_of(c(stringr::str_to_title(cols), "model")),
-      values_from = dplyr::all_of(c(estimate_lab, uncert_lab)),
-      names_from = dplyr::all_of(c(stringr::str_to_title(id_group))))
+      )
+    
+  # Only pivot wider if id_cols is >1 otherwise it's already in the correct format
+  if (length(id_group) > 0) {
+    table_data <- table_data |>
+      tidyr::pivot_wider(
+        id_cols = dplyr::all_of(c(stringr::str_to_title(cols), "model")),
+        values_from = dplyr::all_of(c(estimate_lab, uncert_lab)),
+        names_from = dplyr::all_of(c(stringr::str_to_title(id_group))))
+  } 
+    
   
   # filter out NAs for cols columns
   for (c in stringr::str_to_title(cols)){
@@ -416,7 +422,7 @@ process_table <- function(
   
   # group indexing data together (i.e. fleet)
   if (length(id_group) > 0){
-    for (f in unique(dat$fleet)) {
+    for (f in unique(dat$fleet)) { # TODO: change dat$fleet to indexing col(s)
       table_data <- table_data |> 
         dplyr::relocate(contains(f), .after = last_col())
     }
@@ -439,7 +445,7 @@ process_table <- function(
   # Export as list
   list(
     table_list,
-    index_variables
+    id_group
   )
   
 }

@@ -28,7 +28,7 @@
 table_landings <- function(
     dat,
     unit_label = "mt",
-    era = "time",
+    era = NULL,
     interactive = TRUE,
     group = NULL,
     method = "sum",
@@ -39,14 +39,6 @@ table_landings <- function(
     make_rda = FALSE,
     tables_dir = getwd()) {
   
-  # TODO: remove -- this gets called in create_rda @ end
-  # create plot-specific variables to use throughout fxn for naming and IDing
-  topic_label <- "landings"
-  
-  # TODO: remove -- this gets called in create_rda @ end
-  # identify output
-  fig_or_table <- "table"
-  
   #TODO: do group and facet need to be uncommented and updated?
   # Filter data for landings
   prepared_data <- filter_data(
@@ -54,8 +46,6 @@ table_landings <- function(
     label_name = "landings",
     geom = "line",
     era = era,
-   # group = ifelse(length(group) > 1, group[1], group),
-   # facet = ifelse(length(group) > 1, group[-1], NULL),
     module = module,
     scale_amount = scale_amount,
     interactive = interactive
@@ -158,6 +148,7 @@ table_landings <- function(
     )
   table_data <- table_data_info[[1]]
   indexed_vars <- table_data_info[[2]]
+  
   # put table_data into a nice table
   capitalized_names <- c("Year" = "year",
                          "Sex" = "sex",
@@ -167,42 +158,11 @@ table_landings <- function(
   landings_colname <- paste0("Landings (", unit_label, ")")
   
   final_df <- table_data |>
-    dplyr::rename(dplyr::any_of(capitalized_names)) |>
-    dplyr::rename_with(~ gsub(target_label, "", .)) |>
+    # replace col names from unique(prepared_data2$label) with landings_colname
     dplyr::rename_with(
-      .fn = ~ paste0(landings_colname, "_", stringr::str_extract(., "[^_]+$")),
-      .cols = contains("estimate")) |>
-    dplyr::rename_with(~ gsub("_NA|_label", "", .)) |>
-    dplyr::rename_with(
-      # replace an underscore only if it's at the end of the colname
-      .fn = ~ stringr::str_replace(., pattern = "_$", replacement = ""),
-      .cols = everything()
+       ~ gsub(stringr::str_to_title(target_label), landings_colname, .)
     ) |>
-    dplyr::rename_with(~ gsub("uncertainty_", "", .)) |>
-    dplyr::rename_with(~ gsub("_", " - ", .)) |>    
-    dplyr::rename_with(
-      .fn = ~ stringr::str_replace(., 
-                          pattern = "^ - ", 
-                          replacement = ""),
-      .cols = everything()
-    )
-  
-  # Order columns by landings / cv / landings, etc. and with alphabetical fleets
-  if (length(fleets) > 0){
-    cols_to_sort <- final_df |>
-      dplyr::select(-Year) |>
-      colnames()
-    fleet_codes <- stringr::str_extract(cols_to_sort, "(?<=- )[^ ]+")
-    fleet_ranks <- stringr::str_rank(fleet_codes, numeric = TRUE)
-    # Order by those ranks, then by col names
-    order_index <- order(fleet_ranks, cols_to_sort)
-    ordered_cols_to_sort <- cols_to_sort[order_index]
-    final_df <- final_df |>
-      dplyr::select(
-        Year,
-        dplyr::all_of(ordered_cols_to_sort)
-        )
-  }
+    dplyr::rename_with(~ gsub("_", " - ", .))
   
   final <- final_df |>
     gt::gt() |>
@@ -216,47 +176,15 @@ table_landings <- function(
   
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
-    # run write_captions.R if its output doesn't exist
-    if (!file.exists(
-      fs::path(getwd(), "captions_alt_text.csv")
-    )
-    ) {
-      stockplotr::write_captions(
-        dat = dat,
-        dir = tables_dir,
-        year = end_year
-      )
-    }
-
-    # add more key quantities included as arguments in this fxn
-    add_more_key_quants(
-      dat,
-      topic = topic_label,
-      fig_or_table = fig_or_table,
-      dir = tables_dir,
-      end_year = end_year,
-      units = unit_label
-    )
-
-    # extract this plot's caption and alt text
-    caps_alttext <- extract_caps_alttext(
-      topic_label = topic_label,
-      fig_or_table = fig_or_table,
-      dir = tables_dir
-    )
-    
-    # create LaTeX-based table
-    latex_table <- create_latex_table(data = final_df,
-                       caption = caps_alttext[1],
-                       label = "landings_latex")
-
-    export_rda(
+    create_rda(
       object = final,
-      caps_alttext = caps_alttext,
-      figures_tables_dir = tables_dir,
-      topic_label = topic_label,
-      fig_or_table = fig_or_table,
-      latex_table = latex_table
+      topic_label = "landings",
+      fig_or_table = "table",
+      dat = dat,
+      dir = tables_dir,
+      scale_amount = scale_amount,
+      unit_label = unit_label,
+      table_df = final_df
     )
   }
   # Return finished table

@@ -17,6 +17,8 @@
 #' shown on the y axis. For example, scale_amount = 100 would scale down a value
 #' from 500,000 --> 5,000. This scale will be reflected in the y axis label.
 #' @param unit_label A string containing a unit label for the y-axis
+#' @param table_df The data frame that the table will be made into for purposes 
+#' of exporting a latex formatted table.
 #'
 #' @returns Create an rda package for a plot or table object. Requires an
 #' object from the R environment such as a ggplot or flextable object.
@@ -41,7 +43,8 @@ create_rda <- function(
   ref_line = "msy",
   ref_point = "msy", # this is not used anywhere
   scale_amount = 1,
-  unit_label = "mt"
+  unit_label = "mt",
+  table_df = NULL
 ) {
   # run write_captions.R if its output doesn't exist
   if (!file.exists(
@@ -82,13 +85,21 @@ create_rda <- function(
     fig_or_table = fig_or_table,
     dir = dir
   )
+  
+  if (fig_or_table == "table") {
+    latex_table <- create_latex_table(
+      data = table_df,
+      caption = caps_alttext[1],
+      label = "landings_latex")
+  }
 
   export_rda(
     object = object,
     caps_alttext = caps_alttext, # Load in of this is missing I think
     figures_tables_dir = dir,
     topic_label = topic_label,
-    fig_or_table = fig_or_table
+    fig_or_table = fig_or_table,
+    latex_table = latex_table
   )
 }
 
