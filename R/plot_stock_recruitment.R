@@ -1,4 +1,4 @@
-#' Plot Spawn-Recruit Relationship
+#' Plot Stock Recruit Relationship
 #'
 #' @inheritParams plot_spawning_biomass
 #' @param interactive Indicate whether the environment the
@@ -8,21 +8,21 @@
 #' @param spawning_biomass_label Units for spawning biomass
 #' @param recruitment_label units for recruitment
 #'
-#' @return Plot the spawn recruitment relationship  from an assessment model output file
+#' @return Plot the stock recruitment relationship from an assessment model output file
 #' translated to a standardized output (\link[asar]{convert_output}). There are options to return a
 #' [ggplot2::ggplot()] object or export an rda object containing associated
 #' caption and alternative text for the figure.
 #' @export
 #'
 #' @examples
-#' plot_spawn_recruitment(
+#' plot_stock_recruitment(
 #'   dat = stockplotr:::example_data,
 #'   interactive = FALSE,
 #'   spawning_biomass_label = "metric tons",
 #'   recruitment_label = "metric tons",
 #'   module = "SPAWN_RECRUIT"
 #' )
-plot_spawn_recruitment <- function(
+plot_stock_recruitment <- function(
   dat,
   spawning_biomass_label = "mt",
   recruitment_label = "mt",

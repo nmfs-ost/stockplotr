@@ -549,7 +549,7 @@ add_more_key_quants <- function(
   }
 
   if (!is.null(sr_ssb_units)) {
-    ### this is for plot_spawn_recruitment, since there are two units
+    ### this is for plot_stock_recruitment, since there are two units
     #### replace sr.ssb.units with sr_ssb_units
     topic_cap_alt <- topic_cap_alt |>
       dplyr::mutate(alt_text = stringr::str_replace_all(
@@ -562,7 +562,7 @@ add_more_key_quants <- function(
   }
 
   if (!is.null(sr_recruitment_units)) {
-    ### this is for plot_spawn_recruitment, since there are two units
+    ### this is for plot_stock_recruitment, since there are two units
     #### replace sr.units with sr_recruitment_units
     topic_cap_alt <- topic_cap_alt |>
       dplyr::mutate(alt_text = stringr::str_replace_all(
