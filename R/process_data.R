@@ -438,7 +438,8 @@ process_table <- function(
   estimate_lab <- stringr::str_to_title(stringr::str_replace_all(unique(dat$label), "_", " "))
   
   table_list <- list()
-  for (i in length(unique(dat$model))){
+  id_group_list <- list()
+  for (mod in unique(dat$model)){
     mod_dat <- dplyr::filter(dat, model == mod)
     mod_index_variables <- unique(index_variables[names(index_variables) == mod])
     mod_id_group <- unique(id_group[names(id_group) == mod])
@@ -473,6 +474,11 @@ process_table <- function(
       }
     }
     table_list[[mod]] <- table_data
+    
+    # This feels like backward progress
+    id_group_list[[mod]] <- lapply(setNames(mod_id_group, mod_id_group), function(x) {
+      unique(mod_dat[[x]])
+      })
   } # close loop
   
   # check if only one model -- export as df instead
@@ -483,7 +489,8 @@ process_table <- function(
   # Export as list
   list(
     table_list,
-    id_group
+    stringr::str_to_title(id_group),
+    id_group_list
   )
   
 }
