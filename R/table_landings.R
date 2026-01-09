@@ -136,15 +136,17 @@ table_landings <- function(
   )
   table_data <- table_data_info[[1]]
   indexed_vars <- table_data_info[[2]]
+  id_col_vals <- table_data_info[[3]]
   
+  id_group_vals <- sapply(id_cols, function(x) unique(prepared_data[[x]]), simplify = FALSE)
   # TODO: add check if there is a landings column for every error column -- if not remove the error (can keep landings)
 
   if (!is.data.frame(table_data)) {
     # lapply made with the help of Gemini (all recoding names code is original)
-    df_list <- lapply(df_list, function(table_data) {
+    df_list <- lapply(table_data, function(dat) {
       
-      landings_cols_init <- colnames(table_data)[
-        grepl("landings", tolower(colnames(table_data)))
+      landings_cols_init <- colnames(dat)[
+        grepl("landings", tolower(colnames(dat)))
       ]
       
       # CONDITION: Only proceed if landings columns actually exist in this data frame
@@ -153,24 +155,28 @@ table_landings <- function(
         landings_cols_new <- stringr::str_remove_all(
           landings_cols_init, 
           paste0("_", fleets, collapse = "|")
-        )
+        ) |> stringr::str_replace_all("_", " ")
         # Drop "weight" or "number" if present
         landings_cols_new <- unique(
-          stringr::str_remove_all(landings_cols_new, " Number| Weight")
+          stringr::str_remove_all(tolower(landings_cols_new), " number| weight")
         )
         # Check if we should simplify to a single "Landings" label
-        if (length(unique(landings_cols_new)) == 1) {
-          landings_cols_new <- "Landings"
+        if (length(unique(landings_cols_new)) == 2) {
+          matches <- sapply(uncert_lab, function(l) {
+            any(stringr::str_detect(landings_cols_new, stringr::str_c("\\b", l, "\\b")))
+          })
+          id_uncert <- uncert_lab[matches]
+          landings_cols_new <- c(paste0("Landings (", unit_label, ")"), id_uncert)
         }
   
         # Add units
-        landings_cols_new <- paste0(landings_cols_new, " (", unit_label, ")")
+        # landings_cols_new <- paste0(landings_cols_new, " (", unit_label, ")")
         
         # Re-attach fleet names to the new labels
         cols_fleets <- stringr::str_extract(
           landings_cols_init, 
-          paste0(fleets, collapse = "|")
-        )
+          paste0("_",fleets, "$", collapse = "|")
+        ) |> stringr::str_remove_all("_")
         
         # Final target labels
         final_names <- paste0(landings_cols_new, " - ", cols_fleets)
@@ -180,14 +186,14 @@ table_landings <- function(
         rename_map <- setNames(landings_cols_init, final_names)
         
         # Apply the renaming
-        table_data <- table_data |>
+        dat <- dat |>
           dplyr::rename(any_of(rename_map))
       }
       
       # Apply the general underscore formatting to ALL columns (regardless of landings)
-      table_data <- table_data |>
+      dat <- dat |>
         dplyr::rename_with(~ gsub("_", " - ", .))
-      return(table_data)
+      return(dat)
     })
     # transform dfs into tables
     final <- lapply(table_data, function(df) {
