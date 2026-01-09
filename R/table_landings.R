@@ -54,19 +54,23 @@ table_landings <- function(
     dplyr::mutate(estimate = round(as.numeric(estimate), digits = 0)) |>
     dplyr::mutate(uncertainty = round(as.numeric(uncertainty), digits = 2))
   
-  # get uncertainty label
-  uncert_lab <- unique(prepared_data$uncertainty_label)
-  # Remove NA if present
-  uncert_lab <- uncert_lab[!is.na(uncert_lab)]
+  # get uncertainty label by model
+  uncert_lab <- prepared_data |>
+    dplyr::filter(!is.na(uncertainty_label)) |>
+      dplyr::group_by(model) |>
+      dplyr::summarise(unique_uncert = unique(uncertainty_label))
+  uncert_lab <- setNames(uncert_lab$unique_uncert, uncert_lab$model)
+  # if (length(unique(uncert_lab)) == 1) uncert_lab <- unique(uncert_lab) # might need this line
   
   # This needs to be adjusted when comparing different models and diff error
-  if (length(uncert_lab) > 1){
+  if (length(uncert_lab) > 1 & length(unique(prepared_data$model)) == 1){
     cli::cli_alert_warning("More than one value for uncertainty exists: {uncert_lab}")
     uncert_lab <- uncert_lab[[1]]
     cli::cli_alert_warning("The first value ({uncert_lab}) will be chosen.")
   }
   
   # get fleet names
+  # TODO: change from fleets to id_group AFTER the process data step and adjust throughout the table based on indexing
   fleets <- unique(prepared_data$fleet) |>
     # sort numerically even if fleets are 100% characters
     stringr::str_sort(numeric = TRUE)
@@ -74,10 +78,10 @@ table_landings <- function(
   #TODO: fix this so that fleet names aren't removed if, e.g., group = "fleet"
   table_data_info <- process_table(
     dat = prepared_data,
-   # group = group,
+    # group = group,
     method = method,
-   label = label
-    )
+    label = label
+  )
   table_data <- table_data_info[[1]]
   indexed_vars <- table_data_info[[2]]
   

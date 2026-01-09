@@ -471,109 +471,107 @@ process_table <- function(
   uncert_lab <- unique(dat$uncertainty_label)
   estimate_lab <- stringr::str_to_title(stringr::str_replace_all(unique(dat$label), "_", " "))
   
-  if (length(estimate_lab) > 1) {
-    table_data <- dat |>
+  # if (length(estimate_lab) > 1 & length(unique(dat$model)) == 1){
+  #   table_data <- dat |>
+  #     dplyr::rename_with(
+  #       ~ stringr::str_to_title(.x), 
+  #       .cols = dplyr::all_of(unique(index_variables))
+  #     ) |>
+  #     dplyr::rename(!!uncert_lab := uncertainty) |>
+  #     dplyr::select(dplyr::all_of(c(
+  #       "label", "model", stringr::str_to_title(index_variables), "estimate", uncert_lab
+  #     ))) # |>
+  #     # tidyr::pivot_wider(
+  #     #   id_cols = dplyr::all_of(c("model", stringr::str_to_title(index_variables))),
+  #     #   names_from = dplyr::all_of("label"),
+  #     #   values_from = dplyr::all_of(c("estimate", uncert_lab))
+  #     # ) |>
+  #     # # rename uncertainty and capitalize indexing variables + estimate
+  #     # dplyr::rename(
+  #     #   !!estimate_lab := estimate
+  #     # )
+  #   
+  #   # Only pivot wider if id_cols is >1 otherwise it's already in the correct format
+  #   if (length(id_group) > 0) {
+  #     table_data <- table_data |>
+  #       tidyr::pivot_wider(
+  #         id_cols = dplyr::all_of(c(stringr::str_to_title(cols), "model")),
+  #         values_from = dplyr::all_of(c(estimate_lab, uncert_lab)),
+  #         names_from = dplyr::all_of(c(stringr::str_to_title(id_group))))
+  #   }
+  # } else {
+  #   table_data <- dat |>
+  #     dplyr::rename_with(
+  #       ~ stringr::str_to_title(.x), 
+  #       # .cols = dplyr::all_of(index_variables)
+  #     ) |>
+  #     dplyr::select(dplyr::all_of(c(
+  #       "model", stringr::str_to_title(unique(index_variables)), "estimate", "uncertainty"
+  #     ))) # |>
+  #     # rename uncertainty and capitalize indexing variables + estimate
+  #     # dplyr::rename(
+  #     #   !!uncert_lab := uncertainty,
+  #     #   !!estimate_lab := estimate
+  #     # )
+  #   
+  #   # Only pivot wider if id_cols is >1 otherwise it's already in the correct format
+  #   if (length(id_group) > 0) {
+  #     table_data <- table_data |>
+  #       tidyr::pivot_wider(
+  #         id_cols = dplyr::all_of(c(stringr::str_to_title(cols), "model")),
+  #         values_from = dplyr::all_of(c(estimate_lab, uncert_lab)),
+  #         names_from = dplyr::all_of(c(stringr::str_to_title(id_group))))
+  #   }
+  # }
+  
+  table_list <- list()
+  for (i in length(unique(dat$model))){
+    mod_dat <- dplyr::filter(dat, model == mod)
+    mod_index_variables <- unique(index_variables[names(index_variables) == mod])
+    mod_id_group <- unique(id_group[names(id_group) == mod])
+    mod_cols <- unique(cols[names(cols) == mod])
+    mod_uncert_lab <- na.omit(unique(mod_dat$uncertainty_label))
+    
+    table_data <- mod_dat |>
+      dplyr::filter(dplyr::if_all(dplyr::any_of(mod_cols), ~ !is.na(.))) |>
       dplyr::rename_with(
         ~ stringr::str_to_title(.x), 
-        .cols = dplyr::all_of(index_variables)
-      ) |>
-      dplyr::rename(!!uncert_lab := uncertainty) |>
-      dplyr::select(dplyr::all_of(c(
-        "label", "model", stringr::str_to_title(index_variables), "estimate", uncert_lab
-      ))) |>
-      tidyr::pivot_wider(
-        id_cols = dplyr::all_of(c("model", stringr::str_to_title(index_variables))),
-        names_from = dplyr::all_of("label"),
-        values_from = dplyr::all_of(c("estimate", uncert_lab))
-      ) |>
-      # rename uncertainty and capitalize indexing variables + estimate
-      dplyr::rename(
-        !!estimate_lab := estimate
-      )
-    
-    # Only pivot wider if id_cols is >1 otherwise it's already in the correct format
-    if (length(id_group) > 0) {
-      table_data <- table_data |>
-        tidyr::pivot_wider(
-          id_cols = dplyr::all_of(c(stringr::str_to_title(cols), "model")),
-          values_from = dplyr::all_of(c(estimate_lab, uncert_lab)),
-          names_from = dplyr::all_of(c(stringr::str_to_title(id_group))))
-    }
-  } else {
-    table_data <- dat |>
-      dplyr::rename_with(
-        ~ stringr::str_to_title(.x), 
-        .cols = dplyr::all_of(index_variables)
+        .cols = dplyr::all_of(mod_index_variables)
       ) |>
       dplyr::select(dplyr::all_of(c(
-        "model", stringr::str_to_title(index_variables), "estimate", "uncertainty"
+        stringr::str_to_title(mod_index_variables), "label", "estimate", "uncertainty"
       ))) |>
       # rename uncertainty and capitalize indexing variables + estimate
       dplyr::rename(
-        !!uncert_lab := uncertainty,
-        !!estimate_lab := estimate
-      )
+        !!mod_uncert_lab := uncertainty
+      ) |>
     
     # Only pivot wider if id_cols is >1 otherwise it's already in the correct format
-    if (length(id_group) > 0) {
-      table_data <- table_data |>
+    # if (length(mod_id_group) > 0) {
+    #   table_data2 <- table_data |>
         tidyr::pivot_wider(
-          id_cols = dplyr::all_of(c(stringr::str_to_title(cols), "model")),
-          values_from = dplyr::all_of(c(estimate_lab, uncert_lab)),
-          names_from = dplyr::all_of(c(stringr::str_to_title(id_group))))
-    }
-  }
-  
-  table_data <- dat |>
-    dplyr::rename_with(
-      ~ stringr::str_to_title(.x), 
-      .cols = dplyr::all_of(index_variables)
-    ) |>
-    dplyr::select(dplyr::all_of(c(
-      "model", stringr::str_to_title(index_variables), "estimate", "uncertainty"
-    ))) |>
-    # rename uncertainty and capitalize indexing variables + estimate
-    dplyr::rename(
-      !!uncert_lab := uncertainty,
-      !!estimate_lab := estimate
-      )
+          id_cols = dplyr::all_of(c(stringr::str_to_title(mod_cols))),
+          values_from = dplyr::all_of(c("estimate", mod_uncert_lab)),
+          names_from = dplyr::all_of(c("label", stringr::str_to_title(mod_id_group)))#,
+          # names_glue = "{.value}_{label}_{!!Fleet}"
+          ) |>
+        dplyr::rename_with(~ stringr::str_remove(., "^estimate_"))
+    # } else {
+    #   mod_estimate_lab <- unique(table_data$label)
+    #   table_data <- table_data |>
+    #     dplyr::select(-label) |>
+    #     dplyr::rename(!!mod_estimate_lab := estimate)
+    # }
     
-  # Only pivot wider if id_cols is >1 otherwise it's already in the correct format
-  if (length(id_group) > 0) {
-    table_data <- table_data |>
-      tidyr::pivot_wider(
-        id_cols = dplyr::all_of(c(stringr::str_to_title(cols), "model")),
-        values_from = dplyr::all_of(c(estimate_lab, uncert_lab)),
-        names_from = dplyr::all_of(c(stringr::str_to_title(id_group))))
-  } 
-    
-  
-  # filter out NAs for cols columns
-  for (c in stringr::str_to_title(cols)){
-    table_data <- dplyr::filter(table_data, !is.na(.data[[c]]))
-  }
-  
-  # group indexing data together (i.e. fleet)
-  if (length(id_group) > 0){
-    for (f in unique(dat$fleet)) { # TODO: change dat$fleet to indexing col(s)
-      table_data <- table_data |> 
-        dplyr::relocate(contains(f), .after = last_col())
+    # group indexing data together (i.e. fleet)
+    if (length(id_group) > 0){
+      for (f in unique(mod_dat$fleet)) { # TODO: change dat$fleet to indexing col(s)
+        table_data <- table_data |> 
+          dplyr::relocate(contains(f), .after = last_col())
+      }
     }
-  }
-  
-  # If length of model > 1 then split into multiple dfs to a list
-  if (length(unique(table_data$model)) > 1){
-    table_list <- list()
-    for (mod in unique(table_data$model)){
-      mod_data <- dplyr::filter(table_data, model == mod) |>
-        dplyr::select(-model)
-      table_list[[mod]] <- mod_data
-    }
-    table_data <- table_list
-  } else {
-    table_list <- table_data |>
-      dplyr::select(-model)
-  }
+    table_list[[mod]] <- table_data
+  } # close loop
   
   # Export as list
   list(
