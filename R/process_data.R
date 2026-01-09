@@ -358,7 +358,7 @@ process_table <- function(
 
   id_group <- index_variables[-grep("year|age|length_bin", index_variables)]
   cols <- index_variables[grep("year|age|length_bin", index_variables)]
-
+  
   # Add check for length label >1
   # below method will only work when unqiue(label) == 2
   if (!is.null(label)) {
