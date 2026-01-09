@@ -1,0 +1,109 @@
+# This workflow lives in Repository B (the one that runs the function)
+
+name: 2. Run Function from Released Package
+
+on:
+  repository_dispatch:
+    # Only run if the event type matches the one sent by Repo A
+    types: [release_trigger]
+
+jobs:
+  run_released_function:
+    runs-on: ubuntu-latest
+    
+    # IMPORTANT: Grant write permission to the GITHUB_TOKEN for committing and creating the PR
+    permissions:
+      contents: write
+      pull-requests: write # Explicitly needed for creating the PR
+    
+    # Define variables extracted from the client-payload and constants for the PR
+    env:
+      RELEASE_TAG: ${{ github.event.client_payload.release_tag }}
+      REPO_A_NAME: ${{ github.event.client_payload.repository_a_name }}
+      # Define the target branch name for the new changes
+      PR_BRANCH_NAME: feature/update-data-from-repo-A-${{ github.event.client_payload.release_tag }}
+
+    steps:
+      # STEP 1: Checkout Repository B's code to access its data and allow committing back.
+      - name: Checkout Repository B (Data Source & Destination)
+        uses: actions/checkout@v4
+        # Defaults to checking out the current repo (Repo B) into the workspace root
+        
+      - name: Install R and dependencies (Example)
+        uses: r-lib/actions/setup-r@v2
+        
+      # Install devtools, needed for loading the source package from Repo A
+      - name: Install R Package Dependencies (devtools)
+        run: |
+          install.packages("devtools")
+
+      # STEP 2: Download Repository A's source code (Function Source)
+      - name: Download Repository A's source code
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.REPO_A_NAME }}
+          ref: ${{ env.RELEASE_TAG }}
+          path: 'repo_a_source'
+          
+      # STEP 3: Run the local R script that loads Repo A's function and saves the data.
+      - name: Generate and Save Example Data
+        run: Rscript data-raw/update_example_data.R
+        
+      # STEP 4: Commit the newly created data file to a new branch.
+      - name: Commit Data and Set PR Flag
+        run: |
+          # 1. Configure Git user for the commit
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # 2. Check for changes in the target data file
+          if git status --porcelain | grep data/example_data.rda; then
+            # 3. Create and switch to the new feature branch
+            git checkout -b ${{ env.PR_BRANCH_NAME }}
+            
+            # 4. Commit the file
+            git add data/example_data.rda 
+            git commit -m "CI: Update example_data.rda from Repo A release ${{ env.RELEASE_TAG }}"
+            
+            # 5. Set environment variable to proceed with PR
+            echo "COMMITTED=true" >> $GITHUB_ENV
+            echo "Changes committed. Proceeding to push and create PR."
+          else
+            echo "COMMITTED=false" >> $GITHUB_ENV
+            echo "No changes detected in data/example_data.rda. Skipping PR creation."
+          fi
+          
+      # STEP 5: Push the new branch to GitHub (only if changes were committed)
+      - name: Push New Branch
+        if: env.COMMITTED == 'true'
+        run: git push origin ${{ env.PR_BRANCH_NAME }}
+
+      # STEP 6: Create the Pull Request
+      - name: Create Pull Request
+        if: env.COMMITTED == 'true'
+        uses: actions/github-script@v7
+        with:
+          # Use the default GITHUB_TOKEN which has write access due to permissions block
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prBranch = process.env.PR_BRANCH_NAME;
+            const baseBranch = context.ref.replace('refs/heads/', ''); // The branch that received the dispatch
+            
+            const title = `[CI] Data Update: New 'example_data.rda' from Repo A \`${process.env.RELEASE_TAG}\``;
+            const body = `This pull request automatically updates \`data/example_data.rda\` following the release of **${process.env.RELEASE_TAG}** in Repository A (${process.env.REPO_A_NAME}).
+
+            The new data was generated using the \`${process.env.RELEASE_TAG}\` version of the conversion function. Please review the changes before merging.`;
+            
+            try {
+                const pr = await github.rest.pulls.create({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    title: title,
+                    head: prBranch,
+                    base: baseBranch,
+                    body: body
+                });
+                console.log('Pull Request created successfully:', pr.data.html_url);
+            } catch (error) {
+                console.error('Failed to create pull request. This may happen if a PR for this release tag already exists.');
+            }
