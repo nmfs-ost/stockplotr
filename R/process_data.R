@@ -200,13 +200,6 @@ process_data <- function(
       facet <- c(facet, index_variables)
     }
   } else if (length(index_variables) > 0) {
-    # overwrite variable if a grouping/indexing column was identified
-    # based on only the first group if >1 identified
-    # variable <- ifelse(
-    #   length(unique(data[[index_variables[1]]])) > 1,
-    #   TRUE,
-    #   FALSE
-    # )
     # Move remaining indexing variables to facet
     if (!is.null(group) && group == "year") {
       facet <- c(facet, index_variables)
@@ -301,12 +294,6 @@ process_data <- function(
         data <- data |> dplyr::filter(year == max(year))
       }
     }
-    # check if all values are the same
-    # variable <- ifelse(
-    #   length(unique(data$estimate)) != length(unique(data$age)),
-    #   TRUE, # more M values than ages
-    #   FALSE # same # or less M values than ages
-    # )
   }
 
   # Final check if group = NULL, then set group var to 1
@@ -339,6 +326,7 @@ process_data <- function(
 #' Processing for tables
 #'
 #' @inheritParams process_data
+#' @param label A string or vector of strings identifying the label values to filter the data.
 #'
 #' @returns A dataframe of processed data ready for formatting into a table. Input is an object created with \link[stockplotr]{filter_data}.
 #' @export
@@ -358,7 +346,18 @@ process_table <- function(
     method = "sum",
     label = NULL){
   
-  index_variables <- check_grouping(dat)
+  index_variables <- c()
+  # TODO: incorporate this into the output for check_grouping to avoid loop
+  for (mod in unique(dat$model)) {
+    mod_data <- dplyr::filter(dat, model == mod)
+    mod_index <- check_grouping(mod_data)
+    mod_names <- rep(mod, length(mod_index))
+    mod_index <- setNames(mod_index, mod_names)
+    index_variables <- c(index_variables, mod_index)
+  }
+  
+  id_group <- index_variables[-grep("year|age|length_bin", index_variables)]
+  cols <- index_variables[grep("year|age|length_bin", index_variables)]
   
   # Add check for length label >1
   # below method will only work when unqiue(label) == 2
@@ -366,24 +365,20 @@ process_table <- function(
     dat <- dat |>
       dplyr::filter(label %in% label)
   } else {
-    if (length(unique(prepared_data$label)) > 1){
-      if (length(unique(prepared_data$label)) == 2){
+    # Check if there's > 1 label for any model
+    if ((dat |>
+         dplyr::group_by(model) |>
+         dplyr::summarise(unique_count = dplyr::n_distinct(label)) |>
+         dplyr::pull(unique_count) |> max()) > 1){
+      if ((dat |>
+           dplyr::group_by(model) |>
+           dplyr::summarise(unique_count = dplyr::n_distinct(label)) |>
+           dplyr::pull(unique_count) |> max()) == 2){
         # compare estimate across all indexing vars and see if they are different over years
-        label_differences <- dat |>
-          tidyr::pivot_wider(
-            id_cols = dplyr::all_of(index_variables),
-            names_from = label,
-            values_from = estimate
-          ) |>
-          dplyr::mutate(
-            diff = .data[[unique(dat$label)[1]]] - .data[[unique(dat$label)[2]]]
-          )
-        
-        if (all(label_differences$diff == 0)){
-          cli::cli_alert_info("Labels have identical values. Using only the first label: {unique(prepared_data$label)[1]}")
-          dat <- dat |>
-            dplyr::filter(label == unique(dat$label)[1])
-        }
+        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        dat <- check_label_differences(dat, index_variables)
       } else {
         cli::cli_alert_info("Multiple labels detected.")
         if (interactive()) {
@@ -406,9 +401,45 @@ process_table <- function(
         }
         dat <- dat |>
           dplyr::filter(label %in% selected_label)
-      }
-    }
-  }
+        # Check if any of the selected labels are the same values
+        dat2 <- check_label_differences(dat, index_variables, id_group)
+        # label_differences <- dat |>
+        #   tidyr::pivot_wider(
+        #     id_cols = dplyr::all_of(c(unique(index_variables), "model")),
+        #     names_from = label,
+        #     values_from = estimate
+        #   )
+        #   
+        #   # Identify if any of the aligned columns contain ID group -- if so warn user and remove id_group labels from table
+        #   empty_check <- label_differences |>
+        #     dplyr::filter(!is.na(fleet)) |>
+        #     dplyr::summarise(across(unique(dat$label), ~ all(is.na(.))))
+        #   col_to_remove <- names(empty_check)[which(as.logical(empty_check))]
+        #   dat <- dplyr::filter(dat, label %notin% col_to_remove)
+        #   # Identify if any of the columns are identical then remove one of the identical columns
+        #   if (length(unique(prepared_data$label)) == 2){
+        #     # compare estimate across all indexing vars and see if they are different over years
+        #     label_differences <- dat |>
+        #       tidyr::pivot_wider(
+        #         id_cols = dplyr::all_of(c(index_variables, "model")),
+        #         names_from = label,
+        #         values_from = estimate
+        #       ) |>
+        #       dplyr::mutate(
+        #         diff = .data[[unique(dat$label)[1]]] - .data[[unique(dat$label)[2]]]
+        #       )
+        #     
+        #     if (all(label_differences$diff == 0)){
+        #       cli::cli_alert_info("Labels have identical values. Using only the first label: {unique(prepared_data$label)[1]}")
+        #       dat <- dat |>
+        #         dplyr::filter(label == unique(dat$label)[1])
+        #     }
+        # } else {
+        #   cli::cli_alert_danger("Multiple labels with differing values detected. Function may not work as intended. Please leave an issue on GitHub.")
+        # } # close secondary statement of labels == 2 if removing under situation labels was >2
+      } # close else >2 labels
+    } # close if >1 label in df
+  } # close if label == NULL
   
   #TODO: calculate error properly, if summarized
   if (!is.null(group) && group == "none"){
@@ -436,11 +467,62 @@ process_table <- function(
       cli::cli_alert_info("Output will contain indexing variables ({index_variables}).")
     }
   }
-  
-  id_group <- index_variables[-grepl("year|age|length_bin", index_variables)]
-  cols <- index_variables[grepl("year|age|length_bin", index_variables)]
+
   uncert_lab <- unique(dat$uncertainty_label)
-  estimate_lab <- stringr::str_to_title(unique(dat$label)[1])
+  estimate_lab <- stringr::str_to_title(stringr::str_replace_all(unique(dat$label), "_", " "))
+  
+  if (length(estimate_lab) > 1) {
+    table_data <- dat |>
+      dplyr::rename_with(
+        ~ stringr::str_to_title(.x), 
+        .cols = dplyr::all_of(index_variables)
+      ) |>
+      dplyr::rename(!!uncert_lab := uncertainty) |>
+      dplyr::select(dplyr::all_of(c(
+        "label", "model", stringr::str_to_title(index_variables), "estimate", uncert_lab
+      ))) |>
+      tidyr::pivot_wider(
+        id_cols = dplyr::all_of(c("model", stringr::str_to_title(index_variables))),
+        names_from = dplyr::all_of("label"),
+        values_from = dplyr::all_of(c("estimate", uncert_lab))
+      ) |>
+      # rename uncertainty and capitalize indexing variables + estimate
+      dplyr::rename(
+        !!estimate_lab := estimate
+      )
+    
+    # Only pivot wider if id_cols is >1 otherwise it's already in the correct format
+    if (length(id_group) > 0) {
+      table_data <- table_data |>
+        tidyr::pivot_wider(
+          id_cols = dplyr::all_of(c(stringr::str_to_title(cols), "model")),
+          values_from = dplyr::all_of(c(estimate_lab, uncert_lab)),
+          names_from = dplyr::all_of(c(stringr::str_to_title(id_group))))
+    }
+  } else {
+    table_data <- dat |>
+      dplyr::rename_with(
+        ~ stringr::str_to_title(.x), 
+        .cols = dplyr::all_of(index_variables)
+      ) |>
+      dplyr::select(dplyr::all_of(c(
+        "model", stringr::str_to_title(index_variables), "estimate", "uncertainty"
+      ))) |>
+      # rename uncertainty and capitalize indexing variables + estimate
+      dplyr::rename(
+        !!uncert_lab := uncertainty,
+        !!estimate_lab := estimate
+      )
+    
+    # Only pivot wider if id_cols is >1 otherwise it's already in the correct format
+    if (length(id_group) > 0) {
+      table_data <- table_data |>
+        tidyr::pivot_wider(
+          id_cols = dplyr::all_of(c(stringr::str_to_title(cols), "model")),
+          values_from = dplyr::all_of(c(estimate_lab, uncert_lab)),
+          names_from = dplyr::all_of(c(stringr::str_to_title(id_group))))
+    }
+  }
   
   table_data <- dat |>
     dplyr::rename_with(
