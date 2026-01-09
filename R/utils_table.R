@@ -97,3 +97,73 @@ create_latex_table <- function(data,
   #   collapse = "\n"
   # )
 }
+
+#-------------------------------------------------------------------------------
+
+#' Create loop to test for differences in column values
+#' @param dat input data into process_table
+#' @param index_variables the index_variables vector created within process_table
+
+check_label_differences <- function(dat, index_variables, id_group = NULL) {
+  # Loop over model to perform checks if the model columns are identical
+  for (mod in unique(dat$model)){
+    mod_index_variables <- unique(index_variables[names(index_variables) == mod])
+    mod_data <- dplyr::filter(dat, model == mod)
+    mod_id_group <- unique(id_group[names(id_group) == mod])
+    
+    if (length(unique(mod_data$label)) == 2) {
+      label_differences <- mod_data |>
+        tidyr::pivot_wider(
+          id_cols = dplyr::all_of(mod_index_variables),
+          names_from = label,
+          values_from = estimate
+        ) |>
+        dplyr::mutate(
+          diff = .data[[unique(mod_data$label)[1]]] - .data[[unique(mod_data$label)[2]]]
+        )
+      
+      if (all(label_differences$diff == 0)){
+        # Modify dat to only include one label from model
+        cli::cli_alert_info("Labels in {mod} model have identical values. Using only: {unique(mod_data$label)[2]}")
+        dat <- dat |>
+          dplyr::filter(label != unique(mod_data$label)[1])
+      }
+    } else {
+      label_differences <- mod_data |>
+        tidyr::pivot_wider(
+          id_cols = dplyr::all_of(unique(mod_index_variables)),
+          names_from = label,
+          values_from = estimate
+        )
+      
+      # Identify if any of the aligned columns contain ID group -- if so warn user and remove id_group labels from table
+      empty_check <- label_differences |>
+        dplyr::filter(dplyr::if_all(dplyr::any_of(mod_id_group), ~ !is.na(.))) |>
+        dplyr::summarise(across(unique(mod_data$label), ~ all(is.na(.))))
+      col_to_remove <- names(empty_check)[which(as.logical(empty_check))]
+      mod_data2 <- dplyr::filter(mod_data, label %notin% col_to_remove)
+      # Identify if any of the columns are identical then remove one of the identical columns
+      if (length(unique(mod_data2$label)) == 2){
+        # compare estimate across all indexing vars and see if they are different over years
+        label_differences <- mod_data2 |>
+          tidyr::pivot_wider(
+            id_cols = dplyr::all_of(c(mod_index_variables)),
+            names_from = label,
+            values_from = estimate
+          ) |>
+          dplyr::mutate(
+            diff = .data[[unique(mod_data2$label)[1]]] - .data[[unique(mod_data2$label)[2]]]
+          )
+        
+        if (all(label_differences$diff == 0)){
+          cli::cli_alert_info("Labels in {mod} model have identical values. Using only one label: {unique(prepared_data$label)[2]}")
+          col_to_remove <- c(col_to_remove, unique(mod_data2$label)[1])
+        }
+        dat <- dplyr::filter(dat, label %notin% col_to_remove)
+      } else {
+        cli::cli_alert_danger("Multiple labels with differing values detected. Function may not work as intended. Please leave an issue on GitHub.")
+      }
+    }
+  }
+  dat
+}
