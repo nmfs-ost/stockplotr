@@ -403,40 +403,6 @@ process_table <- function(
           dplyr::filter(label %in% selected_label)
         # Check if any of the selected labels are the same values
         dat2 <- check_label_differences(dat, index_variables, id_group)
-        # label_differences <- dat |>
-        #   tidyr::pivot_wider(
-        #     id_cols = dplyr::all_of(c(unique(index_variables), "model")),
-        #     names_from = label,
-        #     values_from = estimate
-        #   )
-        #   
-        #   # Identify if any of the aligned columns contain ID group -- if so warn user and remove id_group labels from table
-        #   empty_check <- label_differences |>
-        #     dplyr::filter(!is.na(fleet)) |>
-        #     dplyr::summarise(across(unique(dat$label), ~ all(is.na(.))))
-        #   col_to_remove <- names(empty_check)[which(as.logical(empty_check))]
-        #   dat <- dplyr::filter(dat, label %notin% col_to_remove)
-        #   # Identify if any of the columns are identical then remove one of the identical columns
-        #   if (length(unique(prepared_data$label)) == 2){
-        #     # compare estimate across all indexing vars and see if they are different over years
-        #     label_differences <- dat |>
-        #       tidyr::pivot_wider(
-        #         id_cols = dplyr::all_of(c(index_variables, "model")),
-        #         names_from = label,
-        #         values_from = estimate
-        #       ) |>
-        #       dplyr::mutate(
-        #         diff = .data[[unique(dat$label)[1]]] - .data[[unique(dat$label)[2]]]
-        #       )
-        #     
-        #     if (all(label_differences$diff == 0)){
-        #       cli::cli_alert_info("Labels have identical values. Using only the first label: {unique(prepared_data$label)[1]}")
-        #       dat <- dat |>
-        #         dplyr::filter(label == unique(dat$label)[1])
-        #     }
-        # } else {
-        #   cli::cli_alert_danger("Multiple labels with differing values detected. Function may not work as intended. Please leave an issue on GitHub.")
-        # } # close secondary statement of labels == 2 if removing under situation labels was >2
       } # close else >2 labels
     } # close if >1 label in df
   } # close if label == NULL
@@ -471,59 +437,6 @@ process_table <- function(
   uncert_lab <- unique(dat$uncertainty_label)
   estimate_lab <- stringr::str_to_title(stringr::str_replace_all(unique(dat$label), "_", " "))
   
-  # if (length(estimate_lab) > 1 & length(unique(dat$model)) == 1){
-  #   table_data <- dat |>
-  #     dplyr::rename_with(
-  #       ~ stringr::str_to_title(.x), 
-  #       .cols = dplyr::all_of(unique(index_variables))
-  #     ) |>
-  #     dplyr::rename(!!uncert_lab := uncertainty) |>
-  #     dplyr::select(dplyr::all_of(c(
-  #       "label", "model", stringr::str_to_title(index_variables), "estimate", uncert_lab
-  #     ))) # |>
-  #     # tidyr::pivot_wider(
-  #     #   id_cols = dplyr::all_of(c("model", stringr::str_to_title(index_variables))),
-  #     #   names_from = dplyr::all_of("label"),
-  #     #   values_from = dplyr::all_of(c("estimate", uncert_lab))
-  #     # ) |>
-  #     # # rename uncertainty and capitalize indexing variables + estimate
-  #     # dplyr::rename(
-  #     #   !!estimate_lab := estimate
-  #     # )
-  #   
-  #   # Only pivot wider if id_cols is >1 otherwise it's already in the correct format
-  #   if (length(id_group) > 0) {
-  #     table_data <- table_data |>
-  #       tidyr::pivot_wider(
-  #         id_cols = dplyr::all_of(c(stringr::str_to_title(cols), "model")),
-  #         values_from = dplyr::all_of(c(estimate_lab, uncert_lab)),
-  #         names_from = dplyr::all_of(c(stringr::str_to_title(id_group))))
-  #   }
-  # } else {
-  #   table_data <- dat |>
-  #     dplyr::rename_with(
-  #       ~ stringr::str_to_title(.x), 
-  #       # .cols = dplyr::all_of(index_variables)
-  #     ) |>
-  #     dplyr::select(dplyr::all_of(c(
-  #       "model", stringr::str_to_title(unique(index_variables)), "estimate", "uncertainty"
-  #     ))) # |>
-  #     # rename uncertainty and capitalize indexing variables + estimate
-  #     # dplyr::rename(
-  #     #   !!uncert_lab := uncertainty,
-  #     #   !!estimate_lab := estimate
-  #     # )
-  #   
-  #   # Only pivot wider if id_cols is >1 otherwise it's already in the correct format
-  #   if (length(id_group) > 0) {
-  #     table_data <- table_data |>
-  #       tidyr::pivot_wider(
-  #         id_cols = dplyr::all_of(c(stringr::str_to_title(cols), "model")),
-  #         values_from = dplyr::all_of(c(estimate_lab, uncert_lab)),
-  #         names_from = dplyr::all_of(c(stringr::str_to_title(id_group))))
-  #   }
-  # }
-  
   table_list <- list()
   for (i in length(unique(dat$model))){
     mod_dat <- dplyr::filter(dat, model == mod)
@@ -545,23 +458,12 @@ process_table <- function(
       dplyr::rename(
         !!mod_uncert_lab := uncertainty
       ) |>
-    
-    # Only pivot wider if id_cols is >1 otherwise it's already in the correct format
-    # if (length(mod_id_group) > 0) {
-    #   table_data2 <- table_data |>
-        tidyr::pivot_wider(
-          id_cols = dplyr::all_of(c(stringr::str_to_title(mod_cols))),
-          values_from = dplyr::all_of(c("estimate", mod_uncert_lab)),
-          names_from = dplyr::all_of(c("label", stringr::str_to_title(mod_id_group)))#,
-          # names_glue = "{.value}_{label}_{!!Fleet}"
-          ) |>
-        dplyr::rename_with(~ stringr::str_remove(., "^estimate_"))
-    # } else {
-    #   mod_estimate_lab <- unique(table_data$label)
-    #   table_data <- table_data |>
-    #     dplyr::select(-label) |>
-    #     dplyr::rename(!!mod_estimate_lab := estimate)
-    # }
+      tidyr::pivot_wider(
+        id_cols = dplyr::all_of(c(stringr::str_to_title(mod_cols))),
+        values_from = dplyr::all_of(c("estimate", mod_uncert_lab)),
+        names_from = dplyr::all_of(c("label", stringr::str_to_title(mod_id_group)))
+      ) |>
+      dplyr::rename_with(~ stringr::str_remove(., "^estimate_"))
     
     # group indexing data together (i.e. fleet)
     if (length(id_group) > 0){
@@ -572,6 +474,11 @@ process_table <- function(
     }
     table_list[[mod]] <- table_data
   } # close loop
+  
+  # check if only one model -- export as df instead
+  if (length(table_list) == 1){
+    table_list <- table_list[[1]]
+  }
   
   # Export as list
   list(
