@@ -111,7 +111,10 @@ check_label_differences <- function(dat, index_variables, id_group = NULL) {
     mod_data <- dplyr::filter(dat, model == mod)
     mod_id_group <- unique(id_group[names(id_group) == mod])
     
-    if (length(unique(mod_data$label)) == 2) {
+    if (length(unique(mod_data$label)) == 1) {
+      # only one label - nothing to edit for this model
+      next
+    } else if (length(unique(mod_data$label)) == 2) {
       label_differences <- mod_data |>
         tidyr::pivot_wider(
           id_cols = dplyr::all_of(mod_index_variables),

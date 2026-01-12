@@ -401,8 +401,23 @@ process_table <- function(
         }
         dat <- dat |>
           dplyr::filter(label %in% selected_label)
+        
+        # Re-run index variables after filtering 
+        index_variables <- c()
+        # TODO: incorporate this into the output for check_grouping to avoid loop
+        for (mod in unique(dat$model)) {
+          mod_data <- dplyr::filter(dat, model == mod)
+          mod_index <- check_grouping(mod_data)
+          mod_names <- rep(mod, length(mod_index))
+          mod_index <- setNames(mod_index, mod_names)
+          index_variables <- c(index_variables, mod_index)
+        }
+        
+        id_group <- index_variables[-grep("year|age|length_bin", index_variables)]
+        cols <- index_variables[grep("year|age|length_bin", index_variables)]
+        
         # Check if any of the selected labels are the same values
-        dat2 <- check_label_differences(dat, index_variables, id_group)
+        dat <- check_label_differences(dat, index_variables, id_group)
       } # close else >2 labels
     } # close if >1 label in df
   } # close if label == NULL
@@ -441,10 +456,15 @@ process_table <- function(
   id_group_list <- list()
   for (mod in unique(dat$model)){
     mod_dat <- dplyr::filter(dat, model == mod)
-    mod_index_variables <- unique(index_variables[names(index_variables) == mod])
-    mod_id_group <- unique(id_group[names(id_group) == mod])
-    mod_cols <- unique(cols[names(cols) == mod])
-    mod_uncert_lab <- na.omit(unique(mod_dat$uncertainty_label))
+    mod_index_variables <- check_grouping(mod_dat)
+    mod_id_group <- mod_index_variables[-grep("year|age|length_bin", mod_index_variables)]
+    mod_cols <- mod_index_variables[grep("year|age|length_bin", mod_index_variables)]
+    mod_uncert_lab <- unique(mod_dat$uncertainty_label)
+    if (length(mod_uncert_lab) == 1 && is.na(mod_uncert_lab)) {
+      mod_uncert_lab <- "Uncertainty"
+    } else {
+      uncert_lab <- na.omit(uncert_lab)
+    } 
     
     table_data <- mod_dat |>
       dplyr::filter(dplyr::if_all(dplyr::any_of(mod_cols), ~ !is.na(.))) |>
@@ -467,7 +487,7 @@ process_table <- function(
       dplyr::rename_with(~ stringr::str_remove(., "^estimate_"))
     
     # group indexing data together (i.e. fleet)
-    if (length(id_group) > 0){
+    if (length(mod_id_group) > 0){
       for (f in unique(mod_dat$fleet)) { # TODO: change dat$fleet to indexing col(s)
         table_data <- table_data |> 
           dplyr::relocate(contains(f), .after = last_col())
