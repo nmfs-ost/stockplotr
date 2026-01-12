@@ -113,7 +113,6 @@ check_label_differences <- function(dat, index_variables, id_group = NULL) {
     mod_index_variables <- unique(index_variables[names(index_variables) == mod])
     mod_data <- dplyr::filter(dat, model == mod)
     mod_id_group <- unique(id_group[names(id_group) == mod])
-
     if (length(unique(mod_data$label)) == 1) {
       # only one label - nothing to edit for this model
       next

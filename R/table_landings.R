@@ -115,11 +115,13 @@ table_landings <- function(
   # if (length(unique(uncert_lab)) == 1) uncert_lab <- unique(uncert_lab) # might need this line
   
   # This needs to be adjusted when comparing different models and diff error
-  if (length(uncert_lab) > 1 & length(unique(prepared_data$model)) == 1){
-    cli::cli_alert_warning("More than one value for uncertainty exists: {uncert_lab}")
+  if (length(uncert_lab) > 1 & length(unique(uncert_lab)) == 1 | length(names(uncert_lab)) == 1){ # prepared_data$model
+    # cli::cli_alert_warning("More than one value for uncertainty exists: {uncert_lab}")
     uncert_lab <- uncert_lab[[1]]
-    cli::cli_alert_warning("The first value ({uncert_lab}) will be chosen.")
+    # cli::cli_alert_warning("The first value ({uncert_lab}) will be chosen.")
   }
+  
+  if (is.na(uncert_lab)) uncert_lab <- "uncertainty"
   
   # get fleet names
   # TODO: change from fleets to id_group AFTER the process data step and adjust throughout the table based on indexing
@@ -138,15 +140,15 @@ table_landings <- function(
   indexed_vars <- table_data_info[[2]]
   id_col_vals <- table_data_info[[3]]
   
-  id_group_vals <- sapply(id_cols, function(x) unique(prepared_data[[x]]), simplify = FALSE)
+  # id_group_vals <- sapply(id_cols, function(x) unique(prepared_data[[x]]), simplify = FALSE)
   # TODO: add check if there is a landings column for every error column -- if not remove the error (can keep landings)
 
   if (!is.data.frame(table_data)) {
     # lapply made with the help of Gemini (all recoding names code is original)
-    df_list <- lapply(table_data, function(dat) {
+    df_list <- lapply(table_data, function(tab_dat) {
       
-      landings_cols_init <- colnames(dat)[
-        grepl("landings", tolower(colnames(dat)))
+      landings_cols_init <- colnames(tab_dat)[
+        grepl("landings", tolower(colnames(tab_dat)))
       ]
       
       # CONDITION: Only proceed if landings columns actually exist in this data frame
@@ -166,7 +168,14 @@ table_landings <- function(
             any(stringr::str_detect(landings_cols_new, stringr::str_c("\\b", l, "\\b")))
           })
           id_uncert <- uncert_lab[matches]
-          landings_cols_new <- c(paste0("Landings (", unit_label, ")"), id_uncert)
+          landings_cols_new <- c(
+            ifelse(
+              uncert_lab == "uncertainty",
+              paste0("Landings (", unit_label, ")"),
+              paste0("Landings (", unit_label, ") (", id_uncert, ")")
+              ), 
+            id_uncert) 
+          # Remove (", id_uncert, ")" in the above line if we don't want to combine value and error in one column
         }
   
         # Add units
@@ -179,24 +188,56 @@ table_landings <- function(
         ) |> stringr::str_remove_all("_")
         
         # Final target labels
-        final_names <- paste0(landings_cols_new, " - ", cols_fleets)
+        final_names <- ifelse(
+          is.na(cols_fleets),
+          landings_cols_new,
+          paste0(landings_cols_new, " - ", cols_fleets)
+        )
         
         # Create a named vector for renaming: c(new_name = old_name)
         # This handles the "Rename this specific old name to this specific new name"
         rename_map <- setNames(landings_cols_init, final_names)
         
         # Apply the renaming
-        dat <- dat |>
+        tab_dat <- tab_dat |>
           dplyr::rename(any_of(rename_map))
+        
+        # Comment out from here to closing brackets if don't want to combine label and uncertainty
+        # {{ -------------------------------------------------------------------
+        # Use loop to combine label (uncertainty)
+        landings_cols <- grep(paste0("Landings \\(", unit_label, "\\)"), names(tab_dat), value = TRUE)
+        
+        for (l_col in landings_cols) {
+          # 1. Extract fleet from current landing column name
+          f_id <- stringr::str_extract(l_col, paste0(unique(cols_fleets), collapse = "|"))
+          
+          # 2. Construct the matching uncertainty column name
+          u_col <- paste0(id_uncert, " - ", f_id)
+          
+          # 3. Only perform the merge if the uncertainty column actually exists
+          if (u_col %in% names(tab_dat)) {
+            tab_dat[[l_col]] <- paste0(
+              tab_dat[[l_col]], 
+              " (", tab_dat[[u_col]], ")"
+            )
+            
+            # Optional: Clean up " (NA)" if they appear
+            tab_dat[[l_col]] <- stringr::str_remove(tab_dat[[l_col]], " \\(NA\\)")
+          }
+        }
+        # Remove error column(s)
+        tab_dat <- tab_dat |>
+          dplyr::select(-dplyr::matches(paste0(uncert_lab, " - ", fleets, collapse = "|")))
+        # }} -------------------------------------------------------------------
       }
       
       # Apply the general underscore formatting to ALL columns (regardless of landings)
-      dat <- dat |>
+      tab_dat <- tab_dat |>
         dplyr::rename_with(~ gsub("_", " - ", .))
-      return(dat)
+      return(tab_dat)
     })
     # transform dfs into tables
-    final <- lapply(table_data, function(df) {
+    final <- lapply(df_list, function(df) {
       df |>
         gt::gt() |>
         add_theme()
@@ -208,104 +249,87 @@ table_landings <- function(
     landings_cols_init <- colnames(table_data)[
       grepl("landings", tolower(colnames(table_data)))
     ]
-    landings_cols_new <- stringr::str_remove_all(
-      landings_cols_init,
-      paste0("_", fleets,collapse = "|"))
-    # drop "weight" or "number" if present
-    # Potential for users to want both?
-    landings_cols_new <- unique(
-      stringr::str_remove_all(landings_cols_new, " Number| Weight"))
     
-    # test if all labels are the same in landings_cols
-    if (length(unique(landings_cols_new)) == 1) {
-      landings_cols_new <- "Landings"
+    # CONDITION: Only proceed if landings columns actually exist in this data frame
+    if (length(landings_cols_init) > 0) {
+      # Clean up fleet names and keywords
+      landings_cols_new <- stringr::str_remove_all(
+        landings_cols_init, 
+        paste0("_", fleets, collapse = "|")
+      ) |> stringr::str_replace_all("_", " ")
+      # Drop "weight" or "number" if present
+      landings_cols_new <- unique(
+        stringr::str_remove_all(tolower(landings_cols_new), " number| weight")
+      )
+      # Check if we should simplify to a single "Landings" label
+      if (length(unique(landings_cols_new)) == 2) {
+        matches <- sapply(uncert_lab, function(l) {
+          any(stringr::str_detect(landings_cols_new, stringr::str_c("\\b", l, "\\b")))
+        })
+        id_uncert <- uncert_lab[matches]
+        landings_cols_new <- c(paste0("Landings (", unit_label, ") (", id_uncert, ")"), id_uncert) 
+        # Remove (", id_uncert, ")" in the above line if we don't want to combine value and error in one column
+      }
+      
+      # Add units
+      # landings_cols_new <- paste0(landings_cols_new, " (", unit_label, ")")
+      
+      # Re-attach fleet names to the new labels
+      cols_fleets <- stringr::str_extract(
+        landings_cols_init, 
+        paste0("_",fleets, "$", collapse = "|")
+      ) |> stringr::str_remove_all("_")
+      
+      # Final target labels
+      final_names <- paste0(landings_cols_new, " - ", cols_fleets)
+      
+      # Create a named vector for renaming: c(new_name = old_name)
+      # This handles the "Rename this specific old name to this specific new name"
+      rename_map <- setNames(landings_cols_init, final_names)
+      
+      # Apply the renaming
+      table_data <- table_data |>
+        dplyr::rename(any_of(rename_map))
+      
+      # Comment out from here to closing brackets if don't want to combine label and uncertainty
+      # {{ -------------------------------------------------------------------
+      # Use loop to combine label (uncertainty)
+      landings_cols <- grep(paste0("Landings \\(", unit_label, "\\)"), names(table_data), value = TRUE)
+      
+      for (l_col in landings_cols) {
+        # 1. Extract fleet from current landing column name
+        f_id <- stringr::str_extract(l_col, paste0(unique(cols_fleets), collapse = "|"))
+        
+        # 2. Construct the matching uncertainty column name
+        u_col <- paste0(id_uncert, " - ", f_id)
+        
+        # 3. Only perform the merge if the uncertainty column actually exists
+        if (u_col %in% names(table_data)) {
+          table_data[[l_col]] <- paste0(
+            table_data[[l_col]], 
+            " (", table_data[[u_col]], ")"
+          )
+          
+          # Optional: Clean up " (NA)" if they appear
+          table_data[[l_col]] <- stringr::str_remove(table_data[[l_col]], " \\(NA\\)")
+        }
+      }
+      # Remove error column(s)
+      table_data <- table_data |>
+        dplyr::select(-dplyr::matches(paste0(uncert_lab, " - ", fleets, collapse = "|")))
+      # }} -------------------------------------------------------------------
     }
-    # Add unit label to landings colnames
-    landings_cols_new <- paste0(
-      landings_cols_new,
-      " (", unit_label, ")")
-    # Extract fleets from landings_cols_init
-    cols_fleets <- unlist(stringr::str_extract_all(
-      landings_cols_init,
-      paste0(fleets, collapse = "|")
-    ))
-    landings_cols_new <- paste0(landings_cols_new, " - ", cols_fleets)
     
-    final_df <- table_data |>
-      # replace col names from unique(prepared_data2$label) with landings_colname
-      dplyr::rename_with(
-        ~ gsub(stringr::str_to_title(target_label), landings_colname, .)
-      ) |>
+    # Apply the general underscore formatting to ALL columns (regardless of landings)
+    table_data <- table_data |>
       dplyr::rename_with(~ gsub("_", " - ", .))
+    
     # Turn df into table
-    final <- final_df |>
+    final <- table_data |>
       gt::gt() |>
       add_theme()
   }
-  # 
-  # if (!is.data.frame(table_data)) {
-  #   table_data <- lapply(table_data, function(df) {
-  #     df |>
-  #       dplyr::rename_with(
-  #         ~ gsub(stringr::str_to_title(target_label), landings_colname, .)
-  #       ) |>
-  #       dplyr::rename_with(~ gsub("_", " - ", .))
-  #   })
-  #   final <- lapply(table_data, function(df) {
-  #     df |>
-  #       gt::gt() |>
-  #       add_theme()
-  #   })
-  # } else {
-  #   # Determine target label(s) for landings based on available labels in data
-  #   # If 1 label -> "Landings"
-  #   # if > 1 label -> drop "weight" or "number" if present
-  #   landings_cols_init <- colnames(table_data)[
-  #     grepl("landings", tolower(colnames(table_data)))
-  #   ]
-  #   landings_cols_new <- stringr::str_remove_all(
-  #     landings_cols_init,
-  #     paste0("_", fleets,collapse = "|"))
-  #   # drop "weight" or "number" if present
-  #   # Potential for users to want both?
-  #   landings_cols_new <- unique(
-  #     stringr::str_remove_all(landings_cols_new, " Number| Weight"))
-  #   
-  #   # test if all labels are the same in landings_cols
-  #   if (length(unique(landings_cols_new)) == 1) {
-  #     landings_cols_new <- "Landings"
-  #   }
-  #   # Add unit label to landings colnames
-  #   landings_cols_new <- paste0(
-  #     landings_cols_new,
-  #     " (", unit_label, ")")
-  #   # Extract fleets from landings_cols_init
-  #   cols_fleets <- unlist(stringr::str_extract_all(
-  #     landings_cols_init,
-  #     paste0(fleets, collapse = "|")
-  #   ))
-  #   landings_cols_new <- paste0(landings_cols_new, " - ", cols_fleets)
-  #   
-  #   final_df <- table_data |>
-  #     # replace col names from unique(prepared_data2$label) with landings_colname
-  #     dplyr::rename_with(
-  #       ~ gsub(stringr::str_to_title(target_label), landings_colname, .)
-  #     ) |>
-  #     dplyr::rename_with(~ gsub("_", " - ", .))
-  #   
-  #   final <- final_df |>
-  #     gt::gt() |>
-  #     add_theme()
-  # }
-  
- # final
-  # Progress:
-    # for bsb, hake, vsnap, and stockplotr::example_data, cols are:
-    #    "Year", "Landings (<unit>)", "uncertainty"
-    # for am, cols are:
-    #    "Landings (mt) - cbn",	"cv - cbn",	"Landings (mt) - cbs",	"cv - cbs", etc
->>>>>>> 0d6671b (move parts that processed the data out of landings and into process_table)
-  
+
   
   #   # TODO: add option to scale data
   #   # Replace all spaces with underscore if not in proper format
@@ -497,6 +521,17 @@ table_landings <- function(
   # Send table(s) to viewer
   if (!is.data.frame(table_data)) {
     for (t in final) {
+      print(t)
+    }
+    # Return table list invisibly
+    return(invisible(final))
+  } else {
+    # Return finished table (when only one table)
+    return(final)
+  }
+  # Send table(s) to viewer
+  if (!is.data.frame(final)) {
+    for(t in final) {
       print(t)
     }
     # Return table list invisibly
