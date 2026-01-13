@@ -52,6 +52,11 @@ table_landings <- function(
     dplyr::mutate(estimate = round(as.numeric(estimate), digits = 0)) |>
     dplyr::mutate(uncertainty = round(as.numeric(uncertainty), digits = 2))
   
+  # Add check if there is any data
+  if (nrow(prepared_data) == 0){
+    cli::cli_abort("No landings data found.")
+  }
+  
   # get uncertainty label by model
   uncert_lab <- prepared_data |>
     dplyr::filter(!is.na(uncertainty_label)) |>
@@ -115,9 +120,11 @@ table_landings <- function(
             any(stringr::str_detect(landings_cols_new, stringr::str_c("\\b", l, "\\b")))
           })
           id_uncert <- uncert_lab[matches]
+          if (length(id_uncert) == 0) id_uncert <- "uncertainty"
+          
           landings_cols_new <- c(
             ifelse(
-              uncert_lab == "uncertainty",
+              id_uncert == "uncertainty",
               paste0("Landings (", unit_label, ")"),
               paste0("Landings (", unit_label, ") (", id_uncert, ")")
               ), 
@@ -214,12 +221,30 @@ table_landings <- function(
           any(stringr::str_detect(landings_cols_new, stringr::str_c("\\b", l, "\\b")))
         })
         id_uncert <- uncert_lab[matches]
-        landings_cols_new <- c(paste0("Landings (", unit_label, ") (", id_uncert, ")"), id_uncert) 
-        # Remove (", id_uncert, ")" in the above line if we don't want to combine value and error in one column
+        if (length(id_uncert) == 0) id_uncert <- "uncertainty"
+      } else {
+        id_uncert <- uncert_lab
       }
       
-      # Add units
-      # landings_cols_new <- paste0(landings_cols_new, " (", unit_label, ")")
+      if (any(grepl("expected|predicted|observed|estimated",landings_cols_new))) {
+        landings_lab <- stringr::str_to_title(unique(stringr::str_extract(
+          landings_cols_new,
+          "landings expected|landings predicted|landings observed|landings estimated")
+        ))
+        id_uncert_col <- paste0(
+          id_uncert, " ", landings_lab)
+      } else {
+        landings_lab <- "Landings"
+      }
+      
+      if (id_uncert == "uncertainty" || length(id_uncert) == 0) {
+        landings_cols_new <- c(paste0(landings_lab, " (", unit_label, ")"), id_uncert)
+      } else {
+        landings_cols_new <- c(
+          paste0(landings_lab, " (", unit_label, ") (", id_uncert, ")"),
+          id_uncert_col)
+      }
+      # Remove (", id_uncert, ")" in the above line if we don't want to combine value and error in one column
       
       # Re-attach fleet names to the new labels
       cols_fleets <- stringr::str_extract(
@@ -228,7 +253,11 @@ table_landings <- function(
       ) |> stringr::str_remove_all("_")
       
       # Final target labels
-      final_names <- paste0(landings_cols_new, " - ", cols_fleets)
+      final_names <- ifelse(
+        is.na(cols_fleets),
+        landings_cols_new,
+        paste0(landings_cols_new, " - ", cols_fleets)
+      )
       
       # Create a named vector for renaming: c(new_name = old_name)
       # This handles the "Rename this specific old name to this specific new name"
@@ -239,37 +268,66 @@ table_landings <- function(
         dplyr::rename(any_of(rename_map))
       
       # Comment out from here to closing brackets if don't want to combine label and uncertainty
-      # {{ -------------------------------------------------------------------
-      # Use loop to combine label (uncertainty)
-      landings_cols <- grep(paste0("Landings \\(", unit_label, "\\)"), names(table_data), value = TRUE)
-      
-      for (l_col in landings_cols) {
-        # 1. Extract fleet from current landing column name
-        f_id <- stringr::str_extract(l_col, paste0(unique(cols_fleets), collapse = "|"))
+      # {{ --------------------------------------------------------------------
+      if (!all(is.na(table_data[[id_uncert]]))) { # only works for 1 column of uncertainty data
+        # Use loop to combine label (uncertainty)
+        landings_cols <- grep(paste0("Landings.*\\(", unit_label, "\\)"), names(table_data), value = TRUE)
         
-        # 2. Construct the matching uncertainty column name
-        u_col <- paste0(id_uncert, " - ", f_id)
-        
-        # 3. Only perform the merge if the uncertainty column actually exists
-        if (u_col %in% names(table_data)) {
-          table_data[[l_col]] <- paste0(
-            table_data[[l_col]], 
-            " (", table_data[[u_col]], ")"
-          )
+        for (col_name in landings_cols) {
+          # 2. Extract metadata from the current column name
+          # Example: "land exp (mt) (cv) - mrip" -> Type: exp, Fleet: mrip
+          type_val  <- stringr::str_extract(col_name, "Expected|Predicted|Observed|Estimated")
+          fleet_val <- stringr::str_extract(col_name, glue::glue("{unique(cols_fleets)}$")) # Use your specific fleet list
           
-          # Optional: Clean up " (NA)" if they appear
-          table_data[[l_col]] <- stringr::str_remove(table_data[[l_col]], " \\(NA\\)")
+          # 3. Construct the name of the "CV" column that matches
+          # This looks for the column starting with "cv", containing the type and the fleet
+          cv_col_name <- names(table_data)[
+            stringr::str_detect(names(table_data), glue::glue("^{id_uncert}")) & 
+              stringr::str_detect(names(table_data), type_val) & 
+              stringr::str_detect(names(table_data), na.omit(fleet_val))
+          ]
+          
+          # 4. Update the Landings column with the combined format
+          # If a matching CV column was found, merge them
+          if (length(cv_col_name) == 1) {
+            table_data[[col_name]] <- paste0(
+              table_data[[col_name]], " (", table_data[[cv_col_name]], ")"
+            )
+          }
+        }
+        
+        if (length(landings_cols) > 1) {
+          for (l_col in landings_cols) {
+            # 1. Extract fleet from current landing column name
+            f_id <- stringr::str_extract(l_col, paste0(unique(cols_fleets), collapse = "|"))
+            
+            # 2. Construct the matching uncertainty column name
+            u_col <- paste0(id_uncert, " - ", f_id)
+            
+            # 3. Only perform the merge if the uncertainty column actually exists
+            if (u_col %in% names(table_data)) {
+              table_data[[l_col]] <- paste0(
+                table_data[[l_col]], 
+                " (", table_data[[u_col]], ")"
+              )
+              
+              # Optional: Clean up " (NA)" if they appear
+              table_data[[l_col]] <- stringr::str_remove(table_data[[l_col]], " \\(NA\\)")
+            }
+          }
+          # Remove error column(s)
+          table_data <- table_data |>
+            dplyr::select(-dplyr::matches(paste0(uncert_lab, " - ", fleets, collapse = "|")))
         }
       }
-      # Remove error column(s)
-      table_data <- table_data |>
-        dplyr::select(-dplyr::matches(paste0(uncert_lab, " - ", fleets, collapse = "|")))
-      # }} -------------------------------------------------------------------
+      # }} ---------------------------------------------------------------------
     }
     
     # Apply the general underscore formatting to ALL columns (regardless of landings)
     table_data <- table_data |>
-      dplyr::rename_with(~ gsub("_", " - ", .))
+      dplyr::rename_with(~ gsub("_", " - ", .)) |>
+      # Remove columns containing all NA
+      dplyr::select(where(~!all(is.na(.))))
     
     # Turn df into table
     final <- table_data |>
@@ -291,7 +349,7 @@ table_landings <- function(
     )
   }
   # Send table(s) to viewer
-  if (!is.data.frame(final)) {
+  if (!is.data.frame(table_data)) {
     for(t in final) {
       print(t)
     }
