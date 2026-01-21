@@ -61,7 +61,7 @@ table_landings <- function(
   uncert_lab <- prepared_data |>
     dplyr::filter(!is.na(uncertainty_label)) |>
       dplyr::group_by(model) |>
-      dplyr::summarise(unique_uncert = unique(uncertainty_label))
+      dplyr::reframe(unique_uncert = unique(uncertainty_label)) # changed to reframe -- may cause errors
   uncert_lab <- setNames(uncert_lab$unique_uncert, uncert_lab$model)
   # if (length(unique(uncert_lab)) == 1) uncert_lab <- unique(uncert_lab) # might need this line
   
