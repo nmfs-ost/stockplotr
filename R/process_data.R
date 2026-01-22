@@ -502,9 +502,9 @@ process_table <- function(
   } # close loop
   
   # check if only one model -- export as df instead
-  if (length(table_list) == 1){
-    table_list <- table_list[[1]]
-  }
+  # if (length(table_list) == 1){
+  #   table_list <- table_list[[1]]
+  # }
   
   # Export as list
   list(
