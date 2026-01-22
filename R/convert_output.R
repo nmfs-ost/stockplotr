@@ -1057,6 +1057,7 @@ convert_output <- function(
               df1 <- df1[, -loc_xx]
             }
             
+            # TODO: apply this next if statement to a general process so it's part of the standard cleaning
             # check if the headers make sense
             # this is a temporary fix to a specific bug
             # I have seen this issue in the past and I am not sure how to recognize this generally
