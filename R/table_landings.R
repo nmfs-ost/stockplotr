@@ -33,7 +33,6 @@ table_landings <- function(
     group = NULL,
     method = "sum",
     module = NULL,
-    scale_amount = 1,
     label = NULL,
     make_rda = FALSE,
     tables_dir = getwd()) {
@@ -46,7 +45,7 @@ table_landings <- function(
     geom = "line",
     era = era,
     module = module,
-    scale_amount = scale_amount,
+    scale_amount = 1,
     interactive = interactive
   ) |>
     dplyr::mutate(estimate = round(as.numeric(estimate), digits = 0)) |>
@@ -118,7 +117,7 @@ table_landings <- function(
       fig_or_table = "table",
       dat = dat,
       dir = tables_dir,
-      scale_amount = scale_amount,
+      scale_amount = 1,
       unit_label = unit_label,
       table_df = final_df
     )
