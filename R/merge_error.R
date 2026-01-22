@@ -14,78 +14,79 @@
 #' @export
 #'
 merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
+  # TODO: change fleets to grouping when the data is indexed by factors other than fleet 
   lapply(table_data, function(tab_dat) {
 
-    landings_cols_init <- colnames(tab_dat)[
-      grepl("landings", tolower(colnames(tab_dat)))
+    label_cols_init <- colnames(tab_dat)[
+      grepl(label, tolower(colnames(tab_dat))) # "landings"
     ]
 
-    # CONDITION: Only proceed if landings columns actually exist in this data frame
-    if (length(landings_cols_init) > 0) {
+    # CONDITION: Only proceed if label columns actually exist in this data frame
+    if (length(label_cols_init) > 0) {
       # Clean up fleet names and keywords
-      landings_cols_new <- stringr::str_remove_all(
-        landings_cols_init,
+      label_cols_new <- stringr::str_remove_all(
+        label_cols_init,
         paste0("_", fleets, collapse = "|")
       ) |> stringr::str_replace_all("_", " ")
       # Drop "weight" or "number" if present
-      landings_cols_new <- unique(
-        stringr::str_remove_all(tolower(landings_cols_new), " number| weight")
+      label_cols_new <- unique(
+        stringr::str_remove_all(tolower(label_cols_new), " number| weight")
       )
       # Check if we should simplify to a single "Landings" label
-      if (length(unique(landings_cols_new)) == 2) {
+      if (length(unique(label_cols_new)) == 2) {
         matches <- sapply(uncert_lab, function(l) {
-          any(stringr::str_detect(landings_cols_new, stringr::str_c("\\b", l, "\\b")))
+          any(stringr::str_detect(label_cols_new, stringr::str_c("\\b", l, "\\b")))
         })
         id_uncert <- uncert_lab[matches]
         if (length(id_uncert) == 0) id_uncert <- "uncertainty"
 
-        landings_cols_final <- c(
+        label_cols_final <- c(
           ifelse(
             id_uncert == "uncertainty",
-            paste0("Landings (", unit_label, ")"),
-            paste0("Landings (", unit_label, ") (", id_uncert, ")")
+            paste0(stringr::str_to_title(label), " (", unit_label, ")"),
+            paste0(stringr::str_to_title(label), " (", unit_label, ") (", id_uncert, ")")
           ),
           id_uncert)
         # Remove (", id_uncert, ")" in the above line if we don't want to combine value and error in one column
-      } else if (any(grepl("expected|predicted|observed|estimated",landings_cols_new))) {
-        landings_lab <- stringr::str_to_title(unique(stringr::str_extract(
-          landings_cols_new,
-          "landings expected|landings predicted|landings observed|landings estimated")
+      } else if (any(grepl("expected|predicted|observed|estimated",label_cols_new))) {
+        label_lab <- stringr::str_to_title(unique(stringr::str_extract(
+          label_cols_new,
+          paste(label, c("expected", "predicted", "observed", "estimated"), collapse = "|"))
         ))
         id_uncert_col <- paste0(
-          uncert_lab, " ", landings_lab)
+          uncert_lab, " ", label_lab)
         if (uncert_lab == "uncertainty" || length(uncert_lab) == 0) {
-          landings_cols_final <- c(paste0(landings_lab, " (", unit_label, ")"), uncert_lab)
+          label_cols_final <- c(paste0(label_lab, " (", unit_label, ")"), uncert_lab)
         } else {
-          landings_cols_final <- c(
-            paste0(landings_lab, " (", unit_label, ") (", uncert_lab, ")"),
+          label_cols_final <- c(
+            paste0(label_lab, " (", unit_label, ") (", uncert_lab, ")"),
             id_uncert_col)
         }
       }
 
       # Re-attach fleet names to the new labels
       cols_fleets <- stringr::str_extract(
-        landings_cols_init,
+        label_cols_init,
         paste0("_",fleets, "$", collapse = "|")
       ) |> stringr::str_remove_all("_")
 
       # Target labels for next step
       final_names <- ifelse(
         is.na(cols_fleets),
-        landings_cols_new,
-        paste0(landings_cols_new, " - ", cols_fleets)
+        label_cols_new,
+        paste0(label_cols_new, " - ", cols_fleets)
       )
 
       # Assign previous names with new identifying ones
-      rename_map <- setNames(landings_cols_init, final_names)
+      rename_map <- setNames(label_cols_init, final_names)
 
       # rename cols for final df
       rename_map_final <- setNames(
         final_names, 
         ifelse(
           is.na(cols_fleets),
-          landings_cols_final,
-          paste0(landings_cols_final, " - ", cols_fleets)
+          label_cols_final,
+          paste0(label_cols_final, " - ", cols_fleets)
         ))
 
       # Apply the renaming
@@ -93,12 +94,12 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
         dplyr::rename(any_of(rename_map))
 
       # Identify lestimate and uncertainty columns for loop and other reference
-      landings_cols <- names(tab_dat)[-c(1, grep(glue::glue("^{uncert_lab} "), names(tab_dat)))]
+      label_cols <- names(tab_dat)[-c(1, grep(glue::glue("^{uncert_lab} "), names(tab_dat)))]
       uncert_cols <- names(tab_dat)[grep(glue::glue("^{uncert_lab} "), names(tab_dat))]
       # Comment out from here to closing brackets if don't want to combine label and uncertainty
       # {{ -------------------------------------------------------------------
       # Use loop to combine label (uncertainty)
-      for (l_col in landings_cols) {
+      for (l_col in label_cols) {
 
         # Identify the error column that contains l_col in the name
         uncert_col <- uncert_cols[grepl(l_col, uncert_cols)]
@@ -132,7 +133,7 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
       cli::cli_alert_info(
         "No {label} columns found in data; skipping renaming step."
       )
-    } # close if statement on landings column
+    } # close if statement on label column
     return(tab_dat)
   }) # close and end lapply
 }
