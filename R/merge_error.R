@@ -1,3 +1,18 @@
+#' Rename column
+#'
+#' @param table_data list of dataframes that will be eventually turned into tables
+#' @param uncert_lab uncertainty label. Typically inherited from another function
+#' but is the exact string of the uncertainty in the data (e.g., "sd", "se", "cv",
+#' "uncertainty").)
+#' @param fleets Vector of fleet names.
+#' @param label Label name of target quantity that is being presented by the table.
+#' @param unit_label String. The units of the estimate being presented in the table.
+#'
+#' @return List of formatted dataframes that contain column names formatted
+#' for a table along with a merge of values in the estimate and error columns
+#' to reduce redundancy in the table.
+#' @export
+#'
 merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
   lapply(table_data, function(tab_dat) {
 
@@ -108,7 +123,7 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
       # }} -------------------------------------------------------------------
       
       # Rename final df with cleaned names
-      tab_dat2 <- tab_dat |>
+      tab_dat <- tab_dat |>
         dplyr::rename(any_of(rename_map_final)) |>
         dplyr::rename_with(~ gsub("_", " - ", .)) # |>
         # not sure if we want to keep this or not
