@@ -1,15 +1,15 @@
-merge_error <- funtion(table_data) {
-  df_list <- lapply(table_data, function(tab_dat) {
-    
+merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
+  lapply(table_data, function(tab_dat) {
+
     landings_cols_init <- colnames(tab_dat)[
       grepl("landings", tolower(colnames(tab_dat)))
     ]
-    
+
     # CONDITION: Only proceed if landings columns actually exist in this data frame
     if (length(landings_cols_init) > 0) {
       # Clean up fleet names and keywords
       landings_cols_new <- stringr::str_remove_all(
-        landings_cols_init, 
+        landings_cols_init,
         paste0("_", fleets, collapse = "|")
       ) |> stringr::str_replace_all("_", " ")
       # Drop "weight" or "number" if present
@@ -23,14 +23,14 @@ merge_error <- funtion(table_data) {
         })
         id_uncert <- uncert_lab[matches]
         if (length(id_uncert) == 0) id_uncert <- "uncertainty"
-        
-        landings_cols_new <- c(
+
+        landings_cols_final <- c(
           ifelse(
             id_uncert == "uncertainty",
             paste0("Landings (", unit_label, ")"),
             paste0("Landings (", unit_label, ") (", id_uncert, ")")
-          ), 
-          id_uncert) 
+          ),
+          id_uncert)
         # Remove (", id_uncert, ")" in the above line if we don't want to combine value and error in one column
       } else if (any(grepl("expected|predicted|observed|estimated",landings_cols_new))) {
         landings_lab <- stringr::str_to_title(unique(stringr::str_extract(
@@ -38,82 +38,86 @@ merge_error <- funtion(table_data) {
           "landings expected|landings predicted|landings observed|landings estimated")
         ))
         id_uncert_col <- paste0(
-          id_uncert, " ", landings_lab)
-        if (id_uncert == "uncertainty" || length(id_uncert) == 0) {
-          landings_cols_new <- c(paste0(landings_lab, " (", unit_label, ")"), id_uncert)
+          uncert_lab, " ", landings_lab)
+        if (uncert_lab == "uncertainty" || length(uncert_lab) == 0) {
+          landings_cols_final <- c(paste0(landings_lab, " (", unit_label, ")"), uncert_lab)
         } else {
-          landings_cols_new <- c(
-            paste0(landings_lab, " (", unit_label, ") (", id_uncert, ")"),
+          landings_cols_final <- c(
+            paste0(landings_lab, " (", unit_label, ") (", uncert_lab, ")"),
             id_uncert_col)
         }
       }
-      
-      # Add units
-      # landings_cols_new <- paste0(landings_cols_new, " (", unit_label, ")")
-      
+
       # Re-attach fleet names to the new labels
       cols_fleets <- stringr::str_extract(
-        landings_cols_init, 
+        landings_cols_init,
         paste0("_",fleets, "$", collapse = "|")
       ) |> stringr::str_remove_all("_")
-      
-      # Final target labels
+
+      # Target labels for next step
       final_names <- ifelse(
         is.na(cols_fleets),
         landings_cols_new,
         paste0(landings_cols_new, " - ", cols_fleets)
       )
-      
-      # Create a named vector for renaming: c(new_name = old_name)
-      # This handles the "Rename this specific old name to this specific new name"
+
+      # Assign previous names with new identifying ones
       rename_map <- setNames(landings_cols_init, final_names)
-      
-      
-      
-      
-      
-      
-      
-      
+
+      # rename cols for final df
+      rename_map_final <- setNames(
+        final_names, 
+        ifelse(
+          is.na(cols_fleets),
+          landings_cols_final,
+          paste0(landings_cols_final, " - ", cols_fleets)
+        ))
+
       # Apply the renaming
       tab_dat <- tab_dat |>
         dplyr::rename(any_of(rename_map))
-      
+
+      # Identify lestimate and uncertainty columns for loop and other reference
+      landings_cols <- names(tab_dat)[-c(1, grep(glue::glue("^{uncert_lab} "), names(tab_dat)))]
+      uncert_cols <- names(tab_dat)[grep(glue::glue("^{uncert_lab} "), names(tab_dat))]
       # Comment out from here to closing brackets if don't want to combine label and uncertainty
       # {{ -------------------------------------------------------------------
       # Use loop to combine label (uncertainty)
-      landings_cols <- names(tab_dat)[-c(1, grep(glue::glue("^{uncert_lab} "), names(tab_dat)))]
       for (l_col in landings_cols) {
-        
+
         # Identify the error column that contains l_col in the name
-        
-        
-        #############here#####################
-        
-        
-        # 2. Construct the matching uncertainty column name
-        u_col <- paste0(id_uncert, " - ", f_id)
-        
-        # 3. Only perform the merge if the uncertainty column actually exists
-        if (u_col %in% names(tab_dat)) {
-          tab_dat[[l_col]] <- paste0(
-            tab_dat[[l_col]], 
-            " (", tab_dat[[u_col]], ")"
-          )
-          
-          # Optional: Clean up " (NA)" if they appear
-          tab_dat[[l_col]] <- stringr::str_remove(tab_dat[[l_col]], " \\(NA\\)")
-        }
-      }
-      # Remove error column(s)
-      tab_dat <- tab_dat |>
-        dplyr::select(-dplyr::matches(paste0(uncert_lab, " - ", fleets, collapse = "|")))
+        uncert_col <- uncert_cols[grepl(l_col, uncert_cols)]
+
+        # adjust tab dat to combine the uncert_col value into the l_col = l_col (uncert_col)
+        tab_dat <- tab_dat |>
+          dplyr::mutate(
+            !!l_col := ifelse(
+              !is.na(.data[[uncert_col]]),
+              paste0(.data[[l_col]], " (", .data[[uncert_col]], ")"),
+              # maybe not good practice to insert dash?
+              ifelse(
+                is.na(.data[[l_col]]),
+                "-",
+                as.character(.data[[l_col]])
+                )
+            )
+          ) |>
+          # Remove uncertainty colummn id'd in this step of the loop
+          dplyr::select(-dplyr::all_of(uncert_col)) 
+      } # close loop combining label and uncertainty
       # }} -------------------------------------------------------------------
-    }
-    
-    # Apply the general underscore formatting to ALL columns (regardless of landings)
-    tab_dat <- tab_dat |>
-      dplyr::rename_with(~ gsub("_", " - ", .))
+      
+      # Rename final df with cleaned names
+      tab_dat2 <- tab_dat |>
+        dplyr::rename(any_of(rename_map_final)) |>
+        dplyr::rename_with(~ gsub("_", " - ", .)) # |>
+        # not sure if we want to keep this or not
+        # dplyr::select(where(~!all(is.na(.)) | !all(. == "-"))) # remove columns that are all NA or all "-"))
+    } else {
+      cli::cli_alert_info(
+        "No {label} columns found in data; skipping renaming step."
+      )
+    } # close if statement on landings column
     return(tab_dat)
-  })
+  }) # close and end lapply
 }
