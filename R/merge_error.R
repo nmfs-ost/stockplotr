@@ -47,6 +47,7 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
             paste0(stringr::str_to_title(label), " (", unit_label, ") (", id_uncert, ")")
           ),
           id_uncert)
+        if (id_uncert != uncert_lab) uncert_lab <- id_uncert
         # Remove (", id_uncert, ")" in the above line if we don't want to combine value and error in one column
       } else if (any(grepl("expected|predicted|observed|estimated",label_cols_new))) {
         label_lab <- stringr::str_to_title(unique(stringr::str_extract(
