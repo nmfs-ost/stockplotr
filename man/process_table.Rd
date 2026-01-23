@@ -4,7 +4,7 @@
 \alias{process_table}
 \title{Processing for tables}
 \usage{
-process_table(dat, group = NULL, method = "sum")
+process_table(dat, group = NULL, method = "sum", label = NULL)
 }
 \arguments{
 \item{dat}{Pre-filtered data from \link[stockplotr]{filter_data} following a
@@ -15,6 +15,8 @@ want to just summarize the data across all factors, set group = "none".}
 
 \item{method}{A string describing the method of summarizing data when group
 is set to "none". Options are "sum" or "mean". Default is "sum".}
+
+\item{label}{A string or vector of strings identifying the label values to filter the data.}
 }
 \value{
 A dataframe of processed data ready for formatting into a table. Input is an object created with \link[stockplotr]{filter_data}.

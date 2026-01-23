@@ -7,12 +7,11 @@
 table_landings(
   dat,
   unit_label = "mt",
-  era = "time",
+  era = NULL,
   interactive = TRUE,
   group = NULL,
   method = "sum",
   module = NULL,
-  scale_amount = 1,
   label = NULL,
   make_rda = FALSE,
   tables_dir = getwd()
@@ -43,11 +42,10 @@ is set to "none". Options are "sum" or "mean". Default is "sum".}
 with the label for the plot if known. Default is NULL. By default, the function
 will select the most relevant module if more than 1 exists.}
 
-\item{scale_amount}{A number describing how much to scale down the quantities
-shown on the y axis. For example, scale_amount = 100 would scale down a value
-from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
-
-\item{label}{The label that will be chosen from the input file. If unspecified, the function will search the "label" column and use the first matching label in this ordered list: "landings_weight",  "landings_numbers", "landings_expected", "landings_predicted", "landings".}
+\item{label}{The label that will be chosen from the input file. If unspecified,
+the function will search the "label" column and use the first matching label
+in this ordered list: "landings_weight",  "landings_numbers", "landings_expected",
+"landings_predicted", "landings".}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
