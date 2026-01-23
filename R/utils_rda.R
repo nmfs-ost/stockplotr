@@ -17,6 +17,8 @@
 #' shown on the y axis. For example, scale_amount = 100 would scale down a value
 #' from 500,000 --> 5,000. This scale will be reflected in the y axis label.
 #' @param unit_label A string containing a unit label for the y-axis
+#' @param table_df The data frame that the table will be made into for purposes 
+#' of exporting a latex formatted table.
 #'
 #' @returns Create an rda package for a plot or table object. Requires an
 #' object from the R environment such as a ggplot or flextable object.
@@ -41,7 +43,8 @@ create_rda <- function(
   ref_line = "msy",
   ref_point = "msy", # this is not used anywhere
   scale_amount = 1,
-  unit_label = "mt"
+  unit_label = "mt",
+  table_df = NULL
 ) {
   # run write_captions.R if its output doesn't exist
   if (!file.exists(
@@ -82,13 +85,21 @@ create_rda <- function(
     fig_or_table = fig_or_table,
     dir = dir
   )
+  
+  if (fig_or_table == "table") {
+    latex_table <- create_latex_table(
+      data = table_df,
+      caption = caps_alttext[1],
+      label = "landings_latex")
+  }
 
   export_rda(
     object = object,
     caps_alttext = caps_alttext, # Load in of this is missing I think
     figures_tables_dir = dir,
     topic_label = topic_label,
-    fig_or_table = fig_or_table
+    fig_or_table = fig_or_table,
+    latex_table = latex_table
   )
 }
 
@@ -115,6 +126,8 @@ add_more_key_quants <- function(
   # make year character if not null
   if (!is.null(end_year)) {
     end_year <- as.character(end_year)
+  } else {
+    end_year <- format(Sys.Date(), "%Y")
   }
 
   # select specific fig/table's caption/alt text
@@ -137,43 +150,43 @@ add_more_key_quants <- function(
 
   # calculate key quantities that rely on end_year for calculation
   ## terminal fishing mortality
-  if (topic_cap_alt$label == "fishing.mortality") {
-    if (is.null(dat)) {
-      cli::cli_alert_warning("Some key quantities associated with fishing mortality were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).", wrap = TRUE)
-    } else {
-      F.end.year <- dat |>
-        dplyr::filter(
-          c(label == "fishing_mortality" &
-            year == end_year) |
-            c(label == "terminal_fishing_mortality" & is.na(year))
-        ) |>
-        dplyr::pull(estimate) |>
-        as.numeric() |>
-        round(digits = 2)
-
-      # COMMENTING OUT THESE LINES because the current alt text/captions csv
-      # doesn't include Ftarg or F.Ftarg. If we alter them to include them,
-      # then uncomment these lines and add code that would substitute the key
-      # quantities into the df, like at the bottom of write_captions.
-      #
-      # # recalculate Ftarg for F.Ftarg, below
-      # Ftarg <- dat |>
-      #   dplyr::filter(grepl('f_target', label) |
-      #                   grepl('f_msy', label) |
-      #                   c(grepl('fishing_mortality_msy', label) &
-      #                       is.na(year))) |>
-      #   dplyr::pull(estimate) |>
-      #   as.numeric() |>
-      #   round(digits = 2)
-      #
-      # # Terminal year F respective to F target
-      # F.Ftarg <- F.end.year / Ftarg
-
-      if (!is.null(F.end.year)) {
-        end_year <- as.character(F.end.year)
-      }
-    }
-  }
+  # if (topic_cap_alt$label == "fishing.mortality") {
+  #   if (is.null(dat)) {
+  #     cli::cli_alert_warning("Some key quantities associated with fishing mortality were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).", wrap = TRUE)
+  #   } else {
+  #     F.end.year <- dat |>
+  #       dplyr::filter(
+  #         c(label == "fishing_mortality" &
+  #           year == end_year) |
+  #           c(label == "terminal_fishing_mortality" & is.na(year))
+  #       ) |>
+  #       dplyr::pull(estimate) |>
+  #       as.numeric() |>
+  #       round(digits = 2)
+  # 
+  #     # COMMENTING OUT THESE LINES because the current alt text/captions csv
+  #     # doesn't include Ftarg or F.Ftarg. If we alter them to include them,
+  #     # then uncomment these lines and add code that would substitute the key
+  #     # quantities into the df, like at the bottom of write_captions.
+  #     #
+  #     # # recalculate Ftarg for F.Ftarg, below
+  #     # Ftarg <- dat |>
+  #     #   dplyr::filter(grepl('f_target', label) |
+  #     #                   grepl('f_msy', label) |
+  #     #                   c(grepl('fishing_mortality_msy', label) &
+  #     #                       is.na(year))) |>
+  #     #   dplyr::pull(estimate) |>
+  #     #   as.numeric() |>
+  #     #   round(digits = 2)
+  #     #
+  #     # # Terminal year F respective to F target
+  #     # F.Ftarg <- F.end.year / Ftarg
+  # 
+  #     if (!is.null(F.end.year)) {
+  #       end_year <- as.character(F.end.year)
+  #     }
+  #   }
+  # }
 
 
   # calculate key quantities that rely on scaling for calculation
@@ -1821,6 +1834,7 @@ extract_caps_alttext <- function(topic_label = NULL,
 #' labels are found in the "label" column of the "captions_alt_text.csv" file
 #' and are used to link the figure or table with its caption/alt text.
 #' @param fig_or_table A string describing whether the plot is a figure or table.
+#' @param latex_table The object containing a LaTeX-based table.
 #'
 #' @return An rda file with a figure's ggplot, caption, and alternative text, or
 #' a table's flextable and caption.
@@ -1834,7 +1848,8 @@ extract_caps_alttext <- function(topic_label = NULL,
 #'   caps_alttext = caps_alttext_object,
 #'   figures_tables_dir = here::here(),
 #'   topic_label = "bnc",
-#'   fig_or_table = "table"
+#'   fig_or_table = "table",
+#'   latex_table = "latex_table"
 #' )
 #'
 #' export_rda(
@@ -1849,7 +1864,8 @@ export_rda <- function(object = NULL,
                        caps_alttext = NULL,
                        figures_tables_dir = NULL,
                        topic_label = NULL,
-                       fig_or_table = NULL) {
+                       fig_or_table = NULL,
+                       latex_table = NULL) {
   # make rda for figures
   if (fig_or_table == "figure") {
     rda <- list(
@@ -1869,7 +1885,8 @@ export_rda <- function(object = NULL,
   } else if (fig_or_table == "table") {
     rda <- list(
       "table" = object,
-      "caption" = caps_alttext[[1]]
+      "caption" = caps_alttext[[1]],
+      "latex_table" = latex_table
     )
     rda_loc <- "tables"
     # check if a tables folder already exists; if not, make one

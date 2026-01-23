@@ -1,207 +1,136 @@
-# #' Landed catch by fleet and year table
-# #'
-# #' @inheritParams plot_recruitment
-# #' @param unit_label Abbreviated units of landings
-# #' @param tables_dir The location of the folder containing the generated table
-# #' rda files ("tables") that will be created if the argument `make_rda` = TRUE.
-# #' Default is the working directory.
-# #'
-# #' @return Create a table ready for a stock assessment report of landed catch by
-# #' fleet and year.
-# #' @export
-# #'
-# #' @examples
-# #' \dontrun{
-# #' table_landings(dat)
-# #'
-# #' table_landings(
-# #'   dat,
-# #'   unit_label = "landings label",
-# #'   end_year = 2024,
-# #'   make_rda = TRUE,
-# #'   tables_dir = getwd()
-# #' )
-# #' }
-# table_landings <- function(dat,
-#                            unit_label = "mt",
-#                            end_year = format(Sys.Date(), "%Y"),
-#                            make_rda = FALSE,
-#                            tables_dir = getwd()) {
-#   # TODO: add an option to stratify by gear type
+#' Landed catch by fleet and year table
+#'
+#' @inheritParams plot_recruitment
+#' @param unit_label Abbreviated units of landings
+#' @param group A string identifying the indexing variable of the data. If you
+#' want to just summarize the data across all factors, set group = "none".
+#' @param method A string describing the method of summarizing data when group
+#' is set to "none". Options are "sum" or "mean". Default is "sum".
+#' @param tables_dir The location of the folder containing the generated table
+#' rda files ("tables") that will be created if the argument `make_rda` = TRUE. 
+#' @param label The label that will be chosen from the input file. If unspecified,
+#' the function will search the "label" column and use the first matching label
+#' in this ordered list: "landings_weight",  "landings_numbers", "landings_expected",
+#' "landings_predicted", "landings".
+#'
+#' @return Create a table ready for a stock assessment report of landed catch by
+#' fleet and year.
+#' @export
+#'
+#' @examples
+#' table_landings(stockplotr::example_data)
+#'
+#' table_landings(
+#'   stockplotr::example_data,
+#'   unit_label = "landings label",
+#'   group = 
+#' )
+table_landings <- function(
+    dat,
+    unit_label = "mt",
+    era = NULL,
+    interactive = TRUE,
+    group = NULL,
+    method = "sum",
+    module = NULL,
+    label = NULL,
+    make_rda = FALSE,
+    tables_dir = getwd()) {
+  
+  #TODO: do group and facet need to be uncommented and updated?
+  # Filter data for landings
+  prepared_data <- filter_data(
+    dat = dat,
+    label_name = "landings",
+    geom = "line",
+    era = era,
+    module = module,
+    scale_amount = 1,
+    interactive = interactive
+  ) |>
+    dplyr::mutate(estimate = round(as.numeric(estimate), digits = 0)) |>
+    dplyr::mutate(uncertainty = round(as.numeric(uncertainty), digits = 2))
+  
+  # Add check if there is any data
+  if (nrow(prepared_data) == 0){
+    cli::cli_abort("No landings data found.")
+  }
+  
+  # get uncertainty label by model
+  uncert_lab <- prepared_data |>
+    dplyr::filter(!is.na(uncertainty_label)) |>
+      dplyr::group_by(model) |>
+      dplyr::reframe(unique_uncert = unique(uncertainty_label)) # changed to reframe -- may cause errors
+  uncert_lab <- stats::setNames(uncert_lab$unique_uncert, uncert_lab$model)
+  # if (length(unique(uncert_lab)) == 1) uncert_lab <- unique(uncert_lab) # might need this line
+  
+  # This needs to be adjusted when comparing different models and diff error
+  if (length(uncert_lab) > 1 & length(unique(uncert_lab)) == 1 | length(names(uncert_lab)) == 1){ # prepared_data$model
+    # cli::cli_alert_warning("More than one value for uncertainty exists: {uncert_lab}")
+    uncert_lab <- uncert_lab[[1]]
+    # cli::cli_alert_warning("The first value ({uncert_lab}) will be chosen.")
+  }
+  
+  if (is.na(uncert_lab)) uncert_lab <- "uncertainty"
+  
+  # get fleet names
+  # TODO: change from fleets to id_group AFTER the process data step and adjust throughout the table based on indexing
+  fleets <- unique(prepared_data$fleet) |>
+    # sort numerically even if fleets are 100% characters
+    stringr::str_sort(numeric = TRUE)
 
-#   # Units
-#   land_label <- glue::glue("Landings ({unit_label})")
-
-#   # create plot-specific variables to use throughout fxn for naming and IDing
-#   topic_label <- "landings"
-
-#   # identify output
-#   fig_or_table <- "table"
-
-#   # check year isn't past end_year if not projections plot
-#   check_year(
-#     end_year = end_year,
-#     fig_or_table = fig_or_table,
-#     topic = topic_label
-#   )
-
-#   # read standard data file and extract target quantity
-#   land_dat <- dat |>
-#     dplyr::filter(
-#       c(module_name == "t.series" & grepl("landings_observed", label)) | c(module_name == "CATCH" & grepl("ret_bio", label)),
-#       # t.series is associated with a conversion from BAM output and CATCH with SS3 converted output
-#       !is.na(fleet)
-#     ) |>
-#     dplyr::mutate(
-#       estimate = as.numeric(estimate),
-#       year = as.numeric(year)
-#     ) |>
-#     suppressWarnings() |>
-#     dplyr::filter(
-#       !is.na(year)
-#     ) |>
-#     dplyr::filter(year <= end_year)
-
-
-#   # if (is.numeric(land_dat$fleet)){
-#   #   land_dat$fleet <- paste0("00", land_dat$fleet)
-#   # }
-
-#   if ("uncertainty" %in% names(land_dat)) {
-#     if ("uncertainty_label" %in% names(land_dat)) {
-#       uncert_label <- land_dat |>
-#         dplyr::select(uncertainty_label) |>
-#         unique() |>
-#         as.character() |>
-#         toupper()
-
-#       land_dat <- land_dat |>
-#         dplyr::mutate(uncertainty = round(uncertainty, 2))
-
-#       if (uncert_label != "NA") {
-#         land_dat <- land_dat |>
-#           dplyr::rename(!!(uncert_label) := "uncertainty")
-
-#         piv_vals <- c(
-#           "Landings",
-#           uncert_label
-#         )
-#       } else {
-#         uncert_label <- NULL
-#         piv_vals <- "Landings"
-#       }
-#     }
-#   } else {
-#     uncert_label <- NULL
-#     piv_vals <- "Landings"
-#   }
-
-#   # TODO: Reorder column names so that numeric fleets show up in chronological
-#   # order (currently, lists 1, 10, 11, 12, etc.)
-
-#   # Check number of areas and season - if any are >1 then need to use alternative plot (or summarize)
-#   narea <- length(unique(land_dat$area))
-#   nseas <- length(unique(land_dat$season))
-
-#   if (narea > 1) {
-#     # factors <- TRUE
-#     idcols <- c("year", "Area")
-#     # will need facet if TRUE
-#   } else {
-#     idcols <- c("year")
-#     # factors <- FALSE
-#   }
-
-#   # Check for nseas > 1 - mean of landings through the year
-#   if (nseas > 1) {
-#     land_dat <- land_dat |>
-#       dplyr::group_by(year, fleet, sex, area, growth_pattern) |>
-#       dplyr::summarize(estimate = mean(estimate)) |>
-#       dplyr::mutate(fleet = as.factor(fleet)) |>
-#       dplyr::rename("Area" = area)
-#   }
-
-#   # Extract fleet names
-#   fleet_names <- unique(as.character(land_dat$fleet))
-
-#   land <- land_dat |>
-#     dplyr::mutate(
-#       fleet = as.factor(fleet),
-#       #  fleet = paste0("Fleet_", fleet),
-#       year = as.factor(year),
-#       estimate = round(estimate, digits = 0)
-#     ) |>
-#     dplyr::rename("Landings" = estimate) |>
-#     dplyr::relocate(fleet, .after = season) |>
-#     tidyr::pivot_wider(
-#       id_cols = dplyr::all_of(idcols),
-#       names_from = fleet,
-#       #  names_prefix = "Fleet_",
-#       values_from = piv_vals,
-#       names_glue = "Fleet {fleet}_{.value}"
-#     ) |>
-#     dplyr::rename("Year" = year)
-
-#   land <- land |>
-#     dplyr::select(order(colnames(land),
-#       method = "auto"
-#     )) |>
-#     dplyr::relocate(Year, .before = 1) |>
-#     dplyr::rename_with(~ stringr::str_replace(
-#       .,
-#       "Landings",
-#       land_label
-#     ))
-
-#   # add theming to final table
-#   final <- land |>
-#     flextable::flextable() |>
-#     flextable::separate_header() |>
-#     flextable::merge_h(part = "header") |>
-#     flextable::align(part = "header") |>
-#     add_theme() |>
-#     suppressWarnings()
-#   final
-
-#   # export figure to rda if argument = T
-#   if (make_rda == TRUE) {
-#     # run write_captions.R if its output doesn't exist
-#     if (!file.exists(
-#       fs::path(getwd(), "captions_alt_text.csv")
-#     )
-#     ) {
-#       stockplotr::write_captions(
-#         dat = dat,
-#         dir = tables_dir,
-#         year = end_year
-#       )
-#     }
-
-#     # add more key quantities included as arguments in this fxn
-#     add_more_key_quants(
-#       dat,
-#       topic = topic_label,
-#       fig_or_table = fig_or_table,
-#       dir = tables_dir,
-#       end_year = end_year,
-#       units = unit_label
-#     )
-
-#     # extract this plot's caption and alt text
-#     caps_alttext <- extract_caps_alttext(
-#       topic_label = topic_label,
-#       fig_or_table = fig_or_table,
-#       dir = tables_dir
-#     )
-
-#     export_rda(
-#       object = final,
-#       caps_alttext = caps_alttext,
-#       figures_tables_dir = tables_dir,
-#       topic_label = topic_label,
-#       fig_or_table = fig_or_table
-#     )
-#   }
-#   # Return finished table
-#   final
-# }
+  #TODO: fix this so that fleet names aren't removed if, e.g., group = "fleet"
+  table_data_info <- process_table(
+    dat = prepared_data,
+    # group = group,
+    method = method,
+    label = label
+  )
+  table_data <- table_data_info[[1]]
+  indexed_vars <- table_data_info[[2]]
+  id_col_vals <- table_data_info[[3]]
+  
+  # id_group_vals <- sapply(id_cols, function(x) unique(prepared_data[[x]]), simplify = FALSE)
+  # TODO: add check if there is a landings column for every error column -- if not remove the error (can keep landings)
+  
+  # merge error and landings columns and rename
+  df_list <- merge_error(
+    table_data,
+    uncert_lab,
+    fleets,
+    label = "landings",
+    unit_label
+  )
+  
+  # transform dfs into tables
+  final <- lapply(df_list, function(df) {
+    df |>
+      gt::gt() |>
+      add_theme()
+  })
+  
+  # export figure to rda if argument = T
+  if (make_rda == TRUE) {
+    create_rda(
+      object = final,
+      topic_label = "landings",
+      fig_or_table = "table",
+      dat = dat,
+      dir = tables_dir,
+      scale_amount = 1,
+      unit_label = unit_label,
+      table_df = final_df
+    )
+  }
+  # Send table(s) to viewer
+  if (!is.data.frame(table_data)) {
+    for(t in final) {
+      print(t)
+    }
+    # Return table list invisibly
+    return(invisible(final))
+  } else {
+    # Return finished table (when only one table)
+    return(final)
+  }
+}

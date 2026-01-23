@@ -19,21 +19,21 @@ plot_error(
 }
 \arguments{
 \item{dat}{filtered data frame from standard output file(s) preformatted for
-the target label from \link[stockplotr]{filter_data}}
+the target label from \link[stockplotr]{prepare_data}}
 
-\item{x}{a string of the column name of data used to plot on the x-axis (default
+\item{x}{a string of the column name of data used to plot on the x-axis (default 
 is "year")}
 
-\item{y}{a string of the column name of data used to plot on the y-axis (default
+\item{y}{a string of the column name of data used to plot on the y-axis (default 
 is "estimate")}
 
-\item{geom}{type of geom to use for plotting found in ggplot2 (e.g. "point",
+\item{geom}{type of geom to use for plotting found in ggplot2 (e.g. "point", 
 "line", etc.). Default is "line". Other options are "point" and "area".}
 
-\item{group}{a string of a single column that groups the data (e.g. "fleet",
+\item{group}{a string of a single column that groups the data (e.g. "fleet", 
 "sex", "area", etc.). Currently can only have one level of grouping.}
 
-\item{facet}{a string or vector of strings of a column that facets the data
+\item{facet}{a string or vector of strings of a column that facets the data 
 (e.g. "year", "area", etc.)}
 
 \item{xlab}{a string of the x-axis label (default is "Year")}

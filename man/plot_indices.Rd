@@ -67,6 +67,6 @@ Plot Index of Abundance
 plot_indices(
   dat = stockplotr:::example_data,
   unit_label = "fish/hr",
-  interactive = FALSE
-)
+  interactive= FALSE)
+  
 }

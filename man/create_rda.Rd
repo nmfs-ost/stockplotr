@@ -14,7 +14,8 @@ create_rda(
   ref_line = "msy",
   ref_point = "msy",
   scale_amount = 1,
-  unit_label = "mt"
+  unit_label = "mt",
+  table_df = NULL
 )
 }
 \arguments{
@@ -40,6 +41,9 @@ shown on the y axis. For example, scale_amount = 100 would scale down a value
 from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
 
 \item{unit_label}{A string containing a unit label for the y-axis}
+
+\item{table_df}{The data frame that the table will be made into for purposes 
+of exporting a latex formatted table.}
 }
 \value{
 Create an rda package for a plot or table object. Requires an
