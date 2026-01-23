@@ -332,20 +332,20 @@ process_data <- function(
 #' @export
 #'
 #' @examples {
-#' filtered <- filter_data(
-#' dat = stockplotr:::example_data,
-#' label_name = "landings",
-#' geom = "line",
-#' era = "time"
-#' )
-#' process_table(dat = filtered, method = "sum")
+#'   filtered <- filter_data(
+#'     dat = stockplotr:::example_data,
+#'     label_name = "landings",
+#'     geom = "line",
+#'     era = "time"
+#'   )
+#'   process_table(dat = filtered, method = "sum")
 #' }
 process_table <- function(
-    dat,
-    group = NULL,
-    method = "sum",
-    label = NULL){
-  
+  dat,
+  group = NULL,
+  method = "sum",
+  label = NULL
+) {
   index_variables <- c()
   # TODO: incorporate this into the output for check_grouping to avoid loop
   for (mod in unique(dat$model)) {
@@ -355,10 +355,10 @@ process_table <- function(
     mod_index <- setNames(mod_index, mod_names)
     index_variables <- c(index_variables, mod_index)
   }
-  
+
   id_group <- index_variables[-grep("year|age|length_bin", index_variables)]
   cols <- index_variables[grep("year|age|length_bin", index_variables)]
-  
+
   # Add check for length label >1
   # below method will only work when unqiue(label) == 2
   if (!is.null(label)) {
@@ -367,17 +367,17 @@ process_table <- function(
   } else {
     # Check if there's > 1 label for any model
     if ((dat |>
-         dplyr::group_by(model) |>
-         dplyr::summarise(unique_count = dplyr::n_distinct(label)) |>
-         dplyr::pull(unique_count) |> max()) > 1){
+      dplyr::group_by(model) |>
+      dplyr::summarise(unique_count = dplyr::n_distinct(label)) |>
+      dplyr::pull(unique_count) |> max()) > 1) {
       if ((dat |>
-           dplyr::group_by(model) |>
-           dplyr::summarise(unique_count = dplyr::n_distinct(label)) |>
-           dplyr::pull(unique_count) |> max()) == 2){
+        dplyr::group_by(model) |>
+        dplyr::summarise(unique_count = dplyr::n_distinct(label)) |>
+        dplyr::pull(unique_count) |> max()) == 2) {
         # compare estimate across all indexing vars and see if they are different over years
-        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         dat <- check_label_differences(dat, index_variables)
       } else {
         cli::cli_alert_info("Multiple labels detected.")
@@ -401,8 +401,8 @@ process_table <- function(
         }
         dat <- dat |>
           dplyr::filter(label %in% selected_label)
-        
-        # Re-run index variables after filtering 
+
+        # Re-run index variables after filtering
         index_variables <- c()
         # TODO: incorporate this into the output for check_grouping to avoid loop
         for (mod in unique(dat$model)) {
@@ -412,20 +412,19 @@ process_table <- function(
           mod_index <- setNames(mod_index, mod_names)
           index_variables <- c(index_variables, mod_index)
         }
-        
+
         id_group <- index_variables[-grep("year|age|length_bin", index_variables)]
         cols <- index_variables[grep("year|age|length_bin", index_variables)]
-        
+
         # Check if any of the selected labels are the same values
         dat <- check_label_differences(dat, index_variables, id_group)
       } # close else >2 labels
     } # close if >1 label in df
   } # close if label == NULL
-  
-  #TODO: calculate error properly, if summarized
-  if (!is.null(group) && group == "none"){
-    dat <- switch(
-      method,
+
+  # TODO: calculate error properly, if summarized
+  if (!is.null(group) && group == "none") {
+    dat <- switch(method,
       "mean" = dat |>
         dplyr::group_by(dplyr::across(tidyselect::all_of(c("label", "model", index_variables)))) |>
         dplyr::summarize(
@@ -451,10 +450,10 @@ process_table <- function(
 
   uncert_lab <- unique(dat$uncertainty_label)
   estimate_lab <- stringr::str_to_title(stringr::str_replace_all(unique(dat$label), "_", " "))
-  
+
   table_list <- list()
   id_group_list <- list()
-  for (mod in unique(dat$model)){
+  for (mod in unique(dat$model)) {
     mod_dat <- dplyr::filter(dat, model == mod)
     mod_index_variables <- check_grouping(mod_dat)
     mod_id_group <- mod_index_variables[-grep("year|age|length_bin", mod_index_variables)]
@@ -464,12 +463,12 @@ process_table <- function(
       mod_uncert_lab <- "Uncertainty"
     } else {
       uncert_lab <- stats::na.omit(uncert_lab)
-    } 
-    
+    }
+
     table_data <- mod_dat |>
       dplyr::filter(dplyr::if_all(dplyr::any_of(mod_cols), ~ !is.na(.))) |>
       dplyr::rename_with(
-        ~ stringr::str_to_title(.x), 
+        ~ stringr::str_to_title(.x),
         .cols = dplyr::all_of(mod_index_variables)
       ) |>
       dplyr::select(dplyr::all_of(c(
@@ -485,32 +484,31 @@ process_table <- function(
         names_from = dplyr::all_of(c("label", stringr::str_to_title(mod_id_group)))
       ) |>
       dplyr::rename_with(~ stringr::str_remove(., "^estimate_"))
-    
+
     # group indexing data together (i.e. fleet)
-    if (length(mod_id_group) > 0){
+    if (length(mod_id_group) > 0) {
       for (f in unique(mod_dat$fleet)) { # TODO: change dat$fleet to indexing col(s)
-        table_data <- table_data |> 
+        table_data <- table_data |>
           dplyr::relocate(dplyr::contains(f), .after = dplyr::last_col())
       }
     }
     table_list[[mod]] <- table_data
-    
+
     # This feels like backward progress
     id_group_list[[mod]] <- lapply(setNames(mod_id_group, mod_id_group), function(x) {
       unique(mod_dat[[x]])
-      })
+    })
   } # close loop
-  
+
   # check if only one model -- export as df instead
   # if (length(table_list) == 1){
   #   table_list <- table_list[[1]]
   # }
-  
+
   # Export as list
   list(
     table_list,
     stringr::str_to_title(id_group),
     id_group_list
   )
-  
 }

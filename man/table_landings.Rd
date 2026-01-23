@@ -68,6 +68,6 @@ table_landings(stockplotr::example_data)
 table_landings(
   stockplotr::example_data,
   unit_label = "landings label",
-  group = 
-)
+  group =
+  )
 }

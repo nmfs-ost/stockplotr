@@ -202,8 +202,8 @@ plot_timeseries <- function(
 #' @param ... inherited arguments from internal functions from ggplot2::geom_xx
 #'
 #'
-#' @returns Create a time series plot for a stock assessment report. The user 
-#' has options to create a line, point, or area plot where the x-axis is year 
+#' @returns Create a time series plot for a stock assessment report. The user
+#' has options to create a line, point, or area plot where the x-axis is year
 #' and Y can vary for any time series quantity. Currently, grouping is
 #' restricted to one group where faceting can be any number of facets.
 #' @export
@@ -211,40 +211,40 @@ plot_timeseries <- function(
 #' @examples
 #' \dontrun{
 #' plot_timeseries(dat,
-#'                x = "year",
-#'                y = "estimate",
-#'                geom = "line",
-#'                xlab = "Year",
-#'                ylab = "Biomass",
-#'                group = "fleet",
-#'                facet = "area")
+#'   x = "year",
+#'   y = "estimate",
+#'   geom = "line",
+#'   xlab = "Year",
+#'   ylab = "Biomass",
+#'   group = "fleet",
+#'   facet = "area"
+#' )
 #' }
 plot_timeseries <- function(
-    dat,
-    x = "year",
-    y = "estimate",
-    geom = "line",
-    xlab = "Year",
-    ylab = NULL,
-    group = NULL,
-    facet = NULL,
-    ...
+  dat,
+  x = "year",
+  y = "estimate",
+  geom = "line",
+  xlab = "Year",
+  ylab = NULL,
+  group = NULL,
+  facet = NULL,
+  ...
 ) {
   # Start plot
   plot <- ggplot2::ggplot()
   # make into new geom?
   # more defaults and fxnality for ggplot
-  
+
   # Add geom
-  plot <- switch(
-    geom,
+  plot <- switch(geom,
     "point" = {
-      point_size = ifelse(
+      point_size <- ifelse(
         is.null(list(...)$size),
         2.0,
         list(...)$size
       )
-      plot + 
+      plot +
         ggplot2::geom_point(
           data = dat,
           ggplot2::aes(
@@ -263,7 +263,7 @@ plot_timeseries <- function(
     "line" = {
       plot +
         ggplot2::geom_ribbon(
-          dat = dat|> dplyr::filter(!is.na(estimate_lower)),
+          dat = dat |> dplyr::filter(!is.na(estimate_lower)),
           ggplot2::aes(
             x = .data[[x]],
             ymin = estimate_lower,
@@ -271,7 +271,7 @@ plot_timeseries <- function(
           ),
           colour = "grey",
           alpha = 0.3
-        ) + 
+        ) +
         ggplot2::geom_line(
           data = dat,
           ggplot2::aes(
@@ -286,7 +286,7 @@ plot_timeseries <- function(
         )
     },
     "area" = {
-      plot + 
+      plot +
         ggplot2::geom_area(
           data = dat,
           ggplot2::aes(
@@ -298,7 +298,7 @@ plot_timeseries <- function(
         )
     }
   )
-  
+
   # Add labels to axis and legend
   labs <- plot + ggplot2::labs(
     x = xlab,
@@ -308,20 +308,18 @@ plot_timeseries <- function(
     fill = cap_first_letter(group),
     shape = cap_first_letter(group)
   )
-  
+
   # Remove linetype or point when there is no grouping
   if (is.null(group)) {
-    labs <- switch(
-      geom,
+    labs <- switch(geom,
       "line" = labs + ggplot2::guides(linetype = "none"),
       "point" = labs + ggplot2::guides(shape = "none"),
       # return plot if option beyond line and point for now
       labs
     )
   }
-  if (length(unique(dat$model)) == 1){
-    labs <- switch(
-      geom,
+  if (length(unique(dat$model)) == 1) {
+    labs <- switch(geom,
       "line" = labs + ggplot2::guides(color = "none"),
       "point" = labs + ggplot2::guides(color = "none"),
       "area" = labs + ggplot2::guides(fill = "none"),
@@ -329,7 +327,7 @@ plot_timeseries <- function(
       labs
     )
   }
-  
+
   # Calc axis breaks
   x_n_breaks <- axis_breaks(dat[[x]])
   breaks <- ggplot2::scale_x_continuous(
@@ -338,18 +336,18 @@ plot_timeseries <- function(
       minor.ticks = TRUE
     )
   )
-  
+
   # Put together final plot
   final <- labs + breaks + ggplot2::expand_limits(y = 0) +
     ggplot2::scale_y_continuous(
       labels = scales::label_comma()
     )
-  
+
   # Remove legend if no group is selected
   if (is.null(group) & is.data.frame(dat) & any(is.na(unique(dat$model)))) {
     final <- final + ggplot2::theme(legend.position = "none")
   }
-  
+
   # Check if facet(s) are desired
   if (!is.null(facet)) {
     facet <- paste("~", paste(facet, collapse = " + "))
@@ -363,26 +361,26 @@ plot_timeseries <- function(
 #------------------------------------------------------------------------------
 
 #' Create plot with error
-#' 
+#'
 #' @param dat filtered data frame from standard output file(s) preformatted for
 #'  the target label from \link[stockplotr]{prepare_data}
-#' @param x a string of the column name of data used to plot on the x-axis (default 
+#' @param x a string of the column name of data used to plot on the x-axis (default
 #' is "year")
-#' @param y a string of the column name of data used to plot on the y-axis (default 
+#' @param y a string of the column name of data used to plot on the y-axis (default
 #' is "estimate")
-#' @param geom type of geom to use for plotting found in ggplot2 (e.g. "point", 
+#' @param geom type of geom to use for plotting found in ggplot2 (e.g. "point",
 #' "line", etc.). Default is "line". Other options are "point" and "area".
 #' @param xlab a string of the x-axis label (default is "Year")
 #' @param ylab a string of the y-axis label. If NULL, it will be set to the name
 #'  of `y`.
-#' @param group a string of a single column that groups the data (e.g. "fleet", 
+#' @param group a string of a single column that groups the data (e.g. "fleet",
 #' "sex", "area", etc.). Currently can only have one level of grouping.
-#' @param facet a string or vector of strings of a column that facets the data 
+#' @param facet a string or vector of strings of a column that facets the data
 #' (e.g. "year", "area", etc.)
 #' @param hline indicate true or false to place a horizontal line at 1
 #' @param ... inherited arguments from internal functions from ggplot2::geom_xx
-#' 
-#' 
+#'
+#'
 plot_error <- function(
   dat,
   x = "year",

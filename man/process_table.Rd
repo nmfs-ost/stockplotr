@@ -26,12 +26,12 @@ Processing for tables
 }
 \examples{
 {
-filtered <- filter_data(
-dat = stockplotr:::example_data,
-label_name = "landings",
-geom = "line",
-era = "time"
-)
-process_table(dat = filtered, method = "sum")
+  filtered <- filter_data(
+    dat = stockplotr:::example_data,
+    label_name = "landings",
+    geom = "line",
+    era = "time"
+  )
+  process_table(dat = filtered, method = "sum")
 }
 }

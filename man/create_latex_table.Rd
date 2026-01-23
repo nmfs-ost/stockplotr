@@ -21,8 +21,8 @@ Create the rda package for a plot or table
 }
 \examples{
 create_latex_table(
- data = as.data.frame(head(mtcars, 6)),
- caption = "My caption",
- label = "My label"
+  data = as.data.frame(head(mtcars, 6)),
+  caption = "My caption",
+  label = "My label"
 )
 }
