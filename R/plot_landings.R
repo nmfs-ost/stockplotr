@@ -111,5 +111,4 @@ plot_landings <- function(
   }
   # Output final plot
   plt
-
 }

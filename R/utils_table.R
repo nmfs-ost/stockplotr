@@ -13,65 +13,67 @@
 #'
 #' @examples
 #' create_latex_table(
-#'  data = as.data.frame(head(mtcars, 6)),
-#'  caption = "My caption",
-#'  label = "My label"
+#'   data = as.data.frame(head(mtcars, 6)),
+#'   caption = "My caption",
+#'   label = "My label"
 #' )
 create_latex_table <- function(data,
-                         caption,
-                         label) {
-  
+                               caption,
+                               label) {
   # Essential latex packages:
   # \usepackage{hyperref}
   # \usepackage{bookmark}
-  # \usepackage{booktabs} 
+  # \usepackage{booktabs}
   # \usepackage{tagpdf}
   # \usepackage{caption}
-  
-  latex_tbl <- knitr::kable(data, 
-                            format = "latex", 
-                            booktabs = TRUE,
-                            linesep = "")
-  
+
+  latex_tbl <- knitr::kable(data,
+    format = "latex",
+    booktabs = TRUE,
+    linesep = ""
+  )
+
   # add number of header rows
   nheaders <- 1
-  
+
   init_line <- paste0("\\tagpdfsetup{table/header-rows={", nheaders, "}}")
 
   # add caption, label
   cap <- paste0("\\captionof{table}{", caption, "}\n")
   lab <- paste0("\\label{", label, "}\n")
-  
+
   # put together table
-  table <- paste0(init_line,
-                  "\n",
-                  "\\begin{center}\n",
-                  cap,
-                  lab,
-                  latex_tbl,
-                  "\n",
-                  "\\end{center}")
-  
+  table <- paste0(
+    init_line,
+    "\n",
+    "\\begin{center}\n",
+    cap,
+    lab,
+    latex_tbl,
+    "\n",
+    "\\end{center}"
+  )
+
   table
-  
+
   # ncols <- ncol(data)
   # column_names <- paste(colnames(data), collapse = " & ")
   # latex_format_data <- paste(
   #   column_names, "\\\\", "\n"
   # )
-  # 
+  #
   # # c signifies all cols will be centered
   # alignment <- strrep("c", ncols)
-  # 
+  #
   # for (i in 1:nrow(data)) {
   #   row_data <- stringr::str_replace_all(
   #     paste(data[i,], collapse = " & "),
   #     "NA",
   #     "-")
-  #   
+  #
   #   # ends up adding a space and two forward slashes to the end of each line
   #   row_data_with_linebreak <- paste0(row_data, " \\\\")
-  #   
+  #
   #   latex_format_data <- paste(
   #     latex_format_data,
   #     ifelse(i == 1, "\\midrule\n", ""),
@@ -81,7 +83,7 @@ create_latex_table <- function(data,
   #     collapse = "\n"
   #   )
   # }
-  # 
+  #
   # table <- paste0(
   #  # "\\begin{document}\n",
   #   "\\begin{tabular}{", alignment, "}\n",
@@ -107,11 +109,11 @@ create_latex_table <- function(data,
 
 check_label_differences <- function(dat, index_variables, id_group = NULL) {
   # Loop over model to perform checks if the model columns are identical
-  for (mod in unique(dat$model)){
+  for (mod in unique(dat$model)) {
     mod_index_variables <- unique(index_variables[names(index_variables) == mod])
     mod_data <- dplyr::filter(dat, model == mod)
     mod_id_group <- unique(id_group[names(id_group) == mod])
-    
+
     if (length(unique(mod_data$label)) == 1) {
       # only one label - nothing to edit for this model
       next
@@ -125,8 +127,8 @@ check_label_differences <- function(dat, index_variables, id_group = NULL) {
         dplyr::mutate(
           diff = .data[[unique(mod_data$label)[1]]] - .data[[unique(mod_data$label)[2]]]
         )
-      
-      if (all(label_differences$diff == 0)){
+
+      if (all(label_differences$diff == 0)) {
         # Modify dat to only include one label from model
         cli::cli_alert_info("Labels in {mod} model have identical values. Using only: {unique(mod_data$label)[2]}")
         dat <- dat |>
@@ -139,7 +141,7 @@ check_label_differences <- function(dat, index_variables, id_group = NULL) {
           names_from = label,
           values_from = estimate
         )
-      
+
       # Identify if any of the aligned columns contain ID group -- if so warn user and remove id_group labels from table
       empty_check <- label_differences |>
         dplyr::filter(dplyr::if_all(dplyr::any_of(mod_id_group), ~ !is.na(.))) |>
@@ -147,7 +149,7 @@ check_label_differences <- function(dat, index_variables, id_group = NULL) {
       col_to_remove <- names(empty_check)[which(as.logical(empty_check))]
       mod_data2 <- dplyr::filter(mod_data, label %notin% col_to_remove)
       # Identify if any of the columns are identical then remove one of the identical columns
-      if (length(unique(mod_data2$label)) == 2){
+      if (length(unique(mod_data2$label)) == 2) {
         # compare estimate across all indexing vars and see if they are different over years
         label_differences <- mod_data2 |>
           tidyr::pivot_wider(
@@ -158,8 +160,8 @@ check_label_differences <- function(dat, index_variables, id_group = NULL) {
           dplyr::mutate(
             diff = .data[[unique(mod_data2$label)[1]]] - .data[[unique(mod_data2$label)[2]]]
           )
-        
-        if (all(label_differences$diff == 0)){
+
+        if (all(label_differences$diff == 0)) {
           cli::cli_alert_info("Labels in {mod} model have identical values. Using only one label: {unique(prepared_data$label)[2]}")
           col_to_remove <- c(col_to_remove, unique(mod_data2$label)[1])
         }
@@ -189,13 +191,12 @@ check_label_differences <- function(dat, index_variables, id_group = NULL) {
 #' to reduce redundancy in the table.
 #'
 merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
-  # TODO: change fleets to grouping when the data is indexed by factors other than fleet 
+  # TODO: change fleets to grouping when the data is indexed by factors other than fleet
   lapply(table_data, function(tab_dat) {
-    
     label_cols_init <- colnames(tab_dat)[
       grepl(label, tolower(colnames(tab_dat))) # "landings"
     ]
-    
+
     # CONDITION: Only proceed if label columns actually exist in this data frame
     if (length(label_cols_init) > 0) {
       # Clean up fleet names and keywords
@@ -214,61 +215,65 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
         })
         id_uncert <- uncert_lab[matches]
         if (length(id_uncert) == 0) id_uncert <- "uncertainty"
-        
+
         label_cols_final <- c(
           ifelse(
             id_uncert == "uncertainty",
             paste0(stringr::str_to_title(label), " (", unit_label, ")"),
             paste0(stringr::str_to_title(label), " (", unit_label, ") (", id_uncert, ")")
           ),
-          id_uncert)
+          id_uncert
+        )
         if (id_uncert != uncert_lab) uncert_lab <- id_uncert
         # Remove (", id_uncert, ")" in the above line if we don't want to combine value and error in one column
-      } else if (any(grepl("expected|predicted|observed|estimated",label_cols_new))) {
+      } else if (any(grepl("expected|predicted|observed|estimated", label_cols_new))) {
         label_lab <- stringr::str_to_title(unique(stringr::str_extract(
           label_cols_new,
-          paste(label, c("expected", "predicted", "observed", "estimated"), collapse = "|"))
-        ))
+          paste(label, c("expected", "predicted", "observed", "estimated"), collapse = "|")
+        )))
         id_uncert_col <- paste0(
-          uncert_lab, " ", label_lab)
+          uncert_lab, " ", label_lab
+        )
         if (uncert_lab == "uncertainty" || length(uncert_lab) == 0) {
           label_cols_final <- c(paste0(label_lab, " (", unit_label, ")"), uncert_lab)
         } else {
           label_cols_final <- c(
             paste0(label_lab, " (", unit_label, ") (", uncert_lab, ")"),
-            id_uncert_col)
+            id_uncert_col
+          )
         }
       }
-      
+
       # Re-attach fleet names to the new labels
       cols_fleets <- stringr::str_extract(
         label_cols_init,
-        paste0("_",fleets, "$", collapse = "|")
+        paste0("_", fleets, "$", collapse = "|")
       ) |> stringr::str_remove_all("_")
-      
+
       # Target labels for next step
       final_names <- ifelse(
         is.na(cols_fleets),
         label_cols_new,
         paste0(label_cols_new, " - ", cols_fleets)
       )
-      
+
       # Assign previous names with new identifying ones
       rename_map <- stats::setNames(label_cols_init, final_names)
-      
+
       # rename cols for final df
       rename_map_final <- stats::setNames(
-        final_names, 
+        final_names,
         ifelse(
           is.na(cols_fleets),
           label_cols_final,
           paste0(label_cols_final, " - ", cols_fleets)
-        ))
-      
+        )
+      )
+
       # Apply the renaming
       tab_dat <- tab_dat |>
         dplyr::rename(dplyr::any_of(rename_map))
-      
+
       # Identify lestimate and uncertainty columns for loop and other reference
       label_cols <- names(tab_dat)[-c(1, grep(glue::glue("^{uncert_lab} "), names(tab_dat)))]
       uncert_cols <- names(tab_dat)[grep(glue::glue("^{uncert_lab} "), names(tab_dat))]
@@ -276,10 +281,9 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
       # {{ -------------------------------------------------------------------
       # Use loop to combine label (uncertainty)
       for (l_col in label_cols) {
-        
         # Identify the error column that contains l_col in the name
         uncert_col <- uncert_cols[grepl(l_col, uncert_cols)]
-        
+
         # adjust tab dat to combine the uncert_col value into the l_col = l_col (uncert_col)
         tab_dat <- tab_dat |>
           dplyr::mutate(
@@ -295,10 +299,10 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
             )
           ) |>
           # Remove uncertainty colummn id'd in this step of the loop
-          dplyr::select(-dplyr::all_of(uncert_col)) 
+          dplyr::select(-dplyr::all_of(uncert_col))
       } # close loop combining label and uncertainty
       # }} -------------------------------------------------------------------
-      
+
       # Rename final df with cleaned names
       tab_dat <- tab_dat |>
         dplyr::rename(any_of(rename_map_final)) |>
@@ -313,4 +317,3 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
     return(tab_dat)
   }) # close and end lapply
 }
-

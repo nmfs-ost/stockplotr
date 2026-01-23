@@ -42,7 +42,7 @@ from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
 
 \item{unit_label}{A string containing a unit label for the y-axis}
 
-\item{table_df}{The data frame that the table will be made into for purposes 
+\item{table_df}{The data frame that the table will be made into for purposes
 of exporting a latex formatted table.}
 }
 \value{

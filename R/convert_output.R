@@ -1056,12 +1056,12 @@ convert_output <- function(
               row <- row[row != "XX"]
               df1 <- df1[, -loc_xx]
             }
-            
+
             # TODO: apply this next if statement to a general process so it's part of the standard cleaning
             # check if the headers make sense
             # this is a temporary fix to a specific bug
             # I have seen this issue in the past and I am not sure how to recognize this generally
-            if (any(parm_sel == "AGE_SELEX" & c("1","2", "3") %notin% row)) {
+            if (any(parm_sel == "AGE_SELEX" & c("1", "2", "3") %notin% row)) {
               rownum <- prodlim::row.match(row, df1)
               # Subset data frame
               df1 <- df1[-c(1:rownum), ]
@@ -1070,10 +1070,10 @@ convert_output <- function(
               df2 <- df1[stats::complete.cases(df1), ]
               row <- df2[1, ]
             }
-            
+
             # make row the header names for first df
             colnames(df1) <- row
-            
+
             # find row number that matches 'row'
             rownum <- prodlim::row.match(row, df1)
             # Subset data frame

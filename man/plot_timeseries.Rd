@@ -60,8 +60,8 @@ has options to create a line, point, or area plot where the x-axis is year
 and Y can vary for any time series quantity. Currently, grouping is
 restricted to one group where faceting can be any number of facets.
 
-Create a time series plot for a stock assessment report. The user 
-has options to create a line, point, or area plot where the x-axis is year 
+Create a time series plot for a stock assessment report. The user
+has options to create a line, point, or area plot where the x-axis is year
 and Y can vary for any time series quantity. Currently, grouping is
 restricted to one group where faceting can be any number of facets.
 }
@@ -84,12 +84,13 @@ plot_timeseries(dat,
 }
 \dontrun{
 plot_timeseries(dat,
-               x = "year",
-               y = "estimate",
-               geom = "line",
-               xlab = "Year",
-               ylab = "Biomass",
-               group = "fleet",
-               facet = "area")
+  x = "year",
+  y = "estimate",
+  geom = "line",
+  xlab = "Year",
+  ylab = "Biomass",
+  group = "fleet",
+  facet = "area"
+)
 }
 }

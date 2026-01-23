@@ -11,7 +11,7 @@ test_that("table_landings generates plots without errors", {
       out_new,
       interactive = FALSE,
       module = "CATCH"
-      )
+    )
   )
 
   # expect error-free plot with many arguments
@@ -54,11 +54,11 @@ test_that("table_landings generates plots without errors", {
 #     make_rda = TRUE,
 #     tables_dir = getwd()
 #   )
-# 
+#
 #   # expect that both tables dir and the landings_table.rda file exist
 #   expect_true(dir.exists(fs::path(getwd(), "tables")))
 #   expect_true(file.exists(fs::path(getwd(), "tables", "landings_table.rda")))
-# 
+#
 #   # erase temporary testing files
 #   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
 #   unlink(fs::path(getwd(), "tables"), recursive = T)
