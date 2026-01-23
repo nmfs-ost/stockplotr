@@ -463,7 +463,7 @@ process_table <- function(
     if (length(mod_uncert_lab) == 1 && is.na(mod_uncert_lab)) {
       mod_uncert_lab <- "Uncertainty"
     } else {
-      uncert_lab <- stats::a.omit(uncert_lab)
+      uncert_lab <- stats::na.omit(uncert_lab)
     } 
     
     table_data <- mod_dat |>
