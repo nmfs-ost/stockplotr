@@ -76,7 +76,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Processing for tables</h1>
-    <small class="dont-index">Source: <a href="https://github.com/nmfs-ost/stockplotr/blob/v0.8.0-beta/R/process_data.R" class="external-link"><code>R/process_data.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/nmfs-ost/stockplotr/blob/main/R/process_data.R" class="external-link"><code>R/process_data.R</code></a></small>
     <div class="hidden name"><code>process_table.Rd</code></div>
     </div>
 
@@ -119,13 +119,13 @@ is set to "none". Options are "sum" or "mean". Default is "sum".</p></dd>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="op">{</span></span></span>
-<span class="r-in"><span><span class="va">filtered</span> <span class="op">&lt;-</span> <span class="fu"><a href="filter_data.html">filter_data</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va">example_data</span>,</span></span>
-<span class="r-in"><span>label_name <span class="op">=</span> <span class="st">"landings"</span>,</span></span>
-<span class="r-in"><span>geom <span class="op">=</span> <span class="st">"line"</span>,</span></span>
-<span class="r-in"><span>era <span class="op">=</span> <span class="st">"time"</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">process_table</span><span class="op">(</span>dat <span class="op">=</span> <span class="va">filtered</span>, method <span class="op">=</span> <span class="st">"sum"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">filtered</span> <span class="op">&lt;-</span> <span class="fu"><a href="filter_data.html">filter_data</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va">example_data</span>,</span></span>
+<span class="r-in"><span>    label_name <span class="op">=</span> <span class="st">"landings"</span>,</span></span>
+<span class="r-in"><span>    geom <span class="op">=</span> <span class="st">"line"</span>,</span></span>
+<span class="r-in"><span>    era <span class="op">=</span> <span class="st">"time"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">process_table</span><span class="op">(</span>dat <span class="op">=</span> <span class="va">filtered</span>, method <span class="op">=</span> <span class="st">"sum"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]$label</span>

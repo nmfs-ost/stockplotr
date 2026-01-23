@@ -76,7 +76,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create the rda package for a plot or table</h1>
-    <small class="dont-index">Source: <a href="https://github.com/nmfs-ost/stockplotr/blob/v0.8.0-beta/R/utils_table.R" class="external-link"><code>R/utils_table.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/nmfs-ost/stockplotr/blob/main/R/utils_table.R" class="external-link"><code>R/utils_table.R</code></a></small>
     <div class="hidden name"><code>create_latex_table.Rd</code></div>
     </div>
 
@@ -112,9 +112,9 @@
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">create_latex_table</span><span class="op">(</span></span></span>
-<span class="r-in"><span> data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span> caption <span class="op">=</span> <span class="st">"My caption"</span>,</span></span>
-<span class="r-in"><span> label <span class="op">=</span> <span class="st">"My label"</span></span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  caption <span class="op">=</span> <span class="st">"My caption"</span>,</span></span>
+<span class="r-in"><span>  label <span class="op">=</span> <span class="st">"My label"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "\\tagpdfsetup{table/header-rows={1}}\n\\begin{center}\n\\captionof{table}{My caption}\n\\label{My label}\n\n\\begin{tabular}{lrrrrrrrrrrr}\n\\toprule\n  &amp; mpg &amp; cyl &amp; disp &amp; hp &amp; drat &amp; wt &amp; qsec &amp; vs &amp; am &amp; gear &amp; carb\\\\\n\\midrule\nMazda RX4 &amp; 21.0 &amp; 6 &amp; 160 &amp; 110 &amp; 3.90 &amp; 2.620 &amp; 16.46 &amp; 0 &amp; 1 &amp; 4 &amp; 4\\\\\nMazda RX4 Wag &amp; 21.0 &amp; 6 &amp; 160 &amp; 110 &amp; 3.90 &amp; 2.875 &amp; 17.02 &amp; 0 &amp; 1 &amp; 4 &amp; 4\\\\\nDatsun 710 &amp; 22.8 &amp; 4 &amp; 108 &amp; 93 &amp; 3.85 &amp; 2.320 &amp; 18.61 &amp; 1 &amp; 1 &amp; 4 &amp; 1\\\\\nHornet 4 Drive &amp; 21.4 &amp; 6 &amp; 258 &amp; 110 &amp; 3.08 &amp; 3.215 &amp; 19.44 &amp; 1 &amp; 0 &amp; 3 &amp; 1\\\\\nHornet Sportabout &amp; 18.7 &amp; 8 &amp; 360 &amp; 175 &amp; 3.15 &amp; 3.440 &amp; 17.02 &amp; 0 &amp; 0 &amp; 3 &amp; 2\\\\\nValiant &amp; 18.1 &amp; 6 &amp; 225 &amp; 105 &amp; 2.76 &amp; 3.460 &amp; 20.22 &amp; 1 &amp; 0 &amp; 3 &amp; 1\\\\\n\\bottomrule\n\\end{tabular}\n\\end{center}"</span>
 </code></pre></div>
