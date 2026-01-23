@@ -503,7 +503,11 @@ process_table <- function(
   # if (length(table_list) == 1){
   #   table_list <- table_list[[1]]
   # }
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 7c0a83c (Format tables to merge error to estimates (#181))
   # Export as list
   list(
     table_list,

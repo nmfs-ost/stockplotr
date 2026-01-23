@@ -214,7 +214,6 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
         })
         id_uncert <- uncert_lab[matches]
         if (length(id_uncert) == 0) id_uncert <- "uncertainty"
-
         label_cols_final <- c(
           ifelse(
             id_uncert == "uncertainty",
@@ -248,7 +247,6 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
         label_cols_init,
         paste0("_", fleets, "$", collapse = "|")
       ) |> stringr::str_remove_all("_")
-
       # Target labels for next step
       final_names <- ifelse(
         is.na(cols_fleets),
