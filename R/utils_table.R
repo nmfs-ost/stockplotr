@@ -270,7 +270,6 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
       # Apply the renaming
       tab_dat <- tab_dat |>
         dplyr::rename(dplyr::any_of(rename_map))
-
       # Identify lestimate and uncertainty columns for loop and other reference
       label_cols <- names(tab_dat)[-c(1, grep(glue::glue("^{uncert_lab} "), names(tab_dat)))]
       uncert_cols <- names(tab_dat)[grep(glue::glue("^{uncert_lab} "), names(tab_dat))]

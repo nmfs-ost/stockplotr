@@ -53,8 +53,6 @@ of `y`.}
 (e.g. "year", "area", etc.)}
 
 \item{...}{inherited arguments from internal functions from ggplot2::geom_xx}
-
-\item{hline}{indicate true or false to place a horizontal line at 1}
 }
 \value{
 Create a time series plot for a stock assessment report. The user
