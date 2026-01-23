@@ -103,6 +103,7 @@ create_latex_table <- function(data,
 #' Create loop to test for differences in column values
 #' @param dat input data into process_table
 #' @param index_variables the index_variables vector created within process_table
+#' @param id_group the identifying index variable as a string
 
 check_label_differences <- function(dat, index_variables, id_group = NULL) {
   # Loop over model to perform checks if the model columns are identical
@@ -142,7 +143,7 @@ check_label_differences <- function(dat, index_variables, id_group = NULL) {
       # Identify if any of the aligned columns contain ID group -- if so warn user and remove id_group labels from table
       empty_check <- label_differences |>
         dplyr::filter(dplyr::if_all(dplyr::any_of(mod_id_group), ~ !is.na(.))) |>
-        dplyr::summarise(across(unique(mod_data$label), ~ all(is.na(.))))
+        dplyr::summarise(dplyr::across(unique(mod_data$label), ~ all(is.na(.))))
       col_to_remove <- names(empty_check)[which(as.logical(empty_check))]
       mod_data2 <- dplyr::filter(mod_data, label %notin% col_to_remove)
       # Identify if any of the columns are identical then remove one of the identical columns
@@ -253,10 +254,10 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
       )
       
       # Assign previous names with new identifying ones
-      rename_map <- setNames(label_cols_init, final_names)
+      rename_map <- stats::setNames(label_cols_init, final_names)
       
       # rename cols for final df
-      rename_map_final <- setNames(
+      rename_map_final <- stats::setNames(
         final_names, 
         ifelse(
           is.na(cols_fleets),
@@ -266,7 +267,7 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
       
       # Apply the renaming
       tab_dat <- tab_dat |>
-        dplyr::rename(any_of(rename_map))
+        dplyr::rename(dplyr::any_of(rename_map))
       
       # Identify lestimate and uncertainty columns for loop and other reference
       label_cols <- names(tab_dat)[-c(1, grep(glue::glue("^{uncert_lab} "), names(tab_dat)))]

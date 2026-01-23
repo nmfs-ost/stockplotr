@@ -71,7 +71,7 @@ save_all_plots <- function(
     # imported from plot_landings
     landings_unit_label = "mt",
     # imported from plot_recruitment_deviations- zero unique arguments
-    # imported from plot_spawn_recruitment
+    # imported from plot_stock_recruitment
     spawning_biomass_label = "mt",
     spawning_biomass_scale_amount = 1,
     # imported from plot_spawning_biomass
@@ -231,8 +231,8 @@ save_all_plots <- function(
 
   tryCatch(
     {
-      cli::cli_h2("plot_spawn_recruitment")
-      plot_spawn_recruitment(dat,
+      cli::cli_h2("plot_stock_recruitment")
+      plot_stock_recruitment(dat,
                              spawning_biomass_label,
                              recruitment_label = recruitment_unit_label,
                              make_rda = TRUE,
@@ -242,7 +242,7 @@ save_all_plots <- function(
       #                        |> suppressWarnings() |> invisible()
     },
     error = function(e) {
-      cli::cli_alert_danger("plot_spawn_recruitment failed to run.")
+      cli::cli_alert_danger("plot_stock_recruitment failed to run.")
       cli::cli_alert("Tip: check that your arguments are correct.")
       cli::cli_li("spawning_biomass_label = {spawning_biomass_label}")
       cli::cli_li("recruitment_label = {recruitment_label}")

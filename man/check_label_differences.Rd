@@ -10,6 +10,8 @@ check_label_differences(dat, index_variables, id_group = NULL)
 \item{dat}{input data into process_table}
 
 \item{index_variables}{the index_variables vector created within process_table}
+
+\item{id_group}{the identifying index variable as a string}
 }
 \description{
 Create loop to test for differences in column values

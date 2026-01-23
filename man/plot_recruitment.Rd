@@ -61,7 +61,7 @@ Default is the working directory.}
 }
 \value{
 Plot recruitment over time from an assessment model output file
-translated to a standardized output (\link[asar]{convert_output}). There are options to return a
+translated to a standardized output (\link[stockplotr]{convert_output}). There are options to return a
 [ggplot2::ggplot()] object or export an rda object containing associated
 caption and alternative text for the figure.
 }

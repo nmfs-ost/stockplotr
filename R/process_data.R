@@ -463,7 +463,7 @@ process_table <- function(
     if (length(mod_uncert_lab) == 1 && is.na(mod_uncert_lab)) {
       mod_uncert_lab <- "Uncertainty"
     } else {
-      uncert_lab <- na.omit(uncert_lab)
+      uncert_lab <- stats::a.omit(uncert_lab)
     } 
     
     table_data <- mod_dat |>
@@ -490,7 +490,7 @@ process_table <- function(
     if (length(mod_id_group) > 0){
       for (f in unique(mod_dat$fleet)) { # TODO: change dat$fleet to indexing col(s)
         table_data <- table_data |> 
-          dplyr::relocate(contains(f), .after = last_col())
+          dplyr::relocate(dplyr::contains(f), .after = dplyr::last_col())
       }
     }
     table_list[[mod]] <- table_data
