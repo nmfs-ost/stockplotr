@@ -27,7 +27,14 @@ navbar:
         href: articles/how-caps-alttext-are-made.html
       - text: Standardizing Assessment Model Output
         href: articles/convert_output_details.html
+        
+    cheatsheet:
+      text: Cheatsheet
+      href: stockplotr_cheatsheet.pdf
+      icon: fa-solid fa-key
+      # Make the link open in a new tab
+      target: "_blank"
 
   structure:
-    left: [home, reference, sourcecode, articles, news]
+    left: [home, reference, cheatsheet, sourcecode, articles, news]
     right: [search, issue, github]
