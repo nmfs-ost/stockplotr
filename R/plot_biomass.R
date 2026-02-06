@@ -78,7 +78,7 @@ plot_biomass <- function(
   # Filter data for spawning biomass
   prepared_data <- filter_data(
     dat = dat,
-    label_name = "^biomass$|^biomass_retained$|^biomass_dead$",
+    label_name = "^biomass$|biomass_retained|biomass_dead",
     geom = geom,
     group = group,
     facet = facet,
@@ -108,6 +108,17 @@ plot_biomass <- function(
   prepared_data <- processing[[1]]
   group <- processing[[2]]
   if (!is.null(processing[[3]])) facet <- processing[[3]]
+  
+  # if (length(prepared_data$label) > 1){
+  #   prepared_data <- prepared_data |>
+  #     dplyr::group_by(dplyr::across(dplyr::any_of(c("year", "group_var", "model",group, facet)))) |>
+  #     dplyr::summarise(
+  #       estimate = sum(estimate, na.rm = TRUE),
+  #       estimate_upper = sum(estimate_upper, na.rm = TRUE),
+  #       estimate_lower = sum(estimate_lower, na.rm = TRUE),
+  #       .groups = "drop"
+  #     )
+  # }
 
   # Calculate estimate if relative
   if (relative) {

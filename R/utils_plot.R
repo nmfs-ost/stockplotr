@@ -446,7 +446,8 @@ plot_timeseries <- function(
           ggplot2::aes(
             x = .data[[x]],
             ymin = estimate_lower,
-            ymax = estimate_upper
+            ymax = estimate_upper,
+            fill = group_var
           ),
           colour = "grey",
           alpha = 0.3
@@ -471,7 +472,7 @@ plot_timeseries <- function(
           ggplot2::aes(
             x = .data[[x]],
             y = .data[[y]],
-            fill = model
+            fill = group_var # model
           ),
           ...
         )
