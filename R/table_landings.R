@@ -112,14 +112,14 @@ table_landings <- function(
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
     create_rda(
-      object = final,
+      object = final$label,
       topic_label = "landings",
       fig_or_table = "table",
       dat = dat,
       dir = tables_dir,
       scale_amount = 1,
       unit_label = unit_label,
-      table_df = final_df
+      table_df = df_list
     )
   }
   # Send table(s) to viewer
