@@ -43,26 +43,26 @@ test_that("table_landings generates plots without errors", {
   # )
 })
 
-# test_that("rda file made when indicated", {
-#   # export rda
-#   table_landings(
-#     dat = out_new,
-#     unit_label = "mt",
-#     era = NULL,
-#     interactive = FALSE,
-#     module = "CATCH",
-#     make_rda = TRUE,
-#     tables_dir = getwd()
-#   )
-#
-#   # expect that both tables dir and the landings_table.rda file exist
-#   expect_true(dir.exists(fs::path(getwd(), "tables")))
-#   expect_true(file.exists(fs::path(getwd(), "tables", "landings_table.rda")))
-#
-#   # erase temporary testing files
-#   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-#   unlink(fs::path(getwd(), "tables"), recursive = T)
-# })
+test_that("rda file made when indicated", {
+  # export rda
+  table_landings(
+    dat = out_new,
+    unit_label = "mt",
+    era = NULL,
+    interactive = FALSE,
+    module = "CATCH",
+    make_rda = TRUE,
+    tables_dir = getwd()
+  )
+
+  # expect that both tables dir and the landings_table.rda file exist
+  expect_true(dir.exists(fs::path(getwd(), "tables")))
+  expect_true(file.exists(fs::path(getwd(), "tables", "landings_table.rda")))
+
+  # erase temporary testing files
+  file.remove(fs::path(getwd(), "captions_alt_text.csv"))
+  unlink(fs::path(getwd(), "tables"), recursive = T)
+})
 
 test_that("table_landings generates error with incorrect module", {
   # expect error
