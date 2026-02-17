@@ -120,7 +120,7 @@ table_landings <- function(
       dir = tables_dir,
       scale_amount = 1,
       unit_label = unit_label,
-      table_df = df_list
+      table_df = final
       )}
     } else {
         cli::cli_alert_warning("Multiple tables cannot be exported at this time.")
