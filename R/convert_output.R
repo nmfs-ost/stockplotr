@@ -1056,6 +1056,7 @@ convert_output <- function(
               row <- row[row != "XX"]
               df1 <- df1[, -loc_xx]
             }
+            
             # TODO: apply this next if statement to a general process so it's part of the standard cleaning
             # check if the headers make sense
             # this is a temporary fix to a specific bug

@@ -113,6 +113,7 @@ check_label_differences <- function(dat, index_variables, id_group = NULL) {
     mod_index_variables <- unique(index_variables[names(index_variables) == mod])
     mod_data <- dplyr::filter(dat, model == mod)
     mod_id_group <- unique(id_group[names(id_group) == mod])
+    
     if (length(unique(mod_data$label)) == 1) {
       # only one label - nothing to edit for this model
       next
@@ -214,6 +215,7 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
         })
         id_uncert <- uncert_lab[matches]
         if (length(id_uncert) == 0) id_uncert <- "uncertainty"
+        
         label_cols_final <- c(
           ifelse(
             id_uncert == "uncertainty",
@@ -247,6 +249,7 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
         label_cols_init,
         paste0("_", fleets, "$", collapse = "|")
       ) |> stringr::str_remove_all("_")
+      
       # Target labels for next step
       final_names <- ifelse(
         is.na(cols_fleets),
@@ -270,6 +273,7 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
       # Apply the renaming
       tab_dat <- tab_dat |>
         dplyr::rename(dplyr::any_of(rename_map))
+      
       # Identify lestimate and uncertainty columns for loop and other reference
       label_cols <- names(tab_dat)[-c(1, grep(glue::glue("^{uncert_lab} "), names(tab_dat)))]
       uncert_cols <- names(tab_dat)[grep(glue::glue("^{uncert_lab} "), names(tab_dat))]
