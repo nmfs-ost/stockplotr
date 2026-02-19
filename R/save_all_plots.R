@@ -57,42 +57,42 @@
 #' )
 #' }
 save_all_plots <- function(
-  # imported from plot_recruitment
-  dat,
-  recruitment_unit_label = "mt", # changed from unit_label to recruitment_unit_label for specificity
-  recruitment_scale_amount = 1,
-  relative = FALSE,
-  proportional = TRUE,
-  interactive = FALSE,
-  figures_tables_dir = getwd(),
-  # imported from plot_biomass
-  ref_line = "msy",
-  biomass_scale_amount = 1,
-  # imported from plot_landings
-  landings_unit_label = "mt",
-  # imported from plot_recruitment_deviations- zero unique arguments
-  # imported from plot_stock_recruitment
-  spawning_biomass_label = "mt",
-  spawning_biomass_scale_amount = 1,
-  # imported from plot_spawning_biomass
-  ref_line_sb = "msy",
-  # imported from plot_abundance_at_age
-  abundance_at_age_scale_amount = 1,
-  abundance_at_age_unit_label = "fish",
-  # imported from plot_biomass_at_age
-  biomass_at_age_scale_amount = 1,
-  biomass_at_age_unit_label = "mt",
-  # imported from plot_indices
-  indices_unit_label = "",
-  # imported from table_afsc_tier- add potential unique arguments after dev
-  # imported from table_bnc
-  biomass_unit_label = "mt",
-  catch_unit_label = "mt",
-  catch_scale_amount = 1
-  # imported from table_harvest_projection- add potential unique arguments after dev
-  # imported from table_indices- zero unique arguments
-  # imported from table_landings- zero unique arguments
-) {
+    # imported from plot_recruitment
+    dat,
+    recruitment_unit_label = "mt", # changed from unit_label to recruitment_unit_label for specificity
+    recruitment_scale_amount = 1,
+    relative = FALSE,
+    proportional = TRUE,
+    interactive = FALSE,
+    figures_tables_dir = getwd(),
+    # imported from plot_biomass
+    ref_line = "msy",
+    biomass_scale_amount = 1,
+    # imported from plot_landings
+    landings_unit_label = "mt",
+    # imported from plot_recruitment_deviations- zero unique arguments
+    # imported from plot_stock_recruitment
+    spawning_biomass_label = "mt",
+    spawning_biomass_scale_amount = 1,
+    # imported from plot_spawning_biomass
+    ref_line_sb = "msy",
+    # imported from plot_abundance_at_age
+    abundance_at_age_scale_amount = 1,
+    abundance_at_age_unit_label = "fish",
+    # imported from plot_biomass_at_age
+    biomass_at_age_scale_amount = 1,
+    biomass_at_age_unit_label = "mt",
+    # imported from plot_indices
+    indices_unit_label = "",
+    # imported from table_afsc_tier- add potential unique arguments after dev
+    # imported from table_bnc
+    biomass_unit_label = "mt",
+    catch_unit_label = "mt",
+    catch_scale_amount = 1
+    # imported from table_harvest_projection- add potential unique arguments after dev
+    # imported from table_indices- zero unique arguments
+    # imported from table_landings- zero unique arguments
+    ) {
   make_rda <- TRUE
 
   cli::cli_h1("Starting export of figures and tables")
@@ -225,7 +225,7 @@ save_all_plots <- function(
       # invisible()
     },
     error = function(e) {
-      cli::cli_alert_danger("plot_recruitment_deviations failed to run.")
+      cli::cli_alert_danger("plot_fishing_mortality failed to run.")
       cli::cli_alert("Tip: check that your arguments are correct.")
       print(e)
     }
@@ -242,6 +242,96 @@ save_all_plots <- function(
         module = "SPAWN_RECRUIT",
         figures_dir = figures_tables_dir
       )
+      #                        |> suppressWarnings() |> invisible()
+    },
+    error = function(e) {
+      cli::cli_alert_danger("plot_stock_recruitment failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      cli::cli_li("spawning_biomass_label = {spawning_biomass_label}")
+      cli::cli_li("recruitment_label = {recruitment_label}")
+      print(e)
+    }
+  )
+
+  tryCatch(
+    {
+      cli::cli_h2("plot_spawning_biomass")
+      plot_spawning_biomass(
+        dat,
+        unit_label = spawning_biomass_label,
+        scale_amount = spawning_biomass_scale_amount,
+        ref_line = ref_line_sb,
+        relative = relative,
+        interactive = interactive,
+        make_rda = TRUE,
+        figures_dir = figures_tables_dir
+      ) # |>
+      # suppressWarnings() |>
+      # invisible()
+    },
+    error = function(e) {
+      cli::cli_alert_danger("plot_spawning_biomass failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      cli::cli_li("spawning_biomass_label = {spawning_biomass_label}")
+      cli::cli_li("spawning_biomass_scale_amount = {spawning_biomass_scale_amount}")
+      cli::cli_li("ref_line_sb = {ref_line_sb}")
+      cli::cli_li("relative = {relative}")
+      print(e)
+    }
+  )
+
+  # tryCatch(
+  #   {
+  #     cli::cli_h2("plot_natural_mortality")
+  #     plot_natural_mortality(dat,
+  #                            module = "Natural_Mortality",
+  #                            make_rda = TRUE,
+  #                            figures_dir = figures_tables_dir,
+  #                            interactive = FALSE) # |>
+  #     # suppressWarnings() |>
+  #     # invisible()
+  #   },
+  #   error = function(e) {
+  #     cli::cli_alert_danger("plot_natural_mortality failed to run.")
+  #     cli::cli_alert("Tip: check that your arguments are correct.")
+  #     print(e)
+  #   }
+  # )
+
+  tryCatch(
+    {
+      plot_catch_comp(
+        dat,
+        unit_label = catch_unit_label,
+        scale_amount = catch_scale_amount,
+        proportional = proportional,
+        interactive = FALSE,
+        make_rda = TRUE,
+        figures_dir = figures_tables_dir
+      ) # |>
+      # suppressWarnings() |>
+      # invisible()
+    },
+    error = function(e) {
+      message("plot_catch_comp failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      cli::cli_li("catch_unit_label = {catch_unit_label}")
+      cli::cli_li("catch_scale_amount = {catch_scale_amount}")
+      cli::cli_li("proportional = {proportional}")
+      print(e)
+    }
+  )
+
+  tryCatch(
+    {
+      cli::cli_h2("plot_spawn_recruitment")
+      plot_spawn_recruitment(dat,
+                             spawning_biomass_label,
+                             recruitment_label = recruitment_unit_label,
+                             make_rda = TRUE,
+                             interactive = FALSE,
+                             module = "SPAWN_RECRUIT",
+                             figures_dir = figures_tables_dir)
       #                        |> suppressWarnings() |> invisible()
     },
     error = function(e) {

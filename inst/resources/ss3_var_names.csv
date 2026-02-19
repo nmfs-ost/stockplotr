@@ -91,13 +91,13 @@ SPAWN_RECRUIT,mature_num,mature_abundance
 TIME_SERIES,mature_num,mature_abundance
 SPAWN_RECRUIT,raw_dev,
 TIME_SERIES,bio_all,biomass
-TIME_SERIES,bio_smry,biomass_midyear
+TIME_SERIES,bio_smry,biomass_reference_age
 TIME_SERIES,recruit,recruitment
 TIME_SERIES,smrybio,biomass_midyear
 TIME_SERIES,smrynum,abundance_midyear
-TIME_SERIES,sel(b),biomass
-TIME_SERIES,dead(b),biomass_dead
-TIME_SERIES,retain(b),biomass_retained
+TIME_SERIES,sel(b),catch_selected
+TIME_SERIES,dead(b),catch_dead
+TIME_SERIES,retain(b),catch_retained
 TIME_SERIES,sel(n),numbers
 TIME_SERIES,dead(n),numbers_dead
 TIME_SERIES,retain(n),numbers_retained

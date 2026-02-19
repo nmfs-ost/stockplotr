@@ -358,7 +358,7 @@ process_table <- function(
 
   id_group <- index_variables[-grep("year|age|length_bin", index_variables)]
   cols <- index_variables[grep("year|age|length_bin", index_variables)]
-
+  
   # Add check for length label >1
   # below method will only work when unqiue(label) == 2
   if (!is.null(label)) {
@@ -450,7 +450,6 @@ process_table <- function(
 
   uncert_lab <- unique(dat$uncertainty_label)
   estimate_lab <- stringr::str_to_title(stringr::str_replace_all(unique(dat$label), "_", " "))
-
   table_list <- list()
   id_group_list <- list()
   for (mod in unique(dat$model)) {

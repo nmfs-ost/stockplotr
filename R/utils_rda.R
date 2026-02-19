@@ -85,6 +85,13 @@ create_rda <- function(
     fig_or_table = fig_or_table,
     dir = dir
   )
+  
+  if (fig_or_table == "table") {
+    latex_table <- create_latex_table(
+      data = table_df,
+      caption = caps_alttext[1],
+      label = "landings_latex")
+  }
 
   if (fig_or_table == "table") {
     latex_table <- create_latex_table(
