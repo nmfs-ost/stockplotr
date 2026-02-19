@@ -1,3 +1,4 @@
+
 #############################
 # Utility functions for plotting
 #############################
@@ -41,86 +42,86 @@
 #' )
 #' }
 plot_timeseries <- function(
-  dat,
-  x = "year",
-  y = "estimate",
-  geom = "line",
-  xlab = "Year",
-  ylab = NULL,
-  group = NULL,
-  facet = NULL,
-  ...
+    dat,
+    x = "year",
+    y = "estimate",
+    geom = "line",
+    xlab = "Year",
+    ylab = NULL,
+    group = NULL,
+    facet = NULL,
+    ...
 ) {
   # Start plot
   plot <- ggplot2::ggplot()
   # make into new geom?
   # more defaults and fxnality for ggplot
-
+  
   # Add geom
   plot <- switch(geom,
-    "point" = {
-      # point_size = ifelse(
-      #   is.null(list(...)$size),
-      #   2.0,
-      #   list(...)$size
-      # )
-      plot +
-        ggplot2::geom_point(
-          data = dat,
-          ggplot2::aes(
-            .data[[x]],
-            .data[[y]],
-            # TODO: add more groupings
-            # shape = ifelse(any(grepl("shape", names(group))), .data[[group[[grep("shape", names(group))]]]], 1),
-            # color = ifelse(any(grepl("color", names(group))), .data[[group[[grep("color", names(group))]]]], "black")
-            color = model,
-            shape = group_var
-          ),
-          # size = point_size,
-          ...
-        )
-    },
-    "line" = {
-      plot +
-        # if (any(c("estimate_lower", "estimate_upper") %in% colnames(dat))){
-        ggplot2::geom_ribbon(
-          dat = dat |> dplyr::filter(!is.na(estimate_lower)),
-          ggplot2::aes(
-            x = .data[[x]],
-            ymin = estimate_lower,
-            ymax = estimate_upper,
-            fill = group_var
-          ),
-          alpha = 0.3
-        ) +
-        # }
-        ggplot2::geom_line(
-          data = dat,
-          ggplot2::aes(
-            x = .data[[x]],
-            y = .data[[y]],
-            linetype = group_var,
-            # linetype = ifelse(!is.null(group), group_var, "solid"),
-            color = model
-          ),
-          # linewidth = 1.0,
-          ...
-        )
-    },
-    "area" = {
-      plot +
-        ggplot2::geom_area(
-          data = dat,
-          ggplot2::aes(
-            x = .data[[x]],
-            y = .data[[y]],
-            fill = model
-          ),
-          ...
-        )
-    }
+                 "point" = {
+                   # point_size = ifelse(
+                   #   is.null(list(...)$size),
+                   #   2.0,
+                   #   list(...)$size
+                   # )
+                   plot +
+                     ggplot2::geom_point(
+                       data = dat,
+                       ggplot2::aes(
+                         .data[[x]],
+                         .data[[y]],
+                         # TODO: add more groupings
+                         # shape = ifelse(any(grepl("shape", names(group))), .data[[group[[grep("shape", names(group))]]]], 1),
+                         # color = ifelse(any(grepl("color", names(group))), .data[[group[[grep("color", names(group))]]]], "black")
+                         color = model,
+                         shape = group_var
+                       ),
+                       # size = point_size,
+                       ...
+                     )
+                 },
+                 "line" = {
+                   plot +
+                     # if (any(c("estimate_lower", "estimate_upper") %in% colnames(dat))){
+                     ggplot2::geom_ribbon(
+                       dat = dat |> dplyr::filter(!is.na(estimate_lower)),
+                       ggplot2::aes(
+                         x = .data[[x]],
+                         ymin = estimate_lower,
+                         ymax = estimate_upper,
+                         fill = group_var
+                       ),
+                       alpha = 0.3
+                     ) +
+                     # }
+                     ggplot2::geom_line(
+                       data = dat,
+                       ggplot2::aes(
+                         x = .data[[x]],
+                         y = .data[[y]],
+                         linetype = group_var,
+                         # linetype = ifelse(!is.null(group), group_var, "solid"),
+                         color = model
+                       ),
+                       # linewidth = 1.0,
+                       ...
+                     )
+                 },
+                 "area" = {
+                   plot +
+                     ggplot2::geom_area(
+                       data = dat,
+                       ggplot2::aes(
+                         x = .data[[x]],
+                         y = .data[[y]],
+                         fill = model
+                       ),
+                       ...
+                     )
+                 }
   )
-
+  
   # Add labels to axis and legend
   labs <- plot + ggplot2::labs(
     x = xlab,
@@ -130,26 +131,26 @@ plot_timeseries <- function(
     fill = cap_first_letter(group),
     shape = cap_first_letter(group)
   )
-
+  
   # Remove linetype or point when there is no grouping
   if (is.null(group) & length(unique(dat$model)) == 1) {
     labs <- switch(geom,
-      "line" = labs + ggplot2::guides(linetype = "none"),
-      "point" = labs + ggplot2::guides(shape = "none"),
-      # return plot if option beyond line and point for now
-      labs
+                   "line" = labs + ggplot2::guides(linetype = "none"),
+                   "point" = labs + ggplot2::guides(shape = "none"),
+                   # return plot if option beyond line and point for now
+                   labs
     )
   }
   if (length(unique(dat$model)) == 1) {
     labs <- switch(geom,
-      "line" = labs + ggplot2::guides(color = "none"),
-      "point" = labs + ggplot2::guides(color = "none"),
-      "area" = labs + ggplot2::guides(fill = "none"),
-      # return plot if option beyond line and point for now
-      labs
+                   "line" = labs + ggplot2::guides(color = "none"),
+                   "point" = labs + ggplot2::guides(color = "none"),
+                   "area" = labs + ggplot2::guides(fill = "none"),
+                   # return plot if option beyond line and point for now
+                   labs
     )
   }
-
+  
   # Calc axis breaks
   x_n_breaks <- axis_breaks(dat[[x]])
   breaks <- ggplot2::scale_x_continuous(
@@ -158,23 +159,23 @@ plot_timeseries <- function(
       minor.ticks = TRUE
     )
   )
-
+  
   # Put together final plot
   final <- labs + breaks + ggplot2::expand_limits(y = 0) +
     ggplot2::scale_y_continuous(
       labels = scales::label_comma()
     )
-
+  
   # Remove legend if no group is selected
   if (is.null(group) & is.data.frame(dat) & any(is.na(unique(dat$model)))) {
     final <- final + ggplot2::theme(legend.position = "none")
   }
-
+  
   # Check if facet(s) are desired
   if (!is.null(facet)) {
     facet <- paste("~", paste(facet, collapse = " + "))
     facet_formula <- stats::reformulate(facet)
-
+    
     final <- final + ggplot2::facet_wrap(facet_formula)
   }
   final
@@ -221,84 +222,84 @@ plot_timeseries <- function(
 #' )
 #' }
 plot_timeseries <- function(
-  dat,
-  x = "year",
-  y = "estimate",
-  geom = "line",
-  xlab = "Year",
-  ylab = NULL,
-  group = NULL,
-  facet = NULL,
-  ...
+    dat,
+    x = "year",
+    y = "estimate",
+    geom = "line",
+    xlab = "Year",
+    ylab = NULL,
+    group = NULL,
+    facet = NULL,
+    ...
 ) {
   # Start plot
   plot <- ggplot2::ggplot()
   # make into new geom?
   # more defaults and fxnality for ggplot
-
+  
   # Add geom
   plot <- switch(geom,
-    "point" = {
-      point_size <- ifelse(
-        is.null(list(...)$size),
-        2.0,
-        list(...)$size
-      )
-      plot +
-        ggplot2::geom_point(
-          data = dat,
-          ggplot2::aes(
-            .data[[x]],
-            .data[[y]],
-            # TODO: add more groupings
-            # shape = ifelse(any(grepl("shape", names(group))), .data[[group[[grep("shape", names(group))]]]], 1),
-            # color = ifelse(any(grepl("color", names(group))), .data[[group[[grep("color", names(group))]]]], "black")
-            color = model,
-            shape = group_var
-          ),
-          # size = point_size,
-          ...
-        )
-    },
-    "line" = {
-      plot +
-        ggplot2::geom_ribbon(
-          dat = dat |> dplyr::filter(!is.na(estimate_lower)),
-          ggplot2::aes(
-            x = .data[[x]],
-            ymin = estimate_lower,
-            ymax = estimate_upper
-          ),
-          colour = "grey",
-          alpha = 0.3
-        ) +
-        ggplot2::geom_line(
-          data = dat,
-          ggplot2::aes(
-            .data[[x]],
-            .data[[y]],
-            linetype = group_var,
-            # linetype = ifelse(!is.null(group), group_var, "solid"),
-            color = model
-          ),
-          # linewidth = 1.0,
-          ...
-        )
-    },
-    "area" = {
-      plot +
-        ggplot2::geom_area(
-          data = dat,
-          ggplot2::aes(
-            x = .data[[x]],
-            y = .data[[y]],
-            fill = model
-          ),
-          ...
-        )
-    }
+                 "point" = {
+                   point_size <- ifelse(
+                     is.null(list(...)$size),
+                     2.0,
+                     list(...)$size
+                   )
+                   plot +
+                     ggplot2::geom_point(
+                       data = dat,
+                       ggplot2::aes(
+                         .data[[x]],
+                         .data[[y]],
+                         # TODO: add more groupings
+                         # shape = ifelse(any(grepl("shape", names(group))), .data[[group[[grep("shape", names(group))]]]], 1),
+                         # color = ifelse(any(grepl("color", names(group))), .data[[group[[grep("color", names(group))]]]], "black")
+                         color = model,
+                         shape = group_var
+                       ),
+                       # size = point_size,
+                       ...
+                     )
+                 },
+                 "line" = {
+                   plot +
+                     ggplot2::geom_ribbon(
+                       dat = dat |> dplyr::filter(!is.na(estimate_lower)),
+                       ggplot2::aes(
+                         x = .data[[x]],
+                         ymin = estimate_lower,
+                         ymax = estimate_upper
+                       ),
+                       colour = "grey",
+                       alpha = 0.3
+                     ) +
+                     ggplot2::geom_line(
+                       data = dat,
+                       ggplot2::aes(
+                         .data[[x]],
+                         .data[[y]],
+                         linetype = group_var,
+                         # linetype = ifelse(!is.null(group), group_var, "solid"),
+                         color = model
+                       ),
+                       # linewidth = 1.0,
+                       ...
+                     )
+                 },
+                 "area" = {
+                   plot +
+                     ggplot2::geom_area(
+                       data = dat,
+                       ggplot2::aes(
+                         x = .data[[x]],
+                         y = .data[[y]],
+                         fill = model
+                       ),
+                       ...
+                     )
+                 }
   )
-
+  
   # Add labels to axis and legend
   labs <- plot + ggplot2::labs(
     x = xlab,
@@ -308,26 +309,26 @@ plot_timeseries <- function(
     fill = cap_first_letter(group),
     shape = cap_first_letter(group)
   )
-
+  
   # Remove linetype or point when there is no grouping
   if (is.null(group)) {
     labs <- switch(geom,
-      "line" = labs + ggplot2::guides(linetype = "none"),
-      "point" = labs + ggplot2::guides(shape = "none"),
-      # return plot if option beyond line and point for now
-      labs
+                   "line" = labs + ggplot2::guides(linetype = "none"),
+                   "point" = labs + ggplot2::guides(shape = "none"),
+                   # return plot if option beyond line and point for now
+                   labs
     )
   }
   if (length(unique(dat$model)) == 1) {
     labs <- switch(geom,
-      "line" = labs + ggplot2::guides(color = "none"),
-      "point" = labs + ggplot2::guides(color = "none"),
-      "area" = labs + ggplot2::guides(fill = "none"),
-      # return plot if option beyond line and point for now
-      labs
+                   "line" = labs + ggplot2::guides(color = "none"),
+                   "point" = labs + ggplot2::guides(color = "none"),
+                   "area" = labs + ggplot2::guides(fill = "none"),
+                   # return plot if option beyond line and point for now
+                   labs
     )
   }
-
+  
   # Calc axis breaks
   x_n_breaks <- axis_breaks(dat[[x]])
   breaks <- ggplot2::scale_x_continuous(
@@ -336,23 +337,23 @@ plot_timeseries <- function(
       minor.ticks = TRUE
     )
   )
-
+  
   # Put together final plot
   final <- labs + breaks + ggplot2::expand_limits(y = 0) +
     ggplot2::scale_y_continuous(
       labels = scales::label_comma()
     )
-
+  
   # Remove legend if no group is selected
   if (is.null(group) & is.data.frame(dat) & any(is.na(unique(dat$model)))) {
     final <- final + ggplot2::theme(legend.position = "none")
   }
-
+  
   # Check if facet(s) are desired
   if (!is.null(facet)) {
     facet <- paste("~", paste(facet, collapse = " + "))
     facet_formula <- stats::reformulate(facet)
-
+    
     final <- final + ggplot2::facet_wrap(facet_formula)
   }
   final
@@ -381,199 +382,17 @@ plot_timeseries <- function(
 #' @param ... inherited arguments from internal functions from ggplot2::geom_xx
 #'
 #'
-#' @returns Create a time series plot for a stock assessment report. The user 
-#' has options to create a line, point, or area plot where the x-axis is year 
-#' and Y can vary for any time series quantity. Currently, grouping is
-#' restricted to one group where faceting can be any number of facets.
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' plot_timeseries(dat,
-#'                x = "year",
-#'                y = "estimate",
-#'                geom = "line",
-#'                xlab = "Year",
-#'                ylab = "Biomass",
-#'                group = "fleet",
-#'                facet = "area")
-#' }
-plot_timeseries <- function(
+plot_error <- function(
     dat,
     x = "year",
     y = "estimate",
-    geom = "line",
-    xlab = "Year",
-    ylab = NULL,
+    geom = "point",
     group = NULL,
     facet = NULL,
+    xlab = "Year",
+    ylab = NULL,
+    hline = TRUE,
     ...
-) {
-  # Start plot
-  plot <- ggplot2::ggplot()
-  # make into new geom?
-  # more defaults and fxnality for ggplot
-  
-  # Add geom
-  plot <- switch(
-    geom,
-    "point" = {
-      point_size = ifelse(
-        is.null(list(...)$size),
-        2.0,
-        list(...)$size
-      )
-      plot + 
-        ggplot2::geom_point(
-          data = dat,
-          ggplot2::aes(
-            .data[[x]],
-            .data[[y]],
-            # TODO: add more groupings
-            # shape = ifelse(any(grepl("shape", names(group))), .data[[group[[grep("shape", names(group))]]]], 1),
-            # color = ifelse(any(grepl("color", names(group))), .data[[group[[grep("color", names(group))]]]], "black")
-            color = model,
-            shape = group_var
-          ),
-          # size = point_size,
-          ...
-        )
-    },
-    "line" = {
-      plot +
-        ggplot2::geom_ribbon(
-          dat = dat|> dplyr::filter(!is.na(estimate_lower)),
-          ggplot2::aes(
-            x = .data[[x]],
-            ymin = estimate_lower,
-            ymax = estimate_upper,
-            fill = group_var
-          ),
-          colour = "grey",
-          alpha = 0.3
-        ) + 
-        ggplot2::geom_line(
-          data = dat,
-          ggplot2::aes(
-            .data[[x]],
-            .data[[y]],
-            linetype = group_var,
-            # linetype = ifelse(!is.null(group), group_var, "solid"),
-            color = model
-          ),
-          # linewidth = 1.0,
-          ...
-        )
-    },
-    "area" = {
-      plot + 
-        ggplot2::geom_area(
-          data = dat,
-          ggplot2::aes(
-            x = .data[[x]],
-            y = .data[[y]],
-            fill = group_var # model
-          ),
-          ...
-        )
-    }
-  )
-  
-  # Add labels to axis and legend
-  labs <- plot + ggplot2::labs(
-    x = xlab,
-    y = ylab,
-    color = "Model",
-    linetype = cap_first_letter(group),
-    fill = cap_first_letter(group),
-    shape = cap_first_letter(group)
-  )
-  
-  # Remove linetype or point when there is no grouping
-  if (is.null(group)) {
-    labs <- switch(
-      geom,
-      "line" = labs + ggplot2::guides(linetype = "none"),
-      "point" = labs + ggplot2::guides(shape = "none"),
-      # return plot if option beyond line and point for now
-      labs
-    )
-  }
-  if (length(unique(dat$model)) == 1){
-    labs <- switch(
-      geom,
-      "line" = labs + ggplot2::guides(color = "none"),
-      "point" = labs + ggplot2::guides(color = "none"),
-      "area" = labs + ggplot2::guides(fill = "none"),
-      # return plot if option beyond line and point for now
-      labs
-    )
-  }
-  
-  # Calc axis breaks
-  x_n_breaks <- axis_breaks(dat[[x]])
-  breaks <- ggplot2::scale_x_continuous(
-    breaks = x_n_breaks,
-    guide = ggplot2::guide_axis(
-      minor.ticks = TRUE
-    )
-  )
-  
-  # Put together final plot
-  final <- labs + breaks + ggplot2::expand_limits(y = 0) +
-    ggplot2::scale_y_continuous(
-      labels = scales::label_comma()
-    )
-  
-  # Remove legend if no group is selected
-  if (is.null(group) & is.data.frame(dat) & any(is.na(unique(dat$model)))) {
-    final <- final + ggplot2::theme(legend.position = "none")
-  }
-  
-  # Check if facet(s) are desired
-  if (!is.null(facet)) {
-    facet <- paste("~", paste(facet, collapse = " + "))
-    facet_formula <- stats::reformulate(facet)
-
-    final <- final + ggplot2::facet_wrap(facet_formula)
-  }
-  final
-}
-
-#------------------------------------------------------------------------------
-
-#' Create plot with error
-#' 
-#' @param dat filtered data frame from standard output file(s) preformatted for
-#'  the target label from \link[stockplotr]{prepare_data}
-#' @param x a string of the column name of data used to plot on the x-axis (default 
-#' is "year")
-#' @param y a string of the column name of data used to plot on the y-axis (default 
-#' is "estimate")
-#' @param geom type of geom to use for plotting found in ggplot2 (e.g. "point", 
-#' "line", etc.). Default is "line". Other options are "point" and "area".
-#' @param xlab a string of the x-axis label (default is "Year")
-#' @param ylab a string of the y-axis label. If NULL, it will be set to the name
-#'  of `y`.
-#' @param group a string of a single column that groups the data (e.g. "fleet", 
-#' "sex", "area", etc.). Currently can only have one level of grouping.
-#' @param facet a string or vector of strings of a column that facets the data 
-#' (e.g. "year", "area", etc.)
-#' @param hline indicate true or false to place a horizontal line at 1
-#' @param ... inherited arguments from internal functions from ggplot2::geom_xx
-#' 
-#' 
-plot_error <- function(
-  dat,
-  x = "year",
-  y = "estimate",
-  geom = "point",
-  group = NULL,
-  facet = NULL,
-  xlab = "Year",
-  ylab = NULL,
-  hline = TRUE,
-  ...
 ) {
   plot <- plot_timeseries(
     dat = dat,
@@ -650,16 +469,16 @@ plot_error <- function(
 #' plot_aa(dat)
 #' }
 plot_aa <- function(
-  dat,
-  x = "year",
-  y = "age",
-  z = "estimate",
-  label = "Abundance",
-  xlab = "Year",
-  ylab = "Age",
-  facet = NULL,
-  proportional = TRUE,
-  ...
+    dat,
+    x = "year",
+    y = "age",
+    z = "estimate",
+    label = "Abundance",
+    xlab = "Year",
+    ylab = "Age",
+    facet = NULL,
+    proportional = TRUE,
+    ...
 ) {
   # Make sure age is numeric
   dat <- dat |>
@@ -675,7 +494,7 @@ plot_aa <- function(
   x_n_breaks <- axis_breaks(dat[[x]])
   # Calculate y-axis breaks
   y_n_breaks <- axis_breaks(dat[[y]])
-
+  
   # Initialize gg plot
   plot <- ggplot2::ggplot() +
     # Add geom
@@ -716,14 +535,14 @@ plot_aa <- function(
     # ggplot2::coord_cartesian(expand = FALSE)
     # add noaa theme
     theme_noaa()
-
+  
   if (proportional) {
     plot <- plot +
       # Remove legend since circles are calculated
       # proportionally to catch and not exactly catch
       ggplot2::theme(legend.position = "none")
   }
-
+  
   # Facet plot if groups are present
   if (!is.null(facet)) {
     if (length(unique(dat$model)) > 1) facet <- c(facet, "model")
@@ -742,8 +561,8 @@ plot_aa <- function(
 
 # Average age line
 average_age_line <- function(
-  dat,
-  facet
+    dat,
+    facet
 ) {
   # Calculate annual mean age
   grouping <- intersect(colnames(dat), facet)
@@ -760,7 +579,7 @@ average_age_line <- function(
     dplyr::summarise(interm = sum(as.numeric(age) * as.numeric(years_per_year))) |>
     dplyr::full_join(total_fish_per_year) |>
     dplyr::mutate(avg = interm / total_fish)
-
+  
   # Add average age line to plot
   list(
     ggplot2::geom_line(
@@ -779,10 +598,10 @@ average_age_line <- function(
 
 # Cohort line
 cohort_line <- function(
-  dat,
-  x = "year",
-  y = "age",
-  z = "estimate"
+    dat,
+    x = "year",
+    y = "age",
+    z = "estimate"
 ) {
   # Make sure all dimensions are numeric
   dat <- dat |>
@@ -799,14 +618,14 @@ cohort_line <- function(
   # Filter for top 5% of cohorts
   # Find the 95th percentile of total_estimate
   threshold <- quantile(cohort_estimates$total_estimate, 0.95)
-
+  
   # Filter the original data to keep only the top 5% cohorts
   top_cohorts_data <- dat |>
     dplyr::mutate(cohort = as.numeric(.data[[x]]) - as.numeric(.data[[y]])) |>
     dplyr::filter(cohort %in% (cohort_estimates |>
-      dplyr::filter(total_estimate >= threshold) |>
-      dplyr::pull(cohort)))
-
+                                 dplyr::filter(total_estimate >= threshold) |>
+                                 dplyr::pull(cohort)))
+  
   list(
     # Create line for only the top 5% of cohorts
     ggplot2::geom_line(
@@ -846,13 +665,13 @@ cohort_line <- function(
 #' reference_line(dat, "biomass", "msy")
 #' }
 reference_line <- function(
-  plot,
-  dat,
-  era = "time",
-  label_name,
-  reference,
-  relative = FALSE,
-  scale_amount = 1
+    plot,
+    dat,
+    era = "time",
+    label_name,
+    reference,
+    relative = FALSE,
+    scale_amount = 1
 ) {
   if (!is.null(names(reference))) {
     ref_line_val <- reference[[1]]
@@ -864,10 +683,10 @@ reference_line <- function(
       reference_name = glue::glue("{label_name}_{reference}")
     )
   }
-
+  
   # Rename era arg
   era_name <- era
-
+  
   # Add geom for ref line
   plot +
     ggplot2::geom_hline(
@@ -895,7 +714,7 @@ reference_line <- function(
 axis_breaks <- function(data_col) {
   # Get the range of the x-axis data (assuming it's a numeric vector)
   x_range <- range(data_col, na.rm = TRUE)
-
+  
   # Calculate pretty breaks for the x-axis
   scales::breaks_pretty()(x_range)
 }
@@ -967,15 +786,15 @@ cap_first_letter <- function(s) {
 #' filter_data(dat, "biomass", "line", group = "fleet")
 #' }
 filter_data <- function(
-  dat,
-  label_name,
-  module = NULL,
-  era = "time",
-  geom,
-  group = NULL,
-  facet = NULL,
-  scale_amount = 1,
-  interactive = TRUE
+    dat,
+    label_name,
+    module = NULL,
+    era = "time",
+    geom,
+    group = NULL,
+    facet = NULL,
+    scale_amount = 1,
+    interactive = TRUE
 ) {
   # TODO: add option to scale data
   # Replace all spaces with underscore if not in proper format
@@ -995,7 +814,7 @@ filter_data <- function(
     # vignette to show how you can filter the data instead of the devs
     # vignette is the effort to show what to do and has example
     # would have to use the plus operator
-
+    
     if (is.data.frame(dat)) {
       data <- dat
       model_label <- FALSE
@@ -1050,9 +869,9 @@ filter_data <- function(
         data <- data |>
           dplyr::mutate(
             group_var = switch(geom,
-              "line" = "solid",
-              "point" = "black",
-              1
+                               "line" = "solid",
+                               "point" = "black",
+                               1
             )
           )
       }
@@ -1060,9 +879,9 @@ filter_data <- function(
       data <- data |>
         dplyr::mutate(
           group_var = switch(geom,
-            "line" = "solid",
-            "point" = "black",
-            1
+                             "line" = "solid",
+                             "point" = "black",
+                             1
           )
         )
       # Set group to NULL if second condition is met
@@ -1078,7 +897,7 @@ filter_data <- function(
   # Put in
   plot_data <- dplyr::bind_rows(list_of_data, .id = "model")
   # do.call(rbind, list_of_data)
-
+  
   # Check if there are multiple module_names present
   if (length(unique(plot_data$module_name)) > 1) {
     if (!is.null(module)) {
@@ -1183,16 +1002,16 @@ filter_data <- function(
   #     ) |>
   #     dplyr::ungroup()
   # }
-
+  
   # TODO: add lines to summarize final data for selected grouping and or facet
-
+  
   if (geom == "area") {
     plot_data <- dplyr::mutate(
       plot_data,
       model = reorder(.data[["model"]], .data[["estimate"]], function(x) -max(x))
     )
   }
-
+  
   plot_data
 }
 
@@ -1214,8 +1033,8 @@ get_id <- function(dat) {
 # Calculate reference value point
 
 calculate_reference_point <- function(
-  dat,
-  reference_name
+    dat,
+    reference_name
 ) {
   # set reference name to lower case
   reference_name <- tolower(gsub(" ", "_", reference_name))
@@ -1241,7 +1060,7 @@ calculate_reference_point <- function(
       "estimate"
     ])
   }
-
+  
   # Check if the reference value was found
   if (length(ref_line_val) == 0) {
     cli::cli_alert_warning(
@@ -1269,10 +1088,10 @@ calculate_reference_point <- function(
 
 # Set magnitude of label
 label_magnitude <- function(
-  label,
-  unit_label = "mt",
-  scale_amount = 1,
-  legend = FALSE
+    label,
+    unit_label = "mt",
+    scale_amount = 1,
+    legend = FALSE
 ) {
   magnitude <- floor(log10(scale_amount))
   if (magnitude == 0) {

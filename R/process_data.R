@@ -450,8 +450,8 @@ process_table <- function(
 
   uncert_lab <- unique(dat$uncertainty_label)
   estimate_lab <- stringr::str_to_title(stringr::str_replace_all(unique(dat$label), "_", " "))
-  table_list <- list()
   
+  table_list <- list()
   id_group_list <- list()
   for (mod in unique(dat$model)) {
     mod_dat <- dplyr::filter(dat, model == mod)
