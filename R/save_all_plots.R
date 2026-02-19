@@ -235,7 +235,6 @@ save_all_plots <- function(
     {
       cli::cli_h2("plot_stock_recruitment")
       plot_stock_recruitment(dat,
-<<<<<<< HEAD
         spawning_biomass_label,
         recruitment_label = recruitment_unit_label,
         make_rda = TRUE,
@@ -327,8 +326,6 @@ save_all_plots <- function(
     {
       cli::cli_h2("plot_spawn_recruitment")
       plot_spawn_recruitment(dat,
-=======
->>>>>>> 67fdbfa (fix fxns and update documentation)
                              spawning_biomass_label,
                              recruitment_label = recruitment_unit_label,
                              make_rda = TRUE,

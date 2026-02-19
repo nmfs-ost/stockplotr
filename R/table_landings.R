@@ -23,10 +23,9 @@
 #' table_landings(
 #'   stockplotr::example_data,
 #'   unit_label = "landings label",
-#'   group =
+#'   group = "fleet"
 #'   )
 table_landings <- function(
-<<<<<<< HEAD
   dat,
   unit_label = "mt",
   era = NULL,
@@ -39,20 +38,6 @@ table_landings <- function(
   tables_dir = getwd()
 ) {
   # TODO: do group and facet need to be uncommented and updated?
-=======
-    dat,
-    unit_label = "mt",
-    era = NULL,
-    interactive = TRUE,
-    group = NULL,
-    method = "sum",
-    module = NULL,
-    label = NULL,
-    make_rda = FALSE,
-    tables_dir = getwd()) {
-  
-  #TODO: do group and facet need to be uncommented and updated?
->>>>>>> 7c0a83c (Format tables to merge error to estimates (#181))
   # Filter data for landings
   prepared_data <- filter_data(
     dat = dat,
@@ -162,45 +147,6 @@ table_landings <- function(
   
   # id_group_vals <- sapply(id_cols, function(x) unique(prepared_data[[x]]), simplify = FALSE)
   # TODO: add check if there is a landings column for every error column -- if not remove the error (can keep landings)
-<<<<<<< HEAD
-
-  if (!is.data.frame(table_data)) {
-    # lapply made with the help of Gemini (all recoding names code is original)
-    df_list <- lapply(table_data, function(tab_dat) {
-      
-      landings_cols_init <- colnames(tab_dat)[
-        grepl("landings", tolower(colnames(tab_dat)))
-      ]
-      
-      # CONDITION: Only proceed if landings columns actually exist in this data frame
-      if (length(landings_cols_init) > 0) {
-        # Clean up fleet names and keywords
-        landings_cols_new <- stringr::str_remove_all(
-          landings_cols_init, 
-          paste0("_", fleets, collapse = "|")
-        ) |> stringr::str_replace_all("_", " ")
-        # Drop "weight" or "number" if present
-        landings_cols_new <- unique(
-          stringr::str_remove_all(tolower(landings_cols_new), " number| weight")
-        )
-        # Check if we should simplify to a single "Landings" label
-        if (length(unique(landings_cols_new)) == 2) {
-          matches <- sapply(uncert_lab, function(l) {
-            any(stringr::str_detect(landings_cols_new, stringr::str_c("\\b", l, "\\b")))
-          })
-          id_uncert <- uncert_lab[matches]
-          if (length(id_uncert) == 0) id_uncert <- "uncertainty"
-          
-          landings_cols_new <- c(
-            ifelse(
-              id_uncert == "uncertainty",
-              paste0("Landings (", unit_label, ")"),
-              paste0("Landings (", unit_label, ") (", id_uncert, ")")
-              ), 
-            id_uncert) 
-          # Remove (", id_uncert, ")" in the above line if we don't want to combine value and error in one column
-        }
-=======
   
   # merge error and landings columns and rename
   df_list <- merge_error(
@@ -210,19 +156,13 @@ table_landings <- function(
     label = "landings",
     unit_label
   )
->>>>>>> 7c0a83c (Format tables to merge error to estimates (#181))
   
   # transform dfs into tables
   final <- lapply(df_list, function(df) {
     df |>
       gt::gt() |>
       add_theme()
-<<<<<<< HEAD
-  }
-
-=======
   })
->>>>>>> 7c0a83c (Format tables to merge error to estimates (#181))
   
   #   # TODO: add option to scale data
   #   # Replace all spaces with underscore if not in proper format
