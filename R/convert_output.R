@@ -1766,6 +1766,79 @@ convert_output <- function(
     out_new <- fims_output
   } else if (model == "rceattle") {
     
+<<<<<<< Updated upstream
+=======
+    #### Read Rceattle ####
+    # TODO: Do we want users to input the saved file or already loaded into the R environment?
+    if (is.character(file)) {
+      dat <- readRDS(file)
+    } else {
+      dat <- file
+    }
+    
+    # estimates
+    # Which parts of the data need extraction?
+    # Is there a list of quantities or inputs?
+    quantities <- dat$quantities
+    estimates <- dat$estimated_params
+    
+    #### Initialize year vector for timeseries ####
+    str_yr <- GOApollock$styr
+    end_yr <- GOApollock$endyr
+    yrs <- str_yr:end_yr
+    
+    #### spawning biomass ####
+    sb <- as.data.frame(t(as.matrix(quantities$ssb))) |>
+      tibble::rownames_to_column() |>
+      dplyr::mutate(
+        label = "spawning_biomass",
+        era = dplyr::case_when(
+          year > end_yr ~ "fore",
+          year < str_yr ~ "early",
+          TRUE ~ "time"
+        )
+      )
+    colnames(sb) <- c("year", "estimate", "label")
+    sb[setdiff(tolower(names(out_new)), tolower(names(sb)))] <- NA
+    out_new <- rbind(out_new, sb)
+    
+    #### biomass ####
+    b <- as.data.frame(t(as.matrix(quantities$biomass))) |>
+      tibble::rownames_to_column() |>
+      dplyr::mutate(
+        label = "biomass"era = dplyr::case_when(
+          year > end_yr ~ "fore",
+          year < str_yr ~ "early",
+          TRUE ~ "time"
+        )
+      )
+    colnames(b) <- c("year", "estimate", "label")
+    b[setdiff(tolower(names(out_new)), tolower(names(b)))] <- NA
+    out_new <- rbind(out_new, b)
+    
+    #### catch ####
+    # did not find landings atm
+    catch <- input$catch_data |>
+      dplyr::rename_with(tolower) |>
+      dplyr::mutate(
+        label = "catch",
+        era = dplyr::case_when(
+          year > end_yr ~ "fore",
+          year < str_yr ~ "early",
+          TRUE ~ "time"
+        ),
+        fleet = dplyr::case_when(
+          unique(.data$Fleet_name) == 1 ~ NA,
+          TRUE ~ Fleet_name
+        )
+      ) |>
+      dplyr::left_join(
+        input$fleet_control |>
+          dplyr::select(Fleet_name, Fleet_code),
+        by = c("Fleet_name"="Fleet_code")
+      )
+    
+>>>>>>> Stashed changes
   } else {
     cli::cli_abort(c(
       message = "Output file not compatible.",
