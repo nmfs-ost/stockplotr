@@ -1764,6 +1764,8 @@ convert_output <- function(
     }
     fims_output[setdiff(tolower(names(out_new)), tolower(names(fims_output)))] <- NA
     out_new <- fims_output
+  } else if (model == "rceattle") {
+    
   } else {
     cli::cli_abort(c(
       message = "Output file not compatible.",
