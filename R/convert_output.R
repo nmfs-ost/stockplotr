@@ -1745,8 +1745,9 @@ convert_output <- function(
     #### JABBA ####
   } else if (tolower(model) == "jabba") {
     cli::cli_abort("JABBA output not currently compatible.")
+    #### FIMS ####
   } else if (model == "fims") {
-    if (grepl(".RDS", file)) {
+    if (is.character(file) && length(file) == 1) {
       fims_output <- readRDS(file)
     } else {
       fims_output <- file
