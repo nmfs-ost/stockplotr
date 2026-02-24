@@ -4,7 +4,7 @@
 #'
 #' @param file Assessment model output file path
 #' @param model Assessment model used in evaluation ("ss3", "bam",
-#'  "asap", "fims", "amak", "ms-java", "wham", "mas").
+#'  "fims").
 #' @param fleet_names Names of fleets in the assessment model as
 #'  shortened in the output file. If fleet names are not properly read, then
 #'  indicate the fleets names as an acronym in a vector
@@ -1761,7 +1761,7 @@ convert_output <- function(
     cli::cli_abort(c(
       message = "Output file not compatible.",
       "i" = "`model` entered as {model}.",
-      "i" = "Accepted `model` options: SS3, BAM, WHAM, AMAK, JABBA."
+      "i" = "Accepted `model` options: ss3, bam, or fims."
     ))
   }
 
