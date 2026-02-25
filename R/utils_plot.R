@@ -183,7 +183,7 @@ plot_timeseries <- function(
   }
 
   # Check if facet(s) are desired
-  if (!is.null(facet)) {
+  if (!is.null(facet) & length(facet) > 0) {
     facet <- paste("~", paste(facet, collapse = " + "))
     facet_formula <- stats::reformulate(facet)
 

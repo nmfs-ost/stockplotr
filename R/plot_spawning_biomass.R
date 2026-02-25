@@ -166,7 +166,8 @@ plot_spawning_biomass <- function(
     geom = geom,
     ylab = spawning_biomass_label,
     group = group,
-    facet = facet,
+    # add check in case facet is returned as character(0)
+    facet = if (length(facet) > 0) facet else NULL,
     ...
   )
   # Add reference line
