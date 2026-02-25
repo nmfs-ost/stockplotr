@@ -89,7 +89,7 @@ plot_timeseries <- function(
             x = .data[[x]],
             ymin = estimate_lower,
             ymax = estimate_upper,
-            fill = group_var
+            fill = interaction(model, group_var)
           ),
           alpha = 0.3
         ) +
@@ -99,9 +99,9 @@ plot_timeseries <- function(
           ggplot2::aes(
             x = .data[[x]],
             y = .data[[y]],
-            linetype = group_var,
+            # linetype = group_var,
             # linetype = ifelse(!is.null(group), group_var, "solid"),
-            color = model
+            color = interaction(model, group_var)
           ),
           # linewidth = 1.0,
           ...
@@ -122,14 +122,26 @@ plot_timeseries <- function(
   )
 
   # Add labels to axis and legend
-  labs <- plot + ggplot2::labs(
-    x = xlab,
-    y = ylab,
-    color = "Model",
-    linetype = cap_first_letter(group),
-    fill = cap_first_letter(group),
-    shape = cap_first_letter(group)
-  )
+  if (length(unique(dat$model)) > 1 & !is.null(group)) {
+    labs <- plot + ggplot2::labs(
+      x = xlab,
+      y = ylab
+      # color = "Model",
+      # linetype = cap_first_letter(group),
+      # fill = cap_first_letter(group),
+      # shape = cap_first_letter(group)
+    ) +
+      ggplot2::theme(legend.title = ggplot2::element_blank())
+  } else {
+    labs <- plot + ggplot2::labs(
+      x = xlab,
+      y = ylab,
+      color = "Model",
+      linetype = cap_first_letter(group),
+      fill = cap_first_letter(group),
+      shape = cap_first_letter(group)
+    )
+  }
 
   # Remove linetype or point when there is no grouping
   if (is.null(group) & length(unique(dat$model)) == 1) {
