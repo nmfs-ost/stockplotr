@@ -70,7 +70,6 @@ plot_natural_mortality <- function(
       dplyr::mutate(group_var = "1") # set group var without anything since we are using group as age
   }
   
-  
   if (!is.null(processing[[3]])) facet <- processing[[3]]
   # make sure group is the one input by user
   if (!is.null(group)) {

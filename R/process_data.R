@@ -358,7 +358,7 @@ process_table <- function(
     mod_data <- dplyr::filter(dat, model == mod)
     mod_index <- check_grouping(mod_data)
     mod_names <- rep(mod, length(mod_index))
-    mod_index <- setNames(mod_index, mod_names)
+    mod_index <- stats::setNames(mod_index, mod_names)
     index_variables <- c(index_variables, mod_index)
   }
 
