@@ -22,7 +22,7 @@ plot_biomass(
 }
 \arguments{
 \item{dat}{A data frame or names list of data frames (input as `list()`)
-returned from \link[asar]{convert_output}. The first data frame in the list
+returned from \link[stockplotr]{convert_output}. The first data frame in the list
 is used in calculation of a reference line if one is present}
 
 \item{geom}{A string stating the geom used for the plot. Default is "line".
