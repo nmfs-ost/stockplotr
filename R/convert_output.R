@@ -1766,8 +1766,6 @@ convert_output <- function(
     out_new <- fims_output
   } else if (model == "rceattle") {
     
-<<<<<<< Updated upstream
-=======
     #### Read Rceattle ####
     # TODO: Do we want users to input the saved file or already loaded into the R environment?
     if (is.character(file)) {
@@ -1838,7 +1836,6 @@ convert_output <- function(
         by = c("Fleet_name"="Fleet_code")
       )
     
->>>>>>> Stashed changes
   } else {
     cli::cli_abort(c(
       message = "Output file not compatible.",
