@@ -1764,9 +1764,9 @@ convert_output <- function(
     }
     fims_output[setdiff(tolower(names(out_new)), tolower(names(fims_output)))] <- NA
     out_new <- fims_output
+    #### Rceattle ####
   } else if (model == "rceattle") {
     
-    #### Read Rceattle ####
     # TODO: Do we want users to input the saved file or already loaded into the R environment?
     if (is.character(file)) {
       dat <- readRDS(file)
@@ -1780,12 +1780,12 @@ convert_output <- function(
     quantities <- dat$quantities
     estimates <- dat$estimated_params
     
-    #### Initialize year vector for timeseries ####
+    ##### Initialize year vector for timeseries #####
     str_yr <- GOApollock$styr
     end_yr <- GOApollock$endyr
     yrs <- str_yr:end_yr
     
-    #### spawning biomass ####
+    ##### spawning biomass ####
     sb <- as.data.frame(t(as.matrix(quantities$ssb))) |>
       tibble::rownames_to_column() |>
       dplyr::mutate(
@@ -1800,11 +1800,12 @@ convert_output <- function(
     sb[setdiff(tolower(names(out_new)), tolower(names(sb)))] <- NA
     out_new <- rbind(out_new, sb)
     
-    #### biomass ####
+    ###### biomass ####
     b <- as.data.frame(t(as.matrix(quantities$biomass))) |>
       tibble::rownames_to_column() |>
       dplyr::mutate(
-        label = "biomass"era = dplyr::case_when(
+        label = "biomass",
+        era = dplyr::case_when(
           year > end_yr ~ "fore",
           year < str_yr ~ "early",
           TRUE ~ "time"
@@ -1814,7 +1815,7 @@ convert_output <- function(
     b[setdiff(tolower(names(out_new)), tolower(names(b)))] <- NA
     out_new <- rbind(out_new, b)
     
-    #### catch ####
+    ##### catch ####
     # did not find landings atm
     catch <- input$catch_data |>
       dplyr::rename_with(tolower) |>
