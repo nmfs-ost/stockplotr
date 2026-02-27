@@ -1774,68 +1774,184 @@ convert_output <- function(
       dat <- file
     }
     
-    # estimates
-    # Which parts of the data need extraction?
-    # Is there a list of quantities or inputs?
-    quantities <- dat$quantities
-    estimates <- dat$estimated_params
+    factors <- c("year", "fleet", "fleet_name", "age", "sex", "area", "seas", "season", "time", "era", "subseas", "subseason", "platoon", "platoo", "growth_pattern", "gp", "nsim", "age_a")
+    errors <- c("StdDev", "sd", "se", "SE", "cv", "CV", "stddev")
+    # units <- c("mt", "lbs", "eggs")
     
-    ##### Initialize year vector for timeseries #####
-    str_yr <- GOApollock$styr
-    end_yr <- GOApollock$endyr
-    yrs <- str_yr:end_yr
+    for (p in 2:length(dat)) {
+      extract <- dat[p]
+      module_name <- names(extract) 
+      cli::cli_alert_info(glue::glue("Processing {names(extract)}"))
+    if (is.vector(extract[[1]])) {
+      if (is.list(extract[[1]])) { # indicates vector and list
+        if (any(vapply(extract[[1]], is.matrix, FUN.VALUE = logical(1)))) {
+          extract_list <- list()
+          for (i in seq_along(extract[[1]])) {
+            if (is.vector(extract[[1]][[i]])) {
+              df <- as.data.frame(extract[[1]][i]) |>
+                tibble::rownames_to_column(var = "age") |>
+                tidyr::pivot_longer(
+                  cols = -age,
+                  values_to = "estimate",
+                  names_to = "label"
+                ) |>
+                dplyr::mutate(
+                  label = names(extract[[1]][i]),
+                  # label_init = names(extract[[1]][i]),
+                  fleet = dplyr::case_when(
+                    grepl(paste(fleet_names, collapse = "|"), label) ~ stringr::str_extract(label, paste(fleet_names, collapse = "|")),
+                    TRUE ~ NA
+                  ),
+                  module_name = names(extract),
+                  label = dplyr::case_when(
+                    grepl(paste(fleet_names, collapse = "|"), label) ~ stringr::str_replace(label, paste(".", fleet_names, sep = "", collapse = "|"), ""),
+                    TRUE ~ label
+                  )
+                )
+              df[setdiff(tolower(names(out_new)), tolower(names(df)))] <- NA
+              extract_list[[names(extract[[1]][i])]] <- df
+            } else {
+              df <- as.data.frame(extract[[1]][[i]]) |>
+                tibble::rownames_to_column(var = "year")
+              df <- df |>
+                dplyr::rename_with(
+                  ~ ifelse(max(as.numeric(df$year)) < 50,
+                           c("age_a"), c("year")
+                  ),
+                  year
+                )
+              if (grepl("lcomp", names(extract[[1]][i]))) {
+                namesto <- "len_bins"
+              } else if (grepl("acomp", names(extract[[1]][i]))) {
+                namesto <- "age"
+              } else {
+                # Default
+                namesto <- "age"
+              }
+              df2 <- df |>
+                tidyr::pivot_longer(
+                  cols = -intersect(colnames(df), c("year", "age_a")),
+                  names_to = namesto,
+                  values_to = "estimate"
+                ) |>
+                dplyr::mutate(
+                  module_name = names(extract),
+                  label = names(extract[[1]][i]),
+                  fleet = dplyr::case_when(
+                    grepl(paste(fleet_names, collapse = "|"), tolower(label)) ~ stringr::str_extract(tolower(label), paste(fleet_names, collapse = "|")),
+                    TRUE ~ NA
+                  ), # stringr::str_extract(module_name, "(?<=\\.)\\w+(?=\\.)"),
+                  label = dplyr::case_when(
+                    grepl(paste0(fleet_names, collapse = "|"), tolower(label)) ~ stringr::str_replace(tolower(label), paste0(".", fleet_names, collapse = "|"), ""),
+                    TRUE ~ names(extract[[1]][i])
+                  )
+                  # label_init = names(extract[[1]][i]),
+                  
+                  # label = dplyr::case_when(
+                  #   is.na(fleet) ~ names(extract[[1]][i]),
+                  #   TRUE ~ stringr::str_replace(tolower(label), paste(".", fleet_names, sep = "", collapse = "|"), "")
+                  # )
+                ) # stringr::str_replace(module_name, "\\.[^.]+\\.", "."))
+              df2[setdiff(tolower(names(out_new)), tolower(names(df2)))] <- NA
+              extract_list[[names(extract[[1]][i])]] <- df2
+            } # close if statement
+          } # close for loop
+          new_df <- Reduce(rbind, extract_list)
+          out_list[[names(extract)]] <- new_df
+        } else if (any(vapply(extract[[1]], is.vector, FUN.VALUE = logical(1)))) {
+          df <- extract[[1]]
+          # go through all elements of df
+          
+          # if (length(intersect(colnames(df), c(factors, errors))) > 0) {
+          #   df2 <- df |>
+          #     tidyr::pivot_longer(
+          #       cols = -intersect(colnames(df), c(factors, errors)),
+          #       names_to = "label",
+          #       values_to = "estimate"
+          #     ) |>
+          #     dplyr::mutate(module_name = names(extract))
+          # } else {
+          #   df2 <- df |>
+          #     tidyr::pivot_longer(
+          #       cols = tidyselect::everything(),
+          #       names_to = "label",
+          #       values_to = "estimate"
+          #     ) |>
+          #     dplyr::mutate(module_name = names(extract))
+          # }
+          # if (any(grepl(paste(fleet_names, collapse = "|"), unique(df2$label)))) {
+          #   df2 <- df2 |>
+          #     dplyr::mutate(
+          #       fleet = dplyr::case_when(
+          #         grepl(paste(fleet_names, collapse = "|"), label) ~ stringr::str_extract(label, paste(fleet_names, collapse = "|")),
+          #         # grepl(paste(fleet_names, collapse = "|"), label) ~ stringr::str_extract(ex, paste(fleet_names,collapse="|")),
+          #         TRUE ~ NA
+          #       ),
+          #       # Number after fleet name is what? variable among df?
+          #       age = dplyr::case_when(
+          #         module_name != "parms" & grepl(".Age[0-9]+.", label) ~ stringr::str_extract(label, "(?<=.Age?)[0-9]+"),
+          #         module_name != "parms" & grepl("[0-9]+$", label) & as.numeric(stringr::str_extract(label, "[0-9]+$")) < 30 ~ stringr::str_extract(label, "[0-9]+$"),
+          #         TRUE ~ NA
+          #       ),
+          #       label = dplyr::case_when(
+          #         # below will only work properly if there are age varying parameters without fleet names in it
+          #         module_name == "parms" & !grepl(paste(".", fleet_names, sep = "", collapse = "|"), tolower(label)) ~ label,
+          #         grepl(paste(".", fleet_names, "d[0-9]+", sep = "", collapse = "|"), tolower(label)) ~ stringr::str_replace(tolower(label), paste(".", fleet_names, "d[0-9]+", sep = "", collapse = "|"), ".d"),
+          #         grepl(paste(".", fleet_names, "[0-9]+$", sep = "", collapse = "|"), tolower(label)) ~ stringr::str_replace(tolower(label), paste(fleet_names, sep = "", collapse = "|"), ""), # "[0-9]+",
+          #         grepl(paste(".", fleet_names, "$", sep = "", collapse = "|"), tolower(label)) ~ stringr::str_replace(tolower(label), paste(".", fleet_names, sep = "", collapse = "|"), ""),
+          #         grepl(paste(".", fleet_names, ".d$", sep = "", collapse = "|"), tolower(label)) ~ stringr::str_replace(tolower(label), paste(".", fleet_names, sep = "", collapse = "|"), ""),
+          #         grepl(".Age[0-9]+.[a-z]+", label) ~ stringr::str_replace(label, ".Age[0-9]+.[a-z]+", ""),
+          #         grepl("[0-9]+$", label) ~ stringr::str_replace(label, "[0-9]+$", ""),
+          #         # !is.na(fleet) | !is.na(age) ~ stringr::str_replace(label, paste(c(paste(".", fleet_names, "[0-9]+", sep = ""), ".Age[0-9]+.[a-z]+", "[0-9]+$"), collapse = "|"), ""),
+          #         # as.numeric(stringr::str_extract(label, "[0-9]+$")) == 0 ~ label,
+          #         # as.numeric(stringr::str_extract(label, "[0-9]+$")) < 30 ~ stringr::str_remove(label, "[0-9]+$"),
+          #         TRUE ~ label
+          #       )
+          #     )
+          # } else if (any(grepl("[0-9]$", unique(df2$label)))) {
+          #   df2 <- df2 |>
+          #     dplyr::mutate(
+          #       fleet = NA,
+          #       # Number after fleet name is what? variable among df?
+          #       age = dplyr::case_when(
+          #         grepl("[0-9]+$", label) & stringr::str_extract(label, "[0-9]+$") < 30 ~ stringr::str_extract(label, "[0-9]+$"),
+          #         TRUE ~ NA
+          #       ),
+          #       # label_init = label,
+          #       label = dplyr::case_when(
+          #         as.numeric(stringr::str_extract(label, "[0-9]+$")) == 0 ~ label,
+          #         as.numeric(stringr::str_extract(label, "[0-9]+$")) < 30 ~ stringr::str_remove(label, "[0-9]+$"),
+          #         TRUE ~ label
+          #       )
+          #     )
+          # } else {
+          #   df2 <- df2 |>
+          #     dplyr::mutate(
+          #       fleet = ifelse("age" %in% colnames(df2), fleet, NA),
+          #       age = ifelse("age" %in% colnames(df2), age, NA),
+          #       label = label,
+          #       module_name = names(extract)
+          #     )
+          # }
+          # df2[setdiff(tolower(names(out_new)), tolower(names(df2)))] <- NA
+          # out_list[[names(extract)]] <- df2
+        } else {
+          cli::cli_alert_warning("Not compatible.")
+        }
+      } else {
+      }
+    } else if (is.list(extract[[1]])) { # list only
+    } else if (is.matrix(extract[[1]])) { # matrix only
+    } else {
+      cli::cli_alert_warning(paste(names(extract), " not compatible.", sep = ""))
+    } # close if statement
+  } # close loop over objects listed in dat file
+    # Want to extract and set values from:
+    # quantities, sdrep, and estimated_params
+    # take similar approach to SS3 when only some keywords were converted
+    # can late take approach like BAM?
     
-    ##### spawning biomass ####
-    sb <- as.data.frame(t(as.matrix(quantities$ssb))) |>
-      tibble::rownames_to_column() |>
-      dplyr::mutate(
-        label = "spawning_biomass",
-        era = dplyr::case_when(
-          year > end_yr ~ "fore",
-          year < str_yr ~ "early",
-          TRUE ~ "time"
-        )
-      )
-    colnames(sb) <- c("year", "estimate", "label")
-    sb[setdiff(tolower(names(out_new)), tolower(names(sb)))] <- NA
-    out_new <- rbind(out_new, sb)
     
-    ###### biomass ####
-    b <- as.data.frame(t(as.matrix(quantities$biomass))) |>
-      tibble::rownames_to_column() |>
-      dplyr::mutate(
-        label = "biomass",
-        era = dplyr::case_when(
-          year > end_yr ~ "fore",
-          year < str_yr ~ "early",
-          TRUE ~ "time"
-        )
-      )
-    colnames(b) <- c("year", "estimate", "label")
-    b[setdiff(tolower(names(out_new)), tolower(names(b)))] <- NA
-    out_new <- rbind(out_new, b)
-    
-    ##### catch ####
-    # did not find landings atm
-    catch <- input$catch_data |>
-      dplyr::rename_with(tolower) |>
-      dplyr::mutate(
-        label = "catch",
-        era = dplyr::case_when(
-          year > end_yr ~ "fore",
-          year < str_yr ~ "early",
-          TRUE ~ "time"
-        ),
-        fleet = dplyr::case_when(
-          unique(.data$Fleet_name) == 1 ~ NA,
-          TRUE ~ Fleet_name
-        )
-      ) |>
-      dplyr::left_join(
-        input$fleet_control |>
-          dplyr::select(Fleet_name, Fleet_code),
-        by = c("Fleet_name"="Fleet_code")
-      )
     
   } else {
     cli::cli_abort(c(
