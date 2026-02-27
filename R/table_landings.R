@@ -111,21 +111,22 @@ table_landings <- function(
 
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
-    if (length(df_list) == 1){
+    if (length(df_list) == 1) {
       create_rda(
-      object = final$label,
-      topic_label = "landings",
-      fig_or_table = "table",
-      dat = dat,
-      dir = tables_dir,
-      scale_amount = 1,
-      unit_label = unit_label,
-      table_df = final
-      )}
-    } else {
-        cli::cli_alert_warning("Multiple tables cannot be exported at this time.")
-        cli::cli_alert_info("We are currently developing this feature.")
-      }
+        object = final$label,
+        topic_label = "landings",
+        fig_or_table = "table",
+        dat = dat,
+        dir = tables_dir,
+        scale_amount = 1,
+        unit_label = unit_label,
+        table_df = final
+      )
+    }
+  } else {
+    cli::cli_alert_warning("Multiple tables cannot be exported at this time.")
+    cli::cli_alert_info("We are currently developing this feature.")
+  }
 
   # Send table(s) to viewer
   if (!is.data.frame(table_data)) {
