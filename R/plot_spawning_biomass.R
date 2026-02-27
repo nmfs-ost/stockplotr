@@ -4,7 +4,7 @@
 #' also be made relative to this reference line rather than in absolute units.
 #'
 #' @param dat A data frame or names list of data frames (input as `list()`)
-#' returned from \link[asar]{convert_output}. The first data frame in the list
+#' returned from \link[stockplotr]{convert_output}. The first data frame in the list
 #' is used in calculation of a reference line if one is present
 #' @param geom A string stating the geom used for the plot. Default is "line".
 #' Options include "line", "point", or "area"
@@ -117,7 +117,7 @@ plot_spawning_biomass <- function(
   # Filter data for spawning biomass
   prepared_data <- filter_data(
     dat = dat,
-    label_name = "spawning_biomass$",
+    label_name = "^spawning_biomass$",
     geom = geom,
     era = era,
     group = group,
@@ -166,7 +166,8 @@ plot_spawning_biomass <- function(
     geom = geom,
     ylab = spawning_biomass_label,
     group = group,
-    facet = facet,
+    # add check in case facet is returned as character(0)
+    facet = if (length(facet) > 0) facet else NULL,
     ...
   )
   # Add reference line

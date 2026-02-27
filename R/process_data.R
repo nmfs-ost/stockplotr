@@ -241,21 +241,27 @@ process_data <- function(
     # check if value varies in ANY year
     # pivot data for 1st indexed data and check if all the same
     if (length(index_variables) > 0) {
-      pivot_data <- data |>
-        dplyr::select(tidyselect::any_of(c("year", "age", "estimate", index_variables))) |>
-        tidyr::pivot_wider(
-          id_cols = c(year),
-          names_from = tidyselect::any_of(index_variables),
-          values_from = estimate
-        ) |>
-        suppressWarnings()
-      column_data <- pivot_data[-1]
+      # if (index_variables == "age" | index_variables == "year") {
+      #   # if age or year is the only other index variable, then get data so there is a single column as expected in column_data
+      #   pivot_data <- data
+      #   column_data <- pivot_data[["estimate"]]
+      # } else {
+        pivot_data <- data |>
+          dplyr::select(tidyselect::any_of(c("year", "age", "estimate", index_variables))) |>
+          tidyr::pivot_wider(
+            id_cols = c(year),
+            names_from = tidyselect::any_of(index_variables),
+            values_from = estimate
+          ) |>
+          suppressWarnings()
+        column_data <- pivot_data[-1]
+      # }
     } else {
       # Look at group_var and identify if there is a needed grouping or can just plot one year
       pivot_data <- data |>
         dplyr::select(tidyselect::any_of(c("year", "age", "estimate", "group_var"))) |>
         tidyr::pivot_wider(
-          id_cols = c(year),
+          id_cols = if ("year" %in% colnames(data)) "year" else NULL,
           names_from = group_var,
           values_from = estimate
         ) |>
@@ -352,7 +358,7 @@ process_table <- function(
     mod_data <- dplyr::filter(dat, model == mod)
     mod_index <- check_grouping(mod_data)
     mod_names <- rep(mod, length(mod_index))
-    mod_index <- setNames(mod_index, mod_names)
+    mod_index <- stats::setNames(mod_index, mod_names)
     index_variables <- c(index_variables, mod_index)
   }
 
@@ -409,7 +415,7 @@ process_table <- function(
           mod_data <- dplyr::filter(dat, model == mod)
           mod_index <- check_grouping(mod_data)
           mod_names <- rep(mod, length(mod_index))
-          mod_index <- setNames(mod_index, mod_names)
+          mod_index <- stats::setNames(mod_index, mod_names)
           index_variables <- c(index_variables, mod_index)
         }
 
@@ -495,7 +501,7 @@ process_table <- function(
     table_list[[mod]] <- table_data
 
     # This feels like backward progress
-    id_group_list[[mod]] <- lapply(setNames(mod_id_group, mod_id_group), function(x) {
+    id_group_list[[mod]] <- lapply(stats::setNames(mod_id_group, mod_id_group), function(x) {
       unique(mod_dat[[x]])
     })
   } # close loop

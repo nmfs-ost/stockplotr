@@ -305,7 +305,7 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
 
       # Rename final df with cleaned names
       tab_dat <- tab_dat |>
-        dplyr::rename(any_of(rename_map_final)) |>
+        dplyr::rename(dplyr::any_of(rename_map_final)) |>
         dplyr::rename_with(~ gsub("_", " - ", .)) # |>
       # not sure if we want to keep this or not
       # dplyr::select(where(~!all(is.na(.)) | !all(. == "-"))) # remove columns that are all NA or all "-"))

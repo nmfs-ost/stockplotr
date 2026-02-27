@@ -14,6 +14,9 @@ globvar <- c(
   "type", "uncertainty", "uncertainty_label", "val", "where", "year",
   ":=", "Year", "avg", "estimate_orig", "interm", "season", "tables_dir", "time", "total_fish",
   "years_per_year", ".data", "cohort", "era", "expected_recruitment", "group_var", "model",
-  "plot_data", "quantile", "rda_dir", "reorder", "total_estimate", "zvar", "filter_data"
+  "plot_data", "quantile", "rda_dir", "reorder", "total_estimate", "zvar", "filter_data",
+  "Component", "age_bins", "alt_label", "final_df", "init", "keyword", "len_bins",
+  "like", "match_key", "morph", "nsim", "output", "output_order", "parm_stdev", "seas",
+  "sexes", "subseas", "unique_count", "value", "yr"
 )
 if (getRversion() >= "2.15.1") utils::globalVariables(globvar)
