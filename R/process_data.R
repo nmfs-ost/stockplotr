@@ -246,15 +246,15 @@ process_data <- function(
       #   pivot_data <- data
       #   column_data <- pivot_data[["estimate"]]
       # } else {
-        pivot_data <- data |>
-          dplyr::select(tidyselect::any_of(c("year", "age", "estimate", index_variables))) |>
-          tidyr::pivot_wider(
-            id_cols = c(year),
-            names_from = tidyselect::any_of(index_variables),
-            values_from = estimate
-          ) |>
-          suppressWarnings()
-        column_data <- pivot_data[-1]
+      pivot_data <- data |>
+        dplyr::select(tidyselect::any_of(c("year", "age", "estimate", index_variables))) |>
+        tidyr::pivot_wider(
+          id_cols = c(year),
+          names_from = tidyselect::any_of(index_variables),
+          values_from = estimate
+        ) |>
+        suppressWarnings()
+      column_data <- pivot_data[-1]
       # }
     } else {
       # Look at group_var and identify if there is a needed grouping or can just plot one year
