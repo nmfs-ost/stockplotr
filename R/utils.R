@@ -2,10 +2,6 @@
 # General utility functions
 # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-# General utility functions
-# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
 # Check end_year isn't past current year for non-projections plots
 # make year character if not null
 check_year <- function(
@@ -54,7 +50,8 @@ get_ncol <- function(file, skip = 0) {
   nummax
 }
 
-#---- SS3_extract_df ----
+#------------------------------------------------------------------------------
+
 # Helper for SS3 output converter
 # Function to extract rows, identify the dfs, and clean them up
 # SS3_extract_df <- function(dat, label) {
@@ -126,7 +123,8 @@ SS3_extract_df <- function(dat, label) {
   as.data.frame(clean_dt)
 }
 
-#---- SS3_extract_fleet ----
+#------------------------------------------------------------------------------
+
 SS3_extract_fleet <- function(dat, vers) {
   # Determine where fleet names are located base on model version
   # TODO: test other SS3 models and/or write converter based on r4ss::ss_output
@@ -183,7 +181,7 @@ SS3_extract_fleet <- function(dat, vers) {
   fleets
 }
 
-#----------------------------------------------------------
+#------------------------------------------------------------------------------
 
 # # Baseline units for models
 # baseline_units <- function() {
@@ -194,3 +192,32 @@ SS3_extract_fleet <- function(dat, vers) {
 #     "weight"
 #   )
 # }
+
+#------------------------------------------------------------------------------
+
+#' @param x unlisted object from model output
+
+expand_vector <- function(x) {
+  df <- as.data.frame(x) |>
+    tidyr::pivot_longer(
+      cols = tidyselect::everything(),
+      values_to = "estimate",
+      names_to = "label_init"
+    ) |>
+    dplyr::mutate(
+      label = stringr::str_extract(label_init, "^[^\\.]+"),
+      label_init = stringr::str_remove(label_init, "^[^\\.]+\\."),
+      label = dplyr::case_when(
+        label == "rec_pars" ~ label_init,
+        TRUE ~ label
+      ),
+      label_init = dplyr::case_when(
+        label == label_init ~ NA,
+        TRUE ~ label_init 
+      )
+    )
+    
+    # suppressWarnings()
+  
+}
+
