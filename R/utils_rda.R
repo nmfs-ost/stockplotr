@@ -247,7 +247,7 @@ add_more_key_quants <- function(
   }
 
   ## relative spawning biomass
-  if (topic_cap_alt$label == "relative.spawning.biomass") {
+  if (topic_cap_alt$label == "relative_spawning_biomass") {
     if (is.null(dat)) {
       cli::cli_alert_warning("Some key quantities associated with relative spawning biomass were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).", wrap = TRUE)
     }
@@ -318,7 +318,7 @@ add_more_key_quants <- function(
   }
 
   ## spawning biomass
-  if (topic_cap_alt$label == "spawning.biomass" | topic_cap_alt$label == "sr") {
+  if (topic_cap_alt$label == "spawning_biomass" | topic_cap_alt$label == "sr") {
     if (is.null(dat)) {
       cli::cli_alert_warning("Some key quantities associated with spawning biomass were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).", wrap = TRUE)
     } else {

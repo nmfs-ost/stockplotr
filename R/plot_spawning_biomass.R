@@ -207,7 +207,7 @@ plot_spawning_biomass <- function(
   if (make_rda) {
     create_rda(
       object = final,
-      topic_label = ifelse(relative, "relative.spawning.biomass", "spawning.biomass"),
+      topic_label = ifelse(relative, "relative_spawning_biomass", "spawning_biomass"),
       fig_or_table = "figure",
       dat = rp_dat,
       dir = figures_dir,
