@@ -151,7 +151,7 @@ add_more_key_quants <- function(
 
   # calculate key quantities that rely on end_year for calculation
   ## terminal fishing mortality
-  # if (topic_cap_alt$label == "fishing.mortality") {
+  # if (topic_cap_alt$label == "fishing_mortality") {
   #   if (is.null(dat)) {
   #     cli::cli_alert_warning("Some key quantities associated with fishing mortality were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).", wrap = TRUE)
   #   } else {

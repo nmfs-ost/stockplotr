@@ -97,7 +97,7 @@ plot_fishing_mortality <- function(
   if (make_rda) {
     create_rda(
       object = final,
-      topic_label = ifelse(relative, "relative.fishing.mortality", "fishing.mortality"),
+      topic_label = ifelse(relative, "relative_fishing_mortality", "fishing_mortality"),
       fig_or_table = "figure",
       dat = dat,
       dir = figures_dir,
