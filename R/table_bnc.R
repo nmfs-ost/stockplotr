@@ -179,12 +179,13 @@
 #       fig_or_table = fig_or_table,
 #       dir = tables_dir
 #     )
-
+# 
 #     export_rda(
 #       object = final,
 #       caps_alttext = caps_alttext,
 #       figures_tables_dir = tables_dir,
-#       topic_label = topic_label,
+#       # get name of function and remove "table_" from it
+#       topic_label = gsub("table_", "", as.character(sys.call()[[1]])), 
 #       fig_or_table = fig_or_table
 #     )
 #   }

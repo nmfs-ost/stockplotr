@@ -155,13 +155,15 @@
 #     )
 
 
-#     export_rda(
-#       object = final,
-#       caps_alttext = caps_alttext,
-#       figures_tables_dir = tables_dir,
-#       topic_label = topic_label,
-#       fig_or_table = fig_or_table
-#     )
+    # export_rda(
+    #   object = final,
+    #   caps_alttext = caps_alttext,
+    #   figures_tables_dir = tables_dir,
+    # # get entire name of function (don't remove "plot_" from it) to
+    # # distinguish with table_indices()
+    #   topic_label = as.character(sys.call()[[1]]), 
+    #   fig_or_table = fig_or_table
+    # )
 #   }
 #   final
 # }
