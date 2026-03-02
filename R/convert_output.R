@@ -1774,6 +1774,12 @@ convert_output <- function(
       dat <- file
     }
     
+    # Extract or use fleet names
+    if (is.null(fleet_names)) {
+      # TODO: as if there is a better way to id fleet names
+      fleet_names <- names(dat$estimated_params$index_ln_q)
+    }
+    
     factors <- c("year", "fleet", "fleet_name", "age", "sex", "area", "seas", "season", "time", "era", "subseas", "subseason", "platoon", "platoo", "growth_pattern", "gp", "nsim", "age_a")
     errors <- c("StdDev", "sd", "se", "SE", "cv", "CV", "stddev")
     # units <- c("mt", "lbs", "eggs")
@@ -1789,25 +1795,40 @@ convert_output <- function(
           for (i in seq_along(extract[[1]])) {
             if (is.vector(extract[[1]][[i]])) {
               df <- as.data.frame(extract[[1]][i]) |>
-                tibble::rownames_to_column(var = "age") |>
                 tidyr::pivot_longer(
-                  cols = -age,
+                  cols = tidyselect::everything(),
                   values_to = "estimate",
                   names_to = "label"
                 ) |>
+                # 1. Split into generic parts first
+                tidyr::separate_wider_delim(
+                  cols = label,
+                  delim = ".",
+                  names = paste0("part", 1:5), # Creates part1, part2, etc.
+                  cols_remove = FALSE
+                ) |>
+                # 2. Reshape to long to find the keywords
+                tidyr::pivot_longer(
+                  cols = starts_with("part"),
+                  names_to = "original_pos",
+                  values_to = "temp_value"
+                ) |>
+                # 3. Create the conditional logic
                 dplyr::mutate(
-                  label = names(extract[[1]][i]),
-                  # label_init = names(extract[[1]][i]),
-                  fleet = dplyr::case_when(
-                    grepl(paste(fleet_names, collapse = "|"), label) ~ stringr::str_extract(label, paste(fleet_names, collapse = "|")),
-                    TRUE ~ NA
-                  ),
-                  module_name = names(extract),
-                  label = dplyr::case_when(
-                    grepl(paste(fleet_names, collapse = "|"), label) ~ stringr::str_replace(label, paste(".", fleet_names, sep = "", collapse = "|"), ""),
-                    TRUE ~ label
+                  category = case_when(
+                    str_detect(temp_value, "Age") ~ "age_col",
+                    str_detect(temp_value, "Sex") ~ "sex_col",
+                    str_detect(temp_value, "upper|lower") ~ "boundary",
+                    TRUE ~ "other"
                   )
+                ) |>
+                # 4. Pivot back to wide format
+                tidyr::pivot_wider(
+                  names_from = category,
+                  values_from = temp_value
                 )
+              
+              
               df[setdiff(tolower(names(out_new)), tolower(names(df)))] <- NA
               extract_list[[names(extract[[1]][i])]] <- df
             } else {
