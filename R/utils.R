@@ -214,10 +214,27 @@ expand_vector <- function(x) {
       label_init = dplyr::case_when(
         label == label_init ~ NA,
         TRUE ~ label_init 
+      ),
+      age = dplyr::case_when(
+        grepl("Age[0-9]+", label_init) ~ as.numeric(stringr::str_extract(label_init, "[0-9]+")),
+        TRUE ~ NA_real_
+      ),
+      sex = dplyr::case_when(
+        grepl("Sex.combined", label_init) ~ "combined",
+        grepl("Sex.female", label_init) ~ "female", # check! haven't seen example yet of this
+        grepl("Sex.male", label_init) ~ "male", # check! haven't seen example yet of this
+        TRUE ~ NA_character_
+      ),
+      year = dplyr::case_when(
+        grepl("[0-9]{4}", label_init) ~ as.numeric(stringr::str_extract(label_init, "[0-9]{4}")),
+        TRUE ~ NA_real_
+      ),
+      fleet = case_when(
+        grepl(paste0(fleet_names, collapse = "|"), label_init) ~ stringr::str_extract(label_init, paste0(fleet_names, collapse = "|")),
+        TRUE ~ NA_character_
       )
-    )
-    
+    ) |>
+    dplyr::select(-label_init) # |>
     # suppressWarnings()
-  
 }
 
