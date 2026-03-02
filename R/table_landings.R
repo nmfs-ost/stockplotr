@@ -114,9 +114,8 @@ table_landings <- function(
     if (length(df_list) == 1) {
       create_rda(
         object = final$label,
-        # get entire name of function (don't remove "table_" from it) to
-        # distinguish with plot_landings()
-        topic_label = as.character(sys.call()[[1]]),    
+        # get name of function and remove "table_" from it
+        topic_label = gsub("table_", "", as.character(sys.call()[[1]])),
         fig_or_table = "table",
         dat = dat,
         dir = tables_dir,

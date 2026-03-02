@@ -101,9 +101,8 @@ plot_landings <- function(
   if (make_rda) {
     create_rda(
       object = plt,
-      # get entire name of function (don't remove "plot_" from it) to
-      # distinguish with table_landings()
-      topic_label = as.character(sys.call()[[1]]),   
+      # get name of function and remove "plot_" from it
+      topic_label = gsub("plot_", "", as.character(sys.call()[[1]])), 
       fig_or_table = "figure",
       dat = dat,
       dir = figures_dir,
