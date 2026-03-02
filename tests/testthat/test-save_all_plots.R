@@ -10,7 +10,7 @@ test_that("save_all_plots works when all figures/tables are plotted", {
     recruitment_unit_label = "mt",
     recruitment_scale_amount = 1,
     ref_line = c("unfished" = 1000),
-    ref_line_sb = "target",
+    ref_line_sb = c("msy"),
     # indices_unit_label = "CPUE",
     figures_tables_dir = getwd(),
     interactive = FALSE
@@ -23,33 +23,33 @@ test_that("save_all_plots works when all figures/tables are plotted", {
   # expect that the figures are all created with expected names
   fig_base_temp_files <- c(
     "biomass_figure.rda",
-    "CPUE.indices_figure.rda",
-    "fishing.mortality_figure.rda",
+    "indices_figure.rda",
+    "fishing_mortality_figure.rda",
     "landings_figure.rda",
-    "natural.mortality_figure.rda",
-    "pop.baa_figure.rda",
-    "pop.caa_figure.rda",
-    "pop.naa_figure.rda",
+    "natural_mortality_figure.rda",
+    "biomass_at_age_figure.rda",
+    "catch_comp_figure.rda",
+    "abundance_at_age_figure.rda",
     "recruitment_figure.rda",
-    "recruitment.deviations_figure.rda",
-    "spawning.biomass_figure.rda",
-    "sr_figure.rda"
+    "recruitment_deviations_figure.rda",
+    "spawning_biomass_figure.rda",
+    "stock_recruitment_figure.rda"
   )
   expect_equal(
     sort(list.files(fs::path(getwd(), "figures"))),
     sort(fig_base_temp_files)
   )
 
-  # expect that the tables are all created with expected names
-  # tab_base_temp_files <- c(
-  #   "bnc_table.rda",
-  #   "indices.abundance_table.rda",
-  #   "landings_table.rda"
-  # )
-  # expect_equal(
-  #   list.files(fs::path(getwd(), "tables")),
-  #   tab_base_temp_files
-  # )
+ # # expect that the tables are all created with expected names
+ #  tab_base_temp_files <- c(
+ #   # "bnc_table.rda",
+ #  #  "indices.abundance_table.rda",
+ #    "landings_table.rda"
+ #  )
+ #  expect_equal(
+ #    list.files(fs::path(getwd(), "tables")),
+ #    tab_base_temp_files
+ #  )
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))

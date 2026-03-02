@@ -89,9 +89,9 @@ test_that("rda file made when indicated", {
     figures_dir = getwd()
   )
 
-  # expect that both figures dir and the spawning.biomass_figure.rda file exist
+  # expect that both figures dir and the spawning_biomass_figure.rda file exist
   expect_true(dir.exists(fs::path(getwd(), "figures")))
-  expect_true(file.exists(fs::path(getwd(), "figures", "spawning.biomass_figure.rda")))
+  expect_true(file.exists(fs::path(getwd(), "figures", "spawning_biomass_figure.rda")))
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
