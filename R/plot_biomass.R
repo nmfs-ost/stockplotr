@@ -151,7 +151,7 @@ plot_biomass <- function(
   if (make_rda) {
     create_rda(
       object = final,
-      topic_label = ifelse(relative, "relative.biomass", "biomass"),
+      topic_label = ifelse(relative, "relative_biomass", "biomass"),
       fig_or_table = "figure",
       dat = rp_dat,
       dir = figures_dir,
