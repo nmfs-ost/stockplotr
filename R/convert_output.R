@@ -1798,24 +1798,20 @@ convert_output <- function(
       if (is.list(extract[[1]])) { # indicates vector and list
         if (any(vapply(extract[[1]], is.matrix, FUN.VALUE = logical(1)))) {
                 ##############################################################
-          if (module_name == "quantities") {
-            extract_list <- extract[[1]][!(names(extract[[1]]) %in% c("a", "c"))]
-          } else {
-            extract_list <- extract[[1]]
-          }
-          df <- extract_list |>
-            expand_vector() |>
+          df <- extract[[1]] |>
+            expand_element(fleet_names = fleet_names) |>
             dplyr::mutate(
               module_name = module_name
             )
           out_list[[names(extract)]] <- df
+          
         } else if (any(vapply(extract[[1]], is.vector, FUN.VALUE = logical(1)))) { # all must be a vector to work - so there must be conditions for dfs with a mix
           extract_list <- list()
           mod_name1 <- names(extract)
           for (i in seq_along(extract[[1]])) {
             mod_name2 <- glue::glue("{mod_name1}_{names(extract[[1]][i])}")
             df <- extract[[1]][i][[1]] |>
-              expand_vector() |>
+              expand_element(fleet_names = fleet_names) |>
               dplyr::mutate(
                 module_name = mod_name2
               ) # |>
