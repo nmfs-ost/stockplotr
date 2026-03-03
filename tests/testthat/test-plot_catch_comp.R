@@ -44,9 +44,9 @@ test_that("rda file made when indicated", {
     make_rda = TRUE
   )
 
-  # expect that both figures dir and the pop.naa_figure.rda file exist
+  # expect that both figures dir and the catch_comp_figure.rda file exist
   expect_true(dir.exists(fs::path(getwd(), "figures")))
-  expect_true(file.exists(fs::path(getwd(), "figures", "pop.caa_figure.rda")))
+  expect_true(file.exists(fs::path(getwd(), "figures", "catch_comp_figure.rda")))
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))

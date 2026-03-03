@@ -113,7 +113,8 @@ plot_abundance_at_age <- function(
   if (make_rda == TRUE) {
     create_rda(
       object = plot,
-      topic_label = "pop.naa",
+      # get name of function and remove "plot_" from it
+      topic_label = gsub("plot_", "", as.character(sys.call()[[1]])),
       fig_or_table = "figure",
       dat,
       unit_label = "mt"

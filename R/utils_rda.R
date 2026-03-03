@@ -151,7 +151,7 @@ add_more_key_quants <- function(
 
   # calculate key quantities that rely on end_year for calculation
   ## terminal fishing mortality
-  # if (topic_cap_alt$label == "fishing.mortality") {
+  # if (topic_cap_alt$label == "fishing_mortality") {
   #   if (is.null(dat)) {
   #     cli::cli_alert_warning("Some key quantities associated with fishing mortality were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).", wrap = TRUE)
   #   } else {
@@ -195,6 +195,10 @@ add_more_key_quants <- function(
   # write analogous code for each in this section, and remove placeholders from
   # the end of write_captions (once we get clarity about how to extract Btarg,
   # ssbtarg, and R0)
+  # 
+  
+  #TODO: When adding code extracting values for landings and/or indices figures/tables, be aware that both figure/table share the same label ("landings" and "indices"). If there's reason, add in extra conditional to check if value is from a figure or table
+  
   ## biomass
   if (topic_cap_alt$label == "biomass") {
     if (is.null(dat)) {
@@ -247,7 +251,7 @@ add_more_key_quants <- function(
   }
 
   ## relative spawning biomass
-  if (topic_cap_alt$label == "relative.spawning.biomass") {
+  if (topic_cap_alt$label == "relative_spawning_biomass") {
     if (is.null(dat)) {
       cli::cli_alert_warning("Some key quantities associated with relative spawning biomass were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).", wrap = TRUE)
     }
@@ -318,7 +322,7 @@ add_more_key_quants <- function(
   }
 
   ## spawning biomass
-  if (topic_cap_alt$label == "spawning.biomass" | topic_cap_alt$label == "sr") {
+  if (topic_cap_alt$label == "spawning_biomass" | topic_cap_alt$label == "stock_recruitment") {
     if (is.null(dat)) {
       cli::cli_alert_warning("Some key quantities associated with spawning biomass were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).", wrap = TRUE)
     } else {
@@ -423,7 +427,7 @@ add_more_key_quants <- function(
   }
 
   ## recruitment
-  if (topic_cap_alt$label == "recruitment" | topic_cap_alt$label == "sr") {
+  if (topic_cap_alt$label == "recruitment" | topic_cap_alt$label == "stock_recruitment") {
     if (is.null(dat)) {
       cli::cli_alert_warning("Some key quantities associated with recruitment were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).", wrap = TRUE)
     } else {
