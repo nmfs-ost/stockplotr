@@ -197,44 +197,73 @@ SS3_extract_fleet <- function(dat, vers) {
 
 #' @param x unlisted object from model output
 
-expand_vector <- function(x) {
-  df <- as.data.frame(x) |>
-    tidyr::pivot_longer(
-      cols = tidyselect::everything(),
-      values_to = "estimate",
-      names_to = "label_init"
-    ) |>
-    dplyr::mutate(
-      label = stringr::str_extract(label_init, "^[^\\.]+"),
-      label_init = stringr::str_remove(label_init, "^[^\\.]+\\."),
-      label = dplyr::case_when(
-        label == "rec_pars" ~ label_init,
-        TRUE ~ label
-      ),
-      label_init = dplyr::case_when(
-        label == label_init ~ NA,
-        TRUE ~ label_init 
-      ),
-      age = dplyr::case_when(
-        grepl("Age[0-9]+", label_init) ~ as.numeric(stringr::str_extract(label_init, "[0-9]+")),
-        TRUE ~ NA_real_
-      ),
-      sex = dplyr::case_when(
-        grepl("Sex.combined", label_init) ~ "combined",
-        grepl("Sex.female", label_init) ~ "female", # check! haven't seen example yet of this
-        grepl("Sex.male", label_init) ~ "male", # check! haven't seen example yet of this
-        TRUE ~ NA_character_
-      ),
-      year = dplyr::case_when(
-        grepl("[0-9]{4}", label_init) ~ as.numeric(stringr::str_extract(label_init, "[0-9]{4}")),
-        TRUE ~ NA_real_
-      ),
-      fleet = case_when(
-        grepl(paste0(fleet_names, collapse = "|"), label_init) ~ stringr::str_extract(label_init, paste0(fleet_names, collapse = "|")),
-        TRUE ~ NA_character_
-      )
-    ) |>
-    dplyr::select(-label_init) # |>
-    # suppressWarnings()
+expand_element <- function(input_list, fleet_names = "Pollock") {
+  
+  # Use map_dfr to iterate over each element of the list
+  # .id = "origin_var" keeps track of which list element the data came from
+  purrr::imap_dfr(input_list, function(x, name) {
+    
+    # Skip empty/null elements immediately
+    if (length(x) == 0 || is.null(x)) return(NULL)
+    
+    # Standardize current element 'x' to a Long Data Frame
+    if (!is.null(dim(x)) && length(dim(x)) > 1) {
+      # Handles Arrays/Matrices
+      df <- as.data.frame.table(x, responseName = "estimate") |>
+        # Unite all Var columns into one string, e.g., "Pollock.Sex combined.Age1"
+        tidyr::unite("dim_info", tidyselect::matches("^Var"), sep = ".", na.rm = TRUE) |>
+        # Prepend the element name: "M1_at_age.Pollock.Sex combined.Age1"
+        dplyr::mutate(label_init = paste0(name, ".", dim_info)) |>
+        dplyr::select(-dim_info)
+    } else {
+      # Handles Vectors/Named Vectors
+      df <- tibble::enframe(x, name = "dim_info", value = "estimate") |>
+        dplyr::mutate(label_init = dplyr::case_when(
+          is.na(dim_info) | dim_info == "" ~ as.character(name),
+          TRUE ~ paste0(name, ".", dim_info)
+        )) |>
+        dplyr::select(-dim_info)
+    }
+    
+    # Process the labels
+    df |>
+      dplyr::mutate(
+        label_init = as.character(label_init),
+        
+        # Pull parameter name
+        label = stringr::str_extract(label_init, "^[^\\.]+"),
+        
+        # Extract Age
+        age = dplyr::case_when(
+          grepl("age", label_init, ignore.case = TRUE) ~ 
+            as.numeric(stringr::str_extract(label_init, "[0-9]+")),
+          TRUE ~ NA_real_
+        ),
+        
+        # Extract Sex
+        sex = dplyr::case_when(
+          grepl("Sex.combined|combined", label_init, ignore.case = TRUE) ~ "combined",
+          grepl("female", label_init, ignore.case = TRUE) ~ "female", # check havent seen example of this!
+          grepl("male", label_init, ignore.case = TRUE) ~ "male", # check havent seen example of this!
+          TRUE ~ NA_character_
+        ),
+        
+        # Extract Year (4 digits)
+        year = dplyr::case_when(
+          grepl("[0-9]{4}", label_init) ~ as.numeric(stringr::str_extract(label_init, "[0-9]{4}")),
+          TRUE ~ NA_real_
+        ),
+        
+        # Extract Fleet
+        fleet = dplyr::case_when(
+          grepl(paste0(fleet_names, collapse = "|"), label_init) ~ 
+            stringr::str_extract(label_init, paste0(fleet_names, collapse = "|")),
+          TRUE ~ NA_character_
+        )
+      ) |>
+      # Ensure 'estimate' is numeric and clean up temp columns
+      dplyr::mutate(estimate = as.numeric(estimate)) |>
+      dplyr::select(-label_init)
+  })
 }
 
