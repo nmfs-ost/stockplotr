@@ -39,7 +39,7 @@ Imports:
     dplyr,
     flextable,
     fs,
-    ggplot2,
+    ggplot2 (>= 4.0.0),
     glue,
     gt,
     httr,
