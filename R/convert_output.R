@@ -1793,8 +1793,8 @@ convert_output <- function(
     for (p in 2:length(dat)) {
       extract <- dat[p]
       module_name <- names(extract) 
-      cli::cli_alert_info(glue::glue("Processing {names(extract)}"))
-    if (is.vector(extract[[1]])) {
+      cli::cli_alert_info("Processing {module_name}")
+    # if (is.vector(extract[[1]])) {
       if (is.list(extract[[1]])) { # indicates vector and list
         if (any(vapply(extract[[1]], is.matrix, FUN.VALUE = logical(1)))) {
                 ##############################################################
@@ -1807,9 +1807,9 @@ convert_output <- function(
           
         } else if (any(vapply(extract[[1]], is.vector, FUN.VALUE = logical(1)))) { # all must be a vector to work - so there must be conditions for dfs with a mix
           extract_list <- list()
-          mod_name1 <- names(extract)
+          # mod_name1 <- names(extract)
           for (i in seq_along(extract[[1]])) {
-            mod_name2 <- glue::glue("{mod_name1}_{names(extract[[1]][i])}")
+            mod_name2 <- glue::glue("{module_name}_{names(extract[[1]][i])}")
             df <- extract[[1]][i][[1]] |>
               expand_element(fleet_names = fleet_names) |>
               dplyr::mutate(
@@ -1826,12 +1826,13 @@ convert_output <- function(
           cli::cli_alert_warning("Not compatible.")
         }
       } else {
+        cli::cli_alert_warning("Not compatible yet.")
       }
-    } else if (is.list(extract[[1]])) { # list only
-    } else if (is.matrix(extract[[1]])) { # matrix only
-    } else {
-      cli::cli_alert_warning(paste(names(extract), " not compatible.", sep = ""))
-    } # close if statement
+    # } else if (is.list(extract[[1]])) { # list only
+    # } else if (is.matrix(extract[[1]])) { # matrix only
+    # } else {
+    #   cli::cli_alert_warning(paste(names(extract), " not compatible.", sep = ""))
+    # } # close if statement
   } # close loop over objects listed in dat file
     # Want to extract and set values from:
     # quantities, sdrep, and estimated_params
