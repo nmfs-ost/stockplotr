@@ -1791,6 +1791,7 @@ convert_output <- function(
     # units <- c("mt", "lbs", "eggs")
     
     for (p in 2:length(dat)) {
+      # last tested through p=6
       extract <- dat[p]
       module_name <- names(extract) 
       cli::cli_alert_info("Processing {module_name}")
