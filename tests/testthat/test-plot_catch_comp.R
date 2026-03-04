@@ -164,7 +164,7 @@ test_that("plot contains a legend", {
     make_rda = FALSE,
     figures_dir = getwd()
   )
-  expect_true(is.null(plot$theme$legend.position))
+  expect_true(!is.null(plot$theme$legend.position))
 })
 
 test_that("year class lines are plotted", {
