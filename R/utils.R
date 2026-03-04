@@ -231,12 +231,15 @@ expand_element <- function(input_list, fleet_names = "Pollock") {
         label_init = as.character(label_init),
         
         # Pull parameter name
-        label = stringr::str_extract(label_init, "^[^\\.]+"),
+        label = dplyr::case_when(
+          stringr::str_extract(label_init, "^[^\\.]+") == "rec_pars" ~ stringr::str_extract(label_init, "[^\\.]+$"),
+          TRUE ~ stringr::str_extract(label_init, "^[^\\.]+")
+          ),
         
         # Extract Age
         age = dplyr::case_when(
           grepl("age", label_init, ignore.case = TRUE) ~ 
-            as.numeric(stringr::str_extract(label_init, "[0-9]+")),
+            as.numeric(stringr::str_extract(label_init, "(?<=\\.[Aa]ge)[0-9]+(?=\\.|$)")),
           TRUE ~ NA_real_
         ),
         
