@@ -2145,8 +2145,8 @@ convert_output <- function(
     errors <- c("StdDev", "sd", "se", "SE", "cv", "CV", "stddev")
     # units <- c("mt", "lbs", "eggs")
     
-    for (p in 2:length(dat)) {
-      # last tested through p=6
+    for (p in (2:length(dat))[-6]) {
+      # last tested through p=9 (data_list)
       extract <- dat[p]
       module_name <- names(extract) 
       cli::cli_alert_info("Processing {module_name}")
@@ -2165,14 +2165,23 @@ convert_output <- function(
           extract_list <- list()
           # mod_name1 <- names(extract)
           for (i in seq_along(extract[[1]])) {
-            mod_name2 <- glue::glue("{module_name}_{names(extract[[1]][i])}")
-            df <- extract[[1]][i][[1]] |>
-              expand_element(fleet_names = fleet_names) |>
-              dplyr::mutate(
-                module_name = mod_name2
-              ) # |>
+            # need to add condition or something in expand_element to account for data thats formatted differently but is still a list i.e. p=9
+            if (is.list(extract[[1]][i][[1]])) {
+              mod_name2 <- glue::glue("{module_name}_{names(extract[[1]][i])}")
+              
+              df <- extract[[1]][i][[1]] |>
+                expand_element(fleet_names = fleet_names) |>
+                dplyr::mutate(
+                  module_name = mod_name2
+                ) # |>
               # suppressWarnings()
-            
+            } else {
+              df <- data.frame(
+                estimate = extract[[1]][[i]][[1]],
+                label = names(extract[[1]][i]),
+                module_name = module_name
+              )
+            }
             df[setdiff(tolower(names(out_new)), tolower(names(df)))] <- NA
             extract_list[[names(extract[[1]][i])]] <- df
           }
