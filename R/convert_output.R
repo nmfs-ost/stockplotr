@@ -4,7 +4,7 @@
 #'
 #' @param file Assessment model output file path
 #' @param model Assessment model used in evaluation ("ss3", "bam",
-#'  "fims").
+#'  "fims", "rceattle).
 #' @param fleet_names Names of fleets in the assessment model as
 #'  shortened in the output file. If fleet names are not properly read, then
 #'  indicate the fleets names as an acronym in a vector
@@ -97,17 +97,19 @@ convert_output <- function(
   out_new <- out_new[-1, ]
 
   # Check if path links to a valid file
-  url_pattern <- "^(https?|ftp|file):\\/\\/[-A-Za-z0-9+&@#\\/%?=~_|!:,.;]*[-A-Za-z0-9+&@#\\/%=~_|]$"
-  if (grepl(url_pattern, file)) {
-    check <- httr::HEAD(file)
-    url <- httr::status_code(check)
-    if (url == 404) cli::cli_abort(c(message = "Invalid URL."))
-  } else {
-    if (!file.exists(file)) {
-      cli::cli_abort(c(
-        message = "`file` not found.",
-        "i" = "`file` entered as {file}"
-      ))
+  if (is.character(file)) {
+    url_pattern <- "^(https?|ftp|file):\\/\\/[-A-Za-z0-9+&@#\\/%?=~_|!:,.;]*[-A-Za-z0-9+&@#\\/%=~_|]$"
+    if (grepl(url_pattern, file)) {
+      check <- httr::HEAD(file)
+      url <- httr::status_code(check)
+      if (url == 404) cli::cli_abort(c(message = "Invalid URL."))
+    } else {
+      if (!file.exists(file)) {
+        cli::cli_abort(c(
+          message = "`file` not found.",
+          "i" = "`file` entered as {file}"
+        ))
+      }
     }
   }
 
@@ -1790,8 +1792,8 @@ convert_output <- function(
     errors <- c("StdDev", "sd", "se", "SE", "cv", "CV", "stddev")
     # units <- c("mt", "lbs", "eggs")
     
-    for (p in 2:length(dat)) {
-      # last tested through p=6
+    for (p in (2:length(dat))[-6]) {
+      # last tested through p=9 (data_list)
       extract <- dat[p]
       module_name <- names(extract) 
       cli::cli_alert_info("Processing {module_name}")
@@ -1810,14 +1812,23 @@ convert_output <- function(
           extract_list <- list()
           # mod_name1 <- names(extract)
           for (i in seq_along(extract[[1]])) {
-            mod_name2 <- glue::glue("{module_name}_{names(extract[[1]][i])}")
-            df <- extract[[1]][i][[1]] |>
-              expand_element(fleet_names = fleet_names) |>
-              dplyr::mutate(
-                module_name = mod_name2
-              ) # |>
+            # need to add condition or something in expand_element to account for data thats formatted differently but is still a list i.e. p=9
+            if (is.list(extract[[1]][i][[1]])) {
+              mod_name2 <- glue::glue("{module_name}_{names(extract[[1]][i])}")
+              
+              df <- extract[[1]][i][[1]] |>
+                expand_element(fleet_names = fleet_names) |>
+                dplyr::mutate(
+                  module_name = mod_name2
+                ) # |>
               # suppressWarnings()
-            
+            } else {
+              df <- data.frame(
+                estimate = extract[[1]][[i]][[1]],
+                label = names(extract[[1]][i]),
+                module_name = module_name
+              )
+            }
             df[setdiff(tolower(names(out_new)), tolower(names(df)))] <- NA
             extract_list[[names(extract[[1]][i])]] <- df
           }
