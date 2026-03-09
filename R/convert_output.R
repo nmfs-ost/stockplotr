@@ -1768,7 +1768,10 @@ convert_output <- function(
     out_new <- fims_output
     #### Rceattle ####
   } else if (model == "rceattle") {
-    
+    # Want to extract and set values from:
+    # quantities, sdrep, and estimated_params
+    # take similar approach to SS3 when only some keywords were converted
+    # can late take approach like BAM?
     # TODO: Do we want users to input the saved file or already loaded into the R environment?
     if (is.character(file)) {
       dat <- readRDS(file)
@@ -1792,13 +1795,109 @@ convert_output <- function(
     errors <- c("StdDev", "sd", "se", "SE", "cv", "CV", "stddev")
     # units <- c("mt", "lbs", "eggs")
     
-    for (p in (2:length(dat))[-6]) {
+    for (p in (2:length(dat))[-c(6, 8, 9, 10)]) {
+      # might need to manually add the removed above
       # last tested through p=9 (data_list)
       extract <- dat[p]
       module_name <- names(extract) 
       cli::cli_alert_info("Processing {module_name}")
-    # if (is.vector(extract[[1]])) {
-      if (is.list(extract[[1]])) { # indicates vector and list
+      if (module_name == "sdrep") {
+        # this does not include all elements from sdrep list
+        df <- extract[[1]]
+        # Extract values from sdrep element in listdrep
+        values <- data.frame(
+          label = names(extract[[1]]$value),
+          estimate = extract[[1]]$value,
+          uncertainty = extract[[1]]$sd,
+          uncertainty_label = "sd"
+        )
+        # values_count <- values |> 
+        #   dplyr::group_by(label) |> 
+        #   dplyr::count() 
+        values <- values |>
+          dplyr::left_join(
+            {
+              values |> dplyr::group_by(label) |> dplyr::count() 
+            },
+            by = "label"
+          ) 
+        # make year column
+        year_col <- rep(
+          file[["data_list"]]$styr:file[["data_list"]]$projyr,
+          length(unique(
+            dplyr::filter(values_count, n == length(file[["data_list"]]$styr:file[["data_list"]]$projyr)) |> 
+              dplyr::pull(label)
+          ))
+        )
+      
+        df2 <- values |>
+          dplyr::filter(n == length(file[["data_list"]]$styr:file[["data_list"]]$projyr)) |>
+          dplyr::mutate(year = year_col) |>
+          rbind(
+            {
+              values |> 
+                dplyr::filter(
+                  n != length(file[["data_list"]]$styr:file[["data_list"]]$projyr)
+                ) |>
+                dplyr::mutate(year = NA)
+            }
+          )
+        
+        # Extract parameter values ts
+        par_fixes <- data.frame(
+          label = names(extract[[1]]$par.fixed),
+          estimate = extract[[1]]$par.fixed
+        )
+        # par_fixes |> 
+        #   dplyr::group_by(label) |> 
+        #   dplyr::count()  
+        par_fixes <- par_fixes |>
+          dplyr::left_join(
+            {
+              par_fixes |> 
+                dplyr::group_by(label) |> 
+                dplyr::count() 
+            },
+            by = "label"
+          ) 
+        
+        year_col_par_fix <- rep(
+          file[["data_list"]]$styr:file[["data_list"]]$endyr,
+          length(unique(
+            dplyr::filter(par_fixes_count, n == length(file[["data_list"]]$styr:file[["data_list"]]$endyr)) |> 
+              dplyr::pull(label)
+          ))
+        )
+        
+        df3 <- par_fixes |>
+          dplyr::filter(n == length(file[["data_list"]]$styr:file[["data_list"]]$endyr)) |>
+          dplyr::mutate(year = year_col_par_fix) |>
+          rbind(
+            {
+              par_fixes |> 
+                dplyr::filter(
+                  n != length(file[["data_list"]]$styr:file[["data_list"]]$endyr)
+                ) |>
+                dplyr::mutate(year = NA)
+            }
+          ) |>
+          dplyr::mutate(
+            uncertainty = NA,
+            uncertainty_label = NA
+          )
+        # not sure how pop_scalar is indexed
+        # not sure how log_index_hat is indexes
+        # Did not use r_sd for the error in rec bc used it from the other element in the list
+        
+        df4 <- rbind(df2, df3) |>
+          dplyr::select(-n) |>
+          dplyr::mutate(
+            module_name = module_name
+          )
+        
+        df4[setdiff(tolower(names(out_new)), tolower(names(df4)))] <- NA
+        out_list[[names(extract)]] <- df4
+      } else if (is.list(extract[[1]])) { # indicates vector and list
         if (any(vapply(extract[[1]], is.matrix, FUN.VALUE = logical(1)))) {
                 ##############################################################
           df <- extract[[1]] |>
@@ -1806,6 +1905,7 @@ convert_output <- function(
             dplyr::mutate(
               module_name = module_name
             )
+          df[setdiff(tolower(names(out_new)), tolower(names(df)))] <- NA
           out_list[[names(extract)]] <- df
           
         } else if (any(vapply(extract[[1]], is.vector, FUN.VALUE = logical(1)))) { # all must be a vector to work - so there must be conditions for dfs with a mix
@@ -1815,6 +1915,8 @@ convert_output <- function(
             # need to add condition or something in expand_element to account for data thats formatted differently but is still a list i.e. p=9
             if (is.list(extract[[1]][i][[1]])) {
               mod_name2 <- glue::glue("{module_name}_{names(extract[[1]][i])}")
+              # comment out message once finished development
+              cli::cli_alert_info("Processing {names(extract[[1]][i])}")
               
               df <- extract[[1]][i][[1]] |>
                 expand_element(fleet_names = fleet_names) |>
@@ -1846,12 +1948,13 @@ convert_output <- function(
     #   cli::cli_alert_warning(paste(names(extract), " not compatible.", sep = ""))
     # } # close if statement
   } # close loop over objects listed in dat file
-    # Want to extract and set values from:
-    # quantities, sdrep, and estimated_params
-    # take similar approach to SS3 when only some keywords were converted
-    # can late take approach like BAM?
-    
-    
+    # Finish out df
+    out_new <- Reduce(rbind, out_list) |>
+      # Add era as factor into BAM conout
+      dplyr::mutate(
+        # TODO: replace all periods with underscore if naming convention is different
+        label = tolower(label)
+      )
     
   } else {
     cli::cli_abort(c(
