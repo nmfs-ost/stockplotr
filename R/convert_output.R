@@ -2161,9 +2161,9 @@ convert_output <- function(
           uncertainty = extract[[1]]$sd,
           uncertainty_label = "sd"
         )
-        # values_count <- values |> 
-        #   dplyr::group_by(label) |> 
-        #   dplyr::count() 
+        values_count <- values |>
+          dplyr::group_by(label) |>
+          dplyr::count()
         values <- values |>
           dplyr::left_join(
             {
@@ -2198,9 +2198,9 @@ convert_output <- function(
           label = names(extract[[1]]$par.fixed),
           estimate = extract[[1]]$par.fixed
         )
-        # par_fixes |> 
-        #   dplyr::group_by(label) |> 
-        #   dplyr::count()  
+        par_fixes_count <- par_fixes |>
+          dplyr::group_by(label) |>
+          dplyr::count()
         par_fixes <- par_fixes |>
           dplyr::left_join(
             {
@@ -2385,7 +2385,7 @@ convert_output <- function(
   } else if (tolower(model) == "rceattle") {
     con_file <- system.file("resources", "rceattle_var_names.csv", package = "stockplotr", mustWork = TRUE)
     var_names_sheet <- utils::read.csv(con_file, na.strings = "")
-  })
+  }
 
 >>>>>>> e7309a0 (add change to standard naming conventions)
   if (file.exists(con_file)) {
