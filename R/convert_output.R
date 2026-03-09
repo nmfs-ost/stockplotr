@@ -2007,7 +2007,10 @@ convert_output <- function(
   } else if (tolower(model) == "fims") {
     con_file <- system.file("resources", "fims_var_names.csv", package = "stockplotr", mustWork = TRUE)
     var_names_sheet <- utils::read.csv(con_file, na.strings = "")
-  }
+  } else if (tolower(model) == "rceattle") {
+    con_file <- system.file("resources", "rceattle_var_names.csv", package = "stockplotr", mustWork = TRUE)
+    var_names_sheet <- utils::read.csv(con_file, na.strings = "")
+  })
 
   if (file.exists(con_file)) {
     # Remove 'X' column if it exists
