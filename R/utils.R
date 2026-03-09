@@ -220,6 +220,7 @@ expand_element <- function(input_list, fleet_names = "Pollock") {
       df <- tibble::enframe(x, name = "dim_info", value = "estimate") |>
         dplyr::mutate(label_init = dplyr::case_when(
           is.na(dim_info) | dim_info == "" ~ as.character(name),
+          # grepl("//.", dim_info) ~ dim_info, # condition where the name is the only thing in the label
           TRUE ~ paste0(name, ".", dim_info)
         )) |>
         dplyr::select(-dim_info)
