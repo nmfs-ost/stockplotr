@@ -42,9 +42,11 @@ table_projections <- function(dat) {
   # TODO: add purrr as a dependency (if not present already)
   # TODO: edit process_table() to avoid losing year when summarizing; right now, it's only examining index vars
   # TODO: add 'method' option for 'distinct'
+  # TODO: update process_table() so it can handle when group = "none"
   test <- process_table(prepared_data1,
-                        group = "none",
-                        method = "mean")
+                        group = NULL#,
+                        #method = "avg"
+                        )
   
   # this is what our processing should achieve
   # proj_raw <- dat |> dplyr::filter(module_name == "projections")
@@ -62,7 +64,7 @@ table_projections <- function(dat) {
   #   dplyr::select(Period, Year = year, `Catch (mt)` = total_catch, `SSB (mt)` = biomass, F_VAL = fishing_mortality)
   
   # Build table
-  final_table <- proj_data |>
+  final_table <- test |>
     gt::gt(groupname_col = "Period", id = label) |>
     gt::cols_align(align = "right", columns = dplyr::everything()) |>
     gt::cols_align(align = "left", columns = Year) |>
