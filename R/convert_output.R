@@ -372,6 +372,8 @@ convert_output <- function(
                       grepl(":_[0-9][0-9]$", label) ~ stringr::str_extract(label, "(?<=_)[0-9][0-9]+"),
                       TRUE ~ NA
                     )
+                  } else if ("fleet_name" %in% colnames(df3)) {
+                    fleet_name
                   } else {
                     fleet
                   },
