@@ -362,8 +362,27 @@ process_table <- function(
     index_variables <- c(index_variables, mod_index)
   }
 
-  id_group <- index_variables[-grep("year|age|length_bin", index_variables)]
+  if (!is.null(group)){
+    id_group <- group
+  } else {
+    id_group <- index_variables[-grep("year|age|length_bin", index_variables)]
+  }
   cols <- index_variables[grep("year|age|length_bin", index_variables)]
+  
+  if (!is.null(group)){
+    if (any(is.na(dat[[group]]))){
+      dat <- dat |>
+        dplyr::filter(!is.na(.data[[group]]))
+    }
+  } else if (!is.null(id_group)){
+    if (length(id_group) > 1){
+      cli::cli_alert_warning("Data contains >1 indexing variable. Selecting {id_group[1]}.")
+    }
+    if (any(is.na(dat[[id_group]]))){
+      dat <- dat |>
+        dplyr::filter(!is.na(.data[[id_group]]))
+    }
+  }
 
   # Add check for length label >1
   # below method will only work when unqiue(label) == 2
@@ -463,6 +482,12 @@ process_table <- function(
     mod_dat <- dplyr::filter(dat, model == mod)
     mod_index_variables <- check_grouping(mod_dat)
     mod_id_group <- mod_index_variables[-grep("year|age|length_bin", mod_index_variables)]
+    
+    # overriding mod_id_group when user inputs `group` argument
+    if (!is.null(group) && (group %in% mod_id_group)){
+      mod_id_group <- group
+    }
+    
     mod_cols <- mod_index_variables[grep("year|age|length_bin", mod_index_variables)]
     mod_uncert_lab <- unique(mod_dat$uncertainty_label)
     if (length(mod_uncert_lab) == 1 && is.na(mod_uncert_lab)) {
@@ -493,7 +518,7 @@ process_table <- function(
 
     # group indexing data together (i.e. fleet)
     if (length(mod_id_group) > 0) {
-      for (f in unique(mod_dat$fleet)) { # TODO: change dat$fleet to indexing col(s)
+      for (f in unique(mod_dat[[mod_id_group]])) {
         table_data <- table_data |>
           dplyr::relocate(dplyr::contains(f), .after = dplyr::last_col())
       }
