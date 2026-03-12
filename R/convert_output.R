@@ -1229,8 +1229,7 @@ convert_output <- function(
       dplyr::mutate(fleet = dplyr::case_when(
         any(unique(out_new$fleet) %in% fleet_names) ~ fleet,
         TRUE ~ fleet_names[fleet]
-      )
-    )
+      ))
   } else if (model %in% c("bam", "BAM")) {
     #### BAM ####
     # Extract values from BAM output - model file after following ADMB2R

@@ -195,10 +195,10 @@ add_more_key_quants <- function(
   # write analogous code for each in this section, and remove placeholders from
   # the end of write_captions (once we get clarity about how to extract Btarg,
   # ssbtarg, and R0)
-  # 
-  
-  #TODO: When adding code extracting values for landings and/or indices figures/tables, be aware that both figure/table share the same label ("landings" and "indices"). If there's reason, add in extra conditional to check if value is from a figure or table
-  
+  #
+
+  # TODO: When adding code extracting values for landings and/or indices figures/tables, be aware that both figure/table share the same label ("landings" and "indices"). If there's reason, add in extra conditional to check if value is from a figure or table
+
   ## biomass
   if (topic_cap_alt$label == "biomass") {
     if (is.null(dat)) {
