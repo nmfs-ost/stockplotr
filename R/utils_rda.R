@@ -2,6 +2,123 @@
 # RDA utility functions
 # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+# TODO: update new fxns to work with a specified 'dir' instead of default 'getwd()'?
+
+# Fill in key quantities in template
+fill_in_kqs <- function(df, ...) {
+  
+  arg_names <- sapply(substitute(list(...))[-1], deparse)
+  arg_values <- list(...)
+  
+  lookup_df <- tibble::tibble(
+    key_quantity = arg_names,
+    value_new = purrr::map_chr(arg_values, as.character)
+  )
+  
+  # TODO: Add message when certain values aren't overwritten (already present)
+  df <- df |>
+    dplyr::mutate(across(everything(), as.character)) |>
+    dplyr::left_join(lookup_df, by = "key_quantity") |>
+    dplyr::mutate(value = dplyr::if_else(
+      (is.na(value) | value == "" & !is.na(value_new)),
+      value_new,
+      value)) |>
+    dplyr::select(-value_new)
+}
+
+# Calculate and export key quantities
+## kqs (e.g., landings.end.year) are the ellipsis args
+export_kqs <- function(...) {
+  
+  # Open new or existing key quantities csv
+  if (file.exists(fs::path(getwd(), "key_quantities.csv"))) {
+    cli::cli_alert_info("Key quantities text file (key_quantities.csv) exists. Newly calculated key quantities will be added to it.", wrap = TRUE)
+    kqs <- utils::read.csv(file.path(getwd(), "key_quantities.csv"))
+  } else {
+    kqs <- utils::read.csv(
+      system.file("resources", "key_quantity_template.csv", package = "stockplotr")
+    )
+  }
+  
+  # kqs (e.g., landings.end.year) are the ellipsis args
+  kqs_filled <- fill_in_kqs(kqs,
+                            ...)
+  
+  utils::write.csv(
+    x = kqs_filled,
+    file = fs::path(getwd(), "key_quantities.csv"),
+    row.names = FALSE
+  )
+  
+}
+
+# Add key quantities to captions/alt text csv
+## kqs (e.g., landings.end.year) are the ellipsis args
+insert_kqs <- function(...) {
+  if (file.exists(fs::path(getwd(), "captions_alt_text.csv"))) {
+    cli::cli_alert_info("Captions/alternative text file (captions_alt_text.csv) exists. Newly calculated key quantities will be added to it.", wrap = TRUE)
+    caps_alttext <- utils::read.csv(fs::path(getwd(), "captions_alt_text.csv"))
+  } else {
+    caps_alttext <- utils::read.csv(
+      system.file("resources", "captions_alt_text_template.csv", package = "stockplotr")
+    )
+  }
+  
+  create_patterns <- function(...) {
+    # Capture the names from the dots without evaluating them yet
+    arg_names <- sapply(rlang::enexprs(...), as.character)
+    
+    # Get the actual values
+    vals <- list(...)
+    
+    # Combine them into a named character vector
+    stats::setNames(as.character(vals), arg_names)
+  }
+  
+  # insert new kqs into alt text/caps csv, where applicable
+  patterns_replacements <- create_patterns(...) |>
+  # If a value = NA, then make it "NA" to avoid errors
+   tidyr::replace_na("NA")
+  
+  # replace values in caption column
+  caps_alttext$caption <- stringr::str_replace_all(
+    caps_alttext$caption,
+    patterns_replacements
+  )
+  
+  # replace values in alt text column
+  caps_alttext$alt_text <- stringr::str_replace_all(
+    caps_alttext$alt_text,
+    patterns_replacements
+  )
+  
+  # export df with updated captions and alt text to csv
+  utils::write.csv(
+    x = caps_alttext,
+    file = fs::path(getwd(), "captions_alt_text.csv"),
+    row.names = FALSE
+  )
+  
+  # message explaining the extracted and inserted key quantities
+  replaced_vals <- patterns_replacements |>
+    as.data.frame() |>
+    tibble::rownames_to_column() |>
+    dplyr::rename(
+      "name" = 1,
+      "key_quantity" = 2
+    )
+  
+  cli::cli_h3("The following key quantities were extracted and inserted into 'captions_alt_text.csv' and 'key_quantities.csv':")
+  for (i in 1:dim(replaced_vals)[1]) {
+    cli::cli_li(paste0(
+      replaced_vals[i, 1],
+      ": ",
+      replaced_vals[i, 2]
+    ))
+  }
+}
+
+
 #' Create the rda package for a plot or table
 #'
 #' @param object Table or plot object
@@ -46,38 +163,6 @@ create_rda <- function(
   unit_label = "mt",
   table_df = NULL
 ) {
-  # run write_captions.R if its output doesn't exist
-  if (!file.exists(
-    fs::path(getwd(), "captions_alt_text.csv")
-  )
-  ) {
-    write_captions(
-      dat = dat,
-      dir = dir,
-      year = max(dat$year, na.rm = TRUE) # this is not right I think
-    )
-  }
-
-  # Remove non-numeric strings from year
-  year <- dat |>
-    dplyr::filter(
-      year %notin% c("Virg", "S/Rcurve", "Init", "selex"),
-      era == "time"
-    ) |>
-    dplyr::mutate(year = as.numeric(year))
-
-  # add more key quantities included as arguments in this fxn
-  add_more_key_quants(
-    dat,
-    topic = topic_label,
-    fig_or_table = fig_or_table,
-    dir = dir,
-    end_year = max(year$year, na.rm = TRUE),
-    units = unit_label,
-    ref_pt = ref_point,
-    ref_line = ref_line,
-    scaling = scale_amount
-  )
 
   # extract this plot's caption and alt text
   caps_alttext <- extract_caps_alttext(
@@ -96,7 +181,7 @@ create_rda <- function(
 
   export_rda(
     object = object,
-    caps_alttext = caps_alttext, # Load in of this is missing I think
+    caps_alttext = caps_alttext,
     figures_tables_dir = dir,
     topic_label = topic_label,
     fig_or_table = fig_or_table,
@@ -880,62 +965,6 @@ write_captions <- function(dat, # converted model output object
     # F.Ftarg : added with add_more_key_quants
 
 
-    ## landings plot
-
-    # start year of landings plot
-    landings.start.year <- dat |>
-      dplyr::filter(
-        c(module_name == "t.series" & grepl("landings_observed", label)) | c(module_name == "CATCH" & grepl("ret_bio", label)),
-        # t.series is associated with a conversion from BAM output and CATCH with SS3 converted output
-        !is.na(fleet)
-      ) |>
-      dplyr::slice(which.min(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
-
-    # end year of landings plot
-    landings.end.year <- dat |>
-      dplyr::filter(
-        c(module_name == "t.series" & grepl("landings_observed", label)) | c(module_name == "CATCH" & grepl("ret_bio", label)),
-        # t.series is associated with a conversion from BAM output and CATCH with SS3 converted output
-        !is.na(fleet)
-      ) |>
-      dplyr::slice(which.max(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
-
-    # units of landings (plural)
-    # landings.units : added with add_more_key_quants
-
-    # minimum landings
-    landings.min <- dat |>
-      dplyr::filter(
-        c(module_name == "t.series" & grepl("landings_observed", label)) | c(module_name == "CATCH" & grepl("ret_bio", label)),
-        # t.series is associated with a conversion from BAM output and CATCH with SS3 converted output
-        !is.na(fleet)
-      ) |>
-      dplyr::slice(which.min(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
-
-    # maximum landings
-    landings.max <- dat |>
-      dplyr::filter(
-        c(module_name == "t.series" & grepl("landings_observed", label)) | c(module_name == "CATCH" & grepl("ret_bio", label)),
-        # t.series is associated with a conversion from BAM output and CATCH with SS3 converted output
-        !is.na(fleet)
-      ) |>
-      dplyr::group_by(fleet, year) |>
-      dplyr::summarise(max_est = max(estimate)) |>
-      dplyr::filter(!is.na(max_est)) |>
-      dplyr::group_by(year) |>
-      dplyr::summarise(max_est_yr = sum(max_est)) |>
-      dplyr::slice(which.max(max_est_yr)) |>
-      dplyr::select(max_est_yr) |>
-      as.numeric() |>
-      round(digits = 2)
-
     ## natural mortality (M)- bam examples have label as natural_mortality
     ## but other formats don't (in input)
     # minimum age of M
@@ -1492,9 +1521,6 @@ write_captions <- function(dat, # converted model output object
     ## catch
     # catch.fleet <- # fleet
 
-    ## landings
-    # landings.tbl.units <- # landings units; remove if units already in table
-
     ## discards
     # discards.tbl.units <- # discards units
 
@@ -1538,12 +1564,6 @@ write_captions <- function(dat, # converted model output object
       "F.min" = as.character(F.min),
       "F.max" = as.character(F.max),
       # 'Ftarg' = as.character(Ftarg),
-
-      ## landings plot
-      "landings.start.year" = as.character(landings.start.year),
-      "landings.end.year" = as.character(landings.end.year),
-      "landings.min" = as.character(landings.min),
-      "landings.max" = as.character(landings.max),
 
       ## natural mortality (M)
       "M.age.min" = as.character(M.age.min),
@@ -1686,9 +1706,6 @@ write_captions <- function(dat, # converted model output object
       #
       # ## catch
       # 'catch.fleet' = as.character(catch.fleet),
-      #
-      # ## landings
-      # 'landings.tbl.units' = as.character(landings.tbl.units),
       #
       # ## discards
       # 'discards.tbl.units' = as.character(discards.tbl.units),
