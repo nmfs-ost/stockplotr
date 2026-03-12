@@ -117,7 +117,7 @@ plot_indices <- function(
     create_rda(
       object = plt,
       # get name of function and remove "plot_" from it
-      topic_label = gsub("plot_", "", as.character(sys.call()[[1]])), 
+      topic_label = gsub("plot_", "", as.character(sys.call()[[1]])),
       fig_or_table = "figure",
       dat = dat,
       dir = figures_dir,

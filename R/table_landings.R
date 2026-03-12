@@ -24,7 +24,7 @@
 #'   stockplotr::example_data,
 #'   unit_label = "landings label",
 #'   group = "fleet"
-#'   )
+#' )
 table_landings <- function(
   dat,
   unit_label = "mt",

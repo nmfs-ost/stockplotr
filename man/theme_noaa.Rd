@@ -29,6 +29,6 @@ ggplot2::ggplot(
   ggplot2::geom_point() +
   theme_noaa()
 \dontrun{
- ggplot2::theme_set(stockplotr::theme_noaa())
+ggplot2::theme_set(stockplotr::theme_noaa())
 }
 }
