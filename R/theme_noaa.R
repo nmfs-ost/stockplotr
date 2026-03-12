@@ -34,8 +34,10 @@
 theme_noaa <- function(discrete = TRUE,
                        ...) {
   if (utils::packageVersion("ggplot2") < "4.0.0") {
-    rlang::warn(
-      message = paste0("Your `ggplot2` version is ", utils::packageVersion("ggplot2"), ", which is older than the version required to use `theme_noaa()` (4.0.0). Please update your `ggplot2` package."),
+    cli::cli_warn(
+      "Your {.pkg ggplot2} version is {.val {utils::packageVersion('ggplot2')}}, 
+     which is older than the version required to use {.fn theme_noaa} (4.0.0). 
+     Please update your {.pkg ggplot2} package.",
       .frequency = "once",
       .frequency_id = "ggplot2_version_warning"
     )
