@@ -18,7 +18,7 @@ plot_catch_comp(
 )
 }
 \arguments{
-\item{dat}{A data frame returned from \link[asar]{convert_output}}
+\item{dat}{A data frame returned from \link[stockplotr]{convert_output}}
 
 \item{facet}{a string or vector of strings of column(s) that
 groups the data (e.g. "fleet", "sex", "area", etc.). Set facet = "none" to
