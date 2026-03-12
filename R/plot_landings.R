@@ -100,76 +100,37 @@ plot_landings <- function(
   ### Make RDA ----
   if (make_rda) {
     
-    if (file.exists(fs::path(dir, "key_quantities.csv"))) {
-      cli::cli_alert_info("Key quantities text file (key_quantities.csv) exists. Newly calculated key quantities will be added to it.", wrap = TRUE)
-      caps_alttext <- utils::read.csv(
-        file.path(dir, "key_quantities.csv")
-        )
-    } else {
-      caps_alttext <- utils::read.csv(
-        system.file("resources", "key_quantity_template.csv", package = "stockplotr")
-      )
-    }
+    # Obtain relevant key quantities for captions/alt text
+    landings.end.year <- max(prepared_data$year)
+    landings.max <- max(prepared_data$estimate)
+    landings.min <- min(prepared_data$estimate)
+    landings.start.year <- min(prepared_data$year)
+    landings.units <- unit_label  
       
-      # Obtain relevant key quantities for captions/alt text
-      landings.end.year <- max(prepared_data$year)
-      landings.max <- max(prepared_data$estimate)
-      landings.min <- min(prepared_data$estimate)
-      landings.start.year <- min(prepared_data$year)
-      landings.units <- unit_label
-      
-      fill_in_kqs <- function(df, ...) {
- 
-          arg_names <- sapply(substitute(list(...))[-1], deparse)
-          arg_values <- list(...)
-          
-          lookup_df <- tibble::tibble(
-            key_quantity = arg_names,
-            value_new = purrr::map_chr(arg_values, as.character)
-          )
-          
-          # TODO: Add message when certain values aren't overwritten (already present)
-          df <- df |>
-            dplyr::mutate(across(everything(), as.character)) |>
-            dplyr::left_join(lookup_df, by = "key_quantity") |>
-            dplyr::mutate(value = dplyr::if_else(
-              (is.na(value) | value == "" & !is.na(value_new)),
-                          value_new,
-                          value)) |>
-            dplyr::select(-value_new)
-        }
-      }
-      
-      caps_alttext_filled <- fill_in_kqs(caps_alttext,
-                          landings.max,
-                          landings.min,
-                          landings.start.year,
-                          landings.end.year,
-                          landings.units)
-      
-      # next step: export caps_alttext_filled
-      
-      # export df with updated captions and alt text to csv
-      # utils::write.csv(
-      #   x = caps_alttext,
-      #   file = fs::path(
-      #     dir,
-      #     "key_quantities.csv"
-      #   ),
-      #   row.names = FALSE
-      # )
+    # calculate & export key quantities
+    export_kqs(landings.end.year,
+               landings.max,
+               landings.min,
+               landings.start.year,
+               landings.units)
     
+    # Add key quantities to captions/alt text
+    insert_kqs(landings.end.year,
+               landings.max,
+               landings.min,
+               landings.start.year,
+               landings.units)
     
-    # create_rda(
-    #   object = plt,
-    #   # get name of function and remove "plot_" from it
-    #   topic_label = gsub("plot_", "", as.character(sys.call()[[1]])), 
-    #   fig_or_table = "figure",
-    #   dat = dat,
-    #   dir = figures_dir,
-    #   scale_amount = scale_amount,
-    #   unit_label = unit_label
-    # )
+    create_rda(
+      object = plt,
+      # get name of function and remove "plot_" from it
+      topic_label = gsub("plot_", "", as.character(sys.call()[[1]])),
+      fig_or_table = "figure",
+      dat = dat,
+      dir = figures_dir,
+      scale_amount = scale_amount,
+      unit_label = unit_label
+    )
   }
   # Output final plot
   plt
