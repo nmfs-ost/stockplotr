@@ -9,7 +9,7 @@
 #' @param recruitment_label units for recruitment
 #'
 #' @return Plot the stock recruitment relationship from an assessment model output file
-#' translated to a standardized output (\link[asar]{convert_output}). There are options to return a
+#' translated to a standardized output (\link[stockplotr]{convert_output}). There are options to return a
 #' [ggplot2::ggplot()] object or export an rda object containing associated
 #' caption and alternative text for the figure.
 #' @export
