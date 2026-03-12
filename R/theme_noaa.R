@@ -17,9 +17,20 @@
 #' ) +
 #'   ggplot2::geom_point() +
 #'   theme_noaa()
-#' \dontrun{
-#' ggplot2::theme_set(stockplotr::theme_noaa())
-#' }
+#' 
+#' ggplot2::ggplot(
+#'   data = OrchardSprays,
+#'   ggplot2::aes(
+#'     x = rowpos,
+#'     y = decrease,
+#'     color = decrease
+#'   )
+#' ) +
+#'   ggplot2::geom_point() +
+#'   theme_noaa(discrete = FALSE)
+#'\dontrun{
+#'  ggplot2::theme_set(stockplotr::theme_noaa())
+#'}
 theme_noaa <- function(discrete = TRUE,
                        ...) {
   if (utils::packageVersion("ggplot2") < "4.0.0") {
@@ -29,8 +40,14 @@ theme_noaa <- function(discrete = TRUE,
       .frequency_id = "ggplot2_version_warning"
     )
   }
-
-  theme <- ggplot2::theme_bw() +
+  
+  mako_pal_discrete <- scales::pal_viridis(begin = 0.1, end = 0.85, option = "G")
+  
+  mako_pal_continuous <- scales::gradient_n_pal(
+    scales::pal_viridis(begin = 0.1, end = 0.85, option = "G")(6)
+  )
+  
+  thm <- ggplot2::theme_bw() + 
     ggplot2::theme(
       plot.background = ggplot2::element_rect(fill = "transparent"),
       panel.background = ggplot2::element_rect(fill = "transparent"),
@@ -40,23 +57,17 @@ theme_noaa <- function(discrete = TRUE,
       plot.margin = ggplot2::margin(0.5, 1, 0.5, 0.5, "cm"),
       ...
     )
-
-  # create main palette
-  pal <- function(n) viridisLite::mako(n, begin = 0.1, end = 0.85)
-
+  
   if (discrete) {
-    theme <- theme +
-      ggplot2::theme(
-        palette.colour.discrete = pal,
-        palette.fill.discrete = pal
-      )
+    thm <- thm + ggplot2::theme(
+      palette.colour.discrete = mako_pal_discrete,
+      palette.fill.discrete   = mako_pal_discrete
+    )
   } else {
-    theme <- theme +
-      ggplot2::theme(
-        palette.colour.continuous = pal,
-        palette.fill.continuous = pal
-      )
+    thm <- thm + ggplot2::theme(
+      palette.colour.continuous = mako_pal_continuous,
+      palette.fill.continuous   = mako_pal_continuous
+    )
   }
-
-  theme
+  thm
 }
