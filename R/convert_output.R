@@ -2264,14 +2264,14 @@ convert_output <- function(
           for (i in seq_along(extract[[1]])) {
             # need to add condition or something in expand_element to account for data thats formatted differently but is still a list i.e. p=9
             if (is.list(extract[[1]][i][[1]])) {
-              mod_name2 <- glue::glue("{module_name}_{names(extract[[1]][i])}")
+              # mod_name2 <- glue::glue("{module_name}_{names(extract[[1]][i])}")
               # comment out message once finished development
               cli::cli_alert_info("Processing {names(extract[[1]][i])}")
               
               df <- extract[[1]][i][[1]] |>
                 expand_element(fleet_names = fleet_names) |>
                 dplyr::mutate(
-                  module_name = mod_name2
+                  module_name = module_name # mod_name2
                 ) # |>
               # suppressWarnings()
             } else {
@@ -2345,7 +2345,7 @@ convert_output <- function(
       )
     ) |>
     suppressWarnings()
-<<<<<<< HEAD
+
   # if (tolower(model) == "ss3") {
   #   con_file <- system.file("resources", "ss3_var_names.csv", package = "stockplotr", mustWork = TRUE)
   #   var_names_sheet <- utils::read.csv(con_file, na.strings = "")
@@ -2369,25 +2369,6 @@ convert_output <- function(
   # con_file <- glue::glue("~/GitHub/stockplotr/inst/resources/{model}_var_names.csv")
   var_names_sheet <- utils::read.csv(con_file, na.strings = "")
   
-=======
-  if (tolower(model) == "ss3") {
-    con_file <- system.file("resources", "ss3_var_names.csv", package = "stockplotr", mustWork = TRUE)
-    var_names_sheet <- utils::read.csv(con_file, na.strings = "")
-  } else if (tolower(model) == "bam") {
-    con_file <- system.file("resources", "bam_var_names.csv", package = "stockplotr", mustWork = TRUE)
-    var_names_sheet <- utils::read.csv(con_file, na.strings = "") |>
-      dplyr::mutate(
-        label = tolower(label)
-      )
-  } else if (tolower(model) == "fims") {
-    con_file <- system.file("resources", "fims_var_names.csv", package = "stockplotr", mustWork = TRUE)
-    var_names_sheet <- utils::read.csv(con_file, na.strings = "")
-  } else if (tolower(model) == "rceattle") {
-    con_file <- system.file("resources", "rceattle_var_names.csv", package = "stockplotr", mustWork = TRUE)
-    var_names_sheet <- utils::read.csv(con_file, na.strings = "")
-  }
-
->>>>>>> e7309a0 (add change to standard naming conventions)
   if (file.exists(con_file)) {
     # Remove 'X' column if it exists
     var_names_sheet <- var_names_sheet |>
