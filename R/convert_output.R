@@ -114,27 +114,43 @@ convert_output <- function(
   }
 
   # Recognize model through file extension
-  if (is.null(model)) {
-    model <- switch(stringr::str_extract(file, "\\.([^.]+)$"),
-      ".sso" = {
-        cli::cli_alert_info("Processing Stock Synthesis output file...")
-        "ss3"
-      },
-      ".rdat" = {
-        cli::cli_alert_info("Processing BAM output file...")
-        "bam"
-      },
-      ".rds" = {
-        cli::cli_alert_info("Processing WHAM output file...")
-        "wham"
-      },
-      ".RDS" = {
+  if (is.character(file)) {
+    if (is.null(model)) {
+      model <- switch(stringr::str_extract(file, "\\.([^.]+)$"),
+                      ".sso" = {
+                        cli::cli_alert_info("Processing Stock Synthesis output file...")
+                        "ss3"
+                      },
+                      ".rdat" = {
+                        cli::cli_alert_info("Processing BAM output file...")
+                        "bam"
+                      },
+                      ".rds" = {
+                        cli::cli_alert_info("Processing WHAM output file...")
+                        "wham"
+                      },
+                      ".RDS" = {
+                        cli::cli_alert_info("Processing FIMS output file...")
+                        "fims"
+                      },
+                      
+                      cli::cli_abort("Unknown file type. Please indicate model.")
+      )
+    }
+  } else {
+    model <- switch (class(file)[1],
+      "fims" = {
         cli::cli_alert_info("Processing FIMS output file...")
         "fims"
+      },
+      "Rceattle" = {
+        cli::cli_alert_info("Processing Rceattle output file...")
+        "rceattle"
       },
       cli::cli_abort("Unknown file type. Please indicate model.")
     )
   }
+  
 
   #### SS3 ####
   # Convert SS3 output Report.sso file
@@ -1914,14 +1930,14 @@ convert_output <- function(
           for (i in seq_along(extract[[1]])) {
             # need to add condition or something in expand_element to account for data thats formatted differently but is still a list i.e. p=9
             if (is.list(extract[[1]][i][[1]])) {
-              mod_name2 <- glue::glue("{module_name}_{names(extract[[1]][i])}")
+              # mod_name2 <- glue::glue("{module_name}_{names(extract[[1]][i])}")
               # comment out message once finished development
               cli::cli_alert_info("Processing {names(extract[[1]][i])}")
               
               df <- extract[[1]][i][[1]] |>
                 expand_element(fleet_names = fleet_names) |>
                 dplyr::mutate(
-                  module_name = mod_name2
+                  module_name = module_name # mod_name2
                 ) # |>
               # suppressWarnings()
             } else {
@@ -1995,23 +2011,27 @@ convert_output <- function(
       )
     ) |>
     suppressWarnings()
-  if (tolower(model) == "ss3") {
-    con_file <- system.file("resources", "ss3_var_names.csv", package = "stockplotr", mustWork = TRUE)
-    var_names_sheet <- utils::read.csv(con_file, na.strings = "")
-  } else if (tolower(model) == "bam") {
-    con_file <- system.file("resources", "bam_var_names.csv", package = "stockplotr", mustWork = TRUE)
-    var_names_sheet <- utils::read.csv(con_file, na.strings = "") |>
-      dplyr::mutate(
-        label = tolower(label)
-      )
-  } else if (tolower(model) == "fims") {
-    con_file <- system.file("resources", "fims_var_names.csv", package = "stockplotr", mustWork = TRUE)
-    var_names_sheet <- utils::read.csv(con_file, na.strings = "")
-  } else if (tolower(model) == "rceattle") {
-    con_file <- system.file("resources", "rceattle_var_names.csv", package = "stockplotr", mustWork = TRUE)
-    var_names_sheet <- utils::read.csv(con_file, na.strings = "")
-  }
-
+  # if (tolower(model) == "ss3") {
+  #   con_file <- system.file("resources", "ss3_var_names.csv", package = "stockplotr", mustWork = TRUE)
+  #   var_names_sheet <- utils::read.csv(con_file, na.strings = "")
+  # } else if (tolower(model) == "bam") {
+  #   con_file <- system.file("resources", "bam_var_names.csv", package = "stockplotr", mustWork = TRUE)
+  #   var_names_sheet <- utils::read.csv(con_file, na.strings = "") |>
+  #     dplyr::mutate(
+  #       label = tolower(label)
+  #     )
+  # } else if (tolower(model) == "fims") {
+  #   con_file <- system.file("resources", "fims_var_names.csv", package = "stockplotr", mustWork = TRUE)
+  #   var_names_sheet <- utils::read.csv(con_file, na.strings = "")
+  # } else if (tolower(model) == "rceattle") {
+  #   con_file <- system.file("resources", "rceattle_var_names.csv", package = "stockplotr", mustWork = TRUE)
+  #   var_names_sheet <- utils::read.csv(con_file, na.strings = "")
+  # }
+  
+  # edit: here is a different way of loading in the csv sheets
+  con_file <- system.file("resources", glue::glue("{model}_var_names.csv"), package = "stockplotr", mustWork = TRUE)
+  var_names_sheet <- utils::read.csv(con_file, na.strings = "")
+  
   if (file.exists(con_file)) {
     # Remove 'X' column if it exists
     var_names_sheet <- var_names_sheet |>
