@@ -17,7 +17,7 @@
 #' ) +
 #'   ggplot2::geom_point() +
 #'   theme_noaa()
-#' 
+#'
 #' ggplot2::ggplot(
 #'   data = OrchardSprays,
 #'   ggplot2::aes(
@@ -28,28 +28,28 @@
 #' ) +
 #'   ggplot2::geom_point() +
 #'   theme_noaa(discrete = FALSE)
-#'\dontrun{
-#'  ggplot2::theme_set(stockplotr::theme_noaa())
-#'}
+#' \dontrun{
+#' ggplot2::theme_set(stockplotr::theme_noaa())
+#' }
 theme_noaa <- function(discrete = TRUE,
                        ...) {
   if (utils::packageVersion("ggplot2") < "4.0.0") {
     cli::cli_warn(
-      "Your {.pkg ggplot2} version is {.val {utils::packageVersion('ggplot2')}}, 
-     which is older than the version required to use {.fn theme_noaa} (4.0.0). 
+      "Your {.pkg ggplot2} version is {.val {utils::packageVersion('ggplot2')}},
+     which is older than the version required to use {.fn theme_noaa} (4.0.0).
      Please update your {.pkg ggplot2} package.",
       .frequency = "once",
       .frequency_id = "ggplot2_version_warning"
     )
   }
-  
+
   mako_pal_discrete <- scales::pal_viridis(begin = 0.1, end = 0.85, option = "G")
-  
+
   mako_pal_continuous <- scales::gradient_n_pal(
     scales::pal_viridis(begin = 0.1, end = 0.85, option = "G")(6)
   )
-  
-  thm <- ggplot2::theme_bw() + 
+
+  thm <- ggplot2::theme_bw() +
     ggplot2::theme(
       plot.background = ggplot2::element_rect(fill = "transparent"),
       panel.background = ggplot2::element_rect(fill = "transparent"),
@@ -59,7 +59,7 @@ theme_noaa <- function(discrete = TRUE,
       plot.margin = ggplot2::margin(0.5, 1, 0.5, 0.5, "cm"),
       ...
     )
-  
+
   if (discrete) {
     thm <- thm + ggplot2::theme(
       palette.colour.discrete = mako_pal_discrete,
