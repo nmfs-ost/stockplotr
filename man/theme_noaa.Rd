@@ -28,7 +28,18 @@ ggplot2::ggplot(
 ) +
   ggplot2::geom_point() +
   theme_noaa()
+
+ggplot2::ggplot(
+  data = OrchardSprays,
+  ggplot2::aes(
+    x = rowpos,
+    y = decrease,
+    color = decrease
+  )
+) +
+  ggplot2::geom_point() +
+  theme_noaa(discrete = FALSE)
 \dontrun{
-ggplot2::theme_set(stockplotr::theme_noaa())
+ ggplot2::theme_set(stockplotr::theme_noaa())
 }
 }
