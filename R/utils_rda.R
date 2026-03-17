@@ -470,65 +470,6 @@ add_more_key_quants <- function(
     }
   }
 
-  ## recruitment
-  if (topic_cap_alt$label == "recruitment" | topic_cap_alt$label == "stock_recruitment") {
-    if (is.null(dat)) {
-      cli::cli_alert_warning("Some key quantities associated with recruitment were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).", wrap = TRUE)
-    } else {
-      # minimum recruitment
-      sr.min <- dat |>
-        dplyr::filter(
-          label == "recruitment",
-          module_name == "TIME_SERIES" | module_name == "t.series",
-          !is.na(year),
-          is.na(fleet) | length(unique(fleet)) <= 1,
-          is.na(sex) | length(unique(sex)) <= 1,
-          is.na(area) | length(unique(area)) <= 1,
-          is.na(growth_pattern) | length(unique(growth_pattern)) <= 1,
-          !year %in% year_exclusions
-        ) |> # SS3 and BAM target module names
-        dplyr::slice(which.min(estimate)) |>
-        dplyr::select(estimate) |>
-        dplyr::mutate(estimate = estimate / scaling) |>
-        as.numeric() |>
-        round(digits = 2)
-
-      # maximum recruitment
-      sr.max <- dat |>
-        dplyr::filter(
-          label == "recruitment",
-          module_name == "TIME_SERIES" | module_name == "t.series",
-          !is.na(year),
-          is.na(fleet) | length(unique(fleet)) <= 1,
-          is.na(sex) | length(unique(sex)) <= 1,
-          is.na(area) | length(unique(area)) <= 1,
-          is.na(growth_pattern) | length(unique(growth_pattern)) <= 1,
-          !year %in% year_exclusions
-        ) |> # SS3 and BAM target module names
-        dplyr::slice(which.max(estimate)) |>
-        dplyr::select(estimate) |>
-        dplyr::mutate(estimate = estimate / scaling) |>
-        as.numeric() |>
-        round(digits = 2)
-
-      # replace sr.min and sr.max placeholders within topic_cap_alt
-      topic_cap_alt <- topic_cap_alt |>
-        dplyr::mutate(alt_text = stringr::str_replace_all(
-          alt_text,
-          "sr.min",
-          as.character(sr.min)
-        )) |>
-        dplyr::mutate(alt_text = stringr::str_replace_all(
-          alt_text,
-          "sr.max",
-          as.character(sr.max)
-        ))
-
-      cli::cli_li("sr.min: {as.character(sr.min)}")
-      cli::cli_li("sr.max: {as.character(sr.max)}")
-    }
-  }
-
   # replace placeholders (e.g., if "end.year" is found in topic_alt, replace it with end_year)
   ## end_year-----
   if (!is.null(end_year)) {
@@ -1114,25 +1055,6 @@ write_captions <- function(dat, # converted model output object
     # selectivity.length.min <- # minimum length
     # selectivity.length.max <- # maximum length
 
-
-    ## estimated stock recruitment
-    # youngest-age recruited fish (instead of age-0)
-    sr.age.min <- dat |>
-      dplyr::filter(!is.na(year) & !is.na(age)) |>
-      dplyr::slice(which.min(age)) |>
-      dplyr::select(age) |>
-      as.numeric()
-
-    # ssb units (plural)
-    # sr.ssb.units : added with add_more_key_quants
-
-    # minimum ssb : added with add_more_key_quants
-
-    # maximum ssb : added with add_more_key_quants
-
-    # recruitment units (plural)
-    # sr.units : added with add_more_key_quants
-
     # minimum recruitment : added with add_more_key_quants
 
     # maximum recruitment: added with add_more_key_quants
@@ -1473,9 +1395,6 @@ write_captions <- function(dat, # converted model output object
       # 'selectivity.length.units' = as.character(selectivity.length.units),
       # 'selectivity.length.min' = as.character(selectivity.length.min),
       # 'selectivity.length.max' = as.character(selectivity.length.max),
-
-      ## estimated stock recruitment (aka spawning stock biomass)
-      # 'sr.age.min' = as.character(sr.age.min),
 
       # relative recruitment ts
       # NOTE: moving this above recruitment so rel.recruitment.min isn't changed
