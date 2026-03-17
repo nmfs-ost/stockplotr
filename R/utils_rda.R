@@ -234,47 +234,6 @@ add_more_key_quants <- function(
 
   cli::cli_h3("Key quantities extracted and inserted from add_more_key_quants():")
 
-  # calculate key quantities that rely on end_year for calculation
-  ## terminal fishing mortality
-  # if (topic_cap_alt$label == "fishing_mortality") {
-  #   if (is.null(dat)) {
-  #     cli::cli_alert_warning("Some key quantities associated with fishing mortality were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).", wrap = TRUE)
-  #   } else {
-  #     F.end.year <- dat |>
-  #       dplyr::filter(
-  #         c(label == "fishing_mortality" &
-  #           year == end_year) |
-  #           c(label == "terminal_fishing_mortality" & is.na(year))
-  #       ) |>
-  #       dplyr::pull(estimate) |>
-  #       as.numeric() |>
-  #       round(digits = 2)
-  #
-  #     # COMMENTING OUT THESE LINES because the current alt text/captions csv
-  #     # doesn't include Ftarg or F.Ftarg. If we alter them to include them,
-  #     # then uncomment these lines and add code that would substitute the key
-  #     # quantities into the df, like at the bottom of write_captions.
-  #     #
-  #     # # recalculate Ftarg for F.Ftarg, below
-  #     # Ftarg <- dat |>
-  #     #   dplyr::filter(grepl('f_target', label) |
-  #     #                   grepl('f_msy', label) |
-  #     #                   c(grepl('fishing_mortality_msy', label) &
-  #     #                       is.na(year))) |>
-  #     #   dplyr::pull(estimate) |>
-  #     #   as.numeric() |>
-  #     #   round(digits = 2)
-  #     #
-  #     # # Terminal year F respective to F target
-  #     # F.Ftarg <- F.end.year / Ftarg
-  #
-  #     if (!is.null(F.end.year)) {
-  #       end_year <- as.character(F.end.year)
-  #     }
-  #   }
-  # }
-
-
   # calculate key quantities that rely on scaling for calculation
   # TODO: pull the relative forms of these three KQs (B, R, SSB) from write_captions,
   # write analogous code for each in this section, and remove placeholders from
@@ -876,94 +835,6 @@ write_captions <- function(dat, # converted model output object
     # rel.B.max <- (B.max / Btarg) |>
     #   round(digits = 2)
 
-    # TODO: uncomment and recode once we get clarity about how to extract this value properly
-    ## mortality (F) plot
-    # F reference point
-    # F.ref.pt <- dat |>
-    #   dplyr::filter(
-    #     label == stringr::str_to_lower("F_targ") |
-    #       label == stringr::str_to_lower("F_proxy") |
-    #       label == stringr::str_to_lower("F_msy") |
-    #       label == "F_target"
-    #       # label == "F40"
-    #       # label == "F30"
-    #       # label == "F50"
-    #       # label == "F_initial"
-    #       # label == "Fmsy"
-    #   ) |>
-    #   dplyr::filter(module_name == "DERIVED_QUANTITIES" | module_name == "parms") |>
-    #   dplyr::pull(estimate) |>
-    #   as.numeric() |>
-    #   round(digits = 2)
-
-    # start year of F plot
-    F.start.year <- dat |>
-      dplyr::filter(label == "fishing_mortality") |>
-      dplyr::slice(which.min(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
-
-    # terminal fishing mortality
-    # F.end.year : added with add_more_key_quants
-
-    # minimum F
-    F.min <- dat |>
-      dplyr::filter(label == "fishing_mortality")
-
-    if (length(unique(F.min$age)) == 1) {
-      if (is.na(unique(F.min$age))) {
-        F.min <- F.min |>
-          dplyr::filter(module_name %in% c("TIME_SERIES", "t.series")) |>
-          dplyr::slice(which.min(estimate)) |>
-          as.numeric() |>
-          round(digits = 2)
-      }
-    } else {
-      F.min <- F.min |>
-        dplyr::group_by(age) |>
-        dplyr::summarize(val = max(estimate)) |>
-        dplyr::slice(which.min(val)) |>
-        dplyr::select(val) |>
-        as.numeric() |>
-        round(digits = 2)
-    }
-
-
-    # maximum F
-    F.max <- dat |>
-      dplyr::filter(label == "fishing_mortality")
-
-    if (length(unique(F.max$age)) == 1) {
-      if (is.na(unique(F.max$age))) {
-        F.min <- F.min |>
-          dplyr::filter(module_name %in% c("TIME_SERIES", "t.series")) |>
-          dplyr::slice(which.max(estimate)) |>
-          as.numeric() |>
-          round(digits = 2)
-      }
-    } else {
-      F.max <- F.max |>
-        dplyr::group_by(age) |>
-        dplyr::summarize(val = max(estimate)) |>
-        dplyr::slice(which.max(val)) |>
-        dplyr::select(val) |>
-        as.numeric() |>
-        round(digits = 2)
-    }
-
-    # TODO: uncomment and recode once we get clarity about how to extract this value properly
-    # fishing mortality at msy
-    # Ftarg <- dat |>
-    #   dplyr::filter(grepl('f_target', label) |
-    #                   grepl('f_msy', label) |
-    #                   c(grepl('fishing_mortality_msy', label) & is.na(year))) |>
-    #   dplyr::pull(estimate) |>
-    #   as.numeric() |>
-    #   round(digits = 2)
-
-    # Terminal year F respective to F target
-    # F.Ftarg : added with add_more_key_quants
-
 
     ## natural mortality (M)- bam examples have label as natural_mortality
     ## but other formats don't (in input)
@@ -1505,9 +1376,6 @@ write_captions <- function(dat, # converted model output object
 
       ## mortality (F) plot
       # 'F.ref.pt' = as.character(F.ref.pt),
-      "F.start.year" = as.character(F.start.year),
-      "F.min" = as.character(F.min),
-      "F.max" = as.character(F.max),
       # 'Ftarg' = as.character(Ftarg),
 
       ## natural mortality (M)
