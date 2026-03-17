@@ -1299,61 +1299,6 @@ write_captions <- function(dat, # converted model output object
     # rel.recruitment.max <- (sr.max / R0) |>
     #   round(digits = 2)
 
-
-    ## recruitment deviations
-    # start year of recruitment deviations plot
-    recruit.dev.start.year <- dat |>
-      dplyr::filter(
-        label == "recruitment_deviations" | label == "log_recruitment_deviations",
-        module_name == "SPAWN_RECRUIT" | module_name == "t.series",
-        !is.na(year),
-        is.na(fleet) | length(unique(fleet)) <= 1,
-        is.na(sex) | length(unique(sex)) <= 1,
-        is.na(area) | length(unique(area)) <= 1,
-        is.na(growth_pattern) | length(unique(growth_pattern)) <= 1,
-        !year %in% year_exclusions
-      ) |> # SS3 and BAM target module names
-      dplyr::slice(which.min(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
-
-    # end year of recruitment deviations plot
-    # recruit.dev.end.year : added with add_more_key_quants
-
-    # minimum recruitment deviation
-    recruit.dev.min <- dat |>
-      dplyr::filter(
-        label == "recruitment_deviations" | label == "log_recruitment_deviations",
-        module_name == "SPAWN_RECRUIT" | module_name == "t.series",
-        !is.na(year),
-        is.na(fleet) | length(unique(fleet)) <= 1,
-        is.na(sex) | length(unique(sex)) <= 1,
-        is.na(area) | length(unique(area)) <= 1,
-        is.na(growth_pattern) | length(unique(growth_pattern)) <= 1,
-        !year %in% year_exclusions
-      ) |> # SS3 and BAM target module names
-      dplyr::slice(which.min(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
-
-    # maximum recruitment deviation
-    recruit.dev.max <- dat |>
-      dplyr::filter(
-        label == "recruitment_deviations" | label == "log_recruitment_deviations",
-        module_name == "SPAWN_RECRUIT" | module_name == "t.series",
-        !is.na(year),
-        is.na(fleet) | length(unique(fleet)) <= 1,
-        is.na(sex) | length(unique(sex)) <= 1,
-        is.na(area) | length(unique(area)) <= 1,
-        is.na(growth_pattern) | length(unique(growth_pattern)) <= 1,
-        !year %in% year_exclusions
-      ) |> # SS3 and BAM target module names
-      dplyr::slice(which.max(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
-
     ## tot_b (total biomass): same as B plot above
 
     ## spawning_biomass (ssb)
@@ -1672,11 +1617,6 @@ write_captions <- function(dat, # converted model output object
 
       ## recruitment ts
       "recruitment.start.year" = as.character(recruitment.start.year),
-
-      ## recruitment deviations
-      "recruit.dev.start.year" = as.character(recruit.dev.start.year),
-      "recruit.dev.min" = as.character(recruit.dev.min),
-      "recruit.dev.max" = as.character(recruit.dev.max),
 
       ## spawning.biomass (ssb)
       "ssb.start.year" = as.character(ssb.start.year),

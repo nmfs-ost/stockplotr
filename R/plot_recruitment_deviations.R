@@ -100,6 +100,25 @@ plot_recruitment_deviations <- function(
     } else {
       selected_dat <- dat
     }
+    
+    # Obtain relevant key quantities for captions/alt text
+    recruit.dev.start.year <- min(filter_data$year)
+    recruit.dev.end.year <- max(filter_data$year)
+    recruit.dev.min <- min(filter_data$estimate)
+    recruit.dev.max <- max(filter_data$estimate)
+
+    # calculate & export key quantities
+    export_kqs(recruit.dev.start.year,
+               recruit.dev.end.year,
+               recruit.dev.min,
+               recruit.dev.max)
+    
+    # Add key quantities to captions/alt text
+    insert_kqs(recruit.dev.start.year,
+               recruit.dev.end.year,
+               recruit.dev.min,
+               recruit.dev.max)
+    
     create_rda(
       object = final,
       # get name of function and remove "plot_" from it
