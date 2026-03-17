@@ -2035,9 +2035,9 @@ convert_output <- function(
   # }
   
   # edit: here is a different way of loading in the csv sheets
-  # con_file <- system.file("resources", glue::glue("{model}_var_names.csv"), package = "stockplotr", mustWork = TRUE)
+  con_file <- system.file("resources", glue::glue("{model}_var_names.csv"), package = "stockplotr", mustWork = TRUE)
   # temporarily add call to local csv so I can test
-  con_file <- glue::glue("~/GitHub/stockplotr/inst/resources/{model}_var_names.csv")
+  # con_file <- glue::glue("~/GitHub/stockplotr/inst/resources/{model}_var_names.csv")
   var_names_sheet <- utils::read.csv(con_file, na.strings = "")
   
   if (file.exists(con_file)) {
