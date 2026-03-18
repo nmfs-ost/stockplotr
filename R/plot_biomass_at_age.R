@@ -95,6 +95,31 @@ plot_biomass_at_age <- function(
     )
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
+
+    # Obtain relevant key quantities for captions/alt text
+    pop.baa.start.year <- min(data$year)
+    pop.baa.end.year <- max(data$year)
+    pop.baa.age.min <- min(data$age)
+    pop.baa.age.max <- max(data$age)
+    pop.baa.fish.min <- min(data$estimate)
+    pop.baa.fish.max <- max(data$estimate)
+    
+    # calculate & export key quantities
+    export_kqs(pop.baa.start.year,
+               pop.baa.end.year,
+               pop.baa.age.min,
+               pop.baa.age.max,
+               pop.baa.fish.min,
+               pop.baa.fish.max)
+    
+    # Add key quantities to captions/alt text
+    insert_kqs(pop.baa.start.year,
+               pop.baa.end.year,
+               pop.baa.age.min,
+               pop.baa.age.max,
+               pop.baa.fish.min,
+               pop.baa.fish.max)
+    
     create_rda(
       object = plot,
       # get name of function and remove "plot_" from it

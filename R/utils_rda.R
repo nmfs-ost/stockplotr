@@ -1106,69 +1106,6 @@ write_captions <- function(dat, # converted model output object
     #   round(digits = 2)
 
 
-    ## pop.baa (population biomass at age)
-    # start year of pop.baa plot
-    pop.baa.start.year <- dat |>
-      dplyr::filter(grepl("^biomass", label)) |>
-      dplyr::slice(which.min(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
-
-    # end year of pop.baa plot
-    pop.baa.end.year <- dat |>
-      dplyr::filter(
-        grepl("^biomass", label),
-        era == "time"
-      ) |>
-      dplyr::slice(which.max(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
-
-    # minimum biomass of fish
-    pop.baa.fish.min <- dat |>
-      dplyr::filter(
-        grepl("^biomass", label) & !is.na(year),
-        era == "time"
-      ) |>
-      dplyr::slice(which.min(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
-
-    # maximum biomass of fish
-    pop.baa.fish.max <- dat |>
-      dplyr::filter(
-        grepl("^biomass", label) & !is.na(year),
-        era == "time"
-      ) |>
-      dplyr::slice(which.max(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
-
-    # minimum age
-    pop.baa.age.min <- dat |>
-      dplyr::filter(
-        label == "biomass",
-        module_name == "BIOMASS_AT_AGE" | module_name == "B.age", # SS3 and BAM target module names
-        !is.na(age)
-      ) |>
-      dplyr::slice(which.min(age)) |>
-      dplyr::select(age) |>
-      as.numeric()
-
-    # maximum age
-    pop.baa.age.max <- dat |>
-      dplyr::filter(
-        label == "biomass",
-        module_name == "BIOMASS_AT_AGE" | module_name == "B.age", # SS3 and BAM target module names
-        !is.na(age)
-      ) |>
-      dplyr::slice(which.max(age)) |>
-      dplyr::select(age) |>
-      as.numeric()
-
-
     ## proj_catch (projected catch)
     # projected catch units (plural)
     # proj.catch.units <- # probably mt, but wait until figure coded
@@ -1349,15 +1286,6 @@ write_captions <- function(dat, # converted model output object
       "spr.min" = as.character(spr.min),
       "spr.max" = as.character(spr.max),
       #  'spr.ref.pt' = as.character(spr.ref.pt),
-
-      # ## pop.baa (population biomass at age)
-      "pop.baa.start.year" = as.character(pop.baa.start.year),
-      "pop.baa.end.year" = as.character(pop.baa.end.year),
-      "pop.baa.fish.min" = as.character(pop.baa.fish.min),
-      "pop.baa.fish.max" = as.character(pop.baa.fish.max),
-      "pop.baa.age.min" = as.character(pop.baa.age.min),
-      "pop.baa.age.max" = as.character(pop.baa.age.max),
-
 
       ## proj_catch (projected catch)
       # 'proj.catch.units' = as.character(proj.catch.units),
