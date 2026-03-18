@@ -953,16 +953,6 @@ write_captions <- function(dat, # converted model output object
     # cal.length.max <- # maximum length group
     # fleet.or.survey.name <- # fleet or survey name
 
-    ## CPUE indices plot- don't code quantities yet
-    # cpue.start.year <- # start year of CPUE indices plot
-    # cpue.end.year <- # end year of CPUE indices plot
-
-    # CPUE units (plural) (SHARED with mod.fit.abun, below)
-    # cpue.units : added with add_more_key_quants
-
-    # cpue.min <- # minimum CPUE (SHARED with mod_fit_abun, below)
-    # cpue.max <- # maximum CPUE (SHARED with mod_fit_abun, below)
-
     ## mod_fit_catch (model fit to catch ts)- don't code quantities yet
     # mod.fit.catch.start.year <- # start year of model fit to catch ts plot
     # mod.fit.catch.end.year <- # end year of model fit to catch ts plot
@@ -1238,12 +1228,6 @@ write_captions <- function(dat, # converted model output object
       ## CAL (catch at length)
       # 'cal.length.min' = as.character(cal.length.min),
       # 'cal.length.max' = as.character(cal.length.max),
-
-      ## CPUE indices plot
-      # 'cpue.start.year' = as.character(cpue.start.year),
-      # 'cpue.end.year' = as.character(cpue.end.year),
-      # 'cpue.min' = as.character(cpue.min),
-      # 'cpue.max' = as.character(cpue.max),
 
       ## mod_fit_catch (model fit to catch ts)
       # 'mod.fit.catch.start.year' = as.character(mod.fit.catch.start.year),
