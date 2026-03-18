@@ -1797,7 +1797,6 @@ convert_output <- function(
     
     # Extract or use fleet names
     if (is.null(fleet_names)) {
-      # TODO: as if there is a better way to id fleet names
       fleet_names <- names(dat$estimated_params$index_ln_q)
     }
     
@@ -1812,8 +1811,6 @@ convert_output <- function(
     # units <- c("mt", "lbs", "eggs")
     
     for (p in (2:length(dat))[-c(6, 8, 9, 10)]) {
-      # might need to manually add the removed above
-      # last tested through p=9 (data_list)
       extract <- dat[p]
       module_name <- names(extract) 
       cli::cli_alert_info("Processing {module_name}")
@@ -1848,16 +1845,14 @@ convert_output <- function(
       
         df2 <- values |>
           dplyr::filter(n == length(file[["data_list"]]$styr:file[["data_list"]]$projyr)) |>
-          dplyr::mutate(year = year_col) |>
-          rbind(
-            {
-              values |> 
+          dplyr::mutate(year = year_col)
+          
+        df2 <- values |> 
                 dplyr::filter(
                   n != length(file[["data_list"]]$styr:file[["data_list"]]$projyr)
                 ) |>
-                dplyr::mutate(year = NA)
-            }
-          )
+                dplyr::mutate(year = NA) |>
+          rbind(df2)
         
         # Extract parameter values ts
         par_fixes <- data.frame(
@@ -1869,11 +1864,7 @@ convert_output <- function(
           dplyr::count()
         par_fixes <- par_fixes |>
           dplyr::left_join(
-            {
-              par_fixes |> 
-                dplyr::group_by(label) |> 
-                dplyr::count() 
-            },
+            par_fixes_count,
             by = "label"
           ) 
         
@@ -1887,16 +1878,13 @@ convert_output <- function(
         
         df3 <- par_fixes |>
           dplyr::filter(n == length(file[["data_list"]]$styr:file[["data_list"]]$endyr)) |>
-          dplyr::mutate(year = year_col_par_fix) |>
-          rbind(
-            {
-              par_fixes |> 
-                dplyr::filter(
-                  n != length(file[["data_list"]]$styr:file[["data_list"]]$endyr)
-                ) |>
-                dplyr::mutate(year = NA)
-            }
-          ) |>
+          dplyr::mutate(year = year_col_par_fix)
+        df3 <- par_fixes |> 
+          dplyr::filter(
+            n != length(file[["data_list"]]$styr:file[["data_list"]]$endyr)
+            ) |>
+          dplyr::mutate(year = NA) |>
+          rbind(df3) |>
           dplyr::mutate(
             uncertainty = NA,
             uncertainty_label = NA
