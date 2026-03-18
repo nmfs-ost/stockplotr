@@ -776,54 +776,6 @@ write_captions <- function(dat, # converted model output object
     # rel.B.max <- (B.max / Btarg) |>
     #   round(digits = 2)
 
-
-    ## natural mortality (M)- bam examples have label as natural_mortality
-    ## but other formats don't (in input)
-    # minimum age of M
-    if ("natural_mortality" %in% dat$label) {
-      M.age.min <- dat |>
-        dplyr::filter(label == "natural_mortality") |>
-        dplyr::select(age) |>
-        dplyr::filter(!is.na(age)) |>
-        dplyr::slice(which.min(age)) |>
-        as.numeric()
-    } else {
-      M.age.min <- dat |>
-        #  dplyr::filter(label == "natural_mortality") |>
-        dplyr::select(age) |>
-        dplyr::filter(!is.na(age)) |>
-        dplyr::slice(which.min(age)) |>
-        as.numeric()
-    }
-
-    # maximum age of M
-    if ("natural_mortality" %in% dat$label) {
-      M.age.max <- dat |>
-        dplyr::filter(label == "natural_mortality") |>
-        dplyr::select(age) |>
-        dplyr::filter(!is.na(age)) |>
-        dplyr::slice(which.max(age)) |>
-        as.numeric()
-    } else {
-      M.age.max <- dat |>
-        #  dplyr::filter(label == "natural_mortality") |>
-        dplyr::select(age) |>
-        dplyr::filter(!is.na(age)) |>
-        dplyr::slice(which.max(age)) |>
-        as.numeric()
-    }
-
-    # minimum M rate- don't code quantities yet (see how it's coded in future fig)
-    # M.rate.min <- dat |>
-    #   dplyr::filter(
-    #     grepl("natural_mortality", label)) |>
-    # -label = natural_mortality (min); est in est col
-
-    # maximum M rate- don't code quantities yet (see how it's coded in future fig)
-    # M.rate.max <-
-    # -label = natural_mortality (min); est in est col
-
-
     ## vonB LAA (von Bertalanffy growth function + length at age)- don't code quantities yet
     # vonb.age.min <- # minimum vonB age
     # vonb.age.max <- # maximum vonB age
@@ -1171,12 +1123,6 @@ write_captions <- function(dat, # converted model output object
       ## mortality (F) plot
       # 'F.ref.pt' = as.character(F.ref.pt),
       # 'Ftarg' = as.character(Ftarg),
-
-      ## natural mortality (M)
-      "M.age.min" = as.character(M.age.min),
-      "M.age.max" = as.character(M.age.max),
-      # 'M.rate.min' = as.character(M.rate.min),
-      # 'M.rate.max' = as.character(M.rate.max),
 
       ## vonB LAA (von Bertalanffy growth function + length at age)
       # 'vonb.age.min' = as.character(vonb.age.min),
