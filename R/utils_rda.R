@@ -963,61 +963,6 @@ write_captions <- function(dat, # converted model output object
     # cpue.min <- # minimum CPUE (SHARED with mod_fit_abun, below)
     # cpue.max <- # maximum CPUE (SHARED with mod_fit_abun, below)
 
-
-    ## NAA (numbers at age)
-    # start year of NAA plot
-    pop.naa.start.year <- dat |>
-      dplyr::filter(label == "abundance" & !is.na(year)) |>
-      dplyr::slice(which.min(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
-
-    # end year of NAA plot
-    pop.naa.end.year <- dat |>
-      dplyr::filter(
-        label == "abundance" & !is.na(year),
-        era == "time"
-      ) |>
-      dplyr::slice(which.max(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
-
-    # minimum age
-    pop.naa.age.min <- dat |>
-      dplyr::filter(label == "abundance" & !is.na(year)) |>
-      dplyr::slice(which.min(age)) |>
-      dplyr::select(age) |>
-      as.numeric()
-
-    # maximum age
-    pop.naa.age.max <- dat |>
-      dplyr::filter(label == "abundance" & !is.na(year)) |>
-      dplyr::slice(which.max(age)) |>
-      dplyr::select(age) |>
-      as.numeric()
-
-    # minimum abundance (number) of fish
-    pop.naa.fish.min <- dat |>
-      dplyr::filter(
-        grepl("abundance", label) & !is.na(year),
-        era == "time"
-      ) |>
-      dplyr::slice(which.min(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
-
-    # maximum abundance (number) of fish
-    pop.naa.fish.max <- dat |>
-      dplyr::filter(
-        grepl("abundance", label) & !is.na(year),
-        era == "time"
-      ) |>
-      dplyr::slice(which.max(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
-
     ## mod_fit_catch (model fit to catch ts)- don't code quantities yet
     # mod.fit.catch.start.year <- # start year of model fit to catch ts plot
     # mod.fit.catch.end.year <- # end year of model fit to catch ts plot
@@ -1362,14 +1307,6 @@ write_captions <- function(dat, # converted model output object
       # 'cpue.end.year' = as.character(cpue.end.year),
       # 'cpue.min' = as.character(cpue.min),
       # 'cpue.max' = as.character(cpue.max),
-
-      ## NAA (numbers at age)
-      "pop.naa.start.year" = as.character(pop.naa.start.year),
-      "pop.naa.end.year" = as.character(pop.naa.end.year),
-      "pop.naa.age.min" = as.character(pop.naa.age.min),
-      "pop.naa.age.max" = as.character(pop.naa.age.max),
-      "pop.naa.fish.min" = as.character(pop.naa.fish.min),
-      "pop.naa.fish.max" = as.character(pop.naa.fish.max),
 
       ## mod_fit_catch (model fit to catch ts)
       # 'mod.fit.catch.start.year' = as.character(mod.fit.catch.start.year),
