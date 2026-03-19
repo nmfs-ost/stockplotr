@@ -243,57 +243,6 @@ add_more_key_quants <- function(
 
   # TODO: When adding code extracting values for landings and/or indices figures/tables, be aware that both figure/table share the same label ("landings" and "indices"). If there's reason, add in extra conditional to check if value is from a figure or table
 
-  ## biomass
-  if (topic_cap_alt$label == "biomass") {
-    if (is.null(dat)) {
-      cli::cli_alert_warning("Some key quantities associated with biomass were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).", wrap = TRUE)
-    } else {
-      # minimum biomass
-      B.min <- dat |>
-        dplyr::filter(
-          label == "biomass",
-          module_name == "TIME_SERIES" | module_name == "t.series", # SS3 and BAM target module names
-          is.na(fleet),
-          is.na(age)
-        ) |>
-        dplyr::slice(which.min(estimate)) |>
-        dplyr::select(estimate) |>
-        dplyr::mutate(estimate = estimate / scaling) |>
-        as.numeric() |>
-        round(digits = 2)
-
-      # maximum biomass
-      B.max <- dat |>
-        dplyr::filter(
-          label == "biomass",
-          module_name == "TIME_SERIES" | module_name == "t.series", # SS3 and BAM target module names
-          is.na(fleet),
-          is.na(age)
-        ) |>
-        dplyr::slice(which.max(estimate)) |>
-        dplyr::select(estimate) |>
-        dplyr::mutate(estimate = estimate / scaling) |>
-        as.numeric() |>
-        round(digits = 2)
-
-      # replace B.min and B.max placeholders within topic_cap_alt
-      topic_cap_alt <- topic_cap_alt |>
-        dplyr::mutate(alt_text = stringr::str_replace_all(
-          alt_text,
-          "B.min",
-          as.character(B.min)
-        )) |>
-        dplyr::mutate(alt_text = stringr::str_replace_all(
-          alt_text,
-          "B.max",
-          as.character(B.max)
-        ))
-
-      cli::cli_li("B.min: {as.character(B.min)}")
-      cli::cli_li("B.max: {as.character(B.max)}")
-    }
-  }
-
   ## relative spawning biomass
   if (topic_cap_alt$label == "relative_spawning_biomass") {
     if (is.null(dat)) {
@@ -709,33 +658,6 @@ write_captions <- function(dat, # converted model output object
     # object that should be "is" or "is not" and answers the question,
     # "the stock ... experiencing overfishing"
     # overfishing.status.is.isnot <-
-
-
-    ## Biomass plot
-    # biomass reference point
-    # B.ref.pt : added with add_more_key_quants
-
-    # start year of biomass plot
-    B.start.year <- dat |>
-      dplyr::filter(
-        label == "biomass",
-        module_name == "TIME_SERIES" | module_name == "t.series", # SS3 and BAM target module names
-        is.na(fleet),
-        is.na(age)
-      ) |>
-      dplyr::slice(which.min(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
-
-    # end year of biomass plot
-    # B.end.year : added with add_more_key_quants
-
-    # units of B (plural)
-    # B.units : added with add_more_key_quants
-
-    # minimum B : added with add_more_key_quants
-
-    # maximum B : added with add_more_key_quants
 
 
     # TODO: uncomment and recode once we get clarity about how to extract this value properly

@@ -1,6 +1,11 @@
 key_quantity,value,meaning,dependent_on_other_kq,dependent_kq,dependent_on_other_fxn_args,fxn_with_other_args
 B.BMSY.end.yr,,,,,,
+B.end.year,,,,,,
+B.max,,,,,,
+B.min,,,,,,
+B.ref.pt,,,,,,
 B.start.year,,,,,,
+B.units,,,,,,
 Bend,,,,,,
 Bmsy,,,,,,
 Btarg,,,,,,

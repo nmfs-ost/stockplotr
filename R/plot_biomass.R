@@ -148,6 +148,31 @@ plot_biomass <- function(
 
   ### Make RDA ----
   if (make_rda) {
+    
+    # Obtain relevant key quantities for captions/alt text
+    B.ref.pt <- as.character(ref_line)
+    B.units <- as.character(unit_label)
+    B.start.year <- min(prepared_data$year)
+    B.end.year <- max(prepared_data$year)
+    B.min <- min(prepared_data$estimate)
+    B.max <- max(prepared_data$estimate)
+    
+    # calculate & export key quantities
+    export_kqs(B.ref.pt,
+               B.units,
+               B.start.year,
+               B.end.year,
+               B.min,
+               B.max)
+    
+    # Add key quantities to captions/alt text
+    insert_kqs(B.ref.pt,
+               B.units,
+               B.start.year,
+               B.end.year,
+               B.min,
+               B.max)
+    
     create_rda(
       object = final,
       topic_label = ifelse(relative, "relative_biomass", "biomass"),
