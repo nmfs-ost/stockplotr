@@ -262,30 +262,7 @@ add_more_key_quants <- function(
       if (length(ssbtarg) > 0) {
         cli::cli_alert_warning("ssbtarg, rel.ssb.min, and rel.ssb.max were not calculated. Check your ref_line is accurate.", wrap = TRUE)
       } else {
-        # ssb.min and ssb.max can be calculated in write_captions, but these quants
-        # are needed for rel values below, so including them here instead
-        # minimum ssb
-        ssb.min <- dat |>
-          dplyr::filter(
-            label == "spawning_biomass",
-            module_name %in% c("DERIVED_QUANTITIES", "t.series")
-          ) |>
-          dplyr::slice(which.min(estimate)) |>
-          dplyr::select(estimate) |>
-          as.numeric() |>
-          round(digits = 2)
-
-        # maximum ssb
-        ssb.max <- dat |>
-          dplyr::filter(
-            label == "spawning_biomass",
-            module_name %in% c("DERIVED_QUANTITIES", "t.series")
-          ) |>
-          dplyr::slice(which.max(estimate)) |>
-          dplyr::select(estimate) |>
-          as.numeric() |>
-          round(digits = 2)
-
+        # ssb.min and ssb.max needed for rel values below
         # relative ssb
         ## relative ssb min
         rel.ssb.min <- (ssb.min / ssbtarg) |>
@@ -363,30 +340,7 @@ add_more_key_quants <- function(
         as.numeric() |>
         round(digits = 2)
 
-      # ssb.min and ssb.max can be calculated in write_captions, but these quants
-      # are needed for rel values below, so including them here instead
-      # minimum ssb
-      ssb.min <- dat |>
-        dplyr::filter(
-          label == "spawning_biomass",
-          module_name %in% c("DERIVED_QUANTITIES", "t.series")
-        ) |>
-        dplyr::slice(which.min(estimate)) |>
-        dplyr::select(estimate) |>
-        as.numeric() |>
-        round(digits = 2)
-
-      # maximum ssb
-      ssb.max <- dat |>
-        dplyr::filter(
-          label == "spawning_biomass",
-          module_name %in% c("DERIVED_QUANTITIES", "t.series")
-        ) |>
-        dplyr::slice(which.max(estimate)) |>
-        dplyr::select(estimate) |>
-        as.numeric() |>
-        round(digits = 2)
-
+      # ssb.min and ssb.max needed for rel values below
       # replace sr.ssb.min, sr.ssb.max, ssbtarg, ssb.min, and ssb.max placeholders
       # within topic_cap_alt
       topic_cap_alt <- topic_cap_alt |>
@@ -399,23 +353,10 @@ add_more_key_quants <- function(
           alt_text,
           "sr.ssb.max",
           as.character(sr.ssb.max)
-        )) |>
-        # putting these last so they won't sub in for rel.ssb.min/max
-        dplyr::mutate(alt_text = stringr::str_replace_all(
-          alt_text,
-          "ssb.min",
-          as.character(ssb.min)
-        )) |>
-        dplyr::mutate(alt_text = stringr::str_replace_all(
-          alt_text,
-          "ssb.max",
-          as.character(ssb.max)
         ))
 
       cli::cli_li("sr.ssb.min: {as.character(sr.ssb.min)}")
       cli::cli_li("sr.ssb.max: {as.character(sr.ssb.max)}")
-      cli::cli_li("ssb.min: {as.character(ssb.min)}")
-      cli::cli_li("ssb.max: {as.character(ssb.max)}")
     }
   }
 
@@ -903,33 +844,6 @@ write_captions <- function(dat, # converted model output object
 
     ## tot_b (total biomass): same as B plot above
 
-    ## spawning_biomass (ssb)
-    # start year of ssb plot
-    ssb.start.year <- dat |>
-      dplyr::filter(
-        label == "spawning_biomass",
-        module_name %in% c("DERIVED_QUANTITIES", "t.series")
-      ) |>
-      dplyr::slice(which.min(year)) |>
-      dplyr::select(year) |>
-      as.numeric() |>
-      round(digits = 2)
-
-    # end year of ssb plot
-    # ssb.end.year : added with add_more_key_quants
-
-    # ssb units (plural)
-    # ssb.units : added with add_more_key_quants
-
-    # minimum ssb
-    # ssb.min : added with add_more_key_quants
-
-    # maximum ssb
-    # ssb.max : added with add_more_key_quants
-
-    # ssb reference point
-    # ssb.ref.pt : added with add_more_key_quants
-
     # ssbtarg : added with add_more_key_quants
 
     ## relative ssb
@@ -1130,9 +1044,6 @@ write_captions <- function(dat, # converted model output object
 
       ## recruitment ts
       "recruitment.start.year" = as.character(recruitment.start.year),
-
-      ## spawning.biomass (ssb)
-      "ssb.start.year" = as.character(ssb.start.year),
 
       ## spr (spawning potential ratio)
       "spr.min" = as.character(spr.min),

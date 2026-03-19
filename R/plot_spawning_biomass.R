@@ -235,6 +235,31 @@ plot_spawning_biomass <- function(
 
   ### Make RDA ----
   if (make_rda) {
+
+    # Obtain relevant key quantities for captions/alt text
+    ssb.ref.pt <- as.character(ref_line)
+    ssb.units <- as.character(unit_label)
+    ssb.start.year <- min(plot_data$year)
+    ssb.end.year <- max(plot_data$year)
+    ssb.min <- min(plot_data$estimate)
+    ssb.max <- max(plot_data$estimate)
+    
+    # calculate & export key quantities
+    export_kqs(ssb.ref.pt,
+               ssb.units,
+               ssb.start.year,
+               ssb.end.year,
+               ssb.min,
+               ssb.max)
+    
+    # Add key quantities to captions/alt text
+    insert_kqs(ssb.ref.pt,
+               ssb.units,
+               ssb.start.year,
+               ssb.end.year,
+               ssb.min,
+               ssb.max)
+    
     create_rda(
       object = final,
       topic_label = ifelse(relative, "relative_spawning_biomass", "spawning_biomass"),
