@@ -3,7 +3,7 @@
 #' Plot spawning biomass with a reference line as a dashed line. The figure can
 #' also be made relative to this reference line rather than in absolute units.
 #'
-#' @param dat A data frame or names list of data frames (input as `list()`)
+#' @param dat A tibble or named list of tibbles (input as `list()`)
 #' returned from \link[stockplotr]{convert_output}. The first data frame in the list
 #' is used in calculation of a reference line if one is present
 #' @param geom A string stating the geom used for the plot. Default is "line".
