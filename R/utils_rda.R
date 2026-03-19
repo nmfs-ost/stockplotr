@@ -65,14 +65,30 @@ insert_kqs <- function(...) {
   }
   
   create_patterns <- function(...) {
-    # Capture the names from the dots without evaluating them yet
+    # Capture the names from the ellipsis
     arg_names <- sapply(rlang::enexprs(...), as.character)
     
     # Get the actual values
-    vals <- list(...)
+    vals <- as.character(list(...))
     
-    # Combine them into a named character vector
-    stats::setNames(as.character(vals), arg_names)
+    # 1. Escape literal dots (e.g., "B.min" -> "B\\.min")
+    # This ensures the dot is treated as a period, not a "match-anything" wildcard.
+    escaped_names <- stringr::str_replace_all(arg_names, "\\.", "\\\\.")
+    
+    # 2. Wrap in lookarounds to enforce "whole word" logic for dots/alphanumerics
+    # 2. Refined Lookarounds:
+    # (?<![a-zA-Z0-9.]) -> PRECEDER: Not a letter, digit, or dot.
+    # (?!([a-zA-Z0-9])) -> FOLLOWER: Not a letter or digit.
+    # We REMOVED the dot from the follower check so "caa.age.max." matches.
+    patterns <- paste0("(?<![a-zA-Z0-9.])", escaped_names, "(?![a-zA-Z0-9])")
+    
+    # Combine into a named character vector
+    stats::setNames(vals, patterns)
+    # # Get the actual values
+    # vals <- list(...)
+    # 
+    # # Combine them into a named character vector
+    # stats::setNames(as.character(vals), arg_names)
   }
   
   # insert new kqs into alt text/caps csv, where applicable
@@ -106,6 +122,11 @@ insert_kqs <- function(...) {
     dplyr::rename(
       "name" = 1,
       "key_quantity" = 2
+    ) |>
+    # remove the added regex characters
+    dplyr::mutate(
+      name = stringr::str_remove_all(name, "^\\(\\?\\<!\\[a-zA-Z0-9\\.\\]\\)|\\(\\?\\!\\[a-zA-Z0-9\\]\\)$"),
+      name = stringr::str_replace_all(name, "\\\\\\.", ".")
     )
   
   cli::cli_h3("The following key quantities were extracted and inserted into 'captions_alt_text.csv' and 'key_quantities.csv':")
@@ -242,54 +263,6 @@ add_more_key_quants <- function(
   #
 
   # TODO: When adding code extracting values for landings and/or indices figures/tables, be aware that both figure/table share the same label ("landings" and "indices"). If there's reason, add in extra conditional to check if value is from a figure or table
-
-  ## relative spawning biomass
-  if (topic_cap_alt$label == "relative_spawning_biomass") {
-    if (is.null(dat)) {
-      cli::cli_alert_warning("Some key quantities associated with relative spawning biomass were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).", wrap = TRUE)
-    }
-    if (is.null(ref_line)) {
-      cli::cli_alert_warning("ref_line was not provided. ssbtarg, rel.ssb.min, and rel.ssb.max were not calculated.", wrap = TRUE)
-    } else {
-      # ssbtarg
-      ssbtarg <- dat |>
-        dplyr::filter(c(grepl(glue::glue("^spawning_biomass_{ref_line}$"), label) |
-          grepl(glue::glue("^spawning_biomass_msy$"), label))) |>
-        dplyr::pull(estimate) |>
-        as.numeric() |>
-        round(digits = 2)
-
-      if (length(ssbtarg) > 0) {
-        cli::cli_alert_warning("ssbtarg, rel.ssb.min, and rel.ssb.max were not calculated. Check your ref_line is accurate.", wrap = TRUE)
-      } else {
-        # ssb.min and ssb.max needed for rel values below
-        # relative ssb
-        ## relative ssb min
-        rel.ssb.min <- (ssb.min / ssbtarg) |>
-          round(digits = 2)
-
-        ## relative ssb max
-        rel.ssb.max <- (ssb.max / ssbtarg) |>
-          round(digits = 2)
-
-        # replace rel.ssb.min, max placeholders within topic_cap_alt
-        topic_cap_alt <- topic_cap_alt |>
-          dplyr::mutate(alt_text = stringr::str_replace_all(
-            alt_text,
-            "rel.ssb.min",
-            as.character(rel.ssb.min)
-          )) |>
-          dplyr::mutate(alt_text = stringr::str_replace_all(
-            alt_text,
-            "rel.ssb.max",
-            as.character(rel.ssb.max)
-          ))
-
-        cli::cli_li("rel.ssb.min: {as.character(rel.ssb.min)}")
-        cli::cli_li("rel.ssb.max: {as.character(rel.ssb.max)}")
-      }
-    }
-  }
 
   ## spawning biomass
   if (topic_cap_alt$label == "spawning_biomass" | topic_cap_alt$label == "stock_recruitment") {
@@ -615,17 +588,6 @@ write_captions <- function(dat, # converted model output object
 
     # Bmsy <-
 
-
-    # TODO: uncomment and recode once we get clarity about how to extract Btarg properly
-    ## relative B
-    # relative B min
-    # rel.B.min <- (B.min / Btarg) |>
-    #   round(digits = 2)
-    #
-    # # relative B max
-    # rel.B.max <- (B.max / Btarg) |>
-    #   round(digits = 2)
-
     ## vonB LAA (von Bertalanffy growth function + length at age)- don't code quantities yet
     # vonb.age.min <- # minimum vonB age
     # vonb.age.max <- # maximum vonB age
@@ -741,14 +703,6 @@ write_captions <- function(dat, # converted model output object
 
     # ssbtarg : added with add_more_key_quants
 
-    ## relative ssb
-    # relative ssb min
-    # rel.ssb.min : added with add_more_key_quants
-
-    # relative ssb max
-    # rel.ssb.max : added with add_more_key_quants
-
-
     ## spr (spawning potential ratio)
     # minimum spr
     spr.min <- dat |>
@@ -839,10 +793,6 @@ write_captions <- function(dat, # converted model output object
       # 'overfished.status.is.isnot' = as.character(overfished.status.is.isnot),
       # 'overfishing.status.is.isnot' = as.character(overfishing.status.is.isnot),
 
-      ## Relative biomass plot
-      # NOTE: moving this above biomass so rel.B.min isn't changed to "rel." + B.min (etc.)
-      # 'rel.B.min' = as.character(rel.B.min),
-      # 'rel.B.max' = as.character(rel.B.max),
 
       ## Biomass plot
       # 'R0' = as.character(R0),

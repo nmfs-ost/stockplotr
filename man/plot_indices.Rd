@@ -13,7 +13,7 @@ plot_indices(
   module = NULL,
   focus = NULL,
   make_rda = FALSE,
-  figures_dir = NULL,
+  figures_dir = getwd(),
   ...
 )
 }
