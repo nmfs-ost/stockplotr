@@ -454,19 +454,6 @@ add_more_key_quants <- function(
     cli::cli_li("sr.ssb.units: {as.character(sr_ssb_units)}")
   }
 
-  if (!is.null(sr_recruitment_units)) {
-    ### this is for plot_stock_recruitment, since there are two units
-    #### replace sr.units with sr_recruitment_units
-    topic_cap_alt <- topic_cap_alt |>
-      dplyr::mutate(alt_text = stringr::str_replace_all(
-        alt_text,
-        "sr.units",
-        as.character(sr_recruitment_units)
-      ))
-
-    cli::cli_li("sr.units: {as.character(sr_recruitment_units)}")
-  }
-
   if (!is.null(units)) {
     ### alt text
     ### this regex preserves the comma after the units
@@ -740,41 +727,14 @@ write_captions <- function(dat, # converted model output object
     # selectivity.length.min <- # minimum length
     # selectivity.length.max <- # maximum length
 
-    # minimum recruitment : added with add_more_key_quants
-
-    # maximum recruitment: added with add_more_key_quants
-
-    ## recruitment ts
-    # recruitment units (plural) - numbers of fish, in thousands
-    # recruitment.units : added with add_more_key_quants
-
-    # start year of recruitment ts plot
-    recruitment.start.year <- dat |>
-      dplyr::filter(
-        label == "recruitment",
-        module_name == "TIME_SERIES" | module_name == "t.series",
-        !is.na(year),
-        is.na(fleet) | length(unique(fleet)) <= 1,
-        is.na(sex) | length(unique(sex)) <= 1,
-        is.na(area) | length(unique(area)) <= 1,
-        is.na(growth_pattern) | length(unique(growth_pattern)) <= 1,
-        !year %in% year_exclusions
-      ) |> # SS3 and BAM target module names
-      dplyr::slice(which.min(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
-
-    # end year of recruitment ts plot
-    # recruitment.end.year : added with add_more_key_quants
-
     # TODO: uncomment and recode once we get clarity about how to extract R0 properly
     ## relative recruitment
     # # minimum relative recruitment
-    # rel.recruitment.min <- (sr.min / R0) |>
+    # rel.recruitment.min <- (recruitment.min / R0) |>
     #   round(digits = 2)
     #
     # # maximum relative recruitment
-    # rel.recruitment.max <- (sr.max / R0) |>
+    # rel.recruitment.max <- (recruitment.max / R0) |>
     #   round(digits = 2)
 
     ## tot_b (total biomass): same as B plot above
@@ -964,9 +924,6 @@ write_captions <- function(dat, # converted model output object
       # to "rel." + recruitment.min (etc.)
       # 'rel.recruitment.min' = as.character(rel.recruitment.min),
       # 'rel.recruitment.max' = as.character(rel.recruitment.max),
-
-      ## recruitment ts
-      "recruitment.start.year" = as.character(recruitment.start.year),
 
       ## spr (spawning potential ratio)
       "spr.min" = as.character(spr.min),

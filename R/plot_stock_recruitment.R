@@ -137,27 +137,27 @@ plot_stock_recruitment <- function(
     sr.ssb.units <- spawning_biomass_label
     sr.ssb.min <- min(sr$spawning_biomass, na.rm = TRUE)
     sr.ssb.max <- max(sr$spawning_biomass, na.rm = TRUE)
-    sr.min <- min(sr$predicted_recruitment, na.rm = TRUE)
-    sr.max <- max(sr$predicted_recruitment, na.rm = TRUE)
-    sr.units <- recruitment_label  
+    recruitment.min <- min(sr$predicted_recruitment, na.rm = TRUE)
+    recruitment.max <- max(sr$predicted_recruitment, na.rm = TRUE)
+    recruitment.units <- recruitment_label  
     
     # calculate & export key quantities
     export_kqs(sr.age.min,
                sr.ssb.units,
                sr.ssb.min,
                sr.ssb.max,
-               sr.min,
-               sr.max,
-               sr.units)
+               recruitment.min,
+               recruitment.max,
+               recruitment.units)
     
     # Add key quantities to captions/alt text
     insert_kqs(sr.age.min,
                sr.ssb.units,
                sr.ssb.min,
                sr.ssb.max,
-               sr.min,
-               sr.max,
-               sr.units)
+               recruitment.min,
+               recruitment.max,
+               recruitment.units)
     
     create_rda(
       object = final,
