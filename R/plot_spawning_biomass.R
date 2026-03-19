@@ -4,54 +4,56 @@
 #' also be made relative to this reference line rather than in absolute units.
 #'
 #' @param dat A tibble or named list of tibbles (input as `list()`)
-#' returned from \link[stockplotr]{convert_output}. The first data frame in the list
-#' is used in calculation of a reference line if one is present
-#' @param geom A string stating the geom used for the plot. Default is "line".
-#' Options include "line", "point", or "area"
-#' @param group a string of a single column that groups the data (e.g. "fleet",
-#' "sex", "area", etc.). Currently can only have one level of grouping. If you want to just summarize
-#' the data across all factors, set group = "none". In the case there is only
-#' one unique value of the grouping and/or NA is available, the function will
-#' default to the NAs and in some cases the grouping when there is not an equal
-#' number of rows for NA and the grouped data.
-#' @param facet a string or vector of strings of a column that facets the data
-#' (e.g. "year", "area", etc.)
-#' @param era a string naming the era of data such as historical ("early"), current ("time"), or
-#' projected ("fore") data if filtering should occur. Default is set to "time" which is
-#' the current time. To plot all data, set era to NULL.
-#' @param ref_line A string specifying the type of reference you want to
-#'   compare spawning biomass to. The default is `"target"`, which looks for
-#'   `"spawning_biomass_target"` in the `"label"` column of `dat`. The actual
-#'   searching in `dat` is case agnostic and will work with either upper- or
-#'   lower-case letters but you must use one of the options specified in the
-#'   default list to ensure that the label on the figure looks correct
-#'   regardless of how it is specified in `dat`.
-#' @param unit_label units for spawning_biomass
-#' @param module (Optional) A string indicating the linked module_name associated
-#' with the label for the plot if known. Default is NULL. By default, the function
-#' will select the most relevant module if more than 1 exists.
-#' @param scale_amount A number describing how much to scale down the quantities
-#' shown on the y axis. For example, scale_amount = 100 would scale down a value
-#' from 500,000 --> 5,000. This scale will be reflected in the y axis label.
-#' @param relative A logical value specifying if the resulting figures should
-#'   be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
-#'   which reference point to use.
-#' @param make_rda TRUE/FALSE; indicate whether to produce an .rda file containing
-#' a list with the figure/table, caption, and alternative text (if figure). If TRUE,
+#' returned from \link[stockplotr]{convert_output}. 
+#' If inputting a list of tibbles, the first tibble's reference point defined 
+#' in `ref_line` is used to plot a reference line or calculate relative spawning biomass.
+#' @param geom A string stating the geom used for the plot. 
+#' Default: "line".
+#' Options: "line", "point", or "area"
+#' @param group A string of a single column that groups the data (e.g. "fleet",
+#' "sex", "area", etc.). 
+#' Set group = "none" to summarize data over all indexing values.
+#' Default: NULL
+#' @param facet A string or vector of strings of a column name.
+#' Default: NULL
+#' @param era A string naming the era of data.
+#' Default: "time"
+#' Options: "early", "time", "fore" (forecast), or NULL (all data)
+#' @param ref_line A string specifying a reference point name.
+#' Default: "target"
+#' Options: (including, but not limited to) "target", "msy", and "unfished"
+#' If the reference point is not found in the data, set ref_line = c("{name}" = value). 
+#' @param unit_label A string specifying spawning biomass unit.
+#' Default: "metric tons"
+#' @param module (Optional) A string indicating the module_name found in `dat`.
+#' Default: NULL
+#' If the interactive and >1 module_name is found, user will select the 
+#' module_name in the console. @seealso [filter_data()]
+#' @param scale_amount A number to scale the y-axis values.
+#' Default: 1
+#' @param relative A logical value specifying to set y-axis values relative to 
+#' the ref_line value.
+#' Default: `FALSE`
+#' @param make_rda A logical value indicating whether to save the object and 
+#' make an automated caption and alternative text in the form of an `rda` object. If TRUE,
 #' the rda will be exported to the folder indicated in the argument "figures_dir".
-#' Default is FALSE.
-#' @param figures_dir The location of the folder containing the generated figure
-#' rda files ("figures") that will be created if the argument `make_rda` = TRUE.
-#' Default is the working directory.
-#' @param interactive TRUE/FALSE; indicate whether the environment in which the
-#' function is operating  is interactive. This bypasses some options for
-#' filtering when preparing data for the plot. Default is FALSE.
-#' @param ... Arguments called from ggplot2::geom_line or ggplot2::geom_point
+#' Default: `FALSE`.
+#' @param figures_dir A string indicating a path to the "figures" folder.
+#' Default: `getwd()`
+#' The folder is created within the path if it does not exist.
+#' @param interactive A logical value indicating if the environment is interactive.
+#' Default: `FALSE`
+#' @param ... Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}
 #' @return
 #' Plot spawning biomass over time from the results of an assessment model translated to
 #' the a standardized output (\link[asar]{convert_output}). There are options to return a
 #' [ggplot2::ggplot()] object or export an rda object containing associated
 #' caption and alternative text for the figure.
+#' 
+#' @note
+#' All plotting functions automatically recognize indexing variables and will 
+#' use them in groupings and/or facetting. @seealso [process_data()].
+#' 
 #' @export
 #'
 #' @examples

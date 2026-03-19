@@ -19,9 +19,9 @@ reference_line(
 
 \item{dat}{standard data frame where reference point should be extracted}
 
-\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or
-projected ("fore") data if filtering should occur. Default is set to "time" which is
-the current time. To plot all data, set era to NULL.}
+\item{era}{A string naming the era of data.
+Default: "time"
+Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
 \item{label_name}{string of the name of the quantity that users want to
 extract the reference point from}
@@ -29,13 +29,12 @@ extract the reference point from}
 \item{reference}{string. name of the reference point such as "msy",
 "unfished", or "target"}
 
-\item{relative}{A logical value specifying if the resulting figures should
-be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
-which reference point to use.}
+\item{relative}{A logical value specifying to set y-axis values relative to 
+the ref_line value.
+Default: `FALSE`}
 
-\item{scale_amount}{A number describing how much to scale down the quantities
-shown on the y axis. For example, scale_amount = 100 would scale down a value
-from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
+\item{scale_amount}{A number to scale the y-axis values.
+Default: 1}
 }
 \value{
 a ggplot2 geom_hline object for a reference point that can be added

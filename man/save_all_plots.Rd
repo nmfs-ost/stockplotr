@@ -29,9 +29,10 @@ save_all_plots(
 )
 }
 \arguments{
-\item{dat}{A data frame or names list of data frames (input as `list()`)
-returned from \link[stockplotr]{convert_output}. The first data frame in the list
-is used in calculation of a reference line if one is present}
+\item{dat}{A tibble or named list of tibbles (input as `list()`)
+returned from \link[stockplotr]{convert_output}. 
+If inputting a list of tibbles, the first tibble's reference point defined 
+in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
 \item{recruitment_unit_label}{Units for recruitment}
 
@@ -40,15 +41,14 @@ the recruitment quantities shown on the y axis. For example,
 recruitment_scale_amount = 100 would scale down a value from 500,000 -->
 5,000. This scale will be reflected in the y axis label.}
 
-\item{relative}{A logical value specifying if the resulting figures should
-be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
-which reference point to use.}
+\item{relative}{A logical value specifying to set y-axis values relative to 
+the ref_line value.
+Default: `FALSE`}
 
 \item{proportional}{T/F to scale size of bubble plots}
 
-\item{interactive}{TRUE/FALSE; indicate whether the environment in which the
-function is operating  is interactive. This bypasses some options for
-filtering when preparing data for the plot. Default is FALSE.}
+\item{interactive}{A logical value indicating if the environment is interactive.
+Default: `FALSE`}
 
 \item{figures_tables_dir}{The location of the folder containing
 figures and tables ("figures" and "tables").}

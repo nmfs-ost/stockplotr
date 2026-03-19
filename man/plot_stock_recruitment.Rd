@@ -16,9 +16,10 @@ plot_stock_recruitment(
 )
 }
 \arguments{
-\item{dat}{A data frame or names list of data frames (input as `list()`)
-returned from \link[stockplotr]{convert_output}. The first data frame in the list
-is used in calculation of a reference line if one is present}
+\item{dat}{A tibble or named list of tibbles (input as `list()`)
+returned from \link[stockplotr]{convert_output}. 
+If inputting a list of tibbles, the first tibble's reference point defined 
+in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
 \item{spawning_biomass_label}{Units for spawning biomass}
 
@@ -29,22 +30,22 @@ plot is being made in is interactive. By default, this
 is set to false. If true, dependent on your data, a
 option menu will pop-up.}
 
-\item{module}{(Optional) A string indicating the linked module_name associated
-with the label for the plot if known. Default is NULL. By default, the function
-will select the most relevant module if more than 1 exists.}
+\item{module}{(Optional) A string indicating the module_name found in `dat`.
+Default: NULL
+If the interactive and >1 module_name is found, user will select the 
+module_name in the console. @seealso [filter_data()]}
 
-\item{scale_amount}{A number describing how much to scale down the quantities
-shown on the y axis. For example, scale_amount = 100 would scale down a value
-from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
+\item{scale_amount}{A number to scale the y-axis values.
+Default: 1}
 
-\item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
-a list with the figure/table, caption, and alternative text (if figure). If TRUE,
+\item{make_rda}{A logical value indicating whether to save the object and 
+make an automated caption and alternative text in the form of an `rda` object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
-Default is FALSE.}
+Default: `FALSE`.}
 
-\item{figures_dir}{The location of the folder containing the generated figure
-rda files ("figures") that will be created if the argument `make_rda` = TRUE.
-Default is the working directory.}
+\item{figures_dir}{A string indicating a path to the "figures" folder.
+Default: `getwd()`
+The folder is created within the path if it does not exist.}
 }
 \value{
 Plot the stock recruitment relationship from an assessment model output file
