@@ -24,55 +24,74 @@ plot_spawning_biomass(
 \arguments{
 \item{dat}{A tibble or named list of tibbles (input as `list()`)
 returned from \link[stockplotr]{convert_output}. 
+
 If inputting a list of tibbles, the first tibble's reference point defined 
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
 \item{geom}{A string stating the geom used for the plot. 
+
 Default: "line".
+
 Options: "line", "point", or "area"}
 
 \item{group}{A string of a single column that groups the data (e.g. "fleet",
 "sex", "area", etc.). 
+
 Set group = "none" to summarize data over all indexing values.
+
 Default: NULL}
 
 \item{facet}{A string or vector of strings of a column name.
+
 Default: NULL}
 
 \item{ref_line}{A string specifying a reference point name.
+
 Default: "target"
+
 Options: (including, but not limited to) "target", "msy", and "unfished"
 If the reference point is not found in the data, set ref_line = c("{name}" = value).}
 
 \item{unit_label}{A string specifying spawning biomass unit.
+
 Default: "metric tons"}
 
 \item{era}{A string naming the era of data.
+
 Default: "time"
+
 Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
 \item{module}{(Optional) A string indicating the module_name found in `dat`.
+
 Default: NULL
+
 If the interactive and >1 module_name is found, user will select the 
 module_name in the console. @seealso [filter_data()]}
 
 \item{scale_amount}{A number to scale the y-axis values.
+
 Default: 1}
 
 \item{relative}{A logical value specifying to set y-axis values relative to 
 the ref_line value.
+
 Default: `FALSE`}
 
 \item{make_rda}{A logical value indicating whether to save the object and 
 make an automated caption and alternative text in the form of an `rda` object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
+
 Default: `FALSE`.}
 
 \item{figures_dir}{A string indicating a path to the "figures" folder.
+
 Default: `getwd()`
+
 The folder is created within the path if it does not exist.}
 
 \item{interactive}{A logical value indicating if the environment is interactive.
+
 Default: `FALSE`}
 
 \item{...}{Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}
@@ -80,7 +99,7 @@ Default: `FALSE`}
 \value{
 Plot spawning biomass over time from the results of an assessment model translated to
 the a standardized output (\link[asar]{convert_output}). There are options to return a
-[ggplot2::ggplot()] object or export an rda object containing associated
+\link[ggplot2]{ggplot} object or export an rda object containing associated
 caption and alternative text for the figure.
 }
 \description{
@@ -108,4 +127,11 @@ plot_spawning_biomass(
   ref_line = "msy",
   module = "TIME_SERIES"
 )
+}
+\seealso{
+* [plot_timeseries()]
+* [calculate_reference_point()]
+* [reference_line()]
+* [filter_data()]
+* [process_data()]
 }

@@ -20,7 +20,9 @@ reference_line(
 \item{dat}{standard data frame where reference point should be extracted}
 
 \item{era}{A string naming the era of data.
+
 Default: "time"
+
 Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
 \item{label_name}{string of the name of the quantity that users want to
@@ -31,9 +33,11 @@ extract the reference point from}
 
 \item{relative}{A logical value specifying to set y-axis values relative to 
 the ref_line value.
+
 Default: `FALSE`}
 
 \item{scale_amount}{A number to scale the y-axis values.
+
 Default: 1}
 }
 \value{

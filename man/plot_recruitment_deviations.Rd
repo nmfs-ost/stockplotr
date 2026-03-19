@@ -17,28 +17,37 @@ plot_recruitment_deviations(
 \arguments{
 \item{dat}{A tibble or named list of tibbles (input as `list()`)
 returned from \link[stockplotr]{convert_output}. 
+
 If inputting a list of tibbles, the first tibble's reference point defined 
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
 \item{module}{(Optional) A string indicating the module_name found in `dat`.
+
 Default: NULL
+
 If the interactive and >1 module_name is found, user will select the 
 module_name in the console. @seealso [filter_data()]}
 
 \item{era}{A string naming the era of data.
+
 Default: "time"
+
 Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
 \item{interactive}{A logical value indicating if the environment is interactive.
+
 Default: `FALSE`}
 
 \item{make_rda}{A logical value indicating whether to save the object and 
 make an automated caption and alternative text in the form of an `rda` object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
+
 Default: `FALSE`.}
 
 \item{figures_dir}{A string indicating a path to the "figures" folder.
+
 Default: `getwd()`
+
 The folder is created within the path if it does not exist.}
 
 \item{...}{Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}

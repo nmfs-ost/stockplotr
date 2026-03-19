@@ -31,6 +31,7 @@ save_all_plots(
 \arguments{
 \item{dat}{A tibble or named list of tibbles (input as `list()`)
 returned from \link[stockplotr]{convert_output}. 
+
 If inputting a list of tibbles, the first tibble's reference point defined 
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
@@ -43,11 +44,13 @@ recruitment_scale_amount = 100 would scale down a value from 500,000 -->
 
 \item{relative}{A logical value specifying to set y-axis values relative to 
 the ref_line value.
+
 Default: `FALSE`}
 
 \item{proportional}{T/F to scale size of bubble plots}
 
 \item{interactive}{A logical value indicating if the environment is interactive.
+
 Default: `FALSE`}
 
 \item{figures_tables_dir}{The location of the folder containing

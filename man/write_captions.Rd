@@ -9,6 +9,7 @@ write_captions(dat, dir = getwd(), year = format(Sys.Date(), "\%Y"))
 \arguments{
 \item{dat}{A tibble or named list of tibbles (input as `list()`)
 returned from \link[stockplotr]{convert_output}. 
+
 If inputting a list of tibbles, the first tibble's reference point defined 
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
