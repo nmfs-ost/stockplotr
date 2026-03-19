@@ -100,6 +100,10 @@ plot_catch_comp <- function(
     group <- processed_data[[2]]
     facet <- processed_data[[3]]
   }
+  
+  data <- data |>
+    dplyr::mutate(age = as.numeric(age))
+  
   # Plot data
   plot <- plot_aa(
     dat = data,
@@ -111,6 +115,31 @@ plot_catch_comp <- function(
 
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
+    
+    # Obtain relevant key quantities for captions/alt text
+    caa.start.year <- min(data$year)
+    caa.end.year <- max(data$year)
+    caa.age.min <- min(data$age)
+    caa.age.max <- max(data$age)
+    tot.catch.min <- min(data$estimate)
+    tot.catch.max <- max(data$estimate)
+    
+    # calculate & export key quantities
+    export_kqs(caa.start.year,
+               caa.end.year,
+               caa.age.min,
+               caa.age.max,
+               tot.catch.min,
+               tot.catch.max)
+    
+    # Add key quantities to captions/alt text
+    insert_kqs(caa.start.year,
+               caa.end.year,
+               caa.age.min,
+               caa.age.max,
+               tot.catch.min,
+               tot.catch.max)
+    
     create_rda(
       object = plot,
       # get name of function and remove "plot_" from it

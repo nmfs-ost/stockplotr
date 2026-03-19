@@ -698,71 +698,6 @@ write_captions <- function(dat, # converted model output object
     # fecundity.min <- # minimum fecundity
     # fecundity.max <- # maximum fecundity
 
-
-    ## catch at age (CAA)
-    # start year of CAA plot
-    caa.start.year <- dat |>
-      dplyr::filter(label == "abundance" & !is.na(year)) |>
-      dplyr::slice(which.min(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
-
-    # end year of CAA plot
-    caa.end.year <- dat |>
-      dplyr::filter(label == "abundance" & !is.na(year)) |>
-      dplyr::slice(which.max(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
-
-    # minimum age
-    caa.age.min <- dat |>
-      dplyr::filter(label == "abundance" & !is.na(year)) |>
-      dplyr::slice(which.min(age)) |>
-      dplyr::select(age) |>
-      as.numeric()
-
-    # maximum age
-    caa.age.max <- dat |>
-      dplyr::filter(label == "abundance" & !is.na(year)) |>
-      dplyr::slice(which.max(age)) |>
-      dplyr::select(age) |>
-      as.numeric()
-
-
-    ## catch composition
-    # minimum & maximum catch
-    if (dim(dat |>
-      dplyr::filter(label == "catch"))[1] > 1) {
-      catch <- dat |>
-        dplyr::filter(
-          label == "catch",
-          !is.na(fleet)
-        ) |>
-        dplyr::mutate(
-          estimate = as.numeric(estimate),
-          year = as.numeric(year),
-          fleet = as.factor(fleet)
-        ) |>
-        dplyr::group_by(label, year, fleet) |>
-        dplyr::summarise(estimate = sum(estimate)) |>
-        dplyr::ungroup()
-
-      tot.catch.min <- catch |>
-        dplyr::slice(which.min(estimate)) |>
-        dplyr::select(estimate) |>
-        as.numeric() |>
-        round(digits = 2)
-
-      tot.catch.max <- catch |>
-        dplyr::slice(which.max(estimate)) |>
-        dplyr::select(estimate) |>
-        as.numeric() |>
-        round(digits = 2)
-    } else {
-      tot.catch.min <- "NA"
-      tot.catch.max <- "NA"
-    }
-
     ## CAL (catch at length)- don't code quantities yet
     # cal.length.min <- # minimum length group
     # cal.length.max <- # maximum length group
@@ -950,7 +885,6 @@ write_captions <- function(dat, # converted model output object
       # 'rel.B.max' = as.character(rel.B.max),
 
       ## Biomass plot
-      "B.start.year" = as.character(B.start.year),
       # 'R0' = as.character(R0),
       # 'Bend' = as.character(Bend),
       # 'Btarg' = as.character(Btarg),
@@ -995,17 +929,6 @@ write_captions <- function(dat, # converted model output object
       # 'fecundity.units' = as.character(fecundity.units),
       # 'fecundity.min' = as.character(fecundity.min),
       # 'fecundity.max' = as.character(fecundity.max),
-
-      ## CAA (catch at age)
-      "caa.start.year" = as.character(caa.start.year),
-      "caa.end.year" = as.character(caa.end.year),
-      "caa.age.min" = as.character(caa.age.min),
-      "caa.age.max" = as.character(caa.age.max),
-
-
-      ## catch comp
-      "tot.catch.min" = as.character(tot.catch.min),
-      "tot.catch.max" = as.character(tot.catch.max),
 
       ## CAL (catch at length)
       # 'cal.length.min' = as.character(cal.length.min),
