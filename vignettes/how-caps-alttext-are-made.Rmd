@@ -44,11 +44,15 @@ After the final plot has been created within the function, key quantities are ca
 
 **NOTE**: While we extract key quantities as accurately as we can, we cannot guarantee that each quantity will be calculated perfectly. Input data varies widely. It’s always your responsibility to check the accuracy of your figures' alt text.
 
+**NOTE**: The key quantities are exported to a file saved to your working directory ("key_quantities.csv") via `export_kqs()`.
+
 Next, the function `insert_kqs()` imports an empty or partially-filled template with captions and alternative text ("captions_alt_text_template.csv" or "captions_alt_text.csv", respectively), depending on if the user has already created a "captions_alt_text.csv" file in their working directory. The .csv file is imported as a dataframe.
 
 The key quantities are substituted into the dataframe's appropriate placeholders. For example, "The y axis shows biomass in B.units, which spans from **B.min** to B.max." will changed to "The y axis shows biomass in B.units, which spans from **100** to B.max."
 
 Finally, the function exports the updated dataframe as a new .csv, or overwrites the old version, to "captions_alt_text.csv".
+
+**NOTE**: If you export a plot with the same filename (e.g., you exported a biomass plot, then decided to slightly change it and reexport), you will be prompted in the console to decide if you want to overwrite your original plot. You will NOT be prompted to decide if you want to overwrite your original plot's caption and alternative text with an updated version from your new plot, which may have different key quantities. To get updated key quantities, you must 1) revert the plot's caption and alternative text in "captions_alt_text.csv" to contain the placeholders present in the "captions_alt_text_template.csv" OR 2) edit those entries manually.
 
 ## Connecting the tables & figures with the captions & alternative text
 

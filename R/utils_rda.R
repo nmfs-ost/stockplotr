@@ -2,7 +2,8 @@
 # RDA utility functions
 # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-# TODO: update new fxns to work with a specified 'dir' instead of default 'getwd()'?
+# TODO: update key quantities functions to work with a specified 'dir' instead of default 'getwd()'?
+# TODO: update key quantities functions for plots that need to extract values from KQs csv to calculate their own, dependent KQs (none present in current plotting functions)
 
 #' Substitute key quantities' values into template
 #'
