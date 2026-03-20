@@ -96,26 +96,43 @@ plot_fishing_mortality <- function(
   ### Make RDA ----
   if (make_rda) {
     
+    if (relative){
     # Obtain relevant key quantities for captions/alt text
+      # pulling out the 2nd df in 'data' works for several datasets
+      rel.F.min <- ggplot2::ggplot_build(final)@data[[2]] |>
+        as.data.frame() |>
+        dplyr::pull(y) |>
+        min()
+      rel.F.max <- ggplot2::ggplot_build(final)@data[[2]] |>
+        as.data.frame() |>
+        dplyr::pull(y) |>
+        max()
+      
+      # calculate & export key quantities
+      export_kqs(rel.F.min, rel.F.max)
+      
+      # Add key quantities to captions/alt text
+      insert_kqs(rel.F.min, rel.F.max)
+      
+    } else {
+      F.min <- min(prepared_data$estimate)
+      F.max <- max(prepared_data$estimate)
+      
+      export_kqs(F.min, F.max)
+      insert_kqs(F.min, F.max)
+    }
+    
     F.ref.pt <- as.character(ref_line)
     F.start.year <- min(prepared_data$year)
     F.end.year <- max(prepared_data$year)
-    F.min <- min(prepared_data$estimate)
-    F.max <- max(prepared_data$estimate)
     
-    # calculate & export key quantities
     export_kqs(F.ref.pt,
                F.start.year,
-               F.end.year,
-               F.min,
-               F.max)
+               F.end.year)
     
-    # Add key quantities to captions/alt text
     insert_kqs(F.ref.pt,
                F.start.year,
-               F.end.year,
-               F.min,
-               F.max)
+               F.end.year)
     
     create_rda(
       object = final,
