@@ -20,15 +20,14 @@
 #' plot_biomass(
 #'   dat = stockplotr:::example_data,
 #'   unit_label = "mt",
-#'   ref_line = "target",
+#'   ref_line = c("target" = 555),
 #'   scale_amount = 100,
 #'   module = "TIME_SERIES",
 #'   figures_dir = getwd()
 #' )
 #' plot_biomass(
 #'   dat = stockplotr:::example_data,
-#'   facet = "fleet",
-#'   ref_line = "target",
+#'   ref_line = NULL,
 #'   module = "TIME_SERIES",
 #'   figures_dir = getwd()
 #' )

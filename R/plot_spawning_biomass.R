@@ -99,6 +99,12 @@
 #'   ref_line = "msy",
 #'   module = "TIME_SERIES"
 #' )
+#' plot_spawning_biomass(
+#'  dat = stockplotr:::example_data,
+#'  ref_line = c("target" = 10),
+#'  interactive = FALSE,
+#'  module = "TIME_SERIES"
+#' )
 plot_spawning_biomass <- function(
   dat,
   geom = "line",
