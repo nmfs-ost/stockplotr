@@ -8,12 +8,11 @@ test_that("extract_caps_alttext works for figures", {
   topic_label <- "biomass"
   fig_or_table <- "figure"
 
-  # run write_captions.R
-  write_captions(
-    dat = out_new,
-    dir = getwd(),
-    year = 2022
-  )
+  B.min <- 100
+  B.max <- 200
+  
+  # add KQs to caps/alt text csv
+  insert_kqs(B.min, B.max)
 
   # extract this plot's caption and alt text
   caps_alttext <- extract_caps_alttext(
@@ -40,12 +39,11 @@ test_that("extract_caps_alttext works for tables", {
   topic_label <- "bnc"
   fig_or_table <- "table"
 
-  # run write_captions.R
-  write_captions(
-    dat = out_new,
-    dir = getwd(),
-    year = 2022
-  )
+  B.min <- 100
+  B.max <- 200
+  
+  # add KQs to caps/alt text csv
+  insert_kqs(B.min, B.max)
 
   # extract this plot's caption and alt text
   caps_alttext <- extract_caps_alttext(
