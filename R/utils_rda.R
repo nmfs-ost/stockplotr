@@ -211,333 +211,10 @@ create_rda <- function(
 }
 
 #------------------------------------------------------------------------------
-
-# substitute in more key quantities (units, end_years, reference points, and more)
-# to captions/alt text
-add_more_key_quants <- function(
-  dat,
-  topic,
-  fig_or_table,
-  dir = getwd(),
-  end_year = NULL,
-  units = NULL,
-  sr_ssb_units = NULL,
-  sr_recruitment_units = NULL,
-  ref_line = NULL,
-  ref_pt = NULL,
-  scaling = 1
-) {
-  # import csv
-  caps_alt_df <- utils::read.csv(fs::path(dir, "captions_alt_text.csv"))
-
-  # make year character if not null
-  if (!is.null(end_year)) {
-    end_year <- as.character(end_year)
-  } else {
-    end_year <- format(Sys.Date(), "%Y")
-  }
-
-  # select specific fig/table's caption/alt text
-  topic_cap_alt <- caps_alt_df |>
-    dplyr::filter(
-      label == topic,
-      type == fig_or_table
-    )
-
-  if (!is.null(dat)) {
-    dat <- dat |>
-      dplyr::mutate(
-        estimate = as.numeric(estimate),
-        year = as.numeric(year),
-        age = as.numeric(age)
-      )
-  }
-
-  cli::cli_h3("Key quantities extracted and inserted from add_more_key_quants():")
-
-  # calculate key quantities that rely on scaling for calculation
-  # TODO: pull the relative forms of these three KQs (B, R, SSB) from write_captions,
-  # write analogous code for each in this section, and remove placeholders from
-  # the end of write_captions (once we get clarity about how to extract Btarg,
-  # ssbtarg, and R0)
-  #
-
-  # TODO: When adding code extracting values for landings and/or indices figures/tables, be aware that both figure/table share the same label ("landings" and "indices"). If there's reason, add in extra conditional to check if value is from a figure or table
-
-  ## spawning biomass
-  if (topic_cap_alt$label == "spawning_biomass" | topic_cap_alt$label == "stock_recruitment") {
-    if (is.null(dat)) {
-      cli::cli_alert_warning("Some key quantities associated with spawning biomass were not extracted and added to captions_alt_text.csv due to missing data file (i.e., 'dat' argument).", wrap = TRUE)
-    } else {
-      # minimum ssb
-      sr.ssb.min <- dat |>
-        dplyr::filter(
-          label == "spawning_biomass",
-          module_name == "TIME_SERIES" | module_name == "t.series",
-          !is.na(year),
-          is.na(fleet) | length(unique(fleet)) <= 1,
-          is.na(sex) | length(unique(sex)) <= 1,
-          is.na(area) | length(unique(area)) <= 1,
-          is.na(growth_pattern) | length(unique(growth_pattern)) <= 1,
-          !year %in% year_exclusions
-        ) |> # SS3 and BAM target module names
-        dplyr::slice(which.min(estimate)) |>
-        dplyr::select(estimate) |>
-        dplyr::mutate(estimate = estimate / scaling) |>
-        as.numeric() |>
-        round(digits = 2)
-
-      # maximum ssb
-      sr.ssb.max <- dat |>
-        dplyr::filter(
-          label == "spawning_biomass",
-          module_name == "TIME_SERIES" | module_name == "t.series",
-          !is.na(year),
-          is.na(fleet) | length(unique(fleet)) <= 1,
-          is.na(sex) | length(unique(sex)) <= 1,
-          is.na(area) | length(unique(area)) <= 1,
-          is.na(growth_pattern) | length(unique(growth_pattern)) <= 1,
-          !year %in% year_exclusions
-        ) |> # SS3 and BAM target module names
-        dplyr::slice(which.max(estimate)) |>
-        dplyr::select(estimate) |>
-        dplyr::mutate(estimate = estimate / scaling) |>
-        as.numeric() |>
-        round(digits = 2)
-
-      # ssbtarg
-      ssbtarg <- dat |>
-        dplyr::filter(c(grepl(glue::glue("^spawning_biomass_{ref_line}$"), label) |
-          grepl(glue::glue("^spawning_biomass_msy$"), label))) |>
-        dplyr::pull(estimate) |>
-        as.numeric() |>
-        round(digits = 2)
-
-      # ssb.min and ssb.max needed for rel values below
-      # replace sr.ssb.min, sr.ssb.max, ssbtarg, ssb.min, and ssb.max placeholders
-      # within topic_cap_alt
-      topic_cap_alt <- topic_cap_alt |>
-        dplyr::mutate(alt_text = stringr::str_replace_all(
-          alt_text,
-          "sr.ssb.min",
-          as.character(sr.ssb.min)
-        )) |>
-        dplyr::mutate(alt_text = stringr::str_replace_all(
-          alt_text,
-          "sr.ssb.max",
-          as.character(sr.ssb.max)
-        ))
-
-      cli::cli_li("sr.ssb.min: {as.character(sr.ssb.min)}")
-      cli::cli_li("sr.ssb.max: {as.character(sr.ssb.max)}")
-    }
-  }
-
-  # replace placeholders (e.g., if "end.year" is found in topic_alt, replace it with end_year)
-  ## end_year-----
-  if (!is.null(end_year)) {
-    ### alt text
-    ### this regex preserves the comma after the end year
-    topic_cap_alt <- topic_cap_alt |>
-      dplyr::mutate(alt_text = stringr::str_replace_all(
-        alt_text,
-        stringr::regex("(\\S*end\\.year\\S*)(?=\\s?,)"),
-        end_year
-      ))
-
-    ### this regex removes a potential trailing space after the end year
-    topic_cap_alt <- topic_cap_alt |>
-      dplyr::mutate(alt_text = stringr::str_replace_all(
-        alt_text,
-        stringr::regex("\\S*end\\.year\\S*\\s*"),
-        end_year
-      ))
-
-    cli::cli_li("end_year: {as.character(end_year)}")
-  }
-  ## units-----
-
-  if (is.null(scaling)) {
-    scale_label <- FALSE
-  } else {
-    scale_label <- TRUE
-    magnitude <- floor(log10(scaling))
-    if (magnitude == 0) {
-      units <- units
-      unit_mag <- ""
-    } else if (magnitude > 0 & magnitude < 10) {
-      scale_unit <- c(
-        "tens of ",
-        "hundreds of ",
-        "thousands of",
-        "tens of thousands of ",
-        "hundreds of thousands of ",
-        "millions of ",
-        "tens of millions of ",
-        "hundreds of millions of ",
-        "billions of "
-      )
-      unit_mag <- paste(scale_unit[magnitude])
-    } else {
-      cli::cli_abort("Scaling out of bounds. Please choose a value ranging from 1-1000000000 (one billion) in orders of magnitude (e.g., 1, 10, 100, 1000, etc.)", wrap = TRUE)
-    }
-  }
-
-
-  if (!is.null(units)) {
-    ### caption
-    ### this regex preserves the closing ) after the units
-    topic_cap_alt <- topic_cap_alt |>
-      dplyr::mutate(caption = stringr::str_replace_all(
-        caption,
-        stringr::regex("(\\S*units\\S*)(?=\\s?\\))"),
-        as.character(units)
-      ))
-
-    ### this regex preserves the period after the units
-    topic_cap_alt <- topic_cap_alt |>
-      dplyr::mutate(caption = stringr::str_replace_all(
-        caption,
-        stringr::regex("(\\S*units\\S*)(?=\\s?.)"),
-        as.character(units)
-      ))
-
-    ### this regex replaces the units if it's not found with the previous two commands
-    ### (i.e., there's no parenthesis or period adjacent to the units variable)
-    topic_cap_alt <- topic_cap_alt |>
-      dplyr::mutate(caption = stringr::str_replace_all(
-        caption,
-        stringr::regex("\\S*units\\S*"),
-        as.character(units)
-      ))
-
-    cli::cli_li("units: {as.character(units)}")
-  }
-
-  if (!is.null(sr_ssb_units)) {
-    ### this is for plot_stock_recruitment, since there are two units
-    #### replace sr.ssb.units with sr_ssb_units
-    topic_cap_alt <- topic_cap_alt |>
-      dplyr::mutate(alt_text = stringr::str_replace_all(
-        alt_text,
-        "sr.ssb.units",
-        as.character(sr_ssb_units)
-      ))
-
-    cli::cli_li("sr.ssb.units: {as.character(sr_ssb_units)}")
-  }
-
-  if (!is.null(units)) {
-    ### alt text
-    ### this regex preserves the comma after the units
-    topic_cap_alt <- topic_cap_alt |>
-      dplyr::mutate(alt_text = stringr::str_replace_all(
-        alt_text,
-        stringr::regex("(\\S*units\\S*)(?=\\s?,)"),
-        ifelse(scale_label,
-          paste0(unit_mag, as.character(units)),
-          as.character(units)
-        )
-      ))
-
-    ### this regex replaces the units if it's not found with the previous command
-    ### (i.e., there's no comma adjacent to the units variable)
-    topic_cap_alt <- topic_cap_alt |>
-      dplyr::mutate(alt_text = stringr::str_replace_all(
-        alt_text,
-        stringr::regex("\\S*units\\S*"),
-        ifelse(scale_label,
-          paste0(unit_mag, as.character(units)),
-          as.character(units)
-        )
-      ))
-  }
-  ## reference points-----
-  if (!is.null(ref_pt)) {
-    ### caption
-    ### this regex preserves the opening ( before the ref pt
-    topic_cap_alt <- topic_cap_alt |>
-      dplyr::mutate(caption = stringr::str_replace_all(
-        caption,
-        stringr::regex("\\(\\S*ref\\.pt*\\S*"),
-        paste0("(", as.character(ref_pt))
-      ))
-
-    cli::cli_li("plot-specific reference point: {as.character(ref_pt)}")
-  }
-
-  # remove row with old caption/alt text, then add new row
-  replaced_df <- dplyr::anti_join(caps_alt_df,
-    topic_cap_alt,
-    by = c("label", "type")
-  ) |>
-    dplyr::full_join(topic_cap_alt)
-
-  # export df with updated captions and alt text to csv
-  utils::write.csv(
-    x = replaced_df,
-    file = fs::path(
-      dir,
-      "captions_alt_text.csv"
-    ),
-    row.names = FALSE
-  )
-}
-
-#------------------------------------------------------------------------------
-
-#' Write captions and alternative text
-#'
-#' Function to create captions and alternative text that contain
-#' key quantities from the model results file.
-#'
-#' @inheritParams plot_spawning_biomass
-#' @param dir Directory where the output captions and alt text file should be
-#' saved. Defaults to working directory.
-#' @param year the last year of the data or the current year this function is
-#' being performed. Defaults to the current year.
-#'
-#' @return Exports .csv with captions and alt text for figures and tables
-#' that contain key quantities (e.g., an assessment's start year) that
-#' are automatically extracted from the converted model results file.
-#'
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' write_captions(dat,
-#'   dir = getwd(),
-#'   year = 2025
-#' )
-#' }
-write_captions <- function(dat, # converted model output object
-                           dir = getwd(),
-                           year = format(Sys.Date(), "%Y")) {
-  # only extract key quantities/export new csv if not present
-  if (file.exists(fs::path(dir, "captions_alt_text.csv"))) {
-    cli::cli_alert_danger("Captions and alternative text file (captions_alt_text.csv) already exists; write_captions() will not run.", wrap = TRUE)
-    cli::cli_alert_info("To extract new key quantities and make a new captions_alt_text.csv file, delete existing captions_alt_text.csv and rerun write_captions().", wrap = TRUE)
-  } else {
-    # import pre-written captions and alt text that include placeholders
-    # for key quantities (e.g., 'start_year' is the placeholder for the
-    # assessment's start year)
-    caps_alttext <- utils::read.csv(
-      system.file("resources", "captions_alt_text_template.csv", package = "stockplotr")
-    )
-
-    dat <- dat |>
-      dplyr::mutate(
-        estimate = as.numeric(estimate),
-        year = as.numeric(year),
-        age = as.numeric(age)
-      )
-
-    # extract key quantities
-    # REMINDERS:
-    # -the variable names must exactly match those in the captions/alt text csv.
-
-    # suppress warnings
-    options(warn = -1)
+# NOTE: this code was taken from the former write_captions() function
+# Leaving it here to pull from as we develop more figure and table functions
+# which will have associated captions/alt text containing key quantities
+# with the following object names and calculations
 
     # FIGURES-----
 
@@ -593,7 +270,7 @@ write_captions <- function(dat, # converted model output object
     # vonb.age.max <- # maximum vonB age
 
     # vonB length units (plural)
-    # vonb.length.units : added with add_more_key_quants
+    # vonb.length.units 
 
     # vonb.length.min <- # minimum vonB length
     # vonb.length.max <- # minimum vonB length
@@ -601,12 +278,12 @@ write_captions <- function(dat, # converted model output object
 
     ## length-type conversion plot- don't code quantities yet
     # total length units (plural)
-    # total.length.units : added with add_more_key_quants
+    # total.length.units 
 
     # total.length.min <- # minimum total length
     # total.length.max <- # maximum total length
     # fork length units (plural)
-    # fork.length.units : added with add_more_key_quants
+    # fork.length.units 
 
     # fork.length.min <- # minimum fork length
     # fork.length.max <- # maximum fork length
@@ -614,13 +291,13 @@ write_captions <- function(dat, # converted model output object
 
     ## weight-length conversion plot- don't code quantities yet
     # length units (plural)
-    # wl.length.units : added with add_more_key_quants
+    # wl.length.units 
 
     # wl.length.min <- # minimum length
     # wl.length.max <- # maximum length
 
     # weight units (plural)
-    # wl.weight.units : added with add_more_key_quants
+    # wl.weight.units 
 
     # wl.weight.min <- # minimum weight
     # wl.weight.max <- # maximum weight
@@ -628,7 +305,7 @@ write_captions <- function(dat, # converted model output object
 
     ## maturity schedule (proportion mature)- don't code quantities yet
     # length units (plural)
-    # prop.mat.length.units : added with add_more_key_quants
+    # prop.mat.length.units 
 
     # prop.mat.length.min <- # minimum length
     # prop.mat.length.max <- # maximum length
@@ -636,13 +313,13 @@ write_captions <- function(dat, # converted model output object
 
     ## fecundity at length- don't code quantities yet
     # length units (plural)
-    # fecundity.length.units : added with add_more_key_quants
+    # fecundity.length.units 
 
     # fecundity.length.min <- # minimum length
     # fecundity.length.max <- # maximum length
 
     # fecundity units (plural)
-    # fecundity.units : added with add_more_key_quants
+    # fecundity.units 
 
     # fecundity.min <- # minimum fecundity
     # fecundity.max <- # maximum fecundity
@@ -657,7 +334,7 @@ write_captions <- function(dat, # converted model output object
     # mod.fit.catch.end.year <- # end year of model fit to catch ts plot
 
     # catch units (plural)
-    # mod.fit.catch.units : added with add_more_key_quants
+    # mod.fit.catch.units 
 
     # mod.fit.catch.min <- # minimum catch
     # mod.fit.catch.max <- # maximum catch
@@ -689,40 +366,30 @@ write_captions <- function(dat, # converted model output object
     # selectivity.length.min <- # minimum length
     # selectivity.length.max <- # maximum length
 
-    # TODO: uncomment and recode once we get clarity about how to extract R0 properly
-    ## relative recruitment
-    # # minimum relative recruitment
-    # rel.recruitment.min <- (recruitment.min / R0) |>
-    #   round(digits = 2)
-    #
-    # # maximum relative recruitment
-    # rel.recruitment.max <- (recruitment.max / R0) |>
-    #   round(digits = 2)
-
     ## tot_b (total biomass): same as B plot above
 
-    # ssbtarg : added with add_more_key_quants
+    # ssbtarg 
 
     ## spr (spawning potential ratio)
     # minimum spr
-    spr.min <- dat |>
-      dplyr::filter(c(grepl("spr", label) |
-        label == "spr") &
-        !is.na(year) &
-        !is.na(estimate)) |>
-      dplyr::slice(which.min(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
-
-    # maximum spr
-    spr.max <- dat |>
-      dplyr::filter(c(grepl("spr", label) |
-        label == "spr") & !is.na(year) & !is.na(estimate)) |>
-      dplyr::slice(which.max(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric() |>
-      round(digits = 2)
+    # spr.min <- dat |>
+    #   dplyr::filter(c(grepl("spr", label) |
+    #     label == "spr") &
+    #     !is.na(year) &
+    #     !is.na(estimate)) |>
+    #   dplyr::slice(which.min(estimate)) |>
+    #   dplyr::select(estimate) |>
+    #   as.numeric() |>
+    #   round(digits = 2)
+    # 
+    # # maximum spr
+    # spr.max <- dat |>
+    #   dplyr::filter(c(grepl("spr", label) |
+    #     label == "spr") & !is.na(year) & !is.na(estimate)) |>
+    #   dplyr::slice(which.max(estimate)) |>
+    #   dplyr::select(estimate) |>
+    #   as.numeric() |>
+    #   round(digits = 2)
 
     # TODO: uncomment and recode once we get clarity about how to extract this value properly
     # spr reference point
@@ -736,32 +403,31 @@ write_captions <- function(dat, # converted model output object
     ## proj_catch (projected catch)
     # projected catch units (plural)
     # proj.catch.units <- # probably mt, but wait until figure coded
-    # --then add into add_more_key_quants()
 
     # start year of projected catch plot
-    proj.catch.start.year <- landings.end.year + 1
+    # proj.catch.start.year <- landings.end.year + 1
 
     # end year of projected catch plot
-    proj.catch.end.year <- dat |>
-      dplyr::filter(label == "catch" & module_name == "DERIVED_QUANTITIES") |>
-      dplyr::slice(which.max(year)) |>
-      dplyr::select(year) |>
-      as.numeric()
+    # proj.catch.end.year <- dat |>
+    #   dplyr::filter(label == "catch" & module_name == "DERIVED_QUANTITIES") |>
+    #   dplyr::slice(which.max(year)) |>
+    #   dplyr::select(year) |>
+    #   as.numeric()
 
     # minimum projected catch
-    proj.catch.min <- dat |>
-      # no BAM file has catch; will be NA
-      dplyr::filter(label == "catch" & module_name == "DERIVED_QUANTITIES") |>
-      dplyr::slice(which.min(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric()
+    # proj.catch.min <- dat |>
+    #   # no BAM file has catch; will be NA
+    #   dplyr::filter(label == "catch" & module_name == "DERIVED_QUANTITIES") |>
+    #   dplyr::slice(which.min(estimate)) |>
+    #   dplyr::select(estimate) |>
+    #   as.numeric()
 
     # maximum projected catch
-    proj.catch.max <- dat |>
-      dplyr::filter(label == "catch" & module_name == "DERIVED_QUANTITIES") |>
-      dplyr::slice(which.max(estimate)) |>
-      dplyr::select(estimate) |>
-      as.numeric()
+    # proj.catch.max <- dat |>
+    #   dplyr::filter(label == "catch" & module_name == "DERIVED_QUANTITIES") |>
+    #   dplyr::slice(which.max(estimate)) |>
+    #   dplyr::select(estimate) |>
+    #   as.numeric()
 
     # TABLES-----
 
@@ -774,185 +440,6 @@ write_captions <- function(dat, # converted model output object
     ## catchability
     # catchability.fleet <- # fleet
 
-
-    # add in more quantities here, and update the quantities above
-
-    # substitute quantity placeholders in the captions/alt text with
-    # the real values, extracted above
-
-
-    # make list with all placeholders
-    # uncomment placeholders once uncommented, above
-    patterns_replacements <- c(
-      # FIGURES-----
-
-      ## kobe plot
-      # 'kobe.end.year' = as.character(kobe.end.year),
-      # 'B.BMSY.end.yr' = as.character(B.BMSY.end.yr),
-      # 'F.FMSY.end.yr' = as.character(F.FMSY.end.yr),
-      # 'overfished.status.is.isnot' = as.character(overfished.status.is.isnot),
-      # 'overfishing.status.is.isnot' = as.character(overfishing.status.is.isnot),
-
-
-      ## Biomass plot
-      # 'R0' = as.character(R0),
-      # 'Bend' = as.character(Bend),
-      # 'Btarg' = as.character(Btarg),
-      # 'Bmsy' = as.character(Bmsy),
-
-      ## mortality (F) plot
-      # 'F.ref.pt' = as.character(F.ref.pt),
-      # 'Ftarg' = as.character(Ftarg),
-
-      ## vonB LAA (von Bertalanffy growth function + length at age)
-      # 'vonb.age.min' = as.character(vonb.age.min),
-      # 'vonb.age.max' = as.character(vonb.age.max),
-      # 'vonb.length.units' = as.character(vonb.length.units),
-      # 'vonb.length.min' = as.character(vonb.length.min),
-      # 'vonb.length.max' = as.character(vonb.length.max),
-
-      ## length-type conversion plot
-      # 'total.length.units' = as.character(total.length.units),
-      # 'total.length.min' = as.character(total.length.min),
-      # 'total.length.max' = as.character(total.length.max),
-      # 'fork.length.units' = as.character(fork.length.units),
-      # 'fork.length.min' = as.character(fork.length.min),
-      # 'fork.length.max' = as.character(fork.length.max),
-
-      ## weight-length conversion plot
-      # 'wl.length.units' = as.character(wl.length.units),
-      # 'wl.length.min' = as.character(wl.length.min),
-      # 'wl.length.max' = as.character(wl.length.max),
-      # 'wl.weight.units' = as.character(wl.weight.units),
-      # 'wl.weight.min' = as.character(wl.weight.min),
-      # 'wl.weight.max' = as.character(wl.weight.max),
-
-      ## maturity schedule (proportion mature)
-      # 'prop.mat.length.units' = as.character(prop.mat.length.units),
-      # 'prop.mat.length.min' = as.character(prop.mat.length.min),
-      # 'prop.mat.length.max' = as.character(prop.mat.length.max),
-
-      ## fecundity at length
-      # 'fecundity.length.units' = as.character(fecundity.length.units),
-      # 'fecundity.length.min' = as.character(fecundity.length.min),
-      # 'fecundity.length.max' = as.character(fecundity.length.max),
-      # 'fecundity.units' = as.character(fecundity.units),
-      # 'fecundity.min' = as.character(fecundity.min),
-      # 'fecundity.max' = as.character(fecundity.max),
-
-      ## CAL (catch at length)
-      # 'cal.length.min' = as.character(cal.length.min),
-      # 'cal.length.max' = as.character(cal.length.max),
-
-      ## mod_fit_catch (model fit to catch ts)
-      # 'mod.fit.catch.start.year' = as.character(mod.fit.catch.start.year),
-      # 'mod.fit.catch.end.year' = as.character(mod.fit.catch.end.year),
-      # 'mod.fit.catch.units' = as.character(mod.fit.catch.units),
-      # 'mod.fit.catch.min' = as.character(mod.fit.catch.min),
-      # 'mod.fit.catch.max' = as.character(mod.fit.catch.max),
-
-      ## mod_fit_abun (model fit to abundance indices plot)
-      # 'mod.fit.abun.start.year' = as.character(mod.fit.abun.start.year),
-      # 'mod.fit.abun.end.year' = as.character(mod.fit.abun.end.year),
-
-      ## mod_fit_discards
-      # 'mod.fit.discards.start.year' = as.character(mod.fit.discards.start.year),
-      # 'mod.fit.discards.end.year' = as.character(mod.fit.discards.end.year),
-      # 'mod.fit.discards.units' = as.character(mod.fit.discards.units),
-      # 'mod.fit.discards.min' = as.character(mod.fit.discards.min),
-      # 'mod.fit.discards.max' = as.character(mod.fit.discards.max),
-
-      ## selectivity
-      # 'selectivity.start.year' = as.character(selectivity.start.year),
-      # 'selectivity.end.year' = as.character(selectivity.end.year),
-      # 'selectivity.length.units' = as.character(selectivity.length.units),
-      # 'selectivity.length.min' = as.character(selectivity.length.min),
-      # 'selectivity.length.max' = as.character(selectivity.length.max),
-
-      # relative recruitment ts
-      # NOTE: moving this above recruitment so rel.recruitment.min isn't changed
-      # to "rel." + recruitment.min (etc.)
-      # 'rel.recruitment.min' = as.character(rel.recruitment.min),
-      # 'rel.recruitment.max' = as.character(rel.recruitment.max),
-
-      ## spr (spawning potential ratio)
-      "spr.min" = as.character(spr.min),
-      "spr.max" = as.character(spr.max),
-      #  'spr.ref.pt' = as.character(spr.ref.pt),
-
-      ## proj_catch (projected catch)
-      # 'proj.catch.units' = as.character(proj.catch.units),
-      "proj.catch.start.year" = as.character(proj.catch.start.year),
-      "proj.catch.end.year" = as.character(proj.catch.end.year),
-      "proj.catch.min" = as.character(proj.catch.min),
-      "proj.catch.max" = as.character(proj.catch.max) # ,
-
-      # # TABLES-----
-      #
-      # ## catch
-      # 'catch.fleet' = as.character(catch.fleet),
-      #
-      # ## discards
-      # 'discards.tbl.units' = as.character(discards.tbl.units),
-      #
-      # ## catchability
-      # 'catchability.fleet' = as.character(catchability.fleet)
-    )
-
-    # If a value in patterns_replacements = NA, then make it "NA"
-    # to avoid errors
-    patterns_replacements <- tidyr::replace_na(patterns_replacements, "NA")
-
-    # take the values associated with the quantities and replace the df's
-    # placeholders with them. For example, if ssb_min = 10, this will replace
-    # "the minimum ssb = ssb_min" with "the minimum ssb = 10".
-
-    # replace values in caption column
-    caps_alttext$caption <- stringr::str_replace_all(
-      caps_alttext$caption,
-      patterns_replacements
-    )
-
-    # replace values in alt text column
-    caps_alttext$alt_text <- stringr::str_replace_all(
-      caps_alttext$alt_text,
-      patterns_replacements
-    )
-
-    # export df with updated captions and alt text to csv
-    utils::write.csv(
-      x = caps_alttext,
-      file = fs::path(
-        dir,
-        "captions_alt_text.csv"
-      ),
-      row.names = FALSE
-    )
-
-
-    # message explaining the extracted and inserted key quantities
-    replaced_vals <- patterns_replacements |>
-      as.data.frame() |>
-      tibble::rownames_to_column() |>
-      dplyr::rename(
-        "name" = 1,
-        "key_quantity" = 2
-      )
-
-    cli::cli_h3("Key quantities extracted and inserted from write_captions().")
-    cli::cli_alert_info("NA values signify key quantities that were not extracted and inserted.", wrap = TRUE)
-    for (i in 1:dim(replaced_vals)[1]) {
-      cli::cli_li(paste0(
-        replaced_vals[i, 1],
-        ": ",
-        replaced_vals[i, 2]
-      ))
-    }
-
-    # enable warnings again
-    options(warn = 0)
-  }
-}
 
 #------------------------------------------------------------------------------
 

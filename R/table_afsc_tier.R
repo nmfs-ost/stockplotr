@@ -11,16 +11,16 @@ table_afsc_tier <- function() {
   fig_or_table <- "table"
 
   # run write_captions.R if its output doesn't exist
-  if (!file.exists(
-    fs::path(getwd(), "captions_alt_text.csv")
-  )
-  ) {
-    stockplotr::write_captions(
-      dat = dat,
-      dir = tables_dir,
-      year = NULL
-    )
-  }
+  # if (!file.exists(
+  #   fs::path(getwd(), "captions_alt_text.csv")
+  # )
+  # ) {
+  #   stockplotr::write_captions(
+  #     dat = dat,
+  #     dir = tables_dir,
+  #     year = NULL
+  #   )
+  # }
   level <- c(
     "Level 1: Normal",
     "Level 2: Substantially Increased Concerns",

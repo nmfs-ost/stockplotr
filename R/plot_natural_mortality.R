@@ -23,11 +23,6 @@ plot_natural_mortality <- function(
   figures_dir = getwd(),
   ...
 ) {
-  # TODO:
-  # -update M.rate.min, max in write_captions once prev point done
-  # -Make test
-  # -add to exp_all_figs_tables
-
   # Extract natural mortality
   # if (is.null(group)) group <- "age"
 
