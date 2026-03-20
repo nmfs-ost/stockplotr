@@ -521,25 +521,33 @@ reference_line <- function(
   era_name <- era
 
   # Add geom for ref line
-  plot +
-    ggplot2::geom_hline(
-      # ggplot2::aes(
-      yintercept = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
-      # ),
-      color = "black",
-      linetype = "dashed"
-    ) +
-    ggplot2::annotate(
-      geom = "text",
-      # TODO: need to change this for general process
-      x = as.numeric(max(dat$year[dat$era == era_name], na.rm = TRUE)), # - as.numeric(max(dat$year[dat$era == "time"], na.rm = TRUE))/200,
-      y = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
-      label = glue::glue("{label_name}[{reference}]"), # list(bquote(label_name[.(reference)])),
-      parse = TRUE,
-      hjust = 1,
-      vjust = 0,
-      size = 5 # this is not foolproof
-    )
+  if (is.null(ref_line_val)) {
+    # cli::cli_alert_warning(
+    #   glue::glue("Reference value for {label_name} not found. Cannot add reference line.")
+    # )
+    plot
+  } else {
+    plot +
+      ggplot2::geom_hline(
+        # ggplot2::aes(
+        yintercept = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
+        # ),
+        color = "black",
+        linetype = "dashed"
+      ) +
+      ggplot2::annotate(
+        geom = "text",
+        # TODO: need to change this for general process
+        x = as.numeric(max(dat$year[dat$era == era_name], na.rm = TRUE)), # - as.numeric(max(dat$year[dat$era == "time"], na.rm = TRUE))/200,
+        y = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
+        label = glue::glue("{label_name}[{reference}]"), # list(bquote(label_name[.(reference)])),
+        parse = TRUE,
+        hjust = 1,
+        vjust = 0,
+        size = 5 # this is not foolproof
+      )
+  }
+  
 }
 
 #------------------------------------------------------------------------------
@@ -895,7 +903,7 @@ calculate_reference_point <- function(
   }
 
   # Check if the reference value was found
-  if (length(ref_line_val) == 0) {
+  if (!is.null(ref_line_val) && length(ref_line_val) == 0) {
     cli::cli_alert_warning(
       "The resulting reference value of `{reference_name}` was not found.",
       wrap = TRUE
