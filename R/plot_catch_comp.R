@@ -121,8 +121,8 @@ plot_catch_comp <- function(
     caa.end.year <- max(data$year)
     caa.age.min <- min(data$age)
     caa.age.max <- max(data$age)
-    tot.catch.min <- min(data$estimate)
-    tot.catch.max <- max(data$estimate)
+    tot.catch.min <- min(data$estimate) |> round(digits = 3)
+    tot.catch.max <- max(data$estimate) |> round(digits = 3)
     
     # calculate & export key quantities
     export_kqs(caa.start.year,

@@ -103,8 +103,8 @@ plot_landings <- function(
     # Obtain relevant key quantities for captions/alt text
     landings.start.year <- min(prepared_data$year)
     landings.end.year <- max(prepared_data$year)
-    landings.min <- min(prepared_data$estimate)
-    landings.max <- max(prepared_data$estimate)
+    landings.min <- min(prepared_data$estimate) |> round(digits = 3)
+    landings.max <- max(prepared_data$estimate) |> round(digits = 3)
     landings.units <- unit_label  
       
     # calculate & export key quantities

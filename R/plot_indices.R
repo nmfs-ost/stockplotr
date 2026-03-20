@@ -118,8 +118,8 @@ plot_indices <- function(
     # Obtain relevant key quantities for captions/alt text
     cpue.start.year <- min(prepared_data$year)
     cpue.end.year <- max(prepared_data$year)
-    cpue.min <- min(prepared_data$estimate)
-    cpue.max <- max(prepared_data$estimate)
+    cpue.min <- min(prepared_data$estimate) |> round(digits = 3)
+    cpue.max <- max(prepared_data$estimate) |> round(digits = 3)
     cpue.units <- ifelse(unit_label == "",
                          "an estimated index ratio", # default if empty
                          unit_label)

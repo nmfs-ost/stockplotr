@@ -102,11 +102,13 @@ plot_fishing_mortality <- function(
       rel.F.min <- ggplot2::ggplot_build(final)@data[[2]] |>
         as.data.frame() |>
         dplyr::pull(y) |>
-        min()
+        min() |>
+        round(digits = 2)
       rel.F.max <- ggplot2::ggplot_build(final)@data[[2]] |>
         as.data.frame() |>
         dplyr::pull(y) |>
-        max()
+        max() |>
+        round(digits = 2)
       
       # calculate & export key quantities
       export_kqs(rel.F.min, rel.F.max)
@@ -115,8 +117,8 @@ plot_fishing_mortality <- function(
       insert_kqs(rel.F.min, rel.F.max)
       
     } else {
-      F.min <- min(prepared_data$estimate)
-      F.max <- max(prepared_data$estimate)
+      F.min <- min(prepared_data$estimate) |> round(digits = 3)
+      F.max <- max(prepared_data$estimate) |> round(digits = 3)
       
       export_kqs(F.min, F.max)
       insert_kqs(F.min, F.max)

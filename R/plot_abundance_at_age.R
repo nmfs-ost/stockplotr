@@ -117,8 +117,8 @@ plot_abundance_at_age <- function(
     pop.naa.end.year <- max(data$year)
     pop.naa.age.min <- min(data$age)
     pop.naa.age.max <- max(data$age)
-    pop.naa.fish.min <- min(data$estimate)
-    pop.naa.fish.max <- max(data$estimate)
+    pop.naa.fish.min <- min(data$estimate) |> round(digits = 3)
+    pop.naa.fish.max <- max(data$estimate) |> round(digits = 3)
     
     # calculate & export key quantities
     export_kqs(pop.naa.start.year,

@@ -104,9 +104,9 @@ plot_recruitment_deviations <- function(
     # Obtain relevant key quantities for captions/alt text
     recruit.dev.start.year <- min(filter_data$year)
     recruit.dev.end.year <- max(filter_data$year)
-    recruit.dev.min <- min(filter_data$estimate)
-    recruit.dev.max <- max(filter_data$estimate)
-
+    recruit.dev.min <- min(filter_data$estimate) |> round(digits = 3)
+    recruit.dev.max <- max(filter_data$estimate) |> round(digits = 3)
+    
     # calculate & export key quantities
     export_kqs(recruit.dev.start.year,
                recruit.dev.end.year,

@@ -104,8 +104,8 @@ plot_natural_mortality <- function(
     # Obtain relevant key quantities for captions/alt text
     M.age.min <- min(processed_data$age)
     M.age.max <- max(processed_data$age)
-    M.rate.min <- min(processed_data$estimate)
-    M.rate.max <- max(processed_data$estimate)
+    M.rate.min <- min(processed_data$estimate) |> round(digits = 3)
+    M.rate.max <- max(processed_data$estimate) |> round(digits = 3)
 
     # calculate & export key quantities
     export_kqs(M.age.min,

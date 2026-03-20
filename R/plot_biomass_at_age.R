@@ -101,8 +101,8 @@ plot_biomass_at_age <- function(
     pop.baa.end.year <- max(data$year)
     pop.baa.age.min <- min(data$age)
     pop.baa.age.max <- max(data$age)
-    pop.baa.fish.min <- min(data$estimate)
-    pop.baa.fish.max <- max(data$estimate)
+    pop.baa.fish.min <- min(data$estimate) |> round(digits = 3)
+    pop.baa.fish.max <- max(data$estimate) |> round(digits = 3)
     
     # calculate & export key quantities
     export_kqs(pop.baa.start.year,

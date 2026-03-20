@@ -150,8 +150,8 @@ plot_recruitment <- function(
     recruitment.units <- as.character(unit_label)
     recruitment.start.year <- min(recruitment$year)
     recruitment.end.year <- max(recruitment$year)
-    recruitment.min <- min(recruitment$predicted_recruitment)
-    recruitment.max <- max(recruitment$predicted_recruitment)
+    recruitment.min <- min(recruitment$predicted_recruitment) |> round(digits = 3)
+    recruitment.max <- max(recruitment$predicted_recruitment) |> round(digits = 3)
 
     # calculate & export key quantities
     export_kqs(recruitment.units,

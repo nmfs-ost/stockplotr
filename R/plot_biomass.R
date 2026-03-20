@@ -176,8 +176,8 @@ plot_biomass <- function(
     
     B.ref.pt <- as.character(ref_line)
     B.units <- as.character(unit_label)
-    B.start.year <- min(prepared_data$year)
-    B.end.year <- max(prepared_data$year) 
+    B.start.year <- min(prepared_data$year) |> round(digits = 3)
+    B.end.year <- max(prepared_data$year) |> round(digits = 3)
     
     export_kqs(B.ref.pt,
                B.units,

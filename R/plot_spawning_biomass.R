@@ -241,11 +241,13 @@ plot_spawning_biomass <- function(
       rel.ssb.min <- ggplot2::ggplot_build(final)@data[[2]] |>
         as.data.frame() |>
         dplyr::pull(y) |>
-        min()
+        min() |>
+        round(digits = 2)
       rel.ssb.max <- ggplot2::ggplot_build(final)@data[[2]] |>
         as.data.frame() |>
         dplyr::pull(y) |>
-        max()
+        max() |>
+        round(digits = 2)
       
       # calculate & export key quantities
       export_kqs(rel.ssb.min, rel.ssb.max)
@@ -254,8 +256,8 @@ plot_spawning_biomass <- function(
       insert_kqs(rel.ssb.min, rel.ssb.max)
       
     } else {
-      ssb.min <- min(plot_data$estimate)
-      ssb.max <- max(plot_data$estimate)
+      ssb.min <- min(plot_data$estimate) |> round(digits = 3)
+      ssb.max <- max(plot_data$estimate) |> round(digits = 3)
       
       export_kqs(ssb.min, ssb.max)
       insert_kqs(ssb.min, ssb.max)
