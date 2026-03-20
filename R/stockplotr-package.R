@@ -17,6 +17,6 @@ globvar <- c(
   "plot_data", "quantile", "rda_dir", "reorder", "total_estimate", "zvar", "filter_data",
   "Component", "age_bins", "alt_label", "final_df", "init", "keyword", "len_bins",
   "like", "match_key", "morph", "nsim", "output", "output_order", "parm_stdev", "seas",
-  "sexes", "subseas", "unique_count", "value", "yr"
+  "sexes", "subseas", "unique_count", "value", "yr", "fleet_names", "."
 )
 if (getRversion() >= "2.15.1") utils::globalVariables(globvar)

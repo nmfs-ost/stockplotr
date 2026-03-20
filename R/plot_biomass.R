@@ -20,7 +20,7 @@
 #' plot_biomass(
 #'   dat = stockplotr:::example_data,
 #'   unit_label = "mt",
-#'   ref_line = c("target" = 555),
+#'   ref_line = c("target" = 20000),
 #'   scale_amount = 100,
 #'   module = "TIME_SERIES",
 #'   figures_dir = getwd()

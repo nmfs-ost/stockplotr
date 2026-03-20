@@ -50,7 +50,7 @@ Default: NULL}
 Default: "target"
 
 Options: (including, but not limited to) "target", "msy", and "unfished"
-If the reference point is not found in the data, set ref_line = c("{name}" = value).}
+If the reference point is not found in the data, set `ref_line = c("{name}" = value)`.}
 
 \item{unit_label}{A string specifying spawning biomass unit.
 
@@ -98,7 +98,7 @@ Default: `FALSE`}
 }
 \value{
 Plot spawning biomass over time from the results of an assessment model translated to
-the a standardized output (\link[asar]{convert_output}). There are options to return a
+the a standardized output (\link[stockplotr]{convert_output}). There are options to return a
 \link[ggplot2]{ggplot} object or export an rda object containing associated
 caption and alternative text for the figure.
 }
@@ -126,6 +126,12 @@ plot_spawning_biomass(
   relative = TRUE,
   ref_line = "msy",
   module = "TIME_SERIES"
+)
+plot_spawning_biomass(
+ dat = stockplotr:::example_data,
+ ref_line = c("target" = 10),
+ interactive = FALSE,
+ module = "TIME_SERIES"
 )
 }
 \seealso{

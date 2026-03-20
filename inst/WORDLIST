@@ -12,7 +12,6 @@ Pre
 Preformatted
 Rda
 alttext
-amak
 asar
 bam
 birthseas
@@ -27,8 +26,10 @@ dat
 dataframe's
 diagonostic
 dplyr
+facetting
 fims
 flextable
+getwd
 ggplot
 gp
 hline
@@ -50,6 +51,7 @@ rowid
 satf
 sd
 se
+seealso
 socio
 spr
 ss
@@ -59,6 +61,8 @@ stringr
 subseason
 theming
 tibble
+tibble's
+tibbles
 tidyr
 tidyselect
 unfished

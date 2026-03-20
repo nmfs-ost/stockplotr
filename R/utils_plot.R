@@ -197,7 +197,7 @@ plot_timeseries <- function(
 #' Create plot with error
 #'
 #' @param dat filtered data frame from standard output file(s) preformatted for
-#'  the target label from \link[stockplotr]{prepare_data}
+#'  the target label from \link[stockplotr]{process_data}
 #' @param x a string of the column name of data used to plot on the x-axis (default
 #' is "year")
 #' @param y a string of the column name of data used to plot on the y-axis (default
