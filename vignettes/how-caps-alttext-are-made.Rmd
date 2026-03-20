@@ -15,9 +15,9 @@ If you create tables and/or figures with this package, you will notice that capt
 
 ## Templates
 
-The ['captions_alt_text_template.csv' file](https://github.com/nmfs-ost/stockplotr/blob/main/inst/resources/captions_alt_text_template.csv) contains the templates for each table or figure's caption/alternative text. Tables have captions, and figures have captions and alternative text. Please refer to [the `asar` package's accessibility vignette](https://nmfs-ost.github.io/asar/articles/accessibility_guide.html) to learn more about how we aimed to construct clear and comprehensive alternative text.
+The ['captions_alt_text_template.csv' file](https://github.com/nmfs-ost/stockplotr/blob/main/inst/resources/captions_alt_text_template.csv) contains the templates for each table or figure's caption/alternative text. Tables have captions, and figures have captions and alternative text. Please refer to [the {asar} package's accessibility vignette](https://nmfs-ost.github.io/asar/articles/accessibility_guide.html) to learn more about how we aimed to construct clear and comprehensive alternative text.
 
-As *templates*, these texts are the *starting point* for the final captions and alternative text (again, we encourage users to read the [the `asar` package's accessibility vignette](https://nmfs-ost.github.io/asar/articles/accessibility_guide.html) to learn how and why they should check the accuracy and write the final component of each figure's alternative text). Specifically, there are placeholders throughout the texts (e.g., B.ref.pt, B.min, B.max). If the model results are parsed successfully, these placeholders will eventually be replaced with key quantities from the model results. For example, B.ref.pt will be replaced with the biomass figure's reference point, and B.min and B.max will be replaced with the minimum and maximum biomass.
+As *templates*, these texts are the *starting point* for the final captions and alternative text (again, we encourage users to read the [the {asar} package's accessibility vignette](https://nmfs-ost.github.io/asar/articles/accessibility_guide.html) to learn how and why they should check the accuracy and write the final component of each figure's alternative text). Specifically, there are placeholders throughout the texts (e.g., B.ref.pt, B.min, B.max). If the model results are parsed successfully, these placeholders will eventually be replaced with key quantities from the model results. For example, B.ref.pt will be replaced with the biomass figure's reference point, and B.min and B.max will be replaced with the minimum and maximum biomass.
 
 The file is set up like this:
 
@@ -36,50 +36,34 @@ The file is set up like this:
 
 : Format for csv containing table and figure captions and alternative text.
 
-## Workflow in four key steps
+## Calculating and exporting captions and alternative text
 
-Next, key quantities are extracted from the model results (which have already been converted into a standardized format using `asar::convert_output()`). Finally, key quantities replace the placeholders in the captions/alt text template.
+The process of extracting and inserting key quantities begins when a user runs a plotting function with the argument `make_rda = TRUE`. For example, `plot_biomass(dat, make_rda = TRUE)`. If  `make_rda = FALSE`, key quantities will not be calculated.
 
-These steps are performed by four key functions within `create_rda()`, which is housed within `utils_rda.R`. These functions are:
-
-1. `write_captions()`
-2. `add_more_key_quants()`
-3. `extract_caps_alttext()`
-4. `export_rda`
-
-The steps are discussed, below.
+After the final plot has been created within the function, key quantities are calculated by extracting values from the dataset used to create the final plot. For example, in `plot_biomass()`, the minimum biomass will be saved to an object called "B.min".
 
 **NOTE**: While we extract key quantities as accurately as we can, we cannot guarantee that each quantity will be calculated perfectly. Input data varies widely. It’s always your responsibility to check the accuracy of your figures' alt text.
 
-## Extracting key quantities from model results
+Next, the function `insert_kqs()` imports an empty or partially-filled template with captions and alternative text ("captions_alt_text_template.csv" or "captions_alt_text.csv", respectively), depending on if the user has already created a "captions_alt_text.csv" file in their working directory. The .csv file is imported as a dataframe.
 
-### `write_captions()`
+The key quantities are substituted into the dataframe's appropriate placeholders. For example, "The y axis shows biomass in B.units, which spans from **B.min** to B.max." will changed to "The y axis shows biomass in B.units, which spans from **100** to B.max."
 
-In this function, the captions_alt_text_template.csv file is imported as a dataframe. Then, key quantities are extracted from the model results and substituted into the dataframe's appropriate placeholders. Finally, the function exports the updated dataframe as a new csv ("captions_alt_text.csv").
-
-### `add_more_key_quants()`
-
-This function imports the new captions_alt_text.csv as a dataframe. Then, it substitutes some placeholders with key quantities that cannot be extracted from the model results because they are manually specified by the user, or are derived using such quantities (e.g., a figure's end year, units, reference point, and more). The function exports the dataframe by overwriting the csv with the same filename.
+Finally, the function exports the updated dataframe as a new .csv, or overwrites the old version, to "captions_alt_text.csv".
 
 ## Connecting the tables & figures with the captions & alternative text
 
-### `extract_caps_alttext()`
+The function `create_rda()` creates an R data ("rda") file containing a package with 1) the figure or table, 2) caption, 3) alternative text (if a figure) OR a LaTeX version of a table (if a table). To make this package of files, the following steps occur:
 
-This function selects the appropriate captions and alternative text from captions_alt_text.csv when a figure or table. 
+1. The `extract_caps_alttext()` function selects the appropriate captions and alternative text from captions_alt_text.csv when a figure or table. 
 
-### `export_rda`
-
-Finally, this function exports an rda containing 1) a table and caption, or 2) a figure, caption, and alternative text.
+2. The `export_rda()` function exports the rda package.
 
 # Expected outcomes
 
 ## Single plot functions
 
-When using functions that produce one table or figure at a time, like `plot_biomass()`, only certain key quantities will be substituted into the placeholders. For instance,
-
--   `write_captions()` will substitute as many key quantities as possible, regardless of whether those quantities are associated with biomass.
--   `add_more_key_quants()` will only substitute additional key quantities that are associated with biomass because only those quantities will be specified by the user. For example, if a user specifies the unit label argument in the `plot_biomass()` as "metric tons", then `add_more_key_quants()` will replace the placeholder associated with biomass units (B.units will changed to metric tons). However, no other placeholder associated with landings units, recruitment deviations units, etc. will be substituted, and those placeholders will remain in the captions_alt_text.csv file.
+When using functions that produce one table or figure at a time, like `plot_biomass()`, only the key quantities associated with that plot will be substituted into the placeholders.
 
 ## Multi-plot functions
 
-When using `save_all_plots()`, the `stockplotr` function that exports all figures and tables, all key quantities (or, as many key quantities as possible) will be substituted into the placeholders. As opposed to single-plot functions, `save_all_plots()` allows for the user to specify all arguments needed to substitute all key quantities.
+When using `save_all_plots()`, the {stockplotr} function that exports all figures and tables, all key quantities (or, as many key quantities as possible) will be substituted into the placeholders.

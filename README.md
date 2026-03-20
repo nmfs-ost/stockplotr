@@ -10,7 +10,7 @@
 
 ***Previously named 'satf'***
 
-The goal of `stockplotr` is to create a centralized package that contains all of
+The goal of {stockplotr} is to create a centralized package that contains all of
 the figures and tables for a stock assessment report used to inform management. 
 There are multiple current packages that perform a 
 similar function, but they are typically region and/or model dependent. Across 
@@ -51,12 +51,12 @@ install.packages("stockplotr", repos = c("https://noaa-fisheries-integrated-tool
 
 ## Usage
 
-Please refer to the [`asar` tutorial](https://connect.fisheries.noaa.gov/asar_tutorial/#section-preparing-to-run-create_template) to learn how to produce the input file necessary to create figures and tables with `stockplotr`.
+Please refer to the [{asar} tutorial](https://connect.fisheries.noaa.gov/asar_tutorial/#section-preparing-to-run-create_template) to learn how to produce the input file necessary to create figures and tables with {stockplotr}.
 
-Then, once your converted model results are saved as an object in your R environment, you can use `stockplotr` functions to create plots from the object.
+Then, once your converted model results are saved as an object in your R environment, you can use {stockplotr} functions to create plots from the object.
 
 > [!TIP]
-> `stockplotr` plots or tables are exported as `ggplot2` or `flextable` objects 
+> {stockplotr} plots or tables are exported as `ggplot2` or `flextable` objects 
 > meaning that users can use the same process to add new data, formatting, or 
 > other customizations to the plot beyond the baseline made by this package
 
@@ -79,7 +79,7 @@ Example Plot | Example Table |
 
 ## Contributions
 
-Have you identified any suggestions for improvement, bugs, or questions? Please see our [Contributing page](https://github.com/nmfs-ost/stockplotr/blob/main/CONTRIBUTING.md) for more information on how to make effective contributions to `stockplotr`.
+Have you identified any suggestions for improvement, bugs, or questions? Please see our [Contributing page](https://github.com/nmfs-ost/stockplotr/blob/main/CONTRIBUTING.md) for more information on how to make effective contributions to {stockplotr}.
 
 Thank you for helping us improve this package!
 
