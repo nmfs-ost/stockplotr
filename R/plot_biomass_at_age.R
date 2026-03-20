@@ -82,6 +82,9 @@ plot_biomass_at_age <- function(
     )
   }
 
+  data <- data |>
+    dplyr::mutate(age = as.numeric(age))
+  
   # Plot data
   plot <- plot_aa(
     dat = data,

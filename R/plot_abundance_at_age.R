@@ -97,6 +97,9 @@ plot_abundance_at_age <- function(
       ggplot2::ggplot()
     )
   }
+  
+  data <- data |>
+    dplyr::mutate(age = as.numeric(age))
 
   # Plot data
   plot <- plot_aa(
