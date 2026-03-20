@@ -4,7 +4,24 @@
 
 # TODO: update new fxns to work with a specified 'dir' instead of default 'getwd()'?
 
-# Fill in key quantities in template
+#' Substitute key quantities' values into template
+#'
+#' @param df Dataframe created by importing "key_quantity_template.csv" or
+#' "key_quantities.csv", empty or partially-filled templates with key
+#' quantity names and other associated information
+#' @param ... Key quantity objects whose values will be added to the output
+#' dataframe
+#'
+#' @returns Dataframe based on key quantities template that contains 
+#' newly-added values of key quantities indicated via ellipsis. The dataframe
+#' is input for [fill_in_kqs()].
+#'
+#' @examples \dontrun{
+#' fill_in_kqs(
+#'   df = data,
+#'   F.min,
+#'   F.max)
+#' }
 fill_in_kqs <- function(df, ...) {
   
   arg_names <- sapply(substitute(list(...))[-1], deparse)
@@ -26,8 +43,20 @@ fill_in_kqs <- function(df, ...) {
     dplyr::select(-value_new)
 }
 
-# Calculate and export key quantities
-## kqs (e.g., landings.end.year) are the ellipsis args
+#' Export updated key quantities template
+#'
+#' @param ... Key quantities whose values should be added to the
+#' exported "key_quantities.csv"
+#'
+#' @returns Exports a file based on key quantities template, with values
+#' added next to the names of the key quantities specified as ellipsis 
+#' arguments. File is saved as "key_quantities.csv" to the working directory.
+#'
+#' @examples \dontrun{
+#' export_kqs(
+#'   F.min,
+#'   F.max)
+#' }
 export_kqs <- function(...) {
   
   # Open new or existing key quantities csv
@@ -52,8 +81,20 @@ export_kqs <- function(...) {
   
 }
 
-# Add key quantities to captions/alt text csv
-## kqs (e.g., landings.end.year) are the ellipsis args
+#' Insert key quantities into the captions and alternative text file
+#'
+#' @param ... Key quantities whose values should be added to the
+#' exported "captions_alt_text.csv"
+#'
+#' @returns Exports a file ("captions_alt_text.csv") containing captions 
+#' and alternative text for figures and tables, with key quantities inserted
+#' into the "captions_alt_text_template.csv" template's placeholders.
+#'
+#' @examples \dontrun{
+#' insert_kqs(
+#'   F.min,
+#'   F.max)
+#' }
 insert_kqs <- function(...) {
   if (file.exists(fs::path(getwd(), "captions_alt_text.csv"))) {
     cli::cli_alert_info("Captions/alternative text file (captions_alt_text.csv) exists. Newly calculated key quantities will be added to it.", wrap = TRUE)
