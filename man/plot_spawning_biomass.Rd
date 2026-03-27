@@ -50,7 +50,7 @@ Default: NULL}
 Default: "target"
 
 Options: (including, but not limited to) "target", "msy", and "unfished"
-If the reference point is not found in the data, set `ref_line = c("{name}" = value)`.}
+If the reference point is not found in the data, set ref_line = c("{name}" = value).}
 
 \item{unit_label}{A string specifying spawning biomass unit.
 
@@ -135,9 +135,6 @@ plot_spawning_biomass(
 )
 }
 \seealso{
-* [plot_timeseries()]
-* [calculate_reference_point()]
-* [reference_line()]
-* [filter_data()]
-* [process_data()]
+[plot_timeseries()], [calculate_reference_point()],
+[reference_line()], [filter_data()], [process_data()]
 }

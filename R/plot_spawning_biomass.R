@@ -32,7 +32,7 @@
 #' Default: "target"
 #' 
 #' Options: (including, but not limited to) "target", "msy", and "unfished"
-#' If the reference point is not found in the data, set `ref_line = c("{name}" = value)`. 
+#' If the reference point is not found in the data, set ref_line = c("{name}" = value). 
 #' @param unit_label A string specifying spawning biomass unit.
 #' 
 #' Default: "metric tons"
@@ -73,12 +73,8 @@
 #' All plotting functions automatically recognize indexing variables and will 
 #' use them in groupings and/or facetting. @seealso [process_data()].
 #' 
-#' @seealso 
-#' * [plot_timeseries()]
-#' * [calculate_reference_point()]
-#' * [reference_line()]
-#' * [filter_data()]
-#' * [process_data()]
+#' @seealso [plot_timeseries()], [calculate_reference_point()],
+#' [reference_line()], [filter_data()], [process_data()]
 #' 
 #' @export
 #'
