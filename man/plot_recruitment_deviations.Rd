@@ -15,32 +15,42 @@ plot_recruitment_deviations(
 )
 }
 \arguments{
-\item{dat}{A data frame or names list of data frames (input as `list()`)
-returned from \link[stockplotr]{convert_output}. The first data frame in the list
-is used in calculation of a reference line if one is present}
+\item{dat}{A tibble or named list of tibbles (input as `list()`)
+returned from \link[stockplotr]{convert_output}. 
 
-\item{module}{(Optional) A string indicating the linked module_name associated
-with the label for the plot if known. Default is NULL. By default, the function
-will select the most relevant module if more than 1 exists.}
+If inputting a list of tibbles, the first tibble's reference point defined 
+in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or
-projected ("fore") data if filtering should occur. Default is set to "time" which is
-the current time. To plot all data, set era to NULL.}
+\item{module}{(Optional) A string indicating the module_name found in `dat`.
 
-\item{interactive}{TRUE/FALSE; indicate whether the environment in which the
-function is operating  is interactive. This bypasses some options for
-filtering when preparing data for the plot. Default is FALSE.}
+Default: NULL
 
-\item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
-a list with the figure/table, caption, and alternative text (if figure). If TRUE,
+If the interactive and >1 module_name is found, user will select the 
+module_name in the console. @seealso [filter_data()]}
+
+\item{era}{A string naming the era of data.
+
+Default: "time"
+
+Options: "early", "time", "fore" (forecast), or NULL (all data)}
+
+\item{interactive}{A logical value indicating if the environment is interactive.
+
+Default: `FALSE`}
+
+\item{make_rda}{A logical value indicating whether to save the object and 
+make an automated caption and alternative text in the form of an `rda` object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
-Default is FALSE.}
 
-\item{figures_dir}{The location of the folder containing the generated figure
-rda files ("figures") that will be created if the argument `make_rda` = TRUE.
-Default is the working directory.}
+Default: `FALSE`.}
 
-\item{...}{Arguments called from ggplot2::geom_line or ggplot2::geom_point}
+\item{figures_dir}{A string indicating a path to the "figures" folder.
+
+Default: `getwd()`
+
+The folder is created within the path if it does not exist.}
+
+\item{...}{Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}
 }
 \value{
 Plot recruitment deviations relative to one over time from an

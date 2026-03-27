@@ -45,7 +45,7 @@ Default is the working directory.}
 }
 \value{
 Plot total abundance (or numbers) at age from a stock assessment model
-using a standardized output made from \link[asar]{convert_output}). Units of
+using a standardized output made from \link[stockplotr]{convert_output}). Units of
 abundance can either be manually added or will be extracted from the provided
 file if possible.
 }

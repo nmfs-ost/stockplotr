@@ -22,73 +22,93 @@ plot_spawning_biomass(
 )
 }
 \arguments{
-\item{dat}{A data frame or names list of data frames (input as `list()`)
-returned from \link[stockplotr]{convert_output}. The first data frame in the list
-is used in calculation of a reference line if one is present}
+\item{dat}{A tibble or named list of tibbles (input as `list()`)
+returned from \link[stockplotr]{convert_output}. 
 
-\item{geom}{A string stating the geom used for the plot. Default is "line".
-Options include "line", "point", or "area"}
+If inputting a list of tibbles, the first tibble's reference point defined 
+in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{group}{a string of a single column that groups the data (e.g. "fleet",
-"sex", "area", etc.). Currently can only have one level of grouping. If you want to just summarize
-the data across all factors, set group = "none". In the case there is only
-one unique value of the grouping and/or NA is available, the function will
-default to the NAs and in some cases the grouping when there is not an equal
-number of rows for NA and the grouped data.}
+\item{geom}{A string stating the geom used for the plot. 
 
-\item{facet}{a string or vector of strings of a column that facets the data
-(e.g. "year", "area", etc.)}
+Default: "line".
 
-\item{ref_line}{A string specifying the type of reference you want to
-compare spawning biomass to. The default is `"target"`, which looks for
-`"spawning_biomass_target"` in the `"label"` column of `dat`. The actual
-searching in `dat` is case agnostic and will work with either upper- or
-lower-case letters but you must use one of the options specified in the
-default list to ensure that the label on the figure looks correct
-regardless of how it is specified in `dat`.}
+Options: "line", "point", or "area"}
 
-\item{unit_label}{units for spawning_biomass}
+\item{group}{A string of a single column that groups the data (e.g. "fleet",
+"sex", "area", etc.). 
 
-\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or
-projected ("fore") data if filtering should occur. Default is set to "time" which is
-the current time. To plot all data, set era to NULL.}
+Set group = "none" to summarize data over all indexing values.
 
-\item{module}{(Optional) A string indicating the linked module_name associated
-with the label for the plot if known. Default is NULL. By default, the function
-will select the most relevant module if more than 1 exists.}
+Default: NULL}
 
-\item{scale_amount}{A number describing how much to scale down the quantities
-shown on the y axis. For example, scale_amount = 100 would scale down a value
-from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
+\item{facet}{A string or vector of strings of a column name.
 
-\item{relative}{A logical value specifying if the resulting figures should
-be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
-which reference point to use.}
+Default: NULL}
 
-\item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
-a list with the figure/table, caption, and alternative text (if figure). If TRUE,
+\item{ref_line}{A string specifying a reference point name.
+
+Default: "target"
+
+Options: (including, but not limited to) "target", "msy", and "unfished"
+If the reference point is not found in the data, set ref_line = c("{name}" = value).}
+
+\item{unit_label}{A string specifying spawning biomass unit.
+
+Default: "metric tons"}
+
+\item{era}{A string naming the era of data.
+
+Default: "time"
+
+Options: "early", "time", "fore" (forecast), or NULL (all data)}
+
+\item{module}{(Optional) A string indicating the module_name found in `dat`.
+
+Default: NULL
+
+If the interactive and >1 module_name is found, user will select the 
+module_name in the console. @seealso [filter_data()]}
+
+\item{scale_amount}{A number to scale the y-axis values.
+
+Default: 1}
+
+\item{relative}{A logical value specifying to set y-axis values relative to 
+the ref_line value.
+
+Default: `FALSE`}
+
+\item{make_rda}{A logical value indicating whether to save the object and 
+make an automated caption and alternative text in the form of an `rda` object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
-Default is FALSE.}
 
-\item{figures_dir}{The location of the folder containing the generated figure
-rda files ("figures") that will be created if the argument `make_rda` = TRUE.
-Default is the working directory.}
+Default: `FALSE`.}
 
-\item{interactive}{TRUE/FALSE; indicate whether the environment in which the
-function is operating  is interactive. This bypasses some options for
-filtering when preparing data for the plot. Default is FALSE.}
+\item{figures_dir}{A string indicating a path to the "figures" folder.
 
-\item{...}{Arguments called from ggplot2::geom_line or ggplot2::geom_point}
+Default: `getwd()`
+
+The folder is created within the path if it does not exist.}
+
+\item{interactive}{A logical value indicating if the environment is interactive.
+
+Default: `FALSE`}
+
+\item{...}{Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}
 }
 \value{
 Plot spawning biomass over time from the results of an assessment model translated to
-the a standardized output (\link[asar]{convert_output}). There are options to return a
-[ggplot2::ggplot()] object or export an rda object containing associated
+the a standardized output (\link[stockplotr]{convert_output}). There are options to return a
+\link[ggplot2]{ggplot} object or export an rda object containing associated
 caption and alternative text for the figure.
 }
 \description{
 Plot spawning biomass with a reference line as a dashed line. The figure can
 also be made relative to this reference line rather than in absolute units.
+}
+\note{
+All plotting functions automatically recognize indexing variables and will 
+use them in groupings and/or facetting. @seealso [process_data()].
 }
 \examples{
 plot_spawning_biomass(
@@ -107,4 +127,14 @@ plot_spawning_biomass(
   ref_line = "msy",
   module = "TIME_SERIES"
 )
+plot_spawning_biomass(
+ dat = stockplotr:::example_data,
+ ref_line = c("target" = 10),
+ interactive = FALSE,
+ module = "TIME_SERIES"
+)
+}
+\seealso{
+[plot_timeseries()], [calculate_reference_point()],
+[reference_line()], [filter_data()], [process_data()]
 }

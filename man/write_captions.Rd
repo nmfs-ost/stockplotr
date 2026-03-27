@@ -7,9 +7,11 @@
 write_captions(dat, dir = getwd(), year = format(Sys.Date(), "\%Y"))
 }
 \arguments{
-\item{dat}{A data frame or names list of data frames (input as `list()`)
-returned from \link[stockplotr]{convert_output}. The first data frame in the list
-is used in calculation of a reference line if one is present}
+\item{dat}{A tibble or named list of tibbles (input as `list()`)
+returned from \link[stockplotr]{convert_output}. 
+
+If inputting a list of tibbles, the first tibble's reference point defined 
+in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
 \item{dir}{Directory where the output captions and alt text file should be
 saved. Defaults to working directory.}
