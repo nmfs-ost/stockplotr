@@ -114,28 +114,28 @@
 
 
 <dl><dt id="arg-dat">dat<a class="anchor" aria-label="anchor" href="#arg-dat"></a></dt>
-<dd><p>A data frame or names list of data frames (input as `list()`)
-returned from <a href="convert_output.html">convert_output</a>. The first data frame in the list
-is used in calculation of a reference line if one is present</p></dd>
+<dd><p>A tibble or named list of tibbles (input as `list()`)
+returned from <a href="convert_output.html">convert_output</a>.</p>
+<p>If inputting a list of tibbles, the first tibble's reference point defined
+in `ref_line` is used to plot a reference line or calculate relative spawning biomass.</p></dd>
 
 
 <dt id="arg-geom">geom<a class="anchor" aria-label="anchor" href="#arg-geom"></a></dt>
-<dd><p>A string stating the geom used for the plot. Default is "line".
-Options include "line", "point", or "area"</p></dd>
+<dd><p>A string stating the geom used for the plot.</p>
+<p>Default: "line".</p>
+<p>Options: "line", "point", or "area"</p></dd>
 
 
 <dt id="arg-group">group<a class="anchor" aria-label="anchor" href="#arg-group"></a></dt>
-<dd><p>a string of a single column that groups the data (e.g. "fleet",
-"sex", "area", etc.). Currently can only have one level of grouping. If you want to just summarize
-the data across all factors, set group = "none". In the case there is only
-one unique value of the grouping and/or NA is available, the function will
-default to the NAs and in some cases the grouping when there is not an equal
-number of rows for NA and the grouped data.</p></dd>
+<dd><p>A string of a single column that groups the data (e.g. "fleet",
+"sex", "area", etc.).</p>
+<p>Set group = "none" to summarize data over all indexing values.</p>
+<p>Default: NULL</p></dd>
 
 
 <dt id="arg-facet">facet<a class="anchor" aria-label="anchor" href="#arg-facet"></a></dt>
-<dd><p>a string or vector of strings of a column that facets the data
-(e.g. "year", "area", etc.)</p></dd>
+<dd><p>A string or vector of strings of a column name.</p>
+<p>Default: NULL</p></dd>
 
 
 <dt id="arg-ref-line">ref_line<a class="anchor" aria-label="anchor" href="#arg-ref-line"></a></dt>
@@ -154,44 +154,43 @@ regardless of how it is specified in `dat`. Other possibilities may include
 
 
 <dt id="arg-module">module<a class="anchor" aria-label="anchor" href="#arg-module"></a></dt>
-<dd><p>(Optional) A string indicating the linked module_name associated
-with the label for the plot if known. Default is NULL. By default, the function
-will select the most relevant module if more than 1 exists.</p></dd>
+<dd><p>(Optional) A string indicating the module_name found in `dat`.</p>
+<p>Default: NULL</p>
+<p>If the interactive and &gt;1 module_name is found, user will select the
+module_name in the console. @seealso [filter_data()]</p></dd>
 
 
 <dt id="arg-scale-amount">scale_amount<a class="anchor" aria-label="anchor" href="#arg-scale-amount"></a></dt>
-<dd><p>A number describing how much to scale down the quantities
-shown on the y axis. For example, scale_amount = 100 would scale down a value
-from 500,000 –&gt; 5,000. This scale will be reflected in the y axis label.</p></dd>
+<dd><p>A number to scale the y-axis values.</p>
+<p>Default: 1</p></dd>
 
 
 <dt id="arg-relative">relative<a class="anchor" aria-label="anchor" href="#arg-relative"></a></dt>
-<dd><p>A logical value specifying if the resulting figures should
-be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
-which reference point to use.</p></dd>
+<dd><p>A logical value specifying to set y-axis values relative to
+the ref_line value.</p>
+<p>Default: `FALSE`</p></dd>
 
 
 <dt id="arg-make-rda">make_rda<a class="anchor" aria-label="anchor" href="#arg-make-rda"></a></dt>
-<dd><p>TRUE/FALSE; indicate whether to produce an .rda file containing
-a list with the figure/table, caption, and alternative text (if figure). If TRUE,
-the rda will be exported to the folder indicated in the argument "figures_dir".
-Default is FALSE.</p></dd>
+<dd><p>A logical value indicating whether to save the object and
+make an automated caption and alternative text in the form of an `rda` object. If TRUE,
+the rda will be exported to the folder indicated in the argument "figures_dir".</p>
+<p>Default: `FALSE`.</p></dd>
 
 
 <dt id="arg-figures-dir">figures_dir<a class="anchor" aria-label="anchor" href="#arg-figures-dir"></a></dt>
-<dd><p>The location of the folder containing the generated figure
-rda files ("figures") that will be created if the argument `make_rda` = TRUE.
-Default is the working directory.</p></dd>
+<dd><p>A string indicating a path to the "figures" folder.</p>
+<p>Default: `getwd()`</p>
+<p>The folder is created within the path if it does not exist.</p></dd>
 
 
 <dt id="arg-interactive">interactive<a class="anchor" aria-label="anchor" href="#arg-interactive"></a></dt>
-<dd><p>TRUE/FALSE; indicate whether the environment in which the
-function is operating  is interactive. This bypasses some options for
-filtering when preparing data for the plot. Default is FALSE.</p></dd>
+<dd><p>A logical value indicating if the environment is interactive.</p>
+<p>Default: `FALSE`</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Arguments called from ggplot2::geom_line or ggplot2::geom_point</p></dd>
+<dd><p>Arguments called from <a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a> or <a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></p></dd>
 
 </dl></div>
     <div id="value">
@@ -207,7 +206,7 @@ associated caption and alternative text for the figure.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">plot_biomass</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va">example_data</span>,</span></span>
 <span class="r-in"><span>  unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span></span>
-<span class="r-in"><span>  ref_line <span class="op">=</span> <span class="st">"target"</span>,</span></span>
+<span class="r-in"><span>  ref_line <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"target"</span> <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  scale_amount <span class="op">=</span> <span class="fl">100</span>,</span></span>
 <span class="r-in"><span>  module <span class="op">=</span> <span class="st">"TIME_SERIES"</span>,</span></span>
 <span class="r-in"><span>  figures_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span></span>
@@ -215,25 +214,16 @@ associated caption and alternative text for the figure.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Ignoring unknown labels:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">linetype</span> : <span style="color: #0000BB;">"Fleet"</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">shape</span> : <span style="color: #0000BB;">"Fleet"</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 1 row containing missing values or values outside the scale range</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_hline()`).</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 1 row containing missing values or values outside the scale range</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_text()`).</span>
 <span class="r-plt img"><img src="plot_biomass-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">plot_biomass</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va">example_data</span>,</span></span>
-<span class="r-in"><span>  facet <span class="op">=</span> <span class="st">"fleet"</span>,</span></span>
-<span class="r-in"><span>  ref_line <span class="op">=</span> <span class="st">"target"</span>,</span></span>
+<span class="r-in"><span>  ref_line <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
 <span class="r-in"><span>  module <span class="op">=</span> <span class="st">"TIME_SERIES"</span>,</span></span>
 <span class="r-in"><span>  figures_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Ignoring unknown labels:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">linetype</span> : <span style="color: #0000BB;">"Fleet"</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">shape</span> : <span style="color: #0000BB;">"Fleet"</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 2 rows containing missing values or values outside the scale range</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_hline()`).</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 2 rows containing missing values or values outside the scale range</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_text()`).</span>
 <span class="r-plt img"><img src="plot_biomass-2.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>

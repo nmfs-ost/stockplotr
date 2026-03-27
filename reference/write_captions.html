@@ -102,9 +102,10 @@ key quantities from the model results file.</p>
 
 
 <dl><dt id="arg-dat">dat<a class="anchor" aria-label="anchor" href="#arg-dat"></a></dt>
-<dd><p>A data frame or names list of data frames (input as `list()`)
-returned from <a href="convert_output.html">convert_output</a>. The first data frame in the list
-is used in calculation of a reference line if one is present</p></dd>
+<dd><p>A tibble or named list of tibbles (input as `list()`)
+returned from <a href="convert_output.html">convert_output</a>.</p>
+<p>If inputting a list of tibbles, the first tibble's reference point defined
+in `ref_line` is used to plot a reference line or calculate relative spawning biomass.</p></dd>
 
 
 <dt id="arg-dir">dir<a class="anchor" aria-label="anchor" href="#arg-dir"></a></dt>

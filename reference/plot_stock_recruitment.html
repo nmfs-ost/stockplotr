@@ -109,9 +109,10 @@
 
 
 <dl><dt id="arg-dat">dat<a class="anchor" aria-label="anchor" href="#arg-dat"></a></dt>
-<dd><p>A data frame or names list of data frames (input as `list()`)
-returned from <a href="convert_output.html">convert_output</a>. The first data frame in the list
-is used in calculation of a reference line if one is present</p></dd>
+<dd><p>A tibble or named list of tibbles (input as `list()`)
+returned from <a href="convert_output.html">convert_output</a>.</p>
+<p>If inputting a list of tibbles, the first tibble's reference point defined
+in `ref_line` is used to plot a reference line or calculate relative spawning biomass.</p></dd>
 
 
 <dt id="arg-spawning-biomass-label">spawning_biomass_label<a class="anchor" aria-label="anchor" href="#arg-spawning-biomass-label"></a></dt>
@@ -130,28 +131,28 @@ option menu will pop-up.</p></dd>
 
 
 <dt id="arg-module">module<a class="anchor" aria-label="anchor" href="#arg-module"></a></dt>
-<dd><p>(Optional) A string indicating the linked module_name associated
-with the label for the plot if known. Default is NULL. By default, the function
-will select the most relevant module if more than 1 exists.</p></dd>
+<dd><p>(Optional) A string indicating the module_name found in `dat`.</p>
+<p>Default: NULL</p>
+<p>If the interactive and &gt;1 module_name is found, user will select the
+module_name in the console. @seealso [filter_data()]</p></dd>
 
 
 <dt id="arg-scale-amount">scale_amount<a class="anchor" aria-label="anchor" href="#arg-scale-amount"></a></dt>
-<dd><p>A number describing how much to scale down the quantities
-shown on the y axis. For example, scale_amount = 100 would scale down a value
-from 500,000 –&gt; 5,000. This scale will be reflected in the y axis label.</p></dd>
+<dd><p>A number to scale the y-axis values.</p>
+<p>Default: 1</p></dd>
 
 
 <dt id="arg-make-rda">make_rda<a class="anchor" aria-label="anchor" href="#arg-make-rda"></a></dt>
-<dd><p>TRUE/FALSE; indicate whether to produce an .rda file containing
-a list with the figure/table, caption, and alternative text (if figure). If TRUE,
-the rda will be exported to the folder indicated in the argument "figures_dir".
-Default is FALSE.</p></dd>
+<dd><p>A logical value indicating whether to save the object and
+make an automated caption and alternative text in the form of an `rda` object. If TRUE,
+the rda will be exported to the folder indicated in the argument "figures_dir".</p>
+<p>Default: `FALSE`.</p></dd>
 
 
 <dt id="arg-figures-dir">figures_dir<a class="anchor" aria-label="anchor" href="#arg-figures-dir"></a></dt>
-<dd><p>The location of the folder containing the generated figure
-rda files ("figures") that will be created if the argument `make_rda` = TRUE.
-Default is the working directory.</p></dd>
+<dd><p>A string indicating a path to the "figures" folder.</p>
+<p>Default: `getwd()`</p>
+<p>The folder is created within the path if it does not exist.</p></dd>
 
 </dl></div>
     <div id="value">

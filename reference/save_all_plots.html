@@ -122,9 +122,10 @@
 
 
 <dl><dt id="arg-dat">dat<a class="anchor" aria-label="anchor" href="#arg-dat"></a></dt>
-<dd><p>A data frame or names list of data frames (input as `list()`)
-returned from <a href="convert_output.html">convert_output</a>. The first data frame in the list
-is used in calculation of a reference line if one is present</p></dd>
+<dd><p>A tibble or named list of tibbles (input as `list()`)
+returned from <a href="convert_output.html">convert_output</a>.</p>
+<p>If inputting a list of tibbles, the first tibble's reference point defined
+in `ref_line` is used to plot a reference line or calculate relative spawning biomass.</p></dd>
 
 
 <dt id="arg-recruitment-unit-label">recruitment_unit_label<a class="anchor" aria-label="anchor" href="#arg-recruitment-unit-label"></a></dt>
@@ -139,9 +140,9 @@ recruitment_scale_amount = 100 would scale down a value from 500,000 –&gt;
 
 
 <dt id="arg-relative">relative<a class="anchor" aria-label="anchor" href="#arg-relative"></a></dt>
-<dd><p>A logical value specifying if the resulting figures should
-be relative spawning biomass. The default is `FALSE`. `ref_line` indicates
-which reference point to use.</p></dd>
+<dd><p>A logical value specifying to set y-axis values relative to
+the ref_line value.</p>
+<p>Default: `FALSE`</p></dd>
 
 
 <dt id="arg-proportional">proportional<a class="anchor" aria-label="anchor" href="#arg-proportional"></a></dt>
@@ -149,9 +150,8 @@ which reference point to use.</p></dd>
 
 
 <dt id="arg-interactive">interactive<a class="anchor" aria-label="anchor" href="#arg-interactive"></a></dt>
-<dd><p>TRUE/FALSE; indicate whether the environment in which the
-function is operating  is interactive. This bypasses some options for
-filtering when preparing data for the plot. Default is FALSE.</p></dd>
+<dd><p>A logical value indicating if the environment is interactive.</p>
+<p>Default: `FALSE`</p></dd>
 
 
 <dt id="arg-figures-tables-dir">figures_tables_dir<a class="anchor" aria-label="anchor" href="#arg-figures-tables-dir"></a></dt>

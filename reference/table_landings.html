@@ -111,9 +111,10 @@
 
 
 <dl><dt id="arg-dat">dat<a class="anchor" aria-label="anchor" href="#arg-dat"></a></dt>
-<dd><p>A data frame or names list of data frames (input as `list()`)
-returned from <a href="convert_output.html">convert_output</a>. The first data frame in the list
-is used in calculation of a reference line if one is present</p></dd>
+<dd><p>A tibble or named list of tibbles (input as `list()`)
+returned from <a href="convert_output.html">convert_output</a>.</p>
+<p>If inputting a list of tibbles, the first tibble's reference point defined
+in `ref_line` is used to plot a reference line or calculate relative spawning biomass.</p></dd>
 
 
 <dt id="arg-unit-label">unit_label<a class="anchor" aria-label="anchor" href="#arg-unit-label"></a></dt>
@@ -121,15 +122,14 @@ is used in calculation of a reference line if one is present</p></dd>
 
 
 <dt id="arg-era">era<a class="anchor" aria-label="anchor" href="#arg-era"></a></dt>
-<dd><p>a string naming the era of data such as historical ("early"), current ("time"), or
-projected ("fore") data if filtering should occur. Default is set to "time" which is
-the current time. To plot all data, set era to NULL.</p></dd>
+<dd><p>A string naming the era of data.</p>
+<p>Default: "time"</p>
+<p>Options: "early", "time", "fore" (forecast), or NULL (all data)</p></dd>
 
 
 <dt id="arg-interactive">interactive<a class="anchor" aria-label="anchor" href="#arg-interactive"></a></dt>
-<dd><p>TRUE/FALSE; indicate whether the environment in which the
-function is operating  is interactive. This bypasses some options for
-filtering when preparing data for the plot. Default is FALSE.</p></dd>
+<dd><p>A logical value indicating if the environment is interactive.</p>
+<p>Default: `FALSE`</p></dd>
 
 
 <dt id="arg-group">group<a class="anchor" aria-label="anchor" href="#arg-group"></a></dt>
@@ -143,9 +143,10 @@ is set to "none". Options are "sum" or "mean". Default is "sum".</p></dd>
 
 
 <dt id="arg-module">module<a class="anchor" aria-label="anchor" href="#arg-module"></a></dt>
-<dd><p>(Optional) A string indicating the linked module_name associated
-with the label for the plot if known. Default is NULL. By default, the function
-will select the most relevant module if more than 1 exists.</p></dd>
+<dd><p>(Optional) A string indicating the module_name found in `dat`.</p>
+<p>Default: NULL</p>
+<p>If the interactive and &gt;1 module_name is found, user will select the
+module_name in the console. @seealso [filter_data()]</p></dd>
 
 
 <dt id="arg-label">label<a class="anchor" aria-label="anchor" href="#arg-label"></a></dt>
@@ -156,10 +157,10 @@ in this ordered list: "landings_weight",  "landings_numbers", "landings_expected
 
 
 <dt id="arg-make-rda">make_rda<a class="anchor" aria-label="anchor" href="#arg-make-rda"></a></dt>
-<dd><p>TRUE/FALSE; indicate whether to produce an .rda file containing
-a list with the figure/table, caption, and alternative text (if figure). If TRUE,
-the rda will be exported to the folder indicated in the argument "figures_dir".
-Default is FALSE.</p></dd>
+<dd><p>A logical value indicating whether to save the object and
+make an automated caption and alternative text in the form of an `rda` object. If TRUE,
+the rda will be exported to the folder indicated in the argument "figures_dir".</p>
+<p>Default: `FALSE`.</p></dd>
 
 
 <dt id="arg-tables-dir">tables_dir<a class="anchor" aria-label="anchor" href="#arg-tables-dir"></a></dt>
