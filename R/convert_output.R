@@ -1233,9 +1233,44 @@ convert_output <- function(
           TRUE ~ fleet_names[fleet]
         ))
     } else {
-      # r4ss output
+      #### r4ss ####
       dat <- file
-      
+      select_modules <- c(
+        "recruit",
+        "SPAWN_RECRUIT_CURVE",
+        "Natural_Mortality",
+        "growth_series",
+        "sizeselex",
+        "ageselex",
+        "exploitation",
+        "catch","
+        timeseries",
+        "discard",
+        "mngwt", # ???
+        "sprseries",
+        "sprtarg",
+        "btarg",
+        "kobe",
+        "cpue",
+        "natage",
+        "batage",
+        "natlen",
+        "batlen",
+        "fatage",
+        "discard_at_age",
+        "catage",
+        "equil_yeild",
+        "Z_at_age",
+        "M_at_age",
+        "Z_by_area",
+        "M_by_area",
+        "Dynamic_Bzero",
+        "len_comp_fit_table",
+        "age_comp_fit_table",
+        "derived_quants",
+        "parameters",
+        "SBzero"
+      )
     }
     
   } else if (model %in% c("bam", "BAM")) {
