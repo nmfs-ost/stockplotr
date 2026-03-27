@@ -30,9 +30,9 @@ save_all_plots(
 }
 \arguments{
 \item{dat}{A tibble or named list of tibbles (input as `list()`)
-returned from \link[stockplotr]{convert_output}. 
+returned from \link[stockplotr]{convert_output}.
 
-If inputting a list of tibbles, the first tibble's reference point defined 
+If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
 \item{recruitment_unit_label}{Units for recruitment}
@@ -42,7 +42,7 @@ the recruitment quantities shown on the y axis. For example,
 recruitment_scale_amount = 100 would scale down a value from 500,000 -->
 5,000. This scale will be reflected in the y axis label.}
 
-\item{relative}{A logical value specifying to set y-axis values relative to 
+\item{relative}{A logical value specifying to set y-axis values relative to
 the ref_line value.
 
 Default: `FALSE`}

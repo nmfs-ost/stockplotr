@@ -31,7 +31,7 @@ extract the reference point from}
 \item{reference}{string. name of the reference point such as "msy",
 "unfished", or "target"}
 
-\item{relative}{A logical value specifying to set y-axis values relative to 
+\item{relative}{A logical value specifying to set y-axis values relative to
 the ref_line value.
 
 Default: `FALSE`}
