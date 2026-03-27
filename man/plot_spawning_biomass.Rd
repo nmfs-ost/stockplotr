@@ -23,19 +23,19 @@ plot_spawning_biomass(
 }
 \arguments{
 \item{dat}{A tibble or named list of tibbles (input as `list()`)
-returned from \link[stockplotr]{convert_output}. 
+returned from \link[stockplotr]{convert_output}.
 
-If inputting a list of tibbles, the first tibble's reference point defined 
+If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{geom}{A string stating the geom used for the plot. 
+\item{geom}{A string stating the geom used for the plot.
 
 Default: "line".
 
 Options: "line", "point", or "area"}
 
 \item{group}{A string of a single column that groups the data (e.g. "fleet",
-"sex", "area", etc.). 
+"sex", "area", etc.).
 
 Set group = "none" to summarize data over all indexing values.
 
@@ -66,19 +66,19 @@ Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
 Default: NULL
 
-If the interactive and >1 module_name is found, user will select the 
+If the interactive and >1 module_name is found, user will select the
 module_name in the console. @seealso [filter_data()]}
 
 \item{scale_amount}{A number to scale the y-axis values.
 
 Default: 1}
 
-\item{relative}{A logical value specifying to set y-axis values relative to 
+\item{relative}{A logical value specifying to set y-axis values relative to
 the ref_line value.
 
 Default: `FALSE`}
 
-\item{make_rda}{A logical value indicating whether to save the object and 
+\item{make_rda}{A logical value indicating whether to save the object and
 make an automated caption and alternative text in the form of an `rda` object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
 
@@ -107,7 +107,7 @@ Plot spawning biomass with a reference line as a dashed line. The figure can
 also be made relative to this reference line rather than in absolute units.
 }
 \note{
-All plotting functions automatically recognize indexing variables and will 
+All plotting functions automatically recognize indexing variables and will
 use them in groupings and/or facetting. @seealso [process_data()].
 }
 \examples{
@@ -128,10 +128,10 @@ plot_spawning_biomass(
   module = "TIME_SERIES"
 )
 plot_spawning_biomass(
- dat = stockplotr:::example_data,
- ref_line = c("target" = 10),
- interactive = FALSE,
- module = "TIME_SERIES"
+  dat = stockplotr:::example_data,
+  ref_line = c("target" = 10),
+  interactive = FALSE,
+  module = "TIME_SERIES"
 )
 }
 \seealso{

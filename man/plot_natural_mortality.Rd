@@ -18,13 +18,13 @@ plot_natural_mortality(
 }
 \arguments{
 \item{dat}{A tibble or named list of tibbles (input as `list()`)
-returned from \link[stockplotr]{convert_output}. 
+returned from \link[stockplotr]{convert_output}.
 
-If inputting a list of tibbles, the first tibble's reference point defined 
+If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
 \item{group}{A string of a single column that groups the data (e.g. "fleet",
-"sex", "area", etc.). 
+"sex", "area", etc.).
 
 Set group = "none" to summarize data over all indexing values.
 
@@ -48,10 +48,10 @@ Default: `FALSE`}
 
 Default: NULL
 
-If the interactive and >1 module_name is found, user will select the 
+If the interactive and >1 module_name is found, user will select the
 module_name in the console. @seealso [filter_data()]}
 
-\item{make_rda}{A logical value indicating whether to save the object and 
+\item{make_rda}{A logical value indicating whether to save the object and
 make an automated caption and alternative text in the form of an `rda` object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
 
