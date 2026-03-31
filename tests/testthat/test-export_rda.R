@@ -10,7 +10,7 @@ test_that("export_rda works for figures", {
 
   B.min <- 100
   B.max <- 200
-  
+
   # add KQs to caps/alt text csv
   insert_kqs(B.min, B.max)
 
@@ -53,7 +53,7 @@ test_that("export_rda works for tables", {
 
   B.min <- 100
   B.max <- 200
-  
+
   # add KQs to caps/alt text csv
   insert_kqs(B.min, B.max)
 

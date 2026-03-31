@@ -15,7 +15,7 @@ quantity names and other associated information}
 dataframe}
 }
 \value{
-Dataframe based on key quantities template that contains 
+Dataframe based on key quantities template that contains
 newly-added values of key quantities indicated via ellipsis. The dataframe
 is input for [fill_in_kqs()].
 }
@@ -27,6 +27,7 @@ Substitute key quantities' values into template
 fill_in_kqs(
   df = data,
   F.min,
-  F.max)
+  F.max
+)
 }
 }

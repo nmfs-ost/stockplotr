@@ -13,7 +13,7 @@
 #' @param ... Key quantity objects whose values will be added to the output
 #' dataframe
 #'
-#' @returns Dataframe based on key quantities template that contains 
+#' @returns Dataframe based on key quantities template that contains
 #' newly-added values of key quantities indicated via ellipsis. The dataframe
 #' is input for [fill_in_kqs()].
 #'
@@ -21,18 +21,18 @@
 #' fill_in_kqs(
 #'   df = data,
 #'   F.min,
-#'   F.max)
+#'   F.max
+#' )
 #' }
 fill_in_kqs <- function(df, ...) {
-  
   arg_names <- sapply(substitute(list(...))[-1], deparse)
   arg_values <- list(...)
-  
+
   lookup_df <- tibble::tibble(
     key_quantity = arg_names,
     value_new = purrr::map_chr(arg_values, as.character)
   )
-  
+
   # TODO: Add message when certain values aren't overwritten (already present)
   df <- df |>
     dplyr::mutate(across(everything(), as.character)) |>
@@ -40,7 +40,8 @@ fill_in_kqs <- function(df, ...) {
     dplyr::mutate(value = dplyr::if_else(
       (is.na(value) | value == "" & !is.na(value_new)),
       value_new,
-      value)) |>
+      value
+    )) |>
     dplyr::select(-value_new)
 }
 
@@ -50,16 +51,16 @@ fill_in_kqs <- function(df, ...) {
 #' exported "key_quantities.csv"
 #'
 #' @returns Exports a file based on key quantities template, with values
-#' added next to the names of the key quantities specified as ellipsis 
+#' added next to the names of the key quantities specified as ellipsis
 #' arguments. File is saved as "key_quantities.csv" to the working directory.
 #'
 #' @examples \dontrun{
 #' export_kqs(
 #'   F.min,
-#'   F.max)
+#'   F.max
+#' )
 #' }
 export_kqs <- function(...) {
-  
   # Open new or existing key quantities csv
   if (file.exists(fs::path(getwd(), "key_quantities.csv"))) {
     cli::cli_alert_info("Key quantities text file (key_quantities.csv) exists. Newly calculated key quantities will be added to it.", wrap = TRUE)
@@ -69,17 +70,18 @@ export_kqs <- function(...) {
       system.file("resources", "key_quantity_template.csv", package = "stockplotr")
     )
   }
-  
+
   # kqs (e.g., landings.end.year) are the ellipsis args
-  kqs_filled <- fill_in_kqs(kqs,
-                            ...)
-  
+  kqs_filled <- fill_in_kqs(
+    kqs,
+    ...
+  )
+
   utils::write.csv(
     x = kqs_filled,
     file = fs::path(getwd(), "key_quantities.csv"),
     row.names = FALSE
   )
-  
 }
 
 #' Insert key quantities into the captions and alternative text file
@@ -87,14 +89,15 @@ export_kqs <- function(...) {
 #' @param ... Key quantities whose values should be added to the
 #' exported "captions_alt_text.csv"
 #'
-#' @returns Exports a file ("captions_alt_text.csv") containing captions 
+#' @returns Exports a file ("captions_alt_text.csv") containing captions
 #' and alternative text for figures and tables, with key quantities inserted
 #' into the "captions_alt_text_template.csv" template's placeholders.
 #'
 #' @examples \dontrun{
 #' insert_kqs(
 #'   F.min,
-#'   F.max)
+#'   F.max
+#' )
 #' }
 insert_kqs <- function(...) {
   if (file.exists(fs::path(getwd(), "captions_alt_text.csv"))) {
@@ -105,58 +108,58 @@ insert_kqs <- function(...) {
       system.file("resources", "captions_alt_text_template.csv", package = "stockplotr")
     )
   }
-  
+
   create_patterns <- function(...) {
     # Capture the names from the ellipsis
     arg_names <- sapply(rlang::enexprs(...), as.character)
-    
+
     # Get the actual values
     vals <- as.character(list(...))
-    
+
     # 1. Escape literal dots (e.g., "B.min" -> "B\\.min")
     # This ensures the dot is treated as a period, not a "match-anything" wildcard.
     escaped_names <- stringr::str_replace_all(arg_names, "\\.", "\\\\.")
-    
+
     # 2. Wrap in lookarounds to enforce "whole word" logic for dots/alphanumerics
     # 2. Refined Lookarounds:
     # (?<![a-zA-Z0-9.]) -> PRECEDER: Not a letter, digit, or dot.
     # (?!([a-zA-Z0-9])) -> FOLLOWER: Not a letter or digit.
     # We REMOVED the dot from the follower check so "caa.age.max." matches.
     patterns <- paste0("(?<![a-zA-Z0-9.])", escaped_names, "(?![a-zA-Z0-9])")
-    
+
     # Combine into a named character vector
     stats::setNames(vals, patterns)
     # # Get the actual values
     # vals <- list(...)
-    # 
+    #
     # # Combine them into a named character vector
     # stats::setNames(as.character(vals), arg_names)
   }
-  
+
   # insert new kqs into alt text/caps csv, where applicable
   patterns_replacements <- create_patterns(...) |>
-  # If a value = NA, then make it "NA" to avoid errors
-   tidyr::replace_na("NA")
-  
+    # If a value = NA, then make it "NA" to avoid errors
+    tidyr::replace_na("NA")
+
   # replace values in caption column
   caps_alttext$caption <- stringr::str_replace_all(
     caps_alttext$caption,
     patterns_replacements
   )
-  
+
   # replace values in alt text column
   caps_alttext$alt_text <- stringr::str_replace_all(
     caps_alttext$alt_text,
     patterns_replacements
   )
-  
+
   # export df with updated captions and alt text to csv
   utils::write.csv(
     x = caps_alttext,
     file = fs::path(getwd(), "captions_alt_text.csv"),
     row.names = FALSE
   )
-  
+
   # message explaining the extracted and inserted key quantities
   replaced_vals <- patterns_replacements |>
     as.data.frame() |>
@@ -170,7 +173,7 @@ insert_kqs <- function(...) {
       name = stringr::str_remove_all(name, "^\\(\\?\\<!\\[a-zA-Z0-9\\.\\]\\)|\\(\\?\\!\\[a-zA-Z0-9\\]\\)$"),
       name = stringr::str_replace_all(name, "\\\\\\.", ".")
     )
-  
+
   cli::cli_h3("The following key quantities were extracted and inserted into 'captions_alt_text.csv' and 'key_quantities.csv':")
   for (i in 1:dim(replaced_vals)[1]) {
     cli::cli_li(paste0(
@@ -226,7 +229,6 @@ create_rda <- function(
   unit_label = "mt",
   table_df = NULL
 ) {
-
   # extract this plot's caption and alt text
   caps_alttext <- extract_caps_alttext(
     topic_label = topic_label,
@@ -258,229 +260,229 @@ create_rda <- function(
 # which will have associated captions/alt text containing key quantities
 # with the following object names and calculations
 
-    # FIGURES-----
+# FIGURES-----
 
-    ## kobe plot- don't code quantities yet
-    # kobe.end.year <-
-    # value of B/B(MSY) at the end year
-    # B.BMSY.end.yr <- B/BMSY
-    # --B = time series of biomass, last year
-    # --BMSY = dplyr::filter(grepl('b_target', label) | grepl('b_msy', label) | c(grepl('fishing_mortality_msy', label) & is.na(year)))
-    #   CHECK: if length > 1, then select b_target
+## kobe plot- don't code quantities yet
+# kobe.end.year <-
+# value of B/B(MSY) at the end year
+# B.BMSY.end.yr <- B/BMSY
+# --B = time series of biomass, last year
+# --BMSY = dplyr::filter(grepl('b_target', label) | grepl('b_msy', label) | c(grepl('fishing_mortality_msy', label) & is.na(year)))
+#   CHECK: if length > 1, then select b_target
 
-    # value of F/F(MSY) at the end year
-    # F.FMSY.end.yr <-
+# value of F/F(MSY) at the end year
+# F.FMSY.end.yr <-
 
-    # object that should be "is" or "is not" and answers the question,
-    # "the stock overfishing status ... overfished"
-    # overfished.status.is.isnot <-
+# object that should be "is" or "is not" and answers the question,
+# "the stock overfishing status ... overfished"
+# overfished.status.is.isnot <-
 
-    # object that should be "is" or "is not" and answers the question,
-    # "the stock ... experiencing overfishing"
-    # overfishing.status.is.isnot <-
-
-
-    # TODO: uncomment and recode once we get clarity about how to extract this value properly
-    # R0
-    # R0 <- dat |>
-    #   dplyr::filter(
-    #     # pull from BAM
-    #     grepl('^recruitment$', label) & module_name == "parms" |
-    #        grepl('^R0', label) |
-    #     # pull from SS3
-    #       grepl('recruitment_virgin', label)
-    #                  ) |>
-    #   dplyr::pull(estimate) |>
-    #   unique() |>
-    # as.numeric() |>
-    # round(digits = 2)
-
-    # Bend <-
-
-    # TODO: uncomment and recode once we get clarity about how to extract this value properly
-    # Target biomass
-    # Btarg <- dat |>
-    #   dplyr::filter(c(grepl('biomass', label) & grepl('target', label) & estimate >1) | label == 'biomass_msy') |>
-    #   dplyr::pull(estimate) |>
-    #   as.numeric() |>
-    #   round(digits = 2)
-
-    # Bmsy <-
-
-    ## vonB LAA (von Bertalanffy growth function + length at age)- don't code quantities yet
-    # vonb.age.min <- # minimum vonB age
-    # vonb.age.max <- # maximum vonB age
-
-    # vonB length units (plural)
-    # vonb.length.units 
-
-    # vonb.length.min <- # minimum vonB length
-    # vonb.length.max <- # minimum vonB length
+# object that should be "is" or "is not" and answers the question,
+# "the stock ... experiencing overfishing"
+# overfishing.status.is.isnot <-
 
 
-    ## length-type conversion plot- don't code quantities yet
-    # total length units (plural)
-    # total.length.units 
+# TODO: uncomment and recode once we get clarity about how to extract this value properly
+# R0
+# R0 <- dat |>
+#   dplyr::filter(
+#     # pull from BAM
+#     grepl('^recruitment$', label) & module_name == "parms" |
+#        grepl('^R0', label) |
+#     # pull from SS3
+#       grepl('recruitment_virgin', label)
+#                  ) |>
+#   dplyr::pull(estimate) |>
+#   unique() |>
+# as.numeric() |>
+# round(digits = 2)
 
-    # total.length.min <- # minimum total length
-    # total.length.max <- # maximum total length
-    # fork length units (plural)
-    # fork.length.units 
+# Bend <-
 
-    # fork.length.min <- # minimum fork length
-    # fork.length.max <- # maximum fork length
+# TODO: uncomment and recode once we get clarity about how to extract this value properly
+# Target biomass
+# Btarg <- dat |>
+#   dplyr::filter(c(grepl('biomass', label) & grepl('target', label) & estimate >1) | label == 'biomass_msy') |>
+#   dplyr::pull(estimate) |>
+#   as.numeric() |>
+#   round(digits = 2)
 
+# Bmsy <-
 
-    ## weight-length conversion plot- don't code quantities yet
-    # length units (plural)
-    # wl.length.units 
+## vonB LAA (von Bertalanffy growth function + length at age)- don't code quantities yet
+# vonb.age.min <- # minimum vonB age
+# vonb.age.max <- # maximum vonB age
 
-    # wl.length.min <- # minimum length
-    # wl.length.max <- # maximum length
+# vonB length units (plural)
+# vonb.length.units
 
-    # weight units (plural)
-    # wl.weight.units 
-
-    # wl.weight.min <- # minimum weight
-    # wl.weight.max <- # maximum weight
-
-
-    ## maturity schedule (proportion mature)- don't code quantities yet
-    # length units (plural)
-    # prop.mat.length.units 
-
-    # prop.mat.length.min <- # minimum length
-    # prop.mat.length.max <- # maximum length
-
-
-    ## fecundity at length- don't code quantities yet
-    # length units (plural)
-    # fecundity.length.units 
-
-    # fecundity.length.min <- # minimum length
-    # fecundity.length.max <- # maximum length
-
-    # fecundity units (plural)
-    # fecundity.units 
-
-    # fecundity.min <- # minimum fecundity
-    # fecundity.max <- # maximum fecundity
-
-    ## CAL (catch at length)- don't code quantities yet
-    # cal.length.min <- # minimum length group
-    # cal.length.max <- # maximum length group
-    # fleet.or.survey.name <- # fleet or survey name
-
-    ## mod_fit_catch (model fit to catch ts)- don't code quantities yet
-    # mod.fit.catch.start.year <- # start year of model fit to catch ts plot
-    # mod.fit.catch.end.year <- # end year of model fit to catch ts plot
-
-    # catch units (plural)
-    # mod.fit.catch.units 
-
-    # mod.fit.catch.min <- # minimum catch
-    # mod.fit.catch.max <- # maximum catch
+# vonb.length.min <- # minimum vonB length
+# vonb.length.max <- # minimum vonB length
 
 
-    ## mod_fit_abun (model fit to abundance indices plot)- don't code quantities yet
-    # start year of model fit to abundance indices plot
-    # mod.fit.abun.start.year <-
+## length-type conversion plot- don't code quantities yet
+# total length units (plural)
+# total.length.units
 
-    # end year of model fit to abundance indices plot
-    # mod.fit.abun.end.year <-
+# total.length.min <- # minimum total length
+# total.length.max <- # maximum total length
+# fork length units (plural)
+# fork.length.units
 
-    ## mod_fit_discards- will be by fleet
-    ## for ss3, obs discards not in output file
-    ## -filter labels as discard_observed | discard_predicted | discard
-    ## -then group_by(year, fleet, label), then summarize(estimate_y = sum(estimate))
-    ## ---then, get the following:
-    ## -change alt text so that we add the line's min/max, but analyst has to describe further
-    # mod.fit.discards.start.year <- # start year of model fit to discards plot
-    # mod.fit.discards.end.year <- # end year of F
-    # mod.fit.discards.units <- # discards units (plural)
-    # mod.fit.discards.min <- # minimum discards
-    # mod.fit.discards.max <- # maximum discards
-
-    ## selectivity- don't code quantities yet
-    # selectivity.start.year <- # start year of selectivity plot
-    # selectivity.end.year <- # end year of selectivity plot
-    # selectivity.length.units <- # length units (plural)
-    # selectivity.length.min <- # minimum length
-    # selectivity.length.max <- # maximum length
-
-    ## tot_b (total biomass): same as B plot above
-
-    # ssbtarg 
-
-    ## spr (spawning potential ratio)
-    # minimum spr
-    # spr.min <- dat |>
-    #   dplyr::filter(c(grepl("spr", label) |
-    #     label == "spr") &
-    #     !is.na(year) &
-    #     !is.na(estimate)) |>
-    #   dplyr::slice(which.min(estimate)) |>
-    #   dplyr::select(estimate) |>
-    #   as.numeric() |>
-    #   round(digits = 2)
-    # 
-    # # maximum spr
-    # spr.max <- dat |>
-    #   dplyr::filter(c(grepl("spr", label) |
-    #     label == "spr") & !is.na(year) & !is.na(estimate)) |>
-    #   dplyr::slice(which.max(estimate)) |>
-    #   dplyr::select(estimate) |>
-    #   as.numeric() |>
-    #   round(digits = 2)
-
-    # TODO: uncomment and recode once we get clarity about how to extract this value properly
-    # spr reference point
-    # spr.ref.pt <- dat |>
-    # dplyr::filter(label == "spr_msy") |>
-    #   dplyr::select(estimate) |>
-    #   as.numeric()# |>
-    #   round(digits = 2)
+# fork.length.min <- # minimum fork length
+# fork.length.max <- # maximum fork length
 
 
-    ## proj_catch (projected catch)
-    # projected catch units (plural)
-    # proj.catch.units <- # probably mt, but wait until figure coded
+## weight-length conversion plot- don't code quantities yet
+# length units (plural)
+# wl.length.units
 
-    # start year of projected catch plot
-    # proj.catch.start.year <- landings.end.year + 1
+# wl.length.min <- # minimum length
+# wl.length.max <- # maximum length
 
-    # end year of projected catch plot
-    # proj.catch.end.year <- dat |>
-    #   dplyr::filter(label == "catch" & module_name == "DERIVED_QUANTITIES") |>
-    #   dplyr::slice(which.max(year)) |>
-    #   dplyr::select(year) |>
-    #   as.numeric()
+# weight units (plural)
+# wl.weight.units
 
-    # minimum projected catch
-    # proj.catch.min <- dat |>
-    #   # no BAM file has catch; will be NA
-    #   dplyr::filter(label == "catch" & module_name == "DERIVED_QUANTITIES") |>
-    #   dplyr::slice(which.min(estimate)) |>
-    #   dplyr::select(estimate) |>
-    #   as.numeric()
+# wl.weight.min <- # minimum weight
+# wl.weight.max <- # maximum weight
 
-    # maximum projected catch
-    # proj.catch.max <- dat |>
-    #   dplyr::filter(label == "catch" & module_name == "DERIVED_QUANTITIES") |>
-    #   dplyr::slice(which.max(estimate)) |>
-    #   dplyr::select(estimate) |>
-    #   as.numeric()
 
-    # TABLES-----
+## maturity schedule (proportion mature)- don't code quantities yet
+# length units (plural)
+# prop.mat.length.units
 
-    ## catch
-    # catch.fleet <- # fleet
+# prop.mat.length.min <- # minimum length
+# prop.mat.length.max <- # maximum length
 
-    ## discards
-    # discards.tbl.units <- # discards units
 
-    ## catchability
-    # catchability.fleet <- # fleet
+## fecundity at length- don't code quantities yet
+# length units (plural)
+# fecundity.length.units
+
+# fecundity.length.min <- # minimum length
+# fecundity.length.max <- # maximum length
+
+# fecundity units (plural)
+# fecundity.units
+
+# fecundity.min <- # minimum fecundity
+# fecundity.max <- # maximum fecundity
+
+## CAL (catch at length)- don't code quantities yet
+# cal.length.min <- # minimum length group
+# cal.length.max <- # maximum length group
+# fleet.or.survey.name <- # fleet or survey name
+
+## mod_fit_catch (model fit to catch ts)- don't code quantities yet
+# mod.fit.catch.start.year <- # start year of model fit to catch ts plot
+# mod.fit.catch.end.year <- # end year of model fit to catch ts plot
+
+# catch units (plural)
+# mod.fit.catch.units
+
+# mod.fit.catch.min <- # minimum catch
+# mod.fit.catch.max <- # maximum catch
+
+
+## mod_fit_abun (model fit to abundance indices plot)- don't code quantities yet
+# start year of model fit to abundance indices plot
+# mod.fit.abun.start.year <-
+
+# end year of model fit to abundance indices plot
+# mod.fit.abun.end.year <-
+
+## mod_fit_discards- will be by fleet
+## for ss3, obs discards not in output file
+## -filter labels as discard_observed | discard_predicted | discard
+## -then group_by(year, fleet, label), then summarize(estimate_y = sum(estimate))
+## ---then, get the following:
+## -change alt text so that we add the line's min/max, but analyst has to describe further
+# mod.fit.discards.start.year <- # start year of model fit to discards plot
+# mod.fit.discards.end.year <- # end year of F
+# mod.fit.discards.units <- # discards units (plural)
+# mod.fit.discards.min <- # minimum discards
+# mod.fit.discards.max <- # maximum discards
+
+## selectivity- don't code quantities yet
+# selectivity.start.year <- # start year of selectivity plot
+# selectivity.end.year <- # end year of selectivity plot
+# selectivity.length.units <- # length units (plural)
+# selectivity.length.min <- # minimum length
+# selectivity.length.max <- # maximum length
+
+## tot_b (total biomass): same as B plot above
+
+# ssbtarg
+
+## spr (spawning potential ratio)
+# minimum spr
+# spr.min <- dat |>
+#   dplyr::filter(c(grepl("spr", label) |
+#     label == "spr") &
+#     !is.na(year) &
+#     !is.na(estimate)) |>
+#   dplyr::slice(which.min(estimate)) |>
+#   dplyr::select(estimate) |>
+#   as.numeric() |>
+#   round(digits = 2)
+#
+# # maximum spr
+# spr.max <- dat |>
+#   dplyr::filter(c(grepl("spr", label) |
+#     label == "spr") & !is.na(year) & !is.na(estimate)) |>
+#   dplyr::slice(which.max(estimate)) |>
+#   dplyr::select(estimate) |>
+#   as.numeric() |>
+#   round(digits = 2)
+
+# TODO: uncomment and recode once we get clarity about how to extract this value properly
+# spr reference point
+# spr.ref.pt <- dat |>
+# dplyr::filter(label == "spr_msy") |>
+#   dplyr::select(estimate) |>
+#   as.numeric()# |>
+#   round(digits = 2)
+
+
+## proj_catch (projected catch)
+# projected catch units (plural)
+# proj.catch.units <- # probably mt, but wait until figure coded
+
+# start year of projected catch plot
+# proj.catch.start.year <- landings.end.year + 1
+
+# end year of projected catch plot
+# proj.catch.end.year <- dat |>
+#   dplyr::filter(label == "catch" & module_name == "DERIVED_QUANTITIES") |>
+#   dplyr::slice(which.max(year)) |>
+#   dplyr::select(year) |>
+#   as.numeric()
+
+# minimum projected catch
+# proj.catch.min <- dat |>
+#   # no BAM file has catch; will be NA
+#   dplyr::filter(label == "catch" & module_name == "DERIVED_QUANTITIES") |>
+#   dplyr::slice(which.min(estimate)) |>
+#   dplyr::select(estimate) |>
+#   as.numeric()
+
+# maximum projected catch
+# proj.catch.max <- dat |>
+#   dplyr::filter(label == "catch" & module_name == "DERIVED_QUANTITIES") |>
+#   dplyr::slice(which.max(estimate)) |>
+#   dplyr::select(estimate) |>
+#   as.numeric()
+
+# TABLES-----
+
+## catch
+# catch.fleet <- # fleet
+
+## discards
+# discards.tbl.units <- # discards units
+
+## catchability
+# catchability.fleet <- # fleet
 
 
 #------------------------------------------------------------------------------

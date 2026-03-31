@@ -112,30 +112,34 @@ plot_indices <- function(
   
   ### Make RDA ----
   if (make_rda) {
-    
     # Obtain relevant key quantities for captions/alt text
     cpue.start.year <- min(prepared_data$year)
     cpue.end.year <- max(prepared_data$year)
     cpue.min <- min(prepared_data$estimate) |> round(digits = 3)
     cpue.max <- max(prepared_data$estimate) |> round(digits = 3)
     cpue.units <- ifelse(unit_label == "",
-                         "an estimated index ratio", # default if empty
-                         unit_label)
+      "an estimated index ratio", # default if empty
+      unit_label
+    )
 
     # calculate & export key quantities
-    export_kqs(cpue.start.year,
-               cpue.end.year,
-               cpue.min,
-               cpue.max,
-               cpue.units)
-    
+    export_kqs(
+      cpue.start.year,
+      cpue.end.year,
+      cpue.min,
+      cpue.max,
+      cpue.units
+    )
+
     # Add key quantities to captions/alt text
-    insert_kqs(cpue.start.year,
-               cpue.end.year,
-               cpue.min,
-               cpue.max,
-               cpue.units)
-    
+    insert_kqs(
+      cpue.start.year,
+      cpue.end.year,
+      cpue.min,
+      cpue.max,
+      cpue.units
+    )
+
     create_rda(
       object = plt,
       # get name of function and remove "plot_" from it

@@ -237,8 +237,7 @@ plot_spawning_biomass <- function(
 
   ### Make RDA ----
   if (make_rda) {
-
-    if (relative){
+    if (relative) {
       # pulling out the 2nd df in 'data' works for several datasets
       rel.ssb.min <- ggplot2::ggplot_build(final)@data[[2]] |>
         as.data.frame() |>
@@ -250,39 +249,42 @@ plot_spawning_biomass <- function(
         dplyr::pull(y) |>
         max() |>
         round(digits = 2)
-      
+
       # calculate & export key quantities
       export_kqs(rel.ssb.min, rel.ssb.max)
-      
+
       # Add key quantities to captions/alt text
       insert_kqs(rel.ssb.min, rel.ssb.max)
-      
     } else {
       ssb.min <- min(plot_data$estimate) |> round(digits = 3)
       ssb.max <- max(plot_data$estimate) |> round(digits = 3)
-      
+
       export_kqs(ssb.min, ssb.max)
       insert_kqs(ssb.min, ssb.max)
     }
-    
+
     # Obtain relevant key quantities for captions/alt text
     ssb.ref.pt <- as.character(ref_line)
     ssb.units <- as.character(unit_label)
     ssb.start.year <- min(plot_data$year)
     ssb.end.year <- max(plot_data$year)
-    
+
     # calculate & export key quantities
-    export_kqs(ssb.ref.pt,
-               ssb.units,
-               ssb.start.year,
-               ssb.end.year)
-    
+    export_kqs(
+      ssb.ref.pt,
+      ssb.units,
+      ssb.start.year,
+      ssb.end.year
+    )
+
     # Add key quantities to captions/alt text
-    insert_kqs(ssb.ref.pt,
-               ssb.units,
-               ssb.start.year,
-               ssb.end.year)
-    
+    insert_kqs(
+      ssb.ref.pt,
+      ssb.units,
+      ssb.start.year,
+      ssb.end.year
+    )
+
     create_rda(
       object = final,
       topic_label = ifelse(relative, "relative_spawning_biomass", "spawning_biomass"),
