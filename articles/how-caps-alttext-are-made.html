@@ -130,21 +130,19 @@ generated. This vignette explains how these texts are created.</p>
 file</a> contains the templates for each table or figure’s
 caption/alternative text. Tables have captions, and figures have
 captions and alternative text. Please refer to <a href="https://nmfs-ost.github.io/asar/articles/accessibility_guide.html" class="external-link">the
-<code>asar</code> package’s accessibility vignette</a> to learn more
-about how we aimed to construct clear and comprehensive alternative
-text.</p>
+{asar} package’s accessibility vignette</a> to learn more about how we
+aimed to construct clear and comprehensive alternative text.</p>
 <p>As <em>templates</em>, these texts are the <em>starting point</em>
 for the final captions and alternative text (again, we encourage users
 to read the <a href="https://nmfs-ost.github.io/asar/articles/accessibility_guide.html" class="external-link">the
-<code>asar</code> package’s accessibility vignette</a> to learn how and
-why they should check the accuracy and write the final component of each
-figure’s alternative text). Specifically, there are placeholders
-throughout the texts (e.g., B.ref.pt, B.min, B.max). If the model
-results are parsed successfully, these placeholders will eventually be
-replaced with key quantities from the model results. For example,
-B.ref.pt will be replaced with the biomass figure’s reference point, and
-B.min and B.max will be replaced with the minimum and maximum
-biomass.</p>
+{asar} package’s accessibility vignette</a> to learn how and why they
+should check the accuracy and write the final component of each figure’s
+alternative text). Specifically, there are placeholders throughout the
+texts (e.g., B.ref.pt, B.min, B.max). If the model results are parsed
+successfully, these placeholders will eventually be replaced with key
+quantities from the model results. For example, B.ref.pt will be
+replaced with the biomass figure’s reference point, and B.min and B.max
+will be replaced with the minimum and maximum biomass.</p>
 <p>The file is set up like this:</p>
 <ul>
 <li>Column 1 (“label”) is a shorthand label for your figure or table.
@@ -181,70 +179,64 @@ alternative text for figure. |</td>
 </table>
 </div>
 <div class="section level3">
-<h3 id="workflow-in-four-key-steps">Workflow in four key steps<a class="anchor" aria-label="anchor" href="#workflow-in-four-key-steps"></a>
+<h3 id="calculating-and-exporting-captions-and-alternative-text">Calculating and exporting captions and alternative text<a class="anchor" aria-label="anchor" href="#calculating-and-exporting-captions-and-alternative-text"></a>
 </h3>
-<p>Next, key quantities are extracted from the model results (which have
-already been converted into a standardized format using
-<code>asar::convert_output()</code>). Finally, key quantities replace
-the placeholders in the captions/alt text template.</p>
-<p>These steps are performed by four key functions within
-<code><a href="../reference/create_rda.html">create_rda()</a></code>, which is housed within
-<code>utils_rda.R</code>. These functions are:</p>
-<ol style="list-style-type: decimal">
-<li><code><a href="../reference/write_captions.html">write_captions()</a></code></li>
-<li><code>add_more_key_quants()</code></li>
-<li><code><a href="../reference/extract_caps_alttext.html">extract_caps_alttext()</a></code></li>
-<li><code>export_rda</code></li>
-</ol>
-<p>The steps are discussed, below.</p>
+<p>The process of extracting and inserting key quantities begins when a
+user runs a plotting function with the argument
+<code>make_rda = TRUE</code>. For example,
+<code>plot_biomass(dat, make_rda = TRUE)</code>. If
+<code>make_rda = FALSE</code>, key quantities will not be
+calculated.</p>
+<p>After the final plot has been created within the function, key
+quantities are calculated by extracting values from the dataset used to
+create the final plot. For example, in <code><a href="../reference/plot_biomass.html">plot_biomass()</a></code>, the
+minimum biomass will be saved to an object called “B.min”.</p>
 <p><strong>NOTE</strong>: While we extract key quantities as accurately
 as we can, we cannot guarantee that each quantity will be calculated
 perfectly. Input data varies widely. It’s always your responsibility to
 check the accuracy of your figures’ alt text.</p>
-</div>
-<div class="section level3">
-<h3 id="extracting-key-quantities-from-model-results">Extracting key quantities from model results<a class="anchor" aria-label="anchor" href="#extracting-key-quantities-from-model-results"></a>
-</h3>
-<div class="section level4">
-<h4 id="write_captions">
-<code>write_captions()</code><a class="anchor" aria-label="anchor" href="#write_captions"></a>
-</h4>
-<p>In this function, the captions_alt_text_template.csv file is imported
-as a dataframe. Then, key quantities are extracted from the model
-results and substituted into the dataframe’s appropriate placeholders.
-Finally, the function exports the updated dataframe as a new csv
-(“captions_alt_text.csv”).</p>
-</div>
-<div class="section level4">
-<h4 id="add_more_key_quants">
-<code>add_more_key_quants()</code><a class="anchor" aria-label="anchor" href="#add_more_key_quants"></a>
-</h4>
-<p>This function imports the new captions_alt_text.csv as a dataframe.
-Then, it substitutes some placeholders with key quantities that cannot
-be extracted from the model results because they are manually specified
-by the user, or are derived using such quantities (e.g., a figure’s end
-year, units, reference point, and more). The function exports the
-dataframe by overwriting the csv with the same filename.</p>
-</div>
+<p><strong>NOTE</strong>: The key quantities are exported to a file
+saved to your working directory (“key_quantities.csv”) via
+<code><a href="../reference/export_kqs.html">export_kqs()</a></code>.</p>
+<p>Next, the function <code><a href="../reference/insert_kqs.html">insert_kqs()</a></code> imports an empty or
+partially-filled template with captions and alternative text
+(“captions_alt_text_template.csv” or “captions_alt_text.csv”,
+respectively), depending on if the user has already created a
+“captions_alt_text.csv” file in their working directory. The .csv file
+is imported as a dataframe.</p>
+<p>The key quantities are substituted into the dataframe’s appropriate
+placeholders. For example, “The y axis shows biomass in B.units, which
+spans from <strong>B.min</strong> to B.max.” will changed to “The y axis
+shows biomass in B.units, which spans from <strong>100</strong> to
+B.max.”</p>
+<p>Finally, the function exports the updated dataframe as a new .csv, or
+overwrites the old version, to “captions_alt_text.csv”.</p>
+<p><strong>NOTE</strong>: If you export a plot with the same filename
+(e.g., you exported a biomass plot, then decided to slightly change it
+and reexport), you will be prompted in the console to decide if you want
+to overwrite your original plot. You will NOT be prompted to decide if
+you want to overwrite your original plot’s caption and alternative text
+with an updated version from your new plot, which may have different key
+quantities. To get updated key quantities, you must 1) revert the plot’s
+caption and alternative text in “captions_alt_text.csv” to contain the
+placeholders present in the “captions_alt_text_template.csv” OR 2) edit
+those entries manually.</p>
 </div>
 <div class="section level3">
 <h3 id="connecting-the-tables-figures-with-the-captions-alternative-text">Connecting the tables &amp; figures with the captions &amp;
 alternative text<a class="anchor" aria-label="anchor" href="#connecting-the-tables-figures-with-the-captions-alternative-text"></a>
 </h3>
-<div class="section level4">
-<h4 id="extract_caps_alttext">
-<code>extract_caps_alttext()</code><a class="anchor" aria-label="anchor" href="#extract_caps_alttext"></a>
-</h4>
-<p>This function selects the appropriate captions and alternative text
-from captions_alt_text.csv when a figure or table.</p>
-</div>
-<div class="section level4">
-<h4 id="export_rda">
-<code>export_rda</code><a class="anchor" aria-label="anchor" href="#export_rda"></a>
-</h4>
-<p>Finally, this function exports an rda containing 1) a table and
-caption, or 2) a figure, caption, and alternative text.</p>
-</div>
+<p>The function <code><a href="../reference/create_rda.html">create_rda()</a></code> creates an R data (“rda”) file
+containing a package with 1) the figure or table, 2) caption, 3)
+alternative text (if a figure) OR a LaTeX version of a table (if a
+table). To make this package of files, the following steps occur:</p>
+<ol style="list-style-type: decimal">
+<li><p>The <code><a href="../reference/extract_caps_alttext.html">extract_caps_alttext()</a></code> function selects the
+appropriate captions and alternative text from captions_alt_text.csv
+when a figure or table.</p></li>
+<li><p>The <code><a href="../reference/export_rda.html">export_rda()</a></code> function exports the rda
+package.</p></li>
+</ol>
 </div>
 </div>
 <div class="section level2">
@@ -254,34 +246,15 @@ caption, or 2) a figure, caption, and alternative text.</p>
 <h3 id="single-plot-functions">Single plot functions<a class="anchor" aria-label="anchor" href="#single-plot-functions"></a>
 </h3>
 <p>When using functions that produce one table or figure at a time, like
-<code><a href="../reference/plot_biomass.html">plot_biomass()</a></code>, only certain key quantities will be
-substituted into the placeholders. For instance,</p>
-<ul>
-<li>
-<code><a href="../reference/write_captions.html">write_captions()</a></code> will substitute as many key quantities
-as possible, regardless of whether those quantities are associated with
-biomass.</li>
-<li>
-<code>add_more_key_quants()</code> will only substitute additional
-key quantities that are associated with biomass because only those
-quantities will be specified by the user. For example, if a user
-specifies the unit label argument in the <code><a href="../reference/plot_biomass.html">plot_biomass()</a></code> as
-“metric tons”, then <code>add_more_key_quants()</code> will replace the
-placeholder associated with biomass units (B.units will changed to
-metric tons). However, no other placeholder associated with landings
-units, recruitment deviations units, etc. will be substituted, and those
-placeholders will remain in the captions_alt_text.csv file.</li>
-</ul>
+<code><a href="../reference/plot_biomass.html">plot_biomass()</a></code>, only the key quantities associated with
+that plot will be substituted into the placeholders.</p>
 </div>
 <div class="section level3">
 <h3 id="multi-plot-functions">Multi-plot functions<a class="anchor" aria-label="anchor" href="#multi-plot-functions"></a>
 </h3>
-<p>When using <code><a href="../reference/save_all_plots.html">save_all_plots()</a></code>, the <code>stockplotr</code>
-function that exports all figures and tables, all key quantities (or, as
-many key quantities as possible) will be substituted into the
-placeholders. As opposed to single-plot functions,
-<code><a href="../reference/save_all_plots.html">save_all_plots()</a></code> allows for the user to specify all
-arguments needed to substitute all key quantities.</p>
+<p>When using <code><a href="../reference/save_all_plots.html">save_all_plots()</a></code>, the {stockplotr} function
+that exports all figures and tables, all key quantities (or, as many key
+quantities as possible) will be substituted into the placeholders.</p>
 </div>
 </div>
   </div>

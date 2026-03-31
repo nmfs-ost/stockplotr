@@ -15,11 +15,14 @@
 <url><loc>nmfs-ost.github.io/stockplotr/reference/convert_output.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/create_latex_table.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/create_rda.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/export_kqs.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/export_rda.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/extract_caps_alttext.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/fill_in_kqs.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/filter_data.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/html_all_figs_tables.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/index.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/insert_kqs.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/merge_error.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_aa.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_abundance_at_age.html</loc></url>
@@ -43,6 +46,5 @@
 <url><loc>nmfs-ost.github.io/stockplotr/reference/stockplotr-package.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/table_landings.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/theme_noaa.html</loc></url>
-<url><loc>nmfs-ost.github.io/stockplotr/reference/write_captions.html</loc></url>
 </urlset>
 

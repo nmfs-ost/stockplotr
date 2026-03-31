@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Tables and Figures for Stock Assessments">
-<meta property="og:description" content="Creates exploratory and finished tables and figures for stock assessment documents from U.S. stock assessment model outputs. This packages addresses parts of the stock assessment workflow that interprets outputs of stock assessment models as well as allows the analyst to create report ready tables and figures, reducing the need to create their own and format then when adding into a report. This package is intended to be used in conjuction with `asar`, a partially automated template for writing various stock assessment reports. Throughout development, we will be creating a set of standardized figures and tables for a stock assessment report, developing functions to produce a variety of diagonostic plots, and other helpful materials. The advantage of using this package over others is that it applies to a range of stock assessment model outputs and standardizes them.">
+<meta property="og:description" content="Creates exploratory and finished tables and figures for stock assessment documents from U.S. stock assessment model outputs. This packages addresses parts of the stock assessment workflow that interprets outputs of stock assessment models as well as allows the analyst to create report ready tables and figures, reducing the need to create their own and format then when adding into a report. This package is intended to be used in conjuction with {asar}, a partially automated template for writing various stock assessment reports. Throughout development, we will be creating a set of standardized figures and tables for a stock assessment report, developing functions to produce a variety of diagonostic plots, and other helpful materials. The advantage of using this package over others is that it applies to a range of stock assessment model outputs and standardizes them.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -113,7 +113,7 @@
 
 <p><img src="reference/figures/stockplotr-hex.png" align="right" height="200" style="float:right; height:200px;"></p>
 <p><strong><em>Previously named ‘satf’</em></strong></p>
-<p>The goal of <code>stockplotr</code> is to create a centralized package that contains all of the figures and tables for a stock assessment report used to inform management. There are multiple current packages that perform a similar function, but they are typically region and/or model dependent. Across the US, there are multiple packages that create plots that are directly used in a stock assessment report used for management. For example, an analyst that uses Stock Synthesis (SS3) to assess a stock will utilize <a href="https://github.com/r4ss/r4ss/" class="external-link"><code>r4ss</code></a>, a package that reads outputs, plots key parameters, and more to increase throughput and reduce tedious tasks for an analyst.</p>
+<p>The goal of {stockplotr} is to create a centralized package that contains all of the figures and tables for a stock assessment report used to inform management. There are multiple current packages that perform a similar function, but they are typically region and/or model dependent. Across the US, there are multiple packages that create plots that are directly used in a stock assessment report used for management. For example, an analyst that uses Stock Synthesis (SS3) to assess a stock will utilize <a href="https://github.com/r4ss/r4ss/" class="external-link"><code>r4ss</code></a>, a package that reads outputs, plots key parameters, and more to increase throughput and reduce tedious tasks for an analyst.</p>
 <p>Please note that this package is still in development. As such, some functions are unstable and might not perform as intended. We encourage anyone who tests out this package to leave an <a href="https://github.com/nmfs-ost/stockplotr/issues" class="external-link">issue</a> for any errors you find or for a feature request.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -142,10 +142,10 @@
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<p>Please refer to the <a href="https://connect.fisheries.noaa.gov/asar_tutorial/#section-preparing-to-run-create_template" class="external-link"><code>asar</code> tutorial</a> to learn how to produce the input file necessary to create figures and tables with <code>stockplotr</code>.</p>
-<p>Then, once your converted model results are saved as an object in your R environment, you can use <code>stockplotr</code> functions to create plots from the object.</p>
+<p>Please refer to the <a href="https://connect.fisheries.noaa.gov/asar_tutorial/#section-preparing-to-run-create_template" class="external-link">{asar} tutorial</a> to learn how to produce the input file necessary to create figures and tables with {stockplotr}.</p>
+<p>Then, once your converted model results are saved as an object in your R environment, you can use {stockplotr} functions to create plots from the object.</p>
 <blockquote>
-<p>[!TIP] <code>stockplotr</code> plots or tables are exported as <code>ggplot2</code> or <code>flextable</code> objects meaning that users can use the same process to add new data, formatting, or other customizations to the plot beyond the baseline made by this package</p>
+<p>[!TIP] {stockplotr} plots or tables are exported as <code>ggplot2</code> or <code>flextable</code> objects meaning that users can use the same process to add new data, formatting, or other customizations to the plot beyond the baseline made by this package</p>
 </blockquote>
 <div class="section level3">
 <h3 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
@@ -177,7 +177,7 @@
 <div class="section level2">
 <h2 id="contributions">Contributions<a class="anchor" aria-label="anchor" href="#contributions"></a>
 </h2>
-<p>Have you identified any suggestions for improvement, bugs, or questions? Please see our <a href="https://github.com/nmfs-ost/stockplotr/blob/main/CONTRIBUTING.md" class="external-link">Contributing page</a> for more information on how to make effective contributions to <code>stockplotr</code>.</p>
+<p>Have you identified any suggestions for improvement, bugs, or questions? Please see our <a href="https://github.com/nmfs-ost/stockplotr/blob/main/CONTRIBUTING.md" class="external-link">Contributing page</a> for more information on how to make effective contributions to {stockplotr}.</p>
 <p>Thank you for helping us improve this package!</p>
 </div>
 <div class="section level2">
