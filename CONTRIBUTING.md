@@ -1,6 +1,6 @@
-# Contributing to `stockplotr`
+# Contributing to {stockplotr}
 
-Do you have an idea that would improve `stockplotr`? *Consider making a contribution!* We welcome ideas for improving not only our code, but also our documentation, tutorial, and any other material associated with `stockplotr`. Here are some options and tips for doing so.
+Do you have an idea that would improve {stockplotr}? *Consider making a contribution!* We welcome ideas for improving not only our code, but also our documentation, tutorial, and any other material associated with {stockplotr}. Here are some options and tips for doing so.
 
 Note: To make any contribution, you must agree to abide by the [Code of Conduct](https://github.com/nmfs-ost/stockplotr/blob/main/CODE_OF_CONDUCT.md).
 
@@ -8,7 +8,7 @@ Note: To make any contribution, you must agree to abide by the [Code of Conduct]
 
 ### Recommended workflow: fork & submit a pull request
 
-The most efficient way to contribute an idea is to fork `stockplotr`, make your suggested changes on a local branch, and then submit a pull request. This will allow the developers to easily evaluate your suggested changes. Please see the [GitHub Docs' "Contributing to a project" page](https://docs.github.com/en/get-started/exploring-projects-on-github/contributing-to-a-project) for step-by-step guidance in using this workflow.
+The most efficient way to contribute an idea is to fork {stockplotr}, make your suggested changes on a local branch, and then submit a pull request. This will allow the developers to easily evaluate your suggested changes. Please see the [GitHub Docs' "Contributing to a project" page](https://docs.github.com/en/get-started/exploring-projects-on-github/contributing-to-a-project) for step-by-step guidance in using this workflow.
 
 ### Recommended practices
 

@@ -26,7 +26,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Background
 
-This article describes the process behind developing the `stockplotr::convert_output` function and its setup so users who want to use `asar` or `stockplotr` are still able until [`convert_output.R`](https://github.com/nmfs-ost/stockplotr/blob/main/R/convert_output.R) includes functionality for other models.
+This article describes the process behind developing the `stockplotr::convert_output` function and its setup so users who want to use {asar} or {stockplotr} are still able until [`convert_output.R`](https://github.com/nmfs-ost/stockplotr/blob/main/R/convert_output.R) includes functionality for other models.
 
 <!--- 
 ::: {.callout-tip, title: "Goal"}

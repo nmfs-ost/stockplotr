@@ -53,7 +53,7 @@ plot_abundance_at_age <- function(
 ) {
   # Create label for abundance units in legend
   abundance_label <- label_magnitude(
-    label = "Abudance",
+    label = "Abundance",
     unit_label = unit_label,
     scale_amount = scale_amount
   )
@@ -97,6 +97,9 @@ plot_abundance_at_age <- function(
       ggplot2::ggplot()
     )
   }
+  
+  data <- data |>
+    dplyr::mutate(age = as.numeric(age))
 
   # Plot data
   plot <- plot_aa(
@@ -111,6 +114,31 @@ plot_abundance_at_age <- function(
     )
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
+    
+    # Obtain relevant key quantities for captions/alt text
+    pop.naa.start.year <- min(data$year)
+    pop.naa.end.year <- max(data$year)
+    pop.naa.age.min <- min(data$age)
+    pop.naa.age.max <- max(data$age)
+    pop.naa.fish.min <- min(data$estimate) |> round(digits = 3)
+    pop.naa.fish.max <- max(data$estimate) |> round(digits = 3)
+    
+    # calculate & export key quantities
+    export_kqs(pop.naa.start.year,
+               pop.naa.end.year,
+               pop.naa.age.min,
+               pop.naa.age.max,
+               pop.naa.fish.min,
+               pop.naa.fish.max)
+    
+    # Add key quantities to captions/alt text
+    insert_kqs(pop.naa.start.year,
+               pop.naa.end.year,
+               pop.naa.age.min,
+               pop.naa.age.max,
+               pop.naa.fish.min,
+               pop.naa.fish.max)
+    
     create_rda(
       object = plot,
       # get name of function and remove "plot_" from it

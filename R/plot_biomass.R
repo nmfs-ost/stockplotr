@@ -148,6 +148,47 @@ plot_biomass <- function(
 
   ### Make RDA ----
   if (make_rda) {
+
+    if (relative){
+      # pulling out the 2nd df in 'data' works for several datasets
+      rel.B.min <- ggplot2::ggplot_build(final)@data[[2]] |>
+        as.data.frame() |>
+        dplyr::pull(y) |>
+        min()
+      rel.B.max <- ggplot2::ggplot_build(final)@data[[2]] |>
+        as.data.frame() |>
+        dplyr::pull(y) |>
+        max()
+        
+      # calculate & export key quantities
+      export_kqs(rel.B.min, rel.B.max)
+      
+      # Add key quantities to captions/alt text
+      insert_kqs(rel.B.min, rel.B.max)
+      
+    } else {
+      B.min <- min(prepared_data$estimate)
+      B.max <- max(prepared_data$estimate)
+      
+      export_kqs(B.min, B.max)
+      insert_kqs(B.min, B.max)
+    }
+    
+    B.ref.pt <- as.character(ref_line)
+    B.units <- as.character(unit_label)
+    B.start.year <- min(prepared_data$year) |> round(digits = 3)
+    B.end.year <- max(prepared_data$year) |> round(digits = 3)
+    
+    export_kqs(B.ref.pt,
+               B.units,
+               B.start.year,
+               B.end.year)
+    
+    insert_kqs(B.ref.pt,
+               B.units,
+               B.start.year,
+               B.end.year)
+    
     create_rda(
       object = final,
       topic_label = ifelse(relative, "relative_biomass", "biomass"),

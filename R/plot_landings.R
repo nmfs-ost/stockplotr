@@ -99,6 +99,28 @@ plot_landings <- function(
 
   ### Make RDA ----
   if (make_rda) {
+    
+    # Obtain relevant key quantities for captions/alt text
+    landings.start.year <- min(prepared_data$year)
+    landings.end.year <- max(prepared_data$year)
+    landings.min <- min(prepared_data$estimate) |> round(digits = 3)
+    landings.max <- max(prepared_data$estimate) |> round(digits = 3)
+    landings.units <- unit_label  
+      
+    # calculate & export key quantities
+    export_kqs(landings.start.year,
+               landings.end.year,
+               landings.min,
+               landings.max,
+               landings.units)
+    
+    # Add key quantities to captions/alt text
+    insert_kqs(landings.start.year,
+               landings.end.year,
+               landings.min,
+               landings.max,
+               landings.units)
+    
     create_rda(
       object = plt,
       # get name of function and remove "plot_" from it

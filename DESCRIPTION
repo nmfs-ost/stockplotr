@@ -20,7 +20,7 @@ Description: Creates exploratory and finished tables and figures for stock
     interprets outputs of stock assessment models as well as allows the
     analyst to create report ready tables and figures, reducing the need
     to create their own and format then when adding into a report. This
-    package is intended to be used in conjuction with `asar`, a partially
+    package is intended to be used in conjuction with {asar}, a partially
     automated template for writing various stock assessment reports.
     Throughout development, we will be creating a set of standardized
     figures and tables for a stock assessment report, developing functions
@@ -48,6 +48,7 @@ Imports:
     naniar,
     prodlim,
     quarto,
+    rlang,
     scales,
     stats,
     stringr,

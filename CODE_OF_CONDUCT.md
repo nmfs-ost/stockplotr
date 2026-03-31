@@ -47,7 +47,7 @@ Examples of representing our community include using an official e-mail address,
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
 reported to the community leaders responsible for enforcement anonymously using this [form](https://forms.gle/MVNesUbP15bHei1J7).
 
-Reports will be reviewed by a member of the NOAA Fisheries Office of Science and Technology who is not participating in the `stockplotr` project [Patrick Lynch] but has the full support of `stockplotr` Community Leaders. All reports will be reviewed promptly and fairly.
+Reports will be reviewed by a member of the NOAA Fisheries Office of Science and Technology who is not participating in the {stockplotr} project [Patrick Lynch] but has the full support of {stockplotr} Community Leaders. All reports will be reviewed promptly and fairly.
 
 All community leaders are obligated to respect the privacy and security of the reporter of any incident whenever possible; however, please note behaviors that meet the official criteria for harrassment must be reported by supervisors under NOAA policy.
 

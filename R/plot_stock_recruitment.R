@@ -127,6 +127,38 @@ plot_stock_recruitment <- function(
 
   # Make RDA
   if (make_rda) {
+    
+    # Obtain relevant key quantities for captions/alt text
+    sr.age.min <- dat |>
+      dplyr::filter(!is.na(year) & !is.na(age)) |>
+      dplyr::slice(which.min(age)) |>
+      dplyr::select(age) |>
+      as.numeric()
+    sr.ssb.units <- spawning_biomass_label
+    sr.ssb.min <- min(sr$spawning_biomass, na.rm = TRUE) |> round(digits = 3)
+    sr.ssb.max <- max(sr$spawning_biomass, na.rm = TRUE) |> round(digits = 3)
+    recruitment.min <- min(sr$predicted_recruitment, na.rm = TRUE) |> round(digits = 3)
+    recruitment.max <- max(sr$predicted_recruitment, na.rm = TRUE) |> round(digits = 3)
+    recruitment.units <- recruitment_label  
+    
+    # calculate & export key quantities
+    export_kqs(sr.age.min,
+               sr.ssb.units,
+               sr.ssb.min,
+               sr.ssb.max,
+               recruitment.min,
+               recruitment.max,
+               recruitment.units)
+    
+    # Add key quantities to captions/alt text
+    insert_kqs(sr.age.min,
+               sr.ssb.units,
+               sr.ssb.min,
+               sr.ssb.max,
+               recruitment.min,
+               recruitment.max,
+               recruitment.units)
+    
     create_rda(
       object = final,
       # get name of function and remove "plot_" from it
