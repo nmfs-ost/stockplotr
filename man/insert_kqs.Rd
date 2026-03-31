@@ -11,7 +11,7 @@ insert_kqs(...)
 exported "captions_alt_text.csv"}
 }
 \value{
-Exports a file ("captions_alt_text.csv") containing captions 
+Exports a file ("captions_alt_text.csv") containing captions
 and alternative text for figures and tables, with key quantities inserted
 into the "captions_alt_text_template.csv" template's placeholders.
 }
@@ -22,6 +22,7 @@ Insert key quantities into the captions and alternative text file
 \dontrun{
 insert_kqs(
   F.min,
-  F.max)
+  F.max
+)
 }
 }

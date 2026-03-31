@@ -97,7 +97,7 @@ plot_abundance_at_age <- function(
       ggplot2::ggplot()
     )
   }
-  
+
   data <- data |>
     dplyr::mutate(age = as.numeric(age))
 
@@ -114,7 +114,6 @@ plot_abundance_at_age <- function(
     )
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
-    
     # Obtain relevant key quantities for captions/alt text
     pop.naa.start.year <- min(data$year)
     pop.naa.end.year <- max(data$year)
@@ -122,23 +121,27 @@ plot_abundance_at_age <- function(
     pop.naa.age.max <- max(data$age)
     pop.naa.fish.min <- min(data$estimate) |> round(digits = 3)
     pop.naa.fish.max <- max(data$estimate) |> round(digits = 3)
-    
+
     # calculate & export key quantities
-    export_kqs(pop.naa.start.year,
-               pop.naa.end.year,
-               pop.naa.age.min,
-               pop.naa.age.max,
-               pop.naa.fish.min,
-               pop.naa.fish.max)
-    
+    export_kqs(
+      pop.naa.start.year,
+      pop.naa.end.year,
+      pop.naa.age.min,
+      pop.naa.age.max,
+      pop.naa.fish.min,
+      pop.naa.fish.max
+    )
+
     # Add key quantities to captions/alt text
-    insert_kqs(pop.naa.start.year,
-               pop.naa.end.year,
-               pop.naa.age.min,
-               pop.naa.age.max,
-               pop.naa.fish.min,
-               pop.naa.fish.max)
-    
+    insert_kqs(
+      pop.naa.start.year,
+      pop.naa.end.year,
+      pop.naa.age.min,
+      pop.naa.age.max,
+      pop.naa.fish.min,
+      pop.naa.fish.max
+    )
+
     create_rda(
       object = plot,
       # get name of function and remove "plot_" from it

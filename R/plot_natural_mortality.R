@@ -84,7 +84,7 @@ plot_natural_mortality <- function(
 
   processed_data <- processed_data |>
     dplyr::mutate(age = as.numeric(age))
-  
+
   plt <- plot_timeseries(
     dat = processed_data,
     x = "age",
@@ -100,7 +100,6 @@ plot_natural_mortality <- function(
 
   ### Make RDA ----
   if (make_rda) {
-    
     # Obtain relevant key quantities for captions/alt text
     M.age.min <- min(processed_data$age)
     M.age.max <- max(processed_data$age)
@@ -108,17 +107,21 @@ plot_natural_mortality <- function(
     M.rate.max <- max(processed_data$estimate) |> round(digits = 3)
 
     # calculate & export key quantities
-    export_kqs(M.age.min,
-               M.age.max,
-               M.rate.min,
-               M.rate.max)
-    
+    export_kqs(
+      M.age.min,
+      M.age.max,
+      M.rate.min,
+      M.rate.max
+    )
+
     # Add key quantities to captions/alt text
-    insert_kqs(M.age.min,
-               M.age.max,
-               M.rate.min,
-               M.rate.max)
-    
+    insert_kqs(
+      M.age.min,
+      M.age.max,
+      M.rate.min,
+      M.rate.max
+    )
+
     create_rda(
       object = final,
       # get name of function and remove "plot_" from it

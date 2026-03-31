@@ -112,16 +112,15 @@ table_landings <- function(
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
     if (length(df_list) == 1) {
-      
       # Obtain relevant key quantities for captions/alt text
-      landings.units <- unit_label  
-      
+      landings.units <- unit_label
+
       # calculate & export key quantities
       export_kqs(landings.units)
-      
+
       # Add key quantities to captions/alt text
       insert_kqs(landings.units)
-      
+
       create_rda(
         object = final$label,
         # get name of function and remove "table_" from it

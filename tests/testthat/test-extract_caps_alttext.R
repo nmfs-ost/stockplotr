@@ -10,7 +10,7 @@ test_that("extract_caps_alttext works for figures", {
 
   B.min <- 100
   B.max <- 200
-  
+
   # add KQs to caps/alt text csv
   insert_kqs(B.min, B.max)
 
@@ -41,7 +41,7 @@ test_that("extract_caps_alttext works for tables", {
 
   B.min <- 100
   B.max <- 200
-  
+
   # add KQs to caps/alt text csv
   insert_kqs(B.min, B.max)
 

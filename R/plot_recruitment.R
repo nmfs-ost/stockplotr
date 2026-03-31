@@ -145,7 +145,6 @@ plot_recruitment <- function(
 
   # Make RDA
   if (make_rda) {
-
     # Obtain relevant key quantities for captions/alt text
     recruitment.units <- as.character(unit_label)
     recruitment.start.year <- min(recruitment$year)
@@ -154,20 +153,24 @@ plot_recruitment <- function(
     recruitment.max <- max(recruitment$predicted_recruitment) |> round(digits = 3)
 
     # calculate & export key quantities
-    export_kqs(recruitment.units,
-               recruitment.start.year,
-               recruitment.end.year,
-               recruitment.min,
-               recruitment.max)
-    
+    export_kqs(
+      recruitment.units,
+      recruitment.start.year,
+      recruitment.end.year,
+      recruitment.min,
+      recruitment.max
+    )
+
     # Add key quantities to captions/alt text
-    insert_kqs(recruitment.units,
-               recruitment.start.year,
-               recruitment.end.year,
-               recruitment.min,
-               recruitment.max)
-    
-    
+    insert_kqs(
+      recruitment.units,
+      recruitment.start.year,
+      recruitment.end.year,
+      recruitment.min,
+      recruitment.max
+    )
+
+
     create_rda(
       object = final,
       # get name of function and remove "plot_" from it

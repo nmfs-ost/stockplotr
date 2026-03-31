@@ -12,7 +12,7 @@ exported "key_quantities.csv"}
 }
 \value{
 Exports a file based on key quantities template, with values
-added next to the names of the key quantities specified as ellipsis 
+added next to the names of the key quantities specified as ellipsis
 arguments. File is saved as "key_quantities.csv" to the working directory.
 }
 \description{
@@ -22,6 +22,7 @@ Export updated key quantities template
 \dontrun{
 export_kqs(
   F.min,
-  F.max)
+  F.max
+)
 }
 }
