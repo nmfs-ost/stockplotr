@@ -49,7 +49,7 @@ plot_recruitment <- function(
   # Extract recruitment
   recruitment <- filter_data(
     dat = dat,
-    label_name = "recruitment",
+    label_name = "recruitment$", # might need to adjust for expected vs predicted rec
     geom = "line",
     era = era,
     group = group,
