@@ -69,6 +69,7 @@ Default: NULL}
 \value{
 A plot of observed vs. predicted data for a stock assessment report.
 }
+
 \description{
 Plot observed vs. predicted data
 }
