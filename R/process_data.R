@@ -246,7 +246,7 @@ process_data <- function(
         # at this point in the function, year and age should be removed anyway from index_variables
         index_variables <- NULL
       }
-
+      
       # Remaining id'd index variables moved to facet
       if (length(index_variables) > 0) {
         if (!is.null(facet)) {
