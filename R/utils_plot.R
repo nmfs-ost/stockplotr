@@ -500,7 +500,7 @@ cohort_line <- function(
 reference_line <- function(
   plot,
   dat,
-  era = "time",
+  # era = "time",
   label_name,
   reference,
   relative = FALSE,
@@ -517,9 +517,6 @@ reference_line <- function(
     )
   }
 
-  # Rename era arg
-  era_name <- era
-
   # Add geom for ref line
   if (is.null(ref_line_val)) {
     # cli::cli_alert_warning(
@@ -527,25 +524,25 @@ reference_line <- function(
     # )
     plot
   } else {
-    plot +
-      ggplot2::geom_hline(
-        # ggplot2::aes(
-        yintercept = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
-        # ),
-        color = "black",
-        linetype = "dashed"
-      ) +
-      ggplot2::annotate(
-        geom = "text",
-        # TODO: need to change this for general process
-        x = as.numeric(max(dat$year[dat$era == era_name], na.rm = TRUE)), # - as.numeric(max(dat$year[dat$era == "time"], na.rm = TRUE))/200,
-        y = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
-        label = glue::glue("{label_name}[{reference}]"), # list(bquote(label_name[.(reference)])),
-        parse = TRUE,
-        hjust = 1,
-        vjust = 0,
-        size = 5 # this is not foolproof
-      )
+  plot +
+    ggplot2::geom_hline(
+      # ggplot2::aes(
+      yintercept = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
+      # ),
+      color = "black",
+      linetype = "dashed"
+    ) +
+    ggplot2::annotate(
+      geom = "text",
+      # TODO: need to change this for general process
+      x = as.numeric(max(ggplot2::ggplot_build(plot)@data[[2]][["x"]], na.rm = TRUE)), # - as.numeric(max(dat$year[dat$era == "time"], na.rm = TRUE))/200,
+      y = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
+      label = glue::glue("{label_name}[{reference}]"), # list(bquote(label_name[.(reference)])),
+      parse = TRUE,
+      hjust = 1,
+      vjust = 0,
+      size = 5 # this is not foolproof
+    )
   }
 }
 
