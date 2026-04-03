@@ -14,7 +14,8 @@ plot_recruitment(
   interactive = TRUE,
   module = NULL,
   make_rda = FALSE,
-  figures_dir = getwd()
+  figures_dir = getwd(),
+  ...
 )
 }
 \arguments{
