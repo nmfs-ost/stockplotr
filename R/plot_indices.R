@@ -23,7 +23,7 @@ plot_indices <- function(
   unit_label = "",
   group = NULL,
   # facet always assigned to fleet since that is how indices are calc'd -- unless replaced with NULL
-  facet = "fleet",
+  facet = NULL,
   interactive = TRUE,
   module = NULL,
   focus = NULL,
@@ -63,55 +63,51 @@ plot_indices <- function(
     prepared_data <- prepared_data |>
       dplyr::filter(fleet %in% focus)
   }
+  
+  processed_data <- process_data(
+    dat = prepared_data,
+    group = group,
+    facet = facet
+  )
+  prepared_data <- processed_data[[1]]
+  group <- processed_data[[2]]
+  facet <- processed_data[[3]]
 
-  # identify if there is >1 label and create plot
-  if (length(unique(prepared_data$label)) > 1) {
-    # move label to grouping and set grouping into facet
-    if (!is.null(group)) {
-      facet <- c(facet, group)
-    }
-    # transform prep data so group_var = label
-    prepared_data <- prepared_data |>
-      dplyr::mutate(
-        group_var = label
-      )
-    # plot time series with multiple labels
-    plt <- plot_timeseries(
-      dat = prepared_data,
-      ylab = u_units,
-      group = "label",
-      facet = facet,
-      # linewidth = 1,
-      ...
-    ) +
-      # commenting out but might need this later -- not sure if this will always be true
-      ggplot2::labs(
-        linetype = "",
-        fill = ""
-      ) +
-      theme_noaa() +
-      ggplot2::scale_x_continuous(
-        breaks = ggplot2::waiver(),
-        # labels = scales::label_number(accuracy = 1),
-        guide = ggplot2::guide_axis(
-          minor.ticks = TRUE
-        )
-      )
-    # Overwrite facets from base plot_timeseries bc scales need to be free
-    facet <- paste("~", paste(facet, collapse = " + "))
-    facet_formula <- stats::reformulate(facet)
-    plt <- plt + ggplot2::facet_wrap(facet_formula, scales = "free")
-  } else {
-    # plot time series
-    plt <- plot_error(
-      dat = prepared_data,
-      ylab = u_units,
-      group = group,
-      facet = facet,
-      ...
-    )
+  # move label to grouping and set grouping into facet
+  if (!is.null(group)) {
+    facet <- c(facet, group)
   }
-
+  # transform prep data so group_var = label
+  # prepared_data <- prepared_data |>
+  #   dplyr::mutate(
+  #     group_var = label
+  #   )
+  # plot time series with multiple labels
+  plt <- plot_obsvpred(
+    dat = prepared_data,
+    x = "year",
+    y = "estimate",
+    observed_label = "indices_observed",
+    predicted_label = "indices_predicted",
+    geom = "line",
+    xlab = "Year",
+    ylab = "Estimated Index",
+    group = group,
+    facet = facet
+  ) +
+    theme_noaa() +
+    ggplot2::scale_x_continuous(
+      breaks = ggplot2::waiver(),
+      # labels = scales::label_number(accuracy = 1),
+      guide = ggplot2::guide_axis(
+        minor.ticks = TRUE
+      )
+    )
+  # Overwrite facets from base plot_timeseries bc scales need to be free
+  facet <- paste("~", paste(facet, collapse = " + "))
+  facet_formula <- stats::reformulate(facet)
+  plt <- plt + ggplot2::facet_wrap(facet_formula, scales = "free")
+  
   ### Make RDA ----
   if (make_rda) {
     
