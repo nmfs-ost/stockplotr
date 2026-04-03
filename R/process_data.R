@@ -212,8 +212,42 @@ process_data <- function(
       }
     } else { # group is null
       # Set first indexing variable to group
-      group <- index_variables[1]
-      data <- dplyr::filter(data, !is.na(.data[[group]]))
+      # Check if >1 value exists for each model
+      check_indexing <- data %>%
+        dplyr::group_by(model) %>%
+        dplyr::summarise(dplyr::across(dplyr::all_of(index_variables), ~ dplyr::n_distinct(.x) > 1))
+      if (any(
+          check_indexing  |>
+            dplyr::select(dplyr::all_of(index_variables)) |>
+            # 2. Turn the columns into a single long format
+            tidyr::pivot_longer(cols = dplyr::everything()) |>
+            # 3. Extract the 'value' column as a raw vector
+            dplyr::pull(value)
+        )) {
+        # check which index values contain a TRUE
+        # if any have FALSE in entire column then remove from index_variables
+        valid_vars <- check_indexing |>
+          dplyr::summarise(dplyr::across(-model, any)) |>
+          tidyr::pivot_longer(dplyr::everything()) |>
+          dplyr::filter(value == TRUE) |>
+          dplyr::pull(name)
+        # Remove any index_variables that aren't in valid_vars
+        index_variables <- index_variables[grepl(paste(valid_vars, collapse = "|"), index_variables)]
+        # Set group to first matching valid var
+        group <- valid_vars[1]
+        # Remove group from index_variables so no repeats
+        index_variables <- index_variables[-grepl(valid_vars[1], index_variables)]
+        # Don't want to filter by group if model is present because the index_var could be NA for one of the models
+        # TODO: perform check or adjust function in case when index_var is present for one model and not other
+        # This would cause the plot to be weird
+          # data <- dplyr::filter(data, !is.na(.data[[group]]))
+      } else { # ALL FALSE
+        # remove index variables and set group to model
+        # at this point in the function, year and age should be removed anyway from index_variables
+        index_variables <- NULL
+        # group <- "model"
+      }
+    
       # Remaining id'd index variables moved to facet
       if (length(index_variables) > 1) {
         if (!is.null(facet)) {
@@ -225,17 +259,20 @@ process_data <- function(
         # add message for what vaues are in facet
         cli::cli_alert_info("Faceting by {paste(facet, collapse = ', ')}.")
         # filter out NA for each value in facet
-        for (f in facet) {
-          if (any(is.na(unique(data[[f]]))) & length(unique(data[[f]])) == 2) {
-            data <- dplyr::filter(data, is.na(.data[[f]]))
-            facet <- facet[-grepl(f, facet)]
-          } else {
-            data <- dplyr::filter(data, !is.na(.data[[f]]))
-          }
-        }
-      }
-    }
-  }
+        # only perform if ==1 model
+        if (length(unique(data$model)) == 1) {
+          for (f in facet) {
+            if (any(is.na(unique(data[[f]]))) & length(unique(data[[f]])) == 2) {
+              data <- dplyr::filter(data, is.na(.data[[f]]))
+              facet <- facet[-grepl(f, facet)]
+            } else {
+              data <- dplyr::filter(data, !is.na(.data[[f]]))
+            } # close ifelse
+          } # close for loop
+        } # close model check
+      } # close check for remaining index variables
+    } # close else group is null
+  } # close length index_vars > 0
 
   if (!is.null(group) && group != "none") {
     # check if value varies in ANY year
