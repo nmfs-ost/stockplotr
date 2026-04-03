@@ -14,7 +14,8 @@ plot_recruitment(
   interactive = TRUE,
   module = NULL,
   make_rda = FALSE,
-  figures_dir = getwd()
+  figures_dir = getwd(),
+  ...
 )
 }
 \arguments{
@@ -58,6 +59,8 @@ Default is FALSE.}
 \item{figures_dir}{The location of the folder containing the generated figure
 rda files ("figures") that will be created if the argument `make_rda` = TRUE.
 Default is the working directory.}
+
+\item{...}{Arguments called from ggplot2::geom_line or ggplot2::geom_point}
 }
 \value{
 Plot recruitment over time from an assessment model output file

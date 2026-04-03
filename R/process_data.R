@@ -213,8 +213,8 @@ process_data <- function(
     } else { # group is null
       # Set first indexing variable to group
       # Check if >1 value exists for each model
-      check_indexing <- data %>%
-        dplyr::group_by(model) %>%
+      check_indexing <- data |>
+        dplyr::group_by(model) |>
         dplyr::summarise(dplyr::across(dplyr::all_of(index_variables), ~ dplyr::n_distinct(.x) > 1))
       if (any(
           check_indexing  |>
