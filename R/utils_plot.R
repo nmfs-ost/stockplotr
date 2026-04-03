@@ -666,7 +666,7 @@ filter_data <- function(
       ) |>
       dplyr::mutate(
         year = as.numeric(year),
-        model = ifelse(model_label, get_id(dat)[i], NA),
+        model = ifelse(model_label, get_id(dat)[i], "1"), # NA -- changed from NA to 1 for processing reasons, might need to change back if issue
         estimate = as.numeric(estimate) / scale_amount,
         # calc uncertainty when se
         # TODO: calculate other sources of error to upper and lower (cv,)
