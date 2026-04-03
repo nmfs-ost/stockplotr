@@ -980,3 +980,106 @@ check_grouping <- function(dat) {
   }
   dat_index
 }
+
+#------------------------------------------------------------------------------
+
+#' Plot observed vs. predicted data
+#'
+#' @inheritParams plot_timeseries 
+#' @param observed_label a string of the label used to filter the observed data. Default is "observed". 
+#' @param predicted_label a string of the label used to filter the predicted data. Default is "predicted".
+#'
+#' @returns Create a plot of observed vs. predicted data for a stock assessment report. 
+#' @export
+#'
+plot_obsvpred <- function(
+    dat,
+    x = "year",
+    y = "estimate",
+    observed_label = "observed",
+    predicted_label = "predicted",
+    geom = "line",
+    xlab = "Year",
+    ylab = NULL,
+    group = NULL,
+    facet = NULL,
+    ...
+) {
+  # Start plot
+  plot <- ggplot2::ggplot()
+  # make into new geom?
+  # more defaults and fxnality for ggplot
+  
+  # Add geom
+  plot <- plot +
+    ggplot2::geom_point(
+      data = dat |> dplyr::filter(grepl(observed_label, label)),
+      ggplot2::aes(
+        .data[[x]],
+        .data[[y]],
+        color = model
+      ),
+      shape = 16
+      # ...
+    ) +
+  ggplot2::geom_line(
+    data = dat |> dplyr::filter(grepl(predicted_label, label)),
+    ggplot2::aes(
+      x = .data[[x]],
+      y = .data[[y]],
+      color = model
+    ),
+    linetype = "solid"
+  )
+  
+  # Add labels to axis and legend
+  if (length(unique(dat$model)) > 1 & !is.null(group)) {
+    labs <- plot + ggplot2::labs(
+      x = xlab,
+      y = ylab
+      # color = "Model",
+      # linetype = cap_first_letter(group),
+      # fill = cap_first_letter(group),
+      # shape = cap_first_letter(group)
+    ) +
+      ggplot2::theme(legend.title = ggplot2::element_blank())
+  } else {
+    labs <- plot + ggplot2::labs(
+      x = xlab,
+      y = ylab,
+      color = "Model"
+    )
+  }
+  
+  # Remove linetype or point when there is no grouping
+  if (is.null(group) & length(unique(dat$model)) == 1) {
+    labs <- labs + ggplot2::guides(linetype = "none", shape = "none")
+  }
+  if (length(unique(dat$model)) == 1) {
+    labs <- labs + ggplot2::guides(color = "none")
+  }
+  
+  # Calc axis breaks
+  x_n_breaks <- axis_breaks(dat[[x]])
+  breaks <- ggplot2::scale_x_continuous(
+    breaks = x_n_breaks,
+    guide = ggplot2::guide_axis(
+      minor.ticks = TRUE
+    )
+  )
+  
+  # Put together final plot
+  final <- labs + breaks + ggplot2::expand_limits(y = 0) +
+    ggplot2::scale_y_continuous(
+      labels = scales::label_comma()
+    )
+  
+  # Check if facet(s) are desired
+  if (!is.null(facet) & length(facet) > 0) {
+    facet <- paste("~", paste(facet, collapse = " + "))
+    facet_formula <- stats::reformulate(facet)
+    
+    final <- final + ggplot2::facet_wrap(facet_formula)
+  }
+  final
+}
