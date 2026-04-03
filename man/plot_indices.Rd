@@ -8,7 +8,7 @@ plot_indices(
   dat,
   unit_label = "",
   group = NULL,
-  facet = "fleet",
+  facet = NULL,
   interactive = TRUE,
   module = NULL,
   focus = NULL,
