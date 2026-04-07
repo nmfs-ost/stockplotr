@@ -114,9 +114,9 @@ plot_timeseries <- function(
                 group_var
               }
             }
-          )#,
+          ),
           # linewidth = 1.0,
-          # ...
+          ...
         )
     },
     "area" = {
