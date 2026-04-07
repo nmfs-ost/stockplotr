@@ -89,7 +89,13 @@ plot_timeseries <- function(
             x = .data[[x]],
             ymin = estimate_lower,
             ymax = estimate_upper,
-            fill = interaction(model, group_var)
+            fill = {
+              if(length(unique(.data[["model"]])) > 1) {
+                interaction(model, group_var)
+              } else {
+                group_var
+              }
+            }
           ),
           alpha = 0.3
         ) +
@@ -101,10 +107,16 @@ plot_timeseries <- function(
             y = .data[[y]],
             # linetype = group_var,
             # linetype = ifelse(!is.null(group), group_var, "solid"),
-            color = interaction(model, group_var)
-          ),
+            color = {
+              if(length(unique(.data[["model"]])) > 1) {
+                interaction(model, group_var)
+              } else {
+                group_var
+              }
+            }
+          )#,
           # linewidth = 1.0,
-          ...
+          # ...
         )
     },
     "area" = {
@@ -133,10 +145,11 @@ plot_timeseries <- function(
     ) +
       ggplot2::theme(legend.title = ggplot2::element_blank())
   } else {
+    color_lab <- ifelse(length(unique(dat$model)) > 1, "Model", cap_first_letter(group))
     labs <- plot + ggplot2::labs(
       x = xlab,
       y = ylab,
-      color = "Model",
+      color = color_lab,
       linetype = cap_first_letter(group),
       fill = cap_first_letter(group),
       shape = cap_first_letter(group)
@@ -151,16 +164,15 @@ plot_timeseries <- function(
       # return plot if option beyond line and point for now
       labs
     )
-  }
-  if (length(unique(dat$model)) == 1) {
-    labs <- switch(geom,
-      "line" = labs + ggplot2::guides(color = "none"),
-      "point" = labs + ggplot2::guides(color = "none"),
-      "area" = labs + ggplot2::guides(fill = "none"),
-      # return plot if option beyond line and point for now
-      labs
-    )
-  }
+  } # else if (length(unique(dat$model)) == 1) {
+  #   labs <- switch(geom,
+  #     "line" = labs + ggplot2::guides(color = "none"),
+  #     "point" = labs + ggplot2::guides(color = "none"),
+  #     "area" = labs + ggplot2::guides(fill = "none"),
+  #     # return plot if option beyond line and point for now
+  #     labs
+  #   )
+  # }
 
   # Calc axis breaks
   x_n_breaks <- axis_breaks(dat[[x]])

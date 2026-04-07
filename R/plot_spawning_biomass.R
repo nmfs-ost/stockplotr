@@ -197,8 +197,8 @@ plot_spawning_biomass <- function(
     ylab = spawning_biomass_label,
     group = group,
     # add check in case facet is returned as character(0)
-    facet = if (length(facet) > 0) facet else NULL#,
-    # ...
+    facet = if (length(facet) > 0) facet else NULL,
+    ...
   )
   # Add reference line
   # getting data set - an ifelse statement in the fxn wasn't working
