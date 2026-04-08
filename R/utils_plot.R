@@ -199,7 +199,7 @@ plot_timeseries <- function(
     )
 
   # Remove legend if no group is selected
-  if (is.null(group) & is.data.frame(dat) & any("label" %in% unique(dat$model))) {
+  if (is.null(group) & is.data.frame(dat) & any("label" %in% unique(dat$model)) | length(unique(dat$model)) == 1) {
     final <- final + ggplot2::theme(legend.position = "none")
   }
 
