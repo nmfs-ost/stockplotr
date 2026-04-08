@@ -145,11 +145,20 @@ plot_timeseries <- function(
     ) +
       ggplot2::theme(legend.title = ggplot2::element_blank())
   } else {
-    color_lab <- ifelse(length(unique(dat$model)) > 1, "Model", cap_first_letter(group))
+    if (length(unique(dat$model)) > 1) {
+      color_lab <- "Model"
+    } else {
+      if(!is.null(group)) {
+        color_lab <- group
+      } else {
+        color_lab <- NULL
+      }
+    }
+    # color_lab <- ifelse(length(unique(dat$model)) > 1, "Model", group)
     labs <- plot + ggplot2::labs(
       x = xlab,
       y = ylab,
-      color = color_lab,
+      color = cap_first_letter(color_lab),
       linetype = cap_first_letter(group),
       fill = cap_first_letter(group),
       shape = cap_first_letter(group)
@@ -190,7 +199,7 @@ plot_timeseries <- function(
     )
 
   # Remove legend if no group is selected
-  if (is.null(group) & is.data.frame(dat) & any(is.na(unique(dat$model)))) {
+  if (is.null(group) & is.data.frame(dat) & any("label" %in% unique(dat$model))) {
     final <- final + ggplot2::theme(legend.position = "none")
   }
 
