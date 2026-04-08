@@ -354,7 +354,16 @@ process_data <- function(
       group <- NULL
     }
   }
-
+  
+  # Ensure that index_variables -- group or facets are non-numeric to be plotted accurately
+  data <- data |>
+    dplyr::mutate(
+      across(
+        tidyselect::any_of(c(group, facet)),
+        as.character
+      )
+    )
+  
   # Export list of objects
   list(
     # variable,
