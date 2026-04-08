@@ -70,6 +70,8 @@ Default: `FALSE`.}
 Default: `getwd()`
 
 The folder is created within the path if it does not exist.}
+
+\item{...}{Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}
 }
 \value{
 Plot recruitment over time from an assessment model output file

@@ -104,9 +104,11 @@ plot_indices <- function(
       )
     )
   # Overwrite facets from base plot_timeseries bc scales need to be free
-  facet <- paste("~", paste(facet, collapse = " + "))
-  facet_formula <- stats::reformulate(facet)
-  plt <- plt + ggplot2::facet_wrap(facet_formula, scales = "free")
+  if ("fleet" %in% colnames(prepared_data)) {
+    facet <- paste("~", paste(facet, collapse = " + "))
+    facet_formula <- stats::reformulate(facet)
+    plt <- plt + ggplot2::facet_wrap(facet_formula, scales = "free")
+  }
   
   ### Make RDA ----
   if (make_rda) {
