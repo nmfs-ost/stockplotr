@@ -1,6 +1,6 @@
 #' Create Projection Summary Table
 #'
-#' Generates a table showing assumed and projected years of Catch, SSB, and F.
+#' Generates a table showing assumed and projected years of Catch, SB, and F.
 #'
 #' @inheritParams plot_spawning_biomass
 #'
@@ -10,7 +10,14 @@
 #' \dontrun{
 #' # add example here
 #' }
-table_projections <- function(dat) {
+table_projections <- function(
+    dat,
+    unit_label = c("catch" = "mt", "spawning_biomass" = "mt"),
+    interactive = TRUE,
+    module = NULL,
+    make_rda = FALSE,
+    tables_dir = getwd()
+    ) {
   
   #TODO: Identify how to extract future data from data
   # - use era? Allow user to set years? etc.
