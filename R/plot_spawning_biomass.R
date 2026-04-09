@@ -188,7 +188,10 @@ plot_spawning_biomass <- function(
     }
     if (is.na(ref_line_val)) cli::cli_abort("Reference value not found. Cannot plot relative values.")
     plot_data <- plot_data |>
-      dplyr::mutate(estimate = estimate / ref_line_val)
+      dplyr::mutate(estimate = estimate / ref_line_val,
+                    estimate_lower = estimate_lower / ref_line_val,
+                    estimate_upper = estimate_upper / ref_line_val
+      )
   }
 
   plt <- plot_timeseries(
