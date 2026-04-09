@@ -205,7 +205,7 @@ plot_spawning_biomass <- function(
   final <- reference_line(
     plot = plt,
     dat = rp_dat,
-    era = era,
+    # era = era,
     label_name = "spawning_biomass",
     reference = ref_line,
     relative = relative,
@@ -213,25 +213,26 @@ plot_spawning_biomass <- function(
   ) + theme_noaa()
 
   # Plot vertical lines if era is not filtering
-  if (is.null(era)) {
-    # Find unique era
-    eras <- unique(plot_data$era)
-    if (length(eras) > 1) {
-      year_vlines <- c()
-      for (i in 2:length(eras)) {
-        erax <- plot_data |>
-          dplyr::filter(era == eras[i]) |>
-          dplyr::pull(year) |>
-          min(na.rm = TRUE)
-        year_vlines <- c(year_vlines, erax)
-      }
-    }
-    final <- final +
-      ggplot2::geom_vline(
-        xintercept = year_vlines,
-        color = "#999999"
-      )
-  }
+  # Turning this out because I don't think it's relevant
+  # if (is.null(era)) {
+  #   # Find unique era
+  #   eras <- unique(plot_data$era)
+  #   if (length(eras) > 1) {
+  #     year_vlines <- c()
+  #     for (i in 2:length(eras)) {
+  #       erax <- plot_data |>
+  #         dplyr::filter(era == eras[i]) |>
+  #         dplyr::pull(year) |>
+  #         min(na.rm = TRUE)
+  #       year_vlines <- c(year_vlines, erax)
+  #     }
+  #   }
+  #   final <- final +
+  #     ggplot2::geom_vline(
+  #       xintercept = year_vlines,
+  #       color = "#999999"
+  #     )
+  # }
 
   ### Make RDA ----
   if (make_rda) {
