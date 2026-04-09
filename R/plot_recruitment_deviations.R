@@ -3,7 +3,8 @@
 #' @inheritParams plot_spawning_biomass
 #'
 #' @return A plot showing recruitment deviations relative to one, over time.
-#' The input is from an assessment model output file
+#'
+#' @details The input is from an assessment model output file
 #' translated to a standardized output (\link[stockplotr]{convert_output}).
 #' There are options to return a `ggplot2` object or export an .rda object
 #' containing associated caption and alternative text for the figure.
