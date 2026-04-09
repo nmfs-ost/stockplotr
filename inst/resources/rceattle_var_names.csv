@@ -183,7 +183,7 @@ quantities,true_age_comp_hat,
 quantities,unweighted_jnll_comp,
 quantities,vulnerability,
 quantities,vulnerability_other,
-quantities,z_at_age,total+mortality
+quantities,z_at_age,total_mortality
 sdrep,biomass,
 sdrep,index_ln_q,
 sdrep,init_dev,
