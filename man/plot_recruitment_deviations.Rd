@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_recruitment_deviations.R
 \name{plot_recruitment_deviations}
 \alias{plot_recruitment_deviations}
-\title{Plot Recruitment Deviations}
+\title{Plot recruitment deviations}
 \usage{
 plot_recruitment_deviations(
   dat,
@@ -53,13 +53,20 @@ The folder is created within the path if it does not exist.}
 \item{...}{Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}
 }
 \value{
-Plot recruitment deviations relative to one over time from an
-assessment model output file translated to a standardized output (\link[stockplotr]{convert_output}). There are
-options to return a `ggplot2` object or export an .rda object containing
-associated caption and alternative text for the figure.
+A plot showing recruitment deviations relative to one, over time.
 }
 \description{
-Plot Recruitment Deviations
+Plot recruitment deviations
+}
+\details{
+The input is from an assessment model output file
+translated to a standardized output (\link[stockplotr]{convert_output}).
+There are options to return a `ggplot2` object or export an .rda object
+containing associated caption and alternative text for the figure.
+}
+\note{
+All plotting functions automatically recognize indexing variables and will
+use them in groupings and/or facetting. @seealso [process_data()].
 }
 \examples{
 plot_recruitment_deviations(
@@ -73,4 +80,8 @@ plot_recruitment_deviations(
   interactive = FALSE,
   shape = 2
 )
+}
+\seealso{
+[convert_output()], [plot_error()], [filter_data()],
+[process_data()]
 }
