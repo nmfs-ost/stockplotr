@@ -53,6 +53,7 @@ test_that("save_all_plots works when all figures/tables are plotted", {
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
+  file.remove(fs::path(getwd(), "key_quantities.csv"))
   unlink(fs::path(getwd(), "figures"), recursive = T)
   # unlink(fs::path(getwd(), "tables"), recursive = T)
 })

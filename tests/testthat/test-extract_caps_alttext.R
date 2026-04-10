@@ -33,6 +33,7 @@ test_that("extract_caps_alttext works for figures", {
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
+  file.remove(fs::path(getwd(), "key_quantities.csv"))
 })
 
 test_that("extract_caps_alttext works for tables", {
@@ -60,4 +61,5 @@ test_that("extract_caps_alttext works for tables", {
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
+  file.remove(fs::path(getwd(), "key_quantities.csv"))
 })

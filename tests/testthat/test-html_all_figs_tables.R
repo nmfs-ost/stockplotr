@@ -30,6 +30,7 @@ load(file.path(
 #   # erase temporary testing files
 #   unlink(fs::path(getwd(), "all_tables_figures"), recursive = T)
 #   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
+#   file.remove(fs::path(getwd(), "key_quantities.csv"))
 #   file.remove(fs::path(getwd(), "08_tables.qmd"))
 #   file.remove(fs::path(getwd(), "09_figures.qmd"))
 #   unlink(fs::path(getwd(), "figures"), recursive = T)
@@ -90,6 +91,7 @@ load(file.path(
 #   # erase temporary testing files
 #   unlink(fs::path(getwd(), "all_tables_figures"), recursive = T)
 #   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
+#   file.remove(fs::path(getwd(), "key_quantities.csv"))
 #   file.remove(fs::path(getwd(), "08_tables.qmd"))
 #   file.remove(fs::path(getwd(), "09_figures.qmd"))
 #   unlink(fs::path(getwd(), "figures"), recursive = T)

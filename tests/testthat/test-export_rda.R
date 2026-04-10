@@ -43,6 +43,7 @@ test_that("export_rda works for figures", {
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
+  file.remove(fs::path(getwd(), "key_quantities.csv"))
   unlink(fs::path(getwd(), "figures"), recursive = T)
 })
 
@@ -84,5 +85,6 @@ test_that("export_rda works for tables", {
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
+  file.remove(fs::path(getwd(), "key_quantities.csv"))
   unlink(fs::path(getwd(), "tables"), recursive = T)
 })
