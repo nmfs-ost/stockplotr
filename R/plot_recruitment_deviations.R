@@ -1,11 +1,20 @@
-#' Plot Recruitment Deviations
+#' Plot recruitment deviations
 #'
 #' @inheritParams plot_spawning_biomass
 #'
-#' @return Plot recruitment deviations relative to one over time from an
-#' assessment model output file translated to a standardized output (\link[stockplotr]{convert_output}). There are
-#' options to return a `ggplot2` object or export an .rda object containing
-#' associated caption and alternative text for the figure.
+#' @return A plot showing recruitment deviations relative to one, over time.
+#'
+#' @details The input is from an assessment model output file
+#' translated to a standardized output (\link[stockplotr]{convert_output}).
+#' There are options to return a `ggplot2` object or export an .rda object
+#' containing associated caption and alternative text for the figure.
+#'
+#' @note
+#' All plotting functions automatically recognize indexing variables and will
+#' use them in groupings and/or facetting. @seealso [process_data()].
+#' 
+#' @seealso [convert_output()], [plot_error()], [filter_data()],
+#' [process_data()]
 #'
 #' @export
 #'

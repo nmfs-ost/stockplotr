@@ -73,8 +73,9 @@
 #' All plotting functions automatically recognize indexing variables and will
 #' use them in groupings and/or facetting. @seealso [process_data()].
 #'
-#' @seealso [plot_timeseries()], [calculate_reference_point()],
-#' [reference_line()], [filter_data()], [process_data()]
+#' @seealso [convert_output()], [plot_timeseries()],
+#' [calculate_reference_point()], [reference_line()], [filter_data()],
+#' [process_data()]
 #'
 #' @export
 #'
