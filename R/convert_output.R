@@ -1810,11 +1810,13 @@ convert_output <- function(
     errors <- c("StdDev", "sd", "se", "SE", "cv", "CV", "stddev")
     # units <- c("mt", "lbs", "eggs")
     
-    for (p in (2:length(dat))[-c(6, 8, 9, 10)]) {
+    ##### Loop ####
+    for (p in (2:length(dat))[-c(6, 9, 10)]) {
       extract <- dat[p]
       module_name <- names(extract) 
       cli::cli_alert_info("Processing {module_name}")
       if (module_name == "sdrep") {
+        ##### sdrep ####
         # this does not include all elements from sdrep list
         df <- extract[[1]]
         # Extract values from sdrep element in listdrep
@@ -1901,7 +1903,22 @@ convert_output <- function(
         
         df4[setdiff(tolower(names(out_new)), tolower(names(df4)))] <- NA
         out_list[[names(extract)]] <- df4
+      } else if (module_name == "data_list") {
+        ###### data.list ####
+        # Only extract specific quantity needs
+        # comp_data?, index_data, catch_data, weight, Ftarget, Flimit
+        ####### Indices ####
+        # Extract index_data 
+        df_index <- extract[[1]]$index_data
+        
+        ####### Catch indexing ####
+        # Extract catch_data and align with log_index_hat and catch_h 
+        # Modify sdrep in outlist to include index
+        df_catch <- extract[[1]]$catch_data |>
+          dplyr::filter(!is.na(Catch))
+        
       } else if (is.list(extract[[1]])) { # indicates vector and list
+        ##### remaining lmnts ####
         if (any(vapply(extract[[1]], is.matrix, FUN.VALUE = logical(1)))) {
                 ##############################################################
           df <- extract[[1]] |>
