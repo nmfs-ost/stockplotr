@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">stockplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.9.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.10.0</span>
       </span>
     </div>
 
@@ -102,7 +102,8 @@
 <span>  interactive <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  module <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  make_rda <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  figures_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  figures_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -168,6 +169,10 @@ the rda will be exported to the folder indicated in the argument "figures_dir".<
 <p>Default: `getwd()`</p>
 <p>The folder is created within the path if it does not exist.</p></dd>
 
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Arguments called from <a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a> or <a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -187,8 +192,6 @@ caption and alternative text for the figure.</p>
 <span class="r-in"><span>  module <span class="op">=</span> <span class="st">"TIME_SERIES"</span>,</span></span>
 <span class="r-in"><span>  make_rda <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Ignoring unknown labels:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">colour</span> : <span style="color: #0000BB;">"Model"</span></span>
 <span class="r-plt img"><img src="plot_recruitment-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">plot_recruitment</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va">example_data</span>,</span></span>
@@ -196,8 +199,6 @@ caption and alternative text for the figure.</p>
 <span class="r-in"><span>  module <span class="op">=</span> <span class="st">"TIME_SERIES"</span>,</span></span>
 <span class="r-in"><span>  make_rda <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Ignoring unknown labels:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">colour</span> : <span style="color: #0000BB;">"Model"</span></span>
 <span class="r-plt img"><img src="plot_recruitment-2.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
