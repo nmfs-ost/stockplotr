@@ -135,6 +135,7 @@ plot_spawning_biomass(
 )
 }
 \seealso{
-[plot_timeseries()], [calculate_reference_point()],
-[reference_line()], [filter_data()], [process_data()]
+[convert_output()], [plot_timeseries()],
+[calculate_reference_point()], [reference_line()], [filter_data()],
+[process_data()]
 }

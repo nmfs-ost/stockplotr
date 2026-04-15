@@ -61,6 +61,7 @@ test_that("rda file made when indicated", {
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
+  file.remove(fs::path(getwd(), "key_quantities.csv"))
   unlink(fs::path(getwd(), "tables"), recursive = T)
 })
 

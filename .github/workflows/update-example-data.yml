@@ -1,0 +1,37 @@
+# Update example data when convert_output.R changes
+name: update-example-data
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'R/convert_output.R'
+  workflow_dispatch:
+jobs:
+  update-example-data:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::usethis, local::.
+
+      - name: Update example data
+        run: |
+          example_data <- stockplotr::convert_output(file = "inst/extdata/Report.sso")
+          usethis::use_data(example_data, overwrite = TRUE)
+        shell: Rscript {0}
+
+      - name: Commit and push updated example data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/example_data.rda
+          git diff --cached --quiet || git commit -m "chore: update example_data from convert_output.R changes (triggered by $(git log -1 --pretty=format:'%h %s' HEAD)) [skip ci]"
+          git push
