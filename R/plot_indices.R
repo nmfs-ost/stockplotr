@@ -63,7 +63,7 @@ plot_indices <- function(
     prepared_data <- prepared_data |>
       dplyr::filter(fleet %in% focus)
   }
-  
+
   processed_data <- process_data(
     dat = prepared_data,
     group = group,
@@ -109,7 +109,7 @@ plot_indices <- function(
     facet_formula <- stats::reformulate(facet)
     plt <- plt + ggplot2::facet_wrap(facet_formula, scales = "free")
   }
-  
+
   ### Make RDA ----
   if (make_rda) {
     # Obtain relevant key quantities for captions/alt text

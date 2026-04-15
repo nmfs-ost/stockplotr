@@ -12,7 +12,7 @@
 #' @note
 #' All plotting functions automatically recognize indexing variables and will
 #' use them in groupings and/or facetting. @seealso [process_data()].
-#' 
+#'
 #' @seealso [convert_output()], [plot_error()], [filter_data()],
 #' [process_data()]
 #'
