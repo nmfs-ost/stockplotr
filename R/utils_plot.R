@@ -90,7 +90,7 @@ plot_timeseries <- function(
             ymin = estimate_lower,
             ymax = estimate_upper,
             fill = {
-              if(length(unique(.data[["model"]])) > 1) {
+              if (length(unique(.data[["model"]])) > 1) {
                 interaction(model, group_var)
               } else {
                 group_var
@@ -108,7 +108,7 @@ plot_timeseries <- function(
             # linetype = group_var,
             # linetype = ifelse(!is.null(group), group_var, "solid"),
             color = {
-              if(length(unique(.data[["model"]])) > 1) {
+              if (length(unique(.data[["model"]])) > 1) {
                 interaction(model, group_var)
               } else {
                 group_var
@@ -148,7 +148,7 @@ plot_timeseries <- function(
     if (length(unique(dat$model)) > 1) {
       color_lab <- "Model"
     } else {
-      if(!is.null(group)) {
+      if (!is.null(group)) {
         color_lab <- group
       } else {
         color_lab <- NULL
@@ -1003,31 +1003,31 @@ check_grouping <- function(dat) {
 
 #' Plot observed vs. predicted data
 #'
-#' @inheritParams plot_timeseries 
-#' @param observed_label a string of the label used to filter the observed data. Default is "observed". 
+#' @inheritParams plot_timeseries
+#' @param observed_label a string of the label used to filter the observed data. Default is "observed".
 #' @param predicted_label a string of the label used to filter the predicted data. Default is "predicted".
 #'
-#' @returns Create a plot of observed vs. predicted data for a stock assessment report. 
+#' @returns Create a plot of observed vs. predicted data for a stock assessment report.
 #' @export
 #'
 plot_obsvpred <- function(
-    dat,
-    x = "year",
-    y = "estimate",
-    observed_label = "observed",
-    predicted_label = "predicted",
-    geom = "line",
-    xlab = "Year",
-    ylab = NULL,
-    group = NULL,
-    facet = NULL,
-    ...
+  dat,
+  x = "year",
+  y = "estimate",
+  observed_label = "observed",
+  predicted_label = "predicted",
+  geom = "line",
+  xlab = "Year",
+  ylab = NULL,
+  group = NULL,
+  facet = NULL,
+  ...
 ) {
   # Start plot
   plot <- ggplot2::ggplot()
   # make into new geom?
   # more defaults and fxnality for ggplot
-  
+
   # Add geom
   plot <- plot +
     ggplot2::geom_point(
@@ -1040,16 +1040,16 @@ plot_obsvpred <- function(
       shape = 16
       # ...
     ) +
-  ggplot2::geom_line(
-    data = dat |> dplyr::filter(grepl(predicted_label, label)),
-    ggplot2::aes(
-      x = .data[[x]],
-      y = .data[[y]],
-      color = model
-    ),
-    linetype = "solid"
-  )
-  
+    ggplot2::geom_line(
+      data = dat |> dplyr::filter(grepl(predicted_label, label)),
+      ggplot2::aes(
+        x = .data[[x]],
+        y = .data[[y]],
+        color = model
+      ),
+      linetype = "solid"
+    )
+
   # Add labels to axis and legend
   if (length(unique(dat$model)) > 1 & !is.null(group)) {
     labs <- plot + ggplot2::labs(
@@ -1068,7 +1068,7 @@ plot_obsvpred <- function(
       color = "Model"
     )
   }
-  
+
   # Remove linetype or point when there is no grouping
   if (is.null(group) & length(unique(dat$model)) == 1) {
     labs <- labs + ggplot2::guides(linetype = "none", shape = "none")
@@ -1076,7 +1076,7 @@ plot_obsvpred <- function(
   if (length(unique(dat$model)) == 1) {
     labs <- labs + ggplot2::guides(color = "none")
   }
-  
+
   # Calc axis breaks
   x_n_breaks <- axis_breaks(dat[[x]])
   breaks <- ggplot2::scale_x_continuous(
@@ -1085,18 +1085,18 @@ plot_obsvpred <- function(
       minor.ticks = TRUE
     )
   )
-  
+
   # Put together final plot
   final <- labs + breaks + ggplot2::expand_limits(y = 0) +
     ggplot2::scale_y_continuous(
       labels = scales::label_comma()
     )
-  
+
   # Check if facet(s) are desired
   if (!is.null(facet) & length(facet) > 0) {
     facet <- paste("~", paste(facet, collapse = " + "))
     facet_formula <- stats::reformulate(facet)
-    
+
     final <- final + ggplot2::facet_wrap(facet_formula)
   }
   final

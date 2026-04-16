@@ -217,13 +217,13 @@ process_data <- function(
         dplyr::group_by(model) |>
         dplyr::summarise(dplyr::across(dplyr::all_of(index_variables), ~ dplyr::n_distinct(.x) > 1))
       if (any(
-          check_indexing  |>
-            dplyr::select(dplyr::all_of(index_variables)) |>
-            # 2. Turn the columns into a single long format
-            tidyr::pivot_longer(cols = dplyr::everything()) |>
-            # 3. Extract the 'value' column as a raw vector
-            dplyr::pull(value)
-        )) {
+        check_indexing |>
+          dplyr::select(dplyr::all_of(index_variables)) |>
+          # 2. Turn the columns into a single long format
+          tidyr::pivot_longer(cols = dplyr::everything()) |>
+          # 3. Extract the 'value' column as a raw vector
+          dplyr::pull(value)
+      )) {
         # check which index values contain a TRUE
         # if any have FALSE in entire column then remove from index_variables
         valid_vars <- check_indexing |>
@@ -240,14 +240,14 @@ process_data <- function(
         # Don't want to filter by group if model is present because the index_var could be NA for one of the models
         # TODO: perform check or adjust function in case when index_var is present for one model and not other
         # This would cause the plot to be weird
-          # data <- dplyr::filter(data, !is.na(.data[[group]]))
+        # data <- dplyr::filter(data, !is.na(.data[[group]]))
       } else { # ALL FALSE
         # remove index variables and set group to model
         # at this point in the function, year and age should be removed anyway from index_variables
         index_variables <- NULL
         # group <- "model"
       }
-    
+
       # Remaining id'd index variables moved to facet
       if (length(index_variables) > 1) {
         if (!is.null(facet)) {
@@ -354,7 +354,7 @@ process_data <- function(
       group <- NULL
     }
   }
-  
+
   # Ensure that index_variables -- group or facets are non-numeric to be plotted accurately
   data <- data |>
     dplyr::mutate(
@@ -363,7 +363,7 @@ process_data <- function(
         as.character
       )
     )
-  
+
   # Export list of objects
   list(
     # variable,
