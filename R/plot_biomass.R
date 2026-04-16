@@ -75,56 +75,41 @@ plot_biomass <- function(
   }
 
   # Filter data for spawning biomass
-  prepared_data <- filter_data(
-    dat = dat,
-    label_name = "^biomass$",
-    geom = geom,
-    group = group,
-    facet = facet,
-    module = module,
-    scale_amount = scale_amount,
-    interactive = interactive
-  )
-
-  # check if all 3 are present and subset for one or two
-  if (length(unique(prepared_data$label)) > 1 & any(grepl("biomass$", unique(prepared_data$label)))) {
-    # cli::cli_alert_info("> 1 label name. Selecting total biomass only.")
-    prepared_data <- prepared_data |>
-      dplyr::filter(
-        grepl("biomass$", label)
-      )
-  }
-
-  # Process data for indexing/grouping
-  # TODO: check and add into process_data step to summarize when theres >1 label
-  processing <- process_data(
-    prepared_data,
-    group,
-    facet
-  )
-
-  # variable <- processing[[1]]
-  prepared_data <- processing[[1]]
-  group <- processing[[2]]
-  if (!is.null(processing[[3]])) facet <- processing[[3]]
-
-  # Calculate estimate if relative
   if (relative) {
-    if (!is.null(names(ref_line))) {
-      ref_line_val <- ref_line[[1]]
-      # ref_line <- names(ref_line)
-    } else {
-      ref_line_val <- calculate_reference_point(
-        dat = rp_dat,
-        reference_name = glue::glue("^biomass_", ref_line)
-      ) / scale_amount
+    
+  } else {
+    prepared_data <- filter_data(
+      dat = dat,
+      label_name = "^biomass$",
+      geom = geom,
+      group = group,
+      facet = facet,
+      module = module,
+      scale_amount = scale_amount,
+      interactive = interactive
+    )
+    
+    # check if all 3 are present and subset for one or two
+    if (length(unique(prepared_data$label)) > 1 & any(grepl("biomass$", unique(prepared_data$label)))) {
+      # cli::cli_alert_info("> 1 label name. Selecting total biomass only.")
+      prepared_data <- prepared_data |>
+        dplyr::filter(
+          grepl("biomass$", label)
+        )
     }
-    if (is.na(ref_line_val)) cli::cli_abort("Reference value not found. Cannot plot relative values.")
-    prepared_data <- prepared_data |>
-      dplyr::mutate(estimate = estimate / ref_line_val,
-        estimate_lower = estimate_lower / ref_line_val,
-        estimate_upper = estimate_upper / ref_line_val
-      )
+    
+    # Process data for indexing/grouping
+    # TODO: check and add into process_data step to summarize when theres >1 label
+    processing <- process_data(
+      prepared_data,
+      group,
+      facet
+    )
+    
+    # variable <- processing[[1]]
+    prepared_data <- processing[[1]]
+    group <- processing[[2]]
+    if (!is.null(processing[[3]])) facet <- processing[[3]]
   }
 
   plt <- plot_timeseries(
