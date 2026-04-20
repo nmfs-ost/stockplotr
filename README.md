@@ -73,10 +73,6 @@ Example Plot | Example Table |
 :------------|---------------:
 ![Example landings plot from stockplotr](man/figures/landings_plot_ex.png) | ![Example landings tables from stockplotr](man/figures/landings_table_ex.png)
 
-> [!NOTE]
-> Tables are not currently included in the package due to a major overhaul.
-> We plan to incorporate them by the end of 2025.
-
 ## Contributions
 
 Have you identified any suggestions for improvement, bugs, or questions? Please see our [Contributing page](https://github.com/nmfs-ost/stockplotr/blob/main/CONTRIBUTING.md) for more information on how to make effective contributions to {stockplotr}.
@@ -97,10 +93,10 @@ stakeholders. We encourage interested users to contribute to this package using
 their custom code when they find it may be useful across the nation.
 
 > [!NOTE]
-> An additional package to plot model diagnostics called [FIMSdiags](https://github.com/NOAA-FIMS/FIMSdiags) 
+> An additional package to plot model diagnostics called [{FIMSdiags}](https://github.com/NOAA-FIMS/FIMSdiags) 
 > is being worked on for the Fisheries Integrated Modelling System [FIMS] that 
-> will natively work with the output used for stockplotr since the model output 
-> for FIMS works together with stockplotr.
+> will natively work with the output used for {stockplotr} since the model output 
+> for FIMS works together with {stockplotr}.
 
 ## Disclaimer
 
