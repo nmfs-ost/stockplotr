@@ -75,20 +75,22 @@ plot_biomass <- function(
   }
 
   # Filter data for spawning biomass
+  prepared_data <- filter_data(
+    dat = dat,
+    label_name = ifelse(relative, "biomass_biomass_unfished", "^biomass$"),
+    geom = geom,
+    group = group,
+    facet = facet,
+    module = module,
+    scale_amount = scale_amount,
+    interactive = interactive
+  )
   if (relative) {
-    
+    if (nrow(prepared_data) == 0) {
+      cli::cli_abort("No data found for relative biomass. Please check that your data contains a label for 'biomass_biomass_unfished'.")
+      stop()
+    }
   } else {
-    prepared_data <- filter_data(
-      dat = dat,
-      label_name = "^biomass$",
-      geom = geom,
-      group = group,
-      facet = facet,
-      module = module,
-      scale_amount = scale_amount,
-      interactive = interactive
-    )
-    
     # check if all 3 are present and subset for one or two
     if (length(unique(prepared_data$label)) > 1 & any(grepl("biomass$", unique(prepared_data$label)))) {
       # cli::cli_alert_info("> 1 label name. Selecting total biomass only.")
@@ -97,20 +99,21 @@ plot_biomass <- function(
           grepl("biomass$", label)
         )
     }
-    
-    # Process data for indexing/grouping
-    # TODO: check and add into process_data step to summarize when theres >1 label
-    processing <- process_data(
-      prepared_data,
-      group,
-      facet
-    )
-    
-    # variable <- processing[[1]]
-    prepared_data <- processing[[1]]
-    group <- processing[[2]]
-    if (!is.null(processing[[3]])) facet <- processing[[3]]
   }
+    
+  # Process data for indexing/grouping
+  # TODO: check and add into process_data step to summarize when theres >1 label
+  processing <- process_data(
+    prepared_data,
+    group,
+    facet
+  )
+  
+  # variable <- processing[[1]]
+  prepared_data <- processing[[1]]
+  group <- processing[[2]]
+  if (!is.null(processing[[3]])) facet <- processing[[3]]
+  
 
   plt <- plot_timeseries(
     dat = prepared_data,
