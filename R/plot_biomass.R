@@ -37,6 +37,7 @@ plot_biomass <- function(
   group = NULL,
   facet = NULL,
   ref_line = "msy",
+  era = NULL,
   unit_label = "metric tons",
   module = NULL,
   scale_amount = 1,
@@ -74,13 +75,14 @@ plot_biomass <- function(
     scale_amount <- 1
   }
 
-  # Filter data for spawning biomass
+  # Filter data for biomass
   prepared_data <- filter_data(
     dat = dat,
     label_name = ifelse(relative, "biomass_biomass_unfished", "^biomass$"),
     geom = geom,
     group = group,
     facet = facet,
+    era = era,
     module = module,
     scale_amount = scale_amount,
     interactive = interactive
