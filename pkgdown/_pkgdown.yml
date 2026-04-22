@@ -21,8 +21,8 @@ navbar:
       text: Articles
       icon: fas fa-file-contract fa-lg
       menu:
-      - text: Manual
-        href: articles/manual.html
+      - text: FAQs
+        href: articles/faqs.html
       - text: How captions and alternative text are generated
         href: articles/how-caps-alttext-are-made.html
       - text: Standardizing Assessment Model Output
