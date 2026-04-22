@@ -109,7 +109,7 @@ plot_spawning_biomass <- function(
   facet = NULL,
   ref_line = "msy",
   unit_label = "metric tons",
-  era = "time",
+  era = NULL,
   module = NULL,
   scale_amount = 1,
   relative = FALSE,
@@ -146,12 +146,9 @@ plot_spawning_biomass <- function(
   }
 
   # Filter data for spawning biomass
-  if (relative) {
-    
-  } else {
-    prepared_data <- filter_data(
+  prepared_data <- filter_data(
       dat = dat,
-      label_name = "^spawning_biomass$",
+      label_name = ifelse(relative, glue::glue("spawning_biomass_spawning_biomass_{ref_line}"), "^spawning_biomass$"),
       geom = geom,
       era = era,
       group = group,
@@ -160,23 +157,29 @@ plot_spawning_biomass <- function(
       scale_amount = scale_amount,
       interactive = interactive
     )
-    
-    # process the data for grouping
-    processing <- process_data(
-      dat = prepared_data,
-      group = group,
-      facet = facet,
-      method = "sum"
-    )
-    # variable <- processing[[1]]
-    plot_data <- processing[[1]]
-    group <- processing[[2]]
-    if (!is.null(processing[[3]])) facet <- processing[[3]]
-    
-    # Override grouping variable when there is only NA's
-    if (!is.null(group)) {
-      if (group %notin% colnames(plot_data)) group <- NULL
+  
+  if (relative) {
+    if (nrow(prepared_data) == 0) {
+      cli::cli_abort("No data found for relative biomass. Please check that your data contains a label for 'biomass_biomass_unfished'.")
+      stop()
     }
+  }  
+  
+  # process the data for grouping
+  processing <- process_data(
+    dat = prepared_data,
+    group = group,
+    facet = facet,
+    method = "sum"
+  )
+  # variable <- processing[[1]]
+  plot_data <- processing[[1]]
+  group <- processing[[2]]
+  if (!is.null(processing[[3]])) facet <- processing[[3]]
+  
+  # Override grouping variable when there is only NA's
+  if (!is.null(group)) {
+    if (group %notin% colnames(plot_data)) group <- NULL
   }
 
   plt <- plot_timeseries(
