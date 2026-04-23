@@ -27,7 +27,7 @@ plot_stock_recruitment <- function(
   spawning_biomass_label = "mt",
   recruitment_label = "mt",
   interactive = TRUE,
-  era = "time",
+  era = NULL,
   module = NULL,
   scale_amount = 1,
   make_rda = FALSE,
