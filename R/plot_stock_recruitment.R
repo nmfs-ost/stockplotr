@@ -33,7 +33,7 @@ plot_stock_recruitment <- function(
   spawning_biomass_label = "mt",
   recruitment_label = "mt",
   interactive = TRUE,
-  # era = "time",
+  era = NULL,
   module = NULL,
   scale_amount = 1,
   make_rda = FALSE,
@@ -43,7 +43,7 @@ plot_stock_recruitment <- function(
   recruitment <- filter_data(
     dat = dat,
     label_name = "recruitment",
-    era = "time",
+    era = era,
     geom = "point",
     scale_amount = scale_amount,
     interactive = interactive,
@@ -71,7 +71,7 @@ plot_stock_recruitment <- function(
     dat = dat,
     label_name = "spawning biomass",
     geom = "point",
-    era = "time",
+    era = era,
     scale_amount = scale_amount,
     interactive = interactive,
     module = module
