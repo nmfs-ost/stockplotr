@@ -37,6 +37,7 @@ plot_biomass <- function(
   group = NULL,
   facet = NULL,
   ref_line = "msy",
+  era = NULL,
   unit_label = "metric tons",
   module = NULL,
   scale_amount = 1,
@@ -78,6 +79,7 @@ plot_biomass <- function(
   prepared_data <- filter_data(
     dat = dat,
     label_name = "^biomass$",
+    era = era,
     geom = geom,
     group = group,
     facet = facet,
