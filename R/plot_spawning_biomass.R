@@ -36,6 +36,9 @@
 #' @param unit_label A string specifying spawning biomass unit.
 #'
 #' Default: "metric tons"
+#' @param lbs A logical value indicating whether to convert the y-axis values to pounds.
+#'
+#' Default: `FALSE`
 #' @param module (Optional) A string indicating the module_name found in `dat`.
 #'
 #' Default: NULL
@@ -109,6 +112,7 @@ plot_spawning_biomass <- function(
   facet = NULL,
   ref_line = "msy",
   unit_label = "metric tons",
+  lbs = FALSE,
   era = "time",
   module = NULL,
   scale_amount = 1,
@@ -163,7 +167,8 @@ plot_spawning_biomass <- function(
     dat = prepared_data,
     group = group,
     facet = facet,
-    method = "sum"
+    method = "sum",
+    lbs = lbs
   )
   # variable <- processing[[1]]
   plot_data <- processing[[1]]

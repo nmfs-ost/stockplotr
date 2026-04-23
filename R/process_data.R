@@ -39,6 +39,7 @@ process_data <- function(
   dat,
   group = NULL,
   facet = NULL,
+  lbs = FALSE,
   method = "sum"
 ) {
   # check if >1 model
@@ -363,6 +364,16 @@ process_data <- function(
         as.character
       )
     )
+  
+  if (lbs) {
+    data <- data |>
+      dplyr::mutate(
+        # multiple by conversion from kg to lbs then multiply by 1000 bc units are in mt by default
+        estimate = (estimate * 2.20462) * 1000,
+        estimate_lower = (estimate_lower * 2.20462) * 1000,
+        estimate_upper = (estimate_upper * 2.20462) * 1000
+      )
+  }
 
   # Export list of objects
   list(
