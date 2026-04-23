@@ -657,13 +657,13 @@ filter_data <- function(
   # TODO: add option to scale data
   # Replace all spaces with underscore if not in proper format
   label_name <- gsub(" ", "_", tolower(label_name))
-  list_of_data <- list()
-  length_dat <- ifelse(
-    is.data.frame(dat),
-    1,
-    length(dat)
-  )
-  for (i in 1:length_dat) {
+  # list_of_data <- list()
+  # length_dat <- ifelse(
+  #   is.data.frame(dat),
+  #   1,
+  #   length(dat)
+  # )
+  # for (i in 1:length_dat) {
     # start for loop to bring together each data as their own geom
     # Add columns to data if grouping is selected
     # format geoms the way we want
@@ -673,13 +673,16 @@ filter_data <- function(
     # vignette is the effort to show what to do and has example
     # would have to use the plus operator
 
-    if (is.data.frame(dat)) {
-      data <- dat
-      model_label <- FALSE
-    } else {
-      data <- dat[[i]]
-      model_label <- TRUE
-    }
+  # if (is.data.frame(dat)) {
+  #   # data <- dat 
+  #   data <- dat |> dplyr::mutate(model = "1")
+  #   model_label <- FALSE
+  # } else {
+  #   data <- dplyr::bind_rows(dat, .id = "model")
+  #   # data <- dat[[i]]
+  #   model_label <- TRUE
+  # }
+  
     data <- data |>
       # make sure all labels are lowercase and spaces are replaced with underscores
       dplyr::mutate(
@@ -691,7 +694,7 @@ filter_data <- function(
       ) |>
       dplyr::mutate(
         year = as.numeric(year),
-        model = ifelse(model_label, get_id(dat)[i], "1"), # NA -- changed from NA to 1 for processing reasons, might need to change back if issue
+        # model = ifelse(model_label, get_id(dat)[i], "1"), # NA -- changed from NA to 1 for processing reasons, might need to change back if issue
         estimate = as.numeric(estimate) / scale_amount,
         # calc uncertainty when se
         # TODO: calculate other sources of error to upper and lower (cv,)
@@ -750,10 +753,11 @@ filter_data <- function(
           group_var = .data[[group]]
         )
     }
-    list_of_data[[get_id(dat)[i]]] <- data
-  }
+    # list_of_data[[get_id(dat)[i]]] <- data
+  # }
   # Put in
-  plot_data <- dplyr::bind_rows(list_of_data, .id = "model")
+  # plot_data <- dplyr::bind_rows(list_of_data, .id = "model")
+  plot_data <- data
   # do.call(rbind, list_of_data)
 
   # Check if there are multiple module_names present
@@ -1100,4 +1104,17 @@ plot_obsvpred <- function(
     final <- final + ggplot2::facet_wrap(facet_formula)
   }
   final
+}
+
+
+combine_conout <- function(dat) {
+  if (is.data.frame(dat)) {
+    # data <- dat 
+    data <- dat |> dplyr::mutate(model = "1")
+    model_label <- FALSE
+  } else {
+    data <- dplyr::bind_rows(dat, .id = "model")
+    # data <- dat[[i]]
+    model_label <- TRUE
+  }
 }
