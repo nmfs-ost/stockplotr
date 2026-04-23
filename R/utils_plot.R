@@ -646,7 +646,7 @@ filter_data <- function(
   dat,
   label_name,
   module = NULL,
-  era = "time",
+  era = NULL,
   geom,
   group = NULL,
   facet = NULL,
