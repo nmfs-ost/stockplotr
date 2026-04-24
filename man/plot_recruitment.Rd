@@ -8,7 +8,7 @@ plot_recruitment(
   dat,
   unit_label = "mt",
   scale_amount = 1,
-  era = "time",
+  era = NULL,
   group = NULL,
   facet = NULL,
   interactive = TRUE,

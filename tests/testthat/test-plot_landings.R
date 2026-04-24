@@ -21,7 +21,6 @@ test_that("plot_landings generates plots without errors", {
 test_that("rda file made when indicated", {
   # export rda
   plot_landings(out_new,
-    end_year = 2024,
     make_rda = TRUE,
     unit_label = "metric tons",
     figures_dir = getwd()
