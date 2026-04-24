@@ -10,7 +10,7 @@ plot_fishing_mortality(
   group = NULL,
   facet = NULL,
   ref_line = "msy",
-  era = "time",
+  era = NULL,
   module = NULL,
   make_rda = FALSE,
   figures_dir = getwd(),
