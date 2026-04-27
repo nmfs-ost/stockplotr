@@ -125,7 +125,7 @@ plot_spawning_biomass <- function(
   # this assumes that the previous units were metric tons
   if (lbs && unit_label %notin% c("lbs", "pounds", "lb")) {
     cli::cli_alert_info("Unit label was not changed. Setting unit_label to 'lbs'.")
-    unit_label <- "1000 lbs"
+    unit_label <- "lbs"
   }
   
   # TODO: Fix the unit label if scaling. Maybe this is up to the user to do if
