@@ -11,6 +11,7 @@ plot_spawning_biomass(
   facet = NULL,
   ref_line = "msy",
   unit_label = "metric tons",
+  lbs = FALSE,
   era = "time",
   module = NULL,
   scale_amount = 1,
@@ -55,6 +56,10 @@ If the reference point is not found in the data, set ref_line = c("{name}" = val
 \item{unit_label}{A string specifying spawning biomass unit.
 
 Default: "metric tons"}
+
+\item{lbs}{A logical value indicating whether to convert the y-axis values to pounds.
+
+Default: `FALSE`}
 
 \item{era}{A string naming the era of data.
 

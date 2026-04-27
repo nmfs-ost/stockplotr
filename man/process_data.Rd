@@ -4,7 +4,7 @@
 \alias{process_data}
 \title{Processing for figures}
 \usage{
-process_data(dat, group = NULL, facet = NULL, method = "sum")
+process_data(dat, group = NULL, facet = NULL, lbs = FALSE, method = "sum")
 }
 \arguments{
 \item{dat}{Pre-filtered data from \link[stockplotr]{filter_data} following a
