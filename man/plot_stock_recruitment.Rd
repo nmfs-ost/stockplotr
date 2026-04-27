@@ -9,6 +9,7 @@ plot_stock_recruitment(
   spawning_biomass_label = "mt",
   recruitment_label = "mt",
   interactive = TRUE,
+  era = "time",
   module = NULL,
   scale_amount = 1,
   make_rda = FALSE,
@@ -30,6 +31,12 @@ in `ref_line` is used to plot a reference line or calculate relative spawning bi
 plot is being made in is interactive. By default, this
 is set to false. If true, dependent on your data, a
 option menu will pop-up.}
+
+\item{era}{A string naming the era of data.
+
+Default: "time"
+
+Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
 \item{module}{(Optional) A string indicating the module_name found in `dat`.
 

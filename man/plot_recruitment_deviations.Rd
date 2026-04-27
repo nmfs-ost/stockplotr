@@ -7,7 +7,7 @@
 plot_recruitment_deviations(
   dat,
   module = NULL,
-  era = "time",
+  era = NULL,
   interactive = TRUE,
   make_rda = FALSE,
   figures_dir = getwd(),

@@ -109,7 +109,7 @@ plot_spawning_biomass <- function(
   facet = NULL,
   ref_line = "msy",
   unit_label = "metric tons",
-  era = "time",
+  era = NULL,
   module = NULL,
   scale_amount = 1,
   relative = FALSE,

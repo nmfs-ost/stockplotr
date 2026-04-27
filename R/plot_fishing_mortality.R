@@ -31,7 +31,7 @@ plot_fishing_mortality <- function(
   group = NULL,
   facet = NULL,
   ref_line = "msy",
-  era = "time",
+  era = NULL,
   module = NULL,
   relative = FALSE,
   make_rda = FALSE,

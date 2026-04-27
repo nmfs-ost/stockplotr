@@ -10,6 +10,7 @@ plot_biomass(
   group = NULL,
   facet = NULL,
   ref_line = "msy",
+  era = NULL,
   unit_label = "metric tons",
   module = NULL,
   scale_amount = 1,
@@ -52,6 +53,12 @@ lower-case letters but you must use one of the options specified in the
 default list to ensure that the label on the figure looks correct
 regardless of how it is specified in `dat`. Other possibilities may include
 "target", "MSY", and "unfished".}
+
+\item{era}{A string naming the era of data.
+
+Default: "time"
+
+Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
 \item{unit_label}{units for biomass}
 

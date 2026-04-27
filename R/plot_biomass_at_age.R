@@ -49,6 +49,7 @@ plot_biomass_at_age <- function(
     label_name = "^biomass",
     geom = "point",
     group = "age",
+    era = "time",
     scale_amount = scale_amount,
     interactive = interactive
   )
