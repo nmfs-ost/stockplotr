@@ -22,8 +22,8 @@ test_that("export_rda works for figures", {
   )
 
   # make a simple plot
-  library(ggplot2)
-  final <- ggplot2::ggplot(Orange, aes(circumference, age)) +
+  # library(ggplot2)
+  final <- ggplot2::ggplot(Orange, ggplot2::aes(circumference, age)) +
     ggplot2::geom_point()
 
   # export rda
@@ -43,7 +43,7 @@ test_that("export_rda works for figures", {
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  file.remove(fs::path(getwd(), "key_quantities.csv"))
+  # file.remove(fs::path(getwd(), "key_quantities.csv")) # file is not made in this test
   unlink(fs::path(getwd(), "figures"), recursive = T)
 })
 
@@ -85,6 +85,6 @@ test_that("export_rda works for tables", {
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  file.remove(fs::path(getwd(), "key_quantities.csv"))
+  # file.remove(fs::path(getwd(), "key_quantities.csv")) # file is not made in this test ?
   unlink(fs::path(getwd(), "tables"), recursive = T)
 })
