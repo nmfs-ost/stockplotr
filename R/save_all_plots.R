@@ -248,7 +248,7 @@ save_all_plots <- function(
       cli::cli_alert_danger("plot_stock_recruitment failed to run.")
       cli::cli_alert("Tip: check that your arguments are correct.")
       cli::cli_li("spawning_biomass_label = {spawning_biomass_label}")
-      cli::cli_li("recruitment_label = {recruitment_label}")
+      cli::cli_li("recruitment_label = {recruitment_unit_label}")
       print(e)
     }
   )
