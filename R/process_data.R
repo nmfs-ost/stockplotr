@@ -368,10 +368,10 @@ process_data <- function(
   if (lbs) {
     data <- data |>
       dplyr::mutate(
-        # multiple by conversion from kg to lbs then multiply by 1000 bc units are in mt by default
-        estimate = (estimate * 2.20462) * 1000,
-        estimate_lower = (estimate_lower * 2.20462) * 1000,
-        estimate_upper = (estimate_upper * 2.20462) * 1000
+        # multiple by conversion from kg to lbs -- default then becomes thousands of lbs
+        estimate = (estimate * 2.20462),
+        estimate_lower = (estimate_lower * 2.20462),
+        estimate_upper = (estimate_upper * 2.20462)
       )
   }
 
