@@ -36,6 +36,9 @@
 #' @param unit_label A string specifying spawning biomass unit.
 #'
 #' Default: "metric tons"
+#' @param lbs A logical value indicating whether to convert the y-axis values to pounds.
+#'
+#' Default: `FALSE`
 #' @param module (Optional) A string indicating the module_name found in `dat`.
 #'
 #' Default: NULL
@@ -109,6 +112,7 @@ plot_spawning_biomass <- function(
   facet = NULL,
   ref_line = "msy",
   unit_label = "metric tons",
+  lbs = FALSE,
   era = "time",
   module = NULL,
   scale_amount = 1,
@@ -118,6 +122,12 @@ plot_spawning_biomass <- function(
   interactive = TRUE,
   ...
 ) {
+  # this assumes that the previous units were metric tons
+  if (lbs && unit_label %notin% c("lbs", "pounds", "lb")) {
+    cli::cli_alert_info("Unit label was not changed. Setting unit_label to 'lbs'.")
+    unit_label <- "lbs"
+  }
+  
   # TODO: Fix the unit label if scaling. Maybe this is up to the user to do if
   #       they want something scaled then they have to supply a better unit name
   #       or we create a helper function to do this.
@@ -128,7 +138,7 @@ plot_spawning_biomass <- function(
       label_magnitude(
         label = "Spawning Biomass",
         unit_label = unit_label,
-        scale_amount = scale_amount,
+        scale_amount = dplyr::if_else(lbs, 1000 * scale_amount, scale_amount), # need to check if this is accurate bc from metric tons starting scale is 1000
         legend = TRUE
       )
     }
@@ -163,7 +173,8 @@ plot_spawning_biomass <- function(
     dat = prepared_data,
     group = group,
     facet = facet,
-    method = "sum"
+    method = "sum",
+    lbs = lbs
   )
   # variable <- processing[[1]]
   plot_data <- processing[[1]]
@@ -183,7 +194,8 @@ plot_spawning_biomass <- function(
     } else {
       ref_line_val <- calculate_reference_point(
         dat = rp_dat,
-        reference_name = glue::glue("spawning_biomass_", ref_line)
+        reference_name = glue::glue("spawning_biomass_", ref_line),
+        lbs = lbs
       ) / scale_amount
     }
     if (is.na(ref_line_val)) cli::cli_abort("Reference value not found. Cannot plot relative values.")
@@ -207,33 +219,12 @@ plot_spawning_biomass <- function(
     plot = plt,
     dat = rp_dat,
     # era = era,
+    lbs = lbs,
     label_name = "spawning_biomass",
     reference = ref_line,
     relative = relative,
     scale_amount = scale_amount
   ) + theme_noaa()
-
-  # Plot vertical lines if era is not filtering
-  # Turning this out because I don't think it's relevant
-  # if (is.null(era)) {
-  #   # Find unique era
-  #   eras <- unique(plot_data$era)
-  #   if (length(eras) > 1) {
-  #     year_vlines <- c()
-  #     for (i in 2:length(eras)) {
-  #       erax <- plot_data |>
-  #         dplyr::filter(era == eras[i]) |>
-  #         dplyr::pull(year) |>
-  #         min(na.rm = TRUE)
-  #       year_vlines <- c(year_vlines, erax)
-  #     }
-  #   }
-  #   final <- final +
-  #     ggplot2::geom_vline(
-  #       xintercept = year_vlines,
-  #       color = "#999999"
-  #     )
-  # }
 
   ### Make RDA ----
   if (make_rda) {

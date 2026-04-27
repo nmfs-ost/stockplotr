@@ -39,6 +39,7 @@ process_data <- function(
   dat,
   group = NULL,
   facet = NULL,
+  lbs = FALSE,
   method = "sum"
 ) {
   # check if >1 model
@@ -102,18 +103,6 @@ process_data <- function(
     }
   }
   # Set group_var to identified grouping
-  # if (!is.null(group) && group == "none") {
-  #   # if group is none and there exists an index group, filter to nas of index group
-  #   # commented out bc this issue is solved in the above 1st step
-  #   if (length(id_group) > 0) {
-  #     data <- dplyr::filter(
-  #       dat,
-  #       is.na(.data[[id_group[1]]])
-  #     )
-  #   } else {
-  #     data <- dat
-  #   }
-  # } else
   if (!is.null(group) && group != "none") {
     data <- dplyr::mutate(
       dat,
@@ -144,7 +133,6 @@ process_data <- function(
   if ("age" %in% colnames(data) && any(!is.na(data$age))) {
     # subset out nas if ages exist for this
     # not sure if  this works for all cases -- are there situations where we want the NA and not age?
-
     data <- dplyr::filter(data, !is.na(age))
     if (!is.null(group) && group == "age") {
       if ("age" %in% index_variables) index_variables <- index_variables[-grep("age", index_variables)]
@@ -156,18 +144,12 @@ process_data <- function(
   # move year to another check -- age always used?
   if ("year" %in% colnames(data) && any(!is.na(data$year))) {
     data <- dplyr::filter(data, !is.na(year))
-    # if (!is.null(group) && group == "year") {
     if ("year" %in% index_variables) index_variables <- index_variables[-grep("year", index_variables)]
-    # }
-    # if (!is.null(facet) && facet == "year") {
-    #   if ("year" %in% index_variables) index_variables <- index_variables[-grep("year", index_variables)]
-    # }
   }
 
   # Set any remaining index variables to group (first) and facet
   # Check if this is still the case if a group not NULL
   if (!is.null(group) && group != "year") {
-    # if () {
     # Remove NAs from grouping or keep NA if none
     if (group != "none") {
       data <- dplyr::filter(data, !is.na(.data[[group]]))
@@ -179,17 +161,6 @@ process_data <- function(
           values_from = estimate,
           values_fn = list
         )
-      # overwrite variable if grouping is what makes it variable in above conditions
-      # variable <- ifelse(
-      #   any(length(unique(
-      #     dplyr::select(
-      #       check_group_data,
-      #       dplyr::any_of(unique(data[[group]]))
-      #     )
-      #   )) > 1),
-      #   TRUE,
-      #   FALSE
-      # )
     }
 
     # add any remaining index_variables into facet
@@ -239,13 +210,10 @@ process_data <- function(
         index_variables <- index_variables[-grepl(valid_vars[1], index_variables)]
         # Don't want to filter by group if model is present because the index_var could be NA for one of the models
         # TODO: perform check or adjust function in case when index_var is present for one model and not other
-        # This would cause the plot to be weird
-        # data <- dplyr::filter(data, !is.na(.data[[group]]))
       } else { # ALL FALSE
         # remove index variables and set group to model
         # at this point in the function, year and age should be removed anyway from index_variables
         index_variables <- NULL
-        # group <- "model"
       }
 
       # Remaining id'd index variables moved to facet
@@ -278,11 +246,6 @@ process_data <- function(
     # check if value varies in ANY year
     # pivot data for 1st indexed data and check if all the same
     if (length(index_variables) > 0) {
-      # if (index_variables == "age" | index_variables == "year") {
-      #   # if age or year is the only other index variable, then get data so there is a single column as expected in column_data
-      #   pivot_data <- data
-      #   column_data <- pivot_data[["estimate"]]
-      # } else {
       pivot_data <- data |>
         dplyr::select(tidyselect::any_of(c("year", "age", "estimate", index_variables))) |>
         tidyr::pivot_wider(
@@ -304,10 +267,6 @@ process_data <- function(
         ) |>
         suppressWarnings()
       column_data <- pivot_data[-1]
-      # column_data <- pivot_data[[
-      #   unique(
-      #     data[["group_var"]]
-      #   )[1]]]
     }
     # compare grouping columns to see if all the same
     first_year_data <- column_data[[1]]
@@ -321,13 +280,6 @@ process_data <- function(
       # if TRUE filter out to only one year bc everything else redundant
       # check if same through all years
       if (length(unique(first_year_data)) > 1) {
-        # this step might be redundant
-        # data <- data |>
-        #   dplyr::mutate(group_var = dplyr::case_when(
-        #     # !is.null(group) & group == index_variables[1] ~ .data[[index_variables[1]]],
-        #     is.null(group) & length(index_variables) > 0 ~ .data[[index_variables[1]]],
-        #     TRUE ~ group_var
-        #   ))
         if (is.na(unique(data[["group_var"]])[1])) {
           data <- data |> dplyr::filter(is.na(group_var))
         } else {
@@ -363,6 +315,16 @@ process_data <- function(
         as.character
       )
     )
+  
+  if (lbs) {
+    data <- data |>
+      dplyr::mutate(
+        # multiple by conversion from kg to lbs -- default then becomes thousands of lbs
+        estimate = (estimate * 2.20462),
+        estimate_lower = (estimate_lower * 2.20462),
+        estimate_upper = (estimate_upper * 2.20462)
+      )
+  }
 
   # Export list of objects
   list(

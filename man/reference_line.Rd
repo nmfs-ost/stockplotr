@@ -10,7 +10,8 @@ reference_line(
   label_name,
   reference,
   relative = FALSE,
-  scale_amount = 1
+  scale_amount = 1,
+  lbs = FALSE
 )
 }
 \arguments{
@@ -32,6 +33,10 @@ Default: `FALSE`}
 \item{scale_amount}{A number to scale the y-axis values.
 
 Default: 1}
+
+\item{lbs}{A logical value indicating whether to convert the y-axis values to pounds.
+
+Default: `FALSE`}
 }
 \value{
 a ggplot2 geom_hline object for a reference point that can be added
