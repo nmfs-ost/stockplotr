@@ -48,7 +48,6 @@ Imports:
     naniar,
     prodlim,
     purrr,
-    quarto,
     rlang,
     scales,
     stats,
@@ -61,6 +60,7 @@ Imports:
 Suggests:
     here,
     knitr,
+    quarto,
     rmarkdown,
     testthat (>= 3.0.0)
 VignetteBuilder: 
