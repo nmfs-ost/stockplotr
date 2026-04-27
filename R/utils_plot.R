@@ -526,10 +526,10 @@ cohort_line <- function(
 reference_line <- function(
   plot,
   dat,
-  # era = "time",
   label_name,
   reference,
-  scale_amount = 1
+  scale_amount = 1,
+  lbs = FALSE
 ) {
   if (!is.null(names(reference))) {
     ref_line_val <- reference[[1]]
@@ -538,15 +538,13 @@ reference_line <- function(
     # calculate reference point value
     ref_line_val <- calculate_reference_point(
       dat = dat,
-      reference_name = glue::glue("{label_name}_{reference}")
+      reference_name = glue::glue("{label_name}_{reference}"),
+      lbs = lbs
     )
   }
 
   # Add geom for ref line
   if (is.null(ref_line_val)) {
-    # cli::cli_alert_warning(
-    #   glue::glue("Reference value for {label_name} not found. Cannot add reference line.")
-    # )
     plot
   } else {
     plot +
@@ -896,7 +894,8 @@ get_id <- function(dat) {
 
 calculate_reference_point <- function(
   dat,
-  reference_name
+  reference_name,
+  lbs = FALSE
 ) {
   # set reference name to lower case
   reference_name <- tolower(gsub(" ", "_", reference_name))
@@ -943,7 +942,11 @@ calculate_reference_point <- function(
     )
     ref_line_val <- as.numeric(ref_line_val)
   }
-  ref_line_val
+  dplyr::if_else(
+    lbs,
+    ref_line_val * 2.20462,
+    ref_line_val
+  )
 }
 
 #------------------------------------------------------------------------------
