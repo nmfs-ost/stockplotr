@@ -354,7 +354,7 @@ process_data <- function(
       group <- NULL
     }
   }
-
+  
   # Ensure that index_variables -- group or facets are non-numeric to be plotted accurately
   data <- data |>
     dplyr::mutate(
