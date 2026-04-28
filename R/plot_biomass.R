@@ -76,9 +76,10 @@ plot_biomass <- function(
   }
 
   # Filter data for biomass
+  # TODO: determine method to ID that first point in the timeseries is actually Bunfished ref pt
   prepared_data <- filter_data(
     dat = dat,
-    label_name = ifelse(relative, "biomass_biomass_unfished", "^biomass$"),
+    label_name = ifelse(relative, "biomass_biomass_unfished|biomass_ratio", "^biomass$"), # what exactly is biomass_ratio?
     geom = geom,
     group = group,
     facet = facet,
