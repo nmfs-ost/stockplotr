@@ -148,7 +148,7 @@ plot_spawning_biomass <- function(
   # Filter data for spawning biomass
   prepared_data <- filter_data(
       dat = dat,
-      label_name = ifelse(relative, glue::glue("spawning_biomass_spawning_biomass_{ref_line}"), "^spawning_biomass$"),
+      label_name = ifelse(relative, glue::glue("spawning_biomass_spawning_biomass_{ref_line}|spawning_biomass_ratio"), "^spawning_biomass$"),
       geom = geom,
       era = era,
       group = group,
@@ -195,7 +195,10 @@ plot_spawning_biomass <- function(
   # Add reference line
   # getting data set - an ifelse statement in the fxn wasn't working
   if (relative) {
-    if ("unfished" %in% c(names(ref__line), ref_line)) {
+    # don't add any reference line here and just add theme for final plot
+    final <- plt + theme_noaa()
+  } else {
+    if ("unfished" %in% c(names(ref_line), ref_line)) {
       # find the minimum x axis value from the plot
       min_year <- min <- ggplot2::ggplot_build(plt)@data[[2]] |>
         as.data.frame() |>
@@ -212,17 +215,14 @@ plot_spawning_biomass <- function(
         ggplot2::geom_point(ggplot2::aes(x = min_year - 1, y = ref_point)) + # should I keep -1 or set as first year?
         theme_noaa()
     } else {
-      # don't add any reference line here and just add theme for final plot
-      final <- plt + theme_noaa()
+      final <- reference_line(
+        plot = plt,
+        dat = rp_dat,
+        label_name = "spawning_biomass",
+        reference = ref_line,
+        scale_amount = scale_amount
+      ) + theme_noaa()
     }
-  } else {
-    final <- reference_line(
-      plot = plt,
-      dat = rp_dat,
-      label_name = "spawning_biomass",
-      reference = ref_line,
-      scale_amount = scale_amount
-    ) + theme_noaa()
   }
  
 
