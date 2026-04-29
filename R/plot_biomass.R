@@ -129,16 +129,37 @@ plot_biomass <- function(
   )
   # Add reference line
   # getting data set - an ifelse statement in the fxn wasn't working
-
-  final <- reference_line(
-    plot = plt,
-    dat = rp_dat,
-    label_name = "biomass",
-    reference = ref_line,
-    relative = relative,
-    scale_amount = scale_amount
-  ) +
-    theme_noaa()
+  if (relative) {
+    if ("unfished" %in% c(names(ref__line), ref_line)) {
+      # find the minimum x axis value from the plot
+      min_year <- min <- ggplot2::ggplot_build(plt)@data[[2]] |>
+        as.data.frame() |>
+        dplyr::pull(y) |>
+        min() |>
+        round(digits = 2)
+      # find the reference point value for unfished
+      ref_point <- calculate_reference_point(
+        dat = rp_dat,
+        reference_name = "biomass_unfished"
+      ) / scale_amount
+      # add point to plot and add theme
+      final <- plt +
+        ggplot2::geom_point(ggplot2::aes(x = min_year - 1, y = ref_point)) + # should I keep -1 or set as first year?
+        theme_noaa()
+    } else {
+      # don't add any reference line here and just add theme for final plot
+      final <- plt + theme_noaa()
+    }
+  } else {
+    final <- reference_line(
+      plot = plt,
+      dat = rp_dat,
+      label_name = "biomass",
+      reference = ref_line,
+      scale_amount = scale_amount
+    ) +
+      theme_noaa()
+  }
 
   ### Make RDA ----
   if (make_rda) {
