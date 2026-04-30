@@ -12,7 +12,6 @@ plot_fishing_mortality(
   ref_line = "msy",
   era = "time",
   module = NULL,
-  relative = FALSE,
   make_rda = FALSE,
   figures_dir = getwd(),
   interactive = TRUE,
@@ -62,11 +61,6 @@ Default: NULL
 
 If the interactive and >1 module_name is found, user will select the
 module_name in the console. @seealso [filter_data()]}
-
-\item{relative}{A logical value specifying to set y-axis values relative to
-the ref_line value.
-
-Default: `FALSE`}
 
 \item{make_rda}{A logical value indicating whether to save the object and
 make an automated caption and alternative text in the form of an `rda` object. If TRUE,

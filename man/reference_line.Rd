@@ -4,14 +4,7 @@
 \alias{reference_line}
 \title{Preformatted reference line}
 \usage{
-reference_line(
-  plot,
-  dat,
-  label_name,
-  reference,
-  relative = FALSE,
-  scale_amount = 1
-)
+reference_line(plot, dat, label_name, reference, scale_amount = 1)
 }
 \arguments{
 \item{plot}{a ggplot2 object where the reference line will be added}
@@ -23,11 +16,6 @@ extract the reference point from}
 
 \item{reference}{string. name of the reference point such as "msy",
 "unfished", or "target"}
-
-\item{relative}{A logical value specifying to set y-axis values relative to
-the ref_line value.
-
-Default: `FALSE`}
 
 \item{scale_amount}{A number to scale the y-axis values.
 
