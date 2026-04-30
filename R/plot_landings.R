@@ -34,6 +34,7 @@ plot_landings <- function(
   geom = "line",
   group = NULL,
   facet = NULL,
+  lbs = FALSE,
   era = NULL,
   scale_amount = 1,
   module = NULL,
@@ -46,7 +47,7 @@ plot_landings <- function(
   landings_label <- label_magnitude(
     label = "Landings",
     unit_label = unit_label,
-    scale_amount = scale_amount,
+    scale_amount = dplyr::if_else(lbs, 1000 * scale_amount, scale_amount),
     legend = FALSE
   )
 
@@ -69,7 +70,8 @@ plot_landings <- function(
     dat = prepared_data,
     group = group,
     facet = facet,
-    method = "sum"
+    method = "sum",
+    lbs = lbs
   )
   prepared_data <- processed_data[[1]]
   group <- processed_data[2]
