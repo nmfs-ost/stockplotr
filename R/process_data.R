@@ -10,6 +10,9 @@
 #' want to just summarize the data across all factors, set group = "none".
 #' @param facet A string or vector of strings identifying the faceting
 #' variable(s) of the data.
+#' @param lbs A logical value indicating whether to convert the y-axis values to pounds.
+#'
+#' Default: `FALSE`
 #' @param method A string describing the method of summarizing data when group
 #' is set to "none". Options are "sum" or "mean". Default is "sum".
 #'
