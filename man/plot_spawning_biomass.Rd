@@ -11,7 +11,7 @@ plot_spawning_biomass(
   facet = NULL,
   ref_line = "msy",
   unit_label = "metric tons",
-  era = "time",
+  era = NULL,
   module = NULL,
   scale_amount = 1,
   relative = FALSE,
@@ -120,12 +120,6 @@ plot_spawning_biomass(
   interactive = FALSE,
   module = "TIME_SERIES",
   linewidth = 1.5
-)
-plot_spawning_biomass(
-  dat = stockplotr:::example_data,
-  relative = TRUE,
-  ref_line = "msy",
-  module = "TIME_SERIES"
 )
 plot_spawning_biomass(
   dat = stockplotr:::example_data,
