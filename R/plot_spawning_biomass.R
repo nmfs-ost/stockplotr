@@ -229,6 +229,7 @@ plot_spawning_biomass <- function(
       final <- reference_line(
         plot = plt,
         dat = rp_dat,
+        
         lbs = lbs,
         label_name = "spawning_biomass",
         reference = ref_line,
@@ -236,8 +237,8 @@ plot_spawning_biomass <- function(
       ) + theme_noaa()
     }
   }
-  
-  ### Make RDA ----
+
+  ## Make RDA ----
   if (make_rda) {
     if (relative) {
       # pulling out the 2nd df in 'data' works for several datasets
