@@ -236,7 +236,7 @@ plot_spawning_biomass <- function(
       ) + theme_noaa()
     }
   }
-
+  
   ### Make RDA ----
   if (make_rda) {
     if (relative) {
