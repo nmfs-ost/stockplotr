@@ -942,11 +942,16 @@ calculate_reference_point <- function(
     )
     ref_line_val <- as.numeric(ref_line_val)
   }
-  dplyr::if_else(
-    lbs,
-    ref_line_val * 2.20462,
+  if (!is.null(ref_line_val)) {
+    dplyr::if_else(
+      lbs,
+      ref_line_val * 2.20462,
+      ref_line_val
+    )
+  } else {
     ref_line_val
-  )
+  }
+  
 }
 
 #------------------------------------------------------------------------------

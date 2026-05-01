@@ -10,6 +10,7 @@ plot_landings(
   geom = "line",
   group = NULL,
   facet = NULL,
+  lbs = FALSE,
   era = NULL,
   scale_amount = 1,
   module = NULL,
@@ -46,6 +47,10 @@ Default: NULL}
 \item{facet}{A string or vector of strings of a column name.
 
 Default: NULL}
+
+\item{lbs}{A logical value indicating whether to convert the y-axis values to pounds.
+
+Default: `FALSE`}
 
 \item{era}{A string naming the era of data.
 
