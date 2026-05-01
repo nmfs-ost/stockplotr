@@ -1,0 +1,43 @@
+#' SS3 Example data
+#'
+#' Included data set that represents a Report.sso file converted using 
+#' convert_output(). This example is from the 2022 Petrale sole stock assessment.
+#'
+#' @format A tibble with 591109 rows and 33 variables:
+#' \describe{
+#'   \item{label}{standard name for estimate or value name}
+#'   \item{estimate}{actual value of the label}
+#'   \item{year}{annual indexing value}
+#'   \item{fleet}{names of fleets or surveys indexed by the data}
+#'   \item{sex}{native reference to male, female, unknown, or none}
+#'   \item{area}{specified areas by the model}
+#'   \item{growth_pattern}{indexing column of data}
+#'   \item{uncertainty}{value of uncertainty associated with the label column}
+#'   \item{uncertainty_label}{uncertainty label or name associated with the label columns}
+#'   \item{module_name}{name of keyword (SS3) or list indexing in the original model output for tracking purposes}
+#'   \item{time}{time sometimes referenced in decimals to the year and month}
+#'   \item{era}{"time" for current time series in model; "fore" representing the projected or forecasted years of the model}
+#'   \item{month}{month factor}
+#'   \item{season}{season usually associated with year}
+#'   \item{subseason}{subseason when used}
+#'   \item{birthseas}{birthseason found in SS3}
+#'   \item{initial}{initial input value in the model when available associated with the label column}
+#'   \item{likelihood}{likelihood value for the data point}
+#'   \item{platoon}{platoon also an SS3 indexing value}
+#'   \item{age}{age of fish}
+#'   \item{bio_pattern}{indexing column of data}
+#'   \item{settlement}{indexing column of data}
+#'   \item{morph}{indexing column of data}
+#'   \item{type}{indexing column of data}
+#'   \item{factor}{indexing column of data}
+#'   \item{part}{indexing column of data}
+#'   \item{kind}{indexing column of data}
+#'   \item{nsim}{indexing column of data}
+#'   \item{bin}{indexing column of data}
+#'   \item{age_a}{alterative age column}
+#'   \item{length_bins}{length bins for composition or other length based data}
+#'   \item{count}{indexing column of data}
+#'   \item{block}{indexing column of data}
+#' }
+#' 
+"example_data"
