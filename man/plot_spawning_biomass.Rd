@@ -12,6 +12,7 @@ plot_spawning_biomass(
   ref_line = "msy",
   unit_label = "metric tons",
   era = NULL,
+  lbs = FALSE,
   module = NULL,
   scale_amount = 1,
   relative = FALSE,
@@ -61,6 +62,10 @@ Default: "metric tons"}
 Default: "time"
 
 Options: "early", "time", "fore" (forecast), or NULL (all data)}
+
+\item{lbs}{A logical value indicating whether to convert the y-axis values to pounds.
+
+Default: `FALSE`}
 
 \item{module}{(Optional) A string indicating the module_name found in `dat`.
 
