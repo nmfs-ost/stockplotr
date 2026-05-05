@@ -83,6 +83,10 @@ Have you identified any suggestions for improvement, bugs, or questions? Please 
 
 Thank you for helping us improve this package!
 
+## Progress, Goals, & Timeline
+
+What are we working on? When do we aim to complete it? What have we accomplished? Check out our [GitHub Project Board](https://github.com/orgs/nmfs-ost/projects/45/) and [Milestones](https://github.com/nmfs-ost/stockplotr/milestones) to see the package development status and our goals for the next few months.
+
 ## Code of Conduct
 
 We as members, contributors, and leaders pledge to make participation in our community a harassment-free experience for everyone, regardless of age, body size, visible or invisible disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, caste, color, religion, or sexual identity and orientation. We pledge to act and interact in ways that contribute to an open, welcoming, diverse, inclusive, and healthy community.
