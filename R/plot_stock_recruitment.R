@@ -42,23 +42,40 @@ plot_stock_recruitment <- function(
     scale_amount = scale_amount,
     interactive = interactive,
     module = module
+  ) |>
+    # filter for year !na
+    dplyr::filter(!is.na(year))
+  
+  process_rec <- process_data(
+    recruitment
   )
-  if (length(unique(recruitment$label)) > 1) {
-    recruitment <- recruitment |>
-      tidyr::pivot_wider(
-        id_cols = c(year, model, group_var, estimate_lower, estimate_upper),
-        names_from = label,
-        values_from = estimate
-      )
-  } else {
-    recruitment <- recruitment |>
-      dplyr::rename(predicted_recruitment = estimate) |>
-      dplyr::select(-c(label))
-  }
-
-  if (any(grepl("^recruitment$", colnames(recruitment)))) {
-    recruitment <- dplyr::rename(recruitment, predicted_recruitment = recruitment)
-  }
+  
+  rec_proc <- process_rec[[1]] |>
+    dplyr::rename(
+      recruitment = estimate,
+      recruitment_lower = estimate_lower,
+      recruitment_upper = estimate_upper
+    ) |>
+    dplyr::select(-label)
+  group <- process_rec[[2]]
+  facet <- process_rec[[3]]
+  
+  # if (length(unique(recruitment$label)) > 1) {
+  #   recruitment <- recruitment |>
+  #     tidyr::pivot_wider(
+  #       id_cols = c(year, model, group_var, estimate_lower, estimate_upper),
+  #       names_from = label,
+  #       values_from = estimate
+  #     )
+  # } else {
+  #   recruitment <- recruitment |>
+  #     dplyr::rename(predicted_recruitment = estimate) |>
+  #     dplyr::select(-c(label))
+  # }
+  # 
+  # if (any(grepl("^recruitment$", colnames(recruitment)))) {
+  #   recruitment <- dplyr::rename(recruitment, predicted_recruitment = recruitment)
+  # }
 
   # Extract spawning biomass
   sb <- filter_data(
@@ -70,11 +87,25 @@ plot_stock_recruitment <- function(
     interactive = interactive,
     module = module
   ) |>
-    dplyr::rename(spawning_biomass = estimate) |>
-    dplyr::select(-c(label))
+    dplyr::filter(!is.na(year)) #|>
+    # dplyr::rename(spawning_biomass = estimate) |>
+    # dplyr::select(-c(label))
 
+   process_sb <- process_data(
+     sb
+   )
+   sb_proc <- process_sb[[1]] |>
+     dplyr::rename(
+       spawning_biomass = estimate,
+       spawning_biomass_lower = estimate_lower,
+       spawning_biomass_upper = estimate_upper
+     ) |>
+     dplyr::select(-label)
+   # group <- process_sb[[2]]
+   # facet <- process_sb[[3]]
+  
   # Merge recruitment and spawning biomass data
-  sr <- dplyr::left_join(sb, recruitment)
+  sr <- dplyr::left_join(sb_proc, rec_proc, by = c("year", "model", "group_var"))
 
   # Labs
   recruitment_lab <- label_magnitude(
@@ -94,7 +125,7 @@ plot_stock_recruitment <- function(
   final <- plot_timeseries(
     dat = sr,
     x = "spawning_biomass",
-    y = "predicted_recruitment",
+    y = "recruitment",
     geom = "point",
     color = "black",
     xlab = sb_lab,
