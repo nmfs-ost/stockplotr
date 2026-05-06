@@ -656,6 +656,7 @@ filter_data <- function(
   scale_amount = 1,
   interactive = TRUE
 ) {
+  # TODO: add method to filter by units once added into the converter
   # TODO: add option to scale data
   # Replace all spaces with underscore if not in proper format
   label_name <- gsub(" ", "_", tolower(label_name))

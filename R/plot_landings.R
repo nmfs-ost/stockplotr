@@ -43,6 +43,12 @@ plot_landings <- function(
   figures_dir = getwd(),
   ...
 ) {
+  # this assumes that the previous units were metric tons
+  if (lbs && unit_label %notin% c("lbs", "pounds", "lb")) {
+    cli::cli_alert_info("Unit label was not changed. Setting unit_label to 'lbs'.")
+    unit_label <- "lbs"
+  }
+  
   # Units
   landings_label <- label_magnitude(
     label = "Landings",
