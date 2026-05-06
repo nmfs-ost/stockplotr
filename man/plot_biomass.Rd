@@ -97,13 +97,16 @@ Default: `FALSE`}
 \item{...}{Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}
 }
 \value{
-Plot total biomass from a stock assessment model as found in a NOAA
-stock assessment report. Units of total biomass can either be manually added
-or will be extracted from the provided file if possible. There are options #' to return a [ggplot2::ggplot()] object or export an rda object containing
-associated caption and alternative text for the figure.
+A plot showing total biomass.
 }
 \description{
 Plot Total Biomass
+}
+\details{
+The input is from an assessment model output file
+translated to a standardized output (\link[stockplotr]{convert_output}).
+There are options to return a `ggplot2` object or export an .rda object
+containing associated caption and alternative text for the figure.
 }
 \examples{
 plot_biomass(

@@ -59,12 +59,19 @@ Default is FALSE.}
 Default is the working directory.}
 }
 \value{
-A plot ready for a stock assessment report of catch or landings  composition.
-This plot is made only when catch or landings are explicitly named in the output file.
-The current plot function does not combine all sources of catch.
+A plot showing catch or landings composition.
 }
 \description{
 Plot catch composition
+}
+\details{
+This plot is made only when catch or landings are explicitly named
+in the output file. The current plot function does not combine all sources of
+catch.
+The input is from an assessment model output file
+translated to a standardized output (\link[stockplotr]{convert_output}).
+There are options to return a `ggplot2` object or export an .rda object
+containing associated caption and alternative text for the figure.
 }
 \examples{
 plot_catch_comp(

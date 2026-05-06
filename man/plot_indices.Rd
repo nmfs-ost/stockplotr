@@ -65,11 +65,16 @@ The folder is created within the path if it does not exist.}
 \item{...}{Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}
 }
 \value{
-Plot the expected and predicted indices as indicated from a standard
-assessment model output file.
+A plot showing the expected and predicted indices.
 }
 \description{
 Plot Index of Abundance
+}
+\details{
+The input is from an assessment model output file
+translated to a standardized output (\link[stockplotr]{convert_output}).
+There are options to return a `ggplot2` object or export an .rda object
+containing associated caption and alternative text for the figure.
 }
 \examples{
 plot_indices(

@@ -63,12 +63,14 @@
 #'
 #' Default: `FALSE`
 #' @param ... Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}
-#' @return
-#' Plot spawning biomass over time from the results of an assessment model translated to
-#' the a standardized output (\link[stockplotr]{convert_output}). There are options to return a
-#' \link[ggplot2]{ggplot} object or export an rda object containing associated
-#' caption and alternative text for the figure.
-#'
+#' 
+#' @return A plot showing spawning biomass over time.
+#' 
+#' @details The input is from an assessment model output file
+#' translated to a standardized output (\link[stockplotr]{convert_output}).
+#' There are options to return a `ggplot2` object or export an .rda object
+#' containing associated caption and alternative text for the figure.
+#' 
 #' @note
 #' All plotting functions automatically recognize indexing variables and will
 #' use them in groupings and/or facetting. @seealso [process_data()].

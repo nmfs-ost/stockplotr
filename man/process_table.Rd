@@ -19,10 +19,13 @@ is set to "none". Options are "sum" or "mean". Default is "sum".}
 \item{label}{A string or vector of strings identifying the label values to filter the data.}
 }
 \value{
-A dataframe of processed data ready for formatting into a table. Input is an object created with \link[stockplotr]{filter_data}.
+A dataframe of processed data ready for formatting into a table.
 }
 \description{
 Processing for tables
+}
+\details{
+Input is an object created with \link[stockplotr]{filter_data}.
 }
 \examples{
 {

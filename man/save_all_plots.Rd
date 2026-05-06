@@ -104,6 +104,10 @@ Rda files for each figure/table.
 \description{
 Export all figures and tables to Rda files within one function.
 }
+\details{
+The input is from an assessment model output file
+translated to a standardized output (\link[stockplotr]{convert_output}).
+}
 \examples{
 \dontrun{
 save_all_plots(dat,
