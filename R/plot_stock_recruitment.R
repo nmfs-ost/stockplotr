@@ -20,7 +20,7 @@
 #'   interactive = FALSE,
 #'   spawning_biomass_label = "metric tons",
 #'   recruitment_label = "metric tons",
-#'   module = "SPAWN_RECRUIT"
+#'   module = "DERIVED_QUANTITIES"
 #' )
 plot_stock_recruitment <- function(
   dat,

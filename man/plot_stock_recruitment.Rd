@@ -9,7 +9,7 @@ plot_stock_recruitment(
   spawning_biomass_label = "mt",
   recruitment_label = "mt",
   interactive = TRUE,
-  era = "time",
+  era = NULL,
   module = NULL,
   scale_amount = 1,
   make_rda = FALSE,
@@ -76,6 +76,6 @@ plot_stock_recruitment(
   interactive = FALSE,
   spawning_biomass_label = "metric tons",
   recruitment_label = "metric tons",
-  module = "SPAWN_RECRUIT"
+  module = "DERIVED_QUANTITIES"
 )
 }
