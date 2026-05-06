@@ -327,8 +327,8 @@ process_data <- function(
       dplyr::mutate(
         # multiple by conversion from kg to lbs -- default then becomes thousands of lbs
         estimate = (estimate * 2.20462),
-        estimate_lower = (estimate_lower * 2.20462),
-        estimate_upper = (estimate_upper * 2.20462)
+        estimate_lower = NA_real_, #(estimate_lower * 2.20462),
+        estimate_upper = NA_real_, #(estimate_upper * 2.20462)
       )
   }
 
