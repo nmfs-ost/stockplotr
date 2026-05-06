@@ -36,7 +36,7 @@
 #' @param unit_label A string specifying spawning biomass unit.
 #'
 #' Default: "metric tons"
-#' @param lbs A logical value indicating whether to convert the y-axis values
+#' @param lbs A logical value indicating whether to convert the y-axis values from
 #' kilograms to pounds. The default units match the default in the
 #' unit_label argument - 'metric tons'. 
 #'

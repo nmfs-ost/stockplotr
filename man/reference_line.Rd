@@ -21,7 +21,7 @@ extract the reference point from}
 
 Default: 1}
 
-\item{lbs}{A logical value indicating whether to convert the y-axis values
+\item{lbs}{A logical value indicating whether to convert the y-axis values from
 kilograms to pounds. The default units match the default in the
 unit_label argument - 'metric tons'. 
 
