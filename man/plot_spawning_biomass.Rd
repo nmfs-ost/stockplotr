@@ -51,7 +51,7 @@ Default: NULL}
 Default: "target"
 
 Options: (including, but not limited to) "target", "msy", and "unfished"
-If the reference point is not found in the data, set ref_line = c("{name}" = value).}
+If the reference point is not found in the data, set ref_line = c("name" = value).}
 
 \item{unit_label}{A string specifying spawning biomass unit.
 
