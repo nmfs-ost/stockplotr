@@ -21,7 +21,7 @@
 #' @param figures_dir The location of the folder containing the generated .rda files
 #' ("rda_files") that will be created if the argument `make_rda` = TRUE.
 #' Default is the working directory.
-#' @return Plot total abundance (or numbers) at age from a stock assessment model
+#' @returns Plot total abundance (or numbers) at age from a stock assessment model
 #' using a standardized output made from \link[stockplotr]{convert_output}). Units of
 #' abundance can either be manually added or will be extracted from the provided
 #' file if possible.

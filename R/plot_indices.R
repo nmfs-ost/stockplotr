@@ -7,7 +7,7 @@
 #' @param focus a string or vector of strings indicating how data should be
 #' filtered. (i.e. select names of fleets to zoom into the plot)
 #'
-#' @return Plot the expected and predicted indices as indicated from a standard
+#' @returns Plot the expected and predicted indices as indicated from a standard
 #' assessment model output file.
 #' @export
 #'

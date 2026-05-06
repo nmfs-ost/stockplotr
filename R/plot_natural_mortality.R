@@ -2,7 +2,7 @@
 #'
 #' @inheritParams plot_spawning_biomass
 #'
-#' @return Plot natural mortality at age from a stock assessment model as
+#' @returns Plot natural mortality at age from a stock assessment model as
 #' found in a NOAA stock assessment report.
 #' @export
 #'

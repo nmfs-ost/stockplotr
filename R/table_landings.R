@@ -13,7 +13,7 @@
 #' in this ordered list: "landings_weight",  "landings_numbers", "landings_expected",
 #' "landings_predicted", "landings".
 #'
-#' @return Create a table ready for a stock assessment report of landed catch by
+#' @returns Create a table ready for a stock assessment report of landed catch by
 #' fleet and year.
 #' @export
 #'

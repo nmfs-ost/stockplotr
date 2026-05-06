@@ -18,7 +18,7 @@
 #' with the label for the plot if known. Default is NULL. By default, the function
 #' will select the most relevant module if more than 1 exists.
 #'
-#' @return A plot ready for a stock assessment report of catch or landings  composition.
+#' @returns A plot ready for a stock assessment report of catch or landings  composition.
 #' This plot is made only when catch or landings are explicitly named in the output file.
 #' The current plot function does not combine all sources of catch.
 #'

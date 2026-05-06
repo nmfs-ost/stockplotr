@@ -20,9 +20,7 @@ variable(s) of the data.}
 is set to "none". Options are "sum" or "mean". Default is "sum".}
 }
 \value{
-Automatically detects potential grouping and faceting data from a
-dataframe output from \link[stockplotr]{filter_data}. It returns the following
-list of 3 objects:
+List of 3 objects:
 \item{data}{A data frame of the processed data ready for plotting.}
 \item{group}{A string identifying the grouping variable of the data.
 If NULL, no grouping variable is identified. If not NULL, the function
@@ -34,6 +32,10 @@ identified indexed variables found in this function will be added to facet.}
 }
 \description{
 Processing for figures
+}
+\details{
+Automatically detects potential grouping and faceting data from a
+dataframe output from \link[stockplotr]{filter_data}.
 }
 \examples{
 {

@@ -2,7 +2,7 @@
 #'
 #' @inheritParams plot_spawning_biomass
 #'
-#' @return Create a plot ready for a stock assessment report of cumulative landings
+#' @returns Create a plot ready for a stock assessment report of cumulative landings
 #' over time (\link[stockplotr]{convert_output}). There are options to return a
 #' [ggplot2::ggplot()] object or export an rda object containing associated
 #' caption and alternative text for the figure.

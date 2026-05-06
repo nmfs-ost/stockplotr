@@ -43,13 +43,15 @@ of `y`.}
 \item{...}{inherited arguments from internal functions from ggplot2::geom_xx}
 }
 \value{
-Create a time series plot for a stock assessment report. The user
-has options to create a line, point, or area plot where the x-axis is year
-and Y can vary for any time series quantity. Currently, grouping is
-restricted to one group where faceting can be any number of facets.
+Create a time series plot for a stock assessment report.
 }
 \description{
 Plot time series trends
+}
+\details{
+The user can create a line, point, or area plot, where the x-axis is
+year and y can vary for any time series quantity. Currently, grouping is
+restricted to one group where faceting can be any number of facets.
 }
 \examples{
 \dontrun{

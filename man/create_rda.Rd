@@ -46,7 +46,7 @@ from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
 of exporting a latex formatted table.}
 }
 \value{
-Create an rda package for a plot or table object. Requires an
+An rda package for a plot or table object. Requires an
 object from the R environment such as a ggplot or flextable object.
 }
 \description{

@@ -22,10 +22,11 @@
 #' @param ... inherited arguments from internal functions from ggplot2::geom_xx
 #'
 #'
-#' @returns Create a time series plot for a stock assessment report. The user
-#' has options to create a line, point, or area plot where the x-axis is year
-#' and Y can vary for any time series quantity. Currently, grouping is
+#' @returns Create a time series plot for a stock assessment report.
+#' @details The user can create a line, point, or area plot, where the x-axis is
+#' year and y can vary for any time series quantity. Currently, grouping is
 #' restricted to one group where faceting can be any number of facets.
+#' 
 #' @export
 #'
 #' @examples
@@ -235,6 +236,10 @@ plot_timeseries <- function(
 #' @param hline indicate true or false to place a horizontal line at 1
 #' @param ... inherited arguments from internal functions from ggplot2::geom_xx
 #'
+#' @returns Create a plot with error for a stock assessment report.
+#' @details The user can create a line, point, or area plot, where the x-axis is
+#' year and y can vary for any time series quantity. Currently, grouping is
+#' restricted to one group where faceting can be any number of facets.
 #'
 plot_error <- function(
   dat,
@@ -317,7 +322,7 @@ plot_error <- function(
 #' @param ... inherited arguments from internal functions from
 #' \link[ggplot2]{geom_point}
 #'
-#' @return Create a plot of abundance at age for a stock assessment report.
+#' @returns Create a plot of abundance at age for a stock assessment report.
 #' @export
 #' @examples \dontrun{
 #' plot_aa(dat)
@@ -510,7 +515,7 @@ cohort_line <- function(
 #' @param reference string. name of the reference point such as "msy",
 #' "unfished", or "target"
 #'
-#' @returns a ggplot2 geom_hline object for a reference point that can be added
+#' @returns A ggplot2 geom_hline object for a reference point that can be added
 #' to a plot
 #' @export
 #'
@@ -1006,7 +1011,7 @@ check_grouping <- function(dat) {
 #' @param observed_label a string of the label used to filter the observed data. Default is "observed".
 #' @param predicted_label a string of the label used to filter the predicted data. Default is "predicted".
 #'
-#' @returns Create a plot of observed vs. predicted data for a stock assessment report.
+#' @returns A plot of observed vs. predicted data for a stock assessment report.
 #' @export
 #'
 plot_obsvpred <- function(

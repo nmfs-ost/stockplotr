@@ -35,7 +35,7 @@ and are used to link the figure or table with its caption/alt text.}
 }
 \value{
 An rda file with a figure's ggplot, caption, and alternative text, or
-a table's flextable and caption.
+a table's gt-based table, caption, and LaTeX-based table.
 }
 \description{
 Export a figure/table, and its caption and alternative text, to an rda object.

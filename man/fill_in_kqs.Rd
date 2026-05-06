@@ -16,11 +16,13 @@ dataframe}
 }
 \value{
 Dataframe based on key quantities template that contains
-newly-added values of key quantities indicated via ellipsis. The dataframe
-is input for [fill_in_kqs()].
+newly-added values of key quantities indicated via ellipsis.
 }
 \description{
 Substitute key quantities' values into template
+}
+\details{
+The returned dataframe is input for [fill_in_kqs()].
 }
 \examples{
 \dontrun{

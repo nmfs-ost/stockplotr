@@ -2,7 +2,7 @@
 #'
 #' @inheritParams plot_spawning_biomass
 #'
-#' @return A plot showing recruitment deviations relative to one, over time.
+#' @returns A plot showing recruitment deviations relative to one, over time.
 #'
 #' @details The input is from an assessment model output file
 #' translated to a standardized output (\link[stockplotr]{convert_output}).

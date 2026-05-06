@@ -22,7 +22,7 @@ extract the reference point from}
 Default: 1}
 }
 \value{
-a ggplot2 geom_hline object for a reference point that can be added
+A ggplot2 geom_hline object for a reference point that can be added
 to a plot
 }
 \description{

@@ -2,7 +2,7 @@
 #'
 #' @inheritParams plot_spawning_biomass
 #'
-#' @return Create a plot ready for a stock assessment report of fishing mortality over time
+#' @returns Create a plot ready for a stock assessment report of fishing mortality over time
 #' from the results of an assessment model translated to the a standardized output
 #' (\link[stockplotr]{convert_output}). Includes options to group or facet data where available.
 #' There are options to return a

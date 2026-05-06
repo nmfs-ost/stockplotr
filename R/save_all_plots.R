@@ -42,7 +42,7 @@
 #' @param landings_unit_label Units for landings
 #' @param proportional T/F to scale size of bubble plots
 #'
-#' @return Rda files for each figure/table.
+#' @returns Rda files for each figure/table.
 #'
 #' @export
 #'

@@ -14,10 +14,11 @@
 #' dataframe
 #'
 #' @returns Dataframe based on key quantities template that contains
-#' newly-added values of key quantities indicated via ellipsis. The dataframe
-#' is input for [fill_in_kqs()].
+#' newly-added values of key quantities indicated via ellipsis.
+#' @details The returned dataframe is input for [fill_in_kqs()].
 #'
-#' @examples \dontrun{
+#' @examples
+#' \dontrun{
 #' fill_in_kqs(
 #'   df = data,
 #'   F.min,
@@ -203,7 +204,7 @@ insert_kqs <- function(...) {
 #' @param table_df The data frame that the table will be made into for purposes
 #' of exporting a latex formatted table.
 #'
-#' @returns Create an rda package for a plot or table object. Requires an
+#' @returns An rda package for a plot or table object. Requires an
 #' object from the R environment such as a ggplot or flextable object.
 #' @export
 #'
@@ -498,7 +499,7 @@ create_rda <- function(
 #' @param fig_or_table A string describing whether the plot is a figure or table.
 #' @param dir The directory containing the "captions_alt_text.csv" file.
 #'
-#' @return A figure's caption and alternative text, in a list, or a table's caption.
+#' @returns A figure's caption and alternative text, in a list, or a table's caption.
 #'
 #' @export
 #'
@@ -574,8 +575,8 @@ extract_caps_alttext <- function(topic_label = NULL,
 #' @param fig_or_table A string describing whether the plot is a figure or table.
 #' @param latex_table The object containing a LaTeX-based table.
 #'
-#' @return An rda file with a figure's ggplot, caption, and alternative text, or
-#' a table's flextable and caption.
+#' @returns An rda file with a figure's ggplot, caption, and alternative text, or
+#' a table's gt-based table, caption, and LaTeX-based table.
 #'
 #' @export
 #'
