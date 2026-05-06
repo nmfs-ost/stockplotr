@@ -36,7 +36,9 @@
 #' @param unit_label A string specifying spawning biomass unit.
 #'
 #' Default: "metric tons"
-#' @param lbs A logical value indicating whether to convert the y-axis values to pounds.
+#' @param lbs A logical value indicating whether to convert the y-axis values
+#' kilograms to pounds. The default units match the default in the
+#' unit_label argument - 'metric tons'. 
 #'
 #' Default: `FALSE`
 #' @param module (Optional) A string indicating the module_name found in `dat`.
@@ -132,7 +134,11 @@ plot_spawning_biomass <- function(
       label_magnitude(
         label = "Spawning Biomass",
         unit_label = unit_label,
-        scale_amount = dplyr::if_else(lbs, 1000 * scale_amount, scale_amount), # need to check if this is accurate bc from metric tons starting scale is 1000
+        scale_amount = dplyr::if_else(
+          lbs, 
+          ifelse(unit_label %in% c("mt", "mts", "metric tons", "metric ton"), 1000, 1) * scale_amount, 
+          scale_amount
+          ),
         legend = TRUE
       )
     }
