@@ -2,7 +2,7 @@
 #'
 #' Generates a table showing assumed and projected years of Catch, SB, and F.
 #'
-#' @inheritParams plot_spawning_biomass
+#' @inheritParams table_landings
 #'
 #' @return A formatted gt table object.
 #' @export
@@ -31,7 +31,6 @@ table_projections <- function(
   # legacy_f_label <- meta$mod_f_name %||% "F"
   # f_display_label <- if (is_latex) to_latex_caption(legacy_f_label) else clean_assessment_latex(legacy_f_label)
   
-  # TODO: Replace this with our existing infrastructure/pipeline with filter_data(), etc.
   # TODO: use purrr to iterate through 3 label_names: SB, fishing_mortality, and catch
   prepared_data1 <- filter_data(
     dat = dat,
@@ -45,8 +44,6 @@ table_projections <- function(
     dplyr::mutate(estimate = round(as.numeric(estimate), digits = 0)) |>
     dplyr::mutate(uncertainty = round(as.numeric(uncertainty), digits = 2))
 
-  
-  # TODO: add purrr as a dependency (if not present already)
   # TODO: edit process_table() to avoid losing year when summarizing; right now, it's only examining index vars
   # TODO: add 'method' option for 'distinct'
   # TODO: update process_table() so it can handle when group = "none"
