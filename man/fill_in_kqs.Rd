@@ -33,3 +33,6 @@ fill_in_kqs(
 )
 }
 }
+\seealso{
+[export_kqs()], [insert_kqs()]
+}

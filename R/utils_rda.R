@@ -16,6 +16,7 @@
 #' @returns Dataframe based on key quantities template that contains
 #' newly-added values of key quantities indicated via ellipsis.
 #' @details The returned dataframe is input for [fill_in_kqs()].
+#' @seealso [export_kqs()], [insert_kqs()]
 #'
 #' @examples
 #' \dontrun{
@@ -54,7 +55,8 @@ fill_in_kqs <- function(df, ...) {
 #' @returns Exports a file based on key quantities template, with values
 #' added next to the names of the key quantities specified as ellipsis
 #' arguments. File is saved as "key_quantities.csv" to the working directory.
-#'
+#' @seealso [fill_in_kqs()], [insert_kqs()]
+#' 
 #' @examples \dontrun{
 #' export_kqs(
 #'   F.min,
@@ -93,7 +95,8 @@ export_kqs <- function(...) {
 #' @returns Exports a file ("captions_alt_text.csv") containing captions
 #' and alternative text for figures and tables, with key quantities inserted
 #' into the "captions_alt_text_template.csv" template's placeholders.
-#'
+#' @seealso [fill_in_kqs()], [export_kqs()]
+#' 
 #' @examples \dontrun{
 #' insert_kqs(
 #'   F.min,
@@ -206,6 +209,7 @@ insert_kqs <- function(...) {
 #'
 #' @returns An rda package for a plot or table object. Requires an
 #' object from the R environment such as a ggplot or flextable object.
+#' @seealso [export_rda(), extract_caps_alttext()]
 #' @export
 #'
 #' @examples \dontrun{
@@ -500,7 +504,7 @@ create_rda <- function(
 #' @param dir The directory containing the "captions_alt_text.csv" file.
 #'
 #' @returns A figure's caption and alternative text, in a list, or a table's caption.
-#'
+#' @seealso [export_rda(), create_rda()]
 #' @export
 #'
 #' @examples
@@ -577,7 +581,8 @@ extract_caps_alttext <- function(topic_label = NULL,
 #'
 #' @returns An rda file with a figure's ggplot, caption, and alternative text, or
 #' a table's gt-based table, caption, and LaTeX-based table.
-#'
+#' @seealso [create_rda(), extract_caps_alttext()]
+#' 
 #' @export
 #'
 #' @examples
