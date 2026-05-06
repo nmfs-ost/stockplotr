@@ -81,15 +81,16 @@ Default: `FALSE`}
 \item{...}{Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}
 }
 \value{
-Create a plot ready for a stock assessment report of fishing mortality over time
-from the results of an assessment model translated to the a standardized output
-(\link[stockplotr]{convert_output}). Includes options to group or facet data where available.
-There are options to return a
-[ggplot2::ggplot()] object or export an rda object containing associated
-caption and alternative text for the figure.
+A plot showing fishing mortality over time.
 }
 \description{
 Plot fishing mortality timeseries
+}
+\details{
+The input is from an assessment model output file
+translated to a standardized output (\link[stockplotr]{convert_output}).
+There are options to return a `ggplot2` object or export an .rda object
+containing associated caption and alternative text for the figure.
 }
 \examples{
 plot_fishing_mortality(

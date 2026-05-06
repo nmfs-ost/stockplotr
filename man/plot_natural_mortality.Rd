@@ -66,11 +66,16 @@ The folder is created within the path if it does not exist.}
 \item{...}{Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}
 }
 \value{
-Plot natural mortality at age from a stock assessment model as
-found in a NOAA stock assessment report.
+A plot showing natural mortality at age.
 }
 \description{
 Plot natural mortality (M) at age
+}
+\details{
+The input is from an assessment model output file
+translated to a standardized output (\link[stockplotr]{convert_output}).
+There are options to return a `ggplot2` object or export an .rda object
+containing associated caption and alternative text for the figure.
 }
 \examples{
 plot_natural_mortality(

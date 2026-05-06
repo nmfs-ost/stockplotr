@@ -47,12 +47,16 @@ Default is FALSE.}
 Default is the working directory.}
 }
 \value{
-Plot total biomass at age from a stock assessment model as found in a NOAA
-stock assessment report. Units of total biomass can either be manually added
-or will be extracted from the provided file if possible.
+A plot showing total biomass at age.
 }
 \description{
 Plot Total Biomass at Age (BAA)
+}
+\details{
+The input is from an assessment model output file
+translated to a standardized output (\link[stockplotr]{convert_output}).
+There are options to return a `ggplot2` object or export an .rda object
+containing associated caption and alternative text for the figure.
 }
 \examples{
 plot_biomass_at_age(

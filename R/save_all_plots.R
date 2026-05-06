@@ -43,6 +43,9 @@
 #' @param proportional T/F to scale size of bubble plots
 #'
 #' @returns Rda files for each figure/table.
+#' 
+#' @details The input is from an assessment model output file
+#' translated to a standardized output (\link[stockplotr]{convert_output}).
 #'
 #' @export
 #'

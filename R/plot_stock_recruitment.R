@@ -8,10 +8,12 @@
 #' @param spawning_biomass_label Units for spawning biomass
 #' @param recruitment_label units for recruitment
 #'
-#' @returns Plot the stock recruitment relationship from an assessment model output file
-#' translated to a standardized output (\link[stockplotr]{convert_output}). There are options to return a
-#' [ggplot2::ggplot()] object or export an rda object containing associated
-#' caption and alternative text for the figure.
+#' @returns A plot showing the stock recruitment relationship.
+#' 
+#' @details The input is from an assessment model output file
+#' translated to a standardized output (\link[stockplotr]{convert_output}).
+#' There are options to return a `ggplot2` object or export an .rda object
+#' containing associated caption and alternative text for the figure.
 #' @export
 #'
 #' @examples

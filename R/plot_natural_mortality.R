@@ -2,8 +2,13 @@
 #'
 #' @inheritParams plot_spawning_biomass
 #'
-#' @returns Plot natural mortality at age from a stock assessment model as
-#' found in a NOAA stock assessment report.
+#' @returns A plot showing natural mortality at age.
+#' 
+#' @details The input is from an assessment model output file
+#' translated to a standardized output (\link[stockplotr]{convert_output}).
+#' There are options to return a `ggplot2` object or export an .rda object
+#' containing associated caption and alternative text for the figure.
+#' 
 #' @export
 #'
 #' @examples

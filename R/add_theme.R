@@ -4,7 +4,8 @@
 #' @param discrete TRUE/FALSE indicate if data input is discrete. Specifically applied to plots.
 #'
 #' @returns Add the standard formatting for stock assessment reports for any
-#' figure or table. Currently, the function is able to format objects from:
+#' figure or table.
+#' @details Currently, the function is able to format objects from:
 #' ggplot (ggplot2), base r plot, flextable (flextable), gt tables (gt), and kable tables (kableExtra).
 #' @export
 #'

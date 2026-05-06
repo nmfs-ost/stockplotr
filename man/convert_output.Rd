@@ -21,13 +21,15 @@ indicate the fleets names as an acronym in a vector}
 \value{
 A reformatted and standardized version of assessment model results
         for application in building a stock assessment reports and to easily
-        adapt results among regional assessments. The resulting object is
-        simply a transformed and machine readable version of a model output file.
-        Converted data frame is always returned. It will also be saved if save_dir
-        is not NULL.
+        adapt results among regional assessments.
 }
 \description{
 Format stock assessment output files to a standardized format.
+}
+\details{
+The resulting object is simply a transformed and machine readable 
+version of a model output file. Converted data frame is always returned. 
+It will also be saved if save_dir is not NULL.
 }
 \examples{
 \dontrun{

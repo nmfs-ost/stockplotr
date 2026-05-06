@@ -7,8 +7,13 @@
 #' @param focus a string or vector of strings indicating how data should be
 #' filtered. (i.e. select names of fleets to zoom into the plot)
 #'
-#' @returns Plot the expected and predicted indices as indicated from a standard
-#' assessment model output file.
+#' @returns A plot showing the expected and predicted indices.
+#' 
+#' @details The input is from an assessment model output file
+#' translated to a standardized output (\link[stockplotr]{convert_output}).
+#' There are options to return a `ggplot2` object or export an .rda object
+#' containing associated caption and alternative text for the figure.
+#' 
 #' @export
 #'
 #' @examples
