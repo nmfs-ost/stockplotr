@@ -101,3 +101,6 @@ plot_recruitment(
   make_rda = FALSE
 )
 }
+\seealso{
+[convert_output()], [filter_data()], [process_data()], [plot_timeseries()], [export_kqs()], [insert_kqs()], [create_rda()]
+}

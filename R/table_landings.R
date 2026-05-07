@@ -14,12 +14,15 @@
 #' "landings_predicted", "landings".
 #'
 #' @returns A table ready of landed catch by fleet and year.
+#' 
 #' @details The input is from an assessment model output file
 #' translated to a standardized output (\link[stockplotr]{convert_output}).
 #' There are options to return a [gt::gt()] object or export an rda object
 #' containing a gt-based table, caption, and LaTeX-based table.
+#' 
+#' @seealso [convert_output()], [filter_data()], [process_table()], [export_kqs()], [insert_kqs()], [create_rda()]
 #' @export
-#'
+#' 
 #' @examples
 #' table_landings(stockplotr::example_data)
 #'

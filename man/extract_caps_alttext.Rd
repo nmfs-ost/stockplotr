@@ -37,3 +37,6 @@ extract_caps_alttext(
 )
 }
 }
+\seealso{
+[export_rda()], [create_rda()]
+}

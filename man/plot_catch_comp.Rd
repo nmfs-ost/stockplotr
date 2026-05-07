@@ -94,3 +94,6 @@ plot_catch_comp(
   proportional = FALSE
 )
 }
+\seealso{
+[convert_output()], [filter_data()], [process_data()], [plot_aa()], [export_kqs()], [insert_kqs()], [create_rda()]
+}

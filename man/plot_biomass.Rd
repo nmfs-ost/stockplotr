@@ -124,3 +124,6 @@ plot_biomass(
   figures_dir = getwd()
 )
 }
+\seealso{
+[convert_output()], [plot_timeseries()], [calculate_reference_point()], [reference_line()], [filter_data()], [process_data()], [export_kqs()], [insert_kqs()], [create_rda()]
+}
