@@ -66,7 +66,7 @@ containing associated caption and alternative text for the figure.
 }
 \note{
 All plotting functions automatically recognize indexing variables and will
-use them in groupings and/or facetting. @seealso [process_data()].
+use them in groupings and/or facetting.
 }
 \examples{
 plot_recruitment_deviations(
@@ -83,5 +83,5 @@ plot_recruitment_deviations(
 }
 \seealso{
 [convert_output()], [plot_error()], [filter_data()],
-[process_data()]
+[process_data(), export_kqs(), insert_kqs(), create_rda()]
 }
