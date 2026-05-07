@@ -18,7 +18,7 @@ test_that("save_all_plots works when all figures/tables are plotted", {
 
   # expect that the figures and tables dirs exist
   expect_true(dir.exists(fs::path(getwd(), "figures")))
-  # expect_true(dir.exists(fs::path(getwd(), "tables")))
+  expect_true(dir.exists(fs::path(getwd(), "tables")))
 
   # expect that the figures are all created with expected names
   fig_base_temp_files <- c(
@@ -40,20 +40,20 @@ test_that("save_all_plots works when all figures/tables are plotted", {
     sort(fig_base_temp_files)
   )
 
-  # # expect that the tables are all created with expected names
-  #  tab_base_temp_files <- c(
-  #   # "bnc_table.rda",
-  #  #  "indices.abundance_table.rda",
-  #    "landings_table.rda"
-  #  )
-  #  expect_equal(
-  #    list.files(fs::path(getwd(), "tables")),
-  #    tab_base_temp_files
-  #  )
+  # expect that the tables are all created with expected names
+   tab_base_temp_files <- c(
+    # "bnc_table.rda",
+   #  "indices.abundance_table.rda",
+     "landings_table.rda"
+   )
+   expect_equal(
+     list.files(fs::path(getwd(), "tables")),
+     tab_base_temp_files
+   )
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
   file.remove(fs::path(getwd(), "key_quantities.csv"))
   unlink(fs::path(getwd(), "figures"), recursive = T)
-  # unlink(fs::path(getwd(), "tables"), recursive = T)
+  unlink(fs::path(getwd(), "tables"), recursive = T)
 })
