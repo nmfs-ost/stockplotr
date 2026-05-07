@@ -26,14 +26,14 @@
 #'   interactive = FALSE,
 #'   spawning_biomass_label = "metric tons",
 #'   recruitment_label = "metric tons",
-#'   module = "SPAWN_RECRUIT"
+#'   module = "DERIVED_QUANTITIES"
 #' )
 plot_stock_recruitment <- function(
   dat,
   spawning_biomass_label = "mt",
   recruitment_label = "mt",
   interactive = TRUE,
-  era = "time",
+  era = NULL,
   module = NULL,
   scale_amount = 1,
   make_rda = FALSE,
@@ -42,29 +42,52 @@ plot_stock_recruitment <- function(
   # Extract recruitment
   recruitment <- filter_data(
     dat = dat,
+    # TODO: change string to ^recruitment in naming convention change PR
     label_name = "recruitment",
     era = era,
     geom = "point",
     scale_amount = scale_amount,
     interactive = interactive,
     module = module
+  ) |>
+    # filter for year !na
+    dplyr::filter(
+      !is.na(year),
+      # filter out rec devs if in data
+      !grepl("deviations", label)
+    )
+  
+  process_rec <- process_data(
+    recruitment
   )
+  
+  rec_proc <- process_rec[[1]]
+  group <- process_rec[[2]]
+  facet <- process_rec[[3]]
+  
   if (length(unique(recruitment$label)) > 1) {
-    recruitment <- recruitment |>
+    rec_proc <- rec_proc |>
       tidyr::pivot_wider(
-        id_cols = c(year, model, group_var, estimate_lower, estimate_upper),
+        id_cols = dplyr::any_of(c("year", "model", "group_var", facet)),
         names_from = label,
-        values_from = estimate
+        values_from = c(estimate, estimate_lower, estimate_upper)
       )
+    # rename columns to remove "estimate"
+    colnames(rec_proc) <- gsub("estimate_", "", colnames(rec_proc))
   } else {
-    recruitment <- recruitment |>
-      dplyr::rename(predicted_recruitment = estimate) |>
-      dplyr::select(-c(label))
+    rec_proc <-  rec_proc|>
+      dplyr::rename(
+        predicted_recruitment = estimate,
+        lower_predicted_recruitment = estimate_lower,
+        upper_predicted_recruitment = estimate_upper
+      ) |>
+      dplyr::select(-label)
   }
 
-  if (any(grepl("^recruitment$", colnames(recruitment)))) {
-    recruitment <- dplyr::rename(recruitment, predicted_recruitment = recruitment)
-  }
+  # if (any(grepl("^recruitment$", colnames(recruitment)))) {
+  #   # TODO: adjust naming to recruitment_predicted in naming convention change PR
+  #   recruitment <- dplyr::rename(recruitment, predicted_recruitment = recruitment)
+  # }
 
   # Extract spawning biomass
   sb <- filter_data(
@@ -76,11 +99,23 @@ plot_stock_recruitment <- function(
     interactive = interactive,
     module = module
   ) |>
-    dplyr::rename(spawning_biomass = estimate) |>
-    dplyr::select(-c(label))
+    dplyr::filter(!is.na(year))
 
+   process_sb <- process_data(
+     sb
+   )
+   sb_proc <- process_sb[[1]] |>
+     dplyr::rename(
+       spawning_biomass = estimate,
+       lower_spawning_biomass = estimate_lower,
+       upper_spawning_biomass = estimate_upper
+     ) |>
+     dplyr::select(-label)
+   # group <- process_sb[[2]]
+   # facet <- process_sb[[3]]
+  
   # Merge recruitment and spawning biomass data
-  sr <- dplyr::left_join(sb, recruitment)
+  sr <- dplyr::left_join(sb_proc, rec_proc, by = c("year", "model", "group_var"))
 
   # Labs
   recruitment_lab <- label_magnitude(
@@ -100,6 +135,7 @@ plot_stock_recruitment <- function(
   final <- plot_timeseries(
     dat = sr,
     x = "spawning_biomass",
+    # TODO: change name to recruitment_predicted in naming convention change PR
     y = "predicted_recruitment",
     geom = "point",
     color = "black",
