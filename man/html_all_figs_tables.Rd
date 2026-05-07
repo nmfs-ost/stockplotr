@@ -23,3 +23,7 @@ html_all_figs_tables()
 html_all_figs_tables(figures_tables_dir = "my_figures_tables_dir")
 }
 }
+\seealso{
+\code{\link[asar:create_figures_doc]{asar::create_figures_doc()}},
+\code{\link[asar:create_tables_doc]{asar::create_tables_doc()}}
+}

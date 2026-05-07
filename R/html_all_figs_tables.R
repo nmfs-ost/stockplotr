@@ -7,6 +7,11 @@
 #'
 #' @returns A folder ("all_tables_figures") in your working directory containing
 #' html and qmd files that show all tables and figures.
+#' 
+#' @seealso
+#' \code{\link[asar:create_figures_doc]{asar::create_figures_doc()}},
+#' \code{\link[asar:create_tables_doc]{asar::create_tables_doc()}}
+#' 
 #'
 #' @export
 #'

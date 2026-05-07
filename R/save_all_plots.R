@@ -44,6 +44,8 @@
 #'
 #' @returns Rda files for each figure/table.
 #' 
+#' @seealso [convert_output(), create_rda()]
+#' 
 #' @details The input is from an assessment model output file
 #' translated to a standardized output (\link[stockplotr]{convert_output}).
 #'
