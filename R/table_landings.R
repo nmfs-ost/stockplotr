@@ -20,7 +20,7 @@
 #' There are options to return a [gt::gt()] object or export an rda object
 #' containing a gt-based table, caption, and LaTeX-based table.
 #' 
-#' @seealso [convert_output(), filter_data(), process_table(), export_kqs(), insert_kqs(), create_rda()]
+#' @seealso [convert_output()], [filter_data()], [process_table()], [export_kqs()], [insert_kqs()], [create_rda()]
 #' @export
 #' 
 #' @examples

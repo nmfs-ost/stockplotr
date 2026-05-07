@@ -83,5 +83,5 @@ plot_recruitment_deviations(
 }
 \seealso{
 [convert_output()], [plot_error()], [filter_data()],
-[process_data(), export_kqs(), insert_kqs(), create_rda()]
+[process_data()], [export_kqs()], [insert_kqs()], [create_rda()]
 }

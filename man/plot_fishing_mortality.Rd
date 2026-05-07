@@ -109,5 +109,5 @@ plot_fishing_mortality(
 )
 }
 \seealso{
-[convert_output(), filter_data(), process_data(), plot_timeseries(), reference_line(), export_kqs(), insert_kqs(), create_rda()]
+[convert_output()], [filter_data()], [process_data()], [plot_timeseries()], [reference_line()], [export_kqs()], [insert_kqs()], [create_rda()]
 }

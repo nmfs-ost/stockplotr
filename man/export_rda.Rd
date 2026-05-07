@@ -62,5 +62,5 @@ export_rda(
 }
 }
 \seealso{
-[create_rda(), extract_caps_alttext()]
+[create_rda()], [extract_caps_alttext()]
 }

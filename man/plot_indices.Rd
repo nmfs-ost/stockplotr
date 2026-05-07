@@ -85,5 +85,5 @@ plot_indices(
 
 }
 \seealso{
-[convert_output(), filter_data(), process_data(), plot_obsvpred(), export_kqs(), insert_kqs(), create_rda()]
+[convert_output()], [filter_data()], [process_data()], [plot_obsvpred()], [export_kqs()], [insert_kqs()], [create_rda()]
 }

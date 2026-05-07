@@ -85,5 +85,5 @@ table_landings(
 )
 }
 \seealso{
-[convert_output(), filter_data(), process_table(), export_kqs(), insert_kqs(), create_rda()]
+[convert_output()], [filter_data()], [process_table()], [export_kqs()], [insert_kqs()], [create_rda()]
 }

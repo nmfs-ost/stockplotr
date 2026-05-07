@@ -209,7 +209,7 @@ insert_kqs <- function(...) {
 #'
 #' @returns An rda package for a plot or table object. Requires an
 #' object from the R environment such as a ggplot or flextable object.
-#' @seealso [export_rda(), extract_caps_alttext()]
+#' @seealso [export_rda()], [extract_caps_alttext()]
 #' @export
 #'
 #' @examples \dontrun{
@@ -504,7 +504,7 @@ create_rda <- function(
 #' @param dir The directory containing the "captions_alt_text.csv" file.
 #'
 #' @returns A figure's caption and alternative text, in a list, or a table's caption.
-#' @seealso [export_rda(), create_rda()]
+#' @seealso [export_rda()], [create_rda()]
 #' @export
 #'
 #' @examples
@@ -581,7 +581,7 @@ extract_caps_alttext <- function(topic_label = NULL,
 #'
 #' @returns An rda file with a figure's ggplot, caption, and alternative text, or
 #' a table's gt-based table, caption, and LaTeX-based table.
-#' @seealso [create_rda(), extract_caps_alttext()]
+#' @seealso [create_rda()], [extract_caps_alttext()]
 #' 
 #' @export
 #'

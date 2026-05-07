@@ -9,7 +9,7 @@
 #' There are options to return a `ggplot2` object or export an .rda object
 #' containing associated caption and alternative text for the figure.
 #' 
-#' @seealso [convert_output(), filter_data(), process_data(), plot_timeseries(), reference_line(), export_kqs(), insert_kqs(), create_rda()]
+#' @seealso [convert_output()], [filter_data()], [process_data()], [plot_timeseries()], [reference_line()], [export_kqs()], [insert_kqs()], [create_rda()]
 #' 
 #' @export
 #'
