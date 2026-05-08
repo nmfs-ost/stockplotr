@@ -13,11 +13,14 @@ add_theme(x, discrete = TRUE)
 }
 \value{
 Add the standard formatting for stock assessment reports for any
-figure or table. Currently, the function is able to format objects from:
-ggplot (ggplot2), base r plot, flextable (flextable), gt tables (gt), and kable tables (kableExtra).
+figure or table.
 }
 \description{
 Add NOAA formatting to figure or table
+}
+\details{
+Currently, the function is able to format objects from:
+ggplot (ggplot2), base r plot, flextable (flextable), gt tables (gt), and kable tables (kableExtra).
 }
 \examples{
 add_theme(ggplot2::ggplot(data = cars, ggplot2::aes(x = speed, y = dist)) +

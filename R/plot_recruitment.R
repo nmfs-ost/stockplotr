@@ -3,10 +3,15 @@
 #' @inheritParams plot_spawning_biomass
 #' @param unit_label units for recruitment
 #'
-#' @return Plot recruitment over time from an assessment model output file
-#' translated to a standardized output (\link[stockplotr]{convert_output}). There are options to return a
-#' [ggplot2::ggplot()] object or export an rda object containing associated
-#' caption and alternative text for the figure.
+#' @returns A plot showing recruitment over time.
+#' 
+#' @details The input is from an assessment model output file
+#' translated to a standardized output (\link[stockplotr]{convert_output}).
+#' There are options to return a `ggplot2` object or export an .rda object
+#' containing associated caption and alternative text for the figure.
+#' 
+#' @seealso [convert_output()], [filter_data()], [process_data()], [plot_timeseries()], [export_kqs()], [insert_kqs()], [create_rda()] 
+#' 
 #' @export
 #'
 #' @examples

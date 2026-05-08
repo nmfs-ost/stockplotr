@@ -10,10 +10,15 @@
 #'   default list to ensure that the label on the figure looks correct
 #'   regardless of how it is specified in `dat`. Other possibilities may include
 #'   "target", "MSY", and "unfished".
-#' @return Plot total biomass from a stock assessment model as found in a NOAA
-#' stock assessment report. Units of total biomass can either be manually added
-#' or will be extracted from the provided file if possible. There are options #' to return a [ggplot2::ggplot()] object or export an rda object containing
-#' associated caption and alternative text for the figure.
+#' @returns A plot showing total biomass.
+#' 
+#' @details The input is from an assessment model output file
+#' translated to a standardized output (\link[stockplotr]{convert_output}).
+#' There are options to return a `ggplot2` object or export an .rda object
+#' containing associated caption and alternative text for the figure.
+#' 
+#' @seealso [convert_output()], [plot_timeseries()], [calculate_reference_point()], [reference_line()], [filter_data()], [process_data()], [export_kqs()], [insert_kqs()], [create_rda()]
+#' 
 #' @export
 #'
 #' @examples
@@ -37,6 +42,7 @@ plot_biomass <- function(
   group = NULL,
   facet = NULL,
   ref_line = "msy",
+  era = NULL,
   unit_label = "metric tons",
   module = NULL,
   scale_amount = 1,
@@ -74,27 +80,35 @@ plot_biomass <- function(
     scale_amount <- 1
   }
 
-  # Filter data for spawning biomass
+  # Filter data for biomass
+  # TODO: determine method to ID that first point in the timeseries is actually Bunfished ref pt
   prepared_data <- filter_data(
     dat = dat,
-    label_name = "^biomass$",
+    label_name = ifelse(relative, "biomass_biomass_unfished|biomass_ratio", "^biomass$"), # what exactly is biomass_ratio?
     geom = geom,
     group = group,
     facet = facet,
+    era = era,
     module = module,
     scale_amount = scale_amount,
     interactive = interactive
   )
-
-  # check if all 3 are present and subset for one or two
-  if (length(unique(prepared_data$label)) > 1 & any(grepl("biomass$", unique(prepared_data$label)))) {
-    # cli::cli_alert_info("> 1 label name. Selecting total biomass only.")
-    prepared_data <- prepared_data |>
-      dplyr::filter(
-        grepl("biomass$", label)
-      )
+  if (relative) {
+    if (nrow(prepared_data) == 0) {
+      cli::cli_abort("No data found for relative biomass. Please check that your data contains a label for 'biomass_biomass_unfished'.")
+      stop()
+    }
+  } else {
+    # check if all 3 are present and subset for one or two
+    if (length(unique(prepared_data$label)) > 1 & any(grepl("biomass$", unique(prepared_data$label)))) {
+      # cli::cli_alert_info("> 1 label name. Selecting total biomass only.")
+      prepared_data <- prepared_data |>
+        dplyr::filter(
+          grepl("biomass$", label)
+        )
+    }
   }
-
+    
   # Process data for indexing/grouping
   # TODO: check and add into process_data step to summarize when theres >1 label
   processing <- process_data(
@@ -102,27 +116,12 @@ plot_biomass <- function(
     group,
     facet
   )
-
+  
   # variable <- processing[[1]]
   prepared_data <- processing[[1]]
   group <- processing[[2]]
   if (!is.null(processing[[3]])) facet <- processing[[3]]
-
-  # Calculate estimate if relative
-  if (relative) {
-    if (!is.null(names(ref_line))) {
-      ref_line_val <- ref_line[[1]]
-      # ref_line <- names(ref_line)
-    } else {
-      ref_line_val <- calculate_reference_point(
-        dat = rp_dat,
-        reference_name = glue::glue("^biomass_", ref_line)
-      ) / scale_amount
-    }
-    if (is.na(ref_line_val)) cli::cli_abort("Reference value not found. Cannot plot relative values.")
-    prepared_data <- prepared_data |>
-      dplyr::mutate(estimate = estimate / ref_line_val)
-  }
+  
 
   plt <- plot_timeseries(
     dat = prepared_data,
@@ -135,16 +134,37 @@ plot_biomass <- function(
   )
   # Add reference line
   # getting data set - an ifelse statement in the fxn wasn't working
-
-  final <- reference_line(
-    plot = plt,
-    dat = rp_dat,
-    label_name = "biomass",
-    reference = ref_line,
-    relative = relative,
-    scale_amount = scale_amount
-  ) +
-    theme_noaa()
+  if (relative) {
+    # don't add any reference line here and just add theme for final plot
+    final <- plt + theme_noaa()
+  } else {
+    if ("unfished" %in% c(names(ref_line), ref_line)) {
+      # find the minimum x axis value from the plot
+      min_year <- min <- ggplot2::ggplot_build(plt)@data[[2]] |>
+        as.data.frame() |>
+        dplyr::pull(y) |>
+        min() |>
+        round(digits = 2)
+      # find the reference point value for unfished
+      ref_point <- calculate_reference_point(
+        dat = stockplotr::example_data,
+        reference_name = "biomass_unfished"
+      ) / scale_amount
+      # add point to plot and add theme
+      final <- plt +
+        ggplot2::geom_point(ggplot2::aes(x = min_year - 1, y = ref_point)) + # should I keep -1 or set as first year?
+        theme_noaa()
+    } else {
+      final <- reference_line(
+        plot = plt,
+        dat = rp_dat,
+        label_name = "biomass",
+        reference = ref_line,
+        scale_amount = scale_amount
+      ) +
+        theme_noaa()
+    }
+  }
 
   ### Make RDA ----
   if (make_rda) {

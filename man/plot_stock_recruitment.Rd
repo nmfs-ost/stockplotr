@@ -55,13 +55,16 @@ Default: `getwd()`
 The folder is created within the path if it does not exist.}
 }
 \value{
-Plot the stock recruitment relationship from an assessment model output file
-translated to a standardized output (\link[stockplotr]{convert_output}). There are options to return a
-[ggplot2::ggplot()] object or export an rda object containing associated
-caption and alternative text for the figure.
+A plot showing the stock recruitment relationship.
 }
 \description{
 Plot Stock Recruit Relationship
+}
+\details{
+The input is from an assessment model output file
+translated to a standardized output (\link[stockplotr]{convert_output}).
+There are options to return a `ggplot2` object or export an .rda object
+containing associated caption and alternative text for the figure.
 }
 \examples{
 plot_stock_recruitment(
@@ -71,4 +74,7 @@ plot_stock_recruitment(
   recruitment_label = "metric tons",
   module = "SPAWN_RECRUIT"
 )
+}
+\seealso{
+[convert_output()], [filter_data()], [process_data()], [plot_timeseries()], [export_kqs()], [insert_kqs()], [create_rda()]
 }

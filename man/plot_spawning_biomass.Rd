@@ -11,7 +11,7 @@ plot_spawning_biomass(
   facet = NULL,
   ref_line = "msy",
   unit_label = "metric tons",
-  era = "time",
+  era = NULL,
   module = NULL,
   scale_amount = 1,
   relative = FALSE,
@@ -97,14 +97,17 @@ Default: `FALSE`}
 \item{...}{Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}
 }
 \value{
-Plot spawning biomass over time from the results of an assessment model translated to
-the a standardized output (\link[stockplotr]{convert_output}). There are options to return a
-\link[ggplot2]{ggplot} object or export an rda object containing associated
-caption and alternative text for the figure.
+A plot showing spawning biomass over time.
 }
 \description{
 Plot spawning biomass with a reference line as a dashed line. The figure can
 also be made relative to this reference line rather than in absolute units.
+}
+\details{
+The input is from an assessment model output file
+translated to a standardized output (\link[stockplotr]{convert_output}).
+There are options to return a `ggplot2` object or export an .rda object
+containing associated caption and alternative text for the figure.
 }
 \note{
 All plotting functions automatically recognize indexing variables and will
@@ -123,19 +126,11 @@ plot_spawning_biomass(
 )
 plot_spawning_biomass(
   dat = stockplotr:::example_data,
-  relative = TRUE,
-  ref_line = "msy",
-  module = "TIME_SERIES"
-)
-plot_spawning_biomass(
-  dat = stockplotr:::example_data,
   ref_line = c("target" = 10),
   interactive = FALSE,
   module = "TIME_SERIES"
 )
 }
 \seealso{
-[convert_output()], [plot_timeseries()],
-[calculate_reference_point()], [reference_line()], [filter_data()],
-[process_data()]
+[convert_output()], [plot_timeseries()], [calculate_reference_point()], [reference_line()], [filter_data()], [process_data()], [export_kqs()], [insert_kqs()], [create_rda()]
 }

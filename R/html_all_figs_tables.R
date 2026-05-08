@@ -5,8 +5,13 @@
 #' @param figures_tables_dir The location of the folder containing
 #' figures and tables ("figures" and "tables").
 #'
-#' @return A folder ("all_tables_figures") in your working directory containing
+#' @returns A folder ("all_tables_figures") in your working directory containing
 #' html and qmd files that show all tables and figures.
+#' 
+#' @seealso
+#' \code{\link[asar:create_figures_doc]{asar::create_figures_doc()}},
+#' \code{\link[asar:create_tables_doc]{asar::create_tables_doc()}}
+#' 
 #'
 #' @export
 #'

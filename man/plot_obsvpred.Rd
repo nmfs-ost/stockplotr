@@ -49,7 +49,7 @@ of `y`.}
 \item{...}{inherited arguments from internal functions from ggplot2::geom_xx}
 }
 \value{
-Create a plot of observed vs. predicted data for a stock assessment report.
+A plot of observed vs. predicted data for a stock assessment report.
 }
 \description{
 Plot observed vs. predicted data

@@ -26,3 +26,6 @@ insert_kqs(
 )
 }
 }
+\seealso{
+[fill_in_kqs()], [export_kqs()]
+}

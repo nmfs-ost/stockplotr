@@ -18,9 +18,17 @@
 #' with the label for the plot if known. Default is NULL. By default, the function
 #' will select the most relevant module if more than 1 exists.
 #'
-#' @return A plot ready for a stock assessment report of catch or landings  composition.
-#' This plot is made only when catch or landings are explicitly named in the output file.
-#' The current plot function does not combine all sources of catch.
+#' @returns A plot showing catch or landings composition.
+#' 
+#' @details This plot is made only when catch or landings are explicitly named
+#' in the output file. The current plot function does not combine all sources of
+#' catch.
+#' The input is from an assessment model output file
+#' translated to a standardized output (\link[stockplotr]{convert_output}).
+#' There are options to return a `ggplot2` object or export an .rda object
+#' containing associated caption and alternative text for the figure.
+#'
+#' @seealso [convert_output()], [filter_data()], [process_data()], [plot_aa()], [export_kqs()], [insert_kqs()], [create_rda()]
 #'
 #' @export
 #' @examples

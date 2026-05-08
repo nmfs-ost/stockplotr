@@ -10,6 +10,7 @@ plot_biomass(
   group = NULL,
   facet = NULL,
   ref_line = "msy",
+  era = NULL,
   unit_label = "metric tons",
   module = NULL,
   scale_amount = 1,
@@ -53,6 +54,12 @@ default list to ensure that the label on the figure looks correct
 regardless of how it is specified in `dat`. Other possibilities may include
 "target", "MSY", and "unfished".}
 
+\item{era}{A string naming the era of data.
+
+Default: "time"
+
+Options: "early", "time", "fore" (forecast), or NULL (all data)}
+
 \item{unit_label}{units for biomass}
 
 \item{module}{(Optional) A string indicating the module_name found in `dat`.
@@ -90,13 +97,16 @@ Default: `FALSE`}
 \item{...}{Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}
 }
 \value{
-Plot total biomass from a stock assessment model as found in a NOAA
-stock assessment report. Units of total biomass can either be manually added
-or will be extracted from the provided file if possible. There are options #' to return a [ggplot2::ggplot()] object or export an rda object containing
-associated caption and alternative text for the figure.
+A plot showing total biomass.
 }
 \description{
 Plot Total Biomass
+}
+\details{
+The input is from an assessment model output file
+translated to a standardized output (\link[stockplotr]{convert_output}).
+There are options to return a `ggplot2` object or export an .rda object
+containing associated caption and alternative text for the figure.
 }
 \examples{
 plot_biomass(
@@ -113,4 +123,7 @@ plot_biomass(
   module = "TIME_SERIES",
   figures_dir = getwd()
 )
+}
+\seealso{
+[convert_output()], [plot_timeseries()], [calculate_reference_point()], [reference_line()], [filter_data()], [process_data()], [export_kqs()], [insert_kqs()], [create_rda()]
 }

@@ -44,13 +44,16 @@ Default is FALSE.}
 Default is the working directory.}
 }
 \value{
-Plot total abundance (or numbers) at age from a stock assessment model
-using a standardized output made from \link[stockplotr]{convert_output}). Units of
-abundance can either be manually added or will be extracted from the provided
-file if possible.
+A plot showing total abundance (or numbers) at age.
 }
 \description{
 Plot Abundance (or Numbers) at Age (AAA or NAA)
+}
+\details{
+The input is from an assessment model output file
+translated to a standardized output (\link[stockplotr]{convert_output}).
+There are options to return a `ggplot2` object or export an .rda object
+containing associated caption and alternative text for the figure.
 }
 \examples{
 plot_abundance_at_age(
@@ -67,4 +70,7 @@ plot_abundance_at_age(
   facet = "none",
   proportional = FALSE
 )
+}
+\seealso{
+[convert_output()], [filter_data()], [process_data()], [plot_aa()], [export_kqs()], [insert_kqs()], [create_rda()]
 }
