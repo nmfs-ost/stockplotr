@@ -1791,6 +1791,9 @@ convert_output <- function(
     # can late take approach like BAM?
     # TODO: Do we want users to input the saved file or already loaded into the R environment?
     if (is.character(file)) {
+      if (!grepl(".rds", file)) {
+        cli::cli_abort("File must be in an .rds format otherwise load data into your environment and run `convert_output()` using the loaded data.")
+      }
       dat <- readRDS(file)
     } else {
       dat <- file
@@ -1908,15 +1911,65 @@ convert_output <- function(
         ###### data.list ####
         # Only extract specific quantity needs
         # comp_data?, index_data, catch_data, weight, Ftarget, Flimit
+        data_list_list <- list()
+        
         ####### Indices ####
         # Extract index_data 
-        df_index <- extract[[1]]$index_data
+        df_index <- extract[[1]]$index_data |>
+          # rename all columns to lower case to match standard
+          dplyr::rename_with(tolower) |>
+          dplyr::rename(
+            fleet = fleet_name,
+            indices_observed = observation,
+            block = selectivity_block,
+            uncertainty = log_sd
+          ) |>
+          dplyr::mutate(
+            # label = "indices_observed",
+            uncertainty_label = "log_sd",
+            indices_predicted = dat$quantities$index_hat
+          ) |>
+          dplyr::select(-c(fleet_code, q_block))
+        cli::cli_alert_info("'Selectivity_block' values located in 'block' columns.")
+        
+        # check if species > 1
+        if (length(unique(df_index$species)) > 1) {
+          cli::cli_abort("Not currently compatible for multispecies.")
+        } else {
+          df_index <- df_index |>
+            dplyr::select(-species)
+        }
+        
+        # expand df long to have obs and pred in same column with label
+        df_index_long <- df_index |>
+          tidyr::pivot_longer(
+            cols = c(indices_observed, indices_predicted),
+            names_to = "label",
+            values_to = "estimate"
+          ) |>
+          dplyr::mutate(
+            module_name = names(extract)#,
+            # era = dplyr::if_else(
+            #   year > dat$data_list$endyr,
+            #   "fore",
+            #   NA_character_
+            # )
+          )
+        
+        df_index_long[setdiff(tolower(names(out_new)), tolower(names(df_index_long)))] <- NA
+        data_list_list[["index_data"]] <- df_index_long
         
         ####### Catch indexing ####
         # Extract catch_data and align with log_index_hat and catch_h 
         # Modify sdrep in outlist to include index
         df_catch <- extract[[1]]$catch_data |>
           dplyr::filter(!is.na(Catch))
+        
+        
+        
+        # final df for module
+        new_df <- Reduce(rbind, data_list_list)
+        out_list[[names(extract)]] <- new_df
         
       } else if (is.list(extract[[1]])) { # indicates vector and list
         ##### remaining lmnts ####
