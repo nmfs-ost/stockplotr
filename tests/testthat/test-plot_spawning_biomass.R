@@ -59,4 +59,3 @@ test_that("rda file made when indicated", {
   file.remove(fs::path(getwd(), "key_quantities.csv"))
   unlink(fs::path(getwd(), "figures"), recursive = T)
 })
-

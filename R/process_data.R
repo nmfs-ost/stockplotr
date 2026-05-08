@@ -22,11 +22,11 @@
 #' \item{facet}{A string or vector of strings identifying the faceting
 #' variable(s) of the data. If NULL, no faceting variable is identified. Any
 #' identified indexed variables found in this function will be added to facet.}
-#' 
+#'
 #' @details Automatically detects potential grouping and faceting data from a
 #' dataframe output from \link[stockplotr]{filter_data}.
-#' 
-#' 
+#'
+#'
 #' @export
 #'
 #' @examples {
@@ -357,7 +357,7 @@ process_data <- function(
       group <- NULL
     }
   }
-  
+
   # Ensure that index_variables -- group or facets are non-numeric to be plotted accurately
   data <- data |>
     dplyr::mutate(
@@ -385,7 +385,7 @@ process_data <- function(
 #'
 #' @returns A dataframe of processed data ready for formatting into a table.
 #' @details Input is an object created with \link[stockplotr]{filter_data}.
-#' 
+#'
 #' @export
 #'
 #' @examples {

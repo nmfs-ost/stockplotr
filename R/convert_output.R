@@ -14,11 +14,11 @@
 #'
 #' @returns A reformatted and standardized version of assessment model results
 #'         for application in building a stock assessment reports and to easily
-#'         adapt results among regional assessments. 
-#' @details The resulting object is simply a transformed and machine readable 
-#' version of a model output file. Converted data frame is always returned. 
+#'         adapt results among regional assessments.
+#' @details The resulting object is simply a transformed and machine readable
+#' version of a model output file. Converted data frame is always returned.
 #' It will also be saved if save_dir is not NULL.
-#' 
+#'
 #'
 #' @export
 #'

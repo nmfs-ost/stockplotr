@@ -8,16 +8,16 @@
 #' @param interactive TRUE/FALSE; indicate whether the environment in which the
 #' function is operating  is interactive. This bypasses some options for
 #' filtering when preparing data for the plot. Default is FALSE.
-#' 
+#'
 #' @returns A plot showing total biomass at age.
-#' 
+#'
 #' @details The input is from an assessment model output file
 #' translated to a standardized output (\link[stockplotr]{convert_output}).
 #' There are options to return a `ggplot2` object or export an .rda object
 #' containing associated caption and alternative text for the figure.
-#' 
+#'
 #' @seealso [convert_output()], [filter_data()], [process_data()], [plot_aa()], [export_kqs()], [insert_kqs()], [create_rda()]
-#'  
+#'
 #' @export
 #'
 #' @examples

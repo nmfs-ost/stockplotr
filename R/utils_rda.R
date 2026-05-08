@@ -56,7 +56,7 @@ fill_in_kqs <- function(df, ...) {
 #' added next to the names of the key quantities specified as ellipsis
 #' arguments. File is saved as "key_quantities.csv" to the working directory.
 #' @seealso [fill_in_kqs()], [insert_kqs()]
-#' 
+#'
 #' @examples \dontrun{
 #' export_kqs(
 #'   F.min,
@@ -96,7 +96,7 @@ export_kqs <- function(...) {
 #' and alternative text for figures and tables, with key quantities inserted
 #' into the "captions_alt_text_template.csv" template's placeholders.
 #' @seealso [fill_in_kqs()], [export_kqs()]
-#' 
+#'
 #' @examples \dontrun{
 #' insert_kqs(
 #'   F.min,
@@ -582,7 +582,7 @@ extract_caps_alttext <- function(topic_label = NULL,
 #' @returns An rda file with a figure's ggplot, caption, and alternative text, or
 #' a table's gt-based table, caption, and LaTeX-based table.
 #' @seealso [create_rda()], [extract_caps_alttext()]
-#' 
+#'
 #' @export
 #'
 #' @examples

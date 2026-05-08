@@ -11,14 +11,14 @@
 #'   regardless of how it is specified in `dat`. Other possibilities may include
 #'   "target", "MSY", and "unfished".
 #' @returns A plot showing total biomass.
-#' 
+#'
 #' @details The input is from an assessment model output file
 #' translated to a standardized output (\link[stockplotr]{convert_output}).
 #' There are options to return a `ggplot2` object or export an .rda object
 #' containing associated caption and alternative text for the figure.
-#' 
+#'
 #' @seealso [convert_output()], [plot_timeseries()], [calculate_reference_point()], [reference_line()], [filter_data()], [process_data()], [export_kqs()], [insert_kqs()], [create_rda()]
-#' 
+#'
 #' @export
 #'
 #' @examples
@@ -108,7 +108,7 @@ plot_biomass <- function(
         )
     }
   }
-    
+
   # Process data for indexing/grouping
   # TODO: check and add into process_data step to summarize when theres >1 label
   processing <- process_data(
@@ -116,12 +116,12 @@ plot_biomass <- function(
     group,
     facet
   )
-  
+
   # variable <- processing[[1]]
   prepared_data <- processing[[1]]
   group <- processing[[2]]
   if (!is.null(processing[[3]])) facet <- processing[[3]]
-  
+
 
   plt <- plot_timeseries(
     dat = prepared_data,

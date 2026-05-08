@@ -3,14 +3,14 @@
 #' @inheritParams plot_spawning_biomass
 #'
 #' @returns A plot showing fishing mortality over time.
-#' 
+#'
 #' @details The input is from an assessment model output file
 #' translated to a standardized output (\link[stockplotr]{convert_output}).
 #' There are options to return a `ggplot2` object or export an .rda object
 #' containing associated caption and alternative text for the figure.
-#' 
+#'
 #' @seealso [convert_output()], [filter_data()], [process_data()], [plot_timeseries()], [reference_line()], [export_kqs()], [insert_kqs()], [create_rda()]
-#' 
+#'
 #' @export
 #'
 #' @examples
@@ -86,13 +86,12 @@ plot_fishing_mortality <- function(
 
   ### Make RDA ----
   if (make_rda) {
-    
     F.min <- min(prepared_data$estimate) |> round(digits = 3)
     F.max <- max(prepared_data$estimate) |> round(digits = 3)
-    
+
     export_kqs(F.min, F.max)
     insert_kqs(F.min, F.max)
-    
+
     F.ref.pt <- as.character(ref_line)
     F.start.year <- min(prepared_data$year)
     F.end.year <- max(prepared_data$year)

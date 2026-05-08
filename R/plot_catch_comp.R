@@ -19,7 +19,7 @@
 #' will select the most relevant module if more than 1 exists.
 #'
 #' @returns A plot showing catch or landings composition.
-#' 
+#'
 #' @details This plot is made only when catch or landings are explicitly named
 #' in the output file. The current plot function does not combine all sources of
 #' catch.

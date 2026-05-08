@@ -63,14 +63,14 @@
 #'
 #' Default: `FALSE`
 #' @param ... Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}
-#' 
+#'
 #' @return A plot showing spawning biomass over time.
-#' 
+#'
 #' @details The input is from an assessment model output file
 #' translated to a standardized output (\link[stockplotr]{convert_output}).
 #' There are options to return a `ggplot2` object or export an .rda object
 #' containing associated caption and alternative text for the figure.
-#' 
+#'
 #' @note
 #' All plotting functions automatically recognize indexing variables and will
 #' use them in groupings and/or facetting. @seealso [process_data()].
@@ -141,24 +141,24 @@ plot_spawning_biomass <- function(
 
   # Filter data for spawning biomass
   prepared_data <- filter_data(
-      dat = dat,
-      label_name = ifelse(relative, glue::glue("spawning_biomass_spawning_biomass_{ref_line}|spawning_biomass_ratio"), "^spawning_biomass$"),
-      geom = geom,
-      era = era,
-      group = group,
-      facet = facet,
-      module = module,
-      scale_amount = scale_amount,
-      interactive = interactive
-    )
-  
+    dat = dat,
+    label_name = ifelse(relative, glue::glue("spawning_biomass_spawning_biomass_{ref_line}|spawning_biomass_ratio"), "^spawning_biomass$"),
+    geom = geom,
+    era = era,
+    group = group,
+    facet = facet,
+    module = module,
+    scale_amount = scale_amount,
+    interactive = interactive
+  )
+
   if (relative) {
     if (nrow(prepared_data) == 0) {
       cli::cli_abort("No data found for relative biomass. Please check that your data contains a label for 'biomass_biomass_unfished'.")
       stop()
     }
-  }  
-  
+  }
+
   # process the data for grouping
   processing <- process_data(
     dat = prepared_data,
@@ -170,7 +170,7 @@ plot_spawning_biomass <- function(
   plot_data <- processing[[1]]
   group <- processing[[2]]
   if (!is.null(processing[[3]])) facet <- processing[[3]]
-  
+
   # Override grouping variable when there is only NA's
   if (!is.null(group)) {
     if (group %notin% colnames(plot_data)) group <- NULL
@@ -218,7 +218,7 @@ plot_spawning_biomass <- function(
       ) + theme_noaa()
     }
   }
- 
+
 
   # Plot vertical lines if era is not filtering
   # Turning this out because I don't think it's relevant

@@ -7,7 +7,7 @@ load(file.path(
 # Below is now moot bc relative is coming from model results
 # Make another sample dataset for testing relative
 # n <- 448
-# 
+#
 # sim_df <- data.frame(
 #   label = "biomass",
 #   estimate = rlnorm(n, meanlog = 6.2, sdlog = 1.6),
