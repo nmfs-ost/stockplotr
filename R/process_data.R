@@ -213,9 +213,16 @@ process_data <- function(
         # Remove any index_variables that aren't in valid_vars
         index_variables <- index_variables[grepl(paste(valid_vars, collapse = "|"), index_variables)]
         # Set group to first matching valid var
-        group <- valid_vars[1]
+        # check if any of the vars is in facet first
+        if (any(valid_vars %in% facet)) {
+          valid_vars <- valid_vars[!valid_vars %in% facet]
+          group <- valid_vars[1] 
+        } else {
+          group <- valid_vars[1]
+        }
+        
         # Remove group from index_variables so no repeats
-        index_variables <- index_variables[-grepl(valid_vars[1], index_variables)]
+        index_variables <- index_variables[-grep(valid_vars[1], index_variables)]
         # Don't want to filter by group if model is present because the index_var could be NA for one of the models
         # TODO: perform check or adjust function in case when index_var is present for one model and not other
       } else { # ALL FALSE
@@ -225,12 +232,12 @@ process_data <- function(
       }
 
       # Remaining id'd index variables moved to facet
-      if (length(index_variables) > 1) {
+      if (length(index_variables) > 0) {
         if (!is.null(facet)) {
           if (facet %in% index_variables) index_variables <- index_variables[-grep(facet, index_variables)]
-          facet <- c(facet, index_variables[-1])
+          facet <- c(facet, index_variables) # [-1]
         } else {
-          facet <- index_variables[-1]
+          facet <- index_variables # [-1]
         }
         # add message for what vaues are in facet
         cli::cli_alert_info("Faceting by {paste(facet, collapse = ', ')}.")
@@ -239,7 +246,7 @@ process_data <- function(
         if (length(unique(data$model)) == 1) {
           for (f in facet) {
             if (any(is.na(unique(data[[f]]))) & length(unique(data[[f]])) == 2) {
-              data <- dplyr::filter(data, is.na(.data[[f]]))
+              data <- dplyr::filter(data, !is.na(.data[[f]]))
               facet <- facet[-grepl(f, facet)]
             } else {
               data <- dplyr::filter(data, !is.na(.data[[f]]))
