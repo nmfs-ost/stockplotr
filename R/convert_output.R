@@ -2000,7 +2000,53 @@ convert_output <- function(
         df_catch[setdiff(tolower(names(out_new)), tolower(names(df_catch)))] <- NA
         data_list_list[["catch_data"]] <- df_catch
         
-        # final df for module
+        ####### Comp indexing ####
+        df_comp_obs <- dat$data_list$comp_data |>
+          dplyr::rename_with(tolower) |>
+          dplyr::mutate(
+            label = "indices_observed"
+          )
+        
+        indexing_vars_cols <- colnames(df_comp_obs)[!grepl("comp", colnames(df_comp_obs))] 
+        
+        df_comp_pred <- dplyr::select(df_comp_obs, dplyr::all_of(indexing_vars_cols)) |>
+          dplyr::cross_join(as.data.frame(dat$quantities$age_hat)) |>
+          tidyr::pivot_longer(
+            cols = -dplyr::all_of(indexing_vars_cols),
+            names_to = "age",
+            values_to = "estimate"
+          ) |>
+          # removes the 0 so assuming there will be no recorded zero catch but Rceattle reports ages up to 117
+          dplyr::filter(estimate != 0) |>
+          dplyr::mutate(
+            label = "composition_predicted",
+            # NOTE: the below age mutate slows down code
+            age = stringr::str_replace(age, "V","")
+          )
+        
+        # Finish adjusting comp_obs
+        # pivot obs data
+        df_comp_obs <- df_comp_obs |>
+          tidyr::pivot_longer(
+            cols = -dplyr::all_of(indexing_vars_cols),
+            names_to = "age",
+            values_to = "estimate"
+          ) |>
+          dplyr::filter(!is.na(estimate)) |>
+          dplyr::mutate(
+            label = "composition_observed",
+            # NOTE: the below age mutate slows down code
+            age = stringr::str_replace(age, "comp_","")
+          )
+          
+        df_comp <- rbind(df_comp_obs, df_comp_pred) |>
+          # TODO: do I need to filter sample size by <3 for confidentiality or does this not apply?
+          dplyr::select(-c(age0_length1, fleet_code, sample_size))
+        
+        df_catch[setdiff(tolower(names(out_new)), tolower(names(df_catch)))] <- NA
+        data_list_list[["comp_data"]] <- df_catch
+        
+        # final df for data_list module
         new_df <- Reduce(rbind, data_list_list)
         out_list[[names(extract)]] <- new_df
         
@@ -2043,7 +2089,7 @@ convert_output <- function(
             # remove quantities inserted from other steps
             df <- df |>
               dplyr::filter(
-                label %notint% c("index_hat", "catch_h")
+                label %notin% c("index_hat", "catch_h")
               )
             extract_list[[names(extract[[1]][i])]] <- df
           }
