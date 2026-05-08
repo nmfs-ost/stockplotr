@@ -1963,9 +1963,42 @@ convert_output <- function(
         # Extract catch_data and align with log_index_hat and catch_h 
         # Modify sdrep in outlist to include index
         df_catch <- extract[[1]]$catch_data |>
-          dplyr::filter(!is.na(Catch))
+          # dplyr::filter(!is.na(Catch)) |>
+          dplyr::rename_with(tolower) |>
+          dplyr::mutate(
+            era = dplyr::if_else(
+              year > dat$data_list$endyr,
+              "fore",
+              NA_character_
+            ),
+            catch_h = dat$quantities$catch_h,
+            # TODO: follow up on this quantity
+            # log_index_hat = dat$quantities$log_index_hat
+            uncertainty_label = "log_sd"
+          ) |>
+          dplyr::rename(
+            catch_predicted = catch_h,
+            fleet = fleet_name,
+            block = selectivity_block,
+            uncertainty = log_sd
+          ) |>
+          tidyr::pivot_longer(
+            cols = c(catch, catch_predicted),
+            names_to = "label",
+            values_to = "estimate"
+          ) |>
+          dplyr::select(-c(fleet_code, species))
         
-        
+        # Remove fleet names if do not match object
+        if (unique(df_catch$fleet) %notin% fleet_names) {
+          df_catch <- df_catch |>
+            dplyr::mutate(fleet = NA)
+        }
+        if (length(unique(df_catch$month)) == 1) {
+          df_catch$month <- NA
+        }
+        df_catch[setdiff(tolower(names(out_new)), tolower(names(df_catch)))] <- NA
+        data_list_list[["catch_data"]] <- df_catch
         
         # final df for module
         new_df <- Reduce(rbind, data_list_list)
@@ -2007,6 +2040,11 @@ convert_output <- function(
               )
             }
             df[setdiff(tolower(names(out_new)), tolower(names(df)))] <- NA
+            # remove quantities inserted from other steps
+            df <- df |>
+              dplyr::filter(
+                label %notint% c("index_hat", "catch_h")
+              )
             extract_list[[names(extract[[1]][i])]] <- df
           }
           new_df <- Reduce(rbind, extract_list)
