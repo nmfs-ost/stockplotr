@@ -51,7 +51,7 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/manual.html">Manual</a>
+      <a href="../articles/faqs.html">FAQs</a>
     </li>
     <li>
       <a href="../articles/how-caps-alttext-are-made.html">How captions and alternative text are generated</a>
@@ -98,6 +98,7 @@
 <span>  group <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  facet <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ref_line <span class="op">=</span> <span class="st">"msy"</span>,</span>
+<span>  era <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  unit_label <span class="op">=</span> <span class="st">"metric tons"</span>,</span>
 <span>  module <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  scale_amount <span class="op">=</span> <span class="fl">1</span>,</span>
@@ -149,6 +150,12 @@ regardless of how it is specified in `dat`. Other possibilities may include
 "target", "MSY", and "unfished".</p></dd>
 
 
+<dt id="arg-era">era<a class="anchor" aria-label="anchor" href="#arg-era"></a></dt>
+<dd><p>A string naming the era of data.</p>
+<p>Default: "time"</p>
+<p>Options: "early", "time", "fore" (forecast), or NULL (all data)</p></dd>
+
+
 <dt id="arg-unit-label">unit_label<a class="anchor" aria-label="anchor" href="#arg-unit-label"></a></dt>
 <dd><p>units for biomass</p></dd>
 
@@ -195,10 +202,18 @@ the rda will be exported to the folder indicated in the argument "figures_dir".<
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Plot total biomass from a stock assessment model as found in a NOAA
-stock assessment report. Units of total biomass can either be manually added
-or will be extracted from the provided file if possible. There are options #' to return a [ggplot2::ggplot()] object or export an rda object containing
-associated caption and alternative text for the figure.</p>
+    <p>A plot showing total biomass.</p>
+    </div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>The input is from an assessment model output file
+translated to a standardized output (<a href="convert_output.html">convert_output</a>).
+There are options to return a `ggplot2` object or export an .rda object
+containing associated caption and alternative text for the figure.</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p>[convert_output()], [plot_timeseries()], [calculate_reference_point()], [reference_line()], [filter_data()], [process_data()], [export_kqs()], [insert_kqs()], [create_rda()]</p></div>
     </div>
 
     <div id="ref-examples">

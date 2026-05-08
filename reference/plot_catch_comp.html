@@ -51,7 +51,7 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/manual.html">Manual</a>
+      <a href="../articles/faqs.html">FAQs</a>
     </li>
     <li>
       <a href="../articles/how-caps-alttext-are-made.html">How captions and alternative text are generated</a>
@@ -172,9 +172,21 @@ Default is the working directory.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A plot ready for a stock assessment report of catch or landings  composition.
-This plot is made only when catch or landings are explicitly named in the output file.
-The current plot function does not combine all sources of catch.</p>
+    <p>A plot showing catch or landings composition.</p>
+    </div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>This plot is made only when catch or landings are explicitly named
+in the output file. The current plot function does not combine all sources of
+catch.
+The input is from an assessment model output file
+translated to a standardized output (<a href="convert_output.html">convert_output</a>).
+There are options to return a `ggplot2` object or export an .rda object
+containing associated caption and alternative text for the figure.</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p>[convert_output()], [filter_data()], [process_data()], [plot_aa()], [export_kqs()], [insert_kqs()], [create_rda()]</p></div>
     </div>
 
     <div id="ref-examples">

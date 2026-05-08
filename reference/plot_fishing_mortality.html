@@ -51,7 +51,7 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/manual.html">Manual</a>
+      <a href="../articles/faqs.html">FAQs</a>
     </li>
     <li>
       <a href="../articles/how-caps-alttext-are-made.html">How captions and alternative text are generated</a>
@@ -100,7 +100,6 @@
 <span>  ref_line <span class="op">=</span> <span class="st">"msy"</span>,</span>
 <span>  era <span class="op">=</span> <span class="st">"time"</span>,</span>
 <span>  module <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  relative <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  make_rda <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  figures_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  interactive <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -157,12 +156,6 @@ If the reference point is not found in the data, set ref_line = c("name" = value
 module_name in the console. @seealso [filter_data()]</p></dd>
 
 
-<dt id="arg-relative">relative<a class="anchor" aria-label="anchor" href="#arg-relative"></a></dt>
-<dd><p>A logical value specifying to set y-axis values relative to
-the ref_line value.</p>
-<p>Default: `FALSE`</p></dd>
-
-
 <dt id="arg-make-rda">make_rda<a class="anchor" aria-label="anchor" href="#arg-make-rda"></a></dt>
 <dd><p>A logical value indicating whether to save the object and
 make an automated caption and alternative text in the form of an `rda` object. If TRUE,
@@ -187,12 +180,18 @@ the rda will be exported to the folder indicated in the argument "figures_dir".<
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Create a plot ready for a stock assessment report of fishing mortality over time
-from the results of an assessment model translated to the a standardized output
-(<a href="convert_output.html">convert_output</a>). Includes options to group or facet data where available.
-There are options to return a
-[ggplot2::ggplot()] object or export an rda object containing associated
-caption and alternative text for the figure.</p>
+    <p>A plot showing fishing mortality over time.</p>
+    </div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>The input is from an assessment model output file
+translated to a standardized output (<a href="convert_output.html">convert_output</a>).
+There are options to return a `ggplot2` object or export an .rda object
+containing associated caption and alternative text for the figure.</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p>[convert_output()], [filter_data()], [process_data()], [plot_timeseries()], [reference_line()], [export_kqs()], [insert_kqs()], [create_rda()]</p></div>
     </div>
 
     <div id="ref-examples">

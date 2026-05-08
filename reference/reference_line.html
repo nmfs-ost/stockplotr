@@ -51,7 +51,7 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/manual.html">Manual</a>
+      <a href="../articles/faqs.html">FAQs</a>
     </li>
     <li>
       <a href="../articles/how-caps-alttext-are-made.html">How captions and alternative text are generated</a>
@@ -92,14 +92,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">reference_line</span><span class="op">(</span></span>
-<span>  <span class="va">plot</span>,</span>
-<span>  <span class="va">dat</span>,</span>
-<span>  <span class="va">label_name</span>,</span>
-<span>  <span class="va">reference</span>,</span>
-<span>  relative <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  scale_amount <span class="op">=</span> <span class="fl">1</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">reference_line</span><span class="op">(</span><span class="va">plot</span>, <span class="va">dat</span>, <span class="va">label_name</span>, <span class="va">reference</span>, scale_amount <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -124,12 +117,6 @@ extract the reference point from</p></dd>
 "unfished", or "target"</p></dd>
 
 
-<dt id="arg-relative">relative<a class="anchor" aria-label="anchor" href="#arg-relative"></a></dt>
-<dd><p>A logical value specifying to set y-axis values relative to
-the ref_line value.</p>
-<p>Default: `FALSE`</p></dd>
-
-
 <dt id="arg-scale-amount">scale_amount<a class="anchor" aria-label="anchor" href="#arg-scale-amount"></a></dt>
 <dd><p>A number to scale the y-axis values.</p>
 <p>Default: 1</p></dd>
@@ -137,7 +124,7 @@ the ref_line value.</p>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a ggplot2 geom_hline object for a reference point that can be added
+    <p>A ggplot2 geom_hline object for a reference point that can be added
 to a plot</p>
     </div>
 

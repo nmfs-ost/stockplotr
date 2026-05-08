@@ -3,9 +3,9 @@ pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   convert_output_details: convert_output_details.html
+  faqs: faqs.html
   how-caps-alttext-are-made: how-caps-alttext-are-made.html
-  manual: manual.html
-last_built: 2026-05-05T19:50Z
+last_built: 2026-05-08T14:13Z
 urls:
   reference: nmfs-ost.github.io/stockplotr/reference
   article: nmfs-ost.github.io/stockplotr/articles

@@ -51,7 +51,7 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/manual.html">Manual</a>
+      <a href="../articles/faqs.html">FAQs</a>
     </li>
     <li>
       <a href="../articles/how-caps-alttext-are-made.html">How captions and alternative text are generated</a>
@@ -170,8 +170,18 @@ rda files ("tables") that will be created if the argument `make_rda` = TRUE.</p>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Create a table ready for a stock assessment report of landed catch by
-fleet and year.</p>
+    <p>A table ready of landed catch by fleet and year.</p>
+    </div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>The input is from an assessment model output file
+translated to a standardized output (<a href="convert_output.html">convert_output</a>).
+There are options to return a [gt::gt()] object or export an rda object
+containing a gt-based table, caption, and LaTeX-based table.</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p>[convert_output()], [filter_data()], [process_table()], [export_kqs()], [insert_kqs()], [create_rda()]</p></div>
     </div>
 
     <div id="ref-examples">
