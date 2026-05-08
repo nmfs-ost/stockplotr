@@ -14,10 +14,12 @@
 #' dataframe
 #'
 #' @returns Dataframe based on key quantities template that contains
-#' newly-added values of key quantities indicated via ellipsis. The dataframe
-#' is input for [fill_in_kqs()].
+#' newly-added values of key quantities indicated via ellipsis.
+#' @details The returned dataframe is input for [fill_in_kqs()].
+#' @seealso [export_kqs()], [insert_kqs()]
 #'
-#' @examples \dontrun{
+#' @examples
+#' \dontrun{
 #' fill_in_kqs(
 #'   df = data,
 #'   F.min,
@@ -53,7 +55,8 @@ fill_in_kqs <- function(df, ...) {
 #' @returns Exports a file based on key quantities template, with values
 #' added next to the names of the key quantities specified as ellipsis
 #' arguments. File is saved as "key_quantities.csv" to the working directory.
-#'
+#' @seealso [fill_in_kqs()], [insert_kqs()]
+#' 
 #' @examples \dontrun{
 #' export_kqs(
 #'   F.min,
@@ -92,7 +95,8 @@ export_kqs <- function(...) {
 #' @returns Exports a file ("captions_alt_text.csv") containing captions
 #' and alternative text for figures and tables, with key quantities inserted
 #' into the "captions_alt_text_template.csv" template's placeholders.
-#'
+#' @seealso [fill_in_kqs()], [export_kqs()]
+#' 
 #' @examples \dontrun{
 #' insert_kqs(
 #'   F.min,
@@ -203,8 +207,9 @@ insert_kqs <- function(...) {
 #' @param table_df The data frame that the table will be made into for purposes
 #' of exporting a latex formatted table.
 #'
-#' @returns Create an rda package for a plot or table object. Requires an
+#' @returns An rda package for a plot or table object. Requires an
 #' object from the R environment such as a ggplot or flextable object.
+#' @seealso [export_rda()], [extract_caps_alttext()]
 #' @export
 #'
 #' @examples \dontrun{
@@ -498,8 +503,8 @@ create_rda <- function(
 #' @param fig_or_table A string describing whether the plot is a figure or table.
 #' @param dir The directory containing the "captions_alt_text.csv" file.
 #'
-#' @return A figure's caption and alternative text, in a list, or a table's caption.
-#'
+#' @returns A figure's caption and alternative text, in a list, or a table's caption.
+#' @seealso [export_rda()], [create_rda()]
 #' @export
 #'
 #' @examples
@@ -574,9 +579,10 @@ extract_caps_alttext <- function(topic_label = NULL,
 #' @param fig_or_table A string describing whether the plot is a figure or table.
 #' @param latex_table The object containing a LaTeX-based table.
 #'
-#' @return An rda file with a figure's ggplot, caption, and alternative text, or
-#' a table's flextable and caption.
-#'
+#' @returns An rda file with a figure's ggplot, caption, and alternative text, or
+#' a table's gt-based table, caption, and LaTeX-based table.
+#' @seealso [create_rda()], [extract_caps_alttext()]
+#' 
 #' @export
 #'
 #' @examples

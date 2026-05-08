@@ -12,7 +12,6 @@ plot_fishing_mortality(
   ref_line = "msy",
   era = "time",
   module = NULL,
-  relative = FALSE,
   make_rda = FALSE,
   figures_dir = getwd(),
   interactive = TRUE,
@@ -63,11 +62,6 @@ Default: NULL
 If the interactive and >1 module_name is found, user will select the
 module_name in the console. @seealso [filter_data()]}
 
-\item{relative}{A logical value specifying to set y-axis values relative to
-the ref_line value.
-
-Default: `FALSE`}
-
 \item{make_rda}{A logical value indicating whether to save the object and
 make an automated caption and alternative text in the form of an `rda` object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
@@ -87,15 +81,16 @@ Default: `FALSE`}
 \item{...}{Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}
 }
 \value{
-Create a plot ready for a stock assessment report of fishing mortality over time
-from the results of an assessment model translated to the a standardized output
-(\link[stockplotr]{convert_output}). Includes options to group or facet data where available.
-There are options to return a
-[ggplot2::ggplot()] object or export an rda object containing associated
-caption and alternative text for the figure.
+A plot showing fishing mortality over time.
 }
 \description{
 Plot fishing mortality timeseries
+}
+\details{
+The input is from an assessment model output file
+translated to a standardized output (\link[stockplotr]{convert_output}).
+There are options to return a `ggplot2` object or export an .rda object
+containing associated caption and alternative text for the figure.
 }
 \examples{
 plot_fishing_mortality(
@@ -112,4 +107,7 @@ plot_fishing_mortality(
   interactive = FALSE,
   module = "TIME_SERIES"
 )
+}
+\seealso{
+[convert_output()], [filter_data()], [process_data()], [plot_timeseries()], [reference_line()], [export_kqs()], [insert_kqs()], [create_rda()]
 }

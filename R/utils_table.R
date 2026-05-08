@@ -186,7 +186,7 @@ check_label_differences <- function(dat, index_variables, id_group = NULL) {
 #' @param label Label name of target quantity that is being presented by the table.
 #' @param unit_label String. The units of the estimate being presented in the table.
 #'
-#' @return List of formatted dataframes that contain column names formatted
+#' @returns List of formatted dataframes that contain column names formatted
 #' for a table along with a merge of values in the estimate and error columns
 #' to reduce redundancy in the table.
 #'

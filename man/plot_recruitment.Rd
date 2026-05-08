@@ -74,13 +74,16 @@ The folder is created within the path if it does not exist.}
 \item{...}{Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}
 }
 \value{
-Plot recruitment over time from an assessment model output file
-translated to a standardized output (\link[stockplotr]{convert_output}). There are options to return a
-[ggplot2::ggplot()] object or export an rda object containing associated
-caption and alternative text for the figure.
+A plot showing recruitment over time.
 }
 \description{
 Plot Recruitment
+}
+\details{
+The input is from an assessment model output file
+translated to a standardized output (\link[stockplotr]{convert_output}).
+There are options to return a `ggplot2` object or export an .rda object
+containing associated caption and alternative text for the figure.
 }
 \examples{
 plot_recruitment(
@@ -97,4 +100,7 @@ plot_recruitment(
   module = "TIME_SERIES",
   make_rda = FALSE
 )
+}
+\seealso{
+[convert_output()], [filter_data()], [process_data()], [plot_timeseries()], [export_kqs()], [insert_kqs()], [create_rda()]
 }

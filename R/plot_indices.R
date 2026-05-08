@@ -7,8 +7,15 @@
 #' @param focus a string or vector of strings indicating how data should be
 #' filtered. (i.e. select names of fleets to zoom into the plot)
 #'
-#' @return Plot the expected and predicted indices as indicated from a standard
-#' assessment model output file.
+#' @returns A plot showing the expected and predicted indices.
+#' 
+#' @details The input is from an assessment model output file
+#' translated to a standardized output (\link[stockplotr]{convert_output}).
+#' There are options to return a `ggplot2` object or export an .rda object
+#' containing associated caption and alternative text for the figure.
+#' 
+#' @seealso [convert_output()], [filter_data()], [process_data()], [plot_obsvpred()], [export_kqs()], [insert_kqs()], [create_rda()]
+#' 
 #' @export
 #'
 #' @examples
@@ -63,7 +70,7 @@ plot_indices <- function(
     prepared_data <- prepared_data |>
       dplyr::filter(fleet %in% focus)
   }
-
+  
   processed_data <- process_data(
     dat = prepared_data,
     group = group,
@@ -109,7 +116,7 @@ plot_indices <- function(
     facet_formula <- stats::reformulate(facet)
     plt <- plt + ggplot2::facet_wrap(facet_formula, scales = "free")
   }
-
+  
   ### Make RDA ----
   if (make_rda) {
     # Obtain relevant key quantities for captions/alt text

@@ -64,11 +64,16 @@ Default: `FALSE`.}
 rda files ("tables") that will be created if the argument `make_rda` = TRUE.}
 }
 \value{
-Create a table ready for a stock assessment report of landed catch by
-fleet and year.
+A table ready of landed catch by fleet and year.
 }
 \description{
 Landed catch by fleet and year table
+}
+\details{
+The input is from an assessment model output file
+translated to a standardized output (\link[stockplotr]{convert_output}).
+There are options to return a [gt::gt()] object or export an rda object
+containing a gt-based table, caption, and LaTeX-based table.
 }
 \examples{
 table_landings(stockplotr::example_data)
@@ -78,4 +83,7 @@ table_landings(
   unit_label = "landings label",
   group = "fleet"
 )
+}
+\seealso{
+[convert_output()], [filter_data()], [process_table()], [export_kqs()], [insert_kqs()], [create_rda()]
 }

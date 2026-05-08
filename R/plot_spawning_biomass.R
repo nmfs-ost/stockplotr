@@ -63,19 +63,19 @@
 #'
 #' Default: `FALSE`
 #' @param ... Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}
-#' @return
-#' Plot spawning biomass over time from the results of an assessment model translated to
-#' the a standardized output (\link[stockplotr]{convert_output}). There are options to return a
-#' \link[ggplot2]{ggplot} object or export an rda object containing associated
-#' caption and alternative text for the figure.
-#'
+#' 
+#' @return A plot showing spawning biomass over time.
+#' 
+#' @details The input is from an assessment model output file
+#' translated to a standardized output (\link[stockplotr]{convert_output}).
+#' There are options to return a `ggplot2` object or export an .rda object
+#' containing associated caption and alternative text for the figure.
+#' 
 #' @note
 #' All plotting functions automatically recognize indexing variables and will
 #' use them in groupings and/or facetting. @seealso [process_data()].
 #'
-#' @seealso [convert_output()], [plot_timeseries()],
-#' [calculate_reference_point()], [reference_line()], [filter_data()],
-#' [process_data()]
+#' @seealso [convert_output()], [plot_timeseries()], [calculate_reference_point()], [reference_line()], [filter_data()], [process_data()], [export_kqs()], [insert_kqs()], [create_rda()]
 #'
 #' @export
 #'
@@ -92,12 +92,6 @@
 #' )
 #' plot_spawning_biomass(
 #'   dat = stockplotr:::example_data,
-#'   relative = TRUE,
-#'   ref_line = "msy",
-#'   module = "TIME_SERIES"
-#' )
-#' plot_spawning_biomass(
-#'   dat = stockplotr:::example_data,
 #'   ref_line = c("target" = 10),
 #'   interactive = FALSE,
 #'   module = "TIME_SERIES"
@@ -109,7 +103,7 @@ plot_spawning_biomass <- function(
   facet = NULL,
   ref_line = "msy",
   unit_label = "metric tons",
-  era = "time",
+  era = NULL,
   module = NULL,
   scale_amount = 1,
   relative = FALSE,
@@ -147,17 +141,24 @@ plot_spawning_biomass <- function(
 
   # Filter data for spawning biomass
   prepared_data <- filter_data(
-    dat = dat,
-    label_name = "^spawning_biomass$",
-    geom = geom,
-    era = era,
-    group = group,
-    facet = facet,
-    module = module,
-    scale_amount = scale_amount,
-    interactive = interactive
-  )
-
+      dat = dat,
+      label_name = ifelse(relative, glue::glue("spawning_biomass_spawning_biomass_{ref_line}|spawning_biomass_ratio"), "^spawning_biomass$"),
+      geom = geom,
+      era = era,
+      group = group,
+      facet = facet,
+      module = module,
+      scale_amount = scale_amount,
+      interactive = interactive
+    )
+  
+  if (relative) {
+    if (nrow(prepared_data) == 0) {
+      cli::cli_abort("No data found for relative biomass. Please check that your data contains a label for 'biomass_biomass_unfished'.")
+      stop()
+    }
+  }  
+  
   # process the data for grouping
   processing <- process_data(
     dat = prepared_data,
@@ -169,26 +170,10 @@ plot_spawning_biomass <- function(
   plot_data <- processing[[1]]
   group <- processing[[2]]
   if (!is.null(processing[[3]])) facet <- processing[[3]]
-
+  
   # Override grouping variable when there is only NA's
   if (!is.null(group)) {
     if (group %notin% colnames(plot_data)) group <- NULL
-  }
-
-  # Calculate estimate if relative
-  if (relative) {
-    if (!is.null(names(ref_line))) {
-      ref_line_val <- ref_line[[1]]
-      # ref_line <- names(ref_line)
-    } else {
-      ref_line_val <- calculate_reference_point(
-        dat = rp_dat,
-        reference_name = glue::glue("spawning_biomass_", ref_line)
-      ) / scale_amount
-    }
-    if (is.na(ref_line_val)) cli::cli_abort("Reference value not found. Cannot plot relative values.")
-    plot_data <- plot_data |>
-      dplyr::mutate(estimate = estimate / ref_line_val)
   }
 
   plt <- plot_timeseries(
@@ -203,15 +188,37 @@ plot_spawning_biomass <- function(
   )
   # Add reference line
   # getting data set - an ifelse statement in the fxn wasn't working
-  final <- reference_line(
-    plot = plt,
-    dat = rp_dat,
-    # era = era,
-    label_name = "spawning_biomass",
-    reference = ref_line,
-    relative = relative,
-    scale_amount = scale_amount
-  ) + theme_noaa()
+  if (relative) {
+    # don't add any reference line here and just add theme for final plot
+    final <- plt + theme_noaa()
+  } else {
+    if ("unfished" %in% c(names(ref_line), ref_line)) {
+      # find the minimum x axis value from the plot
+      min_year <- min <- ggplot2::ggplot_build(plt)@data[[2]] |>
+        as.data.frame() |>
+        dplyr::pull(y) |>
+        min() |>
+        round(digits = 2)
+      # find the reference point value for unfished
+      ref_point <- calculate_reference_point(
+        dat = rp_dat,
+        reference_name = "spawing_biomass_unfished"
+      ) / scale_amount
+      # add point to plot and add theme
+      final <- plt +
+        ggplot2::geom_point(ggplot2::aes(x = min_year - 1, y = ref_point)) + # should I keep -1 or set as first year?
+        theme_noaa()
+    } else {
+      final <- reference_line(
+        plot = plt,
+        dat = rp_dat,
+        label_name = "spawning_biomass",
+        reference = ref_line,
+        scale_amount = scale_amount
+      ) + theme_noaa()
+    }
+  }
+ 
 
   # Plot vertical lines if era is not filtering
   # Turning this out because I don't think it's relevant

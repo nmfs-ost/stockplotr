@@ -4,31 +4,32 @@ load(file.path(
   "std_output.rda"
 ))
 
+# Below is now moot bc relative is coming from model results
 # Make another sample dataset for testing relative
-n <- 448
-
-sim_df <- data.frame(
-  label = "biomass",
-  estimate = rlnorm(n, meanlog = 6.2, sdlog = 1.6),
-  module_name = "B.age",
-  time = NA,
-  season = NA,
-  subseason = NA,
-  fleet = NA,
-  sex = NA,
-  area = NA,
-  uncertainty_label = NA,
-  uncertainty = NA,
-  growth_pattern = NA,
-  age = sample(c(0, 1, 2, 3, 4, 5, 6), n, replace = TRUE),
-  era = sample(c("time", "fore"), n, replace = TRUE),
-  year = as.numeric(sample(2000:2024, n, replace = TRUE)),
-  nsim = as.numeric(1:n)
-) |>
-  dplyr::full_join(data.frame(
-    label = "biomass_msy",
-    estimate = 30000
-  ))
+# n <- 448
+# 
+# sim_df <- data.frame(
+#   label = "biomass",
+#   estimate = rlnorm(n, meanlog = 6.2, sdlog = 1.6),
+#   module_name = "B.age",
+#   time = NA,
+#   season = NA,
+#   subseason = NA,
+#   fleet = NA,
+#   sex = NA,
+#   area = NA,
+#   uncertainty_label = NA,
+#   uncertainty = NA,
+#   growth_pattern = NA,
+#   age = sample(c(0, 1, 2, 3, 4, 5, 6), n, replace = TRUE),
+#   era = sample(c("time", "fore"), n, replace = TRUE),
+#   year = as.numeric(sample(2000:2024, n, replace = TRUE)),
+#   nsim = as.numeric(1:n)
+# ) |>
+#   dplyr::full_join(data.frame(
+#     label = "biomass_msy",
+#     estimate = 30000
+#   ))
 
 
 test_that("plot_biomass generates plots without errors", {
@@ -60,9 +61,9 @@ test_that("plot_biomass generates plots without errors", {
   # expect error-free plot when setting relative to T
   expect_no_error(
     plot_biomass(
-      sim_df,
+      out_new,
       unit_label = "mt",
-      scale_amount = 10,
+      # scale_amount = 10,
       relative = TRUE
     )
   )
@@ -80,31 +81,6 @@ test_that("plot_biomass generates plots without errors", {
     "gg"
   )
 })
-
-# test_that("plot_biomass plots contain reference point when indicated", {
-#   # expect plot with a reference point (horizontal line) contains 4 layers while
-#   # plot w/o ref pt contains only 3 layers
-
-#   # make b plot with reference point
-#   b_ref <- plot_biomass(out_new,
-#     ref_point = 18000
-#   )
-#   # extract number of layers (should be 4)
-#   b_ref_layers <- b_ref[["layers"]] |>
-#     length()
-
-#   # make b plot without reference point
-#   b_no_ref <- plot_biomass(out_new)
-#   # extract number of layers (should be 3)
-#   b_no_ref_layers <- b_no_ref[["layers"]] |>
-#     length()
-
-#   # TODO: Update test
-#   #   expect_equal(
-#   #     (b_ref_layers - 1),
-#   #     b_no_ref_layers
-#   #   )
-# })
 
 test_that("rda file made when indicated", {
   # export rda

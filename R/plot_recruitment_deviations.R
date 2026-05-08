@@ -2,7 +2,7 @@
 #'
 #' @inheritParams plot_spawning_biomass
 #'
-#' @return A plot showing recruitment deviations relative to one, over time.
+#' @returns A plot showing recruitment deviations relative to one, over time.
 #'
 #' @details The input is from an assessment model output file
 #' translated to a standardized output (\link[stockplotr]{convert_output}).
@@ -11,10 +11,10 @@
 #'
 #' @note
 #' All plotting functions automatically recognize indexing variables and will
-#' use them in groupings and/or facetting. @seealso [process_data()].
+#' use them in groupings and/or facetting.
 #'
 #' @seealso [convert_output()], [plot_error()], [filter_data()],
-#' [process_data()]
+#' [process_data()], [export_kqs()], [insert_kqs()], [create_rda()]
 #'
 #' @export
 #'

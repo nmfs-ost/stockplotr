@@ -22,10 +22,11 @@
 #' @param ... inherited arguments from internal functions from ggplot2::geom_xx
 #'
 #'
-#' @returns Create a time series plot for a stock assessment report. The user
-#' has options to create a line, point, or area plot where the x-axis is year
-#' and Y can vary for any time series quantity. Currently, grouping is
+#' @returns Create a time series plot for a stock assessment report.
+#' @details The user can create a line, point, or area plot, where the x-axis is
+#' year and y can vary for any time series quantity. Currently, grouping is
 #' restricted to one group where faceting can be any number of facets.
+#' 
 #' @export
 #'
 #' @examples
@@ -235,6 +236,10 @@ plot_timeseries <- function(
 #' @param hline indicate true or false to place a horizontal line at 1
 #' @param ... inherited arguments from internal functions from ggplot2::geom_xx
 #'
+#' @returns Create a plot with error for a stock assessment report.
+#' @details The user can create a line, point, or area plot, where the x-axis is
+#' year and y can vary for any time series quantity. Currently, grouping is
+#' restricted to one group where faceting can be any number of facets.
 #'
 plot_error <- function(
   dat,
@@ -317,7 +322,7 @@ plot_error <- function(
 #' @param ... inherited arguments from internal functions from
 #' \link[ggplot2]{geom_point}
 #'
-#' @return Create a plot of abundance at age for a stock assessment report.
+#' @returns Create a plot of abundance at age for a stock assessment report.
 #' @export
 #' @examples \dontrun{
 #' plot_aa(dat)
@@ -510,7 +515,7 @@ cohort_line <- function(
 #' @param reference string. name of the reference point such as "msy",
 #' "unfished", or "target"
 #'
-#' @returns a ggplot2 geom_hline object for a reference point that can be added
+#' @returns A ggplot2 geom_hline object for a reference point that can be added
 #' to a plot
 #' @export
 #'
@@ -524,7 +529,6 @@ reference_line <- function(
   # era = "time",
   label_name,
   reference,
-  relative = FALSE,
   scale_amount = 1
 ) {
   if (!is.null(names(reference))) {
@@ -548,7 +552,7 @@ reference_line <- function(
     plot +
       ggplot2::geom_hline(
         # ggplot2::aes(
-        yintercept = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
+        yintercept = ref_line_val / scale_amount,
         # ),
         color = "black",
         linetype = "dashed"
@@ -557,7 +561,7 @@ reference_line <- function(
         geom = "text",
         # TODO: need to change this for general process
         x = as.numeric(max(ggplot2::ggplot_build(plot)@data[[2]][["x"]], na.rm = TRUE)), # - as.numeric(max(dat$year[dat$era == "time"], na.rm = TRUE))/200,
-        y = ref_line_val / ifelse(relative, ref_line_val, scale_amount),
+        y = ref_line_val / scale_amount,
         label = glue::glue("{stringr::str_replace_all(label_name, '_', '~')}[{reference}]"), # list(bquote(label_name[.(reference)])),
         parse = TRUE,
         hjust = 1,
@@ -1007,7 +1011,7 @@ check_grouping <- function(dat) {
 #' @param observed_label a string of the label used to filter the observed data. Default is "observed".
 #' @param predicted_label a string of the label used to filter the predicted data. Default is "predicted".
 #'
-#' @returns Create a plot of observed vs. predicted data for a stock assessment report.
+#' @returns A plot of observed vs. predicted data for a stock assessment report.
 #' @export
 #'
 plot_obsvpred <- function(

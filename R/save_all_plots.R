@@ -42,7 +42,12 @@
 #' @param landings_unit_label Units for landings
 #' @param proportional T/F to scale size of bubble plots
 #'
-#' @return Rda files for each figure/table.
+#' @returns Rda files for each figure/table.
+#' 
+#' @seealso [convert_output()], [create_rda()]
+#' 
+#' @details The input is from an assessment model output file
+#' translated to a standardized output (\link[stockplotr]{convert_output}).
 #'
 #' @export
 #'
@@ -178,7 +183,6 @@ save_all_plots <- function(
       cli::cli_h2("plot_fishing_mortality")
       plot_fishing_mortality(dat,
         make_rda = TRUE,
-        relative = relative,
         figures_dir = figures_tables_dir,
         interactive = FALSE
       ) # |>
@@ -411,24 +415,25 @@ save_all_plots <- function(
   #   }
   # )
 
-  # tryCatch(
-  #   {
-  #     cli::cli_h2("table_landings")
-  #     table_landings(dat,
-  #       unit_label = landings_unit_label,
-  #       make_rda = TRUE,
-  #       tables_dir = figures_tables_dir
-  #     ) # |>
-  #     # suppressWarnings() |>
-  #     # invisible()
-  #   },
-  #   error = function(e) {
-  #     cli::cli_alert_danger("table_landings failed to run.")
-  #     cli::cli_alert("Tip: check that your arguments are correct.")
-  #     cli::cli_li("landings_unit_label = {landings_unit_label}")
-  #     print(e)
-  #   }
-  # )
+  tryCatch(
+    {
+      cli::cli_h2("table_landings")
+      table_landings(dat,
+        unit_label = landings_unit_label,
+        interactive = FALSE,
+        make_rda = TRUE,
+        tables_dir = figures_tables_dir
+      ) # |>
+      # suppressWarnings() |>
+      # invisible()
+    },
+    error = function(e) {
+      cli::cli_alert_danger("table_landings failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      cli::cli_li("landings_unit_label = {landings_unit_label}")
+      print(e)
+    }
+  )
 
   # uncomment when finished
   #

@@ -1,0 +1,66 @@
+---
+title: "Frequently Asked Questions (FAQs)"
+output:
+  html_document:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Frequently Asked Questions (FAQs)}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+For more context, please read the function documentation and refer to the documentation of [the companion package, {asar}](https://github.com/nmfs-ost/asar).
+
+# Captions and alternative text (alt text)
+## How are captions and alt text constructed?
+
+When a plotting function (e.g., `plot_biomass()`, `table_indices()`, `save_all_plots()`) is run, placeholders within the plot's associated alt text and captions are replaced with key quantities (see the [{asar} package's Accessibility vignette](https://nmfs-ost.github.io/asar/articles/accessibility_guide.html) and the {stockplotr} ["How captions and alternative text are generated" vignette](https://nmfs-ost.github.io/stockplotr/articles/how-caps-alttext-are-made.html) for more details).
+
+As stated in the [Accessibility vignette's "Your to-do list" section](https://nmfs-ost.github.io/asar/articles/accessibility_guide.html#your-to-do-list), **you should always:**
+
+**1. Check that these alt texts and captions have been assembled correctly.**
+
+**2. Write the final component of each figure’s alt text.**
+
+## How can I alter the captions and/or alt text?
+
+Directly edit the rda's caption or alt_text objects. To do so, assign a new value to the text you wish to change. For example:
+
+1. Locate your rda file. It may be called something like "biomass_figure.rda".
+
+2. Load it into your R environment. You can do this by clicking the file or by using a command like this: `load("biomass_figure.rda")`. It will probably be called `rda`.
+
+3. If you want to change the caption to "my new caption", you'd enter the following command: `rda[["caption"]] <- "my new caption"`. To change the alt text, you'd change "caption" to "alt_text" (e.g., `rda[["alt_text"]] <- "my new alt text"`.).
+
+4. Save the changes to the rda's file (most likely you'll want to overwrite your original rda) by entering the following command: `save(rda, file = 'biomass_figure.rda')`.
+
+## If I recreate a figure or table, will its caption and/or alt text be updated/overwritten?
+
+No. When you export a figure or table as an rda, key quantities are calculated and inserted into its associated caption and alt text. If you regenerate a figure or table, its caption and alt text won't change.
+
+## How can I change or update captions and alt text?
+
+### Individual figures/tables (e.g., `plot_biomass()`)
+
+1. Open your caps_alt_text.csv file. Find the row where the "label" column is the name of the plotting function, minus the "plot_" or "table_", and delete the row. For example, the label for `plot_biomass()` is "biomass".
+
+2. Open the inst/resources/captions_alt_text_template.csv file. Find the same row and copy it.
+
+3. Paste the row into the caps_alt_text.csv file.
+
+4. Rerun the function so that the key quantities are newly calculated and added to the caps_alt_text.csv file.
+
+### All available figures and tables (e.g., `save_all_plots()`)
+
+1.  Delete the captions_alt_text.csv file
+
+2.  Rerun `save_all_plots()`
+
+**NOTE**: It is possible to directly edit the captions_alt_text.csv file to change the caption or alt text. However, if you wish to do anything besides adding or removing text, we recommend using the two-step workflow, above, to avoid potential issues where an incorrect argument was used to calculate other (now incorrect) key quantities. For instance, `end_year` may be used to calculate values associated with F, which are then used to calculate other values.

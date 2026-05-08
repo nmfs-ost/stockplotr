@@ -9,10 +9,12 @@
 # #' rda files ("tables") that will be created if the argument `make_rda` = TRUE.
 # #' Default is the working directory.
 # #'
-# #' @return Create a table of biomass, abundance, catch, and spawning biomass through all years of
-# #' the assessment model output translated to a standard structure.There are
-# #' options to return a [flextable::flextable()] object or export an rda object containing
-# #' associated caption for the table.
+# #' @returns A table of biomass, abundance, catch, and spawning biomass through all years of
+# #' the assessment model output translated to a standard structure.
+# #' @details There are
+# #' options to return a [gt::gt()] object or export an rda object containing
+# #' a gt-based table, caption, and LaTeX-based table.
+# #' @seealso [convert_output()], [filter_data()], [process_table()], [export_kqs()], [insert_kqs()], [create_rda()]
 # #' @export
 # #'
 # #' @examples
