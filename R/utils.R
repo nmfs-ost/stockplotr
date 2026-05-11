@@ -195,7 +195,7 @@ SS3_extract_fleet <- function(dat, vers) {
 
 #------------------------------------------------------------------------------
 
-#' @param x unlisted object from model output
+# input_list = unlisted object from model output
 
 expand_element <- function(input_list, fleet_names = "Pollock") {
   
