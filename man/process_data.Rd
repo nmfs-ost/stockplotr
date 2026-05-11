@@ -4,7 +4,7 @@
 \alias{process_data}
 \title{Processing for figures}
 \usage{
-process_data(dat, group = NULL, facet = NULL, method = "sum")
+process_data(dat, group = NULL, facet = NULL, lbs = FALSE, method = "sum")
 }
 \arguments{
 \item{dat}{Pre-filtered data from \link[stockplotr]{filter_data} following a
@@ -15,6 +15,12 @@ want to just summarize the data across all factors, set group = "none".}
 
 \item{facet}{A string or vector of strings identifying the faceting
 variable(s) of the data.}
+
+\item{lbs}{A logical value indicating whether to convert the y-axis values from
+kilograms to pounds. The default units match the default in the
+unit_label argument - 'metric tons'. 
+
+Default: `FALSE`}
 
 \item{method}{A string describing the method of summarizing data when group
 is set to "none". Options are "sum" or "mean". Default is "sum".}

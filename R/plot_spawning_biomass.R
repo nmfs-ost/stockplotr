@@ -32,10 +32,15 @@
 #' Default: "target"
 #'
 #' Options: (including, but not limited to) "target", "msy", and "unfished"
-#' If the reference point is not found in the data, set ref_line = c("{name}" = value).
+#' If the reference point is not found in the data, set ref_line = c("name" = value).
 #' @param unit_label A string specifying spawning biomass unit.
 #'
 #' Default: "metric tons"
+#' @param lbs A logical value indicating whether to convert the y-axis values from
+#' kilograms to pounds. The default units match the default in the
+#' unit_label argument - 'metric tons'. 
+#'
+#' Default: `FALSE`
 #' @param module (Optional) A string indicating the module_name found in `dat`.
 #'
 #' Default: NULL
@@ -104,6 +109,7 @@ plot_spawning_biomass <- function(
   ref_line = "msy",
   unit_label = "metric tons",
   era = NULL,
+  lbs = FALSE,
   module = NULL,
   scale_amount = 1,
   relative = FALSE,
@@ -112,6 +118,12 @@ plot_spawning_biomass <- function(
   interactive = TRUE,
   ...
 ) {
+  # this assumes that the previous units were metric tons
+  if (lbs && unit_label %notin% c("lbs", "pounds", "lb")) {
+    cli::cli_alert_info("Unit label was not changed. Setting unit_label to 'lbs'.")
+    unit_label <- "lbs"
+  }
+  
   # TODO: Fix the unit label if scaling. Maybe this is up to the user to do if
   #       they want something scaled then they have to supply a better unit name
   #       or we create a helper function to do this.
@@ -122,7 +134,11 @@ plot_spawning_biomass <- function(
       label_magnitude(
         label = "Spawning Biomass",
         unit_label = unit_label,
-        scale_amount = scale_amount,
+        scale_amount = dplyr::if_else(
+          lbs, 
+          ifelse(unit_label %in% c("mt", "mts", "metric tons", "metric ton"), 1000, 1) * scale_amount, 
+          scale_amount
+          ),
         legend = TRUE
       )
     }
@@ -164,7 +180,8 @@ plot_spawning_biomass <- function(
     dat = prepared_data,
     group = group,
     facet = facet,
-    method = "sum"
+    method = "sum",
+    lbs = lbs
   )
   # variable <- processing[[1]]
   plot_data <- processing[[1]]
@@ -212,35 +229,13 @@ plot_spawning_biomass <- function(
       final <- reference_line(
         plot = plt,
         dat = rp_dat,
+        lbs = lbs,
         label_name = "spawning_biomass",
         reference = ref_line,
         scale_amount = scale_amount
       ) + theme_noaa()
     }
   }
- 
-
-  # Plot vertical lines if era is not filtering
-  # Turning this out because I don't think it's relevant
-  # if (is.null(era)) {
-  #   # Find unique era
-  #   eras <- unique(plot_data$era)
-  #   if (length(eras) > 1) {
-  #     year_vlines <- c()
-  #     for (i in 2:length(eras)) {
-  #       erax <- plot_data |>
-  #         dplyr::filter(era == eras[i]) |>
-  #         dplyr::pull(year) |>
-  #         min(na.rm = TRUE)
-  #       year_vlines <- c(year_vlines, erax)
-  #     }
-  #   }
-  #   final <- final +
-  #     ggplot2::geom_vline(
-  #       xintercept = year_vlines,
-  #       color = "#999999"
-  #     )
-  # }
 
   ### Make RDA ----
   if (make_rda) {

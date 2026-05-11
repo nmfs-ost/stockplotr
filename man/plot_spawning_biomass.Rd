@@ -12,6 +12,7 @@ plot_spawning_biomass(
   ref_line = "msy",
   unit_label = "metric tons",
   era = NULL,
+  lbs = FALSE,
   module = NULL,
   scale_amount = 1,
   relative = FALSE,
@@ -50,7 +51,7 @@ Default: NULL}
 Default: "target"
 
 Options: (including, but not limited to) "target", "msy", and "unfished"
-If the reference point is not found in the data, set ref_line = c("{name}" = value).}
+If the reference point is not found in the data, set ref_line = c("name" = value).}
 
 \item{unit_label}{A string specifying spawning biomass unit.
 
@@ -61,6 +62,12 @@ Default: "metric tons"}
 Default: "time"
 
 Options: "early", "time", "fore" (forecast), or NULL (all data)}
+
+\item{lbs}{A logical value indicating whether to convert the y-axis values from
+kilograms to pounds. The default units match the default in the
+unit_label argument - 'metric tons'. 
+
+Default: `FALSE`}
 
 \item{module}{(Optional) A string indicating the module_name found in `dat`.
 

@@ -4,7 +4,7 @@
 \alias{reference_line}
 \title{Preformatted reference line}
 \usage{
-reference_line(plot, dat, label_name, reference, scale_amount = 1)
+reference_line(plot, dat, label_name, reference, scale_amount = 1, lbs = FALSE)
 }
 \arguments{
 \item{plot}{a ggplot2 object where the reference line will be added}
@@ -20,6 +20,12 @@ extract the reference point from}
 \item{scale_amount}{A number to scale the y-axis values.
 
 Default: 1}
+
+\item{lbs}{A logical value indicating whether to convert the y-axis values from
+kilograms to pounds. The default units match the default in the
+unit_label argument - 'metric tons'. 
+
+Default: `FALSE`}
 }
 \value{
 A ggplot2 geom_hline object for a reference point that can be added

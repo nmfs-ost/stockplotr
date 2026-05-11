@@ -78,7 +78,6 @@ plot_fishing_mortality <- function(
   final <- reference_line(
     plot = plt,
     dat = dat,
-    # era = "time",
     label_name = "fishing_mortality",
     reference = ref_line,
     scale_amount = 1
