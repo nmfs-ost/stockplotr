@@ -8,8 +8,7 @@ test_that("plot_stock_recruitment generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
     stockplotr::plot_stock_recruitment(
-      dat = out_new,
-      era = "time"
+      dat = out_new
     )
   )
 
@@ -17,7 +16,6 @@ test_that("plot_stock_recruitment generates plots without errors", {
   expect_no_error(
     stockplotr::plot_stock_recruitment(
       out_new,
-      era = "time",
       spawning_biomass_label = "mt",
       recruitment_label = "mt",
       make_rda = FALSE,
@@ -32,7 +30,6 @@ test_that("plot_stock_recruitment generates plots without errors", {
       out_new,
       spawning_biomass_label = "mt",
       recruitment_label = "mt",
-      era = "time",
       make_rda = FALSE,
       figures_dir = getwd()
     ),
