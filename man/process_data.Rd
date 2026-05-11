@@ -16,7 +16,9 @@ want to just summarize the data across all factors, set group = "none".}
 \item{facet}{A string or vector of strings identifying the faceting
 variable(s) of the data.}
 
-\item{lbs}{A logical value indicating whether to convert the y-axis values to pounds.
+\item{lbs}{A logical value indicating whether to convert the y-axis values from
+kilograms to pounds. The default units match the default in the
+unit_label argument - 'metric tons'. 
 
 Default: `FALSE`}
 
