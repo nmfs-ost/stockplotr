@@ -1990,10 +1990,11 @@ convert_output <- function(
           dplyr::select(-c(fleet_code, species))
         
         # Remove fleet names if do not match object
-        if (unique(df_catch$fleet) %notin% fleet_names) {
-          df_catch <- df_catch |>
-            dplyr::mutate(fleet = NA)
-        }
+        # if (unique(df_catch$fleet) %notin% fleet_names) {
+        #   df_catch <- df_catch |>
+        #     dplyr::mutate(fleet = NA)
+        # }
+        
         if (length(unique(df_catch$month)) == 1) {
           df_catch$month <- NA
         }
@@ -2058,7 +2059,7 @@ convert_output <- function(
             expand_element(fleet_names = fleet_names) |>
             dplyr::mutate(
               module_name = module_name
-            )
+            ) |> suppressWarnings()
           df[setdiff(tolower(names(out_new)), tolower(names(df)))] <- NA
           out_list[[names(extract)]] <- df
           
@@ -2160,7 +2161,6 @@ convert_output <- function(
       )
     ) |>
     suppressWarnings()
-
   # if (tolower(model) == "ss3") {
   #   con_file <- system.file("resources", "ss3_var_names.csv", package = "stockplotr", mustWork = TRUE)
   #   var_names_sheet <- utils::read.csv(con_file, na.strings = "")
