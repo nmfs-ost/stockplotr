@@ -216,13 +216,17 @@ process_data <- function(
         # check if any of the vars is in facet first
         if (any(valid_vars %in% facet)) {
           valid_vars <- valid_vars[!valid_vars %in% facet]
-          group <- valid_vars[1] 
+          if (length(valid_vars) > 0) group <- valid_vars[1]
         } else {
           group <- valid_vars[1]
         }
         
         # Remove group from index_variables so no repeats
-        index_variables <- index_variables[-grep(valid_vars[1], index_variables)]
+        if (length(valid_vars) > 0) {
+          index_variables <- index_variables[-grep(valid_vars[1], index_variables)]
+        } else {
+          index_variables <- NULL
+        }
         # Don't want to filter by group if model is present because the index_var could be NA for one of the models
         # TODO: perform check or adjust function in case when index_var is present for one model and not other
       } else { # ALL FALSE
