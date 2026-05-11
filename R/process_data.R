@@ -251,7 +251,7 @@ process_data <- function(
           for (f in facet) {
             if (any(is.na(unique(data[[f]]))) & length(unique(data[[f]])) == 2) {
               data <- dplyr::filter(data, !is.na(.data[[f]]))
-              facet <- facet[-grepl(f, facet)]
+              facet <- facet[-grep(f, facet)]
             } else {
               data <- dplyr::filter(data, !is.na(.data[[f]]))
             } # close ifelse
