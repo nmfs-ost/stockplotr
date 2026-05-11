@@ -43,7 +43,6 @@ test_that("rda file made when indicated", {
     out_new,
     spawning_biomass_label = "mt",
     recruitment_label = "mt",
-    era = "time",
     make_rda = TRUE,
     figures_dir = getwd()
   )
