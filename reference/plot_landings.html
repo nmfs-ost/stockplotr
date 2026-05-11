@@ -98,6 +98,7 @@
 <span>  geom <span class="op">=</span> <span class="st">"line"</span>,</span>
 <span>  group <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  facet <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  lbs <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  era <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  scale_amount <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  module <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -140,6 +141,13 @@ in `ref_line` is used to plot a reference line or calculate relative spawning bi
 <dt id="arg-facet">facet<a class="anchor" aria-label="anchor" href="#arg-facet"></a></dt>
 <dd><p>A string or vector of strings of a column name.</p>
 <p>Default: NULL</p></dd>
+
+
+<dt id="arg-lbs">lbs<a class="anchor" aria-label="anchor" href="#arg-lbs"></a></dt>
+<dd><p>A logical value indicating whether to convert the y-axis values from
+kilograms to pounds. The default units match the default in the
+unit_label argument - 'metric tons'.</p>
+<p>Default: `FALSE`</p></dd>
 
 
 <dt id="arg-era">era<a class="anchor" aria-label="anchor" href="#arg-era"></a></dt>
@@ -201,7 +209,7 @@ containing associated caption and alternative text for the figure.</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">plot_landings</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va">example_data</span>,</span></span>
+<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va"><a href="example_data.html">example_data</a></span>,</span></span>
 <span class="r-in"><span>  unit_label <span class="op">=</span> <span class="st">"metric tons"</span>,</span></span>
 <span class="r-in"><span>  group <span class="op">=</span> <span class="st">"fleet"</span>,</span></span>
 <span class="r-in"><span>  interactive <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
@@ -214,7 +222,7 @@ containing associated caption and alternative text for the figure.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">shape</span> : <span style="color: #0000BB;">"Fleet"</span></span>
 <span class="r-plt img"><img src="plot_landings-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">plot_landings</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va">example_data</span>,</span></span>
+<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va"><a href="example_data.html">example_data</a></span>,</span></span>
 <span class="r-in"><span>  unit_label <span class="op">=</span> <span class="st">"metric tons"</span>,</span></span>
 <span class="r-in"><span>  facet <span class="op">=</span> <span class="st">"fleet"</span>,</span></span>
 <span class="r-in"><span>  interactive <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>

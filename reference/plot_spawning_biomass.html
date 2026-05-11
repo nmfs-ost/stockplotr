@@ -102,6 +102,7 @@ also be made relative to this reference line rather than in absolute units.</p>
 <span>  ref_line <span class="op">=</span> <span class="st">"msy"</span>,</span>
 <span>  unit_label <span class="op">=</span> <span class="st">"metric tons"</span>,</span>
 <span>  era <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  lbs <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  module <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  scale_amount <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  relative <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -157,6 +158,13 @@ If the reference point is not found in the data, set ref_line = c("name" = value
 <dd><p>A string naming the era of data.</p>
 <p>Default: "time"</p>
 <p>Options: "early", "time", "fore" (forecast), or NULL (all data)</p></dd>
+
+
+<dt id="arg-lbs">lbs<a class="anchor" aria-label="anchor" href="#arg-lbs"></a></dt>
+<dd><p>A logical value indicating whether to convert the y-axis values from
+kilograms to pounds. The default units match the default in the
+unit_label argument - 'metric tons'.</p>
+<p>Default: `FALSE`</p></dd>
 
 
 <dt id="arg-module">module<a class="anchor" aria-label="anchor" href="#arg-module"></a></dt>
@@ -223,7 +231,7 @@ use them in groupings and/or facetting. @seealso [process_data()].</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">plot_spawning_biomass</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va">example_data</span>,</span></span>
+<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va"><a href="example_data.html">example_data</a></span>,</span></span>
 <span class="r-in"><span>  geom <span class="op">=</span> <span class="st">"line"</span>,</span></span>
 <span class="r-in"><span>  ref_line <span class="op">=</span> <span class="st">"msy"</span>,</span></span>
 <span class="r-in"><span>  unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span></span>
@@ -240,7 +248,7 @@ use them in groupings and/or facetting. @seealso [process_data()].</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">shape</span> : <span style="color: #0000BB;">"Growth_pattern"</span></span>
 <span class="r-plt img"><img src="plot_spawning_biomass-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">plot_spawning_biomass</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va">example_data</span>,</span></span>
+<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va"><a href="example_data.html">example_data</a></span>,</span></span>
 <span class="r-in"><span>  ref_line <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"target"</span> <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  interactive <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>  module <span class="op">=</span> <span class="st">"TIME_SERIES"</span></span></span>

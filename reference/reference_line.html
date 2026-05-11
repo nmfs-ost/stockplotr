@@ -92,7 +92,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">reference_line</span><span class="op">(</span><span class="va">plot</span>, <span class="va">dat</span>, <span class="va">label_name</span>, <span class="va">reference</span>, scale_amount <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">reference_line</span><span class="op">(</span><span class="va">plot</span>, <span class="va">dat</span>, <span class="va">label_name</span>, <span class="va">reference</span>, scale_amount <span class="op">=</span> <span class="fl">1</span>, lbs <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -120,6 +120,13 @@ extract the reference point from</p></dd>
 <dt id="arg-scale-amount">scale_amount<a class="anchor" aria-label="anchor" href="#arg-scale-amount"></a></dt>
 <dd><p>A number to scale the y-axis values.</p>
 <p>Default: 1</p></dd>
+
+
+<dt id="arg-lbs">lbs<a class="anchor" aria-label="anchor" href="#arg-lbs"></a></dt>
+<dd><p>A logical value indicating whether to convert the y-axis values from
+kilograms to pounds. The default units match the default in the
+unit_label argument - 'metric tons'.</p>
+<p>Default: `FALSE`</p></dd>
 
 </dl></div>
     <div id="value">
