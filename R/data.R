@@ -34,7 +34,7 @@
 #'   \item{kind}{indexing column of data}
 #'   \item{nsim}{indexing column of data}
 #'   \item{bin}{indexing column of data}
-#'   \item{age_a}{alterative age column}
+#'   \item{age_a}{alternative age column}
 #'   \item{length_bins}{length bins for composition or other length based data}
 #'   \item{count}{indexing column of data}
 #'   \item{block}{indexing column of data}
