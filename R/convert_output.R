@@ -4,7 +4,7 @@
 #'
 #' @param file Assessment model output file path
 #' @param model Assessment model used in evaluation ("ss3", "bam",
-#'  "fims").
+#'  "fims", "rceattle).
 #' @param fleet_names Names of fleets in the assessment model as
 #'  shortened in the output file. If fleet names are not properly read, then
 #'  indicate the fleets names as an acronym in a vector
@@ -98,42 +98,60 @@ convert_output <- function(
   out_new <- out_new[-1, ]
 
   # Check if path links to a valid file
-  url_pattern <- "^(https?|ftp|file):\\/\\/[-A-Za-z0-9+&@#\\/%?=~_|!:,.;]*[-A-Za-z0-9+&@#\\/%=~_|]$"
-  if (grepl(url_pattern, file)) {
-    check <- httr::HEAD(file)
-    url <- httr::status_code(check)
-    if (url == 404) cli::cli_abort(c(message = "Invalid URL."))
-  } else {
-    if (!file.exists(file)) {
-      cli::cli_abort(c(
-        message = "`file` not found.",
-        "i" = "`file` entered as {file}"
-      ))
+  if (is.character(file)) {
+    url_pattern <- "^(https?|ftp|file):\\/\\/[-A-Za-z0-9+&@#\\/%?=~_|!:,.;]*[-A-Za-z0-9+&@#\\/%=~_|]$"
+    if (grepl(url_pattern, file)) {
+      check <- httr::HEAD(file)
+      url <- httr::status_code(check)
+      if (url == 404) cli::cli_abort(c(message = "Invalid URL."))
+    } else {
+      if (!file.exists(file)) {
+        cli::cli_abort(c(
+          message = "`file` not found.",
+          "i" = "`file` entered as {file}"
+        ))
+      }
     }
   }
 
   # Recognize model through file extension
-  if (is.null(model)) {
-    model <- switch(stringr::str_extract(file, "\\.([^.]+)$"),
-      ".sso" = {
-        cli::cli_alert_info("Processing Stock Synthesis output file...")
-        "ss3"
-      },
-      ".rdat" = {
-        cli::cli_alert_info("Processing BAM output file...")
-        "bam"
-      },
-      ".rds" = {
-        cli::cli_alert_info("Processing WHAM output file...")
-        "wham"
-      },
-      ".RDS" = {
+  if (is.character(file)) {
+    if (is.null(model)) {
+      model <- switch(stringr::str_extract(file, "\\.([^.]+)$"),
+                      ".sso" = {
+                        cli::cli_alert_info("Processing Stock Synthesis output file...")
+                        "ss3"
+                      },
+                      ".rdat" = {
+                        cli::cli_alert_info("Processing BAM output file...")
+                        "bam"
+                      },
+                      ".rds" = {
+                        cli::cli_alert_info("Processing WHAM output file...")
+                        "wham"
+                      },
+                      ".RDS" = {
+                        cli::cli_alert_info("Processing FIMS output file...")
+                        "fims"
+                      },
+                      
+                      cli::cli_abort("Unknown file type. Please indicate model.")
+      )
+    }
+  } else {
+    model <- switch (class(file)[1],
+      "fims" = {
         cli::cli_alert_info("Processing FIMS output file...")
         "fims"
+      },
+      "Rceattle" = {
+        cli::cli_alert_info("Processing Rceattle output file...")
+        "rceattle"
       },
       cli::cli_abort("Unknown file type. Please indicate model.")
     )
   }
+  
 
   #### SS3 ####
   # Convert SS3 output Report.sso file
@@ -1765,6 +1783,345 @@ convert_output <- function(
     }
     fims_output[setdiff(tolower(names(out_new)), tolower(names(fims_output)))] <- NA
     out_new <- fims_output
+    #### Rceattle ####
+  } else if (model == "rceattle") {
+    # Want to extract and set values from:
+    # quantities, sdrep, and estimated_params
+    # take similar approach to SS3 when only some keywords were converted
+    # can late take approach like BAM?
+    # TODO: Do we want users to input the saved file or already loaded into the R environment?
+    if (is.character(file)) {
+      if (!grepl(".rds", file)) {
+        cli::cli_abort("File must be in an .rds format otherwise load data into your environment and run `convert_output()` using the loaded data.")
+      }
+      dat <- readRDS(file)
+    } else {
+      dat <- file
+    }
+    
+    # Extract or use fleet names
+    if (is.null(fleet_names)) {
+      fleet_names <- names(dat$estimated_params$index_ln_q)
+    }
+    
+    # Output fleet names in console
+    cli::cli_alert_info("Identified fleet names:")
+    cli::cli_alert_info("{fleet_names}")
+    # Create list for morphed dfs to go into (for rbind later)
+    out_list <- list()
+    
+    factors <- c("year", "fleet", "fleet_name", "age", "sex", "area", "seas", "season", "time", "era", "subseas", "subseason", "platoon", "platoo", "growth_pattern", "gp", "nsim", "age_a")
+    errors <- c("StdDev", "sd", "se", "SE", "cv", "CV", "stddev")
+    # units <- c("mt", "lbs", "eggs")
+    
+    ##### Loop ####
+    for (p in (2:length(dat))[-c(6, 9, 10)]) {
+      extract <- dat[p]
+      module_name <- names(extract) 
+      cli::cli_alert_info("Processing {module_name}")
+      if (module_name == "sdrep") {
+        ##### sdrep ####
+        # this does not include all elements from sdrep list
+        df <- extract[[1]]
+        # Extract values from sdrep element in listdrep
+        values <- data.frame(
+          label = names(extract[[1]]$value),
+          estimate = extract[[1]]$value,
+          uncertainty = extract[[1]]$sd,
+          uncertainty_label = "sd"
+        )
+        values_count <- values |>
+          dplyr::group_by(label) |>
+          dplyr::count()
+        values <- values |>
+          dplyr::left_join(
+            {
+              values |> dplyr::group_by(label) |> dplyr::count() 
+            },
+            by = "label"
+          ) 
+        # make year column
+        year_col <- rep(
+          file[["data_list"]]$styr:file[["data_list"]]$projyr,
+          length(unique(
+            dplyr::filter(values_count, n == length(file[["data_list"]]$styr:file[["data_list"]]$projyr)) |> 
+              dplyr::pull(label)
+          ))
+        )
+      
+        df2 <- values |>
+          dplyr::filter(n == length(file[["data_list"]]$styr:file[["data_list"]]$projyr)) |>
+          dplyr::mutate(year = year_col)
+          
+        df2 <- values |> 
+                dplyr::filter(
+                  n != length(file[["data_list"]]$styr:file[["data_list"]]$projyr)
+                ) |>
+                dplyr::mutate(year = NA) |>
+          rbind(df2)
+        
+        # Extract parameter values ts
+        par_fixes <- data.frame(
+          label = names(extract[[1]]$par.fixed),
+          estimate = extract[[1]]$par.fixed
+        )
+        par_fixes_count <- par_fixes |>
+          dplyr::group_by(label) |>
+          dplyr::count()
+        par_fixes <- par_fixes |>
+          dplyr::left_join(
+            par_fixes_count,
+            by = "label"
+          ) 
+        
+        year_col_par_fix <- rep(
+          file[["data_list"]]$styr:file[["data_list"]]$endyr,
+          length(unique(
+            dplyr::filter(par_fixes_count, n == length(file[["data_list"]]$styr:file[["data_list"]]$endyr)) |> 
+              dplyr::pull(label)
+          ))
+        )
+        
+        df3 <- par_fixes |>
+          dplyr::filter(n == length(file[["data_list"]]$styr:file[["data_list"]]$endyr)) |>
+          dplyr::mutate(year = year_col_par_fix)
+        df3 <- par_fixes |> 
+          dplyr::filter(
+            n != length(file[["data_list"]]$styr:file[["data_list"]]$endyr)
+            ) |>
+          dplyr::mutate(year = NA) |>
+          rbind(df3) |>
+          dplyr::mutate(
+            uncertainty = NA,
+            uncertainty_label = NA
+          )
+        # not sure how pop_scalar is indexed
+        # not sure how log_index_hat is indexes
+        # Did not use r_sd for the error in rec bc used it from the other element in the list
+        
+        df4 <- rbind(df2, df3) |>
+          dplyr::select(-n) |>
+          dplyr::mutate(
+            module_name = module_name
+          )
+        
+        df4[setdiff(tolower(names(out_new)), tolower(names(df4)))] <- NA
+        out_list[[names(extract)]] <- df4
+      } else if (module_name == "data_list") {
+        ###### data.list ####
+        # Only extract specific quantity needs
+        # comp_data?, index_data, catch_data, weight, Ftarget, Flimit
+        data_list_list <- list()
+        
+        ####### Indices ####
+        # Extract index_data 
+        df_index <- extract[[1]]$index_data |>
+          # rename all columns to lower case to match standard
+          dplyr::rename_with(tolower) |>
+          dplyr::rename(
+            fleet = fleet_name,
+            indices_observed = observation,
+            block = selectivity_block,
+            uncertainty = log_sd
+          ) |>
+          dplyr::mutate(
+            # label = "indices_observed",
+            uncertainty_label = "log_sd",
+            indices_predicted = dat$quantities$index_hat
+          ) |>
+          dplyr::select(-c(fleet_code, q_block))
+        cli::cli_alert_info("'Selectivity_block' values located in 'block' columns.")
+        
+        # check if species > 1
+        if (length(unique(df_index$species)) > 1) {
+          cli::cli_abort("Not currently compatible for multispecies.")
+        } else {
+          df_index <- df_index |>
+            dplyr::select(-species)
+        }
+        
+        # expand df long to have obs and pred in same column with label
+        df_index_long <- df_index |>
+          tidyr::pivot_longer(
+            cols = c(indices_observed, indices_predicted),
+            names_to = "label",
+            values_to = "estimate"
+          ) |>
+          dplyr::mutate(
+            module_name = names(extract)#,
+            # era = dplyr::if_else(
+            #   year > dat$data_list$endyr,
+            #   "fore",
+            #   NA_character_
+            # )
+          )
+        
+        df_index_long[setdiff(tolower(names(out_new)), tolower(names(df_index_long)))] <- NA
+        data_list_list[["index_data"]] <- df_index_long
+        
+        ####### Catch indexing ####
+        # Extract catch_data and align with log_index_hat and catch_h 
+        # Modify sdrep in outlist to include index
+        df_catch <- extract[[1]]$catch_data |>
+          # dplyr::filter(!is.na(Catch)) |>
+          dplyr::rename_with(tolower) |>
+          dplyr::mutate(
+            era = dplyr::if_else(
+              year > dat$data_list$endyr,
+              "fore",
+              NA_character_
+            ),
+            catch_h = dat$quantities$catch_h,
+            # TODO: follow up on this quantity
+            # log_index_hat = dat$quantities$log_index_hat
+            uncertainty_label = "log_sd"
+          ) |>
+          dplyr::rename(
+            catch_predicted = catch_h,
+            fleet = fleet_name,
+            block = selectivity_block,
+            uncertainty = log_sd
+          ) |>
+          tidyr::pivot_longer(
+            cols = c(catch, catch_predicted),
+            names_to = "label",
+            values_to = "estimate"
+          ) |>
+          dplyr::select(-c(fleet_code, species))
+        
+        # Remove fleet names if do not match object
+        # if (unique(df_catch$fleet) %notin% fleet_names) {
+        #   df_catch <- df_catch |>
+        #     dplyr::mutate(fleet = NA)
+        # }
+        
+        if (length(unique(df_catch$month)) == 1) {
+          df_catch$month <- NA
+        }
+        df_catch[setdiff(tolower(names(out_new)), tolower(names(df_catch)))] <- NA
+        data_list_list[["catch_data"]] <- df_catch
+        
+        ####### Comp indexing ####
+        df_comp_obs <- dat$data_list$comp_data |>
+          dplyr::rename_with(tolower) |>
+          dplyr::mutate(
+            label = "indices_observed"
+          )
+        
+        indexing_vars_cols <- colnames(df_comp_obs)[!grepl("comp", colnames(df_comp_obs))] 
+        
+        df_comp_pred <- dplyr::select(df_comp_obs, dplyr::all_of(indexing_vars_cols)) |>
+          dplyr::cross_join(as.data.frame(dat$quantities$age_hat)) |>
+          tidyr::pivot_longer(
+            cols = -dplyr::all_of(indexing_vars_cols),
+            names_to = "age",
+            values_to = "estimate"
+          ) |>
+          # removes the 0 so assuming there will be no recorded zero catch but Rceattle reports ages up to 117
+          dplyr::filter(estimate != 0) |>
+          dplyr::mutate(
+            label = "composition_predicted",
+            # NOTE: the below age mutate slows down code
+            age = stringr::str_replace(age, "V","")
+          )
+        
+        # Finish adjusting comp_obs
+        # pivot obs data
+        df_comp_obs <- df_comp_obs |>
+          tidyr::pivot_longer(
+            cols = -dplyr::all_of(indexing_vars_cols),
+            names_to = "age",
+            values_to = "estimate"
+          ) |>
+          dplyr::filter(!is.na(estimate)) |>
+          dplyr::mutate(
+            label = "composition_observed",
+            # NOTE: the below age mutate slows down code
+            age = stringr::str_replace(age, "comp_","")
+          )
+          
+        df_comp <- rbind(df_comp_obs, df_comp_pred) |>
+          # TODO: do I need to filter sample size by <3 for confidentiality or does this not apply?
+          dplyr::select(-c(age0_length1, fleet_code, sample_size))
+        
+        df_catch[setdiff(tolower(names(out_new)), tolower(names(df_catch)))] <- NA
+        data_list_list[["comp_data"]] <- df_catch
+        
+        # final df for data_list module
+        new_df <- Reduce(rbind, data_list_list)
+        out_list[[names(extract)]] <- new_df
+        
+      } else if (is.list(extract[[1]])) { # indicates vector and list
+        ##### remaining lmnts ####
+        if (any(vapply(extract[[1]], is.matrix, FUN.VALUE = logical(1)))) {
+                ##############################################################
+          df <- extract[[1]] |>
+            expand_element(fleet_names = fleet_names) |>
+            dplyr::mutate(
+              module_name = module_name
+            ) |> suppressWarnings()
+          df[setdiff(tolower(names(out_new)), tolower(names(df)))] <- NA
+          out_list[[names(extract)]] <- df
+          
+        } else if (any(vapply(extract[[1]], is.vector, FUN.VALUE = logical(1)))) { # all must be a vector to work - so there must be conditions for dfs with a mix
+          extract_list <- list()
+          # mod_name1 <- names(extract)
+          for (i in seq_along(extract[[1]])) {
+            # need to add condition or something in expand_element to account for data thats formatted differently but is still a list i.e. p=9
+            if (is.list(extract[[1]][i][[1]])) {
+              # mod_name2 <- glue::glue("{module_name}_{names(extract[[1]][i])}")
+              # comment out message once finished development
+              cli::cli_alert_info("Processing {names(extract[[1]][i])}")
+              
+              df <- extract[[1]][i][[1]] |>
+                expand_element(fleet_names = fleet_names) |>
+                dplyr::mutate(
+                  module_name = module_name # mod_name2
+                ) # |>
+              # suppressWarnings()
+            } else {
+              df <- data.frame(
+                estimate = extract[[1]][[i]][[1]],
+                label = names(extract[[1]][i]),
+                module_name = module_name
+              )
+            }
+            df[setdiff(tolower(names(out_new)), tolower(names(df)))] <- NA
+            # remove quantities inserted from other steps
+            df <- df |>
+              dplyr::filter(
+                label %notin% c("index_hat", "catch_h")
+              )
+            extract_list[[names(extract[[1]][i])]] <- df
+          }
+          new_df <- Reduce(rbind, extract_list)
+          out_list[[names(extract)]] <- new_df
+        } else {
+          cli::cli_alert_warning("Not compatible.")
+        }
+      } else {
+        cli::cli_alert_warning("Not compatible yet.")
+      }
+    # } else if (is.list(extract[[1]])) { # list only
+    # } else if (is.matrix(extract[[1]])) { # matrix only
+    # } else {
+    #   cli::cli_alert_warning(paste(names(extract), " not compatible.", sep = ""))
+    # } # close if statement
+  } # close loop over objects listed in dat file
+    # Finish out df
+    out_new <- Reduce(rbind, out_list) |>
+      # Add era as factor into BAM conout
+      dplyr::mutate(
+        # TODO: replace all periods with underscore if naming convention is different
+        label = tolower(label),
+        # set era
+        era = dplyr::if_else(
+          year > dat$data_list$endyr, 
+          "fore",
+          "time"
+        )
+      )
+    
   } else {
     cli::cli_abort(c(
       message = "Output file not compatible.",
@@ -1804,20 +2161,29 @@ convert_output <- function(
       )
     ) |>
     suppressWarnings()
-  if (tolower(model) == "ss3") {
-    con_file <- system.file("resources", "ss3_var_names.csv", package = "stockplotr", mustWork = TRUE)
-    var_names_sheet <- utils::read.csv(con_file, na.strings = "")
-  } else if (tolower(model) == "bam") {
-    con_file <- system.file("resources", "bam_var_names.csv", package = "stockplotr", mustWork = TRUE)
-    var_names_sheet <- utils::read.csv(con_file, na.strings = "") |>
-      dplyr::mutate(
-        label = tolower(label)
-      )
-  } else if (tolower(model) == "fims") {
-    con_file <- system.file("resources", "fims_var_names.csv", package = "stockplotr", mustWork = TRUE)
-    var_names_sheet <- utils::read.csv(con_file, na.strings = "")
-  }
-
+  # if (tolower(model) == "ss3") {
+  #   con_file <- system.file("resources", "ss3_var_names.csv", package = "stockplotr", mustWork = TRUE)
+  #   var_names_sheet <- utils::read.csv(con_file, na.strings = "")
+  # } else if (tolower(model) == "bam") {
+  #   con_file <- system.file("resources", "bam_var_names.csv", package = "stockplotr", mustWork = TRUE)
+  #   var_names_sheet <- utils::read.csv(con_file, na.strings = "") |>
+  #     dplyr::mutate(
+  #       label = tolower(label)
+  #     )
+  # } else if (tolower(model) == "fims") {
+  #   con_file <- system.file("resources", "fims_var_names.csv", package = "stockplotr", mustWork = TRUE)
+  #   var_names_sheet <- utils::read.csv(con_file, na.strings = "")
+  # } else if (tolower(model) == "rceattle") {
+  #   con_file <- system.file("resources", "rceattle_var_names.csv", package = "stockplotr", mustWork = TRUE)
+  #   var_names_sheet <- utils::read.csv(con_file, na.strings = "")
+  # }
+  
+  # edit: here is a different way of loading in the csv sheets
+  con_file <- system.file("resources", glue::glue("{model}_var_names.csv"), package = "stockplotr", mustWork = TRUE)
+  # temporarily add call to local csv so I can test
+  # con_file <- glue::glue("~/GitHub/stockplotr/inst/resources/{model}_var_names.csv")
+  var_names_sheet <- utils::read.csv(con_file, na.strings = "")
+  
   if (file.exists(con_file)) {
     # Remove 'X' column if it exists
     var_names_sheet <- var_names_sheet |>

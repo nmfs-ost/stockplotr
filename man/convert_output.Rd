@@ -10,7 +10,7 @@ convert_output(file, model = NULL, fleet_names = NULL, save_dir = NULL)
 \item{file}{Assessment model output file path}
 
 \item{model}{Assessment model used in evaluation ("ss3", "bam",
-"fims").}
+"fims", "rceattle).}
 
 \item{fleet_names}{Names of fleets in the assessment model as
 shortened in the output file. If fleet names are not properly read, then
