@@ -45,10 +45,8 @@ plot_indices <- function(
     glue::glue("Estimated Index ({unit_label})")
   )
 
-  if (!is.null(facet)) {
-    if (facet != "fleet") {
-      facet <- c(facet, "fleet")
-    }
+  if (is.null(facet) || "fleet" %notin% facet) {
+    facet <- c(facet, "fleet")
   }
   # Filter data
   prepared_data <- filter_data(
