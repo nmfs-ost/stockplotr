@@ -79,8 +79,8 @@ Please use the following "release indicators" for a naming a branch or pull requ
 - If the type contains refactor/style/perf/doc/test/chore, then nothing is incremented and no release will be made.
 
 
-The above content is modeled after an article on ["Automating Versioning and Releases Using Semantic Release"](https://medium.com/agoda-engineering/automating-versioning-and-releases-using-semantic-release-6ed355ede742)
-from Agoda Engineering.
+**The above content is modeled after an article on ["Automating Versioning and Releases Using Semantic Release"](https://medium.com/agoda-engineering/automating-versioning-and-releases-using-semantic-release-6ed355ede742)
+from Agoda Engineering.**
 
 ## Contributing bugs
 
