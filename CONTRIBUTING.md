@@ -31,7 +31,7 @@ the [`{roxygen2}` package structure](https://roxygen2.r-lib.org/articles/roxygen
 
 4. Please increment the package version following our [semantic versioning section](https://github.com/nmfs-ost/stockplotr/blob/doc-update-contrib/CONTRIBUTING.md#semantic-versioning-sec-version).
 
-5. Add a short summary or title line in the NEWS.md file indicating the feature 
+5. Add a short summary or title line in the [NEWS.md](https://github.com/nmfs-ost/stockplotr/blob/main/NEWS) file indicating the feature 
 or fix. This will be how we include recognition for your contribution in our 
 monthly release notes.
 
@@ -80,7 +80,7 @@ Please use the following "release indicators" for a naming a branch or pull requ
 
 
 **The above content is modeled after an article on ["Automating Versioning and Releases Using Semantic Release"](https://medium.com/agoda-engineering/automating-versioning-and-releases-using-semantic-release-6ed355ede742)
-from Agoda Engineering.**
+# from Agoda Engineering.**
 
 ## Contributing bugs
 
