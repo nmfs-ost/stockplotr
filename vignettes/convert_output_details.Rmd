@@ -133,7 +133,7 @@ Another hurdle to tackle is naming conventions. We have attempted to create a st
 
 5. For labels specific to a stock or assessment model, they were kept in the converted output, but edited/expanded upon following the above conventions.
 
-6. Labels follow a hierarchy of the sorts where the leading word is the topic followed by descriptive adjectives. For example, catch_discard, catch_retained, biomass_msy, ect.
+6. Labels follow a hierarchy of the sorts where the leading word is the topic followed by descriptive adjectives. For example, catch_discard, catch_retained, biomass_msy, etc.
 
 7. All labels are singular and *not* plural. For example, catch instead of catches, landing instead of landings, or index instead of indices.
 
