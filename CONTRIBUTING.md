@@ -48,7 +48,7 @@ monthly release notes.
 We use an approach to semantic versioning for our packages. This includes using 
 a typical structure for semantic versioning which follows:
 
-v<MAJOR>.<MINOR>.<PATCH>
+`v<MAJOR>.<MINOR>.<PATCH>`
 
 where,
 
@@ -56,7 +56,7 @@ where,
 - MINOR = minor release (new features)
 - PATCH = hot fixes and bug fixes (aka patches)
 
-A branch in v<MAJOR>.<MINOR>.<PATCH>.9000 indicates development in main branch.
+A branch in `v<MAJOR>.<MINOR>.<PATCH>.9000` indicates development in main branch.
 
 Please use the following "release indicators" for a naming a branch or pull request:
 
