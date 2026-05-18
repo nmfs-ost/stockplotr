@@ -135,7 +135,7 @@ Another hurdle to tackle is naming conventions. We have attempted to create a st
 
 6. Labels follow a hierarchy of the sorts where the leading word is the topic followed by descriptive adjectives. For example, catch_discard, catch_retained, biomass_msy, ect.
 
-7. All labels are singular and *not* plural. For example, catch instead of catches, landing instead or landings, or index instead of indices.
+7. All labels are singular and *not* plural. For example, catch instead of catches, landing instead of landings, or index instead of indices.
 
 7. In cases where a label could not be standardized, the same label was kept in the converted output. We hope that these remaining names can be standardized in the future through collaboration with the respective analysts using them.
 
