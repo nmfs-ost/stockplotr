@@ -1,4 +1,5 @@
 BAM
+Bugfixes
 CPUE
 FIMS
 FIMSdiags
@@ -41,8 +42,10 @@ kableExtra
 kobe
 kqs
 len
+md
 msy
 natively
+newsmd
 noaa
 nsim
 obsvpred
