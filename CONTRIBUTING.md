@@ -29,7 +29,7 @@ If you are unfamiliar with this approach, simply let us know :smile
 3. If including a feature that is a new function, please add documentation using
 the [`{roxygen2}` package structure](https://roxygen2.r-lib.org/articles/roxygen2.html).
 
-4. Please increment the package version following our semantic versioning found in @sec-version.
+4. Please increment the package version following our [semantic versioning section](https://github.com/nmfs-ost/stockplotr/blob/doc-update-contrib/CONTRIBUTING.md#semantic-versioning-sec-version).
 
 5. Add a short summary or title line in the NEWS.md file indicating the feature 
 or fix. This will be how we include recognition for your contribution in our 
@@ -43,7 +43,7 @@ monthly release notes.
 -   Test that your contributed code will function as expected under different circumstances.
 -   Add comments to the code if it's not immediately clear what the purpose of the code is, or how it works.
 
-### Semantic Versioning {#sec-version}
+### Semantic Versioning
 
 We use an approach to semantic versioning for our packages. This includes using 
 a typical structure for semantic versioning which follows:
