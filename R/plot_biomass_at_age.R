@@ -5,9 +5,14 @@
 #' age. For example, scale_amount = 100 would scale down a value
 #' from 500,000 --> 5,000. This scale will be reflected in the legend label if
 #' proportion is set to FALSE.
+#'
+#' Default: "1000"
+#'
 #' @param interactive TRUE/FALSE; indicate whether the environment in which the
 #' function is operating  is interactive. This bypasses some options for
-#' filtering when preparing data for the plot. Default is FALSE.
+#' filtering when preparing data for the plot.
+#'
+#' Default: FALSE
 #' 
 #' @returns A plot showing total biomass at age.
 #' 

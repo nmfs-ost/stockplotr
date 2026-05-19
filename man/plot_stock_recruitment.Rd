@@ -23,14 +23,20 @@ returned from \link[stockplotr]{convert_output}.
 If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{spawning_biomass_label}{Units for spawning biomass}
+\item{spawning_biomass_label}{Units for spawning biomass
 
-\item{recruitment_label}{units for recruitment}
+Default: "mt"}
+
+\item{recruitment_label}{units for recruitment
+
+Default: "mt"}
 
 \item{interactive}{Indicate whether the environment the
 plot is being made in is interactive. By default, this
 is set to false. If true, dependent on your data, a
-option menu will pop-up.}
+option menu will pop-up.
+
+Default: TRUE}
 
 \item{era}{A string naming the era of data.
 

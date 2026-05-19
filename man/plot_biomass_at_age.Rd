@@ -27,7 +27,9 @@ summarize the data in a single plot.}
 \item{scale_amount}{A number describing how much to scale down the biomass at
 age. For example, scale_amount = 100 would scale down a value
 from 500,000 --> 5,000. This scale will be reflected in the legend label if
-proportion is set to FALSE.}
+proportion is set to FALSE.
+
+Default: "1000"}
 
 \item{proportional}{Set size of points relative to z when TRUE, point
 size are relative to one another while when set to FALSE, point size
@@ -35,7 +37,9 @@ is relative to z}
 
 \item{interactive}{TRUE/FALSE; indicate whether the environment in which the
 function is operating  is interactive. This bypasses some options for
-filtering when preparing data for the plot. Default is FALSE.}
+filtering when preparing data for the plot.
+
+Default: FALSE}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,

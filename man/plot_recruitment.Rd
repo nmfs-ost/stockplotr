@@ -25,7 +25,9 @@ returned from \link[stockplotr]{convert_output}.
 If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{unit_label}{units for recruitment}
+\item{unit_label}{units for recruitment
+
+Default: "mt"}
 
 \item{scale_amount}{A number to scale the y-axis values.
 

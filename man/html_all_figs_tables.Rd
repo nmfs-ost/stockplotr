@@ -8,7 +8,9 @@ html_all_figs_tables(figures_tables_dir = getwd())
 }
 \arguments{
 \item{figures_tables_dir}{The location of the folder containing
-figures and tables ("figures" and "tables").}
+figures and tables ("figures" and "tables").
+
+Default: The current working directory (`getwd()`)}
 }
 \value{
 A folder ("all_tables_figures") in your working directory containing
