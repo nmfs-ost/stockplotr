@@ -43,6 +43,7 @@ want to just summarize the data across all factors, set group = "none".}
 is set to "none". Options are "sum" or "mean". Default is "sum".}
 
 \item{module}{(Optional) A string indicating the module_name found in `dat`.
+If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
 

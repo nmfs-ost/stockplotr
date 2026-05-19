@@ -6,17 +6,29 @@
 #'
 #' @param dat Pre-filtered data from \link[stockplotr]{filter_data} following a
 #' long format data.
-#' @param group A string identifying the indexing variable of the data. If you
-#' want to just summarize the data across all factors, set group = "none".
+#' @param group A string identifying the indexing variable of the data.
+#' To remove any groups and summarize data across all factors, set
+#' group = "none". Setting group = NULL will keep any grouping
+#' variables identified in the data by the function.
+#'
+#' Default: NULL
+#'
+#' Options: Including, but not limited to: "none", NULL
 #' @param facet A string or vector of strings identifying the faceting
 #' variable(s) of the data.
+#'
+#' Default: NULL
 #' @param lbs A logical value indicating whether to convert the y-axis values from
 #' kilograms to pounds. The default units match the default in the
 #' unit_label argument - 'metric tons'. 
 #'
 #' Default: `FALSE`
 #' @param method A string describing the method of summarizing data when group
-#' is set to "none". Options are "sum" or "mean". Default is "sum".
+#' is set to "none".
+#'
+#' Default: "sum"
+#'
+#' Options: "sum" or "mean"
 #'
 #' @returns List of 3 objects:
 #' \item{data}{A data frame of the processed data ready for plotting.}
@@ -360,6 +372,8 @@ process_data <- function(
 #'
 #' @inheritParams process_data
 #' @param label A string or vector of strings identifying the label values to filter the data.
+#' 
+#' Default: NULL
 #'
 #' @returns A dataframe of processed data ready for formatting into a table.
 #' @details Input is an object created with \link[stockplotr]{filter_data}.
@@ -369,7 +383,7 @@ process_data <- function(
 #' @examples {
 #'   filtered <- filter_data(
 #'     dat = stockplotr:::example_data,
-#'     label_name = "landings",
+#'     label = "landings",
 #'     geom = "line",
 #'     era = "time"
 #'   )

@@ -10,13 +10,25 @@ process_table(dat, group = NULL, method = "sum", label = NULL)
 \item{dat}{Pre-filtered data from \link[stockplotr]{filter_data} following a
 long format data.}
 
-\item{group}{A string identifying the indexing variable of the data. If you
-want to just summarize the data across all factors, set group = "none".}
+\item{group}{A string identifying the indexing variable of the data.
+To remove any groups and summarize data across all factors, set
+group = "none". Setting group = NULL will keep any grouping
+variables identified in the data by the function.
+
+Default: NULL
+
+Options: Including, but not limited to: "none", NULL}
 
 \item{method}{A string describing the method of summarizing data when group
-is set to "none". Options are "sum" or "mean". Default is "sum".}
+is set to "none".
 
-\item{label}{A string or vector of strings identifying the label values to filter the data.}
+Default: "sum"
+
+Options: "sum" or "mean"}
+
+\item{label}{A string or vector of strings identifying the label values to filter the data.
+
+Default: NULL}
 }
 \value{
 A dataframe of processed data ready for formatting into a table.
@@ -31,7 +43,7 @@ Input is an object created with \link[stockplotr]{filter_data}.
 {
   filtered <- filter_data(
     dat = stockplotr:::example_data,
-    label_name = "landings",
+    label = "landings",
     geom = "line",
     era = "time"
   )

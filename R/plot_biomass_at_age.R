@@ -12,7 +12,7 @@
 #' function is operating  is interactive. This bypasses some options for
 #' filtering when preparing data for the plot.
 #'
-#' Default: FALSE
+#' Default: `FALSE`
 #' 
 #' @returns A plot showing total biomass at age.
 #' 

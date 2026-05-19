@@ -11,7 +11,9 @@ check_label_differences(dat, index_variables, id_group = NULL)
 
 \item{index_variables}{the index_variables vector created within process_table}
 
-\item{id_group}{the identifying index variable as a string}
+\item{id_group}{the identifying index variable as a string
+
+Default: NULL}
 }
 \description{
 Create loop to test for differences in column values

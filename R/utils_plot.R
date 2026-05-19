@@ -6,19 +6,34 @@
 #'
 #' @param dat filtered data frame from standard output file(s) preformatted for
 #'  the target label from \link[stockplotr]{filter_data}
-#' @param x a string of the column name of data used to plot on the x-axis (default
-#' is "year")
-#' @param y a string of the column name of data used to plot on the y-axis (default
-#' is "estimate")
+#' @param x a string of the column name of data used to plot on the x-axis
+#'
+#' Default: "year"
+#' @param y a string of the column name of data used to plot on the y-axis
+#'
+#' Default: "estimate"
+#'
 #' @param geom type of geom to use for plotting found in ggplot2 (e.g. "point",
-#' "line", etc.). Default is "line". Other options are "point" and "area".
-#' @param xlab a string of the x-axis label (default is "Year")
+#' "line", etc.).
+#'
+#' Default: "line"
+#'
+#' Options: "point" and "area"
+#' @param xlab a string of the x-axis label
+#'
+#' Default: "Year"
 #' @param ylab a string of the y-axis label. If NULL, it will be set to the name
 #'  of `y`.
+#'
+#' Default: NULL
 #' @param group a string of a single column that groups the data (e.g. "fleet",
 #' "sex", "area", etc.). Currently can only have one level of grouping.
+#'
+#' Default: NULL
 #' @param facet a string or vector of strings of a column that facets the data
 #' (e.g. "year", "area", etc.)
+#' 
+#' Default: NULL
 #' @param ... inherited arguments from internal functions from ggplot2::geom_xx
 #'
 #'
@@ -218,22 +233,10 @@ plot_timeseries <- function(
 
 #' Create plot with error
 #'
-#' @param dat filtered data frame from standard output file(s) preformatted for
-#'  the target label from \link[stockplotr]{process_data}
-#' @param x a string of the column name of data used to plot on the x-axis (default
-#' is "year")
-#' @param y a string of the column name of data used to plot on the y-axis (default
-#' is "estimate")
-#' @param geom type of geom to use for plotting found in ggplot2 (e.g. "point",
-#' "line", etc.). Default is "line". Other options are "point" and "area".
-#' @param xlab a string of the x-axis label (default is "Year")
-#' @param ylab a string of the y-axis label. If NULL, it will be set to the name
-#'  of `y`.
-#' @param group a string of a single column that groups the data (e.g. "fleet",
-#' "sex", "area", etc.). Currently can only have one level of grouping.
-#' @param facet a string or vector of strings of a column that facets the data
-#' (e.g. "year", "area", etc.)
+#' @inheritParams plot_timeseries
 #' @param hline indicate true or false to place a horizontal line at 1
+#' 
+#' Default: `TRUE`
 #' @param ... inherited arguments from internal functions from ggplot2::geom_xx
 #'
 #' @returns Create a plot with error for a stock assessment report.
@@ -301,24 +304,36 @@ plot_error <- function(
 
 #' Create "at-age" plot
 #'
-#' @param dat filtered data frame from standard output file(s) preformatted for
-#'  the target label from \link[stockplotr]{filter_data}
-#' @param x a string of the column name of data used to plot on the x-axis
-#' (default is "year")
+#' @inheritParams plot_timeseries
 #' @param y a string of the column name of data used to plot on the y-axis
-#' (default is "age")
+#' 
+#' Default: "age"
 #' @param z a string of the column name of data used to control the size of the
-#' bubbles (default is "estimate")
+#' bubbles
+#' 
+#' Default: "estimate"
 #' @param label a string of the label for the size of the bubbles
-#' (default is "Abundance")
-#' @param xlab a string of the x-axis label (default is "Year")
-#' @param ylab a string of the y-axis label (default is "Age")
-#' @param facet a string or vector of strings of a column that facets the data
-#' (e.g. "sex", "area", etc.). It is not recommended to include more than one
-#' facet due to the complexity of the plot.
+#' 
+#' Default: "Abundance"
+#' 
+#' @param xlab a string of the x-axis label
+#' 
+#' Default: "Year"
+#' @param ylab a string of the y-axis label
+#' 
+#' Default: "Age"
+#' @param facet a string or vector of strings of a column that facets the data.
+#' It is not recommended to include more than one facet due to the complexity 
+#' of the plot.
+#' 
+#' Default: NULL
+#' 
+#' Options: Including, but not limited to: "sex", "area", "fleet"
 #' @param proportional Set size of points relative to z when TRUE, point
 #' size are relative to one another while when set to FALSE, point size
 #' is relative to z
+#' 
+#' Default: `TRUE`
 #' @param ... inherited arguments from internal functions from
 #' \link[ggplot2]{geom_point}
 #'
@@ -512,8 +527,9 @@ cohort_line <- function(
 #' @param dat standard data frame where reference point should be extracted
 #' @param label_name string of the name of the quantity that users want to
 #' extract the reference point from
-#' @param reference string. name of the reference point such as "msy",
-#' "unfished", or "target"
+#' @param reference string of the reference point
+#' 
+#' Options: Including, but not limited to: "msy", "unfished", "target"
 #'
 #' @returns A ggplot2 geom_hline object for a reference point that can be added
 #' to a plot
@@ -617,26 +633,9 @@ cap_first_letter <- function(s) {
 
 #' Filter data for input into aesthetics for ggplot2
 #'
-#' @param dat a data frame or list of data frames input as `list()` that
-#' contains the data to be plotted.
+#' @inheritParams plot_spawning_biomass
 #' @param label_name a string of the name of the label that is used to filter
 #' the data.
-#' @param geom Type of plot user wants to create. Options are "line", "point",
-#' and "area".
-#' @param group Name of a column selected grouping for the data.
-#' @param facet a string or vector of strings of a column that facets the data
-#' (e.g. "year", "area", etc.)
-#' @param era A string naming the era of data such as historical ("early"), current ("time"), or
-#' projected ("fore") data if filtering should occur. Default is set to "time" which is
-#' the current time. To plot all data, set era to NULL.
-#' @param scale_amount A number describing how much to scale down the quantities
-#' shown on the y axis.
-#' @param interactive logical. If TRUE, the user will be prompted to select
-#' a module_name when there was more than one found in the filtered data set.
-#' @param module (Optional) A string indicating the linked module_name associated
-#' with the label for the plot if known. Default is NULL. By default, the function
-#' will select the most relevant module if more than 1 exists. If selecting more
-#' than one module, place them in a vector such as c("module1", "module2").
 #'
 #' @returns a data frame that is preformatted for plotting with ggplot2.
 #' @export
@@ -1017,8 +1016,11 @@ check_grouping <- function(dat) {
 #' Plot observed vs. predicted data
 #'
 #' @inheritParams plot_timeseries
-#' @param observed_label a string of the label used to filter the observed data. Default is "observed".
-#' @param predicted_label a string of the label used to filter the predicted data. Default is "predicted".
+#' @param observed_label a string of the label used to filter the observed data
+#' 
+#' Default: "observed"
+#' @param predicted_label a string of the label used to filter the predicted data
+#' Default: "predicted"
 #'
 #' @returns A plot of observed vs. predicted data for a stock assessment report.
 #' @export

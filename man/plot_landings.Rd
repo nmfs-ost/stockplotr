@@ -42,7 +42,8 @@ Options: "line", "point", or "area"}
 
 Set group = "none" to summarize data over all indexing values.
 
-Default: NULL}
+Default: NULL
+Options: "year", "area", "fleet", "none"}
 
 \item{facet}{A string or vector of strings of a column name.
 
@@ -65,6 +66,7 @@ Options: "early", "time", "fore" (forecast), or NULL (all data)}
 Default: 1}
 
 \item{module}{(Optional) A string indicating the module_name found in `dat`.
+If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
 

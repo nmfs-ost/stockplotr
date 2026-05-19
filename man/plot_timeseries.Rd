@@ -20,25 +20,39 @@ plot_timeseries(
 \item{dat}{filtered data frame from standard output file(s) preformatted for
 the target label from \link[stockplotr]{filter_data}}
 
-\item{x}{a string of the column name of data used to plot on the x-axis (default
-is "year")}
+\item{x}{a string of the column name of data used to plot on the x-axis
 
-\item{y}{a string of the column name of data used to plot on the y-axis (default
-is "estimate")}
+Default: "year"}
+
+\item{y}{a string of the column name of data used to plot on the y-axis
+
+Default: "estimate"}
 
 \item{geom}{type of geom to use for plotting found in ggplot2 (e.g. "point",
-"line", etc.). Default is "line". Other options are "point" and "area".}
+"line", etc.).
 
-\item{xlab}{a string of the x-axis label (default is "Year")}
+Default: "line"
+
+Options: "point" and "area"}
+
+\item{xlab}{a string of the x-axis label
+
+Default: "Year"}
 
 \item{ylab}{a string of the y-axis label. If NULL, it will be set to the name
-of `y`.}
+ of `y`.
+
+Default: NULL}
 
 \item{group}{a string of a single column that groups the data (e.g. "fleet",
-"sex", "area", etc.). Currently can only have one level of grouping.}
+"sex", "area", etc.). Currently can only have one level of grouping.
+
+Default: NULL}
 
 \item{facet}{a string or vector of strings of a column that facets the data
-(e.g. "year", "area", etc.)}
+(e.g. "year", "area", etc.)
+
+Default: NULL}
 
 \item{...}{inherited arguments from internal functions from ggplot2::geom_xx}
 }

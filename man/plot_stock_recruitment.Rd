@@ -45,6 +45,7 @@ Default: "time"
 Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
 \item{module}{(Optional) A string indicating the module_name found in `dat`.
+If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
 

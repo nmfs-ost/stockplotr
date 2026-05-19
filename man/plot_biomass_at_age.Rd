@@ -39,7 +39,7 @@ is relative to z}
 function is operating  is interactive. This bypasses some options for
 filtering when preparing data for the plot.
 
-Default: FALSE}
+Default: `FALSE`}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
