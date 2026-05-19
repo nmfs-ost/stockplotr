@@ -16,6 +16,10 @@
 #' Default: "sum"
 #'
 #' Options: "sum" or "mean"
+#' @param digits Numeric value indicating the number of digits values in the 
+#' table will be rounded to.
+#' 
+#' Default: 2
 #' @param tables_dir The location of the folder containing the generated table
 #' rda files ("tables") that will be created if the argument `make_rda` = TRUE.
 #' 
@@ -54,9 +58,18 @@ table_landings <- function(
   method = "sum",
   module = NULL,
   label = NULL,
+  digits = 2,
+  scale_amount = 1,
   make_rda = FALSE,
   tables_dir = getwd()
 ) {
+  # set unit label if scaled
+  unit_label <- label_magnitude(
+    label = "",
+    unit_label = unit_label,
+    scale_amount = scale_amount
+  )
+  
   # TODO: do group and facet need to be uncommented and updated?
   # Filter data for landings
   prepared_data <- filter_data(
@@ -65,11 +78,11 @@ table_landings <- function(
     geom = "line",
     era = era,
     module = module,
-    scale_amount = 1,
+    scale_amount = scale_amount,
     interactive = interactive
   ) |>
-    dplyr::mutate(estimate = round(as.numeric(estimate), digits = 0)) |>
-    dplyr::mutate(uncertainty = round(as.numeric(uncertainty), digits = 2))
+    dplyr::mutate(estimate = round(as.numeric(estimate), digits = digits)) |>
+    dplyr::mutate(uncertainty = round(as.numeric(uncertainty), digits = digits))
 
   # Add check if there is any data
   if (nrow(prepared_data) == 0) {
