@@ -2,16 +2,30 @@
 #'
 #' @inheritParams plot_recruitment
 #' @param unit_label Abbreviated units of landings
-#' @param group A string identifying the indexing variable of the data. If you
-#' want to just summarize the data across all factors, set group = "none".
+#' 
+#' Default: "mt"
+#' @param group A string of a single column that groups the data.
+#'
+#' Set group = "none" to summarize data over all indexing values.
+#'
+#' Default: NULL
+#' Options: "year", "area", "fleet", "none"
 #' @param method A string describing the method of summarizing data when group
-#' is set to "none". Options are "sum" or "mean". Default is "sum".
+#' is set to "none".
+#'
+#' Default: "sum"
+#'
+#' Options: "sum" or "mean"
 #' @param tables_dir The location of the folder containing the generated table
 #' rda files ("tables") that will be created if the argument `make_rda` = TRUE.
+#' 
+#' Default: the working directory (`getwd()`)
 #' @param label The label that will be chosen from the input file. If unspecified,
 #' the function will search the "label" column and use the first matching label
 #' in this ordered list: "landings_weight",  "landings_numbers", "landings_expected",
 #' "landings_predicted", "landings".
+#' 
+#' Default: NULL
 #'
 #' @returns A table ready of landed catch by fleet and year.
 #' 

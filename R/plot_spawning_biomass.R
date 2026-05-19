@@ -13,8 +13,7 @@
 #' Default: "line".
 #'
 #' Options: "line", "point", or "area"
-#' @param group A string of a single column that groups the data (e.g. "fleet",
-#' "sex", "area", etc.).
+#' @param group A string of a single column that groups the data.
 #'
 #' Set group = "none" to summarize data over all indexing values.
 #'

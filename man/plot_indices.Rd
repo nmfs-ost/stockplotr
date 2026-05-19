@@ -28,8 +28,7 @@ in `ref_line` is used to plot a reference line or calculate relative spawning bi
 
 Default: ""}
 
-\item{group}{A string of a single column that groups the data (e.g. "fleet",
-"sex", "area", etc.).
+\item{group}{A string of a single column that groups the data.
 
 Set group = "none" to summarize data over all indexing values.
 
