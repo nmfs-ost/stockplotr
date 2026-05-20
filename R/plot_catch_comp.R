@@ -20,6 +20,18 @@
 #'
 #' Options: "early", "time", "fore" (forecast), or NULL (all data)
 #' 
+#' @param interactive A logical value indicating if the environment is interactive.
+#'
+#' Default: `FALSE`
+#' 
+#' @param module (Optional) A string indicating the module_name found in `dat`.
+#' If selecting >1 module, place them in a vector like c("module1", "module2").
+#'
+#' Default: NULL
+#'
+#' If the interactive and >1 module_name is found, user will select the
+#' module_name in the console. @seealso [filter_data()]
+#' 
 #' @returns A plot showing catch or landings composition.
 #' 
 #' @details This plot is made only when catch or landings are explicitly named
