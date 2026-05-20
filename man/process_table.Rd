@@ -17,7 +17,7 @@ variables identified in the data by the function.
 
 Default: NULL
 
-Options: Including, but not limited to: "none", NULL}
+Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
 \item{method}{A string describing the method of summarizing data when group
 is set to "none".

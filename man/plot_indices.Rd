@@ -33,7 +33,7 @@ Default: ""}
 Set group = "none" to summarize data over all indexing values.
 
 Default: NULL
-Options: "year", "area", "fleet", "none"}
+Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
 \item{facet}{a string or vector of strings of a column that facets the data. "fleet" is always added on to any faceting selections
 

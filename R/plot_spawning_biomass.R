@@ -18,7 +18,8 @@
 #' Set group = "none" to summarize data over all indexing values.
 #'
 #' Default: NULL
-#' Options: "year", "area", "fleet", "none"
+#' Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL
+#' 
 #' @param facet A string or vector of strings of a column name.
 #'
 #' Default: NULL

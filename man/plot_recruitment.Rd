@@ -44,7 +44,7 @@ Options: "early", "time", "fore" (forecast), or NULL (all data)}
 Set group = "none" to summarize data over all indexing values.
 
 Default: NULL
-Options: "year", "area", "fleet", "none"}
+Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
 \item{facet}{A string or vector of strings of a column name.
 

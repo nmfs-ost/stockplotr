@@ -17,7 +17,7 @@ variables identified in the data by the function.
 
 Default: NULL
 
-Options: Including, but not limited to: "none", NULL}
+Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
 \item{facet}{A string or vector of strings identifying the faceting
 variable(s) of the data.

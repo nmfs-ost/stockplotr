@@ -28,7 +28,7 @@ in `ref_line` is used to plot a reference line or calculate relative spawning bi
 Set group = "none" to summarize data over all indexing values.
 
 Default: NULL
-Options: "year", "area", "fleet", "none"}
+Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
 \item{facet}{A string or vector of strings of a column name.
 

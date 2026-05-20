@@ -9,7 +9,7 @@
 #' Set group = "none" to summarize data over all indexing values.
 #'
 #' Default: NULL
-#' Options: "year", "area", "fleet", "none"
+#' Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL
 #' @param method A string describing the method of summarizing data when group
 #' is set to "none".
 #'

@@ -11,7 +11,7 @@ plot_biomass(
   facet = NULL,
   ref_line = "msy",
   era = NULL,
-  unit_label = "metric tons",
+  unit_label = "mt",
   module = NULL,
   scale_amount = 1,
   relative = FALSE,
@@ -39,7 +39,7 @@ Options: "line", "point", or "area"}
 Set group = "none" to summarize data over all indexing values.
 
 Default: NULL
-Options: "year", "area", "fleet", "none"}
+Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
 \item{facet}{A string or vector of strings of a column name.
 
@@ -65,7 +65,7 @@ Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
 \item{unit_label}{units for biomass
 
-Default: "metric tons"}
+Default: "mt"}
 
 \item{module}{(Optional) A string indicating the module_name found in `dat`.
 If selecting >1 module, place them in a vector like c("module1", "module2").

@@ -12,7 +12,7 @@
 #' function is operating  is interactive. This bypasses some options for
 #' filtering when preparing data for the plot.
 #'
-#' Default: `FALSE`
+#' Default: `TRUE`
 #' 
 #' @returns A plot showing total biomass at age.
 #' 
@@ -45,7 +45,7 @@ plot_biomass_at_age <- function(
   unit_label = "mt",
   scale_amount = 1000,
   proportional = TRUE,
-  interactive = FALSE,
+  interactive = TRUE,
   make_rda = FALSE,
   figures_dir = getwd()
 ) {

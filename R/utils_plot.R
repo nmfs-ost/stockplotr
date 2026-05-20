@@ -26,10 +26,12 @@
 #'  of `y`.
 #'
 #' Default: NULL
-#' @param group a string of a single column that groups the data (e.g. "fleet",
-#' "sex", "area", etc.). Currently can only have one level of grouping.
+#' @param group a string of a single column that groups the data.
+#' Currently can only have one level of grouping.
 #'
 #' Default: NULL
+#' Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL
+#' 
 #' @param facet a string or vector of strings of a column that facets the data
 #' (e.g. "year", "area", etc.)
 #' 
