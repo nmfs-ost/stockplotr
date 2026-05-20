@@ -35,26 +35,34 @@ returned from \link[stockplotr]{convert_output}.
 If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{recruitment_unit_label}{Units for recruitment}
+\item{recruitment_unit_label}{Units for recruitment
+
+Default: "mt"}
 
 \item{recruitment_scale_amount}{A number describing how much to scale down
 the recruitment quantities shown on the y axis. For example,
 recruitment_scale_amount = 100 would scale down a value from 500,000 -->
-5,000. This scale will be reflected in the y axis label.}
+5,000. This scale will be reflected in the y axis label.
+
+Default: "1"}
 
 \item{relative}{A logical value specifying to set y-axis values relative to
 the ref_line value.
 
 Default: `FALSE`}
 
-\item{proportional}{T/F to scale size of bubble plots}
+\item{proportional}{T/F to scale size of bubble plots
+
+Default: `TRUE`}
 
 \item{interactive}{A logical value indicating if the environment is interactive.
 
 Default: `FALSE`}
 
 \item{figures_tables_dir}{The location of the folder containing
-figures and tables ("figures" and "tables").}
+figures and tables ("figures" and "tables").
+
+Default: the working directory (`getwd()`)}
 
 \item{ref_line}{A string specifying the type of reference you want to
 compare biomass to. The default is `"msy"`, which looks for
@@ -64,39 +72,71 @@ lower-case letters but you must use one of the options specified in the
 default list to ensure that the label on the figure looks correct
 regardless of how it is specified in `dat`. Other possibilities may include
 "target", "MSY", and "unfished". When the reference cannot be found,
-indicate the reference line in the form c("label" = value).}
+indicate the reference line in the form c("label" = value).
+
+Default: "msy"
+
+Options: Including, but not limited to: "target", "MSY", "unfished"}
 
 \item{biomass_scale_amount}{A number describing how much to scale down the
-biomass quantities shown on the y axis. See `recruitment_scale_amount`.}
+biomass quantities shown on the y axis. See `recruitment_scale_amount`.
 
-\item{landings_unit_label}{Units for landings}
+Default: "1"}
 
-\item{spawning_biomass_label}{Units for spawning biomass}
+\item{landings_unit_label}{Units for landings
+
+Default: "mt"}
+
+\item{spawning_biomass_label}{Units for spawning biomass
+
+Default: "mt"}
 
 \item{spawning_biomass_scale_amount}{A number describing how much to scale down the
-spawning biomass quantities shown on the y axis. See `recruitment_scale_amount`.}
+spawning biomass quantities shown on the y axis. See `recruitment_scale_amount`.
+
+Default: "1"}
 
 \item{ref_line_sb}{Identical definition as `ref_line`, but this argument is
-applied to plot_spawning_biomass.}
+applied to plot_spawning_biomass.
+
+Default: "msy"
+
+Options: Including, but not limited to: "target", "MSY", "unfished"}
 
 \item{abundance_at_age_scale_amount}{A number describing how much to scale down the
-abundance quantities shown via bubble size. See `recruitment_scale_amount`.}
+abundance quantities shown via bubble size. See `recruitment_scale_amount`.
 
-\item{abundance_at_age_unit_label}{Abbreviated units for abundance at age}
+Default: "1"}
+
+\item{abundance_at_age_unit_label}{Abbreviated units for abundance at age
+
+Default: "fish"}
 
 \item{biomass_at_age_scale_amount}{A number describing how much to scale down the
-biomass quantities shown via bubble size. See `recruitment_scale_amount`.}
+biomass quantities shown via bubble size. See `recruitment_scale_amount`.
 
-\item{biomass_at_age_unit_label}{Abbreviated units for biomass at age}
+Default: "1"}
 
-\item{indices_unit_label}{Units for index of abundance/CPUE}
+\item{biomass_at_age_unit_label}{Abbreviated units for biomass at age
 
-\item{biomass_unit_label}{Abbreviated units for biomass}
+Default: "mt"}
 
-\item{catch_unit_label}{Abbreviated units for catch}
+\item{indices_unit_label}{Units for index of abundance/CPUE
+
+Default: ""}
+
+\item{biomass_unit_label}{Abbreviated units for biomass
+
+Default: "mt"}
+
+\item{catch_unit_label}{Abbreviated units for catch
+
+Default: "mt"}
 
 \item{catch_scale_amount}{A number describing how much to scale down the
-catch quantities shown via bubble size. See `recruitment_scale_amount`.}
+catch quantities shown via bubble size. See `recruitment_scale_amount`.
+
+Default: "1"}
 }
 \value{
 Rda files for each figure/table.

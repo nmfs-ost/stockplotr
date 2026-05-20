@@ -3,7 +3,7 @@
 #' @inheritParams plot_spawning_biomass
 #' @param unit_label units for biomass
 #' 
-#' Default: "metric tons"
+#' Default: "mt"
 #' @param ref_line A string specifying the type of reference you want to
 #'   compare biomass to. The default `"msy"` looks for
 #'   `"biomass_msy"` in the `"label"` column of `dat`. The actual
@@ -48,7 +48,7 @@ plot_biomass <- function(
   facet = NULL,
   ref_line = "msy",
   era = NULL,
-  unit_label = "metric tons",
+  unit_label = "mt",
   module = NULL,
   scale_amount = 1,
   relative = FALSE,

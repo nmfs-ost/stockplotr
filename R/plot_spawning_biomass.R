@@ -35,10 +35,10 @@
 #' If the reference point is not found in the data, set ref_line = c("name" = value).
 #' @param unit_label A string specifying spawning biomass unit.
 #'
-#' Default: "metric tons"
+#' Default: "mt"
 #' @param lbs A logical value indicating whether to convert the y-axis values from
 #' kilograms to pounds. The default units match the default in the
-#' unit_label argument - 'metric tons'. 
+#' unit_label argument - 'mt'. 
 #'
 #' Default: `FALSE`
 #' @param module (Optional) A string indicating the module_name found in `dat`.
@@ -108,7 +108,7 @@ plot_spawning_biomass <- function(
   group = NULL,
   facet = NULL,
   ref_line = "msy",
-  unit_label = "metric tons",
+  unit_label = "mt",
   era = NULL,
   lbs = FALSE,
   module = NULL,
