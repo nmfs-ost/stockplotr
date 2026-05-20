@@ -14,24 +14,38 @@ export_rda(
 )
 }
 \arguments{
-\item{object}{The final figure (ggplot) or table (flextable) object.}
+\item{object}{The final figure (ggplot) or table (flextable) object.
+
+Default: NULL}
 
 \item{caps_alttext}{The object containing a figure's caption and alternative
 text, in a list, or a table's caption, likely generated with
-stockplotr::extract_caps_alttext().}
+stockplotr::extract_caps_alttext().
+
+Default: NULL}
 
 \item{figures_tables_dir}{If the user has already created folders containing
 figures and tables ("figures" and "tables"), figures_tables_dir represents
 the location of these folders. Otherwise, these two folders will be created
-automatically, then used to store the exported rda files.}
+automatically, then used to store the exported rda files.
+
+Default: NULL}
 
 \item{topic_label}{A string that describes a figure or table's label. These
 labels are found in the "label" column of the "captions_alt_text.csv" file
-and are used to link the figure or table with its caption/alt text.}
+and are used to link the figure or table with its caption/alt text.
 
-\item{fig_or_table}{A string describing whether the plot is a figure or table.}
+Default: NULL}
 
-\item{latex_table}{The object containing a LaTeX-based table.}
+\item{fig_or_table}{A string describing whether the plot is a figure or table.
+
+Default: NULL
+
+Options: "figure", "table"}
+
+\item{latex_table}{The object containing a LaTeX-based table.
+
+Default: NULL}
 }
 \value{
 An rda file with a figure's ggplot, caption, and alternative text, or

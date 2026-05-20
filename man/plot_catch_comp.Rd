@@ -20,43 +20,49 @@ plot_catch_comp(
 \arguments{
 \item{dat}{A data frame returned from \link[stockplotr]{convert_output}}
 
-\item{facet}{a string or vector of strings of column(s) that
-groups the data (e.g. "fleet", "sex", "area", etc.). Set facet = "none" to
-summarize the data in a single plot.}
+\item{facet}{a string or vector of strings of a column that facets the data.
+Set facet = "none" to summarize the data in a single plot.
 
-\item{era}{a string naming the era of data such as historical ("early"), current ("time"), or
-projected ("fore") data if filtering should occur. Default is set to "time" which is
-the current time. To plot all data, set era to NULL.}
+Default: NULL
 
-\item{unit_label}{indicate the name of the units of catch as to label the axis}
+Options: Including, but not limited to: "year", "area", "fleet", "sex", "none",
+NULL}
+
+\item{era}{A string naming the era of data.
+
+Default: "time"
+
+Options: "early", "time", "fore" (forecast), or NULL (all data)}
+
+\item{unit_label}{indicate the name of the units of catch as to label the axis
+
+Default: "mt"}
 
 \item{scale_amount}{A number describing how much to scale down the catch at
 age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders
 of magnitude (e.g., 1, 10, 100, 1000, etc.). For example, scale_amount = 100
 would scale down a value from 500,000 --> 5,000 and would report catch in
 hundreds of the 'unit_label'. This scale will be reflected
-in the legend label if proportional is set to FALSE. The default is 1.}
+in the legend label if proportional is set to FALSE.
+
+Default: "1"}
 
 \item{proportional}{Set size of points relative to z when TRUE, point
 size are relative to one another while when set to FALSE, point size
-is relative to z}
+is relative to z
 
-\item{interactive}{TRUE/FALSE; indicate whether the environment in which the
-function is operating  is interactive. This bypasses some options for
-filtering when preparing data for the plot. Default is FALSE.}
-
-\item{module}{(Optional) A string indicating the linked module_name associated
-with the label for the plot if known. Default is NULL. By default, the function
-will select the most relevant module if more than 1 exists.}
+Default: `TRUE`}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
 the .rda will be exported to the folder indicated in the argument "rda_dir".
-Default is FALSE.}
+
+Default: `FALSE`}
 
 \item{figures_dir}{The location of the folder containing the generated .rda files
 ("rda_files") that will be created if the argument `make_rda` = TRUE.
-Default is the working directory.}
+
+Default: the working directory (`getwd()`)}
 }
 \value{
 A plot showing catch or landings composition.

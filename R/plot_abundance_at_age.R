@@ -1,26 +1,44 @@
 #' Plot Abundance (or Numbers) at Age (AAA or NAA)
 #'
 #' @param dat A data frame returned from \link[stockplotr]{convert_output}
-#' @param facet a string or vector of strings of column(s) that
-#' groups the data (e.g. "fleet", "sex", "area", etc.). Set facet = "none" to
-#' summarize the data in a single plot.
+#' @param facet a string or vector of strings of a column that facets the data.
+#' Set facet = "none" to summarize the data in a single plot.
+#' 
+#' Default: NULL
+#' 
+#' Options: Including, but not limited to: "year", "area", "fleet", "sex", "none",
+#' NULL
+#' 
 #' @param unit_label units for abundance
+#' 
+#' Default: "fish"
+#' 
 #' @param scale_amount A number describing how much to scale down the abundance at
 #' age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders
 #' of magnitude (e.g., 1, 10, 100, 1000, etc.). For example, scale_amount = 100
 #' would scale down a value from 500,000 --> 5,000 and would report abundance in
 #' hundreds of fish (if "fish" was the unit_label). This scale will be reflected
-#' in the legend label if proportional is set to FALSE. The default is 1,000.
+#' in the legend label if proportional is set to FALSE.
+#' 
+#' Default: "1000"
+#' 
 #' @param proportional Set size of points relative to z when TRUE, point
 #' size are relative to one another while when set to FALSE, point size
 #' is relative to z
+#' 
+#' Default: `TRUE`
+#' 
 #' @param make_rda TRUE/FALSE; indicate whether to produce an .rda file containing
 #' a list with the figure/table, caption, and alternative text (if figure). If TRUE,
 #' the .rda will be exported to the folder indicated in the argument "rda_dir".
-#' Default is FALSE.
+#' 
+#' Default: `FALSE`
+#' 
 #' @param figures_dir The location of the folder containing the generated .rda files
 #' ("rda_files") that will be created if the argument `make_rda` = TRUE.
-#' Default is the working directory.
+#' 
+#' Default: the working directory (`getwd()`)
+#' 
 #' @returns A plot showing total abundance (or numbers) at age.
 #' 
 #' @details The input is from an assessment model output file

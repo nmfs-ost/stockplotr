@@ -197,13 +197,29 @@ insert_kqs <- function(...) {
 #' @param dat Data frame containing data which will fill in captions and
 #' alternative text for the object
 #' @param dir Directory to where the rda will be saved
-#' @param year Default to current year
-#' @param ref_line Reference line value such as "msy", "target" or "unfished"
-#' @param ref_point Reference point value such as "msy", "target" or "unfished"
+#' 
+#' Default: the working directory (`getwd()`)
+#' 
+#' @param year Assessment year
+#' 
+#' Default: the current year
+#' 
+#' @param ref_line Reference line value
+#' 
+#' Default: "msy"
+#' 
+#' Options: Including, but not limited to: "msy", "target", "unfished"
+#' 
 #' @param scale_amount A number describing how much to scale down the quantities
 #' shown on the y axis. For example, scale_amount = 100 would scale down a value
 #' from 500,000 --> 5,000. This scale will be reflected in the y axis label.
+#' 
+#' Default: "1"
+#' 
 #' @param unit_label A string containing a unit label for the y-axis
+#' 
+#' Default: "mt"
+#' 
 #' @param table_df The data frame that the table will be made into for purposes
 #' of exporting a latex formatted table.
 #'
@@ -229,7 +245,6 @@ create_rda <- function(
   dir = getwd(),
   year = format(as.POSIXct(Sys.Date(), format = "%YYYY-%mm-%dd"), "%Y"),
   ref_line = "msy",
-  ref_point = "msy", # this is not used anywhere
   scale_amount = 1,
   unit_label = "mt",
   table_df = NULL
@@ -500,8 +515,16 @@ create_rda <- function(
 #' @param topic_label A string that describes a figure or table's label. These
 #' labels are found in the "label" column of the "captions_alt_text.csv" file
 #' and are used to link the figure or table with its caption/alt text.
+#' 
+#' Default: NULL
+#' 
 #' @param fig_or_table A string describing whether the plot is a figure or table.
+#' 
+#' Default: NULL
+#' 
 #' @param dir The directory containing the "captions_alt_text.csv" file.
+#'
+#' Default: the working directory (`getwd()`)
 #'
 #' @returns A figure's caption and alternative text, in a list, or a table's caption.
 #' @seealso [export_rda()], [create_rda()]
@@ -566,19 +589,38 @@ extract_caps_alttext <- function(topic_label = NULL,
 #' Typically used after stockplotr::extract_caps_alttext().
 #'
 #' @param object The final figure (ggplot) or table (flextable) object.
+#' 
+#' Default: NULL
+#' 
 #' @param caps_alttext The object containing a figure's caption and alternative
 #' text, in a list, or a table's caption, likely generated with
 #' stockplotr::extract_caps_alttext().
+#' 
+#' Default: NULL
+#' 
 #' @param figures_tables_dir If the user has already created folders containing
 #' figures and tables ("figures" and "tables"), figures_tables_dir represents
 #' the location of these folders. Otherwise, these two folders will be created
 #' automatically, then used to store the exported rda files.
+#' 
+#' Default: NULL
+#' 
 #' @param topic_label A string that describes a figure or table's label. These
 #' labels are found in the "label" column of the "captions_alt_text.csv" file
 #' and are used to link the figure or table with its caption/alt text.
+#' 
+#' Default: NULL
+#' 
 #' @param fig_or_table A string describing whether the plot is a figure or table.
+#' 
+#' Default: NULL
+#' 
+#' Options: "figure", "table"
+#'  
 #' @param latex_table The object containing a LaTeX-based table.
-#'
+#' 
+#' Default: NULL
+#' 
 #' @returns An rda file with a figure's ggplot, caption, and alternative text, or
 #' a table's gt-based table, caption, and LaTeX-based table.
 #' @seealso [create_rda()], [extract_caps_alttext()]
