@@ -30,7 +30,7 @@
 #' )
 plot_landings <- function(
   dat,
-  unit_label = "metric tons",
+  unit_label = "mt",
   geom = "line",
   group = NULL,
   facet = NULL,

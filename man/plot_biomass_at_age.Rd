@@ -10,7 +10,7 @@ plot_biomass_at_age(
   unit_label = "mt",
   scale_amount = 1000,
   proportional = TRUE,
-  interactive = FALSE,
+  interactive = TRUE,
   make_rda = FALSE,
   figures_dir = getwd()
 )
@@ -18,33 +18,47 @@ plot_biomass_at_age(
 \arguments{
 \item{dat}{A data frame returned from \link[stockplotr]{convert_output}}
 
-\item{facet}{a string or vector of strings of column(s) that
-groups the data (e.g. "fleet", "sex", "area", etc.). Set facet = "none" to
-summarize the data in a single plot.}
+\item{facet}{a string or vector of strings of a column that facets the data.
+Set facet = "none" to summarize the data in a single plot.
 
-\item{unit_label}{units for abundance}
+Default: NULL
+
+Options: Including, but not limited to: "year", "area", "fleet", "sex", "none",
+NULL}
+
+\item{unit_label}{units for abundance
+
+Default: "fish"}
 
 \item{scale_amount}{A number describing how much to scale down the biomass at
 age. For example, scale_amount = 100 would scale down a value
 from 500,000 --> 5,000. This scale will be reflected in the legend label if
-proportion is set to FALSE.}
+proportion is set to FALSE.
+
+Default: 1,000}
 
 \item{proportional}{Set size of points relative to z when TRUE, point
 size are relative to one another while when set to FALSE, point size
-is relative to z}
+is relative to z
+
+Default: `TRUE`}
 
 \item{interactive}{TRUE/FALSE; indicate whether the environment in which the
 function is operating  is interactive. This bypasses some options for
-filtering when preparing data for the plot. Default is FALSE.}
+filtering when preparing data for the plot.
+
+Default: `TRUE`}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
 the .rda will be exported to the folder indicated in the argument "rda_dir".
-Default is FALSE.}
+
+Default: `FALSE`}
 
 \item{figures_dir}{The location of the folder containing the generated .rda files
 ("rda_files") that will be created if the argument `make_rda` = TRUE.
-Default is the working directory.}
+
+Default: the working directory (`getwd()`)}
 }
 \value{
 A plot showing total biomass at age.

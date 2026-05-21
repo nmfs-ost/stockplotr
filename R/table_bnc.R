@@ -40,7 +40,8 @@
 #   biomass_label <- glue::glue("Biomass ({biomass_unit_label})")
 #   catch_label <- glue::glue("Catch ({catch_unit_label})")
 #   sb_label <- glue::glue("Spawning biomass ({sb_unit_label})")
-
+# TODO: Update documentation to match formatting of other functions, with
+# lines for Default and Options
 #   # create plot-specific variables to use throughout fxn for naming and IDing
 #   topic_label <- "bnc"
 

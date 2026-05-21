@@ -3,6 +3,8 @@
 #' @param x table or figures object from ggplot, base r plot, gt table, flextable, or kable extra
 #' @param discrete TRUE/FALSE indicate if data input is discrete. Specifically applied to plots.
 #'
+#' Default: TRUE
+#'
 #' @returns Add the standard formatting for stock assessment reports for any
 #' figure or table.
 #' @details Currently, the function is able to format objects from:

@@ -22,28 +22,43 @@ plot_aa(
 the target label from \link[stockplotr]{filter_data}}
 
 \item{x}{a string of the column name of data used to plot on the x-axis
-(default is "year")}
+
+Default: "year"}
 
 \item{y}{a string of the column name of data used to plot on the y-axis
-(default is "age")}
+
+Default: "age"}
 
 \item{z}{a string of the column name of data used to control the size of the
-bubbles (default is "estimate")}
+bubbles
+
+Default: "estimate"}
 
 \item{label}{a string of the label for the size of the bubbles
-(default is "Abundance")}
 
-\item{xlab}{a string of the x-axis label (default is "Year")}
+Default: "Abundance"}
 
-\item{ylab}{a string of the y-axis label (default is "Age")}
+\item{xlab}{a string of the x-axis label
 
-\item{facet}{a string or vector of strings of a column that facets the data
-(e.g. "sex", "area", etc.). It is not recommended to include more than one
-facet due to the complexity of the plot.}
+Default: "Year"}
+
+\item{ylab}{a string of the y-axis label
+
+Default: "Age"}
+
+\item{facet}{a string or vector of strings of a column that facets the data.
+It is not recommended to include more than one facet due to the complexity 
+of the plot.
+
+Default: NULL
+
+Options: Including, but not limited to: "sex", "area", "fleet"}
 
 \item{proportional}{Set size of points relative to z when TRUE, point
 size are relative to one another while when set to FALSE, point size
-is relative to z}
+is relative to z
+
+Default: `TRUE`}
 
 \item{...}{inherited arguments from internal functions from
 \link[ggplot2]{geom_point}}

@@ -3,6 +3,8 @@
 #' @inheritParams plot_spawning_biomass
 #' @param unit_label units for recruitment
 #'
+#' Default: "mt"
+#'
 #' @returns A plot showing recruitment over time.
 #' 
 #' @details The input is from an assessment model output file

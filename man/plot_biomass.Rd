@@ -11,7 +11,7 @@ plot_biomass(
   facet = NULL,
   ref_line = "msy",
   era = NULL,
-  unit_label = "metric tons",
+  unit_label = "mt",
   module = NULL,
   scale_amount = 1,
   relative = FALSE,
@@ -34,25 +34,28 @@ Default: "line".
 
 Options: "line", "point", or "area"}
 
-\item{group}{A string of a single column that groups the data (e.g. "fleet",
-"sex", "area", etc.).
+\item{group}{A string of a single column that groups the data.
 
 Set group = "none" to summarize data over all indexing values.
 
-Default: NULL}
+Default: NULL
+Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
 \item{facet}{A string or vector of strings of a column name.
 
 Default: NULL}
 
 \item{ref_line}{A string specifying the type of reference you want to
-compare biomass to. The default is `"msy"`, which looks for
-`"biomass_msy"` in the `"label"` column of `dat`. The actual
-searching in `dat` is case agnostic and will work with either upper- or
-lower-case letters but you must use one of the options specified in the
-default list to ensure that the label on the figure looks correct
-regardless of how it is specified in `dat`. Other possibilities may include
-"target", "MSY", and "unfished".}
+  compare biomass to. The default `"msy"` looks for
+  `"biomass_msy"` in the `"label"` column of `dat`. The actual
+  searching in `dat` is case-agnostic and will work with either upper- or
+  lower-case letters. However, you must use one of the options specified in the
+  default list to ensure that the label on the figure looks correct
+  regardless of how it is specified in `dat`.
+  
+Default: "msy"
+
+Options: Including, but not limited to: "target", "MSY", "unfished"}
 
 \item{era}{A string naming the era of data.
 
@@ -60,9 +63,12 @@ Default: "time"
 
 Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
-\item{unit_label}{units for biomass}
+\item{unit_label}{units for biomass
+
+Default: "mt"}
 
 \item{module}{(Optional) A string indicating the module_name found in `dat`.
+If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
 

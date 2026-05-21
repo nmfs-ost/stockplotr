@@ -2,14 +2,19 @@
 #'
 #' @inheritParams plot_spawning_biomass
 #' @param unit_label units for biomass
+#' 
+#' Default: "mt"
 #' @param ref_line A string specifying the type of reference you want to
-#'   compare biomass to. The default is `"msy"`, which looks for
+#'   compare biomass to. The default `"msy"` looks for
 #'   `"biomass_msy"` in the `"label"` column of `dat`. The actual
-#'   searching in `dat` is case agnostic and will work with either upper- or
-#'   lower-case letters but you must use one of the options specified in the
+#'   searching in `dat` is case-agnostic and will work with either upper- or
+#'   lower-case letters. However, you must use one of the options specified in the
 #'   default list to ensure that the label on the figure looks correct
-#'   regardless of how it is specified in `dat`. Other possibilities may include
-#'   "target", "MSY", and "unfished".
+#'   regardless of how it is specified in `dat`.
+#'   
+#' Default: "msy"
+#' 
+#' Options: Including, but not limited to: "target", "MSY", "unfished"
 #' @returns A plot showing total biomass.
 #' 
 #' @details The input is from an assessment model output file
@@ -43,7 +48,7 @@ plot_biomass <- function(
   facet = NULL,
   ref_line = "msy",
   era = NULL,
-  unit_label = "metric tons",
+  unit_label = "mt",
   module = NULL,
   scale_amount = 1,
   relative = FALSE,

@@ -14,8 +14,9 @@ reference_line(plot, dat, label_name, reference, scale_amount = 1, lbs = FALSE)
 \item{label_name}{string of the name of the quantity that users want to
 extract the reference point from}
 
-\item{reference}{string. name of the reference point such as "msy",
-"unfished", or "target"}
+\item{reference}{string of the reference point
+
+Options: Including, but not limited to: "msy", "unfished", "target"}
 
 \item{scale_amount}{A number to scale the y-axis values.
 
@@ -23,7 +24,7 @@ Default: 1}
 
 \item{lbs}{A logical value indicating whether to convert the y-axis values from
 kilograms to pounds. The default units match the default in the
-unit_label argument - 'metric tons'. 
+unit_label argument - 'mt'. 
 
 Default: `FALSE`}
 }

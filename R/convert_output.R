@@ -3,12 +3,19 @@
 #' Format stock assessment output files to a standardized format.
 #'
 #' @param file Assessment model output file path
-#' @param model Assessment model used in evaluation ("ss3", "bam",
-#'  "fims", "rceattle).
+#' @param model Assessment model used in evaluation
+#' 
+#' Default: NULL
+#' 
+#' Options: "ss3", "bam", "fims", "rceattle"
 #' @param fleet_names Names of fleets in the assessment model as
 #'  shortened in the output file. If fleet names are not properly read, then
 #'  indicate the fleets names as an acronym in a vector
+#'  
+#'  Default: NULL
 #' @param save_dir File path to save the converted output file.
+#' 
+#' Default: NULL
 #'
 #' @author Samantha Schiano
 #'

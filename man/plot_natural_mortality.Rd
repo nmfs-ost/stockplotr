@@ -23,12 +23,12 @@ returned from \link[stockplotr]{convert_output}.
 If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{group}{A string of a single column that groups the data (e.g. "fleet",
-"sex", "area", etc.).
+\item{group}{A string of a single column that groups the data.
 
 Set group = "none" to summarize data over all indexing values.
 
-Default: NULL}
+Default: NULL
+Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
 \item{facet}{A string or vector of strings of a column name.
 
@@ -45,6 +45,7 @@ Options: "early", "time", "fore" (forecast), or NULL (all data)}
 Default: `FALSE`}
 
 \item{module}{(Optional) A string indicating the module_name found in `dat`.
+If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
 

@@ -10,7 +10,7 @@ plot_spawning_biomass(
   group = NULL,
   facet = NULL,
   ref_line = "msy",
-  unit_label = "metric tons",
+  unit_label = "mt",
   era = NULL,
   lbs = FALSE,
   module = NULL,
@@ -35,12 +35,12 @@ Default: "line".
 
 Options: "line", "point", or "area"}
 
-\item{group}{A string of a single column that groups the data (e.g. "fleet",
-"sex", "area", etc.).
+\item{group}{A string of a single column that groups the data.
 
 Set group = "none" to summarize data over all indexing values.
 
-Default: NULL}
+Default: NULL
+Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
 \item{facet}{A string or vector of strings of a column name.
 
@@ -55,7 +55,7 @@ If the reference point is not found in the data, set ref_line = c("name" = value
 
 \item{unit_label}{A string specifying spawning biomass unit.
 
-Default: "metric tons"}
+Default: "mt"}
 
 \item{era}{A string naming the era of data.
 
@@ -65,11 +65,12 @@ Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
 \item{lbs}{A logical value indicating whether to convert the y-axis values from
 kilograms to pounds. The default units match the default in the
-unit_label argument - 'metric tons'. 
+unit_label argument - 'mt'. 
 
 Default: `FALSE`}
 
 \item{module}{(Optional) A string indicating the module_name found in `dat`.
+If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
 

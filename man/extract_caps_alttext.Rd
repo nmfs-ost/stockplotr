@@ -9,11 +9,17 @@ extract_caps_alttext(topic_label = NULL, fig_or_table = NULL, dir = getwd())
 \arguments{
 \item{topic_label}{A string that describes a figure or table's label. These
 labels are found in the "label" column of the "captions_alt_text.csv" file
-and are used to link the figure or table with its caption/alt text.}
+and are used to link the figure or table with its caption/alt text.
 
-\item{fig_or_table}{A string describing whether the plot is a figure or table.}
+Default: NULL}
 
-\item{dir}{The directory containing the "captions_alt_text.csv" file.}
+\item{fig_or_table}{A string describing whether the plot is a figure or table.
+
+Default: NULL}
+
+\item{dir}{The directory containing the "captions_alt_text.csv" file.
+
+Default: the working directory (`getwd()`)}
 }
 \value{
 A figure's caption and alternative text, in a list, or a table's caption.

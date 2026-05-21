@@ -17,34 +17,53 @@ filter_data(
 )
 }
 \arguments{
-\item{dat}{a data frame or list of data frames input as `list()` that
-contains the data to be plotted.}
+\item{dat}{A tibble or named list of tibbles (input as `list()`)
+returned from \link[stockplotr]{convert_output}.
+
+If inputting a list of tibbles, the first tibble's reference point defined
+in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
 \item{label_name}{a string of the name of the label that is used to filter
 the data.}
 
-\item{module}{(Optional) A string indicating the linked module_name associated
-with the label for the plot if known. Default is NULL. By default, the function
-will select the most relevant module if more than 1 exists. If selecting more
-than one module, place them in a vector such as c("module1", "module2").}
+\item{module}{(Optional) A string indicating the module_name found in `dat`.
+If selecting >1 module, place them in a vector like c("module1", "module2").
 
-\item{era}{A string naming the era of data such as historical ("early"), current ("time"), or
-projected ("fore") data if filtering should occur. Default is set to "time" which is
-the current time. To plot all data, set era to NULL.}
+Default: NULL
 
-\item{geom}{Type of plot user wants to create. Options are "line", "point",
-and "area".}
+If the interactive and >1 module_name is found, user will select the
+module_name in the console. @seealso [filter_data()]}
 
-\item{group}{Name of a column selected grouping for the data.}
+\item{era}{A string naming the era of data.
 
-\item{facet}{a string or vector of strings of a column that facets the data
-(e.g. "year", "area", etc.)}
+Default: "time"
 
-\item{scale_amount}{A number describing how much to scale down the quantities
-shown on the y axis.}
+Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
-\item{interactive}{logical. If TRUE, the user will be prompted to select
-a module_name when there was more than one found in the filtered data set.}
+\item{geom}{A string stating the geom used for the plot.
+
+Default: "line".
+
+Options: "line", "point", or "area"}
+
+\item{group}{A string of a single column that groups the data.
+
+Set group = "none" to summarize data over all indexing values.
+
+Default: NULL
+Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
+
+\item{facet}{A string or vector of strings of a column name.
+
+Default: NULL}
+
+\item{scale_amount}{A number to scale the y-axis values.
+
+Default: 1}
+
+\item{interactive}{A logical value indicating if the environment is interactive.
+
+Default: `FALSE`}
 }
 \value{
 a data frame that is preformatted for plotting with ggplot2.

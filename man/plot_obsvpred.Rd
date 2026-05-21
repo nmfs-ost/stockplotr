@@ -22,29 +22,47 @@ plot_obsvpred(
 \item{dat}{filtered data frame from standard output file(s) preformatted for
 the target label from \link[stockplotr]{filter_data}}
 
-\item{x}{a string of the column name of data used to plot on the x-axis (default
-is "year")}
+\item{x}{a string of the column name of data used to plot on the x-axis
 
-\item{y}{a string of the column name of data used to plot on the y-axis (default
-is "estimate")}
+Default: "year"}
 
-\item{observed_label}{a string of the label used to filter the observed data. Default is "observed".}
+\item{y}{a string of the column name of data used to plot on the y-axis
 
-\item{predicted_label}{a string of the label used to filter the predicted data. Default is "predicted".}
+Default: "estimate"}
+
+\item{observed_label}{a string of the label used to filter the observed data
+
+Default: "observed"}
+
+\item{predicted_label}{a string of the label used to filter the predicted data
+Default: "predicted"}
 
 \item{geom}{type of geom to use for plotting found in ggplot2 (e.g. "point",
-"line", etc.). Default is "line". Other options are "point" and "area".}
+"line", etc.).
 
-\item{xlab}{a string of the x-axis label (default is "Year")}
+Default: "line"
+
+Options: "point" and "area"}
+
+\item{xlab}{a string of the x-axis label
+
+Default: "Year"}
 
 \item{ylab}{a string of the y-axis label. If NULL, it will be set to the name
-of `y`.}
+ of `y`.
 
-\item{group}{a string of a single column that groups the data (e.g. "fleet",
-"sex", "area", etc.). Currently can only have one level of grouping.}
+Default: NULL}
+
+\item{group}{a string of a single column that groups the data.
+Currently can only have one level of grouping.
+
+Default: NULL
+Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
 \item{facet}{a string or vector of strings of a column that facets the data
-(e.g. "year", "area", etc.)}
+(e.g. "year", "area", etc.)
+
+Default: NULL}
 
 \item{...}{inherited arguments from internal functions from ggplot2::geom_xx}
 }

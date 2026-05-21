@@ -106,6 +106,8 @@ create_latex_table <- function(data,
 #' @param dat input data into process_table
 #' @param index_variables the index_variables vector created within process_table
 #' @param id_group the identifying index variable as a string
+#'
+#' Default: NULL
 
 check_label_differences <- function(dat, index_variables, id_group = NULL) {
   # Loop over model to perform checks if the model columns are identical

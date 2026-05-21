@@ -1,12 +1,18 @@
 #' Plot Index of Abundance
 #'
 #' @inheritParams plot_spawning_biomass
-#' @param facet a string or vector of strings of a column that facets the data
-#' (e.g. "year", "area", etc.) "fleet" is always added on to any faceting selections
+#' @param facet a string or vector of strings of a column that facets the data. "fleet" is always added on to any faceting selections
+#'
+#' Default: NULL
+#'
+#' Options: May include, but is not limited to: "fleet", "year", "area", NULL
 #' @param unit_label units for index of abundance/CPUE
+#'
+#' Default: ""
 #' @param focus a string or vector of strings indicating how data should be
 #' filtered. (i.e. select names of fleets to zoom into the plot)
 #'
+#' Default: NULL
 #' @returns A plot showing the expected and predicted indices.
 #' 
 #' @details The input is from an assessment model output file

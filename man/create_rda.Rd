@@ -12,7 +12,6 @@ create_rda(
   dir = getwd(),
   year = format(as.POSIXct(Sys.Date(), format = "\%YYYY-\%mm-\%dd"), "\%Y"),
   ref_line = "msy",
-  ref_point = "msy",
   scale_amount = 1,
   unit_label = "mt",
   table_df = NULL
@@ -28,19 +27,29 @@ create_rda(
 \item{dat}{Data frame containing data which will fill in captions and
 alternative text for the object}
 
-\item{dir}{Directory to where the rda will be saved}
+\item{dir}{Directory to where the rda will be saved
 
-\item{year}{Default to current year}
+Default: the working directory (`getwd()`)}
 
-\item{ref_line}{Reference line value such as "msy", "target" or "unfished"}
+\item{year}{Assessment year
 
-\item{ref_point}{Reference point value such as "msy", "target" or "unfished"}
+Default: the current year}
+
+\item{ref_line}{Reference line value
+
+Default: "msy"
+
+Options: Including, but not limited to: "msy", "target", "unfished"}
 
 \item{scale_amount}{A number describing how much to scale down the quantities
 shown on the y axis. For example, scale_amount = 100 would scale down a value
-from 500,000 --> 5,000. This scale will be reflected in the y axis label.}
+from 500,000 --> 5,000. This scale will be reflected in the y axis label.
 
-\item{unit_label}{A string containing a unit label for the y-axis}
+Default: 1}
+
+\item{unit_label}{A string containing a unit label for the y-axis
+
+Default: "mt"}
 
 \item{table_df}{The data frame that the table will be made into for purposes
 of exporting a latex formatted table.}

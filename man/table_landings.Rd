@@ -24,7 +24,9 @@ returned from \link[stockplotr]{convert_output}.
 If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{unit_label}{Abbreviated units of landings}
+\item{unit_label}{Abbreviated units of landings
+
+Default: "mt"}
 
 \item{era}{A string naming the era of data.
 
@@ -36,13 +38,22 @@ Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
 Default: `FALSE`}
 
-\item{group}{A string identifying the indexing variable of the data. If you
-want to just summarize the data across all factors, set group = "none".}
+\item{group}{A string of a single column that groups the data.
+
+Set group = "none" to summarize data over all indexing values.
+
+Default: NULL
+Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
 \item{method}{A string describing the method of summarizing data when group
-is set to "none". Options are "sum" or "mean". Default is "sum".}
+is set to "none".
+
+Default: "sum"
+
+Options: "sum" or "mean"}
 
 \item{module}{(Optional) A string indicating the module_name found in `dat`.
+If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
 
@@ -52,7 +63,9 @@ module_name in the console. @seealso [filter_data()]}
 \item{label}{The label that will be chosen from the input file. If unspecified,
 the function will search the "label" column and use the first matching label
 in this ordered list: "landings_weight",  "landings_numbers", "landings_expected",
-"landings_predicted", "landings".}
+"landings_predicted", "landings".
+
+Default: NULL}
 
 \item{make_rda}{A logical value indicating whether to save the object and
 make an automated caption and alternative text in the form of an `rda` object. If TRUE,
@@ -61,7 +74,9 @@ the rda will be exported to the folder indicated in the argument "figures_dir".
 Default: `FALSE`.}
 
 \item{tables_dir}{The location of the folder containing the generated table
-rda files ("tables") that will be created if the argument `make_rda` = TRUE.}
+rda files ("tables") that will be created if the argument `make_rda` = TRUE.
+
+Default: the working directory (`getwd()`)}
 }
 \value{
 A table ready of landed catch by fleet and year.

@@ -10,11 +10,19 @@ process_data(dat, group = NULL, facet = NULL, lbs = FALSE, method = "sum")
 \item{dat}{Pre-filtered data from \link[stockplotr]{filter_data} following a
 long format data.}
 
-\item{group}{A string identifying the indexing variable of the data. If you
-want to just summarize the data across all factors, set group = "none".}
+\item{group}{A string identifying the indexing variable of the data.
+To remove any groups and summarize data across all factors, set
+group = "none". Setting group = NULL will keep any grouping
+variables identified in the data by the function.
+
+Default: NULL
+
+Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
 \item{facet}{A string or vector of strings identifying the faceting
-variable(s) of the data.}
+variable(s) of the data.
+
+Default: NULL}
 
 \item{lbs}{A logical value indicating whether to convert the y-axis values from
 kilograms to pounds. The default units match the default in the
@@ -23,7 +31,11 @@ unit_label argument - 'metric tons'.
 Default: `FALSE`}
 
 \item{method}{A string describing the method of summarizing data when group
-is set to "none". Options are "sum" or "mean". Default is "sum".}
+is set to "none".
+
+Default: "sum"
+
+Options: "sum" or "mean"}
 }
 \value{
 List of 3 objects:

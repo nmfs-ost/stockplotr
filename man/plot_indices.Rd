@@ -24,23 +24,29 @@ returned from \link[stockplotr]{convert_output}.
 If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{unit_label}{units for index of abundance/CPUE}
+\item{unit_label}{units for index of abundance/CPUE
 
-\item{group}{A string of a single column that groups the data (e.g. "fleet",
-"sex", "area", etc.).
+Default: ""}
+
+\item{group}{A string of a single column that groups the data.
 
 Set group = "none" to summarize data over all indexing values.
 
-Default: NULL}
+Default: NULL
+Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
-\item{facet}{a string or vector of strings of a column that facets the data
-(e.g. "year", "area", etc.) "fleet" is always added on to any faceting selections}
+\item{facet}{a string or vector of strings of a column that facets the data. "fleet" is always added on to any faceting selections
+
+Default: NULL
+
+Options: May include, but is not limited to: "fleet", "year", "area", NULL}
 
 \item{interactive}{A logical value indicating if the environment is interactive.
 
 Default: `FALSE`}
 
 \item{module}{(Optional) A string indicating the module_name found in `dat`.
+If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
 
@@ -48,7 +54,9 @@ If the interactive and >1 module_name is found, user will select the
 module_name in the console. @seealso [filter_data()]}
 
 \item{focus}{a string or vector of strings indicating how data should be
-filtered. (i.e. select names of fleets to zoom into the plot)}
+filtered. (i.e. select names of fleets to zoom into the plot)
+
+Default: NULL}
 
 \item{make_rda}{A logical value indicating whether to save the object and
 make an automated caption and alternative text in the form of an `rda` object. If TRUE,

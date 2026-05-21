@@ -6,7 +6,7 @@
 \usage{
 plot_landings(
   dat,
-  unit_label = "metric tons",
+  unit_label = "mt",
   geom = "line",
   group = NULL,
   facet = NULL,
@@ -29,7 +29,7 @@ in `ref_line` is used to plot a reference line or calculate relative spawning bi
 
 \item{unit_label}{A string specifying spawning biomass unit.
 
-Default: "metric tons"}
+Default: "mt"}
 
 \item{geom}{A string stating the geom used for the plot.
 
@@ -37,12 +37,12 @@ Default: "line".
 
 Options: "line", "point", or "area"}
 
-\item{group}{A string of a single column that groups the data (e.g. "fleet",
-"sex", "area", etc.).
+\item{group}{A string of a single column that groups the data.
 
 Set group = "none" to summarize data over all indexing values.
 
-Default: NULL}
+Default: NULL
+Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
 \item{facet}{A string or vector of strings of a column name.
 
@@ -50,7 +50,7 @@ Default: NULL}
 
 \item{lbs}{A logical value indicating whether to convert the y-axis values from
 kilograms to pounds. The default units match the default in the
-unit_label argument - 'metric tons'. 
+unit_label argument - 'mt'. 
 
 Default: `FALSE`}
 
@@ -65,6 +65,7 @@ Options: "early", "time", "fore" (forecast), or NULL (all data)}
 Default: 1}
 
 \item{module}{(Optional) A string indicating the module_name found in `dat`.
+If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
 
