@@ -12,7 +12,7 @@
 #' hundreds of the 'unit_label'. This scale will be reflected
 #' in the legend label if proportional is set to FALSE.
 #' 
-#' Default: "1"
+#' Default: 1
 #' 
 #' @param era A string naming the era of data.
 #'

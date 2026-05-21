@@ -20,7 +20,7 @@
 #' hundreds of fish (if "fish" was the unit_label). This scale will be reflected
 #' in the legend label if proportional is set to FALSE.
 #' 
-#' Default: "1000"
+#' Default: 1,000
 #' 
 #' @param proportional Set size of points relative to z when TRUE, point
 #' size are relative to one another while when set to FALSE, point size

@@ -6,7 +6,7 @@
 #' from 500,000 --> 5,000. This scale will be reflected in the legend label if
 #' proportion is set to FALSE.
 #'
-#' Default: "1000"
+#' Default: 1,000
 #'
 #' @param interactive TRUE/FALSE; indicate whether the environment in which the
 #' function is operating  is interactive. This bypasses some options for

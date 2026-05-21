@@ -44,7 +44,7 @@ the recruitment quantities shown on the y axis. For example,
 recruitment_scale_amount = 100 would scale down a value from 500,000 -->
 5,000. This scale will be reflected in the y axis label.
 
-Default: "1"}
+Default: 1}
 
 \item{relative}{A logical value specifying to set y-axis values relative to
 the ref_line value.
@@ -81,7 +81,7 @@ Options: Including, but not limited to: "target", "MSY", "unfished"}
 \item{biomass_scale_amount}{A number describing how much to scale down the
 biomass quantities shown on the y axis. See `recruitment_scale_amount`.
 
-Default: "1"}
+Default: 1}
 
 \item{landings_unit_label}{Units for landings
 
@@ -94,7 +94,7 @@ Default: "mt"}
 \item{spawning_biomass_scale_amount}{A number describing how much to scale down the
 spawning biomass quantities shown on the y axis. See `recruitment_scale_amount`.
 
-Default: "1"}
+Default: 1}
 
 \item{ref_line_sb}{Identical definition as `ref_line`, but this argument is
 applied to plot_spawning_biomass.
@@ -106,7 +106,7 @@ Options: Including, but not limited to: "target", "MSY", "unfished"}
 \item{abundance_at_age_scale_amount}{A number describing how much to scale down the
 abundance quantities shown via bubble size. See `recruitment_scale_amount`.
 
-Default: "1"}
+Default: 1}
 
 \item{abundance_at_age_unit_label}{Abbreviated units for abundance at age
 
@@ -115,7 +115,7 @@ Default: "fish"}
 \item{biomass_at_age_scale_amount}{A number describing how much to scale down the
 biomass quantities shown via bubble size. See `recruitment_scale_amount`.
 
-Default: "1"}
+Default: 1}
 
 \item{biomass_at_age_unit_label}{Abbreviated units for biomass at age
 
@@ -136,7 +136,7 @@ Default: "mt"}
 \item{catch_scale_amount}{A number describing how much to scale down the
 catch quantities shown via bubble size. See `recruitment_scale_amount`.
 
-Default: "1"}
+Default: 1}
 }
 \value{
 Rda files for each figure/table.

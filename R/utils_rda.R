@@ -214,7 +214,7 @@ insert_kqs <- function(...) {
 #' shown on the y axis. For example, scale_amount = 100 would scale down a value
 #' from 500,000 --> 5,000. This scale will be reflected in the y axis label.
 #' 
-#' Default: "1"
+#' Default: 1
 #' 
 #' @param unit_label A string containing a unit label for the y-axis
 #' 

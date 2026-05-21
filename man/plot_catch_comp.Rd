@@ -45,7 +45,7 @@ would scale down a value from 500,000 --> 5,000 and would report catch in
 hundreds of the 'unit_label'. This scale will be reflected
 in the legend label if proportional is set to FALSE.
 
-Default: "1"}
+Default: 1}
 
 \item{proportional}{Set size of points relative to z when TRUE, point
 size are relative to one another while when set to FALSE, point size

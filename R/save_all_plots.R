@@ -8,7 +8,7 @@
 #' recruitment_scale_amount = 100 would scale down a value from 500,000 -->
 #' 5,000. This scale will be reflected in the y axis label.
 #' 
-#' Default: "1"
+#' Default: 1
 #' 
 #' @param recruitment_unit_label Units for recruitment
 #' 
@@ -36,7 +36,7 @@
 #' @param biomass_scale_amount A number describing how much to scale down the
 #' biomass quantities shown on the y axis. See `recruitment_scale_amount`.
 #' 
-#' Default: "1"
+#' Default: 1
 #' 
 #' @param landings_unit_label Units for landings
 #' 
@@ -53,7 +53,7 @@
 #' @param spawning_biomass_scale_amount  A number describing how much to scale down the
 #' spawning biomass quantities shown on the y axis. See `recruitment_scale_amount`.
 #' 
-#' Default: "1"
+#' Default: 1
 #' 
 #' @param ref_line_sb Identical definition as `ref_line`, but this argument is
 #' applied to plot_spawning_biomass.
@@ -65,7 +65,7 @@
 #' @param abundance_at_age_scale_amount  A number describing how much to scale down the
 #' abundance quantities shown via bubble size. See `recruitment_scale_amount`.
 #' 
-#' Default: "1"
+#' Default: 1
 #' 
 #' @param abundance_at_age_unit_label Abbreviated units for abundance at age
 #' 
@@ -74,7 +74,7 @@
 #' @param biomass_at_age_scale_amount  A number describing how much to scale down the
 #' biomass quantities shown via bubble size. See `recruitment_scale_amount`.
 #' 
-#' Default: "1"
+#' Default: 1
 #' 
 #' @param biomass_at_age_unit_label Abbreviated units for biomass at age
 #' 
@@ -95,7 +95,7 @@
 #' @param catch_scale_amount A number describing how much to scale down the
 #' catch quantities shown via bubble size. See `recruitment_scale_amount`.
 #' 
-#' Default: "1"
+#' Default: 1
 #' 
 #' @param landings_unit_label Units for landings
 #' 
