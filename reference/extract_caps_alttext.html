@@ -104,15 +104,18 @@ generating a figure or table. Typically used before stockplotr::export_rda().</p
 <dl><dt id="arg-topic-label">topic_label<a class="anchor" aria-label="anchor" href="#arg-topic-label"></a></dt>
 <dd><p>A string that describes a figure or table's label. These
 labels are found in the "label" column of the "captions_alt_text.csv" file
-and are used to link the figure or table with its caption/alt text.</p></dd>
+and are used to link the figure or table with its caption/alt text.</p>
+<p>Default: NULL</p></dd>
 
 
 <dt id="arg-fig-or-table">fig_or_table<a class="anchor" aria-label="anchor" href="#arg-fig-or-table"></a></dt>
-<dd><p>A string describing whether the plot is a figure or table.</p></dd>
+<dd><p>A string describing whether the plot is a figure or table.</p>
+<p>Default: NULL</p></dd>
 
 
 <dt id="arg-dir">dir<a class="anchor" aria-label="anchor" href="#arg-dir"></a></dt>
-<dd><p>The directory containing the "captions_alt_text.csv" file.</p></dd>
+<dd><p>The directory containing the "captions_alt_text.csv" file.</p>
+<p>Default: the working directory (`getwd()`)</p></dd>
 
 </dl></div>
     <div id="value">

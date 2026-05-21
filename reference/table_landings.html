@@ -118,7 +118,8 @@ in `ref_line` is used to plot a reference line or calculate relative spawning bi
 
 
 <dt id="arg-unit-label">unit_label<a class="anchor" aria-label="anchor" href="#arg-unit-label"></a></dt>
-<dd><p>Abbreviated units of landings</p></dd>
+<dd><p>Abbreviated units of landings</p>
+<p>Default: "mt"</p></dd>
 
 
 <dt id="arg-era">era<a class="anchor" aria-label="anchor" href="#arg-era"></a></dt>
@@ -133,17 +134,22 @@ in `ref_line` is used to plot a reference line or calculate relative spawning bi
 
 
 <dt id="arg-group">group<a class="anchor" aria-label="anchor" href="#arg-group"></a></dt>
-<dd><p>A string identifying the indexing variable of the data. If you
-want to just summarize the data across all factors, set group = "none".</p></dd>
+<dd><p>A string of a single column that groups the data.</p>
+<p>Set group = "none" to summarize data over all indexing values.</p>
+<p>Default: NULL
+Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
 <dd><p>A string describing the method of summarizing data when group
-is set to "none". Options are "sum" or "mean". Default is "sum".</p></dd>
+is set to "none".</p>
+<p>Default: "sum"</p>
+<p>Options: "sum" or "mean"</p></dd>
 
 
 <dt id="arg-module">module<a class="anchor" aria-label="anchor" href="#arg-module"></a></dt>
-<dd><p>(Optional) A string indicating the module_name found in `dat`.</p>
+<dd><p>(Optional) A string indicating the module_name found in `dat`.
+If selecting &gt;1 module, place them in a vector like c("module1", "module2").</p>
 <p>Default: NULL</p>
 <p>If the interactive and &gt;1 module_name is found, user will select the
 module_name in the console. @seealso [filter_data()]</p></dd>
@@ -153,7 +159,8 @@ module_name in the console. @seealso [filter_data()]</p></dd>
 <dd><p>The label that will be chosen from the input file. If unspecified,
 the function will search the "label" column and use the first matching label
 in this ordered list: "landings_weight",  "landings_numbers", "landings_expected",
-"landings_predicted", "landings".</p></dd>
+"landings_predicted", "landings".</p>
+<p>Default: NULL</p></dd>
 
 
 <dt id="arg-make-rda">make_rda<a class="anchor" aria-label="anchor" href="#arg-make-rda"></a></dt>
@@ -165,7 +172,8 @@ the rda will be exported to the folder indicated in the argument "figures_dir".<
 
 <dt id="arg-tables-dir">tables_dir<a class="anchor" aria-label="anchor" href="#arg-tables-dir"></a></dt>
 <dd><p>The location of the folder containing the generated table
-rda files ("tables") that will be created if the argument `make_rda` = TRUE.</p></dd>
+rda files ("tables") that will be created if the argument `make_rda` = TRUE.</p>
+<p>Default: the working directory (`getwd()`)</p></dd>
 
 </dl></div>
     <div id="value">

@@ -117,18 +117,21 @@ in `ref_line` is used to plot a reference line or calculate relative spawning bi
 
 
 <dt id="arg-spawning-biomass-label">spawning_biomass_label<a class="anchor" aria-label="anchor" href="#arg-spawning-biomass-label"></a></dt>
-<dd><p>Units for spawning biomass</p></dd>
+<dd><p>Units for spawning biomass</p>
+<p>Default: "mt"</p></dd>
 
 
 <dt id="arg-recruitment-label">recruitment_label<a class="anchor" aria-label="anchor" href="#arg-recruitment-label"></a></dt>
-<dd><p>units for recruitment</p></dd>
+<dd><p>units for recruitment</p>
+<p>Default: "mt"</p></dd>
 
 
 <dt id="arg-interactive">interactive<a class="anchor" aria-label="anchor" href="#arg-interactive"></a></dt>
 <dd><p>Indicate whether the environment the
 plot is being made in is interactive. By default, this
 is set to false. If true, dependent on your data, a
-option menu will pop-up.</p></dd>
+option menu will pop-up.</p>
+<p>Default: TRUE</p></dd>
 
 
 <dt id="arg-era">era<a class="anchor" aria-label="anchor" href="#arg-era"></a></dt>
@@ -138,7 +141,8 @@ option menu will pop-up.</p></dd>
 
 
 <dt id="arg-module">module<a class="anchor" aria-label="anchor" href="#arg-module"></a></dt>
-<dd><p>(Optional) A string indicating the module_name found in `dat`.</p>
+<dd><p>(Optional) A string indicating the module_name found in `dat`.
+If selecting &gt;1 module, place them in a vector like c("module1", "module2").</p>
 <p>Default: NULL</p>
 <p>If the interactive and &gt;1 module_name is found, user will select the
 module_name in the console. @seealso [filter_data()]</p></dd>

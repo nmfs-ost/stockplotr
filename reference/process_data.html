@@ -105,13 +105,18 @@ long format data.</p></dd>
 
 
 <dt id="arg-group">group<a class="anchor" aria-label="anchor" href="#arg-group"></a></dt>
-<dd><p>A string identifying the indexing variable of the data. If you
-want to just summarize the data across all factors, set group = "none".</p></dd>
+<dd><p>A string identifying the indexing variable of the data.
+To remove any groups and summarize data across all factors, set
+group = "none". Setting group = NULL will keep any grouping
+variables identified in the data by the function.</p>
+<p>Default: NULL</p>
+<p>Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL</p></dd>
 
 
 <dt id="arg-facet">facet<a class="anchor" aria-label="anchor" href="#arg-facet"></a></dt>
 <dd><p>A string or vector of strings identifying the faceting
-variable(s) of the data.</p></dd>
+variable(s) of the data.</p>
+<p>Default: NULL</p></dd>
 
 
 <dt id="arg-lbs">lbs<a class="anchor" aria-label="anchor" href="#arg-lbs"></a></dt>
@@ -123,7 +128,9 @@ unit_label argument - 'metric tons'.</p>
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
 <dd><p>A string describing the method of summarizing data when group
-is set to "none". Options are "sum" or "mean". Default is "sum".</p></dd>
+is set to "none".</p>
+<p>Default: "sum"</p>
+<p>Options: "sum" or "mean"</p></dd>
 
 </dl></div>
     <div id="value">

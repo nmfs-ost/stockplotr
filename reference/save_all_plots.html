@@ -129,14 +129,16 @@ in `ref_line` is used to plot a reference line or calculate relative spawning bi
 
 
 <dt id="arg-recruitment-unit-label">recruitment_unit_label<a class="anchor" aria-label="anchor" href="#arg-recruitment-unit-label"></a></dt>
-<dd><p>Units for recruitment</p></dd>
+<dd><p>Units for recruitment</p>
+<p>Default: "mt"</p></dd>
 
 
 <dt id="arg-recruitment-scale-amount">recruitment_scale_amount<a class="anchor" aria-label="anchor" href="#arg-recruitment-scale-amount"></a></dt>
 <dd><p>A number describing how much to scale down
 the recruitment quantities shown on the y axis. For example,
 recruitment_scale_amount = 100 would scale down a value from 500,000 –&gt;
-5,000. This scale will be reflected in the y axis label.</p></dd>
+5,000. This scale will be reflected in the y axis label.</p>
+<p>Default: 1</p></dd>
 
 
 <dt id="arg-relative">relative<a class="anchor" aria-label="anchor" href="#arg-relative"></a></dt>
@@ -146,7 +148,8 @@ the ref_line value.</p>
 
 
 <dt id="arg-proportional">proportional<a class="anchor" aria-label="anchor" href="#arg-proportional"></a></dt>
-<dd><p>T/F to scale size of bubble plots</p></dd>
+<dd><p>T/F to scale size of bubble plots</p>
+<p>Default: `TRUE`</p></dd>
 
 
 <dt id="arg-interactive">interactive<a class="anchor" aria-label="anchor" href="#arg-interactive"></a></dt>
@@ -156,7 +159,8 @@ the ref_line value.</p>
 
 <dt id="arg-figures-tables-dir">figures_tables_dir<a class="anchor" aria-label="anchor" href="#arg-figures-tables-dir"></a></dt>
 <dd><p>The location of the folder containing
-figures and tables ("figures" and "tables").</p></dd>
+figures and tables ("figures" and "tables").</p>
+<p>Default: the working directory (`getwd()`)</p></dd>
 
 
 <dt id="arg-ref-line">ref_line<a class="anchor" aria-label="anchor" href="#arg-ref-line"></a></dt>
@@ -168,65 +172,81 @@ lower-case letters but you must use one of the options specified in the
 default list to ensure that the label on the figure looks correct
 regardless of how it is specified in `dat`. Other possibilities may include
 "target", "MSY", and "unfished". When the reference cannot be found,
-indicate the reference line in the form c("label" = value).</p></dd>
+indicate the reference line in the form c("label" = value).</p>
+<p>Default: "msy"</p>
+<p>Options: Including, but not limited to: "target", "MSY", "unfished"</p></dd>
 
 
 <dt id="arg-biomass-scale-amount">biomass_scale_amount<a class="anchor" aria-label="anchor" href="#arg-biomass-scale-amount"></a></dt>
 <dd><p>A number describing how much to scale down the
-biomass quantities shown on the y axis. See `recruitment_scale_amount`.</p></dd>
+biomass quantities shown on the y axis. See `recruitment_scale_amount`.</p>
+<p>Default: 1</p></dd>
 
 
 <dt id="arg-landings-unit-label">landings_unit_label<a class="anchor" aria-label="anchor" href="#arg-landings-unit-label"></a></dt>
-<dd><p>Units for landings</p></dd>
+<dd><p>Units for landings</p>
+<p>Default: "mt"</p></dd>
 
 
 <dt id="arg-spawning-biomass-label">spawning_biomass_label<a class="anchor" aria-label="anchor" href="#arg-spawning-biomass-label"></a></dt>
-<dd><p>Units for spawning biomass</p></dd>
+<dd><p>Units for spawning biomass</p>
+<p>Default: "mt"</p></dd>
 
 
 <dt id="arg-spawning-biomass-scale-amount">spawning_biomass_scale_amount<a class="anchor" aria-label="anchor" href="#arg-spawning-biomass-scale-amount"></a></dt>
 <dd><p>A number describing how much to scale down the
-spawning biomass quantities shown on the y axis. See `recruitment_scale_amount`.</p></dd>
+spawning biomass quantities shown on the y axis. See `recruitment_scale_amount`.</p>
+<p>Default: 1</p></dd>
 
 
 <dt id="arg-ref-line-sb">ref_line_sb<a class="anchor" aria-label="anchor" href="#arg-ref-line-sb"></a></dt>
 <dd><p>Identical definition as `ref_line`, but this argument is
-applied to plot_spawning_biomass.</p></dd>
+applied to plot_spawning_biomass.</p>
+<p>Default: "msy"</p>
+<p>Options: Including, but not limited to: "target", "MSY", "unfished"</p></dd>
 
 
 <dt id="arg-abundance-at-age-scale-amount">abundance_at_age_scale_amount<a class="anchor" aria-label="anchor" href="#arg-abundance-at-age-scale-amount"></a></dt>
 <dd><p>A number describing how much to scale down the
-abundance quantities shown via bubble size. See `recruitment_scale_amount`.</p></dd>
+abundance quantities shown via bubble size. See `recruitment_scale_amount`.</p>
+<p>Default: 1</p></dd>
 
 
 <dt id="arg-abundance-at-age-unit-label">abundance_at_age_unit_label<a class="anchor" aria-label="anchor" href="#arg-abundance-at-age-unit-label"></a></dt>
-<dd><p>Abbreviated units for abundance at age</p></dd>
+<dd><p>Abbreviated units for abundance at age</p>
+<p>Default: "fish"</p></dd>
 
 
 <dt id="arg-biomass-at-age-scale-amount">biomass_at_age_scale_amount<a class="anchor" aria-label="anchor" href="#arg-biomass-at-age-scale-amount"></a></dt>
 <dd><p>A number describing how much to scale down the
-biomass quantities shown via bubble size. See `recruitment_scale_amount`.</p></dd>
+biomass quantities shown via bubble size. See `recruitment_scale_amount`.</p>
+<p>Default: 1</p></dd>
 
 
 <dt id="arg-biomass-at-age-unit-label">biomass_at_age_unit_label<a class="anchor" aria-label="anchor" href="#arg-biomass-at-age-unit-label"></a></dt>
-<dd><p>Abbreviated units for biomass at age</p></dd>
+<dd><p>Abbreviated units for biomass at age</p>
+<p>Default: "mt"</p></dd>
 
 
 <dt id="arg-indices-unit-label">indices_unit_label<a class="anchor" aria-label="anchor" href="#arg-indices-unit-label"></a></dt>
-<dd><p>Units for index of abundance/CPUE</p></dd>
+<dd><p>Units for index of abundance/CPUE</p>
+<p>Default: ""</p></dd>
 
 
 <dt id="arg-biomass-unit-label">biomass_unit_label<a class="anchor" aria-label="anchor" href="#arg-biomass-unit-label"></a></dt>
-<dd><p>Abbreviated units for biomass</p></dd>
+<dd><p>Abbreviated units for biomass</p>
+<p>Default: "mt"</p></dd>
 
 
 <dt id="arg-catch-unit-label">catch_unit_label<a class="anchor" aria-label="anchor" href="#arg-catch-unit-label"></a></dt>
-<dd><p>Abbreviated units for catch</p></dd>
+<dd><p>Abbreviated units for catch</p>
+<p>Default: "mt"</p></dd>
 
 
 <dt id="arg-catch-scale-amount">catch_scale_amount<a class="anchor" aria-label="anchor" href="#arg-catch-scale-amount"></a></dt>
 <dd><p>A number describing how much to scale down the
-catch quantities shown via bubble size. See `recruitment_scale_amount`.</p></dd>
+catch quantities shown via bubble size. See `recruitment_scale_amount`.</p>
+<p>Default: 1</p></dd>
 
 </dl></div>
     <div id="value">

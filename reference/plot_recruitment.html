@@ -119,7 +119,8 @@ in `ref_line` is used to plot a reference line or calculate relative spawning bi
 
 
 <dt id="arg-unit-label">unit_label<a class="anchor" aria-label="anchor" href="#arg-unit-label"></a></dt>
-<dd><p>units for recruitment</p></dd>
+<dd><p>units for recruitment</p>
+<p>Default: "mt"</p></dd>
 
 
 <dt id="arg-scale-amount">scale_amount<a class="anchor" aria-label="anchor" href="#arg-scale-amount"></a></dt>
@@ -134,10 +135,10 @@ in `ref_line` is used to plot a reference line or calculate relative spawning bi
 
 
 <dt id="arg-group">group<a class="anchor" aria-label="anchor" href="#arg-group"></a></dt>
-<dd><p>A string of a single column that groups the data (e.g. "fleet",
-"sex", "area", etc.).</p>
+<dd><p>A string of a single column that groups the data.</p>
 <p>Set group = "none" to summarize data over all indexing values.</p>
-<p>Default: NULL</p></dd>
+<p>Default: NULL
+Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL</p></dd>
 
 
 <dt id="arg-facet">facet<a class="anchor" aria-label="anchor" href="#arg-facet"></a></dt>
@@ -151,7 +152,8 @@ in `ref_line` is used to plot a reference line or calculate relative spawning bi
 
 
 <dt id="arg-module">module<a class="anchor" aria-label="anchor" href="#arg-module"></a></dt>
-<dd><p>(Optional) A string indicating the module_name found in `dat`.</p>
+<dd><p>(Optional) A string indicating the module_name found in `dat`.
+If selecting &gt;1 module, place them in a vector like c("module1", "module2").</p>
 <p>Default: NULL</p>
 <p>If the interactive and &gt;1 module_name is found, user will select the
 module_name in the console. @seealso [filter_data()]</p></dd>
