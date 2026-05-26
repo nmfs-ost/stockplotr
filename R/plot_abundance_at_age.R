@@ -1,4 +1,4 @@
-#' Plot Abundance (or Numbers) at Age (AAA or NAA)
+#' Plot Abundance at Age
 #'
 #' @param dat A data frame returned from \link[stockplotr]{convert_output}
 #' @param facet a string or vector of strings of a column that facets the data.
@@ -40,6 +40,7 @@
 #' Default: the working directory (`getwd()`)
 #' 
 #' @returns A plot showing total abundance (or numbers) at age.
+
 #' 
 #' @details The input is from an assessment model output file
 #' translated to a standardized output (\link[stockplotr]{convert_output}).
@@ -56,9 +57,7 @@
 #'   facet = "growth_pattern",
 #'   unit_label = "fish",
 #'   scale_amount = 1000,
-#'   proportional = TRUE,
-#'   make_rda = FALSE,
-#'   figures_dir = getwd()
+#'   proportional = TRUE
 #' )
 #' plot_abundance_at_age(
 #'   dat = stockplotr:::example_data,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_abundance_at_age.R
 \name{plot_abundance_at_age}
 \alias{plot_abundance_at_age}
-\title{Plot Abundance (or Numbers) at Age (AAA or NAA)}
+\title{Plot Abundance at Age}
 \usage{
 plot_abundance_at_age(
   dat,
@@ -59,7 +59,7 @@ Default: the working directory (`getwd()`)}
 A plot showing total abundance (or numbers) at age.
 }
 \description{
-Plot Abundance (or Numbers) at Age (AAA or NAA)
+Plot Abundance at Age
 }
 \details{
 The input is from an assessment model output file
@@ -73,9 +73,7 @@ plot_abundance_at_age(
   facet = "growth_pattern",
   unit_label = "fish",
   scale_amount = 1000,
-  proportional = TRUE,
-  make_rda = FALSE,
-  figures_dir = getwd()
+  proportional = TRUE
 )
 plot_abundance_at_age(
   dat = stockplotr:::example_data,
