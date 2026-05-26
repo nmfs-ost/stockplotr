@@ -17,7 +17,6 @@ plot_abundance_at_age(
 \arguments{
 \item{dat}{A data frame returned from \link[stockplotr]{convert_output}}
 
-<<<<<<< HEAD
 \item{facet}{a string or vector of strings of a column that facets the data.
 Set facet = "none" to summarize the data in a single plot.
 
@@ -25,14 +24,6 @@ Default: NULL
 
 Options: Including, but not limited to: "year", "area", "fleet", "sex", "none",
 NULL}
-=======
-\item{facet}{a string or vector of strings of column(s) that
-groups the data (e.g. "fleet", "sex", "area", etc.). Set facet = "none" to
-summarize the data in a single plot.
-
-Default: NULL (function will automatically detect and indexing in the data 
-and place them into group then facet)}
->>>>>>> 2e302fb (adjust naa documentation and respective inherited docs)
 
 \item{unit_label}{units for abundance
 
@@ -43,7 +34,6 @@ age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders
 of magnitude (e.g., 1, 10, 100, 1000, etc.). For example, scale_amount = 100
 would scale down a value from 500,000 --> 5,000 and would report abundance in
 hundreds of fish (if "fish" was the unit_label). This scale will be reflected
-<<<<<<< HEAD
 in the legend label if proportional is set to FALSE.
 
 Default: 1,000}
@@ -64,32 +54,9 @@ Default: `FALSE`}
 ("rda_files") that will be created if the argument `make_rda` = TRUE.
 
 Default: the working directory (`getwd()`)}
-=======
-in the legend label if proportional is set to FALSE. 
-
-Default: 1,000.}
-
-\item{proportional}{Set size of points relative to abundance. When TRUE, point
-size are relative to one another. When set to FALSE, point size
-is relative to abundance.
-
-Default: TRUE}
-
-\item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
-a list with the figure/table, caption, and alternative text (if figure). If TRUE,
-the .rda will be exported to the folder indicated in the argument "figures_dir".
-
-Default: FALSE}
-
-\item{figures_dir}{The location of the folder containing the generated .rda files
-("rda_files") that will be created if the argument `make_rda` = TRUE.
-Default is the working directory.
-
-Default: getwd()}
->>>>>>> 2e302fb (adjust naa documentation and respective inherited docs)
 }
 \value{
-Plot of total abundance at age.
+A plot showing total abundance (or numbers) at age.
 }
 \description{
 Plot Abundance at Age

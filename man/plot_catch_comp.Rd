@@ -20,17 +20,8 @@ plot_catch_comp(
 \arguments{
 \item{dat}{A data frame returned from \link[stockplotr]{convert_output}}
 
-<<<<<<< HEAD
 \item{facet}{a string or vector of strings of a column that facets the data.
 Set facet = "none" to summarize the data in a single plot.
-=======
-\item{facet}{a string or vector of strings of column(s) that
-groups the data (e.g. "fleet", "sex", "area", etc.). Set facet = "none" to
-summarize the data in a single plot.
-
-Default: NULL (function will automatically detect and indexing in the data 
-and place them into group then facet)}
->>>>>>> 2e302fb (adjust naa documentation and respective inherited docs)
 
 Default: NULL
 
@@ -56,17 +47,9 @@ in the legend label if proportional is set to FALSE.
 
 Default: 1}
 
-<<<<<<< HEAD
 \item{proportional}{Set size of points relative to z when TRUE, point
 size are relative to one another while when set to FALSE, point size
 is relative to z
-=======
-\item{proportional}{Set size of points relative to abundance. When TRUE, point
-size are relative to one another. When set to FALSE, point size
-is relative to abundance.
-
-Default: TRUE}
->>>>>>> 2e302fb (adjust naa documentation and respective inherited docs)
 
 Default: `TRUE`}
 
@@ -84,7 +67,6 @@ module_name in the console. @seealso [filter_data()]}
 
 \item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
-<<<<<<< HEAD
 the .rda will be exported to the folder indicated in the argument "rda_dir".
 
 Default: `FALSE`}
@@ -93,17 +75,6 @@ Default: `FALSE`}
 ("rda_files") that will be created if the argument `make_rda` = TRUE.
 
 Default: the working directory (`getwd()`)}
-=======
-the .rda will be exported to the folder indicated in the argument "figures_dir".
-
-Default: FALSE}
-
-\item{figures_dir}{The location of the folder containing the generated .rda files
-("rda_files") that will be created if the argument `make_rda` = TRUE.
-Default is the working directory.
-
-Default: getwd()}
->>>>>>> 2e302fb (adjust naa documentation and respective inherited docs)
 }
 \value{
 A plot showing catch or landings composition.
