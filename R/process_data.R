@@ -376,6 +376,7 @@ process_data <- function(
 #' Default: NULL
 #' @param digits Numeric value indicating the number of rounding digits.
 #'
+#'Default: 2
 #' @returns A dataframe of processed data ready for formatting into a table.
 #' @details Input is an object created with \link[stockplotr]{filter_data}.
 #' 

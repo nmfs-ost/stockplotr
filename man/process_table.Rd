@@ -4,7 +4,7 @@
 \alias{process_table}
 \title{Processing for tables}
 \usage{
-process_table(dat, group = NULL, method = "sum", label = NULL)
+process_table(dat, group = NULL, method = "sum", label = NULL, digits = 2)
 }
 \arguments{
 \item{dat}{Pre-filtered data from \link[stockplotr]{filter_data} following a
@@ -29,6 +29,10 @@ Options: "sum" or "mean"}
 \item{label}{A string or vector of strings identifying the label values to filter the data.
 
 Default: NULL}
+
+\item{digits}{Numeric value indicating the number of rounding digits.
+
+Default: 2}
 }
 \value{
 A dataframe of processed data ready for formatting into a table.
