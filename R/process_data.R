@@ -374,6 +374,7 @@ process_data <- function(
 #' @param label A string or vector of strings identifying the label values to filter the data.
 #' 
 #' Default: NULL
+#' @param digits Numeric value indicating the number of rounding digits.
 #'
 #' @returns A dataframe of processed data ready for formatting into a table.
 #' @details Input is an object created with \link[stockplotr]{filter_data}.
@@ -393,7 +394,8 @@ process_table <- function(
   dat,
   group = NULL,
   method = "sum",
-  label = NULL
+  label = NULL,
+  digits = 2
 ) {
   index_variables <- c()
   # TODO: incorporate this into the output for check_grouping to avoid loop
@@ -527,6 +529,8 @@ process_table <- function(
       dplyr::rename(
         !!mod_uncert_lab := uncertainty
       ) |>
+      # set values to strings to include training zeros from rounding
+      dplyr::mutate(estimate = sprintf(glue::glue("%.{digits}f"), estimate))
       tidyr::pivot_wider(
         id_cols = dplyr::all_of(c(stringr::str_to_title(mod_cols))),
         values_from = dplyr::all_of(c("estimate", mod_uncert_lab)),

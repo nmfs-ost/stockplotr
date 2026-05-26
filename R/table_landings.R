@@ -117,7 +117,8 @@ table_landings <- function(
     dat = prepared_data,
     # group = group,
     method = method,
-    label = label
+    label = label,
+    digits = digits
   )
   table_data <- table_data_info[[1]]
   indexed_vars <- table_data_info[[2]]
