@@ -419,13 +419,15 @@ process_table <- function(
   } else {
     # Check if there's > 1 label for any model
     if ((dat |>
-      dplyr::group_by(model) |>
-      dplyr::summarise(unique_count = dplyr::n_distinct(label)) |>
-      dplyr::pull(unique_count) |> max()) > 1) {
+          dplyr::summarise(unique_count = dplyr::n_distinct(label), .groups = dplyr::all_of(c("model", id_group))) |>
+          dplyr::pull(unique_count) |>
+          max()
+      ) > 1) {
       if ((dat |>
-        dplyr::group_by(model) |>
-        dplyr::summarise(unique_count = dplyr::n_distinct(label)) |>
-        dplyr::pull(unique_count) |> max()) == 2) {
+        dplyr::summarise(unique_count = dplyr::n_distinct(label), .groups = dplyr::all_of(c("model", id_group))) |>
+        dplyr::pull(unique_count)
+        |> max()
+        ) == 2) {
         # compare estimate across all indexing vars and see if they are different over years
         # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -531,7 +533,7 @@ process_table <- function(
         !!mod_uncert_lab := uncertainty
       ) |>
       # set values to strings to include training zeros from rounding
-      dplyr::mutate(estimate = sprintf(glue::glue("%.{digits}f"), estimate))
+      dplyr::mutate(estimate = sprintf(glue::glue("%.{digits}f"), estimate)) |>
       tidyr::pivot_wider(
         id_cols = dplyr::all_of(c(stringr::str_to_title(mod_cols))),
         values_from = dplyr::all_of(c("estimate", mod_uncert_lab)),
