@@ -243,7 +243,6 @@ create_rda <- function(
   fig_or_table, # REQUIRED
   dat, # REQUIRED: only one dat file to base captions and alt text from
   dir = getwd(),
-  year = format(as.POSIXct(Sys.Date(), format = "%YYYY-%mm-%dd"), "%Y"),
   ref_line = "msy",
   scale_amount = 1,
   unit_label = "mt",
