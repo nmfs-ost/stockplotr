@@ -62,49 +62,107 @@ table_bnc <- function(
     make_rda = FALSE,
     tables_dir = getwd()) {
   
-  # TODO: do group and facet need to be uncommented and updated?
-  # Filter data for landings
-  prepared_data <- filter_data(
+  biomass_label <- glue::glue("Biomass ({biomass_unit_label})")
+  catch_label <- glue::glue("Catch ({catch_unit_label})")
+  sb_label <- glue::glue("Spawning biomass ({sb_unit_label})")
+  
+  # Filter data for biomass
+  prepared_data_b <- filter_data(
     dat = dat,
-    label_name = "bnc",
+    label_name = "^biomass$",
     geom = "line",
     era = era,
-    module = module,
+    module = ifelse("TIME_SERIES" %in% dat$module_name, "TIME_SERIES", 
+                    ifelse("t.series" %in% dat$module_name, "t.series", NULL)),
+    scale_amount = 1,
+    interactive = interactive
+  ) |>
+    dplyr::mutate(estimate = round(as.numeric(estimate), digits = 0),
+                  uncertainty = round(as.numeric(uncertainty), digits = 2))
+  
+  # Add check if there is any b data
+  if (nrow(prepared_data_b) == 0) {
+    cli::cli_abort("No biomass data found.")
+  }
+  
+  # Filter data for catch
+  labels <- c("catch$", "landings_observed")
+  prepared_data_catch <- purrr::map_df(labels, ~ {
+    filter_data(
+      dat = dat,
+      label_name = .x,
+      geom = "line",
+      era = era,
+      module = if ("TIME_SERIES" %in% dat$module_name) "TIME_SERIES" else 
+        if ("t.series" %in% dat$module_name) "t.series" else NULL,
+      scale_amount = 1,
+      interactive = interactive
+    )
+  }) |>
+    dplyr::mutate(
+      estimate = round(as.numeric(estimate), digits = 0),
+      uncertainty = round(as.numeric(uncertainty), digits = 2)
+    )
+  
+  # Add check if there is any catch data
+  if (nrow(prepared_data_catch) == 0) {
+    cli::cli_abort("No catch data found.")
+  }
+  
+  # Filter data for abundance
+  labels <- c("mature_abundance", "^abundance")
+  prepared_data_abun <- purrr::map_df(labels, ~ {
+    filter_data(
+      dat = dat,
+      label_name = .x,
+      geom = "line",
+      era = era,
+      module = if ("TIME_SERIES" %in% dat$module_name) "TIME_SERIES" else 
+        if ("t.series" %in% dat$module_name) "t.series" else NULL,
+      scale_amount = 1,
+      interactive = interactive
+    )
+  }) |>
+    dplyr::mutate(
+      estimate = round(as.numeric(estimate), digits = 0),
+      uncertainty = round(as.numeric(uncertainty), digits = 2)
+    )
+  
+  # Add check if there is any abundance data
+  if (nrow(prepared_data_abun) == 0) {
+    cli::cli_abort("No abundance data found.")
+  }
+  
+  # Filter data for spawning biomass
+  # TODO: check if the label name shouldn't have carrot and dollar sign; for example data, this includes spawning_biomass and spawning_biomass_unfished
+  prepared_data_sb <- filter_data(
+    dat = dat,
+    label_name = "^spawning_biomass$",
+    geom = "line",
+    era = era,
+    module = ifelse("TIME_SERIES" %in% dat$module_name, "TIME_SERIES", 
+                    ifelse("t.series" %in% dat$module_name, "t.series", NULL)),
     scale_amount = 1,
     interactive = interactive
   ) |>
     dplyr::mutate(estimate = round(as.numeric(estimate), digits = 0)) |>
     dplyr::mutate(uncertainty = round(as.numeric(uncertainty), digits = 2))
   
-  # Add check if there is any data
-  if (nrow(prepared_data) == 0) {
-    cli::cli_abort("No bnc data found.")
+  # Add check if there is any sb data
+  if (nrow(prepared_data_sb) == 0) {
+    cli::cli_abort("No spawning biomass data found.")
   }
   
-  # get uncertainty label by model
-  uncert_lab <- prepared_data |>
-    dplyr::filter(!is.na(uncertainty_label)) |>
-    dplyr::group_by(model) |>
-    dplyr::reframe(unique_uncert = unique(uncertainty_label)) # changed to reframe -- may cause errors
-  uncert_lab <- stats::setNames(uncert_lab$unique_uncert, uncert_lab$model)
-  # if (length(unique(uncert_lab)) == 1) uncert_lab <- unique(uncert_lab) # might need this line
+  prepared_data <- rbind(prepared_data_b,
+                         prepared_data_catch,
+                         prepared_data_abun,
+                         prepared_data_sb)
   
-  # This needs to be adjusted when comparing different models and diff error
-  if (length(uncert_lab) > 1 & length(unique(uncert_lab)) == 1 | length(names(uncert_lab)) == 1) { # prepared_data$model
-    # cli::cli_alert_warning("More than one value for uncertainty exists: {uncert_lab}")
-    uncert_lab <- uncert_lab[[1]]
-    # cli::cli_alert_warning("The first value ({uncert_lab}) will be chosen.")
-  }
+  # TODO: Decide if uncertainty is necessary for this table
+  # it's not present for B or SB but is present for catch in example data
   
-  if (is.na(uncert_lab)) uncert_lab <- "uncertainty"
+  # TODO: check correct to not collect fleet names
   
-  # get fleet names
-  # TODO: change from fleets to id_group AFTER the process data step and adjust throughout the table based on indexing
-  fleets <- unique(prepared_data$fleet) |>
-    # sort numerically even if fleets are 100% characters
-    stringr::str_sort(numeric = TRUE)
-  
-  # TODO: fix this so that fleet names aren't removed if, e.g., group = "fleet"
   table_data_info <- process_table(
     dat = prepared_data,
     # group = group,
@@ -116,8 +174,7 @@ table_bnc <- function(
   id_col_vals <- table_data_info[[3]]
   
   # id_group_vals <- sapply(id_cols, function(x) unique(prepared_data[[x]]), simplify = FALSE)
-  # TODO: add check if there is a landings column for every error column -- if not remove the error (can keep landings)
-  
+
   # merge error and landings columns and rename
   df_list <- merge_error(
     table_data,
@@ -126,6 +183,22 @@ table_bnc <- function(
     label = "landings",
     unit_label
   )
+  
+  #   # Bring together quantities for table
+  #   bnc <- biomass |>
+  #     dplyr::left_join(sb, by = "year") |>
+  #     dplyr::left_join(abundance, by = "year") |>
+  #     dplyr::left_join(catch, by = "year") |>
+  #     dplyr::mutate(year = as.factor(year)) |>
+  #     # apply table
+  #     flextable::flextable() |>
+  #     flextable::set_header_labels(
+  #       year = "Year",
+  #       biomass = biomass_label,
+  #       abundance = "Abundance",
+  #       total_catch = catch_label,
+  #       spawning_biomass = sb_label
+  #     )
   
   # transform dfs into tables
   final <- lapply(df_list, function(df) {
@@ -180,6 +253,7 @@ table_bnc <- function(
     # Return finished table (when only one table)
     return(final)
   }
+}
   
   
   
@@ -190,45 +264,8 @@ table_bnc <- function(
   
   
   
-  
-  
-  
-  
-  
-  
-#   biomass_label <- glue::glue("Biomass ({biomass_unit_label})")
-#   catch_label <- glue::glue("Catch ({catch_unit_label})")
-#   sb_label <- glue::glue("Spawning biomass ({sb_unit_label})")
-# TODO: Update documentation to match formatting of other functions, with
-# lines for Default and Options
 
-#   biomass <- dat |>
-#     dplyr::filter(
-#       # SS3 params
-#       label == "biomass",
-#       !is.na(year),
-#       module_name %in% c("TIME_SERIES", "t.series"),
-#       is.na(fleet), is.na(sex), is.na(area), is.na(growth_pattern),
-#       module_name != "DERIVED_QUANTITIES"
-#     ) |>
-#     dplyr::mutate(estimate = round(as.numeric(estimate), digits = 2)) |>
-#     dplyr::rename(biomass = estimate) |>
-#     dplyr::select(year, biomass)
 
-#   if (length(unique(biomass$year)) != nrow(biomass)) {
-#     cli::cli_abort("Duplicate years found in biomass df.")
-#   }
-
-#   catch <- dat |>
-#     dplyr::filter(
-#       # SS3 params
-#       grepl("catch$", label) | grepl("landings_observed", label),
-#       !is.na(year), is.na(age),
-#       # module_name %in% c("TIME_SERIES","t.series"),
-#       # is.na(fleet), is.na(sex), is.na(area), is.na(growth_pattern),
-#       module_name != "DERIVED_QUANTITIES"
-#     ) |>
-#     dplyr::mutate(estimate = round(as.numeric(estimate), digits = 2))
 #   # Check if df is by age and summarize to time series
 #   if (length(unique(catch$year)) == nrow(catch)) {
 #     catch <- catch |>
@@ -249,15 +286,6 @@ table_bnc <- function(
 #     # }
 #   }
 
-#   abundance <- dat |>
-#     dplyr::filter(
-#       # SS3 params
-#       grepl("mature_abundance", label) | grepl("^abundance", label),
-#       !is.na(year),
-#       module_name %in% c("TIME_SERIES", "t.series"),
-#       # is.na(fleet), is.na(sex), is.na(area), is.na(growth_pattern),
-#       module_name != "DERIVED_QUANTITIES"
-#     )
 #   # Check if there is more than one year aka the values are factored
 #   # TODO: Review that sum is OK to use in these cases - otherwise what are
 #   #       the alternatives?
