@@ -374,7 +374,9 @@ process_data <- function(
 #' @param label A string or vector of strings identifying the label values to filter the data.
 #' 
 #' Default: NULL
+#' @param digits Numeric value indicating the number of rounding digits.
 #'
+#'Default: 2
 #' @returns A dataframe of processed data ready for formatting into a table.
 #' @details Input is an object created with \link[stockplotr]{filter_data}.
 #' 
@@ -393,7 +395,8 @@ process_table <- function(
   dat,
   group = NULL,
   method = "sum",
-  label = NULL
+  label = NULL,
+  digits = 2
 ) {
   index_variables <- c()
   # TODO: incorporate this into the output for check_grouping to avoid loop
@@ -416,13 +419,15 @@ process_table <- function(
   } else {
     # Check if there's > 1 label for any model
     if ((dat |>
-      dplyr::group_by(model) |>
-      dplyr::summarise(unique_count = dplyr::n_distinct(label)) |>
-      dplyr::pull(unique_count) |> max()) > 1) {
+          dplyr::summarise(unique_count = dplyr::n_distinct(label), .groups = c("model", id_group)) |>
+          dplyr::pull(unique_count) |>
+          max()
+      ) > 1) {
       if ((dat |>
-        dplyr::group_by(model) |>
-        dplyr::summarise(unique_count = dplyr::n_distinct(label)) |>
-        dplyr::pull(unique_count) |> max()) == 2) {
+        dplyr::summarise(unique_count = dplyr::n_distinct(label), .groups = c("model", id_group)) |>
+        dplyr::pull(unique_count)
+        |> max()
+        ) == 2) {
         # compare estimate across all indexing vars and see if they are different over years
         # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -527,6 +532,8 @@ process_table <- function(
       dplyr::rename(
         !!mod_uncert_lab := uncertainty
       ) |>
+      # set values to strings to include training zeros from rounding
+      dplyr::mutate(estimate = sprintf(glue::glue("%.{digits}f"), estimate)) |>
       tidyr::pivot_wider(
         id_cols = dplyr::all_of(c(stringr::str_to_title(mod_cols))),
         values_from = dplyr::all_of(c("estimate", mod_uncert_lab)),

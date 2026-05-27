@@ -13,6 +13,8 @@ table_landings(
   method = "sum",
   module = NULL,
   label = NULL,
+  digits = 2,
+  scale_amount = 1,
   make_rda = FALSE,
   tables_dir = getwd()
 )
@@ -66,6 +68,15 @@ in this ordered list: "landings_weight",  "landings_numbers", "landings_expected
 "landings_predicted", "landings".
 
 Default: NULL}
+
+\item{digits}{Numeric value indicating the number of digits values in the 
+table will be rounded to.
+
+Default: 2}
+
+\item{scale_amount}{A number to scale the y-axis values.
+
+Default: 1}
 
 \item{make_rda}{A logical value indicating whether to save the object and
 make an automated caption and alternative text in the form of an `rda` object. If TRUE,

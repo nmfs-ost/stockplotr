@@ -121,6 +121,7 @@ check_label_differences <- function(dat, index_variables, id_group = NULL) {
       next
     } else if (length(unique(mod_data$label)) == 2) {
       label_differences <- mod_data |>
+        dplyr::mutate(estimate = as.numeric(estimate)) |>
         tidyr::pivot_wider(
           id_cols = dplyr::all_of(mod_index_variables),
           names_from = label,
@@ -221,8 +222,8 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
         label_cols_final <- c(
           ifelse(
             id_uncert == "uncertainty",
-            paste0(stringr::str_to_title(label), " (", unit_label, ")"),
-            paste0(stringr::str_to_title(label), " (", unit_label, ") (", id_uncert, ")")
+            paste0(stringr::str_to_title(label), " ", unit_label),
+            paste0(stringr::str_to_title(label), " ", unit_label, " (", id_uncert, ")")
           ),
           id_uncert
         )
@@ -237,10 +238,10 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
           uncert_lab, " ", label_lab
         )
         if (uncert_lab == "uncertainty" || length(uncert_lab) == 0) {
-          label_cols_final <- c(paste0(label_lab, " (", unit_label, ")"), uncert_lab)
+          label_cols_final <- c(paste0(label_lab, " ", unit_label), uncert_lab)
         } else {
           label_cols_final <- c(
-            paste0(label_lab, " (", unit_label, ") (", uncert_lab, ")"),
+            paste0(label_lab, " ", unit_label, " (", uncert_lab, ")"),
             id_uncert_col
           )
         }
