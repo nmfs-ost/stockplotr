@@ -10,7 +10,6 @@ create_rda(
   fig_or_table,
   dat,
   dir = getwd(),
-  year = format(as.POSIXct(Sys.Date(), format = "\%YYYY-\%mm-\%dd"), "\%Y"),
   ref_line = "msy",
   scale_amount = 1,
   unit_label = "mt",
@@ -31,10 +30,6 @@ alternative text for the object}
 
 Default: the working directory (`getwd()`)}
 
-\item{year}{Assessment year
-
-Default: the current year}
-
 \item{ref_line}{Reference line value
 
 Default: "msy"
@@ -53,6 +48,10 @@ Default: "mt"}
 
 \item{table_df}{The data frame that the table will be made into for purposes
 of exporting a latex formatted table.}
+
+\item{year}{Assessment year
+
+Default: the current year}
 }
 \value{
 An rda package for a plot or table object. Requires an
