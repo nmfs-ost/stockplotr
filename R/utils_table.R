@@ -121,6 +121,7 @@ check_label_differences <- function(dat, index_variables, id_group = NULL) {
       next
     } else if (length(unique(mod_data$label)) == 2) {
       label_differences <- mod_data |>
+        dplyr::mutate(estimate = as.numeric(estimate)) |>
         tidyr::pivot_wider(
           id_cols = dplyr::all_of(mod_index_variables),
           names_from = label,

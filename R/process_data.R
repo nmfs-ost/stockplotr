@@ -419,12 +419,12 @@ process_table <- function(
   } else {
     # Check if there's > 1 label for any model
     if ((dat |>
-          dplyr::summarise(unique_count = dplyr::n_distinct(label), .groups = dplyr::all_of(c("model", id_group))) |>
+          dplyr::summarise(unique_count = dplyr::n_distinct(label), .groups = c("model", id_group)) |>
           dplyr::pull(unique_count) |>
           max()
       ) > 1) {
       if ((dat |>
-        dplyr::summarise(unique_count = dplyr::n_distinct(label), .groups = dplyr::all_of(c("model", id_group))) |>
+        dplyr::summarise(unique_count = dplyr::n_distinct(label), .groups = c("model", id_group)) |>
         dplyr::pull(unique_count)
         |> max()
         ) == 2) {
