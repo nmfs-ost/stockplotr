@@ -3,52 +3,52 @@
 #' @param dat A data frame returned from \link[stockplotr]{convert_output}
 #' @param facet a string or vector of strings of a column that facets the data.
 #' Set facet = "none" to summarize the data in a single plot.
-#' 
+#'
 #' Default: NULL
-#' 
+#'
 #' Options: Including, but not limited to: "year", "area", "fleet", "sex", "none",
 #' NULL
-#' 
+#'
 #' @param unit_label units for abundance
-#' 
+#'
 #' Default: "fish"
-#' 
+#'
 #' @param scale_amount A number describing how much to scale down the abundance at
 #' age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders
 #' of magnitude (e.g., 1, 10, 100, 1000, etc.). For example, scale_amount = 100
 #' would scale down a value from 500,000 --> 5,000 and would report abundance in
 #' hundreds of fish (if "fish" was the unit_label). This scale will be reflected
 #' in the legend label if proportional is set to FALSE.
-#' 
+#'
 #' Default: 1,000
-#' 
+#'
 #' @param proportional Set size of points relative to z when TRUE, point
 #' size are relative to one another while when set to FALSE, point size
 #' is relative to z
-#' 
+#'
 #' Default: `TRUE`
-#' 
+#'
 #' @param make_rda TRUE/FALSE; indicate whether to produce an .rda file containing
 #' a list with the figure/table, caption, and alternative text (if figure). If TRUE,
 #' the .rda will be exported to the folder indicated in the argument "rda_dir".
-#' 
+#'
 #' Default: `FALSE`
-#' 
+#'
 #' @param figures_dir The location of the folder containing the generated .rda files
 #' ("rda_files") that will be created if the argument `make_rda` = TRUE.
-#' 
+#'
 #' Default: the working directory (`getwd()`)
-#' 
+#'
 #' @returns A plot showing total abundance (or numbers) at age.
 
-#' 
+#'
 #' @details The input is from an assessment model output file
 #' translated to a standardized output (\link[stockplotr]{convert_output}).
 #' There are options to return a `ggplot2` object or export an .rda object
 #' containing associated caption and alternative text for the figure.
-#' 
+#'
 #' @seealso [convert_output()], [filter_data()], [process_data()], [plot_aa()], [export_kqs()], [insert_kqs()], [create_rda()]
-#' 
+#'
 #' @export
 #'
 #' @examples

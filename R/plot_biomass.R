@@ -2,7 +2,7 @@
 #'
 #' @inheritParams plot_spawning_biomass
 #' @param unit_label units for biomass
-#' 
+#'
 #' Default: "mt"
 #' @param ref_line A string specifying the type of reference you want to
 #'   compare biomass to. The default `"msy"` looks for
@@ -11,19 +11,19 @@
 #'   lower-case letters. However, you must use one of the options specified in the
 #'   default list to ensure that the label on the figure looks correct
 #'   regardless of how it is specified in `dat`.
-#'   
+#'
 #' Default: "msy"
-#' 
+#'
 #' Options: Including, but not limited to: "target", "MSY", "unfished"
 #' @returns A plot showing total biomass.
-#' 
+#'
 #' @details The input is from an assessment model output file
 #' translated to a standardized output (\link[stockplotr]{convert_output}).
 #' There are options to return a `ggplot2` object or export an .rda object
 #' containing associated caption and alternative text for the figure.
-#' 
+#'
 #' @seealso [convert_output()], [plot_timeseries()], [calculate_reference_point()], [reference_line()], [filter_data()], [process_data()], [export_kqs()], [insert_kqs()], [create_rda()]
-#' 
+#'
 #' @export
 #'
 #' @examples
@@ -113,7 +113,7 @@ plot_biomass <- function(
         )
     }
   }
-    
+
   # Process data for indexing/grouping
   # TODO: check and add into process_data step to summarize when theres >1 label
   processing <- process_data(
@@ -121,12 +121,12 @@ plot_biomass <- function(
     group,
     facet
   )
-  
+
   # variable <- processing[[1]]
   prepared_data <- processing[[1]]
   group <- processing[[2]]
   if (!is.null(processing[[3]])) facet <- processing[[3]]
-  
+
 
   plt <- plot_timeseries(
     dat = prepared_data,

@@ -11,21 +11,21 @@
 #' @param spawning_biomass_label Units for spawning biomass
 #'
 #' Default: "mt"
-#' 
+#'
 #' @param recruitment_label units for recruitment
 #'
 #' Default: "mt"
 #'
 #' @returns A plot showing the stock recruitment relationship.
-#' 
+#'
 #' @details The input is from an assessment model output file
 #' translated to a standardized output (\link[stockplotr]{convert_output}).
 #' There are options to return a `ggplot2` object or export an .rda object
 #' containing associated caption and alternative text for the figure.
-#' 
+#'
 #' @seealso [convert_output()], [filter_data()], [process_data()], [plot_timeseries()], [export_kqs()], [insert_kqs()], [create_rda()]
-#' 
-#' 
+#'
+#'
 #' @export
 #'
 #' @examples
@@ -64,15 +64,15 @@ plot_stock_recruitment <- function(
       # filter out rec devs if in data
       !grepl("deviations", label)
     )
-  
+
   process_rec <- process_data(
     recruitment
   )
-  
+
   rec_proc <- process_rec[[1]]
   group <- process_rec[[2]]
   facet <- process_rec[[3]]
-  
+
   if (length(unique(recruitment$label)) > 1) {
     rec_proc <- rec_proc |>
       tidyr::pivot_wider(
@@ -83,7 +83,7 @@ plot_stock_recruitment <- function(
     # rename columns to remove "estimate"
     colnames(rec_proc) <- gsub("estimate_", "", colnames(rec_proc))
   } else {
-    rec_proc <-  rec_proc|>
+    rec_proc <- rec_proc |>
       dplyr::rename(
         predicted_recruitment = estimate,
         lower_predicted_recruitment = estimate_lower,
@@ -109,19 +109,19 @@ plot_stock_recruitment <- function(
   ) |>
     dplyr::filter(!is.na(year))
 
-   process_sb <- process_data(
-     sb
-   )
-   sb_proc <- process_sb[[1]] |>
-     dplyr::rename(
-       spawning_biomass = estimate,
-       lower_spawning_biomass = estimate_lower,
-       upper_spawning_biomass = estimate_upper
-     ) |>
-     dplyr::select(-label)
-   # group <- process_sb[[2]]
-   # facet <- process_sb[[3]]
-  
+  process_sb <- process_data(
+    sb
+  )
+  sb_proc <- process_sb[[1]] |>
+    dplyr::rename(
+      spawning_biomass = estimate,
+      lower_spawning_biomass = estimate_lower,
+      upper_spawning_biomass = estimate_upper
+    ) |>
+    dplyr::select(-label)
+  # group <- process_sb[[2]]
+  # facet <- process_sb[[3]]
+
   # Merge recruitment and spawning biomass data
   sr <- dplyr::left_join(sb_proc, rec_proc, by = c("year", "model", "group_var"))
 

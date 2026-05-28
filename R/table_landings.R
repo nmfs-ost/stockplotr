@@ -2,7 +2,7 @@
 #'
 #' @inheritParams plot_recruitment
 #' @param unit_label Abbreviated units of landings
-#' 
+#'
 #' Default: "mt"
 #' @param group A string of a single column that groups the data.
 #'
@@ -16,31 +16,31 @@
 #' Default: "sum"
 #'
 #' Options: "sum" or "mean"
-#' @param digits Numeric value indicating the number of digits values in the 
+#' @param digits Numeric value indicating the number of digits values in the
 #' table will be rounded to.
-#' 
+#'
 #' Default: 2
 #' @param tables_dir The location of the folder containing the generated table
 #' rda files ("tables") that will be created if the argument `make_rda` = TRUE.
-#' 
+#'
 #' Default: the working directory (`getwd()`)
 #' @param label The label that will be chosen from the input file. If unspecified,
 #' the function will search the "label" column and use the first matching label
 #' in this ordered list: "landings_weight",  "landings_numbers", "landings_expected",
 #' "landings_predicted", "landings".
-#' 
+#'
 #' Default: NULL
 #'
 #' @returns A table ready of landed catch by fleet and year.
-#' 
+#'
 #' @details The input is from an assessment model output file
 #' translated to a standardized output (\link[stockplotr]{convert_output}).
 #' There are options to return a [gt::gt()] object or export an rda object
 #' containing a gt-based table, caption, and LaTeX-based table.
-#' 
+#'
 #' @seealso [convert_output()], [filter_data()], [process_table()], [export_kqs()], [insert_kqs()], [create_rda()]
 #' @export
-#' 
+#'
 #' @examples
 #' table_landings(stockplotr::example_data)
 #'
@@ -69,7 +69,7 @@ table_landings <- function(
     unit_label = unit_label,
     scale_amount = scale_amount
   )
-  
+
   # TODO: do group and facet need to be uncommented and updated?
   # Filter data for landings
   prepared_data <- filter_data(

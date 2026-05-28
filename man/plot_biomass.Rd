@@ -52,7 +52,7 @@ Default: NULL}
   lower-case letters. However, you must use one of the options specified in the
   default list to ensure that the label on the figure looks correct
   regardless of how it is specified in `dat`.
-  
+
 Default: "msy"
 
 Options: Including, but not limited to: "target", "MSY", "unfished"}

@@ -46,7 +46,7 @@ A tibble with 591109 rows and 33 variables:
 example_data
 }
 \description{
-Included data set that represents a Report.sso file converted using 
+Included data set that represents a Report.sso file converted using
 convert_output(). This example is from the 2022 Petrale sole stock assessment.
 }
 \keyword{datasets}

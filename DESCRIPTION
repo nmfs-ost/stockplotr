@@ -65,10 +65,10 @@ Suggests:
     testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr
+Config/roxygen2/version: 8.0.0
 Config/testthat/edition: 3
 Config/testthat/parallel: false
 Encoding: UTF-8
 Language: en-US
 LazyData: true
-Config/roxygen2/version: 8.0.0
 RoxygenNote: 7.3.3

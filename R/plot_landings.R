@@ -3,14 +3,14 @@
 #' @inheritParams plot_spawning_biomass
 #'
 #' @returns A plot showing cumulative landings over time.
-#' 
+#'
 #' @details The input is from an assessment model output file
 #' translated to a standardized output (\link[stockplotr]{convert_output}).
 #' There are options to return a `ggplot2` object or export an .rda object
 #' containing associated caption and alternative text for the figure.
-#' 
+#'
 #' @seealso [convert_output()], [filter_data()], [process_data()], [plot_timeseries()], [export_kqs()], [insert_kqs()], [create_rda()]
-#' 
+#'
 #' @export
 #'
 #' @examples
@@ -48,7 +48,7 @@ plot_landings <- function(
     cli::cli_alert_info("Unit label was not changed. Setting unit_label to 'lbs'.")
     unit_label <- "lbs"
   }
-  
+
   # Units
   landings_label <- label_magnitude(
     label = "Landings",

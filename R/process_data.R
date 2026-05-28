@@ -20,7 +20,7 @@
 #' Default: NULL
 #' @param lbs A logical value indicating whether to convert the y-axis values from
 #' kilograms to pounds. The default units match the default in the
-#' unit_label argument - 'metric tons'. 
+#' unit_label argument - 'metric tons'.
 #'
 #' Default: `FALSE`
 #' @param method A string describing the method of summarizing data when group
@@ -39,11 +39,11 @@
 #' \item{facet}{A string or vector of strings identifying the faceting
 #' variable(s) of the data. If NULL, no faceting variable is identified. Any
 #' identified indexed variables found in this function will be added to facet.}
-#' 
+#'
 #' @details Automatically detects potential grouping and faceting data from a
 #' dataframe output from \link[stockplotr]{filter_data}.
-#' 
-#' 
+#'
+#'
 #' @export
 #'
 #' @examples {
@@ -232,7 +232,7 @@ process_data <- function(
         } else {
           group <- valid_vars[1]
         }
-        
+
         # Remove group from index_variables so no repeats
         if (length(valid_vars) > 0) {
           index_variables <- index_variables[-grep(valid_vars[1], index_variables)]
@@ -337,7 +337,7 @@ process_data <- function(
       group <- NULL
     }
   }
-  
+
   # Ensure that index_variables -- group or facets are non-numeric to be plotted accurately
   data <- data |>
     dplyr::mutate(
@@ -346,14 +346,14 @@ process_data <- function(
         as.character
       )
     )
-  
+
   if (lbs) {
     data <- data |>
       dplyr::mutate(
         # multiple by conversion from kg to lbs -- default then becomes thousands of lbs
         estimate = (estimate * 2.20462),
-        estimate_lower = NA_real_, #(estimate_lower * 2.20462),
-        estimate_upper = NA_real_, #(estimate_upper * 2.20462)
+        estimate_lower = NA_real_, # (estimate_lower * 2.20462),
+        estimate_upper = NA_real_, # (estimate_upper * 2.20462)
       )
   }
 
@@ -372,14 +372,14 @@ process_data <- function(
 #'
 #' @inheritParams process_data
 #' @param label A string or vector of strings identifying the label values to filter the data.
-#' 
+#'
 #' Default: NULL
 #' @param digits Numeric value indicating the number of rounding digits.
 #'
-#'Default: 2
+#' Default: 2
 #' @returns A dataframe of processed data ready for formatting into a table.
 #' @details Input is an object created with \link[stockplotr]{filter_data}.
-#' 
+#'
 #' @export
 #'
 #' @examples {
@@ -419,15 +419,15 @@ process_table <- function(
   } else {
     # Check if there's > 1 label for any model
     if ((dat |>
-          dplyr::summarise(unique_count = dplyr::n_distinct(label), .groups = c("model", id_group)) |>
-          dplyr::pull(unique_count) |>
-          max()
-      ) > 1) {
+      dplyr::summarise(unique_count = dplyr::n_distinct(label), .groups = c("model", id_group)) |>
+      dplyr::pull(unique_count) |>
+      max()
+    ) > 1) {
       if ((dat |>
         dplyr::summarise(unique_count = dplyr::n_distinct(label), .groups = c("model", id_group)) |>
         dplyr::pull(unique_count)
         |> max()
-        ) == 2) {
+      ) == 2) {
         # compare estimate across all indexing vars and see if they are different over years
         # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

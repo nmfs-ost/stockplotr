@@ -198,14 +198,14 @@ SS3_extract_fleet <- function(dat, vers) {
 # input_list = unlisted object from model output
 
 expand_element <- function(input_list, fleet_names = "Pollock") {
-  
   # Use map_dfr to iterate over each element of the list
   # .id = "origin_var" keeps track of which list element the data came from
   purrr::imap_dfr(input_list, function(x, name) {
-    
     # Skip empty/null elements immediately
-    if (length(x) == 0 || is.null(x)) return(NULL)
-    
+    if (length(x) == 0 || is.null(x)) {
+      return(NULL)
+    }
+
     # Standardize current element 'x' to a Long Data Frame
     if (!is.null(dim(x)) && length(dim(x)) > 1) {
       # Handles Arrays/Matrices
@@ -225,25 +225,25 @@ expand_element <- function(input_list, fleet_names = "Pollock") {
         )) |>
         dplyr::select(-dim_info)
     }
-    
+
     # Process the labels
     df |>
       dplyr::mutate(
         label_init = as.character(label_init),
-        
+
         # Pull parameter name
         label = dplyr::case_when(
           stringr::str_extract(label_init, "^[^\\.]+") == "rec_pars" ~ stringr::str_extract(label_init, "[^\\.]+$"),
           TRUE ~ stringr::str_extract(label_init, "^[^\\.]+")
-          ),
-        
+        ),
+
         # Extract Age
         age = dplyr::case_when(
-          grepl("age", label_init, ignore.case = TRUE) ~ 
+          grepl("age", label_init, ignore.case = TRUE) ~
             as.numeric(stringr::str_extract(label_init, "(?<=\\.[Aa]ge)[0-9]+(?=\\.|$)")),
           TRUE ~ NA_real_
         ),
-        
+
         # Extract Sex
         sex = dplyr::case_when(
           grepl("Sex.combined|combined", label_init, ignore.case = TRUE) ~ "combined",
@@ -251,16 +251,16 @@ expand_element <- function(input_list, fleet_names = "Pollock") {
           grepl("male", label_init, ignore.case = TRUE) ~ "male", # check havent seen example of this!
           TRUE ~ NA_character_
         ),
-        
+
         # Extract Year (4 digits)
         year = dplyr::case_when(
           grepl("[0-9]{4}", label_init) ~ as.numeric(stringr::str_extract(label_init, "[0-9]{4}")),
           TRUE ~ NA_real_
         ),
-        
+
         # Extract Fleet
         fleet = dplyr::case_when(
-          grepl(paste0(fleet_names, collapse = "|"), label_init) ~ 
+          grepl(paste0(fleet_names, collapse = "|"), label_init) ~
             stringr::str_extract(label_init, paste0(fleet_names, collapse = "|")),
           TRUE ~ NA_character_
         )
@@ -270,4 +270,3 @@ expand_element <- function(input_list, fleet_names = "Pollock") {
       dplyr::select(-label_init)
   })
 }
-

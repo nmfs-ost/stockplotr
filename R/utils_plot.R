@@ -31,10 +31,10 @@
 #'
 #' Default: NULL
 #' Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL
-#' 
+#'
 #' @param facet a string or vector of strings of a column that facets the data
 #' (e.g. "year", "area", etc.)
-#' 
+#'
 #' Default: NULL
 #' @param ... inherited arguments from internal functions from ggplot2::geom_xx
 #'
@@ -43,7 +43,7 @@
 #' @details The user can create a line, point, or area plot, where the x-axis is
 #' year and y can vary for any time series quantity. Currently, grouping is
 #' restricted to one group where faceting can be any number of facets.
-#' 
+#'
 #' @export
 #'
 #' @examples
@@ -237,7 +237,7 @@ plot_timeseries <- function(
 #'
 #' @inheritParams plot_timeseries
 #' @param hline indicate true or false to place a horizontal line at 1
-#' 
+#'
 #' Default: `TRUE`
 #' @param ... inherited arguments from internal functions from ggplot2::geom_xx
 #'
@@ -308,33 +308,33 @@ plot_error <- function(
 #'
 #' @inheritParams plot_timeseries
 #' @param y a string of the column name of data used to plot on the y-axis
-#' 
+#'
 #' Default: "age"
 #' @param z a string of the column name of data used to control the size of the
 #' bubbles
-#' 
+#'
 #' Default: "estimate"
 #' @param label a string of the label for the size of the bubbles
-#' 
+#'
 #' Default: "Abundance"
-#' 
+#'
 #' @param xlab a string of the x-axis label
-#' 
+#'
 #' Default: "Year"
 #' @param ylab a string of the y-axis label
-#' 
+#'
 #' Default: "Age"
 #' @param facet a string or vector of strings of a column that facets the data.
-#' It is not recommended to include more than one facet due to the complexity 
+#' It is not recommended to include more than one facet due to the complexity
 #' of the plot.
-#' 
+#'
 #' Default: NULL
-#' 
+#'
 #' Options: Including, but not limited to: "sex", "area", "fleet"
 #' @param proportional Set size of points relative to z when TRUE, point
 #' size are relative to one another while when set to FALSE, point size
 #' is relative to z
-#' 
+#'
 #' Default: `TRUE`
 #' @param ... inherited arguments from internal functions from
 #' \link[ggplot2]{geom_point}
@@ -530,7 +530,7 @@ cohort_line <- function(
 #' @param label_name string of the name of the quantity that users want to
 #' extract the reference point from
 #' @param reference string of the reference point
-#' 
+#'
 #' Options: Including, but not limited to: "msy", "unfished", "target"
 #'
 #' @returns A ggplot2 geom_hline object for a reference point that can be added
@@ -953,7 +953,6 @@ calculate_reference_point <- function(
   } else {
     ref_line_val
   }
-  
 }
 
 #------------------------------------------------------------------------------
@@ -1019,7 +1018,7 @@ check_grouping <- function(dat) {
 #'
 #' @inheritParams plot_timeseries
 #' @param observed_label a string of the label used to filter the observed data
-#' 
+#'
 #' Default: "observed"
 #' @param predicted_label a string of the label used to filter the predicted data
 #' Default: "predicted"
