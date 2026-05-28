@@ -47,7 +47,7 @@ Default: "Year"}
 Default: "Age"}
 
 \item{facet}{a string or vector of strings of a column that facets the data.
-It is not recommended to include more than one facet due to the complexity 
+It is not recommended to include more than one facet due to the complexity
 of the plot.
 
 Default: NULL

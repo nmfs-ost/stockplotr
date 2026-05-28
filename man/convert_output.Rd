@@ -16,10 +16,10 @@ Default: NULL
 Options: "ss3", "bam", "fims", "rceattle"}
 
 \item{fleet_names}{Names of fleets in the assessment model as
-shortened in the output file. If fleet names are not properly read, then
-indicate the fleets names as an acronym in a vector
+ shortened in the output file. If fleet names are not properly read, then
+ indicate the fleets names as an acronym in a vector
 
-Default: NULL}
+ Default: NULL}
 
 \item{save_dir}{File path to save the converted output file.
 
@@ -34,8 +34,8 @@ A reformatted and standardized version of assessment model results
 Format stock assessment output files to a standardized format.
 }
 \details{
-The resulting object is simply a transformed and machine readable 
-version of a model output file. Converted data frame is always returned. 
+The resulting object is simply a transformed and machine readable
+version of a model output file. Converted data frame is always returned.
 It will also be saved if save_dir is not NULL.
 }
 \examples{

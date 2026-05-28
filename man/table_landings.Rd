@@ -69,7 +69,7 @@ in this ordered list: "landings_weight",  "landings_numbers", "landings_expected
 
 Default: NULL}
 
-\item{digits}{Numeric value indicating the number of digits values in the 
+\item{digits}{Numeric value indicating the number of digits values in the
 table will be rounded to.
 
 Default: 2}

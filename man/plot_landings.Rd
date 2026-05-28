@@ -50,7 +50,7 @@ Default: NULL}
 
 \item{lbs}{A logical value indicating whether to convert the y-axis values from
 kilograms to pounds. The default units match the default in the
-unit_label argument - 'mt'. 
+unit_label argument - 'mt'.
 
 Default: `FALSE`}
 

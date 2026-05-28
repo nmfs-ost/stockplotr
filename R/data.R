@@ -1,6 +1,6 @@
 #' SS3 Example data
 #'
-#' Included data set that represents a Report.sso file converted using 
+#' Included data set that represents a Report.sso file converted using
 #' convert_output(). This example is from the 2022 Petrale sole stock assessment.
 #'
 #' @format A tibble with 591109 rows and 33 variables:
@@ -39,5 +39,5 @@
 #'   \item{count}{indexing column of data}
 #'   \item{block}{indexing column of data}
 #' }
-#' 
+#'
 "example_data"

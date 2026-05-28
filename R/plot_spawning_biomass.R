@@ -19,7 +19,7 @@
 #'
 #' Default: NULL
 #' Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL
-#' 
+#'
 #' @param facet A string or vector of strings of a column name.
 #'
 #' Default: NULL
@@ -39,7 +39,7 @@
 #' Default: "mt"
 #' @param lbs A logical value indicating whether to convert the y-axis values from
 #' kilograms to pounds. The default units match the default in the
-#' unit_label argument - 'mt'. 
+#' unit_label argument - 'mt'.
 #'
 #' Default: `FALSE`
 #' @param module (Optional) A string indicating the module_name found in `dat`.
@@ -70,14 +70,14 @@
 #'
 #' Default: `FALSE`
 #' @param ... Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}
-#' 
+#'
 #' @return A plot showing spawning biomass over time.
-#' 
+#'
 #' @details The input is from an assessment model output file
 #' translated to a standardized output (\link[stockplotr]{convert_output}).
 #' There are options to return a `ggplot2` object or export an .rda object
 #' containing associated caption and alternative text for the figure.
-#' 
+#'
 #' @note
 #' All plotting functions automatically recognize indexing variables and will
 #' use them in groupings and/or facetting. @seealso [process_data()].
@@ -125,7 +125,7 @@ plot_spawning_biomass <- function(
     cli::cli_alert_info("Unit label was not changed. Setting unit_label to 'lbs'.")
     unit_label <- "lbs"
   }
-  
+
   # TODO: Fix the unit label if scaling. Maybe this is up to the user to do if
   #       they want something scaled then they have to supply a better unit name
   #       or we create a helper function to do this.
@@ -137,10 +137,10 @@ plot_spawning_biomass <- function(
         label = "Spawning Biomass",
         unit_label = unit_label,
         scale_amount = dplyr::if_else(
-          lbs, 
-          ifelse(unit_label %in% c("mt", "mts", "metric tons", "metric ton"), 1000, 1) * scale_amount, 
+          lbs,
+          ifelse(unit_label %in% c("mt", "mts", "metric tons", "metric ton"), 1000, 1) * scale_amount,
           scale_amount
-          ),
+        ),
         legend = TRUE
       )
     }
@@ -159,24 +159,24 @@ plot_spawning_biomass <- function(
 
   # Filter data for spawning biomass
   prepared_data <- filter_data(
-      dat = dat,
-      label_name = ifelse(relative, glue::glue("spawning_biomass_spawning_biomass_{ref_line}|spawning_biomass_ratio"), "^spawning_biomass$"),
-      geom = geom,
-      era = era,
-      group = group,
-      facet = facet,
-      module = module,
-      scale_amount = scale_amount,
-      interactive = interactive
-    )
-  
+    dat = dat,
+    label_name = ifelse(relative, glue::glue("spawning_biomass_spawning_biomass_{ref_line}|spawning_biomass_ratio"), "^spawning_biomass$"),
+    geom = geom,
+    era = era,
+    group = group,
+    facet = facet,
+    module = module,
+    scale_amount = scale_amount,
+    interactive = interactive
+  )
+
   if (relative) {
     if (nrow(prepared_data) == 0) {
       cli::cli_abort("No data found for relative biomass. Please check that your data contains a label for 'biomass_biomass_unfished'.")
       stop()
     }
-  }  
-  
+  }
+
   # process the data for grouping
   processing <- process_data(
     dat = prepared_data,
@@ -189,7 +189,7 @@ plot_spawning_biomass <- function(
   plot_data <- processing[[1]]
   group <- processing[[2]]
   if (!is.null(processing[[3]])) facet <- processing[[3]]
-  
+
   # Override grouping variable when there is only NA's
   if (!is.null(group)) {
     if (group %notin% colnames(plot_data)) group <- NULL
@@ -238,7 +238,7 @@ plot_spawning_biomass <- function(
       ) + theme_noaa()
     }
   }
-  
+
   ### Make RDA ----
   if (make_rda) {
     if (relative) {
