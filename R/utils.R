@@ -81,10 +81,11 @@ get_ncol <- function(file, skip = 0) {
 
 SS3_extract_df <- function(dat, label) {
   # Convert to data.table if not already
-  if (!inherits(dat, "data.table")) {
-    dat <- data.table::as.data.table(dat)
-  }
+  # if (!inherits(dat, "data.table")) {
+  #   dat <- data.table::as.data.table(dat)
+  # }
 
+  dat <- as.data.frame(dat)
   # Identify all values to be treated as NA
   na_values <- c("", "-", "#")
 
@@ -107,12 +108,12 @@ SS3_extract_df <- function(dat, label) {
   # if not --> then use reference to next report as value
   # Find all report: rows
   report_rows <- which(apply(dat, 1, function(row) any(grepl("report:", row))))
-  if (!any(grepl("report:", dat[end_row + 2]))) {
+  if (!is.na(end_row) && !any(grepl("report:", dat[end_row + 2, ]))) {
     # ID where the next report row is
     end_row <- report_rows[which(report_rows > start_row)[1]]
     # Go back to the actual end row of target label
     # Only by one under below condition since in clean_dt we are already doing that
-    if (grep(end_row - 1, next_blank_rows)) end_row <- end_row - 1
+    if (any(grepl(end_row - 1, next_blank_rows))) end_row <- end_row - 1
   }
 
   if (is.na(end_row) || length(end_row) == 0) {
@@ -120,7 +121,9 @@ SS3_extract_df <- function(dat, label) {
   }
 
   # Extract the subset
-  clean_dt <- data.table::as.data.table(dat[start_row:(end_row - 1), ])
+  # row_range <- start_row:(end_row - 1)
+  clean_dt <- dat[start_row:(end_row - 1), , drop = FALSE]
+  clean_dt <- data.table::as.data.table(clean_dt)
 
   # Efficiently replace specified values with NA
   for (j in names(clean_dt)) {
