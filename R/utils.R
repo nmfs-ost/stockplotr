@@ -102,6 +102,18 @@ SS3_extract_df <- function(dat, label) {
 
   # Find the first blank row that appears after the start_row
   end_row <- next_blank_rows[which(next_blank_rows > start_row)[1]]
+  
+  # Add check to determine if after next blank row contains a new report
+  # if not --> then use reference to next report as value
+  # Find all report: rows
+  report_rows <- which(apply(dat, 1, function(row) any(grepl("report:", row))))
+  if (!any(grepl("report:", dat[end_row + 2]))) {
+    # ID where the next report row is
+    next_report_row <- report_rows[which(report_rows > start_row)[1]]
+    # Go back to the actual end row of target label
+    end_row <- ifelse(grep(next_report_row - 1, next_blank_rows), next_report_row - 2, next_report_row - 1)
+  }
+
   if (is.na(end_row) || length(end_row) == 0) {
     end_row <- nrow(dat)
   }
