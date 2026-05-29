@@ -109,9 +109,10 @@ SS3_extract_df <- function(dat, label) {
   report_rows <- which(apply(dat, 1, function(row) any(grepl("report:", row))))
   if (!any(grepl("report:", dat[end_row + 2]))) {
     # ID where the next report row is
-    next_report_row <- report_rows[which(report_rows > start_row)[1]]
+    end_row <- report_rows[which(report_rows > start_row)[1]]
     # Go back to the actual end row of target label
-    end_row <- ifelse(grep(next_report_row - 1, next_blank_rows), next_report_row - 2, next_report_row - 1)
+    # Only by one under below condition since in clean_dt we are already doing that
+    if (grep(end_row - 1, next_blank_rows)) end_row <- end_row - 1
   }
 
   if (is.na(end_row) || length(end_row) == 0) {
