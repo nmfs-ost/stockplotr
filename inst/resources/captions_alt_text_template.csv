@@ -37,7 +37,7 @@ life.history.params,table,Life history parameters used in the stock assessment m
 landings,table,Landed catch by fleet and year in landings.units.,
 discards,table,Discarded catch by fleet and year in discards.tbl.units.,
 age.length.key,table,Age-length key: the proportion of fish for each age that belong to a particular length group. ,
-indices,table,Calculated indices of abundance and their corresponding CVs for the fleets and surveys identified in the column headers. ,
+indices,table,Calculated indices of abundance and corresponding CVs for the fleets and surveys identified in the column headers. ,
 model.runs,table,"The base configuration and alternative sensitivity analysis configurations of the stock assessment model, in which parameters and/or data input streams are changed from one configuration to another.",
 derived.quantities,table,Derived quantities calculated by the base configuration of the stock assessment model.,
 est.params,table,Parameters used in the base stock assessment model and whether the parameter was estimated by the model or fixed (i.e. not allowed to be estimated or changed by the model). CVs for estimated models are provided.,
