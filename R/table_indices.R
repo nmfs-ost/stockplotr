@@ -1,173 +1,186 @@
-# #' Create Indices of Abundance Table
-# #'
-# #' @inheritParams plot_recruitment
-# #' @param tables_dir The location of the folder containing the generated table
-# #' rda files ("tables") that will be created if the argument `make_rda` = TRUE.
-# #' Default: the working directory (`getwd()`)
-# #' @returns A table of observed annual indices of abundance plus error
-# #' stratified by fleet.
-# #' @details The input is from an assessment model output file
-# #' translated to a standardized output (\link[stockplotr]{convert_output}).
-# #' There are options to return a [gt::gt()] object or export an rda object
-# #' containing a gt-based table, caption, and LaTeX-based table.
-# #' @seealso [convert_output()], [filter_data()], [process_table()], [export_kqs()], [insert_kqs()], [create_rda()]
-# #' @export
-# #'
-# #' @examples
-# #' \dontrun{
-# #' table_indices(dat)
-# #'
-# #' table_indices(
-# #'   dat,
-# #'   end_year = 2024,
-# #'   make_rda = TRUE,
-# #'   tables_dir = getwd()
-# #' )
-# #' }
-# table_indices <- function(
-#     dat,
-#     end_year = format(Sys.Date(), "%Y"),
-#     make_rda = FALSE,
-#     tables_dir = getwd()) {
-#   # create plot-specific variables to use throughout fxn for naming and IDing
-#   topic_label <- "indices.abundance"
-
-#   # identify output
-#   fig_or_table <- "table"
-
-#   # check year isn't past end_year if not projections plot
-#   check_year(
-#     end_year = end_year,
-#     fig_or_table = fig_or_table,
-#     topic = topic_label
-#   )
-
-#   # Load data
-#   output <- dat |>
-#     dplyr::filter(module_name == "INDEX_2" | module_name == "t.series") |>
-#     dplyr::filter(year <= end_year)
-#   # Check for U
-#   if (any(unique(output$module_name == "INDEX_2"))) {
-#     output <- output |>
-#       dplyr::filter(
-#         grepl("expected_indices", label) | grepl("indices_predicted", label)
-#       ) # grepl("input_indices", label) |
-#   } else if (any(unique(output$module_name == "t.series"))) {
-#     output <- output |>
-#       dplyr::filter(grepl("cpue", label))
-#   }
-
-#   # Extract fleet names
-#   fleet_names <- unique(as.character(output$fleet))
-#   factors <- c("year", "fleet", "fleet_name", "age", "sex", "area", "seas", "season", "time", "era", "subseas", "subseason", "platoon", "platoo", "growth_pattern", "gp")
-#   # re-structure df for table
-#   indices <- output |>
-#     tidyr::pivot_wider(
-#       # id_cols = c(year, uncertainty, uncertainty_label),
-#       names_from = label,
-#       values_from = estimate
-#     ) |>
-#     dplyr::select(year, fleet, unique(output$label), uncertainty, uncertainty_label) # |>
-
-#   # na.omit()
-#   # check if uncertainty is a measure in the df
-#   if (all(is.na(indices$uncertainty))) {
-#     indices <- indices |>
-#       dplyr::select(-c(uncertainty_label, uncertainty))
-#   } else {
-#     uncertainty_col <- paste("uncertainty_", unique(indices$uncertainty_label), sep = "")
-#     colnames(indices) <- stringr::str_replace(colnames(indices), "^uncertainty$", uncertainty_col)
-#     indices <- dplyr::select(indices, -uncertainty_label)
-#   }
-
-#   # Check if observed/inital values are in the df
-#   if (any(grepl("observed", colnames(indices)))) {
-#     indices <- indices |>
-#       dplyr::select(-colnames(indices)[grep(c("observed"), colnames(indices))])
-#   }
-
-#   # rename columns to remove cpue/effort
-#   if (any(grep("_indices", colnames(indices)))) {
-#     colnames(indices) <- stringr::str_replace_all(colnames(indices), "_indices", "")
-#   } else if (any(grep("indices_", colnames(indices)))) {
-#     colnames(indices) <- stringr::str_replace_all(colnames(indices), "indices_", "")
-#   } else {
-#     colnames(indices) <- stringr::str_replace_all(colnames(indices), "cpue_", "")
-#   }
-
-#   # Check for which column is U and filter out na values
-#   if (any(grep("predicted", colnames(indices)))) {
-#     indices <- indices |>
-#       dplyr::filter(!is.na(predicted))
-#   }
-#   if (any(grep("expected", colnames(indices)))) {
-#     indices <- indices |>
-#       dplyr::filter(!is.na(expected))
-#   }
-
-#   # move fleet data into own columns
-#   indices2 <- indices |>
-#     tidyr::pivot_wider(
-#       names_from = fleet,
-#       values_from = colnames(indices)[!colnames(indices) %in% c("year", "fleet")]
-#     ) |>
-#     dplyr::select(year, dplyr::ends_with(fleet_names))
-
-#   fleet_col_names <- stringr::str_extract(colnames(indices2)[colnames(indices2) != "year"], "[^_]+$")
-#   if (any(grepl("[0-9]+", fleet_col_names))) {
-#     fleet_header_lab <- ""
-#     fleet_col_names <- paste("Fleet ", fleet_col_names)
-#   } else {
-#     fleet_header_lab <- "Fleet"
-#   }
-
-#   tab <- indices2 |>
-#     dplyr::mutate(dplyr::across(where(is.numeric), ~ round(.x, 2)),
-#       year = as.character(year)
-#     ) |>
-#     flextable::flextable() |>
-#     flextable::set_header_labels(
-#       # TODO: set uncertainty to the actual value instead of word uncertainty
-#       values = c("Year", rep(c("Estimated CPUE", "Uncertainty"), (ncol(indices2) - 1) / 2))
-#     ) |>
-#     flextable::add_header_row(
-#       values = c(fleet_header_lab, fleet_col_names)
-#     ) |>
-#     flextable::merge_h(part = "header") |>
-#     flextable::align(part = "header")
-
-#   final <- suppressWarnings(add_theme(tab))
-
-#   # export table to rda if argument = T
-#   if (make_rda) {
-#     # run write_captions.R if its output doesn't exist
-#     if (!file.exists(
-#       fs::path(getwd(), "captions_alt_text.csv")
-#     )
-#     ) {
-#       stockplotr::write_captions(
-#         dat = dat,
-#         dir = tables_dir,
-#         year = end_year
-#       )
-#     }
-
-#     # extract this plot's caption and alt text
-#     caps_alttext <- extract_caps_alttext(
-#       topic_label = topic_label,
-#       fig_or_table = fig_or_table,
-#       dir = tables_dir
-#     )
+#' Indices of abundance table
+#'
+#' @inheritParams plot_recruitment
+#' @param group A string of a single column that groups the data.
+#'
+#' Set group = "none" to summarize data over all indexing values.
+#'
+#' Default: NULL
+#' Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL
+#' @param method A string describing the method of summarizing data when group
+#' is set to "none".
+#'
+#' Default: "sum"
+#'
+#' Options: "sum" or "mean"
+#' @param digits Numeric value indicating the number of digits values in the
+#' table will be rounded to.
+#'
+#' Default: 2
+#' @param tables_dir The location of the folder containing the generated table
+#' rda files ("tables") that will be created if the argument `make_rda` = TRUE.
+#'
+#' Default: the working directory (`getwd()`)
+#' @param label The label that will be chosen from the input file. If unspecified,
+#' the function will search the "label" column and use the first matching label
+#' in this ordered list: "indices_weight",  "indices_numbers", "indices_expected",
+#' "indices_predicted", "indices".
+#'
+#' Default: NULL
+#'
+#' @returns A table of observed annual indices of abundance plus error,
+#' stratified by fleet.
+#' @details The input is from an assessment model output file
+#' translated to a standardized output (\link[stockplotr]{convert_output}).
+#' There are options to return a [gt::gt()] object or export an rda object
+#' containing a gt-based table, caption, and LaTeX-based table.
+#' @seealso [convert_output()], [filter_data()], [process_table()], [export_kqs()], [insert_kqs()], [create_rda()]
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' table_indices(dat)
+#'
+#' table_indices(
+#'   dat,
+#'   make_rda = TRUE,
+#'   tables_dir = getwd()
+#' )
+#' }
+table_indices <- function(
+    dat,
+    era = NULL,
+    interactive = TRUE,
+    group = NULL,
+    method = "sum",
+    module = NULL,
+    label = NULL,
+    digits = 2,
+    make_rda = FALSE,
+    tables_dir = getwd()
+    ) {
+  
+  # TODO: do group and facet need to be uncommented and updated?
+  # Filter data for landings
+  prepared_data <- filter_data(
+    dat = dat,
+    label_name = "indices",
+    geom = "line",
+    era = era,
+    module = module,
+    scale_amount = 1,
+    interactive = interactive
+  ) |>
+    dplyr::mutate(estimate = round(as.numeric(estimate), digits = digits)) |>
+    dplyr::mutate(uncertainty = round(as.numeric(uncertainty), digits = digits))
+  
+  # Add check if there is any data
+  if (nrow(prepared_data) == 0) {
+    cli::cli_abort("No indices data found.")
+  }
+  
+  # get uncertainty label by model
+  uncert_lab <- prepared_data |>
+    dplyr::filter(!is.na(uncertainty_label)) |>
+    dplyr::group_by(model) |>
+    dplyr::reframe(unique_uncert = unique(uncertainty_label)) # changed to reframe -- may cause errors
+  uncert_lab <- stats::setNames(uncert_lab$unique_uncert, uncert_lab$model)
+  # if (length(unique(uncert_lab)) == 1) uncert_lab <- unique(uncert_lab) # might need this line
+  
+  # This needs to be adjusted when comparing different models and diff error
+  if (length(uncert_lab) > 1 & length(unique(uncert_lab)) == 1 | length(names(uncert_lab)) == 1) { # prepared_data$model
+    # cli::cli_alert_warning("More than one value for uncertainty exists: {uncert_lab}")
+    uncert_lab <- uncert_lab[[1]]
+    # cli::cli_alert_warning("The first value ({uncert_lab}) will be chosen.")
+  }
+  
+  if (is.na(uncert_lab)) uncert_lab <- "uncertainty"
+  
+  # get fleet names
+  # TODO: change from fleets to id_group AFTER the process data step and adjust throughout the table based on indexing
+  fleets <- unique(prepared_data$fleet) |>
+    # sort numerically even if fleets are 100% characters
+    stringr::str_sort(numeric = TRUE)
+  
+  # TODO: fix this so that fleet names aren't removed if, e.g., group = "fleet"
+  table_data_info <- process_table(
+    dat = prepared_data,
+    # group = group,
+    method = method,
+    label = label,
+    digits = digits
+  )
+  table_data <- table_data_info[[1]]
+  indexed_vars <- table_data_info[[2]]
+  id_col_vals <- table_data_info[[3]]
+  
+  # id_group_vals <- sapply(id_cols, function(x) unique(prepared_data[[x]]), simplify = FALSE)
+  # TODO: add check if there is a indices column for every error column -- if not remove the error (can keep indices)
+  
+  # merge error and indices columns and rename
+  df_list <- merge_error(
+    table_data,
+    uncert_lab,
+    fleets,
+    label = "indices",
+    unit_label = "" # should this be CPUE?
+  )
+  
+  # transform dfs into tables
+  final <- lapply(df_list, function(df) {
+    df |>
+      gt::gt() |>
+      add_theme()
+  })
+  
+  # export figure to rda if argument = T
+  if (make_rda == TRUE) {
+    
+    # Caption contains no key quantities for indices table
+    # So, export captions/alt text csv if absent
+    if (!file.exists(fs::path(getwd(), "captions_alt_text.csv"))) {
+      caps_alttext <- utils::read.csv(
+        system.file("resources", "captions_alt_text_template.csv", package = "stockplotr")
+      )
+    # export df with captions and alt text to csv
+    utils::write.csv(
+      x = caps_alttext,
+      file = fs::path(getwd(), "captions_alt_text.csv"),
+      row.names = FALSE
+      )    
+    }
+ 
 
 
-# export_rda(
-#   object = final,
-#   caps_alttext = caps_alttext,
-#   figures_tables_dir = tables_dir,
-#   # get name of function and remove "table_" from it
-#   topic_label = gsub("table_", "", as.character(sys.call()[[1]])),
-#   fig_or_table = fig_or_table
-# )
-#   }
-#   final
-# }
+        
+    if (length(df_list) == 1) {
+      
+      create_rda(
+        object = final$label,
+        # get name of function and remove "table_" from it
+        topic_label = gsub("table_", "", as.character(sys.call()[[1]])),
+        fig_or_table = "table",
+        dat = dat,
+        dir = tables_dir,
+        scale_amount = 1,
+        unit_label = unit_label,
+        table_df = final
+      )
+    }
+  } else {
+    cli::cli_alert_warning("Multiple tables cannot be exported at this time.")
+    cli::cli_alert_info("We are currently developing this feature.")
+  }
+  
+  # Send table(s) to viewer
+  if (!is.data.frame(table_data)) {
+    for (t in final) {
+      print(t)
+    }
+    # Return table list invisibly
+    return(invisible(final))
+  } else {
+    # Return finished table (when only one table)
+    return(final)
+  }
+}
