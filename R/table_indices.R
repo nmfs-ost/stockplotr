@@ -71,8 +71,8 @@ table_indices <- function(
     scale_amount = 1,
     interactive = interactive
   ) |>
-    dplyr::mutate(estimate = round(as.numeric(estimate), digits = digits)) |>
-    dplyr::mutate(uncertainty = round(as.numeric(uncertainty), digits = digits))
+    dplyr::mutate(estimate = round(as.numeric(estimate), digits = digits),
+                  uncertainty = round(as.numeric(uncertainty), digits = digits))
   
   # Add check if there is any data
   if (nrow(prepared_data) == 0) {
@@ -149,12 +149,8 @@ table_indices <- function(
       row.names = FALSE
       )    
     }
- 
-
-
-        
+  
     if (length(df_list) == 1) {
-      
       create_rda(
         object = final$label,
         # get name of function and remove "table_" from it
