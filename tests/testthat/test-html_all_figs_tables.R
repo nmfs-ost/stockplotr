@@ -6,7 +6,7 @@
 #     recruitment_scale_amount = 1,
 #     ref_line = c("unfished" = 1000),
 #     ref_line_sb = "msy",
-#     indices_unit_label = "CPUE",
+#     index_unit_label = "CPUE",
 #     figures_tables_dir = getwd()
 #   ) |>
 #     suppressWarnings()
@@ -43,7 +43,7 @@
 #       recruitment_scale_amount = 1,
 #       ref_line = c("unfished"=1000),
 #       ref_line_sb = "msy",
-#       indices_unit_label = "CPUE",
+#       index_unit_label = "CPUE",
 #       figures_tables_dir = getwd()
 #     ) |>
 #       suppressWarnings()
@@ -73,7 +73,7 @@
 #     ref_line = "unfished",
 #     ref_point = 1000,
 #     ref_line_sb = "msy",
-#     indices_unit_label = "CPUE",
+#     index_unit_label = "CPUE",
 #     figures_tables_dir = getwd()
 #   ) |>
 #     suppressWarnings()

@@ -1262,10 +1262,10 @@ convert_output <- function(
 
     # Find fleet names
     if (is.null(fleet_names)) {
-      # Extract names from indices
-      indices <- dat$t.series |>
+      # Extract names from index
+      index <- dat$t.series |>
         dplyr::select(dplyr::contains("U.") & dplyr::contains(".ob"))
-      fleets_ind <- stringr::str_extract(as.vector(colnames(indices)), "(?<=U\\.)\\w+(?=\\.ob)")
+      fleets_ind <- stringr::str_extract(as.vector(colnames(index)), "(?<=U\\.)\\w+(?=\\.ob)")
       # Extract names from landings
       landings <- dat$t.series |>
         dplyr::select(dplyr::contains("L.") & dplyr::contains(".ob") |
@@ -1921,21 +1921,21 @@ convert_output <- function(
         # comp_data?, index_data, catch_data, weight, Ftarget, Flimit
         data_list_list <- list()
 
-        ####### Indices ####
+        ####### index ####
         # Extract index_data
         df_index <- extract[[1]]$index_data |>
           # rename all columns to lower case to match standard
           dplyr::rename_with(tolower) |>
           dplyr::rename(
             fleet = fleet_name,
-            indices_observed = observation,
+            index_observed = observation,
             block = selectivity_block,
             uncertainty = log_sd
           ) |>
           dplyr::mutate(
-            # label = "indices_observed",
+            # label = "index_observed",
             uncertainty_label = "log_sd",
-            indices_predicted = dat$quantities$index_hat
+            index_predicted = dat$quantities$index_hat
           ) |>
           dplyr::select(-c(fleet_code, q_block))
         cli::cli_alert_info("'Selectivity_block' values located in 'block' columns.")
@@ -1951,7 +1951,7 @@ convert_output <- function(
         # expand df long to have obs and pred in same column with label
         df_index_long <- df_index |>
           tidyr::pivot_longer(
-            cols = c(indices_observed, indices_predicted),
+            cols = c(index_observed, index_predicted),
             names_to = "label",
             values_to = "estimate"
           ) |>
@@ -2013,7 +2013,7 @@ convert_output <- function(
         df_comp_obs <- dat$data_list$comp_data |>
           dplyr::rename_with(tolower) |>
           dplyr::mutate(
-            label = "indices_observed"
+            label = "index_observed"
           )
 
         indexing_vars_cols <- colnames(df_comp_obs)[!grepl("comp", colnames(df_comp_obs))]

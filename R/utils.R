@@ -89,7 +89,7 @@ SS3_extract_df <- function(dat, label) {
   # Identify all values to be treated as NA
   na_values <- c("", "-", "#")
 
-  # Find the row indices using a vectorized approach
+  # Find the row index using a vectorized approach
   start_row <- which(apply(dat, 1, function(row) any(row == label)))[2]
 
   # If the label is not found or is not the second instance, return NA
