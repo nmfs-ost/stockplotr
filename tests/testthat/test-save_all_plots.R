@@ -11,7 +11,6 @@ test_that("save_all_plots works when all figures/tables are plotted", {
     recruitment_scale_amount = 1,
     ref_line = c("unfished" = 1000),
     ref_line_sb = c("msy"),
-    # indices_unit_label = "CPUE",
     figures_tables_dir = getwd(),
     interactive = FALSE
   )
@@ -23,7 +22,7 @@ test_that("save_all_plots works when all figures/tables are plotted", {
   # expect that the figures are all created with expected names
   fig_base_temp_files <- c(
     "biomass_figure.rda",
-    "indices_figure.rda",
+    "index_figure.rda",
     "fishing_mortality_figure.rda",
     "landings_figure.rda",
     "natural_mortality_figure.rda",
@@ -43,7 +42,7 @@ test_that("save_all_plots works when all figures/tables are plotted", {
   # expect that the tables are all created with expected names
   tab_base_temp_files <- c(
     # "bnc_table.rda",
-    #  "indices.abundance_table.rda",
+    #  "index_table.rda",
     "landings_table.rda"
   )
   expect_equal(

@@ -13,7 +13,7 @@
 #' filtered. (i.e. select names of fleets to zoom into the plot)
 #'
 #' Default: NULL
-#' @returns A plot showing the expected and predicted indices.
+#' @returns A plot showing the expected and predicted index.
 #'
 #' @details The input is from an assessment model output file
 #' translated to a standardized output (\link[stockplotr]{convert_output}).
@@ -25,17 +25,17 @@
 #' @export
 #'
 #' @examples
-#' plot_indices(
+#' plot_index(
 #'   dat = stockplotr:::example_data,
 #'   unit_label = "fish/hr",
 #'   interactive = FALSE
 #' )
 #'
-plot_indices <- function(
+plot_index <- function(
   dat,
   unit_label = "",
   group = NULL,
-  # facet always assigned to fleet since that is how indices are calc'd -- unless replaced with NULL
+  # facet always assigned to fleet since that is how index are calc'd -- unless replaced with NULL
   facet = NULL,
   interactive = TRUE,
   module = NULL,
@@ -57,7 +57,7 @@ plot_indices <- function(
   # Filter data
   prepared_data <- filter_data(
     dat,
-    label_name = "indices",
+    label_name = "index",
     era = NULL,
     geom = "line",
     # ifelse guarantees the code doesn't miss grouping when label has > 1 value
@@ -98,8 +98,8 @@ plot_indices <- function(
     dat = prepared_data,
     x = "year",
     y = "estimate",
-    observed_label = "indices_observed",
-    predicted_label = "indices_predicted",
+    observed_label = "index_observed",
+    predicted_label = "index_predicted",
     geom = "line",
     xlab = "Year",
     ylab = "Estimated Index",

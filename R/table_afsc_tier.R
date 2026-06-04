@@ -4,7 +4,7 @@ table_afsc_tier <- function() {
   # -adds make_rda and tables_dir as arguments
   # -defines topic_label, fig_or_table; and
   # -makes an rda if make_rda = TRUE
-  # (see table_indices.R for reference)
+  # (see table_index.R for reference)
   # for the rda-related fxns to work, the final table has to be called tab
 
   # identify output

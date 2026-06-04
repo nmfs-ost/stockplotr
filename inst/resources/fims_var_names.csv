@@ -2,10 +2,10 @@ module_name,label,alt_label
 Fleet,age_to_length_conversion,
 Fleet,agecomp_expected,age_composition_expected
 Fleet,agecomp_proportion,age_composition_proportion
-Fleet,index_expected,indices_expected
-Fleet,index_naa,indices
-Fleet,index_nal,indices
-Fleet,index_numbers,indices_numbers
+Fleet,index_expected,index_expected
+Fleet,index_naa,index
+Fleet,index_nal,index
+Fleet,index_numbers,index_numbers
 Fleet,index_waa,indicies_weight
 Fleet,index_weight,indicies_weight
 Fleet,landings_expected,
@@ -34,9 +34,9 @@ selectivity,slope,
 ,AgeCompositionExpected,age_composition_expected
 ,AgeCompositionProportion,age_composition_proportion
 ,FMort,fishing_mortality
-,IndexExpected,indices_expected
-,IndexNumberAtAge,indices_numbers
-,IndexNumberAtLength,indices_numbers
+,IndexExpected,index_expected
+,IndexNumberAtAge,index_numbers
+,IndexNumberAtLength,index_numbers
 ,LandingsExpected,landings_expected
 ,LandingsNumberAtAge,landings_numbers
 ,LandingsNumberAtLength,landings_numbers
