@@ -21,7 +21,7 @@ For more context, please read the function documentation and refer to the docume
 # Captions and alternative text (alt text)
 ## How are captions and alt text constructed?
 
-When a plotting function (e.g., `plot_biomass()`, `table_indices()`, `save_all_plots()`) is run, placeholders within the plot's associated alt text and captions are replaced with key quantities (see the [{asar} package's Accessibility vignette](https://nmfs-ost.github.io/asar/articles/accessibility_guide.html) and the {stockplotr} ["How captions and alternative text are generated" vignette](https://nmfs-ost.github.io/stockplotr/articles/how-caps-alttext-are-made.html) for more details).
+When a plotting function (e.g., `plot_biomass()`, `table_index()`, `save_all_plots()`) is run, placeholders within the plot's associated alt text and captions are replaced with key quantities (see the [{asar} package's Accessibility vignette](https://nmfs-ost.github.io/asar/articles/accessibility_guide.html) and the {stockplotr} ["How captions and alternative text are generated" vignette](https://nmfs-ost.github.io/stockplotr/articles/how-caps-alttext-are-made.html) for more details).
 
 As stated in the [Accessibility vignette's "Your to-do list" section](https://nmfs-ost.github.io/asar/articles/accessibility_guide.html#your-to-do-list), **you should always:**
 
