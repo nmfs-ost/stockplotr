@@ -552,6 +552,11 @@ convert_output <- function(
                 label = dplyr::case_when(
                   label == "f" ~ "fishing_mortality",
                   TRUE ~ label
+                ),
+                estimate = dplyr::if_else(
+                  grepl("-|_", estimate),
+                  NA,
+                  estimate
                 )
               )
 
@@ -568,12 +573,7 @@ convert_output <- function(
                 )
               colnames(df5) <- tolower(names(df5))
             }
-            # param_df <- df5
-            # if (ncol(out_new) < ncol(df5)){
-            #   warning(paste0("Transformed data frame for ", parm_sel, " has more columns than default."))
-            # } else if (ncol(out_new) > ncol(df5)){
-            #   warning(paste0("Transformed data frame for ", parm_sel, " has less columns than default."))
-            # }
+            
             if ("seas" %in% colnames(df5)) df5 <- dplyr::rename(df5, season = seas)
 
             if ("subseas" %in% colnames(df5)) df5 <- dplyr::rename(df5, subseason = subseas)
