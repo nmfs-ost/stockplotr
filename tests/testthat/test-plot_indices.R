@@ -20,9 +20,9 @@ test_that("rda file made when indicated", {
     figures_dir = getwd()
   )
 
-  # expect that both figures dir and the indices_figure.rda file exist
+  # expect that both figures dir and the index_figure.rda file exist
   expect_true(dir.exists(fs::path(getwd(), "figures")))
-  expect_true(file.exists(fs::path(getwd(), "figures", "indices_figure.rda")))
+  expect_true(file.exists(fs::path(getwd(), "figures", "index_figure.rda")))
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
