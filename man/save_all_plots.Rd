@@ -22,7 +22,7 @@ save_all_plots(
   abundance_at_age_unit_label = "fish",
   biomass_at_age_scale_amount = 1,
   biomass_at_age_unit_label = "mt",
-  index_unit_label = "",
+  indices_unit_label = "",
   biomass_unit_label = "mt",
   catch_unit_label = "mt",
   catch_scale_amount = 1
@@ -121,7 +121,7 @@ Default: 1}
 
 Default: "mt"}
 
-\item{index_unit_label}{Units for index of abundance/CPUE
+\item{indices_unit_label}{Units for index of abundance/CPUE
 
 Default: ""}
 
@@ -153,7 +153,7 @@ translated to a standardized output (\link[stockplotr]{convert_output}).
 save_all_plots(dat,
   ref_line = "unfished",
   ref_line_sb = "target",
-  index_unit_label = "CPUE",
+  indices_unit_label = "CPUE",
   biomass_at_age_scale_amount = 1,
   biomass_at_age_unit_label = "metric tons"
 )

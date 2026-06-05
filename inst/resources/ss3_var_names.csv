@@ -57,9 +57,9 @@ OVERALL_COMPS,female,
 OVERALL_COMPS,male,
 BIOMASS_AT_AGE,biomass,
 CATCH,obs,landings_observed_weight
-INDEX_2,obs,index_observed
+INDEX_2,obs,indices_observed
 CATCH,exp,landings_predicted_weight
-INDEX_2,exp,index_predicted
+INDEX_2,exp,indices_predicted
 CATCH,mult,
 CATCH,exp*mult,
 CATCH,f,
