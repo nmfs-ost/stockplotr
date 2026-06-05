@@ -1933,7 +1933,7 @@ convert_output <- function(
             uncertainty = log_sd
           ) |>
           dplyr::mutate(
-            # label = "indices_observed",
+            # label = "index_observed",
             uncertainty_label = "log_sd",
             indices_predicted = dat$quantities$index_hat
           ) |>
@@ -2013,7 +2013,7 @@ convert_output <- function(
         df_comp_obs <- dat$data_list$comp_data |>
           dplyr::rename_with(tolower) |>
           dplyr::mutate(
-            label = "indices_observed"
+            label = "index_observed"
           )
 
         indexing_vars_cols <- colnames(df_comp_obs)[!grepl("comp", colnames(df_comp_obs))]
