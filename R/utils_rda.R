@@ -404,11 +404,11 @@ create_rda <- function(
 # mod.fit.catch.max <- # maximum catch
 
 
-## mod_fit_abun (model fit to abundance index plot)- don't code quantities yet
-# start year of model fit to abundance index plot
+## mod_fit_abun (model fit to abundance indices plot)- don't code quantities yet
+# start year of model fit to abundance indices plot
 # mod.fit.abun.start.year <-
 
-# end year of model fit to abundance index plot
+# end year of model fit to abundance indices plot
 # mod.fit.abun.end.year <-
 
 ## mod_fit_discards- will be by fleet

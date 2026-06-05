@@ -1,4 +1,4 @@
-#' Index of abundance table
+#' Indices of abundance table
 #'
 #' @inheritParams plot_recruitment
 #' @param group A string of a single column that groups the data.
@@ -23,12 +23,12 @@
 #' Default: the working directory (`getwd()`)
 #' @param label The label that will be chosen from the input file. If unspecified,
 #' the function will search the "label" column and use the first matching label
-#' in this ordered list: "index_weight",  "index_numbers", "index_expected",
-#' "index_predicted", "index".
+#' in this ordered list: "indices_weight",  "indices_numbers", "indices_expected",
+#' "indices_predicted", "indices".
 #'
 #' Default: NULL
 #'
-#' @returns A table of observed annual index of abundance plus error,
+#' @returns A table of observed annual indices of abundance plus error,
 #' stratified by fleet.
 #' @details The input is from an assessment model output file
 #' translated to a standardized output (\link[stockplotr]{convert_output}).
@@ -39,15 +39,15 @@
 #'
 #' @examples
 #' \dontrun{
-#' table_index(dat)
+#' table_indices(dat)
 #'
-#' table_index(
+#' table_indices(
 #'   dat,
 #'   make_rda = TRUE,
 #'   tables_dir = getwd()
 #' )
 #' }
-table_index <- function(
+table_indices <- function(
     dat,
     era = NULL,
     interactive = TRUE,
@@ -64,7 +64,7 @@ table_index <- function(
   # Filter data for landings
   prepared_data <- filter_data(
     dat = dat,
-    label_name = "index",
+    label_name = "indices",
     geom = "line",
     era = era,
     module = module,
@@ -76,7 +76,7 @@ table_index <- function(
   
   # Add check if there is any data
   if (nrow(prepared_data) == 0) {
-    cli::cli_abort("No index data found.")
+    cli::cli_abort("No indices data found.")
   }
   
   # get uncertainty label by model
@@ -115,14 +115,14 @@ table_index <- function(
   id_col_vals <- table_data_info[[3]]
   
   # id_group_vals <- sapply(id_cols, function(x) unique(prepared_data[[x]]), simplify = FALSE)
-  # TODO: add check if there is a index column for every error column -- if not remove the error (can keep index)
+  # TODO: add check if there is a indices column for every error column -- if not remove the error (can keep indices)
   
-  # merge error and index columns and rename
+  # merge error and indices columns and rename
   df_list <- merge_error(
     table_data,
     uncert_lab,
     fleets,
-    label = "index",
+    label = "indices",
     unit_label = "" # should this be CPUE?
   )
   
@@ -136,7 +136,7 @@ table_index <- function(
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
     
-    # Caption contains no key quantities for index table
+    # Caption contains no key quantities for indices table
     # So, export captions/alt text csv if absent
     if (!file.exists(fs::path(getwd(), "captions_alt_text.csv"))) {
       caps_alttext <- utils::read.csv(

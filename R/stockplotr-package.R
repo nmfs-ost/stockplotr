@@ -21,7 +21,7 @@ globvar <- c(
   "everything", "fleet_name", "name", "value_new", "y", ".",
   # Rceattle conout terms
   "n", "observation", "selectivity_block", "log_sd", "fleet_code",
-  "q_block", "species", "index_observed", "index_predicted",
+  "q_block", "species", "indices_observed", "indices_predicted",
   "catch_h", "catch", "catch_predicted", "age0_length1", "sample_size",
   "dim_info", "label_init"
 )
