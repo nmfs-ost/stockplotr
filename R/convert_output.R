@@ -1956,12 +1956,13 @@ convert_output <- function(
             values_to = "estimate"
           ) |>
           dplyr::mutate(
-            module_name = names(extract) # ,
+            module_name = names(extract),
             # era = dplyr::if_else(
             #   year > dat$data_list$endyr,
             #   "fore",
             #   NA_character_
             # )
+            label = stringr::str_replace_all(label, "indices", "index")
           )
 
         df_index_long[setdiff(tolower(names(out_new)), tolower(names(df_index_long)))] <- NA
