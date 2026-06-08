@@ -205,12 +205,15 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
       # Clean up fleet names and keywords
       label_cols_new <- stringr::str_remove_all(
         label_cols_init,
-        paste0("_", fleets, collapse = "|")
+        paste0("_", fleets[order(nchar(fleets), decreasing = TRUE)], collapse = "|")
       ) |> stringr::str_replace_all("_", " ")
       # Drop "weight" or "number" if present
-      label_cols_new <- unique(
-        stringr::str_remove_all(tolower(label_cols_new), " number| weight")
-      )
+      if (any(grepl("number|weight", tolower(label_cols_new)))) {
+        label_cols_new <- unique(
+          stringr::str_remove_all(tolower(label_cols_new), " number| weight")
+        )
+      }
+      
       # Check if we should simplify to a single "Landings" label
       if (length(unique(label_cols_new)) == 2) {
         matches <- sapply(uncert_lab, function(l) {
@@ -252,6 +255,14 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
         label_cols_init,
         paste0("_", fleets, "$", collapse = "|")
       ) |> stringr::str_remove_all("_")
+      
+      if (all(is.na(cols_fleets))) {
+        cols_fleets <- stringr::str_extract(
+          label_cols_init,
+          paste0("_", fleets[order(nchar(fleets), decreasing = TRUE)], collapse = "|")
+        ) |> stringr::str_replace("_", "")
+          # stringr::str_replace_all("_", " ")
+      }
 
       # Target labels for next step
       final_names <- ifelse(
@@ -278,14 +289,14 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
         dplyr::rename(dplyr::any_of(rename_map))
 
       # Identify lestimate and uncertainty columns for loop and other reference
-      label_cols <- names(tab_dat)[-c(1, grep(glue::glue("^{uncert_lab} "), names(tab_dat)))]
-      uncert_cols <- names(tab_dat)[grep(glue::glue("^{uncert_lab} "), names(tab_dat))]
+      label_cols <- names(tab_dat)[-c(1, grep(glue::glue("^{gsub('_', ' ', uncert_lab)} "), names(tab_dat)))]
+      uncert_cols <- names(tab_dat)[grep(glue::glue("^{gsub('_', ' ', uncert_lab)} "), names(tab_dat))]
       # Comment out from here to closing brackets if don't want to combine label and uncertainty
       # {{ -------------------------------------------------------------------
       # Use loop to combine label (uncertainty)
       for (l_col in label_cols) {
         # Identify the error column that contains l_col in the name
-        uncert_col <- uncert_cols[grepl(l_col, uncert_cols)]
+        uncert_col <- uncert_cols[grepl(paste0(l_col, "$"), uncert_cols)]
 
         # adjust tab dat to combine the uncert_col value into the l_col = l_col (uncert_col)
         tab_dat <- tab_dat |>
@@ -308,8 +319,8 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
 
       # Rename final df with cleaned names
       tab_dat <- tab_dat |>
-        dplyr::rename(dplyr::any_of(rename_map_final)) |>
-        dplyr::rename_with(~ gsub("_", " - ", .)) # |>
+        dplyr::rename(dplyr::any_of(rename_map_final)) #|>
+        # dplyr::rename_with(~ gsub("_", " - ", .)) # |>
       # not sure if we want to keep this or not
       # dplyr::select(where(~!all(is.na(.)) | !all(. == "-"))) # remove columns that are all NA or all "-"))
     } else {
