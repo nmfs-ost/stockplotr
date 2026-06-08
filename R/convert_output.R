@@ -1933,7 +1933,7 @@ convert_output <- function(
             uncertainty = log_sd
           ) |>
           dplyr::mutate(
-            # label = "indices_observed",
+            # label = "index_observed",
             uncertainty_label = "log_sd",
             indices_predicted = dat$quantities$index_hat
           ) |>
@@ -1956,12 +1956,13 @@ convert_output <- function(
             values_to = "estimate"
           ) |>
           dplyr::mutate(
-            module_name = names(extract) # ,
+            module_name = names(extract),
             # era = dplyr::if_else(
             #   year > dat$data_list$endyr,
             #   "fore",
             #   NA_character_
             # )
+            label = stringr::str_replace_all(label, "indices", "index")
           )
 
         df_index_long[setdiff(tolower(names(out_new)), tolower(names(df_index_long)))] <- NA
@@ -2013,7 +2014,7 @@ convert_output <- function(
         df_comp_obs <- dat$data_list$comp_data |>
           dplyr::rename_with(tolower) |>
           dplyr::mutate(
-            label = "indices_observed"
+            label = "index_observed"
           )
 
         indexing_vars_cols <- colnames(df_comp_obs)[!grepl("comp", colnames(df_comp_obs))]
