@@ -64,7 +64,7 @@ table_index <- function(
   # Filter data for landings
   prepared_data <- filter_data(
     dat = dat,
-    label_name = "index",
+    label_name = "index_observed|index_predicted",
     geom = "line",
     era = era,
     module = module,
