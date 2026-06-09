@@ -1,24 +1,18 @@
-# load sample dataset
-load(file.path(
-  "fixtures", "ss3_models_converted", "Hake_2018",
-  "std_output.rda"
-))
-
 test_that("plot_natural_mortality generate without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_natural_mortality(out_new, module = "Natural_Mortality")
+    plot_natural_mortality(stockplotr::example_data, module = "Natural_Mortality")
   )
 
   # expect eror when not interactive since it's choosing the first module in ex
   expect_error(
-    plot_natural_mortality(out_new)
+    plot_natural_mortality(stockplotr::example_data)
   )
 
   # expect ggplot object is returned
   expect_s3_class(
     plot_natural_mortality(
-      out_new,
+      stockplotr::example_data,
       module = "Natural_Mortality"
     ),
     "gg"
@@ -28,7 +22,7 @@ test_that("plot_natural_mortality generate without errors", {
 test_that("rda file made when indicated", {
   # export rda
   plot_natural_mortality(
-    out_new,
+    stockplotr::example_data,
     module = "Natural_Mortality",
     make_rda = TRUE,
     figures_dir = getwd()

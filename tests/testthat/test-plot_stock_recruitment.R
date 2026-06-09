@@ -1,21 +1,15 @@
-# load sample dataset
-load(file.path(
-  "fixtures", "ss3_models_converted", "Hake_2018",
-  "std_output.rda"
-))
-
 test_that("plot_stock_recruitment generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
     stockplotr::plot_stock_recruitment(
-      dat = out_new
+      dat = stockplotr::example_data
     )
   )
 
   # expect error-free plot with many arguments
   expect_no_error(
     stockplotr::plot_stock_recruitment(
-      out_new,
+      stockplotr::example_data,
       spawning_biomass_label = "mt",
       recruitment_label = "mt",
       make_rda = FALSE,
@@ -27,7 +21,7 @@ test_that("plot_stock_recruitment generates plots without errors", {
   # expect ggplot object is returned
   expect_s3_class(
     stockplotr::plot_stock_recruitment(
-      out_new,
+      stockplotr::example_data,
       spawning_biomass_label = "mt",
       recruitment_label = "mt",
       make_rda = FALSE,
@@ -40,7 +34,7 @@ test_that("plot_stock_recruitment generates plots without errors", {
 test_that("rda file made when indicated", {
   # export rda
   plot_stock_recruitment(
-    out_new,
+    stockplotr::example_data,
     spawning_biomass_label = "mt",
     recruitment_label = "mt",
     make_rda = TRUE,

@@ -1,13 +1,7 @@
-# load sample dataset
-load(file.path(
-  "fixtures", "ss3_models_converted", "Hake_2018",
-  "std_output.rda"
-))
-
 test_that("plot_recruitment generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_recruitment(out_new,
+    plot_recruitment(stockplotr::example_data,
       module = "TIME_SERIES"
     )
   )
@@ -15,7 +9,7 @@ test_that("plot_recruitment generates plots without errors", {
   # expect error-free plot with many arguments
   expect_no_error(
     plot_recruitment(
-      out_new,
+      stockplotr::example_data,
       unit_label = "mt",
       scale_amount = 10,
       module = "TIME_SERIES",
@@ -29,7 +23,7 @@ test_that("plot_recruitment generates plots without errors", {
   # Relative is no longer an option
   # expect_no_error(
   #   plot_recruitment(
-  #     out_new,
+  #     stockplotr::example_data,
   #     unit_label = "mt",
   #     scale_amount = 10,
   #     # relative = TRUE,
@@ -43,7 +37,7 @@ test_that("plot_recruitment generates plots without errors", {
   # expect ggplot object is returned
   expect_s3_class(
     plot_recruitment(
-      out_new,
+      stockplotr::example_data,
       unit_label = "mt",
       scale_amount = 10,
       # relative = TRUE,
@@ -58,7 +52,7 @@ test_that("plot_recruitment generates plots without errors", {
 test_that("rda file made when indicated", {
   # export rda
   plot_recruitment(
-    out_new,
+    stockplotr::example_data,
     module = "TIME_SERIES",
     figures_dir = getwd(),
     make_rda = TRUE

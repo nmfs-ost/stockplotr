@@ -27,16 +27,17 @@ test_that("convert_output works for SS3", {
 
 
 test_that("convert_output saves model ss3 hake output file", {
-  conv_mod_dir <- fs::path("fixtures", "ss3_models_converted", "Hake_2018", "std_output.rda")
 
-  file.remove(fs::path(conv_mod_dir))
-
+  dir.create(fs::path("fixtures", "ss3_models_converted", "Hake_2018"), recursive = TRUE)
+  
   convert_output(
     file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
     save_dir = fs::path("fixtures", "ss3_models_converted", "Hake_2018", "std_output.rda")
   )
 
   expect_true(list.files(fs::path("fixtures", "ss3_models_converted", "Hake_2018")) == "std_output.rda")
+  
+  unlink(fs::path("fixtures", "ss3_models_converted"), recursive = TRUE)
 })
 
 test_that("missing arguments trigger warnings or errors", {
@@ -58,7 +59,8 @@ test_that("missing arguments trigger warnings or errors", {
   #   ),
   #   "Missing `model`"
   # )
-
+  dir.create(fs::path("fixtures", "ss3_models_converted", "Hake_2018"), recursive = TRUE)
+  
   expect_error(
     convert_output(
       file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.rdat"),
@@ -67,4 +69,7 @@ test_that("missing arguments trigger warnings or errors", {
     ),
     "`file` not found"
   )
+  
+  unlink(fs::path("fixtures", "ss3_models_converted"), recursive = TRUE)
+  
 })

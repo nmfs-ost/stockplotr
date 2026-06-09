@@ -1,19 +1,13 @@
-# # load sample dataset
-# load(file.path(
-#   "fixtures", "ss3_models_converted", "Hake_2018",
-#   "std_output.rda"
-# ))
-
 # test_that("table_indices generates plots without errors", {
 #   # expect error-free plot with minimal arguments
 #   expect_no_error(
-#     stockplotr::table_indices(out_new)
+#     stockplotr::table_indices(stockplotr::example_data)
 #   )
 
 #   # expect error-free plot with many arguments
 #   expect_no_error(
 #     stockplotr::table_indices(
-#       out_new,
+#       stockplotr::example_data,
 #       end_year = 2024,
 #       make_rda = FALSE,
 #       tables_dir = getwd()
@@ -24,7 +18,7 @@
 #   # expect flextable object is returned
 #   expect_s3_class(
 #     stockplotr::table_indices(
-#       out_new,
+#       stockplotr::example_data,
 #       make_rda = FALSE,
 #       tables_dir = getwd()
 #     ),
@@ -35,7 +29,7 @@
 # test_that("rda file made when indicated", {
 #   # export rda
 #   table_indices(
-#     out_new,
+#     stockplotr::example_data,
 #     end_year = 2024,
 #     make_rda = TRUE,
 #     tables_dir = getwd()
@@ -56,7 +50,7 @@
 #   # expect error
 #   expect_error(
 #     stockplotr::table_indices(
-#       out_new,
+#       stockplotr::example_data,
 #       end_year = 2035,
 #       make_rda = TRUE,
 #       tables_dir = getwd()

@@ -1,13 +1,7 @@
-# load sample dataset
-load(file.path(
-  "fixtures", "ss3_models_converted", "Hake_2018",
-  "std_output.rda"
-))
-
 # # Dependent on save_all_plots -- uncomment when that fxn is fixed
 # test_that("html_all_figs_tables makes qmd and html files with default figures_tables_dir argument", {
 #   save_all_plots(
-#     out_new,
+#     stockplotr::example_data,
 #     recruitment_unit_label = "mt",
 #     recruitment_scale_amount = 1,
 #     ref_line = c("unfished" = 1000),
@@ -44,7 +38,7 @@ load(file.path(
 #   withr::with_dir(
 #     rda_path,
 #     save_all_plots(
-#       out_new,
+#       stockplotr::example_data,
 #       recruitment_unit_label = "mt",
 #       recruitment_scale_amount = 1,
 #       ref_line = c("unfished"=1000),
@@ -72,7 +66,7 @@ load(file.path(
 #
 # test_that("html_all_figs_tables triggers message (question) when all_tables_figures folder already present", {
 #   save_all_plots(
-#     out_new,
+#     stockplotr::example_data,
 #     end_year = 2024,
 #     recruitment_unit_label = "mt",
 #     recruitment_scale_amount = 1,

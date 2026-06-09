@@ -1,13 +1,7 @@
-# # load sample dataset
-# load(file.path(
-#   "fixtures", "ss3_models_converted", "Hake_2018",
-#   "std_output.rda"
-# ))
-
 # test_that("table_bnc generates plots without errors", {
 #   # expect error-free plot with minimal arguments
 #   expect_no_error(
-#     stockplotr::table_bnc(out_new,
+#     stockplotr::table_bnc(stockplotr::example_data,
 #       end_year = 2022
 #     )
 #   )
@@ -15,7 +9,7 @@
 #   # expect error-free plot with many arguments
 #   expect_no_error(
 #     stockplotr::table_bnc(
-#       out_new,
+#       stockplotr::example_data,
 #       end_year = 2025,
 #       biomass_unit_label = "mt",
 #       catch_unit_label = "mt",
@@ -29,7 +23,7 @@
 #   # expect flextable object is returned
 #   expect_s3_class(
 #     stockplotr::table_bnc(
-#       out_new,
+#       stockplotr::example_data,
 #       end_year = 2025,
 #       biomass_unit_label = "mt",
 #       catch_unit_label = "mt",
@@ -44,7 +38,7 @@
 # test_that("rda file made when indicated", {
 #   # export rda
 #   table_bnc(
-#     out_new,
+#     stockplotr::example_data,
 #     end_year = 2025,
 #     biomass_unit_label = "mt",
 #     catch_unit_label = "mt",
@@ -68,7 +62,7 @@
 #   # expect error
 #   expect_error(
 #     stockplotr::table_bnc(
-#       out_new,
+#       stockplotr::example_data,
 #       end_year = 2035,
 #       biomass_unit_label = "mt",
 #       catch_unit_label = "mt",

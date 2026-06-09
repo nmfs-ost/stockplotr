@@ -1,26 +1,20 @@
-# load sample dataset
-load(file.path(
-  "fixtures", "ss3_models_converted", "Hake_2018",
-  "std_output.rda"
-))
-
 test_that("plot_indices generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_indices(out_new)
+    plot_indices(stockplotr::example_data)
   )
 
 
   # expect ggplot object is returned
   expect_s3_class(
-    plot_indices(out_new),
+    plot_indices(stockplotr::example_data),
     "gg"
   )
 })
 
 test_that("rda file made when indicated", {
   # export rda
-  plot_indices(out_new,
+  plot_indices(stockplotr::example_data,
     make_rda = TRUE,
     unit_label = "metric tons",
     figures_dir = getwd()

@@ -1,24 +1,18 @@
-# load sample dataset
-load(file.path(
-  "fixtures", "ss3_models_converted", "Hake_2018",
-  "std_output.rda"
-))
-
 test_that("plot_spawning_biomass generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_spawning_biomass(out_new)
+    plot_spawning_biomass(stockplotr::example_data)
   )
 
   # expect plot with warnings if ref_point not indicated
   expect_message(
-    plot_spawning_biomass(out_new)
+    plot_spawning_biomass(stockplotr::example_data)
   )
 
   # expect error-free plot with many arguments
   expect_no_error(
     plot_spawning_biomass(
-      out_new,
+      stockplotr::example_data,
       unit_label = "metric tons",
       scale_amount = 1,
       ref_line = "msy"
@@ -28,7 +22,7 @@ test_that("plot_spawning_biomass generates plots without errors", {
   # expect ggplot object is returned
   expect_s3_class(
     plot_spawning_biomass(
-      out_new,
+      stockplotr::example_data,
       unit_label = "metric tons",
       scale_amount = 1,
       ref_line = c("msy" = 2000000),
@@ -41,7 +35,7 @@ test_that("plot_spawning_biomass generates plots without errors", {
 test_that("rda file made when indicated", {
   # export rda
   plot_spawning_biomass(
-    out_new,
+    stockplotr::example_data,
     unit_label = "metric tons",
     scale_amount = 1,
     ref_line = "msy",

@@ -1,13 +1,7 @@
-# load sample dataset
-load(file.path(
-  "fixtures", "ss3_models_converted", "Hake_2018",
-  "std_output.rda"
-))
-
 test_that("plot_recruitment_deviations generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_recruitment_deviations(out_new,
+    plot_recruitment_deviations(stockplotr::example_data,
       module = "SPAWN_RECRUIT"
     )
   )
@@ -15,7 +9,7 @@ test_that("plot_recruitment_deviations generates plots without errors", {
   # expect error-free plot with many arguments
   expect_no_error(
     plot_recruitment_deviations(
-      out_new,
+      stockplotr::example_data,
       module = "SPAWN_RECRUIT",
       make_rda = FALSE,
       figures_dir = getwd()
@@ -25,7 +19,7 @@ test_that("plot_recruitment_deviations generates plots without errors", {
   # expect ggplot object is returned
   expect_s3_class(
     plot_recruitment_deviations(
-      out_new,
+      stockplotr::example_data,
       module = "SPAWN_RECRUIT",
       make_rda = FALSE,
       figures_dir = getwd()
@@ -37,7 +31,7 @@ test_that("plot_recruitment_deviations generates plots without errors", {
 test_that("rda file made when indicated", {
   # export rda
   plot_recruitment_deviations(
-    out_new,
+    stockplotr::example_data,
     module = "SPAWN_RECRUIT",
     make_rda = TRUE,
     figures_dir = getwd()
