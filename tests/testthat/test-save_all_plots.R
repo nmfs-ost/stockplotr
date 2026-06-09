@@ -1,12 +1,6 @@
-# load sample dataset
-load(file.path(
-  "fixtures", "ss3_models_converted", "Hake_2018",
-  "std_output.rda"
-))
-
 test_that("save_all_plots works when all figures/tables are plotted", {
   save_all_plots(
-    out_new,
+    stockplotr::example_data,
     recruitment_unit_label = "mt",
     recruitment_scale_amount = 1,
     ref_line = c("unfished" = 1000),

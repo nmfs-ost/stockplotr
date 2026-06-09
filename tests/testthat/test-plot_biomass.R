@@ -1,9 +1,3 @@
-# load sample dataset
-load(file.path(
-  "fixtures", "ss3_models_converted", "Hake_2018",
-  "std_output.rda"
-))
-
 # Below is now moot bc relative is coming from model results
 # Make another sample dataset for testing relative
 # n <- 448
@@ -35,19 +29,19 @@ load(file.path(
 test_that("plot_biomass generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_biomass(out_new)
+    plot_biomass(stockplotr::example_data)
   )
 
   # TODO: Update test
   # expect plot with warning message if ref_point not indicated
   # expect_message(
-  #   plot_biomass(out_new)
+  #   plot_biomass(stockplotr::example_data)
   # )
 
   # expect error-free plot with many arguments
   expect_no_error(
     plot_biomass(
-      out_new,
+      stockplotr::example_data,
       ref_point = c("target" = 18000),
       unit_label = "metric tons",
       scale_amount = 1,
@@ -61,7 +55,7 @@ test_that("plot_biomass generates plots without errors", {
   # expect error-free plot when setting relative to T
   expect_no_error(
     plot_biomass(
-      out_new,
+      stockplotr::example_data,
       unit_label = "mt",
       # scale_amount = 10,
       relative = TRUE
@@ -71,7 +65,7 @@ test_that("plot_biomass generates plots without errors", {
   # expect ggplot object is returned
   expect_s3_class(
     plot_biomass(
-      out_new,
+      stockplotr::example_data,
       unit_label = "metric tons",
       scale_amount = 1,
       make_rda = FALSE,
@@ -85,7 +79,7 @@ test_that("plot_biomass generates plots without errors", {
 test_that("rda file made when indicated", {
   # export rda
   plot_biomass(
-    out_new,
+    stockplotr::example_data,
     figures_dir = getwd(),
     make_rda = TRUE,
     module = "TIME_SERIES"

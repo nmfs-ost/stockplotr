@@ -1,14 +1,8 @@
-# load sample dataset
-load(file.path(
-  "fixtures", "ss3_models_converted", "Hake_2018",
-  "std_output.rda"
-))
-
 test_that("table_landings generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
     table_landings(
-      out_new,
+      stockplotr::example_data,
       interactive = FALSE,
       module = "CATCH"
     )
@@ -17,7 +11,7 @@ test_that("table_landings generates plots without errors", {
   # expect error-free plot with many arguments
   expect_no_error(
     table_landings(
-      dat = out_new,
+      dat = stockplotr::example_data,
       unit_label = "mt",
       interactive = FALSE,
       module = "CATCH",
@@ -31,7 +25,7 @@ test_that("table_landings generates plots without errors", {
   # adjust this test to work for multiple output tables
   # expect_s3_class(
   #   table_landings(
-  #     dat = out_new,
+  #     dat = stockplotr::example_data,
   #     unit_label = "mt",
   #     era = NULL,
   #     interactive = FALSE,
@@ -46,7 +40,7 @@ test_that("table_landings generates plots without errors", {
 test_that("rda file made when indicated", {
   # export rda
   table_landings(
-    dat = out_new,
+    dat = stockplotr::example_data,
     unit_label = "mt",
     era = NULL,
     interactive = FALSE,
@@ -70,7 +64,7 @@ test_that("table_landings generates error with incorrect module", {
   # Need to test this -- not exactly the right test/result
   expect_error(
     table_landings(
-      dat = out_new,
+      dat = stockplotr::example_data,
       unit_label = "mt",
       era = NULL,
       interactive = FALSE,

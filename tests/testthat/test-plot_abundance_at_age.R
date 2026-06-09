@@ -1,20 +1,13 @@
-# load sample dataset
-load(file.path(
-  "fixtures", "ss3_models_converted", "Hake_2018",
-  "std_output.rda"
-))
-
-# TODO: Fix tests
 test_that("plot_abundance_at_age generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_abundance_at_age(out_new)
+    plot_abundance_at_age(stockplotr::example_data)
   )
 
   # expect error-free plot with many arguments
   expect_no_error(
     plot_abundance_at_age(
-      out_new,
+      stockplotr::example_data,
       facet = "area",
       unit_label = "fish",
       scale_amount = 1000,
@@ -26,7 +19,7 @@ test_that("plot_abundance_at_age generates plots without errors", {
   # expect ggplot object is returned
   expect_s3_class(
     plot_abundance_at_age(
-      out_new,
+      stockplotr::example_data,
       unit_label = "fish",
       scale_amount = 1,
       make_rda = FALSE,
@@ -39,7 +32,7 @@ test_that("plot_abundance_at_age generates plots without errors", {
 test_that("rda file made when indicated", {
   # export rda
   plot_abundance_at_age(
-    out_new,
+    stockplotr::example_data,
     figures_dir = getwd(),
     make_rda = TRUE
   )
@@ -58,7 +51,7 @@ test_that("plot_abundance_at_age generates error with scaling <1", {
   # expect error
   expect_error(
     plot_abundance_at_age(
-      out_new,
+      stockplotr::example_data,
       unit_label = "fish",
       scale_amount = 0.1,
       make_rda = FALSE,
@@ -146,7 +139,7 @@ test_that("plot_abundance_at_age generates error when abundance label is not fou
 
 test_that("plot is made proportional and does not contain a legend", {
   plot <- plot_abundance_at_age(
-    out_new,
+    stockplotr::example_data,
     unit_label = "fish",
     proportional = TRUE,
     scale_amount = 1,
@@ -158,7 +151,7 @@ test_that("plot is made proportional and does not contain a legend", {
 
 test_that("plot contains a legend", {
   plot <- plot_abundance_at_age(
-    out_new,
+    stockplotr::example_data,
     proportional = FALSE,
     unit_label = "fish",
     scale_amount = 1,

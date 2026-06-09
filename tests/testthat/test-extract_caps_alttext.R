@@ -1,9 +1,3 @@
-# load sample dataset
-load(file.path(
-  "fixtures", "ss3_models_converted", "Hake_2018",
-  "std_output.rda"
-))
-
 test_that("extract_caps_alttext works for figures", {
   topic_label <- "biomass"
   fig_or_table <- "figure"
