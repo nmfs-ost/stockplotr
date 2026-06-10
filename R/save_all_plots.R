@@ -460,23 +460,24 @@ save_all_plots <- function(
   #   }
   # )
 
-  # tryCatch(
-  #   {
-  #     cli::cli_h2("table_index")
-  #     table_index(
-  #       dat,
-  #       make_rda = TRUE,
-  #       tables_dir = figures_tables_dir
-  #     ) # |>
-  #     # suppressWarnings() |>
-  #     # invisible()
-  #   },
-  #   error = function(e) {
-  #     cli::cli_alert_danger("table_index failed to run.")
-  #     cli::cli_alert("Tip: check that your arguments are correct.")
-  #     print(e)
-  #   }
-  # )
+  tryCatch(
+    {
+      cli::cli_h2("table_index")
+      table_index(
+        dat,
+        interactive = FALSE,
+        make_rda = TRUE,
+        tables_dir = figures_tables_dir
+      ) # |>
+      # suppressWarnings() |>
+      # invisible()
+    },
+    error = function(e) {
+      cli::cli_alert_danger("table_index failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      print(e)
+    }
+  )
 
   tryCatch(
     {
