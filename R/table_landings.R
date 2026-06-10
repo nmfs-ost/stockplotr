@@ -104,7 +104,7 @@ table_landings <- function(
     # cli::cli_alert_warning("The first value ({uncert_lab}) will be chosen.")
   }
 
-  if (is.na(uncert_lab)) uncert_lab <- "uncertainty"
+  if (length(uncert_lab) == 0 || is.na(uncert_lab)) uncert_lab <- "uncertainty"
 
   # get fleet names
   # TODO: change from fleets to id_group AFTER the process data step and adjust throughout the table based on indexing
