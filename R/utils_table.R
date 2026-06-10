@@ -208,7 +208,13 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
         paste0("_", fleets[order(nchar(fleets), decreasing = TRUE)], collapse = "|")
       ) |> stringr::str_replace_all("_", " ")
       # Drop "weight" or "number" if present
-      if (any(grepl("number|weight", tolower(label_cols_new)))) {
+      if (any(grepl("numbers|weight", tolower(label_cols_new)))) {
+        # add check if both numbers and weight are present
+        # TRUE -- select weight
+        if (any(grepl("numbers", tolower(label_cols_new))) & any(grepl("weight", tolower(label_cols_new)))) {
+          cli::cli_alert_info("Both numbers and weight exist. Selecting only weight.")
+          label_cols_new <- label_cols_new[grepl("weight", tolower(label_cols_new))]
+        }
         label_cols_new <- unique(
           stringr::str_remove_all(tolower(label_cols_new), " numbers| weight")
         )
