@@ -210,7 +210,7 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
       # Drop "weight" or "number" if present
       if (any(grepl("number|weight", tolower(label_cols_new)))) {
         label_cols_new <- unique(
-          stringr::str_remove_all(tolower(label_cols_new), " number| weight")
+          stringr::str_remove_all(tolower(label_cols_new), " numbers| weight")
         )
       }
       
