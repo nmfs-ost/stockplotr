@@ -165,7 +165,7 @@
 #   caps_alttext = caps_alttext,
 #   figures_tables_dir = tables_dir,
 #   # get name of function and remove "table_" from it
-#   topic_label = gsub("table_", "", as.character(sys.call()[[1]])),
+#   topic_label = gsub("table_", "", tail(as.character(sys.call()[[1]]), n = 1)),
 #   fig_or_table = fig_or_table
 # )
 #   }
