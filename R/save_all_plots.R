@@ -436,29 +436,29 @@ save_all_plots <- function(
   )
 
   # tables
-  # tryCatch(
-  #   {
-  #     cli::cli_h2("table_bnc")
-  #     table_bnc(
-  #       dat,
-  #       biomass_unit_label,
-  #       catch_unit_label,
-  #       spawning_biomass_label,
-  #       make_rda = TRUE,
-  #       tables_dir = figures_tables_dir
-  #     ) # |>
-  #     # suppressWarnings() |>
-  #     # invisible()
-  #   },
-  #   error = function(e) {
-  #     cli::cli_alert_danger("table_bnc failed to run.")
-  #     cli::cli_alert("Tip: check that your arguments are correct.")
-  #     cli::cli_li("biomass_unit_label = {biomass_unit_label}")
-  #     cli::cli_li("catch_unit_label = {catch_unit_label}")
-  #     cli::cli_li("spawning_biomass_label = {spawning_biomass_label}")
-  #     print(e)
-  #   }
-  # )
+  tryCatch(
+    {
+      cli::cli_h2("table_bnc")
+      table_bnc(
+        dat,
+        biomass_unit_label,
+        catch_unit_label,
+        spawning_biomass_label,
+        make_rda = TRUE,
+        tables_dir = figures_tables_dir
+      ) # |>
+      # suppressWarnings() |>
+      # invisible()
+    },
+    error = function(e) {
+      cli::cli_alert_danger("table_bnc failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      cli::cli_li("biomass_unit_label = {biomass_unit_label}")
+      cli::cli_li("catch_unit_label = {catch_unit_label}")
+      cli::cli_li("spawning_biomass_label = {spawning_biomass_label}")
+      print(e)
+    }
+  )
 
   # tryCatch(
   #   {

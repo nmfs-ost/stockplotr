@@ -42,7 +42,7 @@ test_that("save_all_plots works when all figures/tables are plotted", {
 
   # expect that the tables are all created with expected names
    tab_base_temp_files <- c(
-    # "bnc_table.rda",
+    "bnc_table.rda",
    #  "indices.abundance_table.rda",
      "landings_table.rda"
    )
