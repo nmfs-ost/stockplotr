@@ -221,26 +221,26 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
       }
       
       # Check if there are other groupings left in label_cols_new
-      # if (any(
-      #   !stringr::str_detect(
-      #     label_cols_new,
-      #     paste0(label,
-      #            "(",
-      #            paste(c(" predicted", " weight", " observed", " numbers"), collapse = "|"),
-      #            ")$")
-      #     )
-      # )) {
-      #   other_grouping <- stringr::str_trim(stringr::str_match(
-      #     label_cols_new,
-      #     paste0("(?<=", label, "(", paste(c(" predicted", " weight", " observed", " numbers"), collapse = "|"), "))(.*)")
-      #   )[, 3]) |> unique()
-      #   label_cols_new2 <- stringr::str_remove_all(
-      #     label_cols_new,
-      #     paste0(" ", other_grouping, collapse = "|")
-      #   )
-      # } else {
-      #   other_grouping <- NULL
-      # }
+      if (any(
+        !stringr::str_detect(
+          label_cols_new,
+          paste0(label,
+                 "(",
+                 paste(c(" predicted", " weight", " observed", " numbers"), collapse = "|"),
+                 ")$")
+          )
+      )) {
+        other_grouping <- stringr::str_trim(stringr::str_match(
+          label_cols_new,
+          paste0("(?<=", label, "(", paste(c(" predicted", " weight", " observed", " numbers"), collapse = "|"), "))(.*)")
+        )[, 3]) |> unique()
+        label_cols_new <- stringr::str_remove_all(
+          label_cols_new,
+          paste0(" ", other_grouping, collapse = "|")
+        ) |> unique()
+      } else {
+        other_grouping <- NULL
+      }
       
       # Check if we should simplify to a single "Landings" label
       if (length(unique(label_cols_new)) == 2) {
@@ -285,6 +285,10 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
       # Re-attach fleet names to the new labels
       # extract fleet names -- order matters
       # want to assign labels to fleet names in the fleet name order
+      # cols_fleets <- stringr::str_extract(
+      #   label_cols_init,
+      #   paste0("_", fleets, "$", collapse = "|")
+      # ) |> stringr::str_remove_all("_")
       cols_fleets <- stringr::str_extract(
         label_cols_init,
         paste0("_", fleets, "$", collapse = "|")
@@ -298,10 +302,23 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
           # stringr::str_replace_all("_", " ")
       }
       
-      # If still all NAs this means that there are more grouping
-      # to maintain uniqueness of the columns, just extract this end part
+      # Combine groupings again
+      all_col_group_idfers <- tidyr::expand_grid(label = other_grouping, fleet = unique(cols_fleets)) |>
+        dplyr::mutate(final_string = paste0(fleet, " ", other_grouping)) |> 
+        dplyr::pull(final_string)
+      # match the ones that are in the initial column names
+      col_group_idfers <- all_col_group_idfers[sapply(
+        stringr::str_replace_all(all_col_group_idfers, " ", "_"),
+        function(x) any(grepl(x, label_cols_init, fixed = TRUE))
+      )]
       
-
+      # Repeat the matches the number of times it occurs to match later
+      # counts <- sapply(
+      #   stringr::str_replace_all(col_group_idfers, " ", "_"),
+      #   function(p) sum(grepl(p, label_cols_init, fixed = TRUE))
+      # )
+      # group_idfers <- rep(col_group_idfers, times = counts)
+      
       # Target labels for next step
       # final_names <- ifelse(
       #   is.na(cols_fleets),
@@ -309,9 +326,9 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
       #   paste0(label_cols_new, " - ", cols_fleets)
       # )
       final_names <- ifelse(
-        is.na(cols_fleets),
+        is.na(group_idfers),
         label_cols_final,
-        tidyr::expand_grid(label = label_cols_final, fleet = unique(cols_fleets)) |> # paste0(label_cols_final, " - ", cols_fleets) # rep(label_cols_final, length(unique(cols_fleets)))
+        tidyr::expand_grid(label = label_cols_final, fleet = unique(col_group_idfers)) |> # paste0(label_cols_final, " - ", cols_fleets) # rep(label_cols_final, length(unique(cols_fleets)))
           dplyr::mutate(final_string = stringr::str_c(label, " - ", fleet)) |> 
           dplyr::pull(final_string)
       )
