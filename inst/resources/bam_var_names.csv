@@ -212,9 +212,6 @@ t.series,total.D.knum,discards_numbers
 t.series,U.ob,index_observed
 t.series,U.pr,index_predicted
 t.series,cv.U,index_cv
-t.series,u.ob,index_observed
-t.series,u.pr,index_predicted
-t.series,cv.u,index_cv
 t.series,q.rate.mult,catchability_rate
 t.series,q.DD.mult,q_DD_mult
 t.series,q.DD.B.4plus,q_DD_B_4plus
