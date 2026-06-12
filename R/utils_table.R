@@ -303,14 +303,14 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
       }
       
       # Combine groupings again
-      all_col_group_idfers <- tidyr::expand_grid(label = other_grouping, fleet = unique(cols_fleets)) |>
-        dplyr::mutate(final_string = paste0(fleet, " ", other_grouping)) |> 
-        dplyr::pull(final_string)
-      # match the ones that are in the initial column names
-      col_group_idfers <- all_col_group_idfers[sapply(
-        stringr::str_replace_all(all_col_group_idfers, " ", "_"),
-        function(x) any(grepl(x, label_cols_init, fixed = TRUE))
-      )]
+      # all_col_group_idfers <- tidyr::expand_grid(label = other_grouping, fleet = unique(cols_fleets)) |>
+      #   dplyr::mutate(final_string = paste0(fleet, " ", other_grouping)) |> 
+      #   dplyr::pull(final_string)
+      # # match the ones that are in the initial column names
+      # col_group_idfers <- all_col_group_idfers[sapply(
+      #   stringr::str_replace_all(all_col_group_idfers, " ", "_"),
+      #   function(x) any(grepl(x, label_cols_init, fixed = TRUE))
+      # )]
       
       # Repeat the matches the number of times it occurs to match later
       # counts <- sapply(
@@ -326,9 +326,9 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
       #   paste0(label_cols_new, " - ", cols_fleets)
       # )
       final_names <- ifelse(
-        is.na(group_idfers),
+        is.na(cols_fleets),
         label_cols_final,
-        tidyr::expand_grid(label = label_cols_final, fleet = unique(col_group_idfers)) |> # paste0(label_cols_final, " - ", cols_fleets) # rep(label_cols_final, length(unique(cols_fleets)))
+        tidyr::expand_grid(label = label_cols_final, fleet = unique(cols_fleets)) |> # col_group_idfers if other option
           dplyr::mutate(final_string = stringr::str_c(label, " - ", fleet)) |> 
           dplyr::pull(final_string)
       )
