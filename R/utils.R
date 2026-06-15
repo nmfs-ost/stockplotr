@@ -103,7 +103,7 @@ SS3_extract_df <- function(dat, label) {
 
   # Find the first blank row that appears after the start_row
   end_row <- next_blank_rows[which(next_blank_rows > start_row)[1]]
-  
+
   # Add check to determine if after next blank row contains a new report
   # if not --> then use reference to next report as value
   # Find all report: rows

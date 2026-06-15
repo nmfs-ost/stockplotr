@@ -573,7 +573,7 @@ convert_output <- function(
                 )
               colnames(df5) <- tolower(names(df5))
             }
-            
+
             if ("seas" %in% colnames(df5)) df5 <- dplyr::rename(df5, season = seas)
 
             if ("subseas" %in% colnames(df5)) df5 <- dplyr::rename(df5, subseason = subseas)
