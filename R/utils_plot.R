@@ -696,11 +696,10 @@ filter_data <- function(
       dplyr::mutate(
         year = as.numeric(year),
         model = ifelse(model_label, get_id(dat)[i], "1"), # NA -- changed from NA to 1 for processing reasons, might need to change back if issue
-        estimate = as.numeric(estimate) / scale_amount,
         # calc uncertainty when se
         # TODO: calculate other sources of error to upper and lower (cv,)
         estimate_lower = dplyr::case_when(
-          grepl("se", uncertainty_label) ~ (estimate - (1.96 * uncertainty)) / scale_amount,
+          grepl("se", uncertainty_label) ~ estimate - ((1.96 * uncertainty)) / scale_amount,
           grepl("sd", tolower(uncertainty_label)) | grepl("std", tolower(uncertainty_label)) ~ (estimate - uncertainty) / scale_amount,
           grepl("cv", tolower(uncertainty_label)) ~ (estimate - (1.96 * (uncertainty * estimate))) / scale_amount,
           TRUE ~ NA
@@ -710,7 +709,8 @@ filter_data <- function(
           grepl("sd", tolower(uncertainty_label)) | grepl("std", tolower(uncertainty_label)) ~ (estimate + uncertainty) / scale_amount,
           grepl("cv", tolower(uncertainty_label)) ~ (estimate + (1.96 * (uncertainty * estimate))) / scale_amount,
           TRUE ~ NA
-        )
+        ),
+        estimate = as.numeric(estimate) / scale_amount
       )
     # must rename era arg bc dplyr gets confused
     era_selection <- era
@@ -758,7 +758,6 @@ filter_data <- function(
   }
   # Put in
   plot_data <- dplyr::bind_rows(list_of_data, .id = "model")
-  # do.call(rbind, list_of_data)
 
   # Check if there are multiple module_names present
   if (length(unique(plot_data$module_name)) > 1) {
@@ -776,16 +775,11 @@ filter_data <- function(
       }
       if (interactive()) {
         if (interactive) {
-          # question1 <- utils::menu(
-          #         options,
-          #         title = "Please select one of the following:"
-          #       )
           question1 <- utils::select.list(
             options,
             multiple = TRUE,
             title = "Select one or more of the following module names"
           )
-          # selected_module <- unique(plot_data$module_name)[as.numeric(question1)]
           selected_module <- intersect(
             unique(plot_data$module_name),
             question1
@@ -806,67 +800,7 @@ filter_data <- function(
       }
     }
   }
-  # If group/facet is NULL then filter out/summarize data for plotting
-  # unsure if want to keep this
-  # TODO: change or remove in the future when moving to other plot types
-  # if (!is.null(group) & is.null(facet)) {
-  #   # Filter data if there is extra data in group/facet
-  #   if (all(is.na(plot_data[[group]]))) {
-  #     cli::cli_alert_warning("Data is not indexed by {group}. Setting group to NULL.")
-  #     # Override group to NULL as stated in warning
-  #     group = NULL
-  #   } else if (length(unique(plot_data[[group]])) == 1) {
-  #     cli::cli_alert_warning("Selected grouping variable only contains one unique value.")
-  #     # Summarize/group data by NULL when there is only 1 unique value to prevent plots with multiple points per year
-  #     # This might be specific to time series
-  #     plot_data <- plot_data |>
-  #       dplyr::group_by(year, model, group_var, era, module_name, label) |>
-  #       dplyr::summarise(
-  #         estimate = sum(unique(estimate)), # taking sum of unique values makes sure that when other grouping contain NA, then it doesn't double values?
-  #         estimate_lower = mean(estimate_lower),
-  #         estimate_upper = mean(estimate_upper)
-  #       )
-  #   } else if (any(is.na(unique(plot_data[[group]])))) {
-  #     # Remove NAs from grouping variable
-  #     plot_data <- plot_data |> dplyr::filter(!is.na(.data[[group]]))
-  #   }
-  # } else if (!is.null(facet)) {
-  #   if (all(is.na(plot_data[[facet]]))) {
-  #     cli::cli_alert_warning("Data is not indexed by {facet}. Setting facet to NULL.")
-  #     # Override facet to NULL as stated in the warning
-  #     facet = NULL
-  #   } else if (any(is.na(unique(plot_data[[facet]])))) {
-  #     # Remove NAs from faceting variable
-  #     plot_data <- plot_data |> dplyr::filter(!is.na(.data[[facet]]))
-  #   }
-  # }
-  # if (is.null(group) & is.null(facet)){
-  #   plot_data <- plot_data |>
-  #     dplyr::filter(
-  #       !is.na(year),
-  #       is.na(fleet) | length(unique(fleet)) <= 1,
-  #       is.na(sex) | length(unique(sex)) <= 1,
-  #       is.na(area) | length(unique(area)) <= 1,
-  #       is.na(growth_pattern) | length(unique(growth_pattern)) <= 1
-  #     ) |>
-  #     dplyr::group_by(
-  #       year,
-  #       model,
-  #       group_var,
-  #       era,
-  #       module_name,
-  #       label
-  #     ) |>
-  #     dplyr::summarise(
-  #       estimate = mean(estimate, na.rm = TRUE),
-  #       estimate_lower = mean(estimate_lower, na.rm = TRUE),
-  #       estimate_upper = mean(estimate_upper, na.rm = TRUE)
-  #     ) |>
-  #     dplyr::ungroup()
-  # }
-
   # TODO: add lines to summarize final data for selected grouping and or facet
-
   if (geom == "area") {
     plot_data <- dplyr::mutate(
       plot_data,
