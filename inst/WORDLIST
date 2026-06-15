@@ -5,13 +5,14 @@ FIMSdiags
 Lifecycle
 MSY
 Modelling
-NAA
 NOAA
 ORCID
 Petrale
 Pre
 Preformatted
 Rda
+Rmarkdown
+Rmd
 aa
 alttext
 asar
@@ -35,6 +36,7 @@ getwd
 ggplot
 gp
 hline
+href
 is’
 kable
 kableExtra
@@ -46,6 +48,7 @@ natively
 noaa
 nsim
 obsvpred
+pkgdown
 preformatted
 qmd
 rceattle
@@ -70,3 +73,5 @@ tibbles
 tidyr
 tidyselect
 unfished
+yaml
+yml
