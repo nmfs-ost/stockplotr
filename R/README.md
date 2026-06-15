@@ -5,6 +5,6 @@ Each script depicts the specific function withi the file. The utility file funct
 
 - [`utils_plot.R`]: utility functions to make plots
 - [`utils_table.R`]: utility functions to make tables
-- [`utils_rda.R`]: utility function to create/export rda when exporting tables or plots
+- [`utils_rda.R`]: utility function to create/export rda files when exporting tables or plots
 - [`utils`]: general helpful utility functions mostly used in the `convert_output` function
 

@@ -1,6 +1,6 @@
 # Vignettes
 
-This folder contains the vignettes found in the [stockplotr website] under the 
+This folder contains the vignettes found in the [stockplotr website](https://nmfs-ost.github.io/stockplotr/) under the 
 "Articles" drop-down tab.
 
 To create a new vignette, create a new Rmarkdown file then add this information as the yaml:
