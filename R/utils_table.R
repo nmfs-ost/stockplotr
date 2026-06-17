@@ -276,6 +276,7 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
           label_cols_final <- c(paste0(label_lab, " ", unit_label), uncert_lab)
         } else {
           label_cols_final <- c(
+            # TODO: works when unit_label = "", but not when it's set
             paste0(label_lab, unit_label, " (", uncert_lab, ")"),
             id_uncert_col
           )
@@ -303,35 +304,43 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
       }
       
       # Combine groupings again
-      # all_col_group_idfers <- tidyr::expand_grid(label = other_grouping, fleet = unique(cols_fleets)) |>
-      #   dplyr::mutate(final_string = paste0(fleet, " ", other_grouping)) |> 
-      #   dplyr::pull(final_string)
-      # # match the ones that are in the initial column names
-      # col_group_idfers <- all_col_group_idfers[sapply(
-      #   stringr::str_replace_all(all_col_group_idfers, " ", "_"),
-      #   function(x) any(grepl(x, label_cols_init, fixed = TRUE))
-      # )]
-      
-      # Repeat the matches the number of times it occurs to match later
-      # counts <- sapply(
-      #   stringr::str_replace_all(col_group_idfers, " ", "_"),
-      #   function(p) sum(grepl(p, label_cols_init, fixed = TRUE))
-      # )
-      # group_idfers <- rep(col_group_idfers, times = counts)
-      
-      # Target labels for next step
-      # final_names <- ifelse(
-      #   is.na(cols_fleets),
-      #   label_cols_new,
-      #   paste0(label_cols_new, " - ", cols_fleets)
-      # )
-      final_names <- ifelse(
-        is.na(cols_fleets),
-        label_cols_final,
-        tidyr::expand_grid(label = label_cols_final, fleet = unique(cols_fleets)) |> # col_group_idfers if other option
-          dplyr::mutate(final_string = stringr::str_c(label, " - ", fleet)) |> 
-          dplyr::pull(final_string)
-      )
+      if (!is.null(other_grouping)) {
+        # all_col_group_idfers <- tidyr::expand_grid(label = other_grouping, fleet = unique(cols_fleets)) |>
+        #   dplyr::mutate(final_string = paste0(fleet, " ", other_grouping)) |>
+        #   dplyr::pull(final_string)
+        # match the ones that are in the initial column names
+        # col_group_idfers <- all_col_group_idfers[sapply(
+        #   stringr::str_replace_all(all_col_group_idfers, " ", "_"),
+        #   function(x) any(grepl(x, label_cols_init, fixed = TRUE))
+        # )]
+        # Repeat the matches the number of times it occurs to match later
+        # counts <- sapply(
+        #   stringr::str_replace_all(col_group_idfers, " ", "_"),
+        #   function(p) sum(grepl(p, label_cols_init, fixed = TRUE))
+        # )
+        # group_idfers <- rep(col_group_idfers, times = counts)
+        
+        all_col_group_idfers <- unlist(stringr::str_extract_all(
+          label_cols_init, paste0("(", paste0(fleets, collapse = "|"), ").*")
+          )) |> unique()
+        
+        # Target labels for next step
+        final_names <- ifelse(
+          is.na(cols_fleets),
+          label_cols_new,
+          tidyr::expand_grid(label = label_cols_new, fleet = all_col_group_idfers) |>
+              dplyr::mutate(final_string = paste0(label, " - ", fleet)) |>
+              dplyr::pull(final_string)
+        )
+      } else {
+        final_names <- ifelse(
+          is.na(cols_fleets),
+          label_cols_final,
+          tidyr::expand_grid(label = label_cols_final, fleet = unique(cols_fleets)) |> # col_group_idfers if other option
+            dplyr::mutate(final_string = stringr::str_c(label, " - ", fleet)) |> 
+            dplyr::pull(final_string)
+        )
+      }
       
       # Assign previous names with new identifying ones
       rename_map <- stats::setNames(sort(label_cols_init), sort(final_names))
@@ -359,7 +368,7 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
       for (l_col in label_cols) {
         # Identify the error column that contains l_col in the name
         # Extract the fleet suffix (e.g., "cl") by grabbing whatever is after the dash
-        fleet_suffix <- stringr::str_extract(tolower(l_col), "(?<=- )\\w+$") 
+        fleet_suffix <- stringr::str_extract(tolower(l_col), "(?<=- ).*$") #(?<=- )\\w+$
         
         # Determine if it's observed or predicted
         is_observed  <- stringr::str_detect(tolower(l_col), "observed")
@@ -401,7 +410,7 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
       # }} -------------------------------------------------------------------
 
       # Rename final df with cleaned names
-      tab_dat <- tab_dat |>
+      tab_dat2 <- tab_dat |>
         # dplyr::rename(dplyr::any_of(rename_map_final)) #|>
       dplyr::rename_with(~ gsub("_", " - ", .)) # |>
       # not sure if we want to keep this or not
