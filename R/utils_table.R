@@ -423,3 +423,73 @@ merge_error <- function(table_data, uncert_lab, fleets, label, unit_label) {
     return(tab_dat)
   }) # close and end lapply
 }
+
+
+merge_error <- function(
+    id_col_vars
+    ) {
+  # TODO: change fleets to grouping when the data is indexed by factors other than fleet
+  lapply(table_data, function(tab_dat) {
+    label_cols <- names(tab_dat)[-c(1, grep(glue::glue("^{uncert_lab}"), names(tab_dat)))]
+    uncert_cols <- names(tab_dat)[grep(glue::glue("^{uncert_lab}"), names(tab_dat))]
+    # Comment out from here to closing brackets if don't want to combine label and uncertainty
+    # {{ -------------------------------------------------------------------
+    # Use loop to combine label (uncertainty)
+    for (l_col in label_cols) {
+      # Identify the error column that contains l_col in the name
+      # Extract the fleet suffix (e.g., "cl") by grabbing whatever is after the dash
+      index_suffix <- stringr::str_extract(
+        tolower(l_col),
+        paste(
+          stringr::str_escape(unlist(id_col_vals, use.names = FALSE)),
+          collapse = "|")
+        )
+      
+      # Identify which uncert col aligns with l_col
+      uncert_col <- uncert_cols[grep(l_col, uncert_cols)]
+      
+      # Determine if it's observed or predicted
+      # is_observed  <- stringr::str_detect(tolower(l_col), "observed")
+      # is_predicted <- stringr::str_detect(tolower(l_col), "predicted")
+      # 
+      # # 3. Filter the choices vector based on those exact components
+      # if (all(is.na(index_suffix))) {
+      #   uncert_col <- uncert_cols[
+      #     stringr::str_detect(tolower(uncert_cols), "observed") == is_observed &
+      #       stringr::str_detect(tolower(uncert_cols), "predicted") == is_predicted
+      #   ]
+      # } else {
+      #   uncert_col <- uncert_cols[
+      #     stringr::str_detect(tolower(uncert_cols), paste0("- ", index_suffix, "$")) & # may not word when > 1 grouping
+      #       stringr::str_detect(tolower(uncert_cols), "observed") == is_observed &
+      #       stringr::str_detect(tolower(uncert_cols), "predicted") == is_predicted
+      #   ]
+      # }
+      
+      # adjust tab dat to combine the uncert_col value into the l_col = l_col (uncert_col)
+      tab_dat <- tab_dat |>
+        dplyr::mutate(
+          !!l_col := ifelse(
+            !is.na(.data[[uncert_col]]),
+            paste0(.data[[l_col]], " (", .data[[uncert_col]], ")"),
+            # maybe not good practice to insert dash?
+            ifelse(
+              is.na(.data[[l_col]]),
+              "-",
+              as.character(.data[[l_col]])
+            )
+          )
+        ) |>
+        # Remove uncertainty colummn id'd in this step of the loop
+        dplyr::select(-dplyr::all_of(uncert_col))
+    } # close loop combining label and uncertainty
+    
+    # Adjust all header label names now
+    header_labs <- stringr::str_replace_all(colnames(tab_dat), "_", " ") |>
+      stringr::str_to_title()
+    header_labs2 <- glue::glue("{header_labs[-1]}{ifelse(unit_label!='', paste0('(', unit_label,')'), ' ')}({uncert_lab})")
+    colnames(tab_dat) <- c(header_labs[1], header_labs2)
+    
+    return(tab_dat)
+  }) # close and end lapply
+}
