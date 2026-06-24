@@ -128,6 +128,7 @@ process_data <- function(
       dat,
       group_var = .data[[group]]
     )
+    if (group %notin% index_variables) index_variables <- c(group, index_variables)
   } else {
     data <- dat
   }
