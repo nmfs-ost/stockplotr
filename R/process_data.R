@@ -115,13 +115,13 @@ process_data <- function(
     }
   }
   # Warn  user when group not indexed in data
-  if (!is.null(group) && group %notin% index_variables) {
-    if (group != "none") {
-      cli::cli_alert_warning("{group} not an index of data.")
-      # reset group to NULL so it's not added to grouping incorrectly
-      group <- NULL
-    }
-  }
+  # if (!is.null(group) && group %notin% index_variables) {
+  #   if (group != "none") {
+  #     cli::cli_alert_warning("{group} not an index of data.")
+  #     # reset group to NULL so it's not added to grouping incorrectly
+  #     group <- NULL
+  #   }
+  # }
   # Set group_var to identified grouping
   if (!is.null(group) && group != "none") {
     data <- dplyr::mutate(
