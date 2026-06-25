@@ -130,10 +130,9 @@ table_landings <- function(
   # merge error and landings columns and rename
   df_list <- merge_error(
     table_data,
-    uncert_lab,
-    fleets,
-    label = "landings",
-    unit_label
+    id_col_vals,
+    unit_label,
+    uncert_lab
   )
 
   # transform dfs into tables
