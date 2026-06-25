@@ -117,14 +117,15 @@ table_index <- function(
   # id_group_vals <- sapply(id_cols, function(x) unique(prepared_data[[x]]), simplify = FALSE)
   # TODO: add check if there is a index column for every error column -- if not remove the error (can keep index)
   
-  if (uncert_lab != "") uncert_lab <- glue::glue("({uncert_lab})")
+  # if (uncert_lab != "") uncert_lab <- glue::glue("({uncert_lab})")
   
   # merge error and index columns and rename
   df_list <- merge_error(
     table_data,
     uncert_lab,
-    fleets,
-    label = "index",
+    id_col_vals,
+    # fleets,
+    # label = "index",
     unit_label = "" # should this be CPUE?
   )
   
