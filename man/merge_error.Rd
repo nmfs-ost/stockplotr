@@ -4,20 +4,19 @@
 \alias{merge_error}
 \title{Rename columns and merge estimate and uncertainty columns for table presentation}
 \usage{
-merge_error(table_data, uncert_lab, fleets, label, unit_label)
+merge_error(table_data, id_col_vals, unit_label, uncert_lab)
 }
 \arguments{
 \item{table_data}{list of dataframes that will be eventually turned into tables}
 
+\item{id_col_vals}{A list of variables identifying grouping of the data and 
+their unique values.}
+
+\item{unit_label}{String. The units of the estimate being presented in the table.}
+
 \item{uncert_lab}{uncertainty label. Typically inherited from another function
 but is the exact string of the uncertainty in the data (e.g., "sd", "se", "cv",
 "uncertainty").)}
-
-\item{fleets}{Vector of fleet names.}
-
-\item{label}{Label name of target quantity that is being presented by the table.}
-
-\item{unit_label}{String. The units of the estimate being presented in the table.}
 }
 \value{
 List of formatted dataframes that contain column names formatted
