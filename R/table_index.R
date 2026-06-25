@@ -122,11 +122,9 @@ table_index <- function(
   # merge error and index columns and rename
   df_list <- merge_error(
     table_data,
-    uncert_lab,
     id_col_vals,
-    # fleets,
-    # label = "index",
-    unit_label = "" # should this be CPUE?
+    unit_label = "", # should this be CPUE?
+    uncert_lab
   )
   
   # transform dfs into tables
