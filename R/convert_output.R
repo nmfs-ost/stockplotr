@@ -297,9 +297,9 @@ convert_output <- function(
         "mngwt", # ???
         "sprseries", # RAND
         "sprtarg", # single value
-        "btarg",
-        "kobe",
-        "cpue",
+        "btarg", # single value
+        "kobe", # maybe STD
+        "cpue", # STD
         "natage",
         "batage",
         "natlen",
