@@ -126,7 +126,7 @@ process_data <- function(
   if (!is.null(group) && group != "none") {
     data <- dplyr::mutate(
       dat,
-      group_var = .data[[group]]
+      group_var = as.character(.data[[group]])
     )
     if (group %notin% index_variables) index_variables <- c(group, index_variables)
   } else {
@@ -343,7 +343,7 @@ process_data <- function(
   data <- data |>
     dplyr::mutate(
       across(
-        tidyselect::any_of(c(group, facet)),
+        tidyselect::any_of(c(group, facet, "group_var")),
         as.character
       )
     )
