@@ -109,7 +109,11 @@ plot_timeseries <- function(
             ymax = estimate_upper,
             fill = {
               if (length(unique(.data[["model"]])) > 1) {
-                interaction(model, group_var)
+                if (length(unique(.data[["group_var"]])) == 1) {
+                  model
+                } else {
+                  interaction(model, group_var)
+                }
               } else {
                 group_var
               }
