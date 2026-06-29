@@ -13,3 +13,4 @@ docs
 stockplotr.Rproj
 *.Rproj
 !vignettes/figures/
+.positai
