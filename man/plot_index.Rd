@@ -86,7 +86,7 @@ containing associated caption and alternative text for the figure.
 }
 \examples{
 plot_index(
-  dat = stockplotr:::example_data,
+  dat = stockplotr::example_data,
   unit_label = "fish/hr",
   interactive = FALSE
 )
