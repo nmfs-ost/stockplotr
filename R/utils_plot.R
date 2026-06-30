@@ -932,20 +932,20 @@ label_magnitude <- function(
 
 check_grouping <- function(dat) {
   # Identify potential indexing variables
-  # index_variables <- c(
-  #   "year", # also not sure of this one
-  #   "age", # not sure if want to add age here
-  #   "fleet", "sex",
-  #   "area", "growth_pattern", "month",
-  #   "season", "platoon", "bio_pattern",
-  #   "settlement", "morph", "block", "length_bins"
-  # )
-  non.index_variables <- c(
-    "estimate", "initial", "likelihood",
-    "uncertainty", "uncertainty_label",
-    "module_name", "label"
+  index_variables <- c(
+    "year", # also not sure of this one
+    "age", # not sure if want to add age here
+    "fleet", "sex",
+    "area", "growth_pattern", "month",
+    "season", "platoon", "bio_pattern",
+    "settlement", "morph", "block", "length_bins"
   )
-  index_variables <- colnames(dat)[-grep(paste0(non.index_variables, collapse = "|"), colnames(dat))]
+  # non.index_variables <- c(
+  #   "estimate", "initial", "likelihood",
+  #   "uncertainty", "uncertainty_label",
+  #   "module_name", "label"
+  # )
+  # index_variables <- colnames(dat)[-grep(paste0(non.index_variables, collapse = "|"), colnames(dat))]
   # Create emppty vector
   dat_index <- c()
   # Cycle through indexing variables and identify ones that have more than 1 unique value
