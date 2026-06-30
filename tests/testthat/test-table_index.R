@@ -1,14 +1,8 @@
-# load sample dataset
-load(file.path(
-  "fixtures", "ss3_models_converted", "Hake_2018",
-  "std_output.rda"
-))
-
 test_that("table_index generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
     table_index(
-      out_new,
+      stockplotr::example_data,
       interactive = FALSE
     )
   )
@@ -16,7 +10,7 @@ test_that("table_index generates plots without errors", {
   # expect error-free plot with many arguments
   expect_no_error(
     table_index(
-      dat = out_new,
+      dat = stockplotr::example_data,
       make_rda = FALSE,
       tables_dir = getwd()
     )
@@ -27,7 +21,7 @@ test_that("table_index generates plots without errors", {
   # adjust this test to work for multiple output tables
   # expect_s3_class(
   #   table_index(
-  #     dat = out_new,
+  #     dat = stockplotr::example_data,
   #     unit_label = "mt",
   #     era = NULL,
   #     interactive = FALSE,
@@ -42,7 +36,7 @@ test_that("table_index generates plots without errors", {
 test_that("rda file made when indicated", {
   # export rda
   table_index(
-    dat = out_new,
+    dat = stockplotr::example_data,
     make_rda = TRUE,
     tables_dir = getwd()
   )
