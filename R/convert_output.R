@@ -1933,7 +1933,7 @@ convert_output <- function(
             uncertainty = log_sd
           ) |>
           dplyr::mutate(
-            # label = "indices_observed",
+            # label = "index_observed",
             uncertainty_label = "log_sd",
             indices_predicted = dat$quantities$index_hat
           ) |>
@@ -1956,12 +1956,13 @@ convert_output <- function(
             values_to = "estimate"
           ) |>
           dplyr::mutate(
-            module_name = names(extract) # ,
+            module_name = names(extract),
             # era = dplyr::if_else(
             #   year > dat$data_list$endyr,
             #   "fore",
             #   NA_character_
             # )
+            label = stringr::str_replace_all(label, "indices", "index")
           )
 
         df_index_long[setdiff(tolower(names(out_new)), tolower(names(df_index_long)))] <- NA
@@ -2013,7 +2014,7 @@ convert_output <- function(
         df_comp_obs <- dat$data_list$comp_data |>
           dplyr::rename_with(tolower) |>
           dplyr::mutate(
-            label = "indices_observed"
+            label = "index_observed"
           )
 
         indexing_vars_cols <- colnames(df_comp_obs)[!grepl("comp", colnames(df_comp_obs))]
@@ -2185,10 +2186,15 @@ convert_output <- function(
   # }
 
   # edit: here is a different way of loading in the csv sheets
-  con_file <- system.file("resources", glue::glue("{model}_var_names.csv"), package = "stockplotr", mustWork = TRUE)
+  con_file <- system.file("resources", glue::glue("{tolower(model)}_var_names.csv"), package = "stockplotr", mustWork = TRUE)
   # temporarily add call to local csv so I can test
   # con_file <- glue::glue("~/GitHub/stockplotr/inst/resources/{model}_var_names.csv")
   var_names_sheet <- utils::read.csv(con_file, na.strings = "")
+  
+  if (tolower(model) == "bam") {
+    var_names_sheet <- var_names_sheet |> 
+      dplyr::mutate(label = tolower(label))
+  }
 
   if (file.exists(con_file)) {
     # Remove 'X' column if it exists

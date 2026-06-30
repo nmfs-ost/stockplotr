@@ -80,7 +80,7 @@
 #'
 #' Default: "mt"
 #'
-#' @param indices_unit_label Units for index of abundance/CPUE
+#' @param index_unit_label Units for index of abundance/CPUE
 #'
 #' Default: ""
 #'
@@ -119,7 +119,7 @@
 #' save_all_plots(dat,
 #'   ref_line = "unfished",
 #'   ref_line_sb = "target",
-#'   indices_unit_label = "CPUE",
+#'   index_unit_label = "CPUE",
 #'   biomass_at_age_scale_amount = 1,
 #'   biomass_at_age_unit_label = "metric tons"
 #' )
@@ -150,15 +150,15 @@ save_all_plots <- function(
   # imported from plot_biomass_at_age
   biomass_at_age_scale_amount = 1,
   biomass_at_age_unit_label = "mt",
-  # imported from plot_indices
-  indices_unit_label = "",
+  # imported from plot_index
+  index_unit_label = "",
   # imported from table_afsc_tier- add potential unique arguments after dev
   # imported from table_bnc
   biomass_unit_label = "mt",
   catch_unit_label = "mt",
   catch_scale_amount = 1
   # imported from table_harvest_projection- add potential unique arguments after dev
-  # imported from table_indices- zero unique arguments
+  # imported from table_index- zero unique arguments
   # imported from table_landings- zero unique arguments
 ) {
   make_rda <- TRUE
@@ -419,18 +419,18 @@ save_all_plots <- function(
 
   tryCatch(
     {
-      cli::cli_h2("plot_indices")
-      plot_indices(dat,
-        unit_label = indices_unit_label,
+      cli::cli_h2("plot_index")
+      plot_index(dat,
+        unit_label = index_unit_label,
         make_rda = TRUE,
         interactive = FALSE,
         figures_dir = figures_tables_dir
       ) # |> suppressWarnings() |> invisible()
     },
     error = function(e) {
-      cli::cli_alert_danger("plot_indices failed to run.")
+      cli::cli_alert_danger("plot_index failed to run.")
       cli::cli_alert("Tip: check that your arguments are correct.")
-      cli::cli_li("indices_unit_label = {indices_unit_label}")
+      cli::cli_li("index_unit_label = {index_unit_label}")
       print(e)
     }
   )
@@ -460,23 +460,24 @@ save_all_plots <- function(
   #   }
   # )
 
-  # tryCatch(
-  #   {
-  #     cli::cli_h2("table_indices")
-  #     table_indices(
-  #       dat,
-  #       make_rda = TRUE,
-  #       tables_dir = figures_tables_dir
-  #     ) # |>
-  #     # suppressWarnings() |>
-  #     # invisible()
-  #   },
-  #   error = function(e) {
-  #     cli::cli_alert_danger("table_indices failed to run.")
-  #     cli::cli_alert("Tip: check that your arguments are correct.")
-  #     print(e)
-  #   }
-  # )
+  tryCatch(
+    {
+      cli::cli_h2("table_index")
+      table_index(
+        dat,
+        interactive = FALSE,
+        make_rda = TRUE,
+        tables_dir = figures_tables_dir
+      ) # |>
+      # suppressWarnings() |>
+      # invisible()
+    },
+    error = function(e) {
+      cli::cli_alert_danger("table_index failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      print(e)
+    }
+  )
 
   tryCatch(
     {

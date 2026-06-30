@@ -532,8 +532,8 @@ process_table <- function(
       dplyr::rename(
         !!mod_uncert_lab := uncertainty
       ) |>
-      # set values to strings to include training zeros from rounding
-      dplyr::mutate(estimate = sprintf(glue::glue("%.{digits}f"), estimate)) |>
+    # set values to strings to include trailing zeros from rounding and     # format large estimate values with commas
+      dplyr::mutate(estimate = formatC(estimate, format = "f", digits = digits, big.mark = ",")) |>
       tidyr::pivot_wider(
         id_cols = dplyr::all_of(c(stringr::str_to_title(mod_cols))),
         values_from = dplyr::all_of(c("estimate", mod_uncert_lab)),
