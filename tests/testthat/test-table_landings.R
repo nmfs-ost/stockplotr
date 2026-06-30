@@ -68,7 +68,7 @@ test_that("table_landings generates error with incorrect module", {
       unit_label = "mt",
       era = NULL,
       interactive = FALSE,
-      module = "SPR_SERIES",
+      module = "SPR_S", # typo in module name- should be SPR_SERIES
       make_rda = FALSE,
       tables_dir = getwd()
     )

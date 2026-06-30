@@ -204,41 +204,47 @@ merge_error <- function(
     label_cols <- names(tab_dat)[-c(1, grep(glue::glue("^{uncert_lab}"), names(tab_dat)))]
     uncert_cols <- names(tab_dat)[grep(glue::glue("^{uncert_lab}"), names(tab_dat))]
     # Use loop to combine label (uncertainty)
-    for (l_col in label_cols) {
-      # Identify the error column that contains l_col in the name
-      # Extract the fleet suffix (e.g., "cl") by grabbing whatever is after the dash
-      index_suffix <- stringr::str_extract(
-        tolower(l_col),
-        paste(
-          stringr::str_escape(unlist(id_col_vals, use.names = FALSE)),
-          collapse = "|")
-        )
-      
-      # Identify which uncert col aligns with l_col
-      uncert_col <- uncert_cols[grep(l_col, uncert_cols)]
-      
-      # adjust tab dat to combine the uncert_col value into the l_col = l_col (uncert_col)
-      tab_dat <- tab_dat |>
-        dplyr::mutate(
-          !!l_col := ifelse(
-            !is.na(.data[[uncert_col]]),
-            paste0(.data[[l_col]], " (", .data[[uncert_col]], ")"),
-            # maybe not good practice to insert dash?
-            # ifelse(
-            #   is.na(.data[[l_col]]),
-              "-"
-            #   as.character(.data[[l_col]])
-            # )
+    if (length(uncert_cols) > 0) {
+      for (l_col in label_cols) {
+        # Identify the error column that contains l_col in the name
+        # Extract the fleet suffix (e.g., "cl") by grabbing whatever is after the dash
+        index_suffix <- stringr::str_extract(
+          tolower(l_col),
+          paste(
+            stringr::str_escape(unlist(id_col_vals, use.names = FALSE)),
+            collapse = "|")
           )
-        ) |>
-        # Remove uncertainty colummn id'd in this step of the loop
-        dplyr::select(-dplyr::all_of(uncert_col))
-    } # close loop combining label and uncertainty
+        
+        # Identify which uncert col aligns with l_col
+        uncert_col <- uncert_cols[grep(l_col, uncert_cols)]
+        
+        # adjust tab dat to combine the uncert_col value into the l_col = l_col (uncert_col)
+        tab_dat <- tab_dat |>
+          dplyr::mutate(
+            !!l_col := ifelse(
+              !is.na(.data[[uncert_col]]),
+              paste0(.data[[l_col]], " (", .data[[uncert_col]], ")"),
+              # maybe not good practice to insert dash?
+              # ifelse(
+              #   is.na(.data[[l_col]]),
+                "-"
+              #   as.character(.data[[l_col]])
+              # )
+            )
+          ) |>
+          # Remove uncertainty colummn id'd in this step of the loop
+          dplyr::select(-dplyr::all_of(uncert_col))
+      } # close loop combining label and uncertainty
+    }
     
     # Adjust all header label names now
     header_labs <- stringr::str_replace_all(colnames(tab_dat), "_", " ") |>
       stringr::str_to_title()
-    header_labs2 <- glue::glue("{header_labs[-1]}{ifelse(unit_label!='', paste0(' ', unit_label,' '), ' ')}({uncert_lab})")
+    if (length(uncert_cols) > 0) {
+      header_labs2 <- glue::glue("{header_labs[-1]}{ifelse(unit_label!='', paste0(' ',unit_label,''), ' ')}({uncert_lab})")
+    } else {
+      header_labs2 <- glue::glue("{header_labs[-1]}{ifelse(unit_label!='', paste0(unit_label, ''), '')}")
+    }
     colnames(tab_dat) <- c(header_labs[1], header_labs2)
     
     return(tab_dat)

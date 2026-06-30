@@ -120,7 +120,10 @@ table_landings <- function(
     label = label,
     digits = digits
   )
-  table_data <- table_data_info[[1]]
+  table_data <- table_data_info[[1]] |>
+    # remove uncertainty columns
+    purrr:::map(~ dplyr::select(.x, !contains(uncert_lab))) |>
+    purrr:::map(~ dplyr::select(.x, !contains("uncertainty", ignore.case = TRUE)))
   indexed_vars <- table_data_info[[2]]
   id_col_vals <- table_data_info[[3]]
 
