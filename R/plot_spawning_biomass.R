@@ -213,9 +213,9 @@ plot_spawning_biomass <- function(
   } else {
     if ("unfished" %in% c(names(ref_line), ref_line)) {
       # find the minimum x axis value from the plot
-      min_year <- min <- ggplot2::ggplot_build(plt)@data[[2]] |>
+      min_year <- min <- ggplot2::ggplot_build(plt)[["data"]][[2]] |>
         as.data.frame() |>
-        dplyr::pull(y) |>
+        dplyr::pull(x) |>
         min() |>
         round(digits = 2)
       # find the reference point value for unfished
@@ -243,12 +243,12 @@ plot_spawning_biomass <- function(
   if (make_rda) {
     if (relative) {
       # pulling out the 2nd df in 'data' works for several datasets
-      rel.ssb.min <- ggplot2::ggplot_build(final)@data[[2]] |>
+      rel.ssb.min <- ggplot2::ggplot_build(final)[["data"]][[2]] |>
         as.data.frame() |>
         dplyr::pull(y) |>
         min() |>
         round(digits = 2)
-      rel.ssb.max <- ggplot2::ggplot_build(final)@data[[2]] |>
+      rel.ssb.max <- ggplot2::ggplot_build(final)[["data"]][[2]] |>
         as.data.frame() |>
         dplyr::pull(y) |>
         max() |>
