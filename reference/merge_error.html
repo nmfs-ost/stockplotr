@@ -92,7 +92,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">merge_error</span><span class="op">(</span><span class="va">table_data</span>, <span class="va">uncert_lab</span>, <span class="va">fleets</span>, <span class="va">label</span>, <span class="va">unit_label</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">merge_error</span><span class="op">(</span><span class="va">table_data</span>, <span class="va">id_col_vals</span>, <span class="va">unit_label</span>, <span class="va">uncert_lab</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -103,22 +103,19 @@
 <dd><p>list of dataframes that will be eventually turned into tables</p></dd>
 
 
-<dt id="arg-uncert-lab">uncert_lab<a class="anchor" aria-label="anchor" href="#arg-uncert-lab"></a></dt>
-<dd><p>uncertainty label. Typically inherited from another function
-but is the exact string of the uncertainty in the data (e.g., "sd", "se", "cv",
-"uncertainty").)</p></dd>
-
-
-<dt id="arg-fleets">fleets<a class="anchor" aria-label="anchor" href="#arg-fleets"></a></dt>
-<dd><p>Vector of fleet names.</p></dd>
-
-
-<dt id="arg-label">label<a class="anchor" aria-label="anchor" href="#arg-label"></a></dt>
-<dd><p>Label name of target quantity that is being presented by the table.</p></dd>
+<dt id="arg-id-col-vals">id_col_vals<a class="anchor" aria-label="anchor" href="#arg-id-col-vals"></a></dt>
+<dd><p>A list of variables identifying grouping of the data and
+their unique values.</p></dd>
 
 
 <dt id="arg-unit-label">unit_label<a class="anchor" aria-label="anchor" href="#arg-unit-label"></a></dt>
 <dd><p>String. The units of the estimate being presented in the table.</p></dd>
+
+
+<dt id="arg-uncert-lab">uncert_lab<a class="anchor" aria-label="anchor" href="#arg-uncert-lab"></a></dt>
+<dd><p>uncertainty label. Typically inherited from another function
+but is the exact string of the uncertainty in the data (e.g., "sd", "se", "cv",
+"uncertainty").)</p></dd>
 
 </dl></div>
     <div id="value">
