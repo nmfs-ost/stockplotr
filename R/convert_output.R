@@ -460,53 +460,74 @@ convert_output <- function(
                   values_to = "estimate"
                 ) |> # , colnames(dplyr::select(df3, tidyselect::matches(errors)))
                 dplyr::mutate(
-                  fleet = if ("fleet" %notin% colnames(df3)) {
-                    dplyr::case_when(
-                      # "fleet" %in% colnames(.data) ~ fleet,
-                      grepl(":_[0-9]$", label) ~ stringr::str_extract(label, "(?<=_)[0-9]+"),
-                      grepl(":_[0-9][0-9]$", label) ~ stringr::str_extract(label, "(?<=_)[0-9][0-9]+"),
-                      TRUE ~ NA
-                    )
-                  } else if ("fleet_name" %in% colnames(df3)) {
-                    fleet_name
-                  } else {
-                    fleet
+                  fleet = {
+                    if ("fleet" %in% colnames(df3)) {
+                      fleet
+                    } else if ("fleet_name" %in% colnames(df3)) {
+                      fleet_name
+                    } else if (grepl(":_[0-9]$", label)) {
+                      stringr::str_extract(label, "(?<=_)[0-9]+")
+                    } else if (grepl(":_[0-9][0-9]$", label)) {
+                      stringr::str_extract(label, "(?<=_)[0-9][0-9]+")
+                    } else {
+                      NA
+                    }
                   },
-                  area = if ("area" %notin% colnames(df3)) {
-                    dplyr::case_when(
-                      grepl("?_area_[0-9]_?", label) ~ stringr::str_extract(label, "(?<=area_)[0-9]+"),
-                      grepl("_[0-9]_", label) ~ stringr::str_extract(label, "(?<=_)[0-9]+"),
-                      grepl(":_[0-9]$", label) ~ stringr::str_extract(label, "(?<=_)[0-9]+"),
-                      grepl(":_[0-9][0-9]$", label) ~ stringr::str_extract(label, "(?<=_)[0-9][0-9]+"),
-                      TRUE ~ NA
-                    )
-                  } else {
-                    area
+                  area = {
+                    if ("area" %in% colnames(df3)) {
+                      area
+                    } else if (grepl("?_area_[0-9]_?", label)) { 
+                      stringr::str_extract(label, "(?<=area_)[0-9]+")
+                    } else if (grepl("_[0-9]_", label)) {
+                      stringr::str_extract(label, "(?<=_)[0-9]+")
+                    } else if (grepl(":_[0-9]$", label)) {
+                      stringr::str_extract(label, "(?<=_)[0-9]+")
+                    } else if (grepl(":_[0-9][0-9]$", label)) {
+                      stringr::str_extract(label, "(?<=_)[0-9][0-9]+")
+                    } else {
+                      NA
+                    }
                   },
-                  sex = if ("sex" %notin% colnames(df3)) {
-                    dplyr::case_when(
-                      grepl("_fem_", label) ~ "female",
-                      grepl("_mal_", label) ~ "male",
-                      grepl("_sx:1$", label) ~ "female",
-                      grepl("_sx:2$", label) ~ "male",
-                      grepl("_sx:1_", label) ~ "female",
-                      grepl("_sx:2_", label) ~ "male",
-                      TRUE ~ NA
-                    )
-                  } else {
-                    dplyr::case_when(
-                      sex == 1 ~ "female",
-                      sex == 2 ~ "male",
-                      sex == 3 ~ "both",
-                      TRUE ~ sex
-                    )
+                  sex = {
+                    if ("sex" %in% colnames(df3)) {
+                      if (sex == 1) {
+                        "female"
+                      } else if (sex == 2) {
+                        "male"
+                      } else if (sex == 3) {
+                        "both"
+                      } else {
+                        sex
+                      }
+                    } else if (grepl("_fem_", label)) {
+                      "female"
+                    } else if (grepl("_mal_", label)) {
+                      "male"
+                    } else if (grepl("_sx:1$", label)) {
+                      "female"
+                    } else if (grepl("_sx:2$", label)) {
+                      "male"
+                    } else if (grepl("_sx:1_", label)) {
+                      "female"
+                    } else if (grepl("_sx:2_", label)) {
+                      "male"
+                    } else {
+                      NA
+                    }
                   },
-                  growth_pattern = dplyr::case_when(
-                    grepl("_gp_[0-9]$", label) ~ stringr::str_extract(label, "(?<=_)[0-9]$"),
-                    grepl("_gp:[0-9]$", label) ~ stringr::str_extract(label, "(?<=:)[0-9]$"),
-                    grepl("_gp:[0-9][0-9]$", label) ~ stringr::str_extract(label, "(?<=:)[0-9][0-9]$"),
-                    TRUE ~ NA
-                  ),
+                  growth_pattern = {
+                    if ("growth_pattern" %in% colnames(df3)) {
+                      growth_pattern
+                    } else if (grepl("_gp_[0-9]$", label)) {
+                      stringr::str_extract(label, "(?<=_)[0-9]$")
+                    } else if (grepl("_gp:[0-9]$", label)) {
+                      stringr::str_extract(label, "(?<=:)[0-9]$")
+                    } else if (grepl("_gp:[0-9][0-9]$", label)) {
+                      stringr::str_extract(label, "(?<=:)[0-9][0-9]$")
+                    } else {
+                      NA
+                    }
+                  },
                   month = {
                     if ("month" %in% colnames(df3)) {
                       month
@@ -518,32 +539,14 @@ convert_output <- function(
                   }
                 )
               
-              # if ("fleet" %in% colnames(df3)) {
-              #   df4 <- df4 |>
-              #     dplyr::mutate(
-              #       fleet = dplyr::case_when(
-              #         "fleet" %in% colnames(df3) ~ fleet,
-              #         # grepl("):_[0-9]$", label) ~ stringr::str_extract(label, "(?<=_)[0-9]$"),
-              #         # grepl("):_[0-9][0-9]+$", label) ~ stringr::str_extract(label, "(?<=_)[0-9][0-9]$"),
-              #         TRUE ~ NA
-              #       ),
-              #       label = stringr::str_extract(label, "^.*?(?=_\\d|_gp|_fem|_mal|_sx|:|$)")
-              #     )
-              # } else {
               df4 <- df4 |>
                 dplyr::mutate(
-                  # fleet = dplyr::case_when(
-                  #   grepl("):_[0-9]$", label) ~ stringr::str_extract(label, "(?<=_)[0-9]$"),
-                  #   grepl("):_[0-9][0-9]+$", label) ~ stringr::str_extract(label, "(?<=_)[0-9][0-9]$"),
-                  #   TRUE ~ NA
-                  # ),
                   label = dplyr::case_when(
                     grepl("?_month_[0-9]_?", label) ~ stringr::str_replace(label, "_?month_\\d?", ""),
                     grepl("?_area_[0-9]_?", label) ~ stringr::str_replace(label, "_?area_\\d?", ""),
                     TRUE ~ stringr::str_extract(label, "^.*?(?=_\\d|_gp|_fem|_mal|_sx|:|$)")
                   )
                 )
-              # }
             } else {
               cli::cli_alert_warning(glue::glue("Data frame not compatible in {parm_sel}."))
             }
