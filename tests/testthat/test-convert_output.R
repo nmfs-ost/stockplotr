@@ -71,3 +71,17 @@ test_that("missing arguments trigger warnings or errors", {
 
   unlink(fs::path("fixtures", "ss3_models_converted"), recursive = TRUE)
 })
+
+test_that("r4ss::ss_output object is compatible.", {
+  install.packages("remotes")
+  remotes::install_github("r4ss/r4ss")
+  library(r4ss)
+  simple <- r4ss::SS_output(dir = file.path(
+    path.package("r4ss"),
+    file.path("extdata", "simple_small")
+  ))
+  
+  expect_no_error(
+    convert_output(simple)
+  )
+})
