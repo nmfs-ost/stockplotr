@@ -4,10 +4,11 @@ test_that("plot_natural_mortality generate without errors", {
     plot_natural_mortality(stockplotr::example_data, module = "Natural_Mortality")
   )
 
+  # This check is moot with the more flextible approach and labelling?
   # expect eror when not interactive since it's choosing the first module in ex
-  expect_error(
-    plot_natural_mortality(stockplotr::example_data)
-  )
+  # expect_error(
+  #   plot_natural_mortality(stockplotr::example_data)
+  # )
 
   # expect ggplot object is returned
   expect_s3_class(

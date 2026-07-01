@@ -54,7 +54,7 @@ plot_recruitment_deviations <- function(
     dat = filter_data,
     group = "none",
     facet = NULL,
-    method = "avg"
+    method = "mean"
   )
   filter_data <- processed_data[[1]]
   group <- processed_data[[2]]
@@ -76,31 +76,6 @@ plot_recruitment_deviations <- function(
   ) +
     # ggplot2::facet_wrap(~ model, scales = "free_y") +
     theme_noaa()
-
-  # Plot vertical lines if era is not filtering
-  # if (is.null(era)) {
-  #   # Find unique era
-  #   eras <- unique(filter_data$era)
-  #   if (length(eras) > 1) {
-  #     # era1 <- filter_data |>
-  #     #   dplyr::filter(era == eras[1]) |>
-  #     #   dplyr::pull(year) |>
-  #     #   max(na.rm = TRUE)
-  #     year_vlines <- c()
-  #     for (i in 2:length(eras)) {
-  #       erax <- filter_data |>
-  #         dplyr::filter(era == eras[i]) |>
-  #         dplyr::pull(year) |>
-  #         min(na.rm = TRUE)
-  #       year_vlines <- c(year_vlines, erax)
-  #     }
-  #   }
-  #   final <- final +
-  #     ggplot2::geom_vline(
-  #       xintercept = year_vlines,
-  #       color = "#999999"
-  #     )
-  # }
 
   # Make RDA
   if (make_rda) {

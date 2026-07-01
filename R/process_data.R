@@ -91,43 +91,45 @@ process_data <- function(
   # check for additional indexed variables
   index_variables <- check_grouping(dat)
   # If user input "none" to group this makes the plot remove any facetting or summarize?
-  if (!is.null(group) && group == "none") {
-    # group <- NULL
-    id_group <- index_variables[-grepl("year|age", index_variables)]
-    index_variables <- intersect(c("year", "age"), index_variables)
-    if (length(id_group) > 0) {
-      dat <- switch(method,
-        "mean" = dat |>
-          dplyr::group_by(dplyr::across(tidyselect::all_of(c("label", "model", "group_var", index_variables)))) |>
-          dplyr::summarize(
-            estimate = mean(estimate),
-            estimate_lower = mean(estimate_lower),
-            estimate_upper = mean(estimate_upper)
-          ),
-        "sum" = dat |>
-          dplyr::group_by(dplyr::across(tidyselect::all_of(c("label", "model", "group_var", index_variables)))) |>
-          dplyr::summarize(
-            estimate = sum(estimate),
-            estimate_lower = sum(estimate_lower),
-            estimate_upper = sum(estimate_upper)
-          )
-      )
-    }
-  }
+  # Removing this bc this logic has a lot of flaws
+  # if (!is.null(group) && group == "none") {
+  #   # group <- NULL
+  #   id_group <- index_variables[-grepl("year|age", index_variables)]
+  #   index_variables <- intersect(c("year", "age"), index_variables)
+  #   if (length(id_group) > 0) {
+  #     dat <- switch(method,
+  #       "mean" = dat |>
+  #         dplyr::group_by(dplyr::across(tidyselect::all_of(c("label", "model", "group_var", index_variables)))) |>
+  #         dplyr::summarize(
+  #           estimate = mean(estimate),
+  #           estimate_lower = mean(estimate_lower),
+  #           estimate_upper = mean(estimate_upper)
+  #         ),
+  #       "sum" = dat |>
+  #         dplyr::group_by(dplyr::across(tidyselect::all_of(c("label", "model", "group_var", index_variables)))) |>
+  #         dplyr::summarize(
+  #           estimate = sum(estimate),
+  #           estimate_lower = sum(estimate_lower),
+  #           estimate_upper = sum(estimate_upper)
+  #         )
+  #     )
+  #   }
+  # }
   # Warn  user when group not indexed in data
-  if (!is.null(group) && group %notin% index_variables) {
-    if (group != "none") {
-      cli::cli_alert_warning("{group} not an index of data.")
-      # reset group to NULL so it's not added to grouping incorrectly
-      group <- NULL
-    }
-  }
+  # if (!is.null(group) && group %notin% index_variables) {
+  #   if (group != "none") {
+  #     cli::cli_alert_warning("{group} not an index of data.")
+  #     # reset group to NULL so it's not added to grouping incorrectly
+  #     group <- NULL
+  #   }
+  # }
   # Set group_var to identified grouping
   if (!is.null(group) && group != "none") {
     data <- dplyr::mutate(
       dat,
       group_var = .data[[group]]
     )
+    if (group %notin% index_variables) index_variables <- c(group, index_variables)
   } else {
     data <- dat
   }
@@ -342,7 +344,7 @@ process_data <- function(
   data <- data |>
     dplyr::mutate(
       across(
-        tidyselect::any_of(c(group, facet)),
+        tidyselect::any_of(c(group, facet, "group_var")),
         as.character
       )
     )

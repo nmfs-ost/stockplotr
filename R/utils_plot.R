@@ -109,7 +109,11 @@ plot_timeseries <- function(
             ymax = estimate_upper,
             fill = {
               if (length(unique(.data[["model"]])) > 1) {
-                interaction(model, group_var)
+                if (length(unique(.data[["group_var"]])) == 1) {
+                  model
+                } else {
+                  interaction(model, group_var)
+                }
               } else {
                 group_var
               }
@@ -936,6 +940,12 @@ check_grouping <- function(dat) {
     "season", "platoon", "bio_pattern",
     "settlement", "morph", "block", "length_bins"
   )
+  # non.index_variables <- c(
+  #   "estimate", "initial", "likelihood",
+  #   "uncertainty", "uncertainty_label",
+  #   "module_name", "label"
+  # )
+  # index_variables <- colnames(dat)[-grep(paste0(non.index_variables, collapse = "|"), colnames(dat))]
   # Create emppty vector
   dat_index <- c()
   # Cycle through indexing variables and identify ones that have more than 1 unique value
