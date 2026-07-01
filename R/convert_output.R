@@ -2295,7 +2295,13 @@ convert_output <- function(
     # Remove 'X' column if it exists
     var_names_sheet <- var_names_sheet |>
       dplyr::select(-dplyr::any_of("X"))
-    out_new <- dplyr::left_join(out_new, var_names_sheet, by = c("module_name", "label")) |>
+    if (model == "ss3" & !is.character(file)) {
+      var_names_sheet <- var_names_sheet |> dplyr::select(-module_name)
+      out_new <- dplyr::left_join(out_new, var_names_sheet, by = "label")
+    } else {
+      out_new <- dplyr::left_join(out_new, var_names_sheet, by = c("module_name", "label"))
+    }
+    out_new <- out_new |>
       dplyr::mutate(label = dplyr::case_when(
         !is.na(alt_label) ~ alt_label,
         # TODO: add this to ss3_var_names.xlsx
