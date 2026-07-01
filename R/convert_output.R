@@ -46,12 +46,6 @@ convert_output <- function(
 ) {
   # check if entered save_dir exists so doesn't waste user time finding this out at the end
   if (!is.null(save_dir)) {
-    # if (!dir.exists(stringr::str_extract(save_dir, "^.*/(?=[^/]+\\.[^/]+$)") |> stringr::str_remove("/$"))) {
-    #   cli::cli_abort("save_dir not a valid path.")
-    # } else {
-    #   # create new save_dir with file name
-    #   save_dir <- file.path(save_dir, "std_output.rda")
-    # }
     if (!grepl(".rda", save_dir)) {
       cli::cli_alert("save_dir does not contain a file name. Saved output will be named `std_output.rda`.")
       save_dir <- file.path(save_dir, "std_output.rda")
@@ -283,96 +277,53 @@ convert_output <- function(
       cli::cli_alert_info("Identified fleet names:")
       cli::cli_alert_info("{fleet_names}")
       
-      param_names <- c(
-        "recruit",
-        "SPAWN_RECRUIT_CURVE", # RAND
-        "Natural_Mortality", # AA.AL
-        "growth_series", # ? UNSURE THIS IS NULL IN EXAMPLE
-        "sizeselex", # AA.AL
-        "ageselex", # AA.AL
+      param_names <- names(dat)
+      
+      std <- c(
+        "recruit", # STD
         "exploitation", # STD
         "catch", # STD
         "timeseries", # STD
         "discard", # STD
-        "mngwt", # ???
-        "sprseries", # RAND
-        "sprtarg", # single value
-        "btarg", # single value
         "kobe", # maybe STD
         "cpue", # STD
-        "natage",
-        "batage",
-        "natlen",
-        "batlen",
-        "fatage", # AA.AL
-        "discard_at_age",
-        "catage",
-        "equil_yeild",
-        "Z_at_age",
-        "M_at_age",
-        "Z_by_area",
-        "M_by_area",
-        "Dynamic_Bzero",
-        "len_comp_fit_table",
-        "age_comp_fit_table",
         "derived_quants", #STD
-        "parameters", # RAND
-        "SBzero"
+        "Dynamic_Bzero", # STD
+        "len_comp_fit_table", # STD
+        "age_comp_fit_table" # STD
       )
-      # Group parameters base on table pattern
-      std <- c(
-        "DERIVED_QUANTITIES",
-        "MGparm_By_Year_after_adjustments",
-        "CATCH",
-        "SPAWN_RECRUIT",
-        "TIME_SERIES",
-        "DISCARD_OUTPUT",
-        "INDEX_2",
-        "FIT_LEN_COMPS",
-        "FIT_AGE_COMPS",
-        "FIT_SIZE_COMPS",
-        "SELEX_database",
-        "Growth_Parameters",
-        "Kobe_Plot"
-      )
-      std2 <- c("OVERALL_COMPS")
-      cha <- c("Dynamic_Bzero")
       rand <- c(
-        "Input_Variance_Adjustment",
-        "SPR_SERIES",
-        "selparm(Size)_By_Year_after_adjustments",
-        "selparm(Age)_By_Year_after_adjustments",
-        "BIOLOGY",
-        "SPR/YPR_Profile",
-        "Biology_at_age_in_endyr",
-        "SPAWN_RECR_CURVE",
-        "PARAMETERS"
-      )
-      info <- c(
-        "LIKELIHOOD",
-        "DEFINITIONS"
+        "SPAWN_RECRUIT_CURVE", # RAND
+        "sprseries", # RAND
+        "parameters" # RAND
+        # "equil_yeild", # SKIP FOR NOW - RAND 
       )
       aa.al <- c(
-        "BIOMASS_AT_AGE",
-        "BIOMASS_AT_LENGTH",
-        "DISCARD_AT_AGE",
-        "CATCH_AT_AGE",
-        "F_AT_AGE",
-        "MEAN_SIZE_TIMESERIES",
-        "NUMBERS_AT_AGE",
-        "NUMBERS_AT_LENGTH",
-        "AGE_SELEX",
-        "LEN_SELEX",
-        "MEAN_BODY_WT(Begin)",
-        "Natural_Mortality"
+        "sizeselex", # AA.AL
+        "ageselex", # AA.AL
+        "Natural_Mortality", # AA.AL
+        "fatage", # AA.AL
+        "natage", # AA.AL
+        "batage", # AA.AL
+        "natlen", # AA.AL
+        "batlen", # AA.AL
+        "discard_at_age", # AA.AL
+        "catage", # AA.AL
+        "Z_at_age", # AA.AL - DO WE NEED BOTH? THIS AND Z_BY_AREA
+        "M_at_age", # AA.AL - DO WE NEED BOTH? THIS AND M_BY_AREA
+        "Z_by_area", # AA.AL
+        "M_by_area" # AA.AL
       )
-      nn <- c(
-        "MORPH_INDEXING",
-        "EXPLOITATION",
-        "DISCARD_SPECIFICATION",
-        "INDEX_1",
-        "MEAN_BODY_WT_OUTPUT"
+        # "growth_series" # ? UNSURE THIS IS NULL IN EXAMPLE
+        # "mngwt" # ???
+      single_val <- c(
+        "sprtarg", # single value
+        "btarg", # single value
+        "SBzero" # SINGLE VALUE
       )
+      # ntentionally empty
+      std2 <- c()
+      cha <- c()
     }
     
     # Extract units
@@ -405,7 +356,7 @@ convert_output <- function(
     for (i in seq_along(param_names)) {
       # Processing data frame
       parm_sel <- param_names[i]
-      if (parm_sel %in% c(std, std2, cha, rand, aa.al)) {
+      if (parm_sel %in% c(std, std2, cha, rand, aa.al, single_val)) {
         cli::cli_alert(glue::glue("Processing {parm_sel}"))
         if(is.character(file)) {
           extract <- SS3_extract_df(dat, parm_sel)
