@@ -149,9 +149,9 @@ convert_output <- function(
         "rceattle"
       },
       "list" = {
-        cli::cli_alert_info("Processing FIMS output file...")
+        cli::cli_alert_info("Processing SS3 r4ss output file...")
         "ss3"
-      }
+      },
       cli::cli_abort("Unknown file type. Please indicate model.")
     )
   }
@@ -502,7 +502,8 @@ convert_output <- function(
                       sex == 1 ~ "female",
                       sex == 2 ~ "male",
                       sex == 3 ~ "both",
-                      TRUE ~ sex
+                      sex == 0 ~ "combined",
+                      TRUE ~ as.character(sex)
                     )
                   },
                   growth_pattern = dplyr::case_when(
@@ -511,36 +512,18 @@ convert_output <- function(
                     grepl("_gp:[0-9][0-9]$", label) ~ stringr::str_extract(label, "(?<=:)[0-9][0-9]$"),
                     TRUE ~ NA
                   ),
-                  month = {
-                    if ("month" %in% colnames(df3)) {
+                  month = if ("month" %in% colnames(df3)) {
                       month
-                    } else if (grepl("_month_[0-9]+$", label)) {
-                      stringr::str_extract(label, "(?<=month_)[0-9]+$")
                     } else {
-                      ifelse(any(grepl("^month$", colnames(df3))), month, NA) # this might remove month
+                      dplyr::case_when(
+                        grepl("_month_[0-9]+$", label) ~ stringr::str_extract(label, "(?<=month_)[0-9]+$"),
+                        TRUE ~ ifelse(any(grepl("^month$", colnames(df3))), month, NA) # this might remove month
+                      )
                     }
-                  }
                 )
               
-              # if ("fleet" %in% colnames(df3)) {
-              #   df4 <- df4 |>
-              #     dplyr::mutate(
-              #       fleet = dplyr::case_when(
-              #         "fleet" %in% colnames(df3) ~ fleet,
-              #         # grepl("):_[0-9]$", label) ~ stringr::str_extract(label, "(?<=_)[0-9]$"),
-              #         # grepl("):_[0-9][0-9]+$", label) ~ stringr::str_extract(label, "(?<=_)[0-9][0-9]$"),
-              #         TRUE ~ NA
-              #       ),
-              #       label = stringr::str_extract(label, "^.*?(?=_\\d|_gp|_fem|_mal|_sx|:|$)")
-              #     )
-              # } else {
               df4 <- df4 |>
                 dplyr::mutate(
-                  # fleet = dplyr::case_when(
-                  #   grepl("):_[0-9]$", label) ~ stringr::str_extract(label, "(?<=_)[0-9]$"),
-                  #   grepl("):_[0-9][0-9]+$", label) ~ stringr::str_extract(label, "(?<=_)[0-9][0-9]$"),
-                  #   TRUE ~ NA
-                  # ),
                   label = dplyr::case_when(
                     grepl("?_month_[0-9]_?", label) ~ stringr::str_replace(label, "_?month_\\d?", ""),
                     grepl("?_area_[0-9]_?", label) ~ stringr::str_replace(label, "_?area_\\d?", ""),
@@ -1199,7 +1182,13 @@ convert_output <- function(
               df3 <- df1[-c(1:rownum), ]
               colnames(df3) <- tolower(row)
             } else {
-              df3 <- extract
+              # Remove XX columns left in dataframe
+              if (any("xx" %in% tolower(colnames(extract)))) {
+                # ID which cols contain XX
+                df3 <- extract[, -grep("xx", tolower(colnames(extract)))]
+              } else {
+                df3 <- extract
+              }
               colnames(df3) <- tolower(colnames(df3))
             }
             
@@ -1335,6 +1324,7 @@ convert_output <- function(
             next
           }
         } # close if param is in output file
+        #### single_val ####
       } else if (parm_sel %in% single_val) {
         df <- data.frame(
           label = parm_sel,
@@ -1343,6 +1333,7 @@ convert_output <- function(
         )
         df[setdiff(tolower(names(out_new)), tolower(names(df)))] <- NA
         out_list[[parm_sel]] <- df
+        #### skip parm in ss3 ####
       } else {
         if (is.character(file)) cli::cli_alert(glue::glue("Skipped [{i}] {parm_sel}"))
         next
