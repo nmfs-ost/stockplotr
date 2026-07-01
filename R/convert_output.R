@@ -148,6 +148,10 @@ convert_output <- function(
         cli::cli_alert_info("Processing Rceattle output file...")
         "rceattle"
       },
+      "list" = {
+        cli::cli_alert_info("Processing FIMS output file...")
+        "ss3"
+      }
       cli::cli_abort("Unknown file type. Please indicate model.")
     )
   }
