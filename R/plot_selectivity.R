@@ -2,12 +2,6 @@
 #'
 #' @inheritParams plot_spawning_biomass
 #' 
-#' @param type Type of selectivity to plot
-#' 
-#' Default: "age"
-#' 
-#' Options: "age", "length"
-#'
 #' @returns A plot showing selectivity by age.
 #'
 #' @details The input is from an assessment model output file
@@ -34,7 +28,6 @@
 #' )
 plot_selectivity <- function(
   dat,
-  type = "age",
   era = NULL,
   group = NULL,
   facet = NULL,
@@ -47,12 +40,10 @@ plot_selectivity <- function(
 ) {
   
   #TODO: update alt text/caption
-  #TODO: revamp this to work for age as type, and for different blocks and
-  #other complexities
-  
-  label_name <- ifelse(type == "length",
-         "length_selectivity",
-         "selectivity")
+  #TODO: troubleshoot why era isn't being applied 
+  #TODO: test with length_bins
+  #TODO: for age, make sure facets clearer (not just numbers)
+  label_name <- "selectivity"
   
   # Extract selectivity
   selectivity <- filter_data(
@@ -69,27 +60,22 @@ plot_selectivity <- function(
   # process data
   processed_data <- process_data(
     dat = selectivity,
-    group = group,
-    facet = facet,
-    method = "mean" # should this be sum?
+    group = "year",
+    facet = c(group, facet)
   )
   
-  # this extracts all possible groups and facets- disregards
-  # user's specified group and facet in args (made "group" vs "groups",
-  # "facet" vs "facets")
   prepared_data <- processed_data[[1]]
-  # |> dplyr::mutate(group_var = NA)
-  groups <- processed_data[[2]]
-  facets <- processed_data[[3]]
+  group <- processed_data[[2]]
+  facet <- processed_data[[3]]
   
-  if ("age" %in% groups){
-    group <- stringr::str_remove(group, "age")
-    
-    prepared_data <- prepared_data |>
-      dplyr::mutate(age = as.numeric(age))
-    if (groups == ""){
-      groups <- NULL
-    }
+  # replace group with first element of facet if 
+  # group = age or length_bins
+  if (any(grepl("age|length_bins", facet))){
+    facet <- facet[!grepl("age|length_bins", facet)]
+  }
+  if (group == "age" | group == "length_bins") {
+    group <- facet[1]
+    facet <- facet[-1]
   }
   
   # Check if there is >1 label
@@ -101,20 +87,24 @@ plot_selectivity <- function(
 
   # Plot
   # TODO: left off here. Need to show fleets, models, other groupings
+  age_type <- grepl("age", unique(prepared_data$label))
+  
   final <- plot_timeseries(
-    dat = prepared_data,
-    x = ifelse(type == "length",
-               "year",
-               "age"),
+    dat = prepared_data |>
+      dplyr::mutate(age = as.numeric(age),
+                    group_var = as.character(group_var)),
+    x = ifelse(age_type,
+               "age",
+               "length_bins"),
     y = "estimate",
-   # color = "group_var",
+    # color = group,
     geom = "line",
-    xlab = ifelse(type == "length",
-                  "Year",
-                  "Age"),
-    ylab = ifelse(type == "length",
-                  "Length",
-                  "Selectivity at Age"),
+    xlab = ifelse(age_type,
+                  "Age",
+                  "Year"),
+    ylab = ifelse(age_type,
+                  "Selectivity at Age",
+                  "Length"),
     group = group,
     facet = facet#,
     #...

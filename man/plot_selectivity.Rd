@@ -6,7 +6,6 @@
 \usage{
 plot_selectivity(
   dat,
-  type = "age",
   era = NULL,
   group = NULL,
   facet = NULL,
@@ -23,12 +22,6 @@ returned from \link[stockplotr]{convert_output}.
 
 If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
-
-\item{type}{Type of selectivity to plot
-
-Default: "age"
-
-Options: "age", "length"}
 
 \item{era}{A string naming the era of data.
 
