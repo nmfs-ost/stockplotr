@@ -9,7 +9,7 @@ merge_error(table_data, id_col_vals, unit_label, uncert_lab)
 \arguments{
 \item{table_data}{list of dataframes that will be eventually turned into tables}
 
-\item{id_col_vals}{A list of variables identifying grouping of the data and 
+\item{id_col_vals}{A list of variables identifying grouping of the data and
 their unique values.}
 
 \item{unit_label}{String. The units of the estimate being presented in the table.}

@@ -2190,9 +2190,9 @@ convert_output <- function(
   # temporarily add call to local csv so I can test
   # con_file <- glue::glue("~/GitHub/stockplotr/inst/resources/{model}_var_names.csv")
   var_names_sheet <- utils::read.csv(con_file, na.strings = "")
-  
+
   if (tolower(model) == "bam") {
-    var_names_sheet <- var_names_sheet |> 
+    var_names_sheet <- var_names_sheet |>
       dplyr::mutate(label = tolower(label))
   }
 

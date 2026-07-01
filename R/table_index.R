@@ -48,18 +48,17 @@
 #' )
 #' }
 table_index <- function(
-    dat,
-    era = NULL,
-    interactive = TRUE,
-    group = NULL,
-    method = "sum",
-    module = NULL,
-    label = NULL,
-    digits = 2,
-    make_rda = FALSE,
-    tables_dir = getwd()
-    ) {
-  
+  dat,
+  era = NULL,
+  interactive = TRUE,
+  group = NULL,
+  method = "sum",
+  module = NULL,
+  label = NULL,
+  digits = 2,
+  make_rda = FALSE,
+  tables_dir = getwd()
+) {
   # TODO: do group and facet need to be uncommented and updated?
   # Filter data for landings
   prepared_data <- filter_data(
@@ -71,14 +70,16 @@ table_index <- function(
     scale_amount = 1,
     interactive = interactive
   ) |>
-    dplyr::mutate(estimate = round(as.numeric(estimate), digits = digits),
-                  uncertainty = round(as.numeric(uncertainty), digits = digits))
-  
+    dplyr::mutate(
+      estimate = round(as.numeric(estimate), digits = digits),
+      uncertainty = round(as.numeric(uncertainty), digits = digits)
+    )
+
   # Add check if there is any data
   if (nrow(prepared_data) == 0) {
     cli::cli_abort("No index data found.")
   }
-  
+
   # get uncertainty label by model
   uncert_lab <- prepared_data |>
     dplyr::filter(!is.na(uncertainty_label)) |>
@@ -86,22 +87,22 @@ table_index <- function(
     dplyr::reframe(unique_uncert = unique(uncertainty_label)) # changed to reframe -- may cause errors
   uncert_lab <- stats::setNames(uncert_lab$unique_uncert, uncert_lab$model)
   # if (length(unique(uncert_lab)) == 1) uncert_lab <- unique(uncert_lab) # might need this line
-  
+
   # This needs to be adjusted when comparing different models and diff error
   if (length(uncert_lab) > 1 & length(unique(uncert_lab)) == 1 | length(names(uncert_lab)) == 1) { # prepared_data$model
     # cli::cli_alert_warning("More than one value for uncertainty exists: {uncert_lab}")
     uncert_lab <- uncert_lab[[1]]
     # cli::cli_alert_warning("The first value ({uncert_lab}) will be chosen.")
   }
-  
+
   if (is.na(uncert_lab)) uncert_lab <- "uncertainty"
-  
+
   # get fleet names
   # TODO: change from fleets to id_group AFTER the process data step and adjust throughout the table based on indexing
   fleets <- unique(prepared_data$fleet) |>
     # sort numerically even if fleets are 100% characters
     stringr::str_sort(numeric = TRUE)
-  
+
   # TODO: fix this so that fleet names aren't removed if, e.g., group = "fleet"
   table_data_info <- process_table(
     dat = prepared_data,
@@ -113,12 +114,12 @@ table_index <- function(
   table_data <- table_data_info[[1]]
   indexed_vars <- table_data_info[[2]]
   id_col_vals <- table_data_info[[3]]
-  
+
   # id_group_vals <- sapply(id_cols, function(x) unique(prepared_data[[x]]), simplify = FALSE)
   # TODO: add check if there is a index column for every error column -- if not remove the error (can keep index)
-  
+
   # if (uncert_lab != "") uncert_lab <- glue::glue("({uncert_lab})")
-  
+
   # merge error and index columns and rename
   df_list <- merge_error(
     table_data,
@@ -126,31 +127,30 @@ table_index <- function(
     unit_label = "", # should this be CPUE?
     uncert_lab
   )
-  
+
   # transform dfs into tables
   final <- lapply(df_list, function(df) {
     df |>
       gt::gt() |>
       add_theme()
   })
-  
+
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
-    
     # Caption contains no key quantities for index table
     # So, export captions/alt text csv if absent
     if (!file.exists(fs::path(getwd(), "captions_alt_text.csv"))) {
       caps_alttext <- utils::read.csv(
         system.file("resources", "captions_alt_text_template.csv", package = "stockplotr")
       )
-    # export df with captions and alt text to csv
-    utils::write.csv(
-      x = caps_alttext,
-      file = fs::path(getwd(), "captions_alt_text.csv"),
-      row.names = FALSE
-      )    
+      # export df with captions and alt text to csv
+      utils::write.csv(
+        x = caps_alttext,
+        file = fs::path(getwd(), "captions_alt_text.csv"),
+        row.names = FALSE
+      )
     }
-  
+
     if (length(df_list) == 1) {
       create_rda(
         object = final$label,
@@ -168,7 +168,7 @@ table_index <- function(
     cli::cli_alert_warning("Multiple tables cannot be exported at this time.")
     cli::cli_alert_info("We are currently developing this feature.")
   }
-  
+
   # Send table(s) to viewer
   if (!is.data.frame(table_data)) {
     for (t in final) {
