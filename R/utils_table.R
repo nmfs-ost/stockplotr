@@ -185,7 +185,7 @@ check_label_differences <- function(dat, index_variables, id_group = NULL) {
 #' @param uncert_lab uncertainty label. Typically inherited from another function
 #' but is the exact string of the uncertainty in the data (e.g., "sd", "se", "cv",
 #' "uncertainty").)
-#' @param id_col_vals A list of variables identifying grouping of the data and 
+#' @param id_col_vals A list of variables identifying grouping of the data and
 #' their unique values.
 #' @param unit_label String. The units of the estimate being presented in the table.
 #'
@@ -194,11 +194,11 @@ check_label_differences <- function(dat, index_variables, id_group = NULL) {
 #' to reduce redundancy in the table.
 #'
 merge_error <- function(
-    table_data,
-    id_col_vals,
-    unit_label,
-    uncert_lab
-    ) {
+  table_data,
+  id_col_vals,
+  unit_label,
+  uncert_lab
+) {
   # TODO: change fleets to grouping when the data is indexed by factors other than fleet
   lapply(table_data, function(tab_dat) {
     label_cols <- names(tab_dat)[-c(1, grep(glue::glue("^{uncert_lab}"), names(tab_dat)))]
@@ -211,12 +211,13 @@ merge_error <- function(
         tolower(l_col),
         paste(
           stringr::str_escape(unlist(id_col_vals, use.names = FALSE)),
-          collapse = "|")
+          collapse = "|"
         )
-      
+      )
+
       # Identify which uncert col aligns with l_col
       uncert_col <- uncert_cols[grep(l_col, uncert_cols)]
-      
+
       # adjust tab dat to combine the uncert_col value into the l_col = l_col (uncert_col)
       tab_dat <- tab_dat |>
         dplyr::mutate(
@@ -226,7 +227,7 @@ merge_error <- function(
             # maybe not good practice to insert dash?
             # ifelse(
             #   is.na(.data[[l_col]]),
-              "-"
+            "-"
             #   as.character(.data[[l_col]])
             # )
           )
@@ -234,13 +235,13 @@ merge_error <- function(
         # Remove uncertainty colummn id'd in this step of the loop
         dplyr::select(-dplyr::all_of(uncert_col))
     } # close loop combining label and uncertainty
-    
+
     # Adjust all header label names now
     header_labs <- stringr::str_replace_all(colnames(tab_dat), "_", " ") |>
       stringr::str_to_title()
     header_labs2 <- glue::glue("{header_labs[-1]}{ifelse(unit_label!='', paste0(' ', unit_label,' '), ' ')}({uncert_lab})")
     colnames(tab_dat) <- c(header_labs[1], header_labs2)
-    
+
     return(tab_dat)
   }) # close and end lapply
 }
