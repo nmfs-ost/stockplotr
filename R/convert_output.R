@@ -266,6 +266,8 @@ convert_output <- function(
         "INDEX_1",
         "MEAN_BODY_WT_OUTPUT"
       )
+      # Intentionally left empty
+      single_val <- c()
     } else {
       # r4ss::ss_output
       dat <- file
@@ -324,6 +326,7 @@ convert_output <- function(
       # ntentionally empty
       std2 <- c()
       cha <- c()
+      info <- c()
     }
     
     # Extract units
@@ -357,7 +360,7 @@ convert_output <- function(
       # Processing data frame
       parm_sel <- param_names[i]
       if (parm_sel %in% c(std, std2, cha, rand, aa.al, single_val)) {
-        cli::cli_alert(glue::glue("Processing {parm_sel}"))
+        cli::cli_alert(glue::glue("[{i}] Processing {parm_sel}"))
         if(is.character(file)) {
           extract <- SS3_extract_df(dat, parm_sel)
         } else {
@@ -504,10 +507,15 @@ convert_output <- function(
                     grepl("_gp:[0-9][0-9]$", label) ~ stringr::str_extract(label, "(?<=:)[0-9][0-9]$"),
                     TRUE ~ NA
                   ),
-                  month = dplyr::case_when(
-                    grepl("_month_[0-9]+$", label) ~ stringr::str_extract(label, "(?<=month_)[0-9]+$"),
-                    TRUE ~ ifelse(any(grepl("^month$", colnames(df3))), month, NA) # this might remove month
-                  )
+                  month = {
+                    if ("month" %in% colnames(df3)) {
+                      month
+                    } else if (grepl("_month_[0-9]+$", label)) {
+                      stringr::str_extract(label, "(?<=month_)[0-9]+$")
+                    } else {
+                      ifelse(any(grepl("^month$", colnames(df3))), month, NA) # this might remove month
+                    }
+                  }
                 )
               
               # if ("fleet" %in% colnames(df3)) {
@@ -791,7 +799,7 @@ convert_output <- function(
             # "Biology_at_age_in_endyr"
             # "PARAMETERS"
             
-            if (parm_sel == "SPAWN_RECR_CURVE") {
+            if (parm_sel %in% c("SPAWN_RECR_CURVE", "SPAWN_RECRUIT_CURVE")) {
               # 32
               # TODO: add this to converter
               # set labels to "fitted_line_x"
@@ -822,21 +830,27 @@ convert_output <- function(
               # skipping for now cuz not needed
               miss_parms <- c(miss_parms, parm_sel)
               next
-            } else if (parm_sel == "SPR_SERIES") {
-              # split into the 3 dfs then stack - make sure all factors are present
-              # remove first row - naming
-              df1 <- extract[-1, ]
-              # Find first row without NAs = headers
-              df2 <- df1[stats::complete.cases(df1), ]
-              # identify first row
-              row <- df2[1, ]
-              # make row the header names for first df
-              colnames(df1) <- row
-              # find row number that matches 'row'
-              rownum <- prodlim::row.match(row, df1)
-              # Subset data frame
-              df3 <- df1[-(1:rownum), ]
-              colnames(df3) <- tolower(row)
+            } else if (parm_sel %in% c("sprseries", "SPR_SERIES")) {
+              if (is.character(file)) {
+                # split into the 3 dfs then stack - make sure all factors are present
+                # remove first row - naming
+                df1 <- extract[-1, ]
+                # Find first row without NAs = headers
+                df2 <- df1[stats::complete.cases(df1), ]
+                # identify first row
+                row <- df2[1, ]
+                # make row the header names for first df
+                colnames(df1) <- row
+                # find row number that matches 'row'
+                rownum <- prodlim::row.match(row, df1)
+                # Subset data frame
+                df3 <- df1[-(1:rownum), ]
+                colnames(df3) <- tolower(row)
+              } else {
+                df3 <- extract
+                colnames(df3) <- tolower(colnames(df3))
+              }
+              
               # check if there are estimate and acual values within the df
               if (any(grepl("actual", colnames(df3)) | grepl("more_f", colnames(df3)))) {
                 actual_col <- grep("actual", colnames(df3))
@@ -961,26 +975,32 @@ convert_output <- function(
             } else if (parm_sel == "Biology_at_age_in_endyr") {
               miss_parms <- c(miss_parms, parm_sel)
               next
-            } else if (parm_sel == "PARAMETERS") {
-              df1 <- extract[-1, ]
-              # Find first row without NAs = headers
-              # temp fix for catch df
-              df2 <- df1[stats::complete.cases(df1), ]
-              if (any(c("#") %in% df2[, 1])) {
-                full_row <- which(apply(df1, 1, function(row) is.na(row) | row == " " | row == "-" | row == "#"))[1]
-                df1 <- df1[-full_row[1], ]
-                df1 <- Filter(function(x) !all(is.na(x)), df1)
+            } else if (tolower(parm_sel) == "parameters") {
+              if (is.character(file)) {
+                df1 <- extract[-1, ]
+                # Find first row without NAs = headers
+                # temp fix for catch df
                 df2 <- df1[stats::complete.cases(df1), ]
+                if (any(c("#") %in% df2[, 1])) {
+                  full_row <- which(apply(df1, 1, function(row) is.na(row) | row == " " | row == "-" | row == "#"))[1]
+                  df1 <- df1[-full_row[1], ]
+                  df1 <- Filter(function(x) !all(is.na(x)), df1)
+                  df2 <- df1[stats::complete.cases(df1), ]
+                }
+                # identify first row
+                row <- df2[1, ]
+                # make row the header names for first df
+                colnames(df1) <- row
+                # find row number that matches 'row'
+                rownum <- prodlim::row.match(row, df1)
+                # Subset data frame
+                df3 <- df1[-c(1:rownum), ]
+                colnames(df3) <- tolower(row)
+              } else {
+                df3 <- extract
+                colnames(df3) <- tolower(colnames(df3))
               }
-              # identify first row
-              row <- df2[1, ]
-              # make row the header names for first df
-              colnames(df1) <- row
-              # find row number that matches 'row'
-              rownum <- prodlim::row.match(row, df1)
-              # Subset data frame
-              df3 <- df1[-c(1:rownum), ]
-              colnames(df3) <- tolower(row)
+              
               # Pull out indexing variables and remove from labels
               df4 <- df3 |>
                 dplyr::select(intersect(colnames(df3), c("label", "value", "init", "parm_stdev"))) |>
@@ -1139,40 +1159,45 @@ convert_output <- function(
             #### aa.al ####
           } else if (parm_sel %in% aa.al) {
             # 8,9,11,12,13,14,15,16,28,29
-            # remove first row - naming
-            df1 <- extract[-1, ]
-            # Find first row without NAs = headers
-            df2 <- df1[stats::complete.cases(df1), ]
-            # identify first row
-            row <- df2[1, ]
-            if (any(row %in% "XX")) {
-              loc_xx <- grep("XX", row)
-              row <- row[row != "XX"]
-              df1 <- df1[, -loc_xx]
-            }
-            
-            # TODO: apply this next if statement to a general process so it's part of the standard cleaning
-            # check if the headers make sense
-            # this is a temporary fix to a specific bug
-            # I have seen this issue in the past and I am not sure how to recognize this generally
-            if (any(parm_sel == "AGE_SELEX" & c("1", "2", "3") %notin% row)) {
+            if (is.character(file)) {
+              # remove first row - naming
+              df1 <- extract[-1, ]
+              # Find first row without NAs = headers
+              df2 <- df1[stats::complete.cases(df1), ]
+              # identify first row
+              row <- df2[1, ]
+              if (any(row %in% "XX")) {
+                loc_xx <- grep("XX", row)
+                row <- row[row != "XX"]
+                df1 <- df1[, -loc_xx]
+              }
+              
+              # TODO: apply this next if statement to a general process so it's part of the standard cleaning
+              # check if the headers make sense
+              # this is a temporary fix to a specific bug
+              # I have seen this issue in the past and I am not sure how to recognize this generally
+              if (any(parm_sel == "AGE_SELEX" & c("1", "2", "3") %notin% row)) {
+                rownum <- prodlim::row.match(row, df1)
+                # Subset data frame
+                df1 <- df1[-c(1:rownum), ]
+                cols_to_keep <- which(sapply(df1, function(x) !all(is.na(x))))
+                df1 <- df1 |> dplyr::select(dplyr::all_of(c(names(cols_to_keep))))
+                df2 <- df1[stats::complete.cases(df1), ]
+                row <- df2[1, ]
+              }
+              
+              # make row the header names for first df
+              colnames(df1) <- row
+              
+              # find row number that matches 'row'
               rownum <- prodlim::row.match(row, df1)
               # Subset data frame
-              df1 <- df1[-c(1:rownum), ]
-              cols_to_keep <- which(sapply(df1, function(x) !all(is.na(x))))
-              df1 <- df1 |> dplyr::select(dplyr::all_of(c(names(cols_to_keep))))
-              df2 <- df1[stats::complete.cases(df1), ]
-              row <- df2[1, ]
+              df3 <- df1[-c(1:rownum), ]
+              colnames(df3) <- tolower(row)
+            } else {
+              df3 <- extract
+              colnames(df3) <- tolower(colnames(df3))
             }
-            
-            # make row the header names for first df
-            colnames(df1) <- row
-            
-            # find row number that matches 'row'
-            rownum <- prodlim::row.match(row, df1)
-            # Subset data frame
-            df3 <- df1[-c(1:rownum), ]
-            colnames(df3) <- tolower(row)
             
             # aa.al names
             naming <- c(
@@ -1306,8 +1331,16 @@ convert_output <- function(
             next
           }
         } # close if param is in output file
+      } else if (parm_sel %in% single_val) {
+        df <- data.frame(
+          label = parm_sel,
+          estimate = extract[[1]],
+          module_name = parm_sel
+        )
+        df[setdiff(tolower(names(out_new)), tolower(names(df)))] <- NA
+        out_list[[parm_sel]] <- df
       } else {
-        cli::cli_alert(glue::glue("Skipped {parm_sel}"))
+        if (is.character(file)) cli::cli_alert(glue::glue("Skipped [{i}] {parm_sel}"))
         next
       }
     } # close loop
