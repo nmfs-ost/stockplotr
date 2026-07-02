@@ -73,15 +73,9 @@ test_that("missing arguments trigger warnings or errors", {
 })
 
 test_that("r4ss::ss_output object is compatible.", {
-  install.packages("remotes")
-  remotes::install_github("r4ss/r4ss")
-  library(r4ss)
-  simple <- r4ss::SS_output(dir = file.path(
-    path.package("r4ss"),
-    file.path("extdata", "simple_small")
-  ))
+  simple_r4ss <- readRDS(fs::path("fixtures", "r4ss_output", "simple_small", "simple_r4ss.rds"))
   
   expect_no_error(
-    convert_output(simple)
+    convert_output(simple_r4ss)
   )
 })
