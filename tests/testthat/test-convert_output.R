@@ -75,7 +75,6 @@ test_that("missing arguments trigger warnings or errors", {
 test_that("r4ss::ss_output object is compatible.", {
   simple_r4ss <- readRDS(fs::path("fixtures", "r4ss_output", "simple_small", "simple_r4ss.rds"))
   
-  expect_no_error(
-    convert_output(simple_r4ss)
-  )
+  expect_no_error(result <- convert_output(simple_r4ss))
+  expect_equal(dim(result)[2], 33)
 })

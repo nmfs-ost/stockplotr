@@ -376,7 +376,7 @@ convert_output <- function(
             df <- data.frame(
               label = parm_sel,
               module_name = parm_sel,
-              estimate = extract
+              estimate = extract[[1]]
             )
             df[setdiff(tolower(names(out_new)), tolower(names(df)))] <- NA
             out_list[[parm_sel]] <- df
@@ -1334,15 +1334,6 @@ convert_output <- function(
             next
           }
         } # close if param is in output file
-        #### single_val ####
-      } else if (parm_sel %in% single_val) {
-        df <- data.frame(
-          label = parm_sel,
-          estimate = extract[[1]],
-          module_name = parm_sel
-        )
-        df[setdiff(tolower(names(out_new)), tolower(names(df)))] <- NA
-        out_list[[parm_sel]] <- df
         #### skip parm in ss3 ####
       } else {
         if (is.character(file)) cli::cli_alert(glue::glue("Skipped [{i}] {parm_sel}"))
@@ -2305,7 +2296,7 @@ convert_output <- function(
     # Remove 'X' column if it exists
     var_names_sheet <- var_names_sheet |>
       dplyr::select(-dplyr::any_of("X"))
-    if (model == "ss3" & !is.character(file)) {
+    if (tolower(model) == "ss3" & !is.character(file)) {
       var_names_sheet <- var_names_sheet |> dplyr::select(-module_name)
       out_new <- dplyr::left_join(out_new, var_names_sheet, by = "label")
     } else {
