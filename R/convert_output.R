@@ -364,7 +364,7 @@ convert_output <- function(
       # Processing data frame
       parm_sel <- param_names[i]
       if (parm_sel %in% c(std, std2, cha, rand, aa.al, single_val)) {
-        cli::cli_alert(glue::glue("[{i}] Processing {parm_sel}"))
+        cli::cli_alert(glue::glue("Processing {parm_sel}")) # Remove [{i}] 
         if(is.character(file)) {
           extract <- SS3_extract_df(dat, parm_sel)
         } else {
@@ -372,9 +372,19 @@ convert_output <- function(
         }
         
         if (!is.data.frame(extract)) {
-          miss_parms <- c(miss_parms, parm_sel)
-          cli::cli_alert(glue::glue("Skipped {parm_sel}"))
-          next
+          if (is.numeric(extract)) {
+            df <- data.frame(
+              label = parm_sel,
+              module_name = parm_sel,
+              estimate = extract
+            )
+            df[setdiff(tolower(names(out_new)), tolower(names(df)))] <- NA
+            out_list[[parm_sel]] <- df
+          } else {
+            miss_parms <- c(miss_parms, parm_sel)
+            cli::cli_alert(glue::glue("Skipped {parm_sel}"))
+            next
+          }
         } else {
           ##### STD ####
           # 1,4,10,17,19,36
