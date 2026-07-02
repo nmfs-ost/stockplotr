@@ -257,4 +257,7 @@ Growth_Parameters,mat2,
 Growth_Parameters,fec1,
 Growth_Parameters,fec2,
 MEAN_BODY_WT(Begin),mean_body_wt,
-Dynamic_Bzero,Dynamic_Bzero,
+Dynamic_Bzero,Dynamic_Bzero,dynamic_biomass_zero
+,sprtarg,spr_target
+,btarg,biomass_target
+,Sbzero,spawning_biomass_zero
