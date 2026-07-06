@@ -1098,6 +1098,7 @@ convert_output <- function(
                   # fix remaining labels
                   label = ifelse(grepl("_GP$", label), stringr::str_remove(label, "_GP$"), label),
                   label = ifelse(grepl("_Fem|_Mal", label), stringr::str_remove(label, "_Fem$|_Mal$"), label),
+                  label = ifelse(grepl(paste0(fleet_names, collapse = "|"), label), stringr::str_remove(label, paste0("_", fleet_names, collapse = "|")), label),
                   module_name = parm_sel
                 )
               # match to out_new
@@ -1205,7 +1206,7 @@ convert_output <- function(
             # aa.al names
             naming <- c(
               "biomass", "discard", "catch",
-              "f", "mean_size", "numbers", "sel",
+              "f", "mean_size", "numbers", "Lsel", "sel",
               "mean_body_wt", "natural_mortality"
             )
             if (stringr::str_detect(tolower(parm_sel), paste(naming, collapse = "|"))) {
@@ -1218,7 +1219,7 @@ convert_output <- function(
               # add conditions for naming label from aa.al
               label <- switch(
                 parm_sel,
-                "sizeselex" = "selectivity_length",
+                # "sizeselex" = "selectivity_length",
                 "ageselex" = "selectivity_age",
                 "Natural_Mortality" = "natural_mortality_age",
                 "fatage" = "fishing_mortality_age",
@@ -1239,7 +1240,7 @@ convert_output <- function(
             } else if (any(grepl("length|len", tolower(parm_sel)))) {
               fac <- "len_bins"
             } else if (any(grepl("size", tolower(parm_sel)))) {
-              fac <- "age"
+              fac <- "len_bins"
             } else {
               fac <- "age"
             }
