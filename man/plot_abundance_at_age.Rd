@@ -10,6 +10,8 @@ plot_abundance_at_age(
   unit_label = "fish",
   scale_amount = 1000,
   proportional = TRUE,
+  module = NULL,
+  interactive = TRUE,
   make_rda = FALSE,
   figures_dir = getwd()
 )

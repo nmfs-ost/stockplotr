@@ -70,6 +70,8 @@ plot_abundance_at_age <- function(
   unit_label = "fish",
   scale_amount = 1000,
   proportional = TRUE,
+  module = NULL,
+  interactive = TRUE,
   make_rda = FALSE,
   figures_dir = getwd()
 ) {
@@ -85,8 +87,9 @@ plot_abundance_at_age <- function(
     label_name = "abundance",
     geom = "point",
     group = "age",
+    module = module,
     scale_amount = scale_amount,
-    interactive = FALSE
+    interactive = interactive
   )
 
   if (!is.null(facet) && facet == "none") {
