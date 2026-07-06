@@ -82,7 +82,7 @@ convert_output <- function(
     bio_pattern = NA,
     settlement = NA,
     morph = NA,
-    # beg/mid = NA, # need to identify df where this is applicable
+    beg_mid = NA,
     type = NA,
     factor = NA,
     # sexes = NA, # remove sexes to see how it impacts the results
@@ -1214,7 +1214,26 @@ convert_output <- function(
               if (label == "f") {
                 label <- "fishing_mortality"
               }
-            }
+            } else (
+              # add conditions for naming label from aa.al
+              label <- switch(
+                parm_sel,
+                "sizeselex" = "selectivity_length",
+                "ageselex" = "selectivity_age",
+                "Natural_Mortality" = "natural_mortality_age",
+                "fatage" = "fishing_mortality_age",
+                "natage" = "abundance_age",
+                "batage" = "biomass_age",
+                "natlen" = "abundance_length",
+                "batlen" = "biomass_length",
+                "discard_at_age" = "discard_age",
+                "catage" = "catch_age",
+                "Z_at_age" = "total_mortality_age",
+                "M_at_age" = "natural_mortality_age",
+                "Z_by_area" = "total_mortality",
+                "M_by_area" = "natural_mortality"
+                )
+            )
             if (grepl("age", tolower(parm_sel))) {
               fac <- "age"
             } else if (any(grepl("length|len", tolower(parm_sel)))) {
@@ -1224,8 +1243,12 @@ convert_output <- function(
             } else {
               fac <- "age"
             }
+            
+            # remove fac from label
+            if (grepl(glue::glue("_{fac}"), label)) label <- stringr::str_remove(label, glue::glue("_{fac}"))
+            
             # Reformat dataframe
-            if (any(colnames(df3) %in% c("Yr", "yr", "year"))) {
+            if (any(colnames(df3) %in% c("Yr", "yr"))) {
               df3 <- df3 |>
                 dplyr::rename(year = yr)
             }
@@ -1291,6 +1314,11 @@ convert_output <- function(
             if (any(grepl("like", colnames(df4)))) {
               df4 <- df4 |>
                 dplyr::rename(likelihood = like)
+            }
+            # Rename beg/mid if present
+            if (any(grepl("beg/mid", colnames(df4)))) {
+              df4 <- df4 |>
+                dplyr::rename(beg_mid = "beg/mid")
             }
             # Check for error in the df
             if (any(grepl(paste0("^", errors, "$", collapse = "|"), colnames(df4)))) {

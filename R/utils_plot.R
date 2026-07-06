@@ -938,7 +938,8 @@ check_grouping <- function(dat) {
     "fleet", "sex",
     "area", "growth_pattern", "month",
     "season", "platoon", "bio_pattern",
-    "settlement", "morph", "block", "length_bins"
+    "settlement", "morph", "block", "length_bins",
+    "beg_mid"
   )
   # non.index_variables <- c(
   #   "estimate", "initial", "likelihood",
