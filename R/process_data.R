@@ -357,6 +357,11 @@ process_data <- function(
       )
   }
 
+  if (is.null(group) && length(facet) > 0) {
+    group <- facet[1]
+    facet <- facet[-1]
+  }
+  
   # Export list of objects
   list(
     # variable,

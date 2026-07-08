@@ -929,7 +929,6 @@ label_magnitude <- function(
 check_grouping <- function(dat) {
   # Identify potential indexing variables
   index_variables <- c(
-    "year", # also not sure of this one
     "age", # not sure if want to add age here
     "fleet", "sex",
     "area", "growth_pattern", "month",
@@ -942,6 +941,10 @@ check_grouping <- function(dat) {
   for (i in index_variables) {
     indexed <- ifelse(length(unique(dat[[i]])) > 1, TRUE, FALSE)
     if (indexed) dat_index <- c(dat_index, i)
+  }
+  # Adding this to ensure year shows up even if only one year
+  if ("year" %in% colnames(dat) & "year" %notin% dat_index) {
+    dat_index <- c(dat_index, "year")
   }
   dat_index
 }

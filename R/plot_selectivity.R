@@ -31,7 +31,6 @@ plot_selectivity <- function(
   era = NULL,
   group = NULL,
   facet = NULL,
-  # relative = FALSE,
   interactive = TRUE,
   module = NULL,
   make_rda = FALSE,
@@ -39,10 +38,10 @@ plot_selectivity <- function(
   ...
 ) {
   
+  # LEFT OFF: move to length_bins option next
+  
   #TODO: update alt text/caption
-  #TODO: troubleshoot why era isn't being applied 
   #TODO: test with length_bins
-  #TODO: for age, make sure facets clearer (not just numbers)
   label_name <- "selectivity"
   
   # Extract selectivity
@@ -61,7 +60,7 @@ plot_selectivity <- function(
   processed_data <- process_data(
     dat = selectivity,
     group = "year",
-    facet = c(group, facet)
+   facet = c(group, facet)
   )
   
   prepared_data <- processed_data[[1]]
@@ -76,6 +75,12 @@ plot_selectivity <- function(
   if (group == "age" | group == "length_bins") {
     group <- facet[1]
     facet <- facet[-1]
+    prepared_data <- prepared_data |>
+      dplyr::mutate(group_var = as.character(.data[[group]]))
+  }
+  
+  if ("age" %in% facet | "length_bins" %in% facet) {
+    facet <- facet[!facet %in% c("age", "length_bins")]
   }
   
   # Check if there is >1 label
