@@ -38,13 +38,14 @@ plot_selectivity <- function(
   era = NULL,
   group = NULL,
   facet = NULL,
-  # relative = FALSE,
   interactive = TRUE,
   module = NULL,
   make_rda = FALSE,
   figures_dir = getwd(),
   ...
 ) {
+  
+  # LEFT OFF: move to length_bins option next
   
   #TODO: update alt text/caption
   #TODO: revamp this to work for age as type, and for different blocks and
@@ -69,9 +70,8 @@ plot_selectivity <- function(
   # process data
   processed_data <- process_data(
     dat = selectivity,
-    group = group,
-    facet = facet,
-    method = "mean" # should this be sum?
+    group = "year",
+   facet = c(group, facet)
   )
   
   # this extracts all possible groups and facets- disregards
@@ -90,6 +90,20 @@ plot_selectivity <- function(
     if (groups == ""){
       groups <- NULL
     }
+  # replace group with first element of facet if 
+  # group = age or length_bins
+  if (any(grepl("age|length_bins", facet))){
+    facet <- facet[!grepl("age|length_bins", facet)]
+  }
+  if (group == "age" | group == "length_bins") {
+    group <- facet[1]
+    facet <- facet[-1]
+    prepared_data <- prepared_data |>
+      dplyr::mutate(group_var = as.character(.data[[group]]))
+  }
+  
+  if ("age" %in% facet | "length_bins" %in% facet) {
+    facet <- facet[!facet %in% c("age", "length_bins")]
   }
   
   # Check if there is >1 label
