@@ -434,6 +434,23 @@ save_all_plots <- function(
       print(e)
     }
   )
+  
+  
+  tryCatch(
+    {
+      cli::cli_h2("plot_selectivity")
+      plot_indices(dat,
+                   # unit_label = selectivity_unit_label, # commenting this out because if interactive = FALSE, unit_label is not used as age is selected (over length), which doesn't require a unit label
+                   make_rda = TRUE,
+                   interactive = FALSE,
+                   figures_dir = figures_tables_dir
+      ) # |> suppressWarnings() |> invisible()
+    },
+    error = function(e) {
+      cli::cli_alert_danger("plot_selectivity failed to run.")
+      print(e)
+    }
+  )
 
   # tables
   # tryCatch(
