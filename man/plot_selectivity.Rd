@@ -6,6 +6,7 @@
 \usage{
 plot_selectivity(
   dat,
+  unit_label = "cm",
   era = NULL,
   group = NULL,
   facet = NULL,
@@ -22,6 +23,8 @@ returned from \link[stockplotr]{convert_output}.
 
 If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
+
+\item{unit_label}{units for length-based selectivity}
 
 \item{era}{A string naming the era of data.
 
@@ -67,7 +70,7 @@ The folder is created within the path if it does not exist.}
 \item{...}{Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}
 }
 \value{
-A plot showing selectivity by age.
+A plot showing selectivity by age or length.
 }
 \description{
 Plot selectivity
