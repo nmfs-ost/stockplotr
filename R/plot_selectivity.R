@@ -45,8 +45,6 @@ plot_selectivity <- function(
   ...
 ) {
   
-  # LEFT OFF: move to length_bins option next
-  
   #TODO: update alt text/caption
   #TODO: revamp this to work for age as type, and for different blocks and
   #other complexities
@@ -71,7 +69,7 @@ plot_selectivity <- function(
   processed_data <- process_data(
     dat = selectivity,
     group = "year",
-   facet = c(group, facet)
+    facet = c(group, facet)
   )
   
   # this extracts all possible groups and facets- disregards
@@ -107,12 +105,12 @@ plot_selectivity <- function(
   }
   
   # Check if there is >1 label
-  if (length(prepared_data$label) > 1) {
+  if (length(unique(prepared_data$label)) > 1) {
     prepared_data <- prepared_data |>
       # always select the first label if TRUE
       dplyr::filter(label == unique(label)[1])
   }
-
+  
   # Plot
   # TODO: left off here. Need to show fleets, models, other groupings
   final <- plot_timeseries(
