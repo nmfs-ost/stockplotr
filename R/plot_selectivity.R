@@ -7,8 +7,10 @@
 #' Default: "age"
 #' 
 #' Options: "age", "length"
-#'
-#' @returns A plot showing selectivity by age.
+
+#' @param unit_label units for length-based selectivity
+#' 
+#' @returns A plot showing selectivity by age or length.
 #'
 #' @details The input is from an assessment model output file
 #' translated to a standardized output (\link[stockplotr]{convert_output}).
@@ -35,6 +37,7 @@
 plot_selectivity <- function(
   dat,
   type = "age",
+  unit_label = "cm",
   era = NULL,
   group = NULL,
   facet = NULL,
@@ -123,7 +126,7 @@ plot_selectivity <- function(
     geom = "line",
     xlab = ifelse(age_type,
                   "Age",
-                  "Length Bin"),
+                  paste0("Length Bin (", unit_label, ")")),
     ylab = "Selectivity",
     group = group,
     facet = facet,
@@ -144,7 +147,7 @@ final
     
     selectivity.x <- ifelse(age_type,
                                 "years",
-                                "cm")
+                            unit_label)
     
     selectivity.start.year <- min(prepared_data$year)
     
