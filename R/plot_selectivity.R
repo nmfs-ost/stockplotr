@@ -111,12 +111,10 @@ plot_selectivity <- function(
     xlab = ifelse(age_type,
                   "Age",
                   "Length Bin"),
-    ylab = ifelse(age_type,
-                  "Selectivity at Age",
-                  "Selectivity"),
+    ylab = "Selectivity",
     group = group,
-    facet = facet#,
-    #...
+    facet = facet,
+    ...
   ) +
     theme_noaa()
 final
