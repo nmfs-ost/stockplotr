@@ -71,12 +71,14 @@ If possible, please submit a reproducible example ([reprex](https://reprex.tidyv
 
 Have a question? Ask it in our [Discussions page](https://github.com/nmfs-ost/stockplotr/discussions). You can categorize it under General, Ideas, Q&A, and more.
 
-## Figure and Table Workflow Guide
+## Figure and Table Development Guide
 
 This guide summarizes the workflow used by the `plot_x` and `table_x` functions in `R/`.
 Use it as a template when building a new figure or table function from the existing package patterns.
 
-### The common starting point
+If a new figure or table does not fit an existing category, please let us know. We can try to build the pipeline to incorporate it into the existing workflow.
+
+### Overview
 
 Most functions begin with standardized output from `convert_output()`.
 That data is then narrowed to one label or related labels, reshaped if needed, and finally rendered as a plot or table.
@@ -86,15 +88,15 @@ The recurring helpers are:
 - `filter_data()` to isolate the target label(s) and apply module, era, grouping, faceting, and scaling choices.
 - `process_data()` to detect indexing variables, set `group_var`, and decide whether additional variables should become grouping or facetting variables.
 - `process_table()` for table-specific label handling and row/column organization.
-- `create_rda()` when `make_rda = TRUE`.
+- `create_rda()` to export the figure/table as an rda file, and the figure/table's associated information.
 
 ### How the figure functions are built
 
-The figure functions in `R/` follow the same basic sequence:
+The figure functions follow the same basic sequence:
 
 1. **Filter the data.**  
    Pick the relevant label with `filter_data()`.  
-   This is where each figure decides whether it needs `year`, `age`, `fleet`, `area`, `sex`, a specific module, or a specific era.
+   This is where the data used as the basis for each figure is filtered from its original state. Variables such as `year`, `age`, `fleet`, `area`, `sex`, a specific module, or a specific era are used to remove unnecessary data.
 
 2. **Process the filtered data.**  
    Run `process_data()` to identify the index structure and to decide how the data should be grouped or faceted.
@@ -115,14 +117,15 @@ The figure functions in `R/` follow the same basic sequence:
 5. **Apply the final theme.**  
    Most figures end with `theme_noaa()`.
 
-6. **Optionally export the accessibility package.**  
+6. **Add capability to export the figure and associated materials.**  
    If `make_rda = TRUE`, the figure function usually:
    - calculates key quantities,
    - writes them with `export_kqs()`,
    - inserts them into captions and alt text with `insert_kqs()`,
    - and saves the final object with `create_rda()`.
+   These steps are important for creating alternative text and captions for the figures. Make sure to reference inst/resources/captions_alt_text_template.csv and inst/resources/key_quantity_template.csv to ensure the key quantities are properly inserted into an accurate caption and alt text.
 
-### Figure families in this package
+#### Figure families
 
 - **Time-series plots:** `plot_biomass()`, `plot_spawning_biomass()`, `plot_recruitment()`, `plot_landings()`, `plot_fishing_mortality()`, `plot_natural_mortality()`
 - **Observation/comparison plots:** `plot_index()`, `plot_stock_recruitment()`, `plot_recruitment_deviations()`
@@ -142,30 +145,23 @@ The data-driven table functions use a shorter version of the same workflow:
    `process_table()` determines which variables are indexing the data, handles multiple labels, and prepares the data for table formatting.
 
 4. **Merge estimates and uncertainty.**  
-   `merge_error()` combines the value and error columns into a single presentation-ready column where needed.
+   `merge_error()` combines the value and error columns into a single column where needed.
 
 5. **Render the table.**  
    - `table_index()` and `table_landings()` convert the prepared data to `gt` tables and apply `add_theme()`
 
-6. **Optionally export the accessibility package.**  
+6. **Add capability to export the figure and associated materials.**  
    As with plots, `make_rda = TRUE` triggers `export_kqs()`, `insert_kqs()`, and `create_rda()`.
 
-### Table families in this package
+#### Table families
 
-- **Data-driven tables:** `table_index()`, `table_landings()`
-- **Legacy/incomplete table workflow:** `table_bnc()` is present but commented out
+All tables are in the same family.
 
-### A simple recipe for a new function
+### Last steps
 
-When adding a new `plot_x` or `table_x` function, follow this order:
+Once your figure or table is developed (🎉!), please complete these tasks:
 
-1. Identify the source label(s) in the standardized output.
-2. Filter with `filter_data()`.
-3. Process with `process_data()` or `process_table()`.
-4. Build the figure or table with the helper that matches the display type.
-5. Add domain-specific layers or table formatting.
-6. Apply the package theme.
-7. Export key quantities and the `.rda` package if the function supports accessibility output.
-8. Document the workflow in the function's roxygen file and add an example.
-
-If a new figure or table does not fit an existing category, explain the new category and we can try to build the pipeline to incorporate it into the existing workflow.
+1. Test it with different kinds of model outputs: SS3, BAM, Rceattle, r4ss, etc.
+2. Add the figure to `save_all_plots()`. Depending on the plot, you may need to add a new argument to the Roxygen.
+3. Update the `save_all_plots()` test in `tests/testthat/test-save_all_plots.R`.
+4. Create unit tests for your figure or table function in `tests/testthat/`. This will entail creating a new test file (e.g., `test-plot_new_function.R`) and adding unit tests. Most/all can be copied from an existing test file and modified for your new function.
