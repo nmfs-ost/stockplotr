@@ -91,7 +91,6 @@ The data-driven table functions use a shorter version of the same workflow:
 
 5. **Render the table.**  
    - `table_index()` and `table_landings()` convert the prepared data to `gt` tables and apply `add_theme()`
-   - the static reference tables (`table_afsc_tier()` and `table_harvest_projection()`) are built directly with `flextable`
 
 6. **Optionally export the accessibility package.**  
    As with plots, `make_rda = TRUE` triggers `export_kqs()`, `insert_kqs()`, and `create_rda()`.
@@ -99,7 +98,6 @@ The data-driven table functions use a shorter version of the same workflow:
 ## Table families in this package
 
 - **Data-driven tables:** `table_index()`, `table_landings()`
-- **Static reference tables:** `table_afsc_tier()`, `table_harvest_projection()`
 - **Legacy/incomplete table workflow:** `table_bnc()` is present but commented out
 
 # A simple recipe for a new function
@@ -122,4 +120,3 @@ When adding a new `plot_x` or `table_x` function, follow this order:
 - `plot_catch_comp()` for age-composition plotting
 - `table_landings()` for a standard data-driven table
 - `table_index()` for label selection and uncertainty formatting
-
