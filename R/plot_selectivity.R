@@ -38,10 +38,7 @@ plot_selectivity <- function(
   ...
 ) {
   
-  # LEFT OFF: move to length_bins option next
-  
   #TODO: update alt text/caption
-  #TODO: test with length_bins
   label_name <- "selectivity"
   
   # Extract selectivity
@@ -60,14 +57,14 @@ plot_selectivity <- function(
   processed_data <- process_data(
     dat = selectivity,
     group = "year",
-   facet = c(group, facet)
+    facet = c(group, facet)
   )
   
   prepared_data <- processed_data[[1]]
   group <- processed_data[[2]]
   facet <- processed_data[[3]]
   
-  # replace group with first element of facet if 
+  # replace group with first element of facet if
   # group = age or length_bins
   if (any(grepl("age|length_bins", facet))){
     facet <- facet[!grepl("age|length_bins", facet)]
@@ -84,20 +81,27 @@ plot_selectivity <- function(
   }
   
   # Check if there is >1 label
-  if (length(prepared_data$label) > 1) {
+  if (length(unique(prepared_data$label)) > 1) {
     prepared_data <- prepared_data |>
       # always select the first label if TRUE
       dplyr::filter(label == unique(label)[1])
   }
-
+  
   # Plot
   # TODO: left off here. Need to show fleets, models, other groupings
   age_type <- grepl("age", unique(prepared_data$label))
   
+  if (age_type){
+    prepared_data <- prepared_data |>
+      dplyr::mutate(age = as.numeric(age))
+  } else {
+    prepared_data <- prepared_data |>
+      dplyr::mutate(length_bins = as.numeric(length_bins))
+  }
+  
   final <- plot_timeseries(
     dat = prepared_data |>
-      dplyr::mutate(age = as.numeric(age),
-                    group_var = as.character(group_var)),
+      dplyr::mutate(group_var = as.character(group_var)),
     x = ifelse(age_type,
                "age",
                "length_bins"),
@@ -106,10 +110,10 @@ plot_selectivity <- function(
     geom = "line",
     xlab = ifelse(age_type,
                   "Age",
-                  "Year"),
+                  "Length Bin"),
     ylab = ifelse(age_type,
                   "Selectivity at Age",
-                  "Length"),
+                  "Selectivity"),
     group = group,
     facet = facet#,
     #...

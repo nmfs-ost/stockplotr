@@ -128,8 +128,10 @@ plot_timeseries <- function(
             color = {
               if (length(unique(.data[["model"]])) > 1) {
                 interaction(model, group_var)
-              } else {
+              } else if (length(unique(.data[["group_var"]])) > 1) {
                 group_var
+              } else {
+                .data[[group]]
               }
             }
           ),
