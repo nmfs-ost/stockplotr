@@ -113,10 +113,4 @@ When adding a new `plot_x` or `table_x` function, follow this order:
 7. Export key quantities and the `.rda` package if the function supports accessibility output.
 8. Document the workflow in the function's roxygen file and add an example.
 
-# Existing functions to use as models
-
-- `plot_biomass()` and `plot_spawning_biomass()` for reference-line time series
-- `plot_index()` for observed vs predicted comparisons
-- `plot_catch_comp()` for age-composition plotting
-- `table_landings()` for a standard data-driven table
-- `table_index()` for label selection and uncertainty formatting
+If a new figure or table does not fit an existing category, explain the new category and we can try to build the pipeline to incorporate it into the existing workflow.

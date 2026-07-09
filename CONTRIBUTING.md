@@ -70,3 +70,26 @@ If possible, please submit a reproducible example ([reprex](https://reprex.tidyv
 ## Contributing questions
 
 Have a question? Ask it in our [Discussions page](https://github.com/nmfs-ost/stockplotr/discussions). You can categorize it under General, Ideas, Q&A, and more.
+
+## Workflow guide for new figure/table functions
+
+When adding a new `plot_x` or `table_x` function, follow this order:
+
+1. Identify the source label(s) in the standardized output.
+2. Filter with `filter_data()`.
+3. Process with `process_data()` or `process_table()`.
+4. Build the figure or table with the helper that matches the display type.
+5. Add domain-specific layers or table formatting.
+6. Apply the package theme.
+7. Export key quantities and the `.rda` package if the function supports accessibility output.
+8. Document the workflow in the function's roxygen file and add an example.
+
+If a new figure or table does not fit an existing category, explain the new category and we can try to build the pipeline to incorporate it into the existing workflow.
+
+### Existing functions to use as models
+
+- `plot_biomass()` and `plot_spawning_biomass()` for reference-line time series
+- `plot_index()` for observed vs predicted comparisons
+- `plot_catch_comp()` for age-composition plotting
+- `table_landings()` for a standard data-driven table
+- `table_index()` for label selection and uncertainty formatting
