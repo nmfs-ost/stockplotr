@@ -23,6 +23,8 @@ navbar:
       menu:
       - text: FAQs
         href: articles/faqs.html
+      - text: Figure and Table Workflow Guide
+        href: articles/figure-table-workflow.html
       - text: How captions and alternative text are generated
         href: articles/how-caps-alttext-are-made.html
       - text: Standardizing Assessment Model Output
