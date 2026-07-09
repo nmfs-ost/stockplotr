@@ -152,10 +152,12 @@ save_all_plots <- function(
   biomass_at_age_unit_label = "mt",
   # imported from plot_index
   index_unit_label = "",
+  # imported from table_afsc_tier- add potential unique arguments after dev
   # imported from table_bnc
   biomass_unit_label = "mt",
   catch_unit_label = "mt",
   catch_scale_amount = 1
+  # imported from table_harvest_projection- add potential unique arguments after dev
   # imported from table_index- zero unique arguments
   # imported from table_landings- zero unique arguments
 ) {
@@ -497,5 +499,10 @@ save_all_plots <- function(
     }
   )
 
+  # uncomment when finished
+  #
+  # undeveloped tables - add arguments after more development
+  # table_afsc_tier() #|> suppressWarnings() |> invisible()
+  # table_harvest_projection() #|> suppressWarnings() |> invisible()
   cli::cli_h1("Finished export of figures and tables.")
 }
