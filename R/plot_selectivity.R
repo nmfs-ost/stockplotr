@@ -125,28 +125,52 @@ final
   # Make RDA
   if (make_rda) {
     # Obtain relevant key quantities for captions/alt text
-    selectivity.units <- as.character(unit_label)
-    selectivity.start.year <- min(selectivity$year)
-    selectivity.end.year <- max(selectivity$year)
-    selectivity.min <- min(selectivity$predicted_selectivity) |> round(digits = 3)
-    selectivity.max <- max(selectivity$predicted_selectivity) |> round(digits = 3)
+    selectivity.type.cap <- ifelse(age_type,
+                              "Age",
+                              "Length")
+    
+    selectivity.type.low <- tolower(selectivity.type.cap)
+    
+    selectivity.x <- ifelse(age_type,
+                                "years",
+                                "cm")
+    
+    selectivity.start.year <- min(prepared_data$year)
+    
+    selectivity.end.year <- max(prepared_data$year)
+    
+    selectivity.x.min <- ifelse(age_type,
+                                min(prepared_data$age),
+                                min(prepared_data$length_bins)) |>
+      as.numeric() |>
+      round(digits = 3)
+    
+    selectivity.x.max <- ifelse(age_type,
+                                max(prepared_data$age),
+                                max(prepared_data$length_bins)) |>
+      as.numeric() |>
+      round(digits = 3)
 
     # calculate & export key quantities
     export_kqs(
-      selectivity.units,
+      selectivity.type.cap,
+      selectivity.type.low,
+      selectivity.x.min,
+      selectivity.x.max,
+      selectivity.x,
       selectivity.start.year,
-      selectivity.end.year,
-      selectivity.min,
-      selectivity.max
+      selectivity.end.year
     )
 
     # Add key quantities to captions/alt text
     insert_kqs(
-      selectivity.units,
+      selectivity.type.cap,
+      selectivity.type.low,
+      selectivity.x.min,
+      selectivity.x.max,
+      selectivity.x,
       selectivity.start.year,
-      selectivity.end.year,
-      selectivity.min,
-      selectivity.max
+      selectivity.end.year
     )
 
 
