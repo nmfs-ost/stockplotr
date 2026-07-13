@@ -249,7 +249,7 @@ convert_output <- function(
       "PARAMETERS"
     )
     info <- c(
-      "LIKELIHOOD",
+      # "LIKELIHOOD",
       "DEFINITIONS"
     )
     aa.al <- c(
@@ -301,7 +301,7 @@ convert_output <- function(
     for (i in seq_along(param_names)) {
       # Processing data frame
       parm_sel <- param_names[i]
-      if (parm_sel %in% c(std, std2, cha, rand, aa.al)) {
+      if (parm_sel %in% c(std, std2, cha, rand, info, aa.al)) {
         cli::cli_alert(glue::glue("Processing {parm_sel}"))
         extract <- SS3_extract_df(dat, parm_sel)
         if (!is.data.frame(extract)) {
@@ -1028,43 +1028,47 @@ convert_output <- function(
             #   next
             #### info ####
           } else if (parm_sel %in% info) {
-            if (parm_sel == "LIKELIHOOD") {
-              df1 <- extract[-1, ]
-              # make row the header names for first df
-              colnames(df1) <- df1[1, ]
-              # Remove first row containing column names
-              df2 <- df1[-1, ] |>
-                dplyr::rename(label = Component) |>
-                tidyr::pivot_longer(
-                  cols = -label,
-                  names_to = "type",
-                  values_to = "likelihood"
-                )
-              # match to out_new
-              df2[setdiff(tolower(names(out_new)), tolower(names(df2)))] <- NA
-              # Add to out list
-              out_list[[parm_sel]] <- df2
-            } else if (parm_sel == "DEFINITIONS") {
+            # if (parm_sel == "LIKELIHOOD") {
+            #   df1 <- extract[-1, ]
+            #   # make row the header names for first df
+            #   colnames(df1) <- df1[1, ]
+            #   # Remove first row containing column names
+            #   df2 <- df1[-1, ] |>
+            #     dplyr::rename(label = Component) |>
+            #     tidyr::pivot_longer(
+            #       cols = -label,
+            #       names_to = "type",
+            #       values_to = "likelihood"
+            #     )
+            #   # match to out_new
+            #   df2[setdiff(tolower(names(out_new)), tolower(names(df2)))] <- NA
+            #   # Add to out list
+            #   out_list[[parm_sel]] <- df2
+            # } else 
+            if (parm_sel == "DEFINITIONS") {
+              # Extract start year and end year for iding era
+              start_year <- as.numeric(extract[which(apply(extract, 1, function(row) any(row == "Start_year:"))), 2])
+              end_year <- as.numeric(extract[which(apply(extract, 1, function(row) any(row == "End_year:"))), 2])
               # Pull out only the first two columns and remove first row keyword
-              df1 <- extract[-1, 1:2]
-              colnames(df1) <- c("label", "estimate")
-              # find where rescale is located
-              col_rescale <- grep("rescaled_to_sum_to:", extract)
-              rescaled_months <- extract[4, col_rescale + 1] |> dplyr::pull()
-              # remove : from all labels and tolower and add in rescaled months
-              df2 <- df1 |>
-                rbind(data.frame(
-                  label = "rescaled_months",
-                  estimate = rescaled_months
-                )) |>
-                dplyr::mutate(
-                  label = tolower(stringr::str_remove_all(label, ":")),
-                  module_name = parm_sel
-                )
-              # match to out_new
-              df2[setdiff(tolower(names(out_new)), tolower(names(df2)))] <- NA
-              # Add to out list
-              out_list[[parm_sel]] <- df2
+              # df1 <- extract[-1, 1:2]
+              # colnames(df1) <- c("label", "estimate")
+              # # find where rescale is located
+              # col_rescale <- grep("rescaled_to_sum_to:", extract)
+              # rescaled_months <- extract[4, col_rescale + 1] |> dplyr::pull()
+              # # remove : from all labels and tolower and add in rescaled months
+              # df2 <- df1 |>
+              #   rbind(data.frame(
+              #     label = "rescaled_months",
+              #     estimate = rescaled_months
+              #   )) |>
+              #   dplyr::mutate(
+              #     label = tolower(stringr::str_remove_all(label, ":")),
+              #     module_name = parm_sel
+              #   )
+              # # match to out_new
+              # df2[setdiff(tolower(names(out_new)), tolower(names(df2)))] <- NA
+              # # Add to out list
+              # out_list[[parm_sel]] <- df2
             } else {
               miss_parms <- c(miss_parms, parm_sel)
               next
@@ -1250,11 +1254,20 @@ convert_output <- function(
       )
     }
     out_new <- Reduce(rbind, out_list)
-    out_new <- out_new |>
-      dplyr::mutate(fleet = dplyr::case_when(
-        any(unique(out_new$fleet) %in% fleet_names) ~ fleet,
-        TRUE ~ fleet_names[fleet]
-      ))
+    out_new2 <- out_new |>
+      dplyr::mutate(
+        fleet = dplyr::case_when(
+          any(unique(out_new$fleet) %in% fleet_names) ~ fleet,
+          TRUE ~ fleet_names[fleet]
+        ),
+        era = dplyr::case_when(
+          !is.na(era) ~ era,
+          year < start_year ~ "init",
+          year >= start_year & year <= end_year ~ "time",
+          year > end_year ~ "fore",
+        TRUE ~ NA_character_
+        )
+      )
   } else if (model %in% c("bam", "BAM")) {
     #### BAM ####
     # Extract values from BAM output - model file after following ADMB2R
