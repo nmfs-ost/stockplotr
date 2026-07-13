@@ -36,7 +36,7 @@ table_projections <- function(
     dat = dat,
     label_name = "spawning_biomass$",
     geom = "line",
-    era = "fore",
+    era = NULL,
     module = module,
     scale_amount = 1,
     interactive = interactive
