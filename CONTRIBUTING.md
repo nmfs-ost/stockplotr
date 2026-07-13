@@ -164,4 +164,4 @@ Once your figure or table is developed (🎉!), please complete these tasks:
 1. Test it with different kinds of model outputs: SS3, BAM, Rceattle, r4ss, etc.
 2. Add the figure to `save_all_plots()`. Depending on the plot, you may need to add a new argument to the Roxygen.
 3. Update the `save_all_plots()` test in `tests/testthat/test-save_all_plots.R`.
-4. Create unit tests for your figure or table function in `tests/testthat/`. This will entail creating a new test file (e.g., `test-plot_new_function.R`) and adding unit tests. Most/all can be copied from an existing test file and modified for your new function.
+4. Create unit tests for your figure or table function in `tests/testthat/`. This will entail creating a new test file (e.g., `test-plot_new_function.R`) and adding unit tests. Most/all can be copied from an existing test file and modified for your new function. If you are unfamiliar with the {testthat} framework, please leave a comment on your PR and let us know. We are happy to work with you to develop a unit test.
