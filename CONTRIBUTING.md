@@ -104,7 +104,7 @@ The figure functions follow the same basic sequence:
 3. **Choose the plot builder.**  
    - `plot_timeseries()` for standard time-series figures
    - `plot_obsvpred()` for observed-vs-predicted index figures
-   - `plot_aa()` for age-composition bubble plots
+   - `plot_aa()` for age- or length-composition bubble plots
    - `plot_error()` for point/error summaries
 
 4. **Add figure-specific layers.**  
