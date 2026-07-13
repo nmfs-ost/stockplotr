@@ -47,10 +47,14 @@ table_projections <- function(
   # TODO: edit process_table() to avoid losing year when summarizing; right now, it's only examining index vars
   # TODO: add 'method' option for 'distinct'
   # TODO: update process_table() so it can handle when group = "none"
-  test <- process_table(prepared_data1,
-                        group = NULL#,
-                        #method = "avg"
-                        )
+  test <- process_table(
+    prepared_data1,
+    group = NULL
+  )
+  
+  data <- test[[1]][[1]]
+  group <- test[[2]]
+  facet <- test[[3]]
   
   # this is what our processing should achieve
   # proj_raw <- dat |> dplyr::filter(module_name == "projections")
