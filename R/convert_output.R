@@ -355,6 +355,7 @@ convert_output <- function(
       "StdDev", "sd", "std", "stddev",
       "se", "SE",
       "cv", "CV"
+      # "dev" # adding but unkwn what kind
     )
     
     miss_parms <- c()
