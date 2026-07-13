@@ -83,7 +83,7 @@ If a new figure or table does not fit an existing category, please let us know. 
 Most functions begin with standardized output from `convert_output()`.
 That data is then narrowed to one label or related labels, reshaped if needed, and finally rendered as a plot or table.
 
-The recurring helpers are:
+The recurring helper functions are executed in the following order:
 
 - `filter_data()` to isolate the target label(s) and apply module, era, grouping, faceting, and scaling choices.
 - `process_data()` to detect indexing variables, set `group_var`, and decide whether additional variables should become grouping or facetting variables.
@@ -95,29 +95,32 @@ The recurring helpers are:
 The figure functions follow the same basic sequence:
 
 1. **Filter the data.**  
-   Pick the relevant label with `filter_data()`.  
-   This is where the data used as the basis for each figure is filtered from its original state. Variables such as `year`, `age`, `fleet`, `area`, `sex`, a specific module, or a specific era are used to remove unnecessary data.
+   Pick the relevant label (a regular expression) with `filter_data()`.  
+   This is where the data used as the basis for each figure is filtered from its original state. Variables such as `year`, `age`, `fleet`, `area`, `sex`, a specific module, or a specific era are used to remove unnecessary data. Confidence intervals are calculated in this step.
 
 2. **Process the filtered data.**  
-   Run `process_data()` to identify the index structure and to decide how the data should be grouped or faceted.
+   Run `process_data()` to identify the index structure and to decide how the data should be grouped or faceted. In this step, the data gets narrowed down to the indexed data columns.
 
 3. **Choose the plot builder.**  
-   - `plot_timeseries()` for standard time-series figures
+   - `plot_timeseries()` for standard time-series figures. As the name suggests, these plots are meant to show a variable over time. However, these plots can be adapted to show other variables on the x and y axes.
    - `plot_obsvpred()` for observed-vs-predicted index figures
    - `plot_aa()` for age- or length-composition bubble plots
    - `plot_error()` for point/error summaries
 
 4. **Add figure-specific layers.**  
    Examples from the existing functions include:
-   - `reference_line()` and `calculate_reference_point()` for biomass and fishing mortality plots
+   - `reference_line()` and `calculate_reference_point()`
    - `average_age_line()` for abundance/biomass-at-age plots
    - `cohort_line()` for catch-composition plots
    - extra overlays for expected recruitment or stock-recruit curves
 
 5. **Apply the final theme.**  
-   Most figures end with `theme_noaa()`.
+  Add NOAA theming to figures with `theme_noaa()`.
+  
+6. **Return the figure**.
+  The figure is shown in the Plots pane and returned as a `ggplot` object, even if it's not exported.
 
-6. **Add capability to export the figure and associated materials.**  
+7. **Add capability to export the figure and associated materials.**  
    If `make_rda = TRUE`, the figure function usually:
    - calculates key quantities,
    - writes them with `export_kqs()`,
@@ -147,15 +150,18 @@ The data-driven table functions use a shorter version of the same workflow:
 4. **Merge estimates and uncertainty.**  
    `merge_error()` combines the value and error columns into a single column where needed.
 
-5. **Render the table.**  
-   - `table_index()` and `table_landings()` convert the prepared data to `gt` tables and apply `add_theme()`
+5. **Render the final table.**  
+   - The prepared data are converted to a `gt` table. `add_theme()` applies formatting to the table.
+   
+6. **Return the table**.
+  The table is returned as a `gt` object, even if it's not exported.
 
-6. **Add capability to export the figure and associated materials.**  
+7. **Add capability to export the table and associated materials.**  
    As with plots, `make_rda = TRUE` triggers `export_kqs()`, `insert_kqs()`, and `create_rda()`.
 
 #### Table families
 
-All tables are in the same family.
+Tables are unique and do not have the same system of families as the figures.
 
 ### Last steps
 
