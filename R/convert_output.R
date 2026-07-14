@@ -477,6 +477,14 @@ convert_output <- function(
                 df3 <- dplyr::mutate(df3, sex = NA)
               }
               
+              # Identify which errors were identified in a column & rename
+              err_col_id <- colnames(df3)[grepl(paste0(errors, "$", collapse = "|"), colnames(df3))]
+              # rename error column
+              if (length(err_col_id) > 0) {
+                uncert_name <- stringr::str_extract(err_col_id, paste0(errors, collapse = "|"))
+                df3 <- df3 |>
+                  dplyr::rename(!!uncert_name := err_col_id)
+              }
               df4 <- df3 |>
                 tidyr::pivot_longer(
                   !tidyselect::any_of(c(factors, errors)),
@@ -543,7 +551,7 @@ convert_output <- function(
                     }
                 )
               
-              df4a <- df4 |>
+              df4 <- df4 |>
                 dplyr::mutate(
                   label = dplyr::case_when(
                     grepl("?_month_[0-9]_?", label) ~ stringr::str_replace(label, "_?month_\\d?", ""),
@@ -660,12 +668,6 @@ convert_output <- function(
                 )
               colnames(df5) <- tolower(names(df5))
             }
-            # param_df <- df5
-            # if (ncol(out_new) < ncol(df5)){
-            #   warning(paste0("Transformed data frame for ", parm_sel, " has more columns than default."))
-            # } else if (ncol(out_new) > ncol(df5)){
-            #   warning(paste0("Transformed data frame for ", parm_sel, " has less columns than default."))
-            # }
             if ("seas" %in% colnames(df5)) df5 <- dplyr::rename(df5, season = seas)
             
             if ("subseas" %in% colnames(df5)) df5 <- dplyr::rename(df5, subseason = subseas)
