@@ -8,7 +8,6 @@ plot_selectivity(
   dat,
   type = "age",
   unit_label = "cm",
-  era = NULL,
   group = NULL,
   facet = NULL,
   interactive = TRUE,
@@ -32,12 +31,6 @@ Default: "age"
 Options: "age", "length"}
 
 \item{unit_label}{units for length-based selectivity}
-
-\item{era}{A string naming the era of data.
-
-Default: "time"
-
-Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
 \item{group}{A string of a single column that groups the data.
 
@@ -97,7 +90,6 @@ plot_selectivity(
 )
 plot_selectivity(
   dat = stockplotr:::example_data,
-  era = "fore",
   module = "TIME_SERIES",
   make_rda = FALSE
 )
