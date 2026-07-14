@@ -7,7 +7,6 @@
 plot_selectivity(
   dat,
   unit_label = "cm",
-  era = NULL,
   group = NULL,
   facet = NULL,
   interactive = TRUE,
@@ -25,12 +24,6 @@ If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
 \item{unit_label}{units for length-based selectivity}
-
-\item{era}{A string naming the era of data.
-
-Default: "time"
-
-Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
 \item{group}{A string of a single column that groups the data.
 
@@ -90,7 +83,6 @@ plot_selectivity(
 )
 plot_selectivity(
   dat = stockplotr:::example_data,
-  era = "fore",
   module = "TIME_SERIES",
   make_rda = FALSE
 )

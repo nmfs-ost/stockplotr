@@ -24,14 +24,12 @@
 #' )
 #' plot_selectivity(
 #'   dat = stockplotr:::example_data,
-#'   era = "fore",
 #'   module = "TIME_SERIES",
 #'   make_rda = FALSE
 #' )
 plot_selectivity <- function(
   dat,
   unit_label = "cm",
-  era = NULL,
   group = NULL,
   facet = NULL,
   interactive = TRUE,
@@ -48,7 +46,7 @@ plot_selectivity <- function(
     dat = dat,
     label_name = label_name,
     geom = "line",
-    era = era,
+    era = NULL,
     group = group,
     facet = facet,
     interactive = interactive,
