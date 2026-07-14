@@ -261,3 +261,6 @@ Dynamic_Bzero,Dynamic_Bzero,dynamic_biomass_zero
 ,sprtarg,spr_target
 ,btarg,biomass_target
 ,SBzero,spawning_biomass_zero
+,seas_dur,season_duration
+,annual_f,fishing_mortality
+,annual_m,natural_mortality

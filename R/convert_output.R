@@ -422,6 +422,15 @@ convert_output <- function(
               # from 4rss output
               df3 <- extract
               colnames(df3) <- tolower(colnames(df3))
+              # ID any column names that are fleets (exploitation module in r4ss)
+              if (any(tolower(fleet_names) %in% colnames(df3))) {
+                for (i in intersect(tolower(fleet_names), colnames(df3))) {
+                  col_name <- glue::glue("exploitation_{i}")
+                  df3 <- df3 |>
+                    dplyr::rename(!!col_name := i)
+                }
+                
+              }
             }
             
             # Remove any leftover NA columns if still present
@@ -478,6 +487,7 @@ convert_output <- function(
                   fleet = if ("fleet" %notin% colnames(df3)) {
                     dplyr::case_when(
                       # "fleet" %in% colnames(.data) ~ fleet,
+                      grepl(paste0(tolower(fleet_names), collapse = "|"), label) ~ stringr::str_extract(label, paste(tolower(fleet_names), collapse = "|")),
                       grepl(":_[0-9]$", label) ~ stringr::str_extract(label, "(?<=_)[0-9]+"),
                       grepl(":_[0-9][0-9]$", label) ~ stringr::str_extract(label, "(?<=_)[0-9][0-9]+"),
                       TRUE ~ NA
@@ -533,11 +543,12 @@ convert_output <- function(
                     }
                 )
               
-              df4 <- df4 |>
+              df4a <- df4 |>
                 dplyr::mutate(
                   label = dplyr::case_when(
                     grepl("?_month_[0-9]_?", label) ~ stringr::str_replace(label, "_?month_\\d?", ""),
                     grepl("?_area_[0-9]_?", label) ~ stringr::str_replace(label, "_?area_\\d?", ""),
+                    grepl(paste0(tolower(fleet_names), collapse = "|"), label) ~ stringr::str_remove(label, paste0("_", tolower(fleet_names), collapse = "|")),
                     TRUE ~ stringr::str_extract(label, "^.*?(?=_\\d|_gp|_fem|_mal|_sx|:|$)")
                   )
                 )
