@@ -355,7 +355,7 @@ convert_output <- function(
       "StdDev", "sd", "std", "stddev",
       "se", "SE",
       "cv", "CV"
-      # "dev" # adding but unkwn what kind
+      # "dev" # not included bc this is dev in model, not uncertainty of the value
     )
     
     miss_parms <- c()
@@ -552,17 +552,20 @@ convert_output <- function(
               err_names <- unique(df4$label)[grepl(paste(paste0("(^|[_.])", errors, "($|[_.])"), collapse = "|"), unique(df4$label)) & !unique(df4$label) %in% errors]
               if (any(grepl("sel", err_names))) {
                 df4 <- df4
-              } else if ("raw_dev" %in% colnames(df4)) {
-                # remove raw_dev bc dev already exists
-                df4 <- df4 |>
-                  dplyr::select(-raw_dev)
-              } else if (length(intersect(errors, colnames(df4))) == 1 && "raw_dev" %notin% colnames(df4)) {
+              } else if (length(intersect(errors, colnames(df4))) == 1 && "raw_dev" %notin% unique(df4$label)) {
                 df4 <- df4[-grep(paste(errors, "_", collapse = "|", sep = ""), df4$label), ]
               } else if (parm_sel == "MGparm_By_Year_after_adjustments") { # this is too specific
                 df4 <- df4
                 cli::cli_alert_info("Error values are present, but are unique to the data frame and not to a selected parameter.")
               } else {
-                if ("raw_dev" %in% colnames(df4)) df4 <- df4 |> dplyr::select(-raw_dev)
+                # remove dev and raw_dev from output -- no place for it atm
+                if ("raw_dev" %in% unique(df4$label)) {
+                  df4 <- df4 |> dplyr::filter(label != "raw_dev")
+                  err_names <- err_names[-grep("raw_dev", err_names)]
+                }
+                if ("dev" %in% unique(df4$label)) {
+                  df4 <- df4 |> dplyr::filter(label != "dev")
+                }
                 df4 <- df4 |>
                   tidyr::pivot_wider(
                     names_from = label,
