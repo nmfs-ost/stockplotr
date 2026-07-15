@@ -116,19 +116,26 @@ plot_fishing_mortality <- function(
       dplyr::filter(year == max(year)) |>
       dplyr::pull(year) |>
       unique()
+    
+    F.target <- dat |>
+      dplyr::filter(grepl('f_target', label) | grepl('f_msy', label) | (grepl('fishing_mortality_msy', label) & is.na(year))) |>
+      dplyr::pull(estimate) |>
+      round(digits = 3)
 
     export_kqs(
       F.ref.pt,
       F.start.year,
       F.end.year,
-      F.terminal.year
+      F.terminal.year,
+      F.target
     )
 
     insert_kqs(
       F.ref.pt,
       F.start.year,
       F.end.year,
-      F.terminal.year
+      F.terminal.year,
+      F.target
     )
 
     create_rda(
