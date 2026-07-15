@@ -84,7 +84,10 @@ plot_biomass <- function(
     cli::cli_alert_warning("Scale amount is not applicable when relative = TRUE. Resetting scale_amount to 1.")
     scale_amount <- 1
   }
-
+  
+  orig_group <- group
+  orig_facet <- facet
+  
   # Filter data for biomass
   # TODO: determine method to ID that first point in the timeseries is actually Bunfished ref pt
   prepared_data <- filter_data(
@@ -201,19 +204,35 @@ plot_biomass <- function(
     B.units <- as.character(unit_label)
     B.start.year <- min(prepared_data$year) |> round(digits = 3)
     B.end.year <- max(prepared_data$year) |> round(digits = 3)
-
+    B.terminal.year <- filter_data(
+      dat = dat,
+      label_name = ifelse(relative, "biomass_biomass_unfished|biomass_ratio", "^biomass$"), # what exactly is biomass_ratio?
+      geom = geom,
+      group = orig_group,
+      facet = orig_facet,
+      era = "time",
+      module = "TIME_SERIES",
+      scale_amount = scale_amount,
+      interactive = interactive
+    ) |>
+      dplyr::filter(year == max(year)) |>
+      dplyr::pull(year) |>
+      unique()
+    
     export_kqs(
       B.ref.pt,
       B.units,
       B.start.year,
-      B.end.year
+      B.end.year,
+      B.terminal.year
     )
 
     insert_kqs(
       B.ref.pt,
       B.units,
       B.start.year,
-      B.end.year
+      B.end.year,
+      B.terminal.year
     )
 
     create_rda(

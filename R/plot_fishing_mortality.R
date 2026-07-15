@@ -41,6 +41,8 @@ plot_fishing_mortality <- function(
   interactive = TRUE,
   ...
 ) {
+  orig_group <- group
+  orig_facet <- facet
   # Filter out data for fishing mortality
   prepared_data <- filter_data(
     dat = dat,
@@ -85,8 +87,14 @@ plot_fishing_mortality <- function(
 
   ### Make RDA ----
   if (make_rda) {
-    F.min <- min(prepared_data$estimate) |> round(digits = 3)
-    F.max <- max(prepared_data$estimate) |> round(digits = 3)
+    F.min <- prepared_data$estimate |>
+      na.omit() |>
+      min() |>
+      round(digits = 3)
+    F.max <- prepared_data$estimate |>
+      na.omit() |>
+      max() |>
+      round(digits = 3)
 
     export_kqs(F.min, F.max)
     insert_kqs(F.min, F.max)
@@ -94,17 +102,33 @@ plot_fishing_mortality <- function(
     F.ref.pt <- as.character(ref_line)
     F.start.year <- min(prepared_data$year)
     F.end.year <- max(prepared_data$year)
+    F.terminal.year <- filter_data(
+      dat = dat,
+      label_name = "^fishing_mortality$",
+      geom = geom,
+      era = "time",
+      group = orig_group,
+      facet = orig_facet,
+      module = "TIME_SERIES",
+      scale_amount = 1,
+      interactive = interactive
+    ) |>
+      dplyr::filter(year == max(year)) |>
+      dplyr::pull(year) |>
+      unique()
 
     export_kqs(
       F.ref.pt,
       F.start.year,
-      F.end.year
+      F.end.year,
+      F.terminal.year
     )
 
     insert_kqs(
       F.ref.pt,
       F.start.year,
-      F.end.year
+      F.end.year,
+      F.terminal.year
     )
 
     create_rda(
