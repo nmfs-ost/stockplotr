@@ -25,7 +25,7 @@ Default: NULL
 Options: Including, but not limited to: "year", "area", "fleet", "sex", "none",
 NULL}
 
-\item{unit_label}{String. Units for abundance
+\item{unit_label}{String. Abundance units
 
 Default: "fish"}
 
@@ -50,7 +50,7 @@ the .rda will be exported to the folder indicated in the argument "rda_dir".
 
 Default: `FALSE`}
 
-\item{figures_dir}{Path. The location of the folder containing the generated .rda files
+\item{figures_dir}{Path. Folder containing the generated .rda files
 ("rda_files") that will be created if the argument `make_rda` = TRUE.
 
 Default: the working directory (`getwd()`)}

@@ -35,7 +35,7 @@ returned from \link[stockplotr]{convert_output}.
 If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{recruitment_unit_label}{String. Units for recruitment
+\item{recruitment_unit_label}{String. Recruitment units
 
 Default: "mt"}
 
@@ -83,53 +83,53 @@ biomass quantities shown on the y axis. See `recruitment_scale_amount`.
 
 Default: 1}
 
-\item{landings_unit_label}{String. Units for landings
+\item{landings_unit_label}{String. Landings units
 
 Default: "mt"}
 
-\item{spawning_biomass_label}{String. Units for spawning biomass
+\item{spawning_biomass_label}{String. Spawning biomass units
 
 Default: "mt"}
 
-\item{spawning_biomass_scale_amount}{Number. A number describing how much to scale down the
+\item{spawning_biomass_scale_amount}{Number.  A number describing how much to scale down the
 spawning biomass quantities shown on the y axis. See `recruitment_scale_amount`.
 
 Default: 1}
 
-\item{ref_line_sb}{String. Identical definition as `ref_line`, but this argument is
+\item{ref_line_sb}{String. Same as `ref_line`, but this argument is
 applied to plot_spawning_biomass.
 
 Default: "msy"
 
 Options: Including, but not limited to: "target", "MSY", "unfished"}
 
-\item{abundance_at_age_scale_amount}{Number. A number describing how much to scale down the
+\item{abundance_at_age_scale_amount}{Number.  A number describing how much to scale down the
 abundance quantities shown via bubble size. See `recruitment_scale_amount`.
 
 Default: 1}
 
-\item{abundance_at_age_unit_label}{String. Abbreviated units for abundance at age
+\item{abundance_at_age_unit_label}{String. Abbreviated abundance at age units
 
 Default: "fish"}
 
-\item{biomass_at_age_scale_amount}{Number. A number describing how much to scale down the
+\item{biomass_at_age_scale_amount}{Number.  A number describing how much to scale down the
 biomass quantities shown via bubble size. See `recruitment_scale_amount`.
 
 Default: 1}
 
-\item{biomass_at_age_unit_label}{String. Abbreviated units for biomass at age
+\item{biomass_at_age_unit_label}{String. Abbreviated biomass at age units
 
 Default: "mt"}
 
-\item{index_unit_label}{String. Units for index of abundance/CPUE
+\item{index_unit_label}{String. Index of abundance/CPUE units
 
 Default: ""}
 
-\item{biomass_unit_label}{String. Abbreviated units for biomass
+\item{biomass_unit_label}{String. Abbreviated biomass units
 
 Default: "mt"}
 
-\item{catch_unit_label}{String. Abbreviated units for catch
+\item{catch_unit_label}{String. Abbreviated catch units
 
 Default: "mt"}
 

@@ -24,7 +24,7 @@ returned from \link[stockplotr]{convert_output}.
 If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{unit_label}{String. Units for index of abundance/CPUE
+\item{unit_label}{String. Index of abundance/CPUE units
 
 Default: ""}
 

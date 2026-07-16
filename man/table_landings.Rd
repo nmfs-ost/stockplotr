@@ -26,7 +26,7 @@ returned from \link[stockplotr]{convert_output}.
 If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{unit_label}{String. Abbreviated units of landings
+\item{unit_label}{String. Abbreviated landings units
 
 Default: "mt"}
 

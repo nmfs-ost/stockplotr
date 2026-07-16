@@ -19,8 +19,7 @@ Default: NULL
 
 Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
-\item{facet}{Character vector. Faceting variable(s) of the
-variable(s) of the data.
+\item{facet}{Character vector. Faceting variable(s) of the data.
 
 Default: NULL}
 
@@ -39,12 +38,12 @@ Options: "sum" or "mean"}
 }
 \value{
 List of 3 objects:
-\item{data}{Data frame. A data frame of the processed data ready for plotting.}
-\item{group}{String. Grouping variable of the data.
+\item{data}{A data frame of the processed data ready for plotting.}
+\item{group}{Grouping variable of the data.
 If NULL, no grouping variable is identified. If not NULL, the function
 will verify that the data is indexed by this variables, otherwise it will
 overwrite it to a different, valid indexed variable or NULL.}
-\item{facet}{Character vector. Faceting variable(s) of the
+\item{facet}{Faceting variable(s) identifying the
 variable(s) of the data. If NULL, no faceting variable is identified. Any
 identified indexed variables found in this function will be added to facet.}
 }

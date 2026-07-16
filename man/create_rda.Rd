@@ -24,7 +24,7 @@ create_rda(
 
 \item{fig_or_table}{String. Indicates whether the object is a "table" or "figure"}
 
-\item{dat}{Data frame. Containing data which will fill in captions and
+\item{dat}{Data frame. Data which will fill in captions and
 alternative text for the object}
 
 \item{dir}{Path. Directory to where the rda will be saved

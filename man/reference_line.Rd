@@ -11,7 +11,7 @@ reference_line(plot, dat, label_name, reference, scale_amount = 1, lbs = FALSE)
 
 \item{dat}{Data frame. Standard data frame where reference point should be extracted}
 
-\item{label_name}{String of the name of the quantity that users want to
+\item{label_name}{String. Name of the quantity that users want to
 extract the reference point from}
 
 \item{reference}{String of the reference point

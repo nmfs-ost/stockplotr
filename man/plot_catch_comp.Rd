@@ -34,7 +34,7 @@ Default: "time"
 
 Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
-\item{unit_label}{String. Indicate the name of the units of catch as to label the axis
+\item{unit_label}{String. Units of catch used to label the axis
 
 Default: "mt"}
 
@@ -71,7 +71,7 @@ the .rda will be exported to the folder indicated in the argument "rda_dir".
 
 Default: `FALSE`}
 
-\item{figures_dir}{Path. The location of the folder containing the generated .rda files
+\item{figures_dir}{Path. Folder containing the generated .rda files
 ("rda_files") that will be created if the argument `make_rda` = TRUE.
 
 Default: the working directory (`getwd()`)}

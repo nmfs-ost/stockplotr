@@ -63,7 +63,7 @@ Default: "time"
 
 Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
-\item{unit_label}{String. Units for biomass
+\item{unit_label}{String. Biomass units
 
 Default: "mt"}
 

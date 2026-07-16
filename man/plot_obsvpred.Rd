@@ -59,7 +59,7 @@ Currently can only have one level of grouping.
 Default: NULL
 Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
-\item{facet}{Character vector. Column name or names used for faceting.
+\item{facet}{Character vector. Column name or names used for faceting
 (e.g. "year", "area", etc.)
 
 Default: NULL}
