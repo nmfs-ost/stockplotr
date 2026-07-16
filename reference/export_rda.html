@@ -109,19 +109,19 @@ Typically used after stockplotr::extract_caps_alttext().</p>
 
 
 <dl><dt id="arg-object">object<a class="anchor" aria-label="anchor" href="#arg-object"></a></dt>
-<dd><p>The final figure (ggplot) or table (flextable) object.</p>
+<dd><p>Object. The final figure (ggplot) or table (flextable) object.</p>
 <p>Default: NULL</p></dd>
 
 
 <dt id="arg-caps-alttext">caps_alttext<a class="anchor" aria-label="anchor" href="#arg-caps-alttext"></a></dt>
-<dd><p>The object containing a figure's caption and alternative
+<dd><p>Data frame or list. The object containing a figure's caption and alternative
 text, in a list, or a table's caption, likely generated with
 stockplotr::extract_caps_alttext().</p>
 <p>Default: NULL</p></dd>
 
 
 <dt id="arg-figures-tables-dir">figures_tables_dir<a class="anchor" aria-label="anchor" href="#arg-figures-tables-dir"></a></dt>
-<dd><p>If the user has already created folders containing
+<dd><p>Path. If the user has already created folders containing
 figures and tables ("figures" and "tables"), figures_tables_dir represents
 the location of these folders. Otherwise, these two folders will be created
 automatically, then used to store the exported rda files.</p>
@@ -129,20 +129,20 @@ automatically, then used to store the exported rda files.</p>
 
 
 <dt id="arg-topic-label">topic_label<a class="anchor" aria-label="anchor" href="#arg-topic-label"></a></dt>
-<dd><p>A string that describes a figure or table's label. These
+<dd><p>String. Figure or table label. These
 labels are found in the "label" column of the "captions_alt_text.csv" file
 and are used to link the figure or table with its caption/alt text.</p>
 <p>Default: NULL</p></dd>
 
 
 <dt id="arg-fig-or-table">fig_or_table<a class="anchor" aria-label="anchor" href="#arg-fig-or-table"></a></dt>
-<dd><p>A string describing whether the plot is a figure or table.</p>
+<dd><p>String. Indicates whether the plot is a figure or table.</p>
 <p>Default: NULL</p>
 <p>Options: "figure", "table"</p></dd>
 
 
 <dt id="arg-latex-table">latex_table<a class="anchor" aria-label="anchor" href="#arg-latex-table"></a></dt>
-<dd><p>The object containing a LaTeX-based table.</p>
+<dd><p>Table object. The object containing a LaTeX-based table.</p>
 <p>Default: NULL</p></dd>
 
 </dl></div>

@@ -100,12 +100,12 @@
 
 
 <dl><dt id="arg-dat">dat<a class="anchor" aria-label="anchor" href="#arg-dat"></a></dt>
-<dd><p>Pre-filtered data from <a href="filter_data.html">filter_data</a> following a
+<dd><p>Data frame. Pre-filtered data from <a href="filter_data.html">filter_data</a> following a
 long format data.</p></dd>
 
 
 <dt id="arg-group">group<a class="anchor" aria-label="anchor" href="#arg-group"></a></dt>
-<dd><p>A string identifying the indexing variable of the data.
+<dd><p>String. Indexing variable of the data.
 To remove any groups and summarize data across all factors, set
 group = "none". Setting group = NULL will keep any grouping
 variables identified in the data by the function.</p>
@@ -114,20 +114,19 @@ variables identified in the data by the function.</p>
 
 
 <dt id="arg-facet">facet<a class="anchor" aria-label="anchor" href="#arg-facet"></a></dt>
-<dd><p>A string or vector of strings identifying the faceting
-variable(s) of the data.</p>
+<dd><p>Character vector. Faceting variable(s) of the data.</p>
 <p>Default: NULL</p></dd>
 
 
 <dt id="arg-lbs">lbs<a class="anchor" aria-label="anchor" href="#arg-lbs"></a></dt>
-<dd><p>A logical value indicating whether to convert the y-axis values from
+<dd><p>Logical. TRUE/FALSE; indicate whether to convert the y-axis values from
 kilograms to pounds. The default units match the default in the
 unit_label argument - 'metric tons'.</p>
 <p>Default: `FALSE`</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
-<dd><p>A string describing the method of summarizing data when group
+<dd><p>String. Method for summarizing data when group
 is set to "none".</p>
 <p>Default: "sum"</p>
 <p>Options: "sum" or "mean"</p></dd>
@@ -140,13 +139,13 @@ is set to "none".</p>
 <dd><p>A data frame of the processed data ready for plotting.</p></dd>
 
 <dt>group</dt>
-<dd><p>A string identifying the grouping variable of the data.
+<dd><p>Grouping variable of the data.
 If NULL, no grouping variable is identified. If not NULL, the function
 will verify that the data is indexed by this variables, otherwise it will
 overwrite it to a different, valid indexed variable or NULL.</p></dd>
 
 <dt>facet</dt>
-<dd><p>A string or vector of strings identifying the faceting
+<dd><p>Faceting variable(s) identifying the
 variable(s) of the data. If NULL, no faceting variable is identified. Any
 identified indexed variables found in this function will be added to facet.</p></dd>
 

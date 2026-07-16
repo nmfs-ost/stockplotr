@@ -108,14 +108,14 @@
 
 
 <dl><dt id="arg-dat">dat<a class="anchor" aria-label="anchor" href="#arg-dat"></a></dt>
-<dd><p>A tibble or named list of tibbles (input as `list()`)
+<dd><p>Data frame or list. A tibble or named list of tibbles (input as `list()`)
 returned from <a href="convert_output.html">convert_output</a>.</p>
 <p>If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.</p></dd>
 
 
 <dt id="arg-module">module<a class="anchor" aria-label="anchor" href="#arg-module"></a></dt>
-<dd><p>(Optional) A string indicating the module_name found in `dat`.
+<dd><p>Character vector. (Optional) Module name found in `dat`.
 If selecting &gt;1 module, place them in a vector like c("module1", "module2").</p>
 <p>Default: NULL</p>
 <p>If the interactive and &gt;1 module_name is found, user will select the
@@ -123,25 +123,25 @@ module_name in the console. @seealso [filter_data()]</p></dd>
 
 
 <dt id="arg-era">era<a class="anchor" aria-label="anchor" href="#arg-era"></a></dt>
-<dd><p>A string naming the era of data.</p>
+<dd><p>String. Era of data.</p>
 <p>Default: "time"</p>
 <p>Options: "early", "time", "fore" (forecast), or NULL (all data)</p></dd>
 
 
 <dt id="arg-interactive">interactive<a class="anchor" aria-label="anchor" href="#arg-interactive"></a></dt>
-<dd><p>A logical value indicating if the environment is interactive.</p>
+<dd><p>Logical. TRUE/FALSE; indicate whether the environment is interactive.</p>
 <p>Default: `FALSE`</p></dd>
 
 
 <dt id="arg-make-rda">make_rda<a class="anchor" aria-label="anchor" href="#arg-make-rda"></a></dt>
-<dd><p>A logical value indicating whether to save the object and
+<dd><p>Logical. TRUE/FALSE; indicate whether to save the object and
 make an automated caption and alternative text in the form of an `rda` object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".</p>
 <p>Default: `FALSE`.</p></dd>
 
 
 <dt id="arg-figures-dir">figures_dir<a class="anchor" aria-label="anchor" href="#arg-figures-dir"></a></dt>
-<dd><p>A string indicating a path to the "figures" folder.</p>
+<dd><p>Path. Path to the "figures" folder.</p>
 <p>Default: `getwd()`</p>
 <p>The folder is created within the path if it does not exist.</p></dd>
 
