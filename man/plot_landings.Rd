@@ -48,7 +48,7 @@ Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", 
 
 Default: NULL}
 
-\item{lbs}{Logical. A logical value indicating whether to convert the y-axis values from
+\item{lbs}{Logical. TRUE/FALSE; indicate whether to convert the y-axis values from
 kilograms to pounds. The default units match the default in the
 unit_label argument - 'mt'.
 
@@ -72,11 +72,11 @@ Default: NULL
 If the interactive and >1 module_name is found, user will select the
 module_name in the console. @seealso [filter_data()]}
 
-\item{interactive}{Logical. A logical value indicating if the environment is interactive.
+\item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
 Default: `FALSE`}
 
-\item{make_rda}{Logical. A logical value indicating whether to save the object and
+\item{make_rda}{Logical. TRUE/FALSE; indicate whether to save the object and
 make an automated caption and alternative text in the form of an `rda` object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
 

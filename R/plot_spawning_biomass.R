@@ -37,7 +37,7 @@
 #' @param unit_label String. A string specifying spawning biomass unit.
 #'
 #' Default: "mt"
-#' @param lbs Logical. A logical value indicating whether to convert the y-axis values from
+#' @param lbs Logical. TRUE/FALSE; indicate whether to convert the y-axis values from
 #' kilograms to pounds. The default units match the default in the
 #' unit_label argument - 'mt'.
 #'
@@ -52,11 +52,11 @@
 #' @param scale_amount Number. A number to scale the y-axis values.
 #'
 #' Default: 1
-#' @param relative Logical. A logical value specifying to set y-axis values relative to
+#' @param relative Logical. TRUE/FALSE; specify whether to set y-axis values relative to
 #' the ref_line value.
 #'
 #' Default: `FALSE`
-#' @param make_rda Logical. A logical value indicating whether to save the object and
+#' @param make_rda Logical. TRUE/FALSE; indicate whether to save the object and
 #' make an automated caption and alternative text in the form of an `rda` object. If TRUE,
 #' the rda will be exported to the folder indicated in the argument "figures_dir".
 #'
@@ -66,7 +66,7 @@
 #' Default: `getwd()`
 #'
 #' The folder is created within the path if it does not exist.
-#' @param interactive Logical. A logical value indicating if the environment is interactive.
+#' @param interactive Logical. TRUE/FALSE; indicate whether the environment is interactive.
 #'
 #' Default: `FALSE`
 #' @param ... Dots. Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}

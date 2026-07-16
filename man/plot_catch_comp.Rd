@@ -47,13 +47,13 @@ in the legend label if proportional is set to FALSE.
 
 Default: 1}
 
-\item{proportional}{Logical. Set size of points relative to z when TRUE, point
+\item{proportional}{Logical. TRUE/FALSE; set size of points relative to z when TRUE, point
 size are relative to one another while when set to FALSE, point size
 is relative to z
 
 Default: `TRUE`}
 
-\item{interactive}{Logical. A logical value indicating if the environment is interactive.
+\item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
 Default: `FALSE`}
 

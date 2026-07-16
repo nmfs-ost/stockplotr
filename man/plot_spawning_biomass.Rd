@@ -63,7 +63,7 @@ Default: "time"
 
 Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
-\item{lbs}{Logical. A logical value indicating whether to convert the y-axis values from
+\item{lbs}{Logical. TRUE/FALSE; indicate whether to convert the y-axis values from
 kilograms to pounds. The default units match the default in the
 unit_label argument - 'mt'.
 
@@ -81,12 +81,12 @@ module_name in the console. @seealso [filter_data()]}
 
 Default: 1}
 
-\item{relative}{Logical. A logical value specifying to set y-axis values relative to
+\item{relative}{Logical. TRUE/FALSE; specify whether to set y-axis values relative to
 the ref_line value.
 
 Default: `FALSE`}
 
-\item{make_rda}{Logical. A logical value indicating whether to save the object and
+\item{make_rda}{Logical. TRUE/FALSE; indicate whether to save the object and
 make an automated caption and alternative text in the form of an `rda` object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
 
@@ -98,7 +98,7 @@ Default: `getwd()`
 
 The folder is created within the path if it does not exist.}
 
-\item{interactive}{Logical. A logical value indicating if the environment is interactive.
+\item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
 Default: `FALSE`}
 

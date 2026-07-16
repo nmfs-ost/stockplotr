@@ -7,7 +7,7 @@
 theme_noaa(discrete = TRUE, ...)
 }
 \arguments{
-\item{discrete}{Logical. Variable indicating whether the color or fill aesthetic is discrete.
+\item{discrete}{Logical. TRUE/FALSE; indicate whether the color or fill aesthetic is discrete.
 
 Default: TRUE}
 

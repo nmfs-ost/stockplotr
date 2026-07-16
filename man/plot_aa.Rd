@@ -54,7 +54,7 @@ Default: NULL
 
 Options: Including, but not limited to: "sex", "area", "fleet"}
 
-\item{proportional}{Logical. Set size of points relative to z when TRUE, point
+\item{proportional}{Logical. TRUE/FALSE; set size of points relative to z when TRUE, point
 size are relative to one another while when set to FALSE, point size
 is relative to z
 

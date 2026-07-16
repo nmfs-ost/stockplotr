@@ -61,7 +61,7 @@ Default: NULL}
 
 Default: 1}
 
-\item{interactive}{Logical. A logical value indicating if the environment is interactive.
+\item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
 Default: `FALSE`}
 }

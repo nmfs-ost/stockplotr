@@ -101,7 +101,7 @@
 #'
 #' Default: "mt"
 #'
-#' @param proportional Logical. T/F to scale size of bubble plots
+#' @param proportional Logical. TRUE/FALSE; scale size of bubble plots
 #'
 #' Default: `TRUE`
 #'

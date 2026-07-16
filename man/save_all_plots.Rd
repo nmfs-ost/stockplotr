@@ -46,16 +46,16 @@ recruitment_scale_amount = 100 would scale down a value from 500,000 -->
 
 Default: 1}
 
-\item{relative}{Logical. A logical value specifying to set y-axis values relative to
+\item{relative}{Logical. TRUE/FALSE; specify whether to set y-axis values relative to
 the ref_line value.
 
 Default: `FALSE`}
 
-\item{proportional}{Logical. T/F to scale size of bubble plots
+\item{proportional}{Logical. TRUE/FALSE; scale size of bubble plots
 
 Default: `TRUE`}
 
-\item{interactive}{Logical. A logical value indicating if the environment is interactive.
+\item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
 Default: `FALSE`}
 

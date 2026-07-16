@@ -56,7 +56,7 @@ Default: "Year"}
 
 Default: NULL}
 
-\item{hline}{Logical. Indicate true or false to place a horizontal line at 1
+\item{hline}{Logical. TRUE/FALSE; indicate whether to place a horizontal line at 1
 
 Default: `TRUE`}
 

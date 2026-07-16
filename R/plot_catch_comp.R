@@ -20,7 +20,7 @@
 #'
 #' Options: "early", "time", "fore" (forecast), or NULL (all data)
 #'
-#' @param interactive Logical. A logical value indicating if the environment is interactive.
+#' @param interactive Logical. TRUE/FALSE; indicate whether the environment is interactive.
 #'
 #' Default: `FALSE`
 #'

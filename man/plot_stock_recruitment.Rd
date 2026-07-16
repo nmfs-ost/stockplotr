@@ -31,7 +31,7 @@ Default: "mt"}
 
 Default: "mt"}
 
-\item{interactive}{Logical. Indicate whether the environment the
+\item{interactive}{Logical. TRUE/FALSE; indicate whether the environment the
 plot is being made in is interactive. By default, this
 is set to false. If true, dependent on your data, a
 option menu will pop-up.
@@ -56,7 +56,7 @@ module_name in the console. @seealso [filter_data()]}
 
 Default: 1}
 
-\item{make_rda}{Logical. A logical value indicating whether to save the object and
+\item{make_rda}{Logical. TRUE/FALSE; indicate whether to save the object and
 make an automated caption and alternative text in the form of an `rda` object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
 

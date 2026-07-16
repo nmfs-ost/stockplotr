@@ -9,7 +9,7 @@ add_theme(x, discrete = TRUE)
 \arguments{
 \item{x}{Object. Table or figures object from ggplot, base r plot, gt table, flextable, or kable extra}
 
-\item{discrete}{Logical. TRUE/FALSE indicate if data input is discrete. Specifically applied to plots.
+\item{discrete}{Logical. TRUE/FALSE; indicate if data input is discrete. Specifically applied to plots.
 
 Default: TRUE}
 }

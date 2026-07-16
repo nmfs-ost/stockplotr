@@ -240,7 +240,7 @@ plot_timeseries <- function(
 #' Create plot with error
 #'
 #' @inheritParams plot_timeseries
-#' @param hline Logical. Indicate true or false to place a horizontal line at 1
+#' @param hline Logical. TRUE/FALSE; indicate whether to place a horizontal line at 1
 #'
 #' Default: `TRUE`
 #' @param ... Dots. Inherited arguments from internal functions from ggplot2::geom_xx
@@ -335,7 +335,7 @@ plot_error <- function(
 #' Default: NULL
 #'
 #' Options: Including, but not limited to: "sex", "area", "fleet"
-#' @param proportional Logical. Set size of points relative to z when TRUE, point
+#' @param proportional Logical. TRUE/FALSE; set size of points relative to z when TRUE, point
 #' size are relative to one another while when set to FALSE, point size
 #' is relative to z
 #'
