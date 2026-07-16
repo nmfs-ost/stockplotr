@@ -18,7 +18,7 @@ plot_biomass_at_age(
 \arguments{
 \item{dat}{Data frame. A data frame returned from \link[stockplotr]{convert_output}}
 
-\item{facet}{Character vector. A string or vector of strings of a column that facets the data.
+\item{facet}{Character vector. Column name or names used for faceting.
 Set facet = "none" to summarize the data in a single plot.
 
 Default: NULL

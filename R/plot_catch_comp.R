@@ -1,7 +1,7 @@
 #' Plot catch composition
 #'
 #' @inheritParams plot_abundance_at_age
-#' @param unit_label String. Indicate the name of the units of catch as to label the axis
+#' @param unit_label String. Units of catch used to label the axis
 #'
 #' Default: "mt"
 #'
@@ -14,7 +14,7 @@
 #'
 #' Default: 1
 #'
-#' @param era String. A string naming the era of data.
+#' @param era String. Era of data.
 #'
 #' Default: "time"
 #'
@@ -24,7 +24,7 @@
 #'
 #' Default: `FALSE`
 #'
-#' @param module Character vector. (Optional) A string indicating the module_name found in `dat`.
+#' @param module Character vector. (Optional) Module name found in `dat`.
 #' If selecting >1 module, place them in a vector like c("module1", "module2").
 #'
 #' Default: NULL

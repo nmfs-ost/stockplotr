@@ -5,8 +5,8 @@
 #' Create the rda package for a plot or table
 #'
 #' @param data Data frame. A dataframe-based table
-#' @param caption String. A string comprising the table caption
-#' @param label String. A string comprising the table label
+#' @param caption String. Table caption
+#' @param label String. Table label
 #'
 #' @returns A table based in LaTeX.
 #' @export

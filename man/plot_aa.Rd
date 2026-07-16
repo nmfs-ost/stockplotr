@@ -21,32 +21,32 @@ plot_aa(
 \item{dat}{Data frame. Filtered data frame from standard output file(s) preformatted for
 the target label from \link[stockplotr]{filter_data}}
 
-\item{x}{String. A string of the column name of data used to plot on the x-axis
+\item{x}{String. Column name of data used to plot on the x-axis
 
 Default: "year"}
 
-\item{y}{String. A string of the column name of data used to plot on the y-axis
+\item{y}{String. Column name of data used to plot on the y-axis
 
 Default: "age"}
 
-\item{z}{String. A string of the column name of data used to control the size of the
+\item{z}{String. Column name of data used to control the size of the
 bubbles
 
 Default: "estimate"}
 
-\item{label}{String. A string of the label for the size of the bubbles
+\item{label}{String. Label for the size of the bubbles
 
 Default: "Abundance"}
 
-\item{xlab}{String. A string of the x-axis label
+\item{xlab}{String. X-axis label
 
 Default: "Year"}
 
-\item{ylab}{String. A string of the y-axis label
+\item{ylab}{String. Y-axis label
 
 Default: "Age"}
 
-\item{facet}{Character vector. A string or vector of strings of a column that facets the data.
+\item{facet}{Character vector. Column name or names used for faceting.
 It is not recommended to include more than one facet due to the complexity
 of the plot.
 
@@ -60,7 +60,7 @@ is relative to z
 
 Default: `TRUE`}
 
-\item{...}{Dots. Inherited arguments from internal functions from
+\item{...}{Inherited arguments from internal functions from
 \link[ggplot2]{geom_point}}
 }
 \value{

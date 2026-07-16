@@ -20,9 +20,9 @@ create_rda(
 \arguments{
 \item{object}{Object. Table or plot object}
 
-\item{topic_label}{String. A string that names the object}
+\item{topic_label}{String. Name of the object}
 
-\item{fig_or_table}{String. A string identifying if the object is a "table" or "figure"}
+\item{fig_or_table}{String. Indicates whether the object is a "table" or "figure"}
 
 \item{dat}{Data frame. Containing data which will fill in captions and
 alternative text for the object}
@@ -47,7 +47,7 @@ from 500,000 --> 5,000. This scale will be reflected in the y axis label.
 
 Default: 1}
 
-\item{unit_label}{String. A string containing a unit label for the y-axis
+\item{unit_label}{String. Unit label for the y-axis
 
 Default: "mt"}
 

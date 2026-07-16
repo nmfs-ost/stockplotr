@@ -11,7 +11,7 @@ theme_noaa(discrete = TRUE, ...)
 
 Default: TRUE}
 
-\item{...}{Dots. Arguments passed to `ggplot2::theme()`.}
+\item{...}{Arguments passed to `ggplot2::theme()`.}
 }
 \value{
 A list applying a theme to a ggplot2 object.

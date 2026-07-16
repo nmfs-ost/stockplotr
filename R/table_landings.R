@@ -1,16 +1,16 @@
 #' Landed catch by fleet and year table
 #'
 #' @inheritParams plot_recruitment
-#' @param unit_label String. Abbreviated units of landings
+#' @param unit_label String. Abbreviated landings units
 #'
 #' Default: "mt"
-#' @param group String. A string of a single column that groups the data.
+#' @param group String. Single column that groups the data.
 #'
 #' Set group = "none" to summarize data over all indexing values.
 #'
 #' Default: NULL
 #' Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL
-#' @param method String. A string describing the method of summarizing data when group
+#' @param method String. Method for summarizing data when group
 #' is set to "none".
 #'
 #' Default: "sum"

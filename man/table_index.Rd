@@ -24,7 +24,7 @@ returned from \link[stockplotr]{convert_output}.
 If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{era}{String. A string naming the era of data.
+\item{era}{String. Era of data.
 
 Default: "time"
 
@@ -34,21 +34,21 @@ Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
 Default: `FALSE`}
 
-\item{group}{String. A string of a single column that groups the data.
+\item{group}{String. Single column that groups the data.
 
 Set group = "none" to summarize data over all indexing values.
 
 Default: NULL
 Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
-\item{method}{String. A string describing the method of summarizing data when group
+\item{method}{String. Method for summarizing data when group
 is set to "none".
 
 Default: "sum"
 
 Options: "sum" or "mean"}
 
-\item{module}{Character vector. (Optional) A string indicating the module_name found in `dat`.
+\item{module}{Character vector. (Optional) Module name found in `dat`.
 If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL

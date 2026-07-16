@@ -11,7 +11,7 @@ fill_in_kqs(df, ...)
 "key_quantities.csv", empty or partially-filled templates with key
 quantity names and other associated information}
 
-\item{...}{Dots. Key quantity objects whose values will be added to the output
+\item{...}{Key quantity objects whose values will be added to the output
 dataframe}
 }
 \value{

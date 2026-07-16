@@ -20,11 +20,11 @@ plot_timeseries(
 \item{dat}{Data frame. Filtered data frame from standard output file(s) preformatted for
 the target label from \link[stockplotr]{filter_data}}
 
-\item{x}{String. A string of the column name of data used to plot on the x-axis
+\item{x}{String. Column name of data used to plot on the x-axis
 
 Default: "year"}
 
-\item{y}{String. A string of the column name of data used to plot on the y-axis
+\item{y}{String. Column name of data used to plot on the y-axis
 
 Default: "estimate"}
 
@@ -35,27 +35,27 @@ Default: "line"
 
 Options: "point" and "area"}
 
-\item{xlab}{String. A string of the x-axis label
+\item{xlab}{String. X-axis label
 
 Default: "Year"}
 
-\item{ylab}{String. A string of the y-axis label. If NULL, it will be set to the name
+\item{ylab}{String. Y-axis label. If NULL, it will be set to the name
  of `y`.
 
 Default: NULL}
 
-\item{group}{String. A string of a single column that groups the data.
+\item{group}{String. Single column that groups the data.
 Currently can only have one level of grouping.
 
 Default: NULL
 Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
-\item{facet}{Character vector. A string or vector of strings of a column that facets the data
+\item{facet}{Character vector. Column name or names used for faceting.
 (e.g. "year", "area", etc.)
 
 Default: NULL}
 
-\item{...}{Dots. Inherited arguments from internal functions from ggplot2::geom_xx}
+\item{...}{Inherited arguments from internal functions from ggplot2::geom_xx}
 }
 \value{
 Create a time series plot for a stock assessment report.

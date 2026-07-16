@@ -64,7 +64,7 @@ figures and tables ("figures" and "tables").
 
 Default: the working directory (`getwd()`)}
 
-\item{ref_line}{String. A string specifying the type of reference you want to
+\item{ref_line}{String. Type of reference point to
 compare biomass to. The default is `"msy"`, which looks for
 `"biomass_msy"` in the `"label"` column of `dat`. The actual
 searching in `dat` is case agnostic and will work with either upper- or

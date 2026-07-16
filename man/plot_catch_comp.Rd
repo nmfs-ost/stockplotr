@@ -20,7 +20,7 @@ plot_catch_comp(
 \arguments{
 \item{dat}{Data frame. A data frame returned from \link[stockplotr]{convert_output}}
 
-\item{facet}{Character vector. A string or vector of strings of a column that facets the data.
+\item{facet}{Character vector. Column name or names used for faceting.
 Set facet = "none" to summarize the data in a single plot.
 
 Default: NULL
@@ -28,7 +28,7 @@ Default: NULL
 Options: Including, but not limited to: "year", "area", "fleet", "sex", "none",
 NULL}
 
-\item{era}{String. A string naming the era of data.
+\item{era}{String. Era of data.
 
 Default: "time"
 
@@ -57,7 +57,7 @@ Default: `TRUE`}
 
 Default: `FALSE`}
 
-\item{module}{Character vector. (Optional) A string indicating the module_name found in `dat`.
+\item{module}{Character vector. (Optional) Module name found in `dat`.
 If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL

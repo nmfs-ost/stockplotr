@@ -7,7 +7,7 @@
 insert_kqs(...)
 }
 \arguments{
-\item{...}{Dots. Key quantities whose values should be added to the
+\item{...}{Key quantities whose values should be added to the
 exported "captions_alt_text.csv"}
 }
 \value{

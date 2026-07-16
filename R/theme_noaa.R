@@ -4,7 +4,7 @@
 #'
 #' Default: TRUE
 #'
-#' @param ... Dots. Arguments passed to `ggplot2::theme()`.
+#' @param ... Arguments passed to `ggplot2::theme()`.
 #'
 #' @returns A list applying a theme to a ggplot2 object.
 #' @export

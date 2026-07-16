@@ -1,16 +1,16 @@
 #' Plot Index of Abundance
 #'
 #' @inheritParams plot_spawning_biomass
-#' @param facet Character vector. A string or vector of strings of a column that facets the data. "fleet" is always added on to any faceting selections
+#' @param facet Character vector. Column name or names used for faceting. "fleet" is always added on to any faceting selections
 #'
 #' Default: NULL
 #'
 #' Options: May include, but is not limited to: "fleet", "year", "area", NULL
-#' @param unit_label String. Units for index of abundance/CPUE
+#' @param unit_label String. Index of abundance/CPUE units
 #'
 #' Default: ""
-#' @param focus Character vector. A string or vector of strings indicating how data should be
-#' filtered. (i.e. select names of fleets to zoom into the plot)
+#' @param focus Character vector. Column name or names used to filter data.
+#' (i.e. select names of fleets to zoom into the plot)
 #'
 #' Default: NULL
 #' @returns A plot showing the expected and predicted index.

@@ -10,7 +10,7 @@
 #'
 #' Default: 1
 #'
-#' @param recruitment_unit_label String. Units for recruitment
+#' @param recruitment_unit_label String. Recruitment units
 #'
 #' Default: "mt"
 #'
@@ -19,7 +19,7 @@
 #'
 #' Default: the working directory (`getwd()`)
 #'
-#' @param ref_line String. A string specifying the type of reference you want to
+#' @param ref_line String. Type of reference point to
 #' compare biomass to. The default is `"msy"`, which looks for
 #' `"biomass_msy"` in the `"label"` column of `dat`. The actual
 #' searching in `dat` is case agnostic and will work with either upper- or
@@ -38,15 +38,15 @@
 #'
 #' Default: 1
 #'
-#' @param landings_unit_label String. Units for landings
+#' @param landings_unit_label String. Landings units
 #'
 #' Default: "mt"
 #'
-#' @param biomass_unit_label String. Units for biomass
+#' @param biomass_unit_label String. Biomass units
 #'
 #' Default: "mt"
 #'
-#' @param spawning_biomass_label String. Units for spawning biomass
+#' @param spawning_biomass_label String. Spawning biomass units
 #'
 #' Default: "mt"
 #'
@@ -55,7 +55,7 @@
 #'
 #' Default: 1
 #'
-#' @param ref_line_sb String. Identical definition as `ref_line`, but this argument is
+#' @param ref_line_sb String. Same as `ref_line`, but this argument is
 #' applied to plot_spawning_biomass.
 #'
 #' Default: "msy"
@@ -67,7 +67,7 @@
 #'
 #' Default: 1
 #'
-#' @param abundance_at_age_unit_label String. Abbreviated units for abundance at age
+#' @param abundance_at_age_unit_label String. Abbreviated abundance at age units
 #'
 #' Default: "fish"
 #'
@@ -76,19 +76,19 @@
 #'
 #' Default: 1
 #'
-#' @param biomass_at_age_unit_label String. Abbreviated units for biomass at age
+#' @param biomass_at_age_unit_label String. Abbreviated biomass at age units
 #'
 #' Default: "mt"
 #'
-#' @param index_unit_label String. Units for index of abundance/CPUE
+#' @param index_unit_label String. Index of abundance/CPUE units
 #'
 #' Default: ""
 #'
-#' @param biomass_unit_label String. Abbreviated units for biomass
+#' @param biomass_unit_label String. Abbreviated biomass units
 #'
 #' Default: "mt"
 #'
-#' @param catch_unit_label String. Abbreviated units for catch
+#' @param catch_unit_label String. Abbreviated catch units
 #'
 #' Default: "mt"
 #'
@@ -97,7 +97,7 @@
 #'
 #' Default: 1
 #'
-#' @param landings_unit_label String. Units for landings
+#' @param landings_unit_label String. Landings units
 #'
 #' Default: "mt"
 #'

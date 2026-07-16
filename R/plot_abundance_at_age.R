@@ -1,7 +1,7 @@
 #' Plot Abundance at Age
 #'
 #' @param dat Data frame. A data frame returned from \link[stockplotr]{convert_output}
-#' @param facet Character vector. A string or vector of strings of a column that facets the data.
+#' @param facet Character vector. Column name or names used for faceting.
 #' Set facet = "none" to summarize the data in a single plot.
 #'
 #' Default: NULL
@@ -9,7 +9,7 @@
 #' Options: Including, but not limited to: "year", "area", "fleet", "sex", "none",
 #' NULL
 #'
-#' @param unit_label String. Units for abundance
+#' @param unit_label String. Abundance units
 #'
 #' Default: "fish"
 #'
@@ -34,7 +34,7 @@
 #'
 #' Default: `FALSE`
 #'
-#' @param figures_dir Path. The location of the folder containing the generated .rda files
+#' @param figures_dir Path. Folder containing the generated .rda files
 #' ("rda_files") that will be created if the argument `make_rda` = TRUE.
 #'
 #' Default: the working directory (`getwd()`)

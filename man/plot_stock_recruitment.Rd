@@ -38,13 +38,13 @@ option menu will pop-up.
 
 Default: TRUE}
 
-\item{era}{String. A string naming the era of data.
+\item{era}{String. Era of data.
 
 Default: "time"
 
 Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
-\item{module}{Character vector. (Optional) A string indicating the module_name found in `dat`.
+\item{module}{Character vector. (Optional) Module name found in `dat`.
 If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
@@ -62,7 +62,7 @@ the rda will be exported to the folder indicated in the argument "figures_dir".
 
 Default: `FALSE`.}
 
-\item{figures_dir}{Path. A string indicating a path to the "figures" folder.
+\item{figures_dir}{Path. Path to the "figures" folder.
 
 Default: `getwd()`
 

@@ -8,33 +8,33 @@
 #'
 #' If inputting a list of tibbles, the first tibble's reference point defined
 #' in `ref_line` is used to plot a reference line or calculate relative spawning biomass.
-#' @param geom String. A string stating the geom used for the plot.
+#' @param geom String. Geom used for the plot.
 #'
 #' Default: "line".
 #'
 #' Options: "line", "point", or "area"
-#' @param group String. A string of a single column that groups the data.
+#' @param group String. Single column that groups the data.
 #'
 #' Set group = "none" to summarize data over all indexing values.
 #'
 #' Default: NULL
 #' Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL
 #'
-#' @param facet Character vector. A string or vector of strings of a column name.
+#' @param facet Character vector. Column name or names used for faceting.
 #'
 #' Default: NULL
-#' @param era String. A string naming the era of data.
+#' @param era String. Era of data.
 #'
 #' Default: "time"
 #'
 #' Options: "early", "time", "fore" (forecast), or NULL (all data)
-#' @param ref_line String. A string specifying a reference point name.
+#' @param ref_line String. Reference point name.
 #'
 #' Default: "target"
 #'
 #' Options: (including, but not limited to) "target", "msy", and "unfished"
 #' If the reference point is not found in the data, set ref_line = c("name" = value).
-#' @param unit_label String. A string specifying spawning biomass unit.
+#' @param unit_label String. Spawning biomass unit.
 #'
 #' Default: "mt"
 #' @param lbs Logical. TRUE/FALSE; indicate whether to convert the y-axis values from
@@ -42,7 +42,7 @@
 #' unit_label argument - 'mt'.
 #'
 #' Default: `FALSE`
-#' @param module Character vector. (Optional) A string indicating the module_name found in `dat`.
+#' @param module Character vector. (Optional) Module name found in `dat`.
 #' If selecting >1 module, place them in a vector like c("module1", "module2").
 #'
 #' Default: NULL
@@ -61,7 +61,7 @@
 #' the rda will be exported to the folder indicated in the argument "figures_dir".
 #'
 #' Default: `FALSE`.
-#' @param figures_dir Path. A string indicating a path to the "figures" folder.
+#' @param figures_dir Path. Path to the "figures" folder.
 #'
 #' Default: `getwd()`
 #'
@@ -69,7 +69,7 @@
 #' @param interactive Logical. TRUE/FALSE; indicate whether the environment is interactive.
 #'
 #' Default: `FALSE`
-#' @param ... Dots. Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}
+#' @param ... Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}
 #'
 #' @return A plot showing spawning biomass over time.
 #'

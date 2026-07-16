@@ -10,7 +10,7 @@
 #' @param df Data frame. Dataframe created by importing "key_quantity_template.csv" or
 #' "key_quantities.csv", empty or partially-filled templates with key
 #' quantity names and other associated information
-#' @param ... Dots. Key quantity objects whose values will be added to the output
+#' @param ... Key quantity objects whose values will be added to the output
 #' dataframe
 #'
 #' @returns Dataframe based on key quantities template that contains
@@ -49,7 +49,7 @@ fill_in_kqs <- function(df, ...) {
 
 #' Export updated key quantities template
 #'
-#' @param ... Dots. Key quantities whose values should be added to the
+#' @param ... Key quantities whose values should be added to the
 #' exported "key_quantities.csv"
 #'
 #' @returns Exports a file based on key quantities template, with values
@@ -89,7 +89,7 @@ export_kqs <- function(...) {
 
 #' Insert key quantities into the captions and alternative text file
 #'
-#' @param ... Dots. Key quantities whose values should be added to the
+#' @param ... Key quantities whose values should be added to the
 #' exported "captions_alt_text.csv"
 #'
 #' @returns Exports a file ("captions_alt_text.csv") containing captions
@@ -192,8 +192,8 @@ insert_kqs <- function(...) {
 #' Create the rda package for a plot or table
 #'
 #' @param object Object. Table or plot object
-#' @param topic_label String. A string that names the object
-#' @param fig_or_table String. A string identifying if the object is a "table" or "figure"
+#' @param topic_label String. Name of the object
+#' @param fig_or_table String. Indicates whether the object is a "table" or "figure"
 #' @param dat Data frame. Containing data which will fill in captions and
 #' alternative text for the object
 #' @param dir Path. Directory to where the rda will be saved
@@ -216,7 +216,7 @@ insert_kqs <- function(...) {
 #'
 #' Default: 1
 #'
-#' @param unit_label String. A string containing a unit label for the y-axis
+#' @param unit_label String. Unit label for the y-axis
 #'
 #' Default: "mt"
 #'
@@ -512,13 +512,13 @@ create_rda <- function(
 #' Extract a figure or table's caption and alternative text for usage when
 #' generating a figure or table. Typically used before stockplotr::export_rda().
 #'
-#' @param topic_label String. A string that describes a figure or table's label. These
+#' @param topic_label String. Figure or table label. These
 #' labels are found in the "label" column of the "captions_alt_text.csv" file
 #' and are used to link the figure or table with its caption/alt text.
 #'
 #' Default: NULL
 #'
-#' @param fig_or_table String. A string describing whether the plot is a figure or table.
+#' @param fig_or_table String. Indicates whether the plot is a figure or table.
 #'
 #' Default: NULL
 #'
@@ -605,13 +605,13 @@ extract_caps_alttext <- function(topic_label = NULL,
 #'
 #' Default: NULL
 #'
-#' @param topic_label String. A string that describes a figure or table's label. These
+#' @param topic_label String. Figure or table label. These
 #' labels are found in the "label" column of the "captions_alt_text.csv" file
 #' and are used to link the figure or table with its caption/alt text.
 #'
 #' Default: NULL
 #'
-#' @param fig_or_table String. A string describing whether the plot is a figure or table.
+#' @param fig_or_table String. Indicates whether the plot is a figure or table.
 #'
 #' Default: NULL
 #'
