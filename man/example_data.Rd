@@ -7,9 +7,9 @@
 \format{
 A tibble with 591109 rows and 33 variables:
 \describe{
-  \item{label}{standard name for estimate or value name}
+  \item{label}{string. standard name for estimate or value name}
   \item{estimate}{actual value of the label}
-  \item{year}{annual indexing value}
+  \item{year}{number. annual indexing value}
   \item{fleet}{names of fleets or surveys indexed by the data}
   \item{sex}{native reference to male, female, unknown, or none}
   \item{area}{specified areas by the model}
@@ -18,7 +18,7 @@ A tibble with 591109 rows and 33 variables:
   \item{uncertainty_label}{uncertainty label or name associated with the label columns}
   \item{module_name}{name of keyword (SS3) or list indexing in the original model output for tracking purposes}
   \item{time}{time sometimes referenced in decimals to the year and month}
-  \item{era}{"time" for current time series in model; "fore" representing the projected or forecasted years of the model}
+  \item{era}{string. "time" for current time series in model; "fore" representing the projected or forecasted years of the model}
   \item{month}{month factor}
   \item{season}{season usually associated with year}
   \item{subseason}{subseason when used}

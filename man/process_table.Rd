@@ -7,10 +7,10 @@
 process_table(dat, group = NULL, method = "sum", label = NULL, digits = 2)
 }
 \arguments{
-\item{dat}{Pre-filtered data from \link[stockplotr]{filter_data} following a
+\item{dat}{data frame. Pre-filtered data from \link[stockplotr]{filter_data} following a
 long format data.}
 
-\item{group}{A string identifying the indexing variable of the data.
+\item{group}{string. A string identifying the indexing variable of the data.
 To remove any groups and summarize data across all factors, set
 group = "none". Setting group = NULL will keep any grouping
 variables identified in the data by the function.
@@ -19,18 +19,18 @@ Default: NULL
 
 Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
-\item{method}{A string describing the method of summarizing data when group
+\item{method}{string. A string describing the method of summarizing data when group
 is set to "none".
 
 Default: "sum"
 
 Options: "sum" or "mean"}
 
-\item{label}{A string or vector of strings identifying the label values to filter the data.
+\item{label}{string. A string or vector of strings identifying the label values to filter the data.
 
 Default: NULL}
 
-\item{digits}{Numeric value indicating the number of rounding digits.
+\item{digits}{number. Numeric value indicating the number of rounding digits.
 
 Default: 2}
 }

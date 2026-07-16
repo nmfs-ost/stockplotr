@@ -1,27 +1,27 @@
 #' Index of abundance table
 #'
 #' @inheritParams plot_recruitment
-#' @param group A string of a single column that groups the data.
+#' @param group string. A string of a single column that groups the data.
 #'
 #' Set group = "none" to summarize data over all indexing values.
 #'
 #' Default: NULL
 #' Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL
-#' @param method A string describing the method of summarizing data when group
+#' @param method string. A string describing the method of summarizing data when group
 #' is set to "none".
 #'
 #' Default: "sum"
 #'
 #' Options: "sum" or "mean"
-#' @param digits Numeric value indicating the number of digits values in the
+#' @param digits number. Numeric value indicating the number of digits values in the
 #' table will be rounded to.
 #'
 #' Default: 2
-#' @param tables_dir The location of the folder containing the generated table
+#' @param tables_dir path. The location of the folder containing the generated table
 #' rda files ("tables") that will be created if the argument `make_rda` = TRUE.
 #'
 #' Default: the working directory (`getwd()`)
-#' @param label The label that will be chosen from the input file. If unspecified,
+#' @param label string. The label that will be chosen from the input file. If unspecified,
 #' the function will search the "label" column and use the first matching label
 #' in this ordered list: "index_weight",  "index_numbers", "index_expected",
 #' "index_predicted", "index".

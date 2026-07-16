@@ -17,34 +17,34 @@ plot_stock_recruitment(
 )
 }
 \arguments{
-\item{dat}{A tibble or named list of tibbles (input as `list()`)
+\item{dat}{data frame or list. A tibble or named list of tibbles (input as `list()`)
 returned from \link[stockplotr]{convert_output}.
 
 If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{spawning_biomass_label}{Units for spawning biomass
+\item{spawning_biomass_label}{string. Units for spawning biomass
 
 Default: "mt"}
 
-\item{recruitment_label}{units for recruitment
+\item{recruitment_label}{string. units for recruitment
 
 Default: "mt"}
 
-\item{interactive}{Indicate whether the environment the
+\item{interactive}{logical. Indicate whether the environment the
 plot is being made in is interactive. By default, this
 is set to false. If true, dependent on your data, a
 option menu will pop-up.
 
 Default: TRUE}
 
-\item{era}{A string naming the era of data.
+\item{era}{string. A string naming the era of data.
 
 Default: "time"
 
 Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
-\item{module}{(Optional) A string indicating the module_name found in `dat`.
+\item{module}{character vector. (Optional) A string indicating the module_name found in `dat`.
 If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
@@ -52,17 +52,17 @@ Default: NULL
 If the interactive and >1 module_name is found, user will select the
 module_name in the console. @seealso [filter_data()]}
 
-\item{scale_amount}{A number to scale the y-axis values.
+\item{scale_amount}{number. A number to scale the y-axis values.
 
 Default: 1}
 
-\item{make_rda}{A logical value indicating whether to save the object and
+\item{make_rda}{logical. A logical value indicating whether to save the object and
 make an automated caption and alternative text in the form of an `rda` object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
 
 Default: `FALSE`.}
 
-\item{figures_dir}{A string indicating a path to the "figures" folder.
+\item{figures_dir}{path. A string indicating a path to the "figures" folder.
 
 Default: `getwd()`
 

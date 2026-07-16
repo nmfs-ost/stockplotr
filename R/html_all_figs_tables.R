@@ -2,7 +2,7 @@
 #'
 #' Show all tables and figures in a single html file.
 #'
-#' @param figures_tables_dir The location of the folder containing
+#' @param figures_tables_dir path. The location of the folder containing
 #' figures and tables ("figures" and "tables").
 #'
 #' Default: The current working directory (`getwd()`)

@@ -3,73 +3,73 @@
 #' Plot spawning biomass with a reference line as a dashed line. The figure can
 #' also be made relative to this reference line rather than in absolute units.
 #'
-#' @param dat A tibble or named list of tibbles (input as `list()`)
+#' @param dat data frame or list. A tibble or named list of tibbles (input as `list()`)
 #' returned from \link[stockplotr]{convert_output}.
 #'
 #' If inputting a list of tibbles, the first tibble's reference point defined
 #' in `ref_line` is used to plot a reference line or calculate relative spawning biomass.
-#' @param geom A string stating the geom used for the plot.
+#' @param geom string. A string stating the geom used for the plot.
 #'
 #' Default: "line".
 #'
 #' Options: "line", "point", or "area"
-#' @param group A string of a single column that groups the data.
+#' @param group string. A string of a single column that groups the data.
 #'
 #' Set group = "none" to summarize data over all indexing values.
 #'
 #' Default: NULL
 #' Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL
 #'
-#' @param facet A string or vector of strings of a column name.
+#' @param facet character vector. A string or vector of strings of a column name.
 #'
 #' Default: NULL
-#' @param era A string naming the era of data.
+#' @param era string. A string naming the era of data.
 #'
 #' Default: "time"
 #'
 #' Options: "early", "time", "fore" (forecast), or NULL (all data)
-#' @param ref_line A string specifying a reference point name.
+#' @param ref_line string. A string specifying a reference point name.
 #'
 #' Default: "target"
 #'
 #' Options: (including, but not limited to) "target", "msy", and "unfished"
 #' If the reference point is not found in the data, set ref_line = c("name" = value).
-#' @param unit_label A string specifying spawning biomass unit.
+#' @param unit_label string. A string specifying spawning biomass unit.
 #'
 #' Default: "mt"
-#' @param lbs A logical value indicating whether to convert the y-axis values from
+#' @param lbs logical. A logical value indicating whether to convert the y-axis values from
 #' kilograms to pounds. The default units match the default in the
 #' unit_label argument - 'mt'.
 #'
 #' Default: `FALSE`
-#' @param module (Optional) A string indicating the module_name found in `dat`.
+#' @param module character vector. (Optional) A string indicating the module_name found in `dat`.
 #' If selecting >1 module, place them in a vector like c("module1", "module2").
 #'
 #' Default: NULL
 #'
 #' If the interactive and >1 module_name is found, user will select the
 #' module_name in the console. @seealso [filter_data()]
-#' @param scale_amount A number to scale the y-axis values.
+#' @param scale_amount number. A number to scale the y-axis values.
 #'
 #' Default: 1
-#' @param relative A logical value specifying to set y-axis values relative to
+#' @param relative logical. A logical value specifying to set y-axis values relative to
 #' the ref_line value.
 #'
 #' Default: `FALSE`
-#' @param make_rda A logical value indicating whether to save the object and
+#' @param make_rda logical. A logical value indicating whether to save the object and
 #' make an automated caption and alternative text in the form of an `rda` object. If TRUE,
 #' the rda will be exported to the folder indicated in the argument "figures_dir".
 #'
 #' Default: `FALSE`.
-#' @param figures_dir A string indicating a path to the "figures" folder.
+#' @param figures_dir path. A string indicating a path to the "figures" folder.
 #'
 #' Default: `getwd()`
 #'
 #' The folder is created within the path if it does not exist.
-#' @param interactive A logical value indicating if the environment is interactive.
+#' @param interactive logical. A logical value indicating if the environment is interactive.
 #'
 #' Default: `FALSE`
-#' @param ... Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}
+#' @param ... dots. Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}
 #'
 #' @return A plot showing spawning biomass over time.
 #'

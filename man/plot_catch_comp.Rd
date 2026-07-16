@@ -18,9 +18,9 @@ plot_catch_comp(
 )
 }
 \arguments{
-\item{dat}{A data frame returned from \link[stockplotr]{convert_output}}
+\item{dat}{data frame. A data frame returned from \link[stockplotr]{convert_output}}
 
-\item{facet}{a string or vector of strings of a column that facets the data.
+\item{facet}{character vector. a string or vector of strings of a column that facets the data.
 Set facet = "none" to summarize the data in a single plot.
 
 Default: NULL
@@ -28,17 +28,17 @@ Default: NULL
 Options: Including, but not limited to: "year", "area", "fleet", "sex", "none",
 NULL}
 
-\item{era}{A string naming the era of data.
+\item{era}{string. A string naming the era of data.
 
 Default: "time"
 
 Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
-\item{unit_label}{indicate the name of the units of catch as to label the axis
+\item{unit_label}{string. indicate the name of the units of catch as to label the axis
 
 Default: "mt"}
 
-\item{scale_amount}{A number describing how much to scale down the catch at
+\item{scale_amount}{number. A number describing how much to scale down the catch at
 age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders
 of magnitude (e.g., 1, 10, 100, 1000, etc.). For example, scale_amount = 100
 would scale down a value from 500,000 --> 5,000 and would report catch in
@@ -47,17 +47,17 @@ in the legend label if proportional is set to FALSE.
 
 Default: 1}
 
-\item{proportional}{Set size of points relative to z when TRUE, point
+\item{proportional}{logical. Set size of points relative to z when TRUE, point
 size are relative to one another while when set to FALSE, point size
 is relative to z
 
 Default: `TRUE`}
 
-\item{interactive}{A logical value indicating if the environment is interactive.
+\item{interactive}{logical. A logical value indicating if the environment is interactive.
 
 Default: `FALSE`}
 
-\item{module}{(Optional) A string indicating the module_name found in `dat`.
+\item{module}{character vector. (Optional) A string indicating the module_name found in `dat`.
 If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
@@ -65,13 +65,13 @@ Default: NULL
 If the interactive and >1 module_name is found, user will select the
 module_name in the console. @seealso [filter_data()]}
 
-\item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
+\item{make_rda}{logical. TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
 the .rda will be exported to the folder indicated in the argument "rda_dir".
 
 Default: `FALSE`}
 
-\item{figures_dir}{The location of the folder containing the generated .rda files
+\item{figures_dir}{path. The location of the folder containing the generated .rda files
 ("rda_files") that will be created if the argument `make_rda` = TRUE.
 
 Default: the working directory (`getwd()`)}

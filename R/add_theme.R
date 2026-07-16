@@ -1,7 +1,7 @@
 #' Add NOAA formatting to figure or table
 #'
-#' @param x table or figures object from ggplot, base r plot, gt table, flextable, or kable extra
-#' @param discrete TRUE/FALSE indicate if data input is discrete. Specifically applied to plots.
+#' @param x object. table or figures object from ggplot, base r plot, gt table, flextable, or kable extra
+#' @param discrete logical. TRUE/FALSE indicate if data input is discrete. Specifically applied to plots.
 #'
 #' Default: TRUE
 #'

@@ -18,34 +18,34 @@ plot_index(
 )
 }
 \arguments{
-\item{dat}{A tibble or named list of tibbles (input as `list()`)
+\item{dat}{data frame or list. A tibble or named list of tibbles (input as `list()`)
 returned from \link[stockplotr]{convert_output}.
 
 If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{unit_label}{units for index of abundance/CPUE
+\item{unit_label}{string. units for index of abundance/CPUE
 
 Default: ""}
 
-\item{group}{A string of a single column that groups the data.
+\item{group}{string. A string of a single column that groups the data.
 
 Set group = "none" to summarize data over all indexing values.
 
 Default: NULL
 Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
-\item{facet}{a string or vector of strings of a column that facets the data. "fleet" is always added on to any faceting selections
+\item{facet}{character vector. a string or vector of strings of a column that facets the data. "fleet" is always added on to any faceting selections
 
 Default: NULL
 
 Options: May include, but is not limited to: "fleet", "year", "area", NULL}
 
-\item{interactive}{A logical value indicating if the environment is interactive.
+\item{interactive}{logical. A logical value indicating if the environment is interactive.
 
 Default: `FALSE`}
 
-\item{module}{(Optional) A string indicating the module_name found in `dat`.
+\item{module}{character vector. (Optional) A string indicating the module_name found in `dat`.
 If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
@@ -53,24 +53,24 @@ Default: NULL
 If the interactive and >1 module_name is found, user will select the
 module_name in the console. @seealso [filter_data()]}
 
-\item{focus}{a string or vector of strings indicating how data should be
+\item{focus}{character vector. a string or vector of strings indicating how data should be
 filtered. (i.e. select names of fleets to zoom into the plot)
 
 Default: NULL}
 
-\item{make_rda}{A logical value indicating whether to save the object and
+\item{make_rda}{logical. A logical value indicating whether to save the object and
 make an automated caption and alternative text in the form of an `rda` object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
 
 Default: `FALSE`.}
 
-\item{figures_dir}{A string indicating a path to the "figures" folder.
+\item{figures_dir}{path. A string indicating a path to the "figures" folder.
 
 Default: `getwd()`
 
 The folder is created within the path if it does not exist.}
 
-\item{...}{Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}
+\item{...}{dots. Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}
 }
 \value{
 A plot showing the expected and predicted index.

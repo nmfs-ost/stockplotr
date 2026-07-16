@@ -1,11 +1,11 @@
 #' Plot catch composition
 #'
 #' @inheritParams plot_abundance_at_age
-#' @param unit_label indicate the name of the units of catch as to label the axis
+#' @param unit_label string. indicate the name of the units of catch as to label the axis
 #'
 #' Default: "mt"
 #'
-#' @param scale_amount A number describing how much to scale down the catch at
+#' @param scale_amount number. A number describing how much to scale down the catch at
 #' age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders
 #' of magnitude (e.g., 1, 10, 100, 1000, etc.). For example, scale_amount = 100
 #' would scale down a value from 500,000 --> 5,000 and would report catch in
@@ -14,17 +14,17 @@
 #'
 #' Default: 1
 #'
-#' @param era A string naming the era of data.
+#' @param era string. A string naming the era of data.
 #'
 #' Default: "time"
 #'
 #' Options: "early", "time", "fore" (forecast), or NULL (all data)
 #'
-#' @param interactive A logical value indicating if the environment is interactive.
+#' @param interactive logical. A logical value indicating if the environment is interactive.
 #'
 #' Default: `FALSE`
 #'
-#' @param module (Optional) A string indicating the module_name found in `dat`.
+#' @param module character vector. (Optional) A string indicating the module_name found in `dat`.
 #' If selecting >1 module, place them in a vector like c("module1", "module2").
 #'
 #' Default: NULL

@@ -29,42 +29,42 @@ save_all_plots(
 )
 }
 \arguments{
-\item{dat}{A tibble or named list of tibbles (input as `list()`)
+\item{dat}{data frame or list. A tibble or named list of tibbles (input as `list()`)
 returned from \link[stockplotr]{convert_output}.
 
 If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{recruitment_unit_label}{Units for recruitment
+\item{recruitment_unit_label}{string. Units for recruitment
 
 Default: "mt"}
 
-\item{recruitment_scale_amount}{A number describing how much to scale down
+\item{recruitment_scale_amount}{number. A number describing how much to scale down
 the recruitment quantities shown on the y axis. For example,
 recruitment_scale_amount = 100 would scale down a value from 500,000 -->
 5,000. This scale will be reflected in the y axis label.
 
 Default: 1}
 
-\item{relative}{A logical value specifying to set y-axis values relative to
+\item{relative}{logical. A logical value specifying to set y-axis values relative to
 the ref_line value.
 
 Default: `FALSE`}
 
-\item{proportional}{T/F to scale size of bubble plots
+\item{proportional}{logical. T/F to scale size of bubble plots
 
 Default: `TRUE`}
 
-\item{interactive}{A logical value indicating if the environment is interactive.
+\item{interactive}{logical. A logical value indicating if the environment is interactive.
 
 Default: `FALSE`}
 
-\item{figures_tables_dir}{The location of the folder containing
+\item{figures_tables_dir}{path. The location of the folder containing
 figures and tables ("figures" and "tables").
 
 Default: the working directory (`getwd()`)}
 
-\item{ref_line}{A string specifying the type of reference you want to
+\item{ref_line}{string. A string specifying the type of reference you want to
 compare biomass to. The default is `"msy"`, which looks for
 `"biomass_msy"` in the `"label"` column of `dat`. The actual
 searching in `dat` is case agnostic and will work with either upper- or
@@ -78,62 +78,62 @@ Default: "msy"
 
 Options: Including, but not limited to: "target", "MSY", "unfished"}
 
-\item{biomass_scale_amount}{A number describing how much to scale down the
+\item{biomass_scale_amount}{number. A number describing how much to scale down the
 biomass quantities shown on the y axis. See `recruitment_scale_amount`.
 
 Default: 1}
 
-\item{landings_unit_label}{Units for landings
+\item{landings_unit_label}{string. Units for landings
 
 Default: "mt"}
 
-\item{spawning_biomass_label}{Units for spawning biomass
+\item{spawning_biomass_label}{string. Units for spawning biomass
 
 Default: "mt"}
 
-\item{spawning_biomass_scale_amount}{A number describing how much to scale down the
+\item{spawning_biomass_scale_amount}{number. A number describing how much to scale down the
 spawning biomass quantities shown on the y axis. See `recruitment_scale_amount`.
 
 Default: 1}
 
-\item{ref_line_sb}{Identical definition as `ref_line`, but this argument is
+\item{ref_line_sb}{string. Identical definition as `ref_line`, but this argument is
 applied to plot_spawning_biomass.
 
 Default: "msy"
 
 Options: Including, but not limited to: "target", "MSY", "unfished"}
 
-\item{abundance_at_age_scale_amount}{A number describing how much to scale down the
+\item{abundance_at_age_scale_amount}{number. A number describing how much to scale down the
 abundance quantities shown via bubble size. See `recruitment_scale_amount`.
 
 Default: 1}
 
-\item{abundance_at_age_unit_label}{Abbreviated units for abundance at age
+\item{abundance_at_age_unit_label}{string. Abbreviated units for abundance at age
 
 Default: "fish"}
 
-\item{biomass_at_age_scale_amount}{A number describing how much to scale down the
+\item{biomass_at_age_scale_amount}{number. A number describing how much to scale down the
 biomass quantities shown via bubble size. See `recruitment_scale_amount`.
 
 Default: 1}
 
-\item{biomass_at_age_unit_label}{Abbreviated units for biomass at age
+\item{biomass_at_age_unit_label}{string. Abbreviated units for biomass at age
 
 Default: "mt"}
 
-\item{index_unit_label}{Units for index of abundance/CPUE
+\item{index_unit_label}{string. Units for index of abundance/CPUE
 
 Default: ""}
 
-\item{biomass_unit_label}{Abbreviated units for biomass
+\item{biomass_unit_label}{string. Abbreviated units for biomass
 
 Default: "mt"}
 
-\item{catch_unit_label}{Abbreviated units for catch
+\item{catch_unit_label}{string. Abbreviated units for catch
 
 Default: "mt"}
 
-\item{catch_scale_amount}{A number describing how much to scale down the
+\item{catch_scale_amount}{number. A number describing how much to scale down the
 catch quantities shown via bubble size. See `recruitment_scale_amount`.
 
 Default: 1}

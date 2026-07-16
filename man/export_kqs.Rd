@@ -7,7 +7,7 @@
 export_kqs(...)
 }
 \arguments{
-\item{...}{Key quantities whose values should be added to the
+\item{...}{dots. Key quantities whose values should be added to the
 exported "key_quantities.csv"}
 }
 \value{
