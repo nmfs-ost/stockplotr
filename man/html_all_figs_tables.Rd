@@ -7,7 +7,7 @@
 html_all_figs_tables(figures_tables_dir = getwd())
 }
 \arguments{
-\item{figures_tables_dir}{path. The location of the folder containing
+\item{figures_tables_dir}{Path. The location of the folder containing
 figures and tables ("figures" and "tables").
 
 Default: The current working directory (`getwd()`)}

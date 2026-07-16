@@ -4,9 +4,9 @@
 
 #' Create the rda package for a plot or table
 #'
-#' @param data data frame. A dataframe-based table
-#' @param caption string. A string comprising the table caption
-#' @param label string. A string comprising the table label
+#' @param data Data frame. A dataframe-based table
+#' @param caption String. A string comprising the table caption
+#' @param label String. A string comprising the table label
 #'
 #' @returns A table based in LaTeX.
 #' @export
@@ -103,9 +103,9 @@ create_latex_table <- function(data,
 #-------------------------------------------------------------------------------
 
 #' Create loop to test for differences in column values
-#' @param dat data frame. input data into process_table
-#' @param index_variables character vector. the index_variables vector created within process_table
-#' @param id_group string. the identifying index variable as a string
+#' @param dat Data frame. Input data into process_table
+#' @param index_variables Character vector. The index_variables vector created within process_table
+#' @param id_group String. The identifying index variable as a string
 #'
 #' Default: NULL
 
@@ -181,13 +181,13 @@ check_label_differences <- function(dat, index_variables, id_group = NULL) {
 
 #' Rename columns and merge estimate and uncertainty columns for table presentation
 #'
-#' @param table_data list of dataframes that will be eventually turned into tables
-#' @param uncert_lab string. uncertainty label. Typically inherited from another function
+#' @param table_data List of dataframes that will be eventually turned into tables
+#' @param uncert_lab String. Uncertainty label. Typically inherited from another function
 #' but is the exact string of the uncertainty in the data (e.g., "sd", "se", "cv",
 #' "uncertainty").)
-#' @param id_col_vals list. A list of variables identifying grouping of the data and
+#' @param id_col_vals List. A list of variables identifying grouping of the data and
 #' their unique values.
-#' @param unit_label string. The units of the estimate being presented in the table.
+#' @param unit_label String. The units of the estimate being presented in the table.
 #'
 #' @returns List of formatted dataframes that contain column names formatted
 #' for a table along with a merge of values in the estimate and error columns

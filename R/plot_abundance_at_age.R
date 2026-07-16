@@ -1,7 +1,7 @@
 #' Plot Abundance at Age
 #'
-#' @param dat data frame. A data frame returned from \link[stockplotr]{convert_output}
-#' @param facet character vector. a string or vector of strings of a column that facets the data.
+#' @param dat Data frame. A data frame returned from \link[stockplotr]{convert_output}
+#' @param facet Character vector. A string or vector of strings of a column that facets the data.
 #' Set facet = "none" to summarize the data in a single plot.
 #'
 #' Default: NULL
@@ -9,11 +9,11 @@
 #' Options: Including, but not limited to: "year", "area", "fleet", "sex", "none",
 #' NULL
 #'
-#' @param unit_label string. units for abundance
+#' @param unit_label String. Units for abundance
 #'
 #' Default: "fish"
 #'
-#' @param scale_amount number. A number describing how much to scale down the abundance at
+#' @param scale_amount Number. A number describing how much to scale down the abundance at
 #' age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders
 #' of magnitude (e.g., 1, 10, 100, 1000, etc.). For example, scale_amount = 100
 #' would scale down a value from 500,000 --> 5,000 and would report abundance in
@@ -22,19 +22,19 @@
 #'
 #' Default: 1,000
 #'
-#' @param proportional logical. Set size of points relative to z when TRUE, point
+#' @param proportional Logical. Set size of points relative to z when TRUE, point
 #' size are relative to one another while when set to FALSE, point size
 #' is relative to z
 #'
 #' Default: `TRUE`
 #'
-#' @param make_rda logical. TRUE/FALSE; indicate whether to produce an .rda file containing
+#' @param make_rda Logical. TRUE/FALSE; indicate whether to produce an .rda file containing
 #' a list with the figure/table, caption, and alternative text (if figure). If TRUE,
 #' the .rda will be exported to the folder indicated in the argument "rda_dir".
 #'
 #' Default: `FALSE`
 #'
-#' @param figures_dir path. The location of the folder containing the generated .rda files
+#' @param figures_dir Path. The location of the folder containing the generated .rda files
 #' ("rda_files") that will be created if the argument `make_rda` = TRUE.
 #'
 #' Default: the working directory (`getwd()`)

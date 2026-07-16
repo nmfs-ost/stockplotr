@@ -1,10 +1,10 @@
 #' Add NOAA theming to ggplot2 object. The palette is from the 'viridis' package, which contains palettes distinguishable by those with color vision deficiency.
 #'
-#' @param discrete logical. Variable indicating whether the color or fill aesthetic is discrete.
+#' @param discrete Logical. Variable indicating whether the color or fill aesthetic is discrete.
 #'
 #' Default: TRUE
 #'
-#' @param ... dots. Arguments passed to `ggplot2::theme()`.
+#' @param ... Dots. Arguments passed to `ggplot2::theme()`.
 #'
 #' @returns A list applying a theme to a ggplot2 object.
 #' @export

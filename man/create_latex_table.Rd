@@ -7,11 +7,11 @@
 create_latex_table(data, caption, label)
 }
 \arguments{
-\item{data}{data frame. A dataframe-based table}
+\item{data}{Data frame. A dataframe-based table}
 
-\item{caption}{string. A string comprising the table caption}
+\item{caption}{String. A string comprising the table caption}
 
-\item{label}{string. A string comprising the table label}
+\item{label}{String. A string comprising the table label}
 }
 \value{
 A table based in LaTeX.

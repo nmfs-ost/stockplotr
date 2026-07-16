@@ -4,9 +4,9 @@
 
 #' Processing for figures
 #'
-#' @param dat data frame. Pre-filtered data from \link[stockplotr]{filter_data} following a
+#' @param dat Data frame. Pre-filtered data from \link[stockplotr]{filter_data} following a
 #' long format data.
-#' @param group string. A string identifying the indexing variable of the data.
+#' @param group String. A string identifying the indexing variable of the data.
 #' To remove any groups and summarize data across all factors, set
 #' group = "none". Setting group = NULL will keep any grouping
 #' variables identified in the data by the function.
@@ -14,16 +14,16 @@
 #' Default: NULL
 #'
 #' Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL
-#' @param facet character vector. A string or vector of strings identifying the faceting
+#' @param facet Character vector. A string or vector of strings identifying the faceting
 #' variable(s) of the data.
 #'
 #' Default: NULL
-#' @param lbs logical. A logical value indicating whether to convert the y-axis values from
+#' @param lbs Logical. A logical value indicating whether to convert the y-axis values from
 #' kilograms to pounds. The default units match the default in the
 #' unit_label argument - 'metric tons'.
 #'
 #' Default: `FALSE`
-#' @param method string. A string describing the method of summarizing data when group
+#' @param method String. A string describing the method of summarizing data when group
 #' is set to "none".
 #'
 #' Default: "sum"
@@ -373,10 +373,10 @@ process_data <- function(
 #' Processing for tables
 #'
 #' @inheritParams process_data
-#' @param label string. A string or vector of strings identifying the label values to filter the data.
+#' @param label String. A string or vector of strings identifying the label values to filter the data.
 #'
 #' Default: NULL
-#' @param digits number. Numeric value indicating the number of rounding digits.
+#' @param digits Number. Numeric value indicating the number of rounding digits.
 #'
 #' Default: 2
 #' @returns A dataframe of processed data ready for formatting into a table.

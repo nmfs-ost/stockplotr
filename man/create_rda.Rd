@@ -18,40 +18,40 @@ create_rda(
 )
 }
 \arguments{
-\item{object}{object. Table or plot object}
+\item{object}{Object. Table or plot object}
 
-\item{topic_label}{string. A string that names the object}
+\item{topic_label}{String. A string that names the object}
 
-\item{fig_or_table}{string. A string identifying if the object is a "table" or "figure"}
+\item{fig_or_table}{String. A string identifying if the object is a "table" or "figure"}
 
-\item{dat}{data frame. Containing data which will fill in captions and
+\item{dat}{Data frame. Containing data which will fill in captions and
 alternative text for the object}
 
-\item{dir}{path. Directory to where the rda will be saved
+\item{dir}{Path. Directory to where the rda will be saved
 
 Default: the working directory (`getwd()`)}
 
-\item{year}{number. Assessment year
+\item{year}{Number. Assessment year
 
 Default: the current year}
 
-\item{ref_line}{string. Reference line value
+\item{ref_line}{String. Reference line value
 
 Default: "msy"
 
 Options: Including, but not limited to: "msy", "target", "unfished"}
 
-\item{scale_amount}{number. A number describing how much to scale down the quantities
+\item{scale_amount}{Number. A number describing how much to scale down the quantities
 shown on the y axis. For example, scale_amount = 100 would scale down a value
 from 500,000 --> 5,000. This scale will be reflected in the y axis label.
 
 Default: 1}
 
-\item{unit_label}{string. A string containing a unit label for the y-axis
+\item{unit_label}{String. A string containing a unit label for the y-axis
 
 Default: "mt"}
 
-\item{table_df}{data frame. The data frame that the table will be made into for purposes
+\item{table_df}{Data frame. The data frame that the table will be made into for purposes
 of exporting a latex formatted table.}
 }
 \value{

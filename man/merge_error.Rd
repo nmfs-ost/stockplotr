@@ -7,14 +7,14 @@
 merge_error(table_data, id_col_vals, unit_label, uncert_lab)
 }
 \arguments{
-\item{table_data}{list of dataframes that will be eventually turned into tables}
+\item{table_data}{List of dataframes that will be eventually turned into tables}
 
-\item{id_col_vals}{list. A list of variables identifying grouping of the data and
+\item{id_col_vals}{List. A list of variables identifying grouping of the data and
 their unique values.}
 
-\item{unit_label}{string. The units of the estimate being presented in the table.}
+\item{unit_label}{String. The units of the estimate being presented in the table.}
 
-\item{uncert_lab}{string. uncertainty label. Typically inherited from another function
+\item{uncert_lab}{String. Uncertainty label. Typically inherited from another function
 but is the exact string of the uncertainty in the data (e.g., "sd", "se", "cv",
 "uncertainty").)}
 }

@@ -18,49 +18,49 @@ plot_error(
 )
 }
 \arguments{
-\item{dat}{data frame. filtered data frame from standard output file(s) preformatted for
+\item{dat}{Data frame. Filtered data frame from standard output file(s) preformatted for
 the target label from \link[stockplotr]{filter_data}}
 
-\item{x}{string. a string of the column name of data used to plot on the x-axis
+\item{x}{String. A string of the column name of data used to plot on the x-axis
 
 Default: "year"}
 
-\item{y}{string. a string of the column name of data used to plot on the y-axis
+\item{y}{String. A string of the column name of data used to plot on the y-axis
 
 Default: "estimate"}
 
-\item{geom}{string. type of geom to use for plotting found in ggplot2 (e.g. "point",
+\item{geom}{String. Type of geom to use for plotting found in ggplot2 (e.g. "point",
 "line", etc.).
 
 Default: "line"
 
 Options: "point" and "area"}
 
-\item{group}{string. a string of a single column that groups the data.
+\item{group}{String. A string of a single column that groups the data.
 Currently can only have one level of grouping.
 
 Default: NULL
 Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
-\item{facet}{character vector. a string or vector of strings of a column that facets the data
+\item{facet}{Character vector. A string or vector of strings of a column that facets the data
 (e.g. "year", "area", etc.)
 
 Default: NULL}
 
-\item{xlab}{string. a string of the x-axis label
+\item{xlab}{String. A string of the x-axis label
 
 Default: "Year"}
 
-\item{ylab}{string. a string of the y-axis label. If NULL, it will be set to the name
+\item{ylab}{String. A string of the y-axis label. If NULL, it will be set to the name
  of `y`.
 
 Default: NULL}
 
-\item{hline}{logical. indicate true or false to place a horizontal line at 1
+\item{hline}{Logical. Indicate true or false to place a horizontal line at 1
 
 Default: `TRUE`}
 
-\item{...}{dots. inherited arguments from internal functions from ggplot2::geom_xx}
+\item{...}{Dots. Inherited arguments from internal functions from ggplot2::geom_xx}
 }
 \value{
 Create a plot with error for a stock assessment report.

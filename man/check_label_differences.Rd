@@ -7,11 +7,11 @@
 check_label_differences(dat, index_variables, id_group = NULL)
 }
 \arguments{
-\item{dat}{data frame. input data into process_table}
+\item{dat}{Data frame. Input data into process_table}
 
-\item{index_variables}{character vector. the index_variables vector created within process_table}
+\item{index_variables}{Character vector. The index_variables vector created within process_table}
 
-\item{id_group}{string. the identifying index variable as a string
+\item{id_group}{String. The identifying index variable as a string
 
 Default: NULL}
 }

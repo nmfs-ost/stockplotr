@@ -7,11 +7,11 @@
 theme_noaa(discrete = TRUE, ...)
 }
 \arguments{
-\item{discrete}{logical. Variable indicating whether the color or fill aesthetic is discrete.
+\item{discrete}{Logical. Variable indicating whether the color or fill aesthetic is discrete.
 
 Default: TRUE}
 
-\item{...}{dots. Arguments passed to `ggplot2::theme()`.}
+\item{...}{Dots. Arguments passed to `ggplot2::theme()`.}
 }
 \value{
 A list applying a theme to a ggplot2 object.

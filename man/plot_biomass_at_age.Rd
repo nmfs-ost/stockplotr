@@ -16,9 +16,9 @@ plot_biomass_at_age(
 )
 }
 \arguments{
-\item{dat}{data frame. A data frame returned from \link[stockplotr]{convert_output}}
+\item{dat}{Data frame. A data frame returned from \link[stockplotr]{convert_output}}
 
-\item{facet}{character vector. a string or vector of strings of a column that facets the data.
+\item{facet}{Character vector. A string or vector of strings of a column that facets the data.
 Set facet = "none" to summarize the data in a single plot.
 
 Default: NULL
@@ -26,36 +26,36 @@ Default: NULL
 Options: Including, but not limited to: "year", "area", "fleet", "sex", "none",
 NULL}
 
-\item{unit_label}{string. units for abundance
+\item{unit_label}{String. Units for abundance
 
 Default: "fish"}
 
-\item{scale_amount}{number. A number describing how much to scale down the biomass at
+\item{scale_amount}{Number. A number describing how much to scale down the biomass at
 age. For example, scale_amount = 100 would scale down a value
 from 500,000 --> 5,000. This scale will be reflected in the legend label if
 proportion is set to FALSE.
 
 Default: 1,000}
 
-\item{proportional}{logical. Set size of points relative to z when TRUE, point
+\item{proportional}{Logical. Set size of points relative to z when TRUE, point
 size are relative to one another while when set to FALSE, point size
 is relative to z
 
 Default: `TRUE`}
 
-\item{interactive}{logical. TRUE/FALSE; indicate whether the environment in which the
+\item{interactive}{Logical. TRUE/FALSE; indicate whether the environment in which the
 function is operating  is interactive. This bypasses some options for
 filtering when preparing data for the plot.
 
 Default: `TRUE`}
 
-\item{make_rda}{logical. TRUE/FALSE; indicate whether to produce an .rda file containing
+\item{make_rda}{Logical. TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
 the .rda will be exported to the folder indicated in the argument "rda_dir".
 
 Default: `FALSE`}
 
-\item{figures_dir}{path. The location of the folder containing the generated .rda files
+\item{figures_dir}{Path. The location of the folder containing the generated .rda files
 ("rda_files") that will be created if the argument `make_rda` = TRUE.
 
 Default: the working directory (`getwd()`)}
