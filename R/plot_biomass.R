@@ -219,12 +219,47 @@ plot_biomass <- function(
       dplyr::pull(year) |>
       unique()
     
+    # SS3, FIMS
+    if ("spawning_biomass_msy" %in% dat$label) {
+      sb_msy <- dat |>
+        dplyr::filter(label == "spawning_biomass_msy") |>
+        dplyr::select(estimate) |>
+        as.numeric()
+      b_sb_msy <- dat |>
+        dplyr::filter(label == "biomass_msy_spawning_biomass_msy") |>
+        dplyr::select(estimate) |>
+        as.numeric()
+      B.msy <- round(sb_msy * b_sb_msy, digits = 3)
+      B.msy.min <- NA
+      B.msy.max <- NA
+    # BAM
+    } else if ("bmsy" %in% dat$label) {
+      B.msy <- dat |>
+        dplyr::filter(label == "bmsy") |>
+        dplyr::select(estimate) |>
+        as.numeric()
+      B.msy.min_uncert <- dat |>
+        dplyr::filter(label == "bmsy") |>
+        dplyr::select(uncertainty) |>
+        as.numeric()
+      B.msy.min <- B.msy - B.msy.min_uncert
+      B.msy.max <- B.msy + B.msy.min_uncert
+    # Rceattle
+    } else {
+      B.msy <- NA
+      B.msy.min <- NA
+      B.msy.max <- NA
+    }
+    
     export_kqs(
       B.ref.pt,
       B.units,
       B.start.year,
       B.end.year,
-      B.terminal.year
+      B.terminal.year,
+      B.msy.min,
+      B.msy.max,
+      B.msy
     )
 
     insert_kqs(
@@ -232,7 +267,21 @@ plot_biomass <- function(
       B.units,
       B.start.year,
       B.end.year,
-      B.terminal.year
+      B.terminal.year,
+      B.msy.min,
+      B.msy.max,
+      B.msy
+    )
+
+    insert_kqs(
+      B.ref.pt,
+      B.units,
+      B.start.year,
+      B.end.year,
+      B.terminal.year,
+      B.msy.min,
+      B.msy.max,
+      B.msy
     )
 
     create_rda(
