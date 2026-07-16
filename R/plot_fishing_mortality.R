@@ -121,13 +121,25 @@ plot_fishing_mortality <- function(
       dplyr::filter(grepl('f_target', label) | grepl('f_msy', label) | (grepl('fishing_mortality_msy', label) & is.na(year))) |>
       dplyr::pull(estimate) |>
       round(digits = 3)
-
+    
+    if ("log_flimit" %in% unique(dat$label)) {
+      f.limit <- dat |>
+      dplyr::filter(label == "log_flimit",
+                    module_name == "estimated_params") |>
+      dplyr::pull(estimate) |>
+      exp() |>
+      round(digits = 3)
+    } else {
+      f.limit <- NA
+    }
+    
     export_kqs(
       F.ref.pt,
       F.start.year,
       F.end.year,
       F.terminal.year,
-      F.target
+      F.target,
+      f.limit
     )
 
     insert_kqs(
@@ -135,7 +147,8 @@ plot_fishing_mortality <- function(
       F.start.year,
       F.end.year,
       F.terminal.year,
-      F.target
+      F.target,
+      f.limit
     )
 
     create_rda(
