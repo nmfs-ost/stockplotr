@@ -1,7 +1,7 @@
 #' Plot Recruitment
 #'
 #' @inheritParams plot_spawning_biomass
-#' @param unit_label units for recruitment
+#' @param unit_label String. Units for recruitment
 #'
 #' Default: "mt"
 #'

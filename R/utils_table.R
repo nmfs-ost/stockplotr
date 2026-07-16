@@ -4,9 +4,9 @@
 
 #' Create the rda package for a plot or table
 #'
-#' @param data A dataframe-based table
-#' @param caption A string comprising the table caption
-#' @param label A string comprising the table label
+#' @param data Data frame. A dataframe-based table
+#' @param caption String. Table caption
+#' @param label String. Table label
 #'
 #' @returns A table based in LaTeX.
 #' @export
@@ -103,9 +103,9 @@ create_latex_table <- function(data,
 #-------------------------------------------------------------------------------
 
 #' Create loop to test for differences in column values
-#' @param dat input data into process_table
-#' @param index_variables the index_variables vector created within process_table
-#' @param id_group the identifying index variable as a string
+#' @param dat Data frame. Input data into process_table
+#' @param index_variables Character vector. The index_variables vector created within process_table
+#' @param id_group String. The identifying index variable as a string
 #'
 #' Default: NULL
 
@@ -181,11 +181,11 @@ check_label_differences <- function(dat, index_variables, id_group = NULL) {
 
 #' Rename columns and merge estimate and uncertainty columns for table presentation
 #'
-#' @param table_data list of dataframes that will be eventually turned into tables
-#' @param uncert_lab uncertainty label. Typically inherited from another function
+#' @param table_data List of dataframes that will be eventually turned into tables
+#' @param uncert_lab String. Uncertainty label. Typically inherited from another function
 #' but is the exact string of the uncertainty in the data (e.g., "sd", "se", "cv",
 #' "uncertainty").)
-#' @param id_col_vals A list of variables identifying grouping of the data and 
+#' @param id_col_vals List. A list of variables identifying grouping of the data and
 #' their unique values.
 #' @param unit_label String. The units of the estimate being presented in the table.
 #'

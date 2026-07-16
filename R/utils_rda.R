@@ -7,7 +7,7 @@
 
 #' Substitute key quantities' values into template
 #'
-#' @param df Dataframe created by importing "key_quantity_template.csv" or
+#' @param df Data frame. Dataframe created by importing "key_quantity_template.csv" or
 #' "key_quantities.csv", empty or partially-filled templates with key
 #' quantity names and other associated information
 #' @param ... Key quantity objects whose values will be added to the output
@@ -191,36 +191,36 @@ insert_kqs <- function(...) {
 
 #' Create the rda package for a plot or table
 #'
-#' @param object Table or plot object
-#' @param topic_label A string that names the object
-#' @param fig_or_table A string identifying if the object is a "table" or "figure"
-#' @param dat Data frame containing data which will fill in captions and
+#' @param object Object. Table or plot object
+#' @param topic_label String. Name of the object
+#' @param fig_or_table String. Indicates whether the object is a "table" or "figure"
+#' @param dat Data frame. Data which will fill in captions and
 #' alternative text for the object
-#' @param dir Directory to where the rda will be saved
+#' @param dir Path. Directory to where the rda will be saved
 #'
 #' Default: the working directory (`getwd()`)
 #'
-#' @param year Assessment year
+#' @param year Number. Assessment year
 #'
 #' Default: the current year
 #'
-#' @param ref_line Reference line value
+#' @param ref_line String. Reference line value
 #'
 #' Default: "msy"
 #'
 #' Options: Including, but not limited to: "msy", "target", "unfished"
 #'
-#' @param scale_amount A number describing how much to scale down the quantities
+#' @param scale_amount Number. A number describing how much to scale down the quantities
 #' shown on the y axis. For example, scale_amount = 100 would scale down a value
 #' from 500,000 --> 5,000. This scale will be reflected in the y axis label.
 #'
 #' Default: 1
 #'
-#' @param unit_label A string containing a unit label for the y-axis
+#' @param unit_label String. Unit label for the y-axis
 #'
 #' Default: "mt"
 #'
-#' @param table_df The data frame that the table will be made into for purposes
+#' @param table_df Data frame. The data frame that the table will be made into for purposes
 #' of exporting a latex formatted table.
 #'
 #' @returns An rda package for a plot or table object. Requires an
@@ -512,17 +512,17 @@ create_rda <- function(
 #' Extract a figure or table's caption and alternative text for usage when
 #' generating a figure or table. Typically used before stockplotr::export_rda().
 #'
-#' @param topic_label A string that describes a figure or table's label. These
+#' @param topic_label String. Figure or table label. These
 #' labels are found in the "label" column of the "captions_alt_text.csv" file
 #' and are used to link the figure or table with its caption/alt text.
 #'
 #' Default: NULL
 #'
-#' @param fig_or_table A string describing whether the plot is a figure or table.
+#' @param fig_or_table String. Indicates whether the plot is a figure or table.
 #'
 #' Default: NULL
 #'
-#' @param dir The directory containing the "captions_alt_text.csv" file.
+#' @param dir Path. The directory containing the "captions_alt_text.csv" file.
 #'
 #' Default: the working directory (`getwd()`)
 #'
@@ -588,36 +588,36 @@ extract_caps_alttext <- function(topic_label = NULL,
 #' Export a figure/table, and its caption and alternative text, to an rda object.
 #' Typically used after stockplotr::extract_caps_alttext().
 #'
-#' @param object The final figure (ggplot) or table (flextable) object.
+#' @param object Object. The final figure (ggplot) or table (flextable) object.
 #'
 #' Default: NULL
 #'
-#' @param caps_alttext The object containing a figure's caption and alternative
+#' @param caps_alttext Data frame or list. The object containing a figure's caption and alternative
 #' text, in a list, or a table's caption, likely generated with
 #' stockplotr::extract_caps_alttext().
 #'
 #' Default: NULL
 #'
-#' @param figures_tables_dir If the user has already created folders containing
+#' @param figures_tables_dir Path. If the user has already created folders containing
 #' figures and tables ("figures" and "tables"), figures_tables_dir represents
 #' the location of these folders. Otherwise, these two folders will be created
 #' automatically, then used to store the exported rda files.
 #'
 #' Default: NULL
 #'
-#' @param topic_label A string that describes a figure or table's label. These
+#' @param topic_label String. Figure or table label. These
 #' labels are found in the "label" column of the "captions_alt_text.csv" file
 #' and are used to link the figure or table with its caption/alt text.
 #'
 #' Default: NULL
 #'
-#' @param fig_or_table A string describing whether the plot is a figure or table.
+#' @param fig_or_table String. Indicates whether the plot is a figure or table.
 #'
 #' Default: NULL
 #'
 #' Options: "figure", "table"
 #'
-#' @param latex_table The object containing a LaTeX-based table.
+#' @param latex_table Table object. The object containing a LaTeX-based table.
 #'
 #' Default: NULL
 #'

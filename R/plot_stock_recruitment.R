@@ -1,18 +1,18 @@
 #' Plot Stock Recruit Relationship
 #'
 #' @inheritParams plot_spawning_biomass
-#' @param interactive Indicate whether the environment the
+#' @param interactive Logical. TRUE/FALSE; indicate whether the environment the
 #' plot is being made in is interactive. By default, this
 #' is set to false. If true, dependent on your data, a
 #' option menu will pop-up.
 #'
 #' Default: TRUE
 #'
-#' @param spawning_biomass_label Units for spawning biomass
+#' @param spawning_biomass_label String. Units for spawning biomass
 #'
 #' Default: "mt"
 #'
-#' @param recruitment_label units for recruitment
+#' @param recruitment_label String. Units for recruitment
 #'
 #' Default: "mt"
 #'

@@ -19,52 +19,52 @@ plot_obsvpred(
 )
 }
 \arguments{
-\item{dat}{filtered data frame from standard output file(s) preformatted for
+\item{dat}{Data frame. Filtered data frame from standard output file(s) preformatted for
 the target label from \link[stockplotr]{filter_data}}
 
-\item{x}{a string of the column name of data used to plot on the x-axis
+\item{x}{String. Column name of data used to plot on the x-axis
 
 Default: "year"}
 
-\item{y}{a string of the column name of data used to plot on the y-axis
+\item{y}{String. Column name of data used to plot on the y-axis
 
 Default: "estimate"}
 
-\item{observed_label}{a string of the label used to filter the observed data
+\item{observed_label}{String. Label used to filter the observed data
 
 Default: "observed"}
 
-\item{predicted_label}{a string of the label used to filter the predicted data
+\item{predicted_label}{String. Label used to filter the predicted data
 Default: "predicted"}
 
-\item{geom}{type of geom to use for plotting found in ggplot2 (e.g. "point",
+\item{geom}{String. Type of geom to use for plotting found in ggplot2 (e.g. "point",
 "line", etc.).
 
 Default: "line"
 
 Options: "point" and "area"}
 
-\item{xlab}{a string of the x-axis label
+\item{xlab}{String. X-axis label
 
 Default: "Year"}
 
-\item{ylab}{a string of the y-axis label. If NULL, it will be set to the name
+\item{ylab}{String. Y-axis label. If NULL, it will be set to the name
  of `y`.
 
 Default: NULL}
 
-\item{group}{a string of a single column that groups the data.
+\item{group}{String. Single column that groups the data.
 Currently can only have one level of grouping.
 
 Default: NULL
 Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
-\item{facet}{a string or vector of strings of a column that facets the data
+\item{facet}{Character vector. Column name or names used for faceting
 (e.g. "year", "area", etc.)
 
 Default: NULL}
 
-\item{...}{inherited arguments from internal functions from ggplot2::geom_xx}
+\item{...}{Inherited arguments from internal functions from ggplot2::geom_xx}
 }
 \value{
 A plot of observed vs. predicted data for a stock assessment report.

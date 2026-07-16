@@ -4,9 +4,9 @@
 
 #' Processing for figures
 #'
-#' @param dat Pre-filtered data from \link[stockplotr]{filter_data} following a
+#' @param dat Data frame. Pre-filtered data from \link[stockplotr]{filter_data} following a
 #' long format data.
-#' @param group A string identifying the indexing variable of the data.
+#' @param group String. Indexing variable of the data.
 #' To remove any groups and summarize data across all factors, set
 #' group = "none". Setting group = NULL will keep any grouping
 #' variables identified in the data by the function.
@@ -14,16 +14,15 @@
 #' Default: NULL
 #'
 #' Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL
-#' @param facet A string or vector of strings identifying the faceting
-#' variable(s) of the data.
+#' @param facet Character vector. Faceting variable(s) of the data.
 #'
 #' Default: NULL
-#' @param lbs A logical value indicating whether to convert the y-axis values from
+#' @param lbs Logical. TRUE/FALSE; indicate whether to convert the y-axis values from
 #' kilograms to pounds. The default units match the default in the
 #' unit_label argument - 'metric tons'.
 #'
 #' Default: `FALSE`
-#' @param method A string describing the method of summarizing data when group
+#' @param method String. Method for summarizing data when group
 #' is set to "none".
 #'
 #' Default: "sum"
@@ -32,11 +31,11 @@
 #'
 #' @returns List of 3 objects:
 #' \item{data}{A data frame of the processed data ready for plotting.}
-#' \item{group}{A string identifying the grouping variable of the data.
+#' \item{group}{Grouping variable of the data.
 #' If NULL, no grouping variable is identified. If not NULL, the function
 #' will verify that the data is indexed by this variables, otherwise it will
 #' overwrite it to a different, valid indexed variable or NULL.}
-#' \item{facet}{A string or vector of strings identifying the faceting
+#' \item{facet}{Faceting variable(s) identifying the
 #' variable(s) of the data. If NULL, no faceting variable is identified. Any
 #' identified indexed variables found in this function will be added to facet.}
 #'
@@ -373,10 +372,10 @@ process_data <- function(
 #' Processing for tables
 #'
 #' @inheritParams process_data
-#' @param label A string or vector of strings identifying the label values to filter the data.
+#' @param label String. Label value or values used to filter the data.
 #'
 #' Default: NULL
-#' @param digits Numeric value indicating the number of rounding digits.
+#' @param digits Number. Numeric value indicating the number of rounding digits.
 #'
 #' Default: 2
 #' @returns A dataframe of processed data ready for formatting into a table.

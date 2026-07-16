@@ -20,41 +20,41 @@ table_landings(
 )
 }
 \arguments{
-\item{dat}{A tibble or named list of tibbles (input as `list()`)
+\item{dat}{Data frame or list. A tibble or named list of tibbles (input as `list()`)
 returned from \link[stockplotr]{convert_output}.
 
 If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{unit_label}{Abbreviated units of landings
+\item{unit_label}{String. Abbreviated landings units
 
 Default: "mt"}
 
-\item{era}{A string naming the era of data.
+\item{era}{String. Era of data.
 
 Default: "time"
 
 Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
-\item{interactive}{A logical value indicating if the environment is interactive.
+\item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
 Default: `FALSE`}
 
-\item{group}{A string of a single column that groups the data.
+\item{group}{String. Single column that groups the data.
 
 Set group = "none" to summarize data over all indexing values.
 
 Default: NULL
 Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
-\item{method}{A string describing the method of summarizing data when group
+\item{method}{String. Method for summarizing data when group
 is set to "none".
 
 Default: "sum"
 
 Options: "sum" or "mean"}
 
-\item{module}{(Optional) A string indicating the module_name found in `dat`.
+\item{module}{Character vector. (Optional) Module name found in `dat`.
 If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
@@ -62,29 +62,29 @@ Default: NULL
 If the interactive and >1 module_name is found, user will select the
 module_name in the console. @seealso [filter_data()]}
 
-\item{label}{The label that will be chosen from the input file. If unspecified,
+\item{label}{String. The label that will be chosen from the input file. If unspecified,
 the function will search the "label" column and use the first matching label
 in this ordered list: "landings_weight",  "landings_numbers", "landings_expected",
 "landings_predicted", "landings".
 
 Default: NULL}
 
-\item{digits}{Numeric value indicating the number of digits values in the
+\item{digits}{Number. Numeric value indicating the number of digits values in the
 table will be rounded to.
 
 Default: 2}
 
-\item{scale_amount}{A number to scale the y-axis values.
+\item{scale_amount}{Number. A number to scale the y-axis values.
 
 Default: 1}
 
-\item{make_rda}{A logical value indicating whether to save the object and
+\item{make_rda}{Logical. TRUE/FALSE; indicate whether to save the object and
 make an automated caption and alternative text in the form of an `rda` object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
 
 Default: `FALSE`.}
 
-\item{tables_dir}{The location of the folder containing the generated table
+\item{tables_dir}{Path. The location of the folder containing the generated table
 rda files ("tables") that will be created if the argument `make_rda` = TRUE.
 
 Default: the working directory (`getwd()`)}
