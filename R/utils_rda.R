@@ -194,7 +194,7 @@ insert_kqs <- function(...) {
 #' @param object Object. Table or plot object
 #' @param topic_label String. Name of the object
 #' @param fig_or_table String. Indicates whether the object is a "table" or "figure"
-#' @param dat Data frame. Containing data which will fill in captions and
+#' @param dat Data frame. Data which will fill in captions and
 #' alternative text for the object
 #' @param dir Path. Directory to where the rda will be saved
 #'
