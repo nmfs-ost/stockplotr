@@ -67,7 +67,9 @@ We would like to thank Dan Hennen for sharing his projections table
 function code, which served as the foundation for this function.
 }
 \examples{
-\dontrun{
-# add example here
-}
+table_projections(
+ dat = stockplotr:::example_data,
+ interactive = FALSE,
+ module = "DERIVED_QUANTITIES")
+
 }
