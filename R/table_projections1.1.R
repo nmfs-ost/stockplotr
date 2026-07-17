@@ -12,8 +12,8 @@
 #' }
 table_projections <- function(
     dat,
-    unit_label = c("catch" = "mt", "spawning_biomass" = "mt"),
-    uncertainty = c("catch" = "sd", "spawning_biomass" = "sd"),
+    unit_label = c("catch" = "mt", "spawning_biomass" = "mt", "fishing_mortality" = ""),
+    uncertainty = c("catch" = "stddev", "spawning_biomass" = "stddev", "fishing_mortality" = "stddev"),
     interactive = TRUE,
     module = NULL,
     make_rda = FALSE,
@@ -48,20 +48,21 @@ table_projections <- function(
         dplyr::mutate(estimate = round(as.numeric(estimate), digits = 0)) |>
         dplyr::mutate(uncertainty = round(as.numeric(uncertainty), digits = 2))
       # process to reduce colums
-      processed_data <- process_table(filtered_data)
-      data <- processed_data[[1]][[1]]
-      group <- processed_data[[2]]
-      # TODO: extract uncert lab from uncert col in processed_data
-      # final df to merge
-      final <- merge_error(
-        table_data = processed_data,
-        id_col_vals = group,
-        unit_label = unit_label[grepl(x, names(unit_label))][[1]],
-        uncert_lab = uncertainty[grepl(x, names(uncertainty))][[1]]
-      )
+      # processed_data <- 
+      process_table(filtered_data)
+      # data <- processed_data[[1]][[1]]
+      # group <- processed_data[[2]]
     }
   )
   
+  # TODO: extract uncert lab from uncert col in processed_data
+  # final df to merge
+  final <- merge_error(
+    table_data = lab_list,
+    id_col_vals = group,
+    unit_label = unit_label[grepl(x, names(unit_label))][[1]],
+    uncert_lab = uncertainty[grepl(x, names(uncertainty))][[1]]
+  )
   # TODO: cbind columns with year/matching groups
   # TODO: add to gt and add_theme
   # TODO: add step for exporting as rda
