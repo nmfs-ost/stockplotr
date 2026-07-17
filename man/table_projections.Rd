@@ -7,8 +7,8 @@
 table_projections(
   dat,
   unit_label = c(catch = "mt", spawning_biomass = "mt", fishing_mortality = ""),
-  uncertainty = c(catch = "stddev", spawning_biomass = "stddev", fishing_mortality =
-    "stddev"),
+  uncertainty_label = c(catch = "stddev", spawning_biomass = "stddev", fishing_mortality
+    = "stddev"),
   interactive = TRUE,
   module = NULL,
   make_rda = FALSE,
@@ -22,9 +22,16 @@ returned from \link[stockplotr]{convert_output}.
 If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{unit_label}{Abbreviated units of landings
+\item{unit_label}{Character vector. Abbreviated unit label for each quantity
 
-Default: "mt"}
+Default: c("catch" = "mt", "spawning_biomass" = "mt", 
+"fishing_mortality" = "")}
+
+\item{uncertainty_label}{Character vector. Abbreviated uncertainty label for
+each quantity
+
+Default: c("catch" = "stddev", "spawning_biomass" = "stddev",
+"fishing_mortality" = "stddev")}
 
 \item{interactive}{A logical value indicating if the environment is interactive.
 

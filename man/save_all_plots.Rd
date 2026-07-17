@@ -25,7 +25,11 @@ save_all_plots(
   index_unit_label = "",
   biomass_unit_label = "mt",
   catch_unit_label = "mt",
-  catch_scale_amount = 1
+  catch_scale_amount = 1,
+  projections_unit_label = c(catch = "mt", spawning_biomass = "mt", fishing_mortality =
+    ""),
+  projections_uncert_label = c(catch = "stddev", spawning_biomass = "stddev",
+    fishing_mortality = "stddev")
 )
 }
 \arguments{
@@ -137,6 +141,17 @@ Default: "mt"}
 catch quantities shown via bubble size. See `recruitment_scale_amount`.
 
 Default: 1}
+
+\item{projections_unit_label}{Units for projections quantities
+
+Default: c("catch" = "mt", "spawning_biomass" = "mt", 
+"fishing_mortality" = "")}
+
+\item{projections_uncert_label}{Abbreviated uncertainty label for
+each quantity
+
+Default: c("catch" = "stddev", "spawning_biomass" = "stddev",
+"fishing_mortality" = "stddev")}
 }
 \value{
 Rda files for each figure/table.
