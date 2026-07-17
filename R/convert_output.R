@@ -553,11 +553,12 @@ convert_output <- function(
                   label == "f" ~ "fishing_mortality",
                   TRUE ~ label
                 ),
-                estimate = dplyr::if_else(
-                  grepl("-|_", estimate),
-                  NA,
-                  estimate
-                )
+                estimate = as.numeric(estimate)
+                  # dplyr::if_else(
+                  # grepl("-|_", as.numeric(estimate)),
+                  # NA,
+                  # estimate
+                # )
               )
 
             if (any(colnames(df5) %in% errors)) {
