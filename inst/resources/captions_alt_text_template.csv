@@ -31,7 +31,7 @@ biomass_at_age,figure,Estimated population numbers at age and population biomass
 proj.catch,figure,Forecasted catch in proj.catch.units over future years for different fishing mortality scenarios as indicated in the legend.,"Time series line graph showing forecasted catch over future years for different fishing mortality scenarios. The x axis shows the year, which spans from proj.catch.start.year to proj.catch.end.year. The y axis shows catch in proj.catch.units, which spans from proj.catch.min to proj.catch.max."
 proj.biomass,table,Forecasted biomass over future years for different fishing mortality scenarios.,
 report.version.model.changes,table,Document version history briefly describing when major changes or updates are made to each version of the report.,
-projection.ts,table,Forecasted catch, biomass, and fishing mortality over future years. ,
+projection.ts,table,"Forecasted catch, biomass, and fishing mortality over future years." ,
 catch,table,Observed (points) and model estimated (line) catch over time for fleet catch.fleet.,
 life.history.params,table,Life history parameters used in the stock assessment model. The last column of the table indicates whether the parameters were estimated by the model or fixed.,
 landings,table,Landed catch by fleet and year in landings.units.,

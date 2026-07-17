@@ -100,6 +100,17 @@
 #' @param landings_unit_label Units for landings
 #'
 #' Default: "mt"
+#' 
+#' @param projections_unit_label Units for projections quantities
+#'
+#' Default: c("catch" = "mt", "spawning_biomass" = "mt", 
+#' "fishing_mortality" = "")
+#' 
+#' @param projections_uncert_label Abbreviated uncertainty label for
+#' each quantity
+#' 
+#' Default: c("catch" = "stddev", "spawning_biomass" = "stddev",
+#' "fishing_mortality" = "stddev")
 #'
 #' @param proportional T/F to scale size of bubble plots
 #'
@@ -156,10 +167,13 @@ save_all_plots <- function(
   # imported from table_bnc
   biomass_unit_label = "mt",
   catch_unit_label = "mt",
-  catch_scale_amount = 1
+  catch_scale_amount = 1,
   # imported from table_harvest_projection- add potential unique arguments after dev
   # imported from table_index- zero unique arguments
   # imported from table_landings- zero unique arguments
+  # imported from table_projections
+  projections_unit_label = c("catch" = "mt", "spawning_biomass" = "mt", "fishing_mortality" = ""),
+  projections_uncert_label = c("catch" = "stddev", "spawning_biomass" = "stddev", "fishing_mortality" = "stddev")
 ) {
   make_rda <- TRUE
 
@@ -495,6 +509,28 @@ save_all_plots <- function(
       cli::cli_alert_danger("table_landings failed to run.")
       cli::cli_alert("Tip: check that your arguments are correct.")
       cli::cli_li("landings_unit_label = {landings_unit_label}")
+      print(e)
+    }
+  )
+  
+  tryCatch(
+    {
+      cli::cli_h2("table_projections")
+      table_projections(dat,
+                     unit_label = projections_unit_label,
+                     uncertainty_label = projections_uncert_label,
+                     interactive = FALSE,
+                     make_rda = TRUE,
+                     tables_dir = figures_tables_dir
+      ) # |>
+      # suppressWarnings() |>
+      # invisible()
+    },
+    error = function(e) {
+      cli::cli_alert_danger("table_projections failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      cli::cli_li("projections_unit_label = {projections_unit_label}")
+      cli::cli_li("projections_uncert_label = {projections_uncert_label}")
       print(e)
     }
   )
