@@ -21,9 +21,11 @@
 #' 
 #' @export
 #' @examples
-#' \dontrun{
-#' # add example here
-#' }
+#' table_projections(
+#'  dat = stockplotr:::example_data,
+#'  interactive = FALSE,
+#'  module = "DERIVED_QUANTITIES")
+#'
 table_projections <- function(
     dat,
     unit_label = c("catch" = "mt", "spawning_biomass" = "mt", "fishing_mortality" = ""),
