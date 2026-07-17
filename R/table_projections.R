@@ -5,6 +5,9 @@
 #' @inheritParams table_landings
 #'
 #' @return A formatted gt table object.
+#' @details We would like to thank Dan Hennen for sharing his projections table
+#' function code, which served as the foundation for this function.
+#' 
 #' @export
 #' @examples
 #' \dontrun{
@@ -20,18 +23,7 @@ table_projections <- function(
     tables_dir = getwd()
     ) {
   
-  #TODO: Add thanks to Dan somewhere
-  
-  # meta <- attr(dat, "metadata")
-  # is_latex <- !is.null(knitr::opts_knit$get("rmarkdown.pandoc.to")) && 
-  #   knitr::opts_knit$get("rmarkdown.pandoc.to") == "latex"
-  
-  # Dynamic F Label logic
-  # legacy_f_label <- meta$mod_f_name %||% "F"
-  # f_display_label <- if (is_latex) to_latex_caption(legacy_f_label) else clean_assessment_latex(legacy_f_label)
-  
-  # TODO: use purrr to iterate through 3 label_names: SB, fishing_mortality, and catch
-  # have info message for each iteration to know which module you are selecting for
+  # iterate through 3 label_names
   lab_list <- purrr::map(
     c("catch", "spawning_biomass", "fishing_mortality"),
     function(x) {
@@ -47,13 +39,12 @@ table_projections <- function(
       ) |>
         dplyr::mutate(estimate = round(as.numeric(estimate), digits = 0)) |>
         dplyr::mutate(uncertainty = round(as.numeric(uncertainty), digits = 2))
-      # process to reduce colums
+      # process to reduce columns
       processed_data <- process_table(filtered_data,
                                       digits = ifelse(x == "fishing_mortality", 5, 2))
       data <- processed_data[[1]]
       group <- processed_data[[2]]
-      # TODO: extract uncert lab from uncert col in processed_data
-      # final df to merge
+      # merge data with uncertainty and unit labels
       merge_error(
         table_data = data,
         id_col_vals = group,
@@ -68,9 +59,25 @@ table_projections <- function(
   
   final_table <- add_theme(combine_data)
   
-  # TODO: fix issue with missing parentheses around unit label in table
-  # TODO: add step for exporting as rda
-  
-  
-  return(final_table)
+  # export figure to rda if argument = T
+  if (make_rda == TRUE) {
+      # No key quantities for captions/alt text since only values
+      # are units for catch, SB, and F, which are specified for
+      # the main figures/tables for each
+      # landings.units <- unit_label
+     
+      create_rda(
+        object = final$label,
+        # get name of function and remove "table_" from it
+        topic_label = gsub("table_", "", tail(as.character(sys.call()[[1]]), n = 1)),
+        fig_or_table = "table",
+        dat = dat,
+        dir = tables_dir,
+        scale_amount = 1,
+        unit_label = unit_label,
+        table_df = final
+      )
+    }
+
+    return(final)
 }

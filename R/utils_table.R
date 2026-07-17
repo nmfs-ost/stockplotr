@@ -238,7 +238,11 @@ merge_error <- function(
     # Adjust all header label names now
     header_labs <- stringr::str_replace_all(colnames(tab_dat), "_", " ") |>
       stringr::str_to_title()
-    header_labs2 <- glue::glue("{header_labs[-1]}{ifelse(unit_label!='', paste0(' ', unit_label,' '), ' ')}({uncert_lab})")
+    header_labs2 <- glue::glue("{header_labs[-1]}{ifelse(unit_label!='', paste0(' (', unit_label,') '), ' ')}({uncert_lab})")
+    header_labs2 <- header_labs2 |> 
+      # remove double parentheses if present
+      stringr::str_replace_all("\\(\\(", "(") |> 
+      stringr::str_replace_all("\\)\\)", ")")
     colnames(tab_dat) <- c(header_labs[1], header_labs2)
     
     return(tab_dat)
