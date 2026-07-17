@@ -13,14 +13,13 @@
 table_projections <- function(
     dat,
     unit_label = c("catch" = "mt", "spawning_biomass" = "mt"),
+    uncertainty = c("catch" = "sd", "spawning_biomass" = "sd"),
     interactive = TRUE,
     module = NULL,
     make_rda = FALSE,
     tables_dir = getwd()
     ) {
   
-  #TODO: Identify how to extract future data from data
-  # - use era? Allow user to set years? etc.
   #TODO: Add thanks to Dan somewhere
   
   # meta <- attr(dat, "metadata")
@@ -32,29 +31,40 @@ table_projections <- function(
   # f_display_label <- if (is_latex) to_latex_caption(legacy_f_label) else clean_assessment_latex(legacy_f_label)
   
   # TODO: use purrr to iterate through 3 label_names: SB, fishing_mortality, and catch
-  prepared_data1 <- filter_data(
-    dat = dat,
-    label_name = "spawning_biomass$",
-    geom = "line",
-    era = NULL,
-    module = module,
-    scale_amount = 1,
-    interactive = interactive
-  ) |>
-    dplyr::mutate(estimate = round(as.numeric(estimate), digits = 0)) |>
-    dplyr::mutate(uncertainty = round(as.numeric(uncertainty), digits = 2))
-
-  # TODO: edit process_table() to avoid losing year when summarizing; right now, it's only examining index vars
-  # TODO: add 'method' option for 'distinct'
-  # TODO: update process_table() so it can handle when group = "none"
-  test <- process_table(
-    prepared_data1,
-    group = NULL
+  # have info message for each iteration to know which module you are selecting for
+  lab_list <- purrr::map(
+    c("catch", "spawning_biomass", "fishing_mortality"),
+    function(x) {
+      cli::cli_alert_info(paste0("Processing ", x))
+      filtered_data <- filter_data(
+        dat = dat,
+        label_name = paste0(x, "$"),
+        geom = "line",
+        era = "fore",
+        module = module,
+        scale_amount = 1,
+        interactive = interactive
+      ) |>
+        dplyr::mutate(estimate = round(as.numeric(estimate), digits = 0)) |>
+        dplyr::mutate(uncertainty = round(as.numeric(uncertainty), digits = 2))
+      # process to reduce colums
+      processed_data <- process_table(filtered_data)
+      data <- processed_data[[1]][[1]]
+      group <- processed_data[[2]]
+      # TODO: extract uncert lab from uncert col in processed_data
+      # final df to merge
+      final <- merge_error(
+        table_data = processed_data,
+        id_col_vals = group,
+        unit_label = unit_label[grepl(x, names(unit_label))][[1]],
+        uncert_lab = uncertainty[grepl(x, names(uncertainty))][[1]]
+      )
+    }
   )
   
-  data <- test[[1]][[1]]
-  group <- test[[2]]
-  facet <- test[[3]]
+  # TODO: cbind columns with year/matching groups
+  # TODO: add to gt and add_theme
+  # TODO: add step for exporting as rda
   
   # this is what our processing should achieve
   # proj_raw <- dat |> dplyr::filter(module_name == "projections")
