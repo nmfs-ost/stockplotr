@@ -59,8 +59,7 @@ process_data <- function(
   dat,
   group = NULL,
   facet = NULL,
-  lbs = FALSE,
-  method = "sum"
+  lbs = FALSE
 ) {
   # check if >1 model
   if (length(unique(dat$model)) > 1) {
@@ -90,39 +89,7 @@ process_data <- function(
 
   # check for additional indexed variables
   index_variables <- check_grouping(dat)
-  # If user input "none" to group this makes the plot remove any facetting or summarize?
-  # Removing this bc this logic has a lot of flaws
-  # if (!is.null(group) && group == "none") {
-  #   # group <- NULL
-  #   id_group <- index_variables[-grepl("year|age", index_variables)]
-  #   index_variables <- intersect(c("year", "age"), index_variables)
-  #   if (length(id_group) > 0) {
-  #     dat <- switch(method,
-  #       "mean" = dat |>
-  #         dplyr::group_by(dplyr::across(tidyselect::all_of(c("label", "model", "group_var", index_variables)))) |>
-  #         dplyr::summarize(
-  #           estimate = mean(estimate),
-  #           estimate_lower = mean(estimate_lower),
-  #           estimate_upper = mean(estimate_upper)
-  #         ),
-  #       "sum" = dat |>
-  #         dplyr::group_by(dplyr::across(tidyselect::all_of(c("label", "model", "group_var", index_variables)))) |>
-  #         dplyr::summarize(
-  #           estimate = sum(estimate),
-  #           estimate_lower = sum(estimate_lower),
-  #           estimate_upper = sum(estimate_upper)
-  #         )
-  #     )
-  #   }
-  # }
-  # Warn  user when group not indexed in data
-  # if (!is.null(group) && group %notin% index_variables) {
-  #   if (group != "none") {
-  #     cli::cli_alert_warning("{group} not an index of data.")
-  #     # reset group to NULL so it's not added to grouping incorrectly
-  #     group <- NULL
-  #   }
-  # }
+  
   # Set group_var to identified grouping
   if (!is.null(group) && group != "none") {
     data <- dplyr::mutate(
@@ -426,7 +393,7 @@ process_table <- function(
     if (length(id_group) > 1){
       cli::cli_alert_warning("Data contains >1 indexing variable. Selecting {id_group[1]}.")
     }
-    if (any(is.na(dat[[id_group]]))){
+    if (length(id_group) > 0 && any(is.na(dat[[id_group]]))){
       dat <- dat |>
         dplyr::filter(!is.na(.data[[id_group]]))
     }

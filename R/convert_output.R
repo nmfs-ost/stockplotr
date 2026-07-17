@@ -1254,7 +1254,7 @@ convert_output <- function(
       )
     }
     out_new <- Reduce(rbind, out_list)
-    out_new2 <- out_new |>
+    out_new <- out_new |>
       dplyr::mutate(
         fleet = dplyr::case_when(
           any(unique(out_new$fleet) %in% fleet_names) ~ fleet,
