@@ -68,6 +68,7 @@ table_projections <- function(
   
   final_table <- add_theme(combine_data)
   
+  # TODO: fix issue with missing parentheses around unit label in table
   # TODO: add step for exporting as rda
   
   
