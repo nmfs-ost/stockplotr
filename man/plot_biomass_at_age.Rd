@@ -44,6 +44,14 @@ is relative to z
 
 Default: `TRUE`}
 
+\item{module}{(Optional) A string indicating the module_name found in `dat`.
+If selecting >1 module, place them in a vector like c("module1", "module2").
+
+Default: NULL
+
+If the interactive and >1 module_name is found, user will select the
+module_name in the console. @seealso [filter_data()]}
+
 \item{interactive}{TRUE/FALSE; indicate whether the environment in which the
 function is operating  is interactive. This bypasses some options for
 filtering when preparing data for the plot.
