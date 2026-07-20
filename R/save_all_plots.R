@@ -402,6 +402,7 @@ save_all_plots <- function(
         unit_label = biomass_at_age_unit_label,
         scale_amount = biomass_at_age_scale_amount,
         proportional = proportional,
+        interactive = FALSE,
         make_rda = TRUE,
         figures_dir = figures_tables_dir
       ) # |>

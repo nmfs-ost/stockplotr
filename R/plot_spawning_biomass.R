@@ -242,18 +242,13 @@ plot_spawning_biomass <- function(
   ### Make RDA ----
   if (make_rda) {
     if (relative) {
-      # pulling out the 2nd df in 'data' works for several datasets
-      rel.ssb.min <- ggplot2::ggplot_build(final)[["data"]][[2]] |>
-        as.data.frame() |>
-        dplyr::pull(y) |>
-        min() |>
-        round(digits = 2)
-      rel.ssb.max <- ggplot2::ggplot_build(final)[["data"]][[2]] |>
-        as.data.frame() |>
-        dplyr::pull(y) |>
-        max() |>
-        round(digits = 2)
-
+      rel.ssb.min <- calc_kqs(returned_kq = "rel.ssb.min",
+                              final = final)
+      
+     
+      rel.ssb.max <- calc_kqs(returned_kq = "rel.ssb.max",
+                              final = final)
+        
       # calculate & export key quantities
       export_kqs(rel.ssb.min, rel.ssb.max)
 
