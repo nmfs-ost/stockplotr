@@ -177,15 +177,10 @@ plot_biomass <- function(
   ### Make RDA ----
   if (make_rda) {
     if (relative) {
-      # pulling out the 2nd df in 'data' works for several datasets
-      rel.B.min <- ggplot2::ggplot_build(final)[["data"]][[2]] |>
-        as.data.frame() |>
-        dplyr::pull(y) |>
-        min()
-      rel.B.max <- ggplot2::ggplot_build(final)[["data"]][[2]] |>
-        as.data.frame() |>
-        dplyr::pull(y) |>
-        max()
+      rel.B.min <- calc_kqs(returned_kq = "rel.B.min",
+                            final = final)
+      rel.B.max <- calc_kqs(returned_kq = "rel.B.max",
+                            final = final)
 
       # calculate & export key quantities
       export_kqs(rel.B.min, rel.B.max)
@@ -193,8 +188,10 @@ plot_biomass <- function(
       # Add key quantities to captions/alt text
       insert_kqs(rel.B.min, rel.B.max)
     } else {
-      B.min <- min(prepared_data$estimate)
-      B.max <- max(prepared_data$estimate)
+      B.min <- calc_kqs(returned_kq = "B.min",
+                        prepared_data = prepared_data)
+      B.max <- calc_kqs(returned_kq = "B.max",
+                        prepared_data = prepared_data)
 
       export_kqs(B.min, B.max)
       insert_kqs(B.min, B.max)
@@ -202,48 +199,34 @@ plot_biomass <- function(
 
     B.ref.pt <- as.character(ref_line)
     B.units <- as.character(unit_label)
-    B.start.year <- min(prepared_data$year) |> round(digits = 3)
-    B.end.year <- max(prepared_data$year) |> round(digits = 3)
-    B.terminal.year <- filter_data(
-      dat = dat,
-      label_name = ifelse(relative, "biomass_biomass_unfished|biomass_ratio", "^biomass$"), # what exactly is biomass_ratio?
-      geom = geom,
-      group = orig_group,
-      facet = orig_facet,
-      era = "time",
-      module = "TIME_SERIES",
-      scale_amount = scale_amount,
-      interactive = interactive
-    ) |>
-      dplyr::filter(year == max(year)) |>
-      dplyr::pull(year) |>
-      unique()
-    
+    B.start.year <- calc_kqs(returned_kq = "B.start.year",
+                             prepared_data = prepared_data)
+    B.end.year <- calc_kqs(returned_kq = "B.end.year", 
+                           prepared_data = prepared_data)
+    B.terminal.year <- calc_kqs(returned_kq = "B.terminal.year",
+                                dat = dat,
+                                relative = relative)
+
     # SS3, FIMS
     if ("spawning_biomass_msy" %in% dat$label) {
-      sb_msy <- dat |>
-        dplyr::filter(label == "spawning_biomass_msy") |>
-        dplyr::select(estimate) |>
-        as.numeric()
-      b_sb_msy <- dat |>
-        dplyr::filter(label == "biomass_msy_spawning_biomass_msy") |>
-        dplyr::select(estimate) |>
-        as.numeric()
-      B.msy <- round(sb_msy * b_sb_msy, digits = 3)
+      sb_msy <- calc_kqs(returned_kq = "sb_msy",
+                         dat = dat)
+      b_sb_msy <- calc_kqs(returned_kq = "b_sb_msy",
+                           dat = dat)
+      B.msy <- calc_kqs(returned_kq = "B.msy",
+                        dat = dat)
       B.msy.min <- NA
       B.msy.max <- NA
     # BAM
     } else if ("bmsy" %in% dat$label) {
-      B.msy <- dat |>
-        dplyr::filter(label == "bmsy") |>
-        dplyr::select(estimate) |>
-        as.numeric()
-      B.msy.min_uncert <- dat |>
-        dplyr::filter(label == "bmsy") |>
-        dplyr::select(uncertainty) |>
-        as.numeric()
-      B.msy.min <- B.msy - B.msy.min_uncert
-      B.msy.max <- B.msy + B.msy.min_uncert
+      B.msy <- calc_kqs(returned_kq = "B.msy", 
+                        dat = dat)
+      B.msy.min_uncert <- calc_kqs(returned_kq = "B.msy.min_uncert",
+                                   dat = dat)
+      B.msy.min <- calc_kqs(returned_kq = "B.msy.min", 
+                            dat = dat)
+      B.msy.max <- calc_kqs(returned_kq = "B.msy.max",
+                            dat = dat)
     # Rceattle
     } else {
       B.msy <- NA

@@ -87,14 +87,10 @@ plot_fishing_mortality <- function(
 
   ### Make RDA ----
   if (make_rda) {
-    F.min <- prepared_data$estimate |>
-      na.omit() |>
-      min() |>
-      round(digits = 3)
-    F.max <- prepared_data$estimate |>
-      na.omit() |>
-      max() |>
-      round(digits = 3)
+    F.min <- calc_kqs(returned_kq = "F.min",
+                      prepared_data = prepared_data)
+    F.max <- calc_kqs(returned_kq = "F.max",
+                      prepared_data = prepared_data)
 
     export_kqs(F.min, F.max)
     insert_kqs(F.min, F.max)
@@ -102,36 +98,14 @@ plot_fishing_mortality <- function(
     F.ref.pt <- as.character(ref_line)
     F.start.year <- min(prepared_data$year)
     F.end.year <- max(prepared_data$year)
-    F.terminal.year <- filter_data(
-      dat = dat,
-      label_name = "^fishing_mortality$",
-      geom = geom,
-      era = "time",
-      group = orig_group,
-      facet = orig_facet,
-      module = "TIME_SERIES",
-      scale_amount = 1,
-      interactive = interactive
-    ) |>
-      dplyr::filter(year == max(year)) |>
-      dplyr::pull(year) |>
-      unique()
+    F.terminal.year <- calc_kqs(returned_kq = "F.terminal.year",
+      dat = dat
+    )
     
-    F.target <- dat |>
-      dplyr::filter(grepl('f_target', label) | grepl('f_msy', label) | (grepl('fishing_mortality_msy', label) & is.na(year))) |>
-      dplyr::pull(estimate) |>
-      round(digits = 3)
-    
-    if ("log_flimit" %in% unique(dat$label)) {
-      f.limit <- dat |>
-      dplyr::filter(label == "log_flimit",
-                    module_name == "estimated_params") |>
-      dplyr::pull(estimate) |>
-      exp() |>
-      round(digits = 3)
-    } else {
-      f.limit <- NA
-    }
+    F.target <- calc_kqs(returned_kq = "F.target",
+                         dat = dat)
+    f.limit <- calc_kqs(returned_kq = "f.limit",
+                        dat = dat)
     
     export_kqs(
       F.ref.pt,
