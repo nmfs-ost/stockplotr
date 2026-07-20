@@ -267,7 +267,7 @@ Dynamic_Bzero,Dynamic_Bzero,dynamic_biomass_zero
 ,bio_all_eq,biomass
 ,bio_smry_eq,biomass_reference_age
 ,ssbfished_eq,spawning_biomass_fished
-,ssbfished_r,
+,ssbfished_r,spawning_biomass_fished_recruitment
 ,f_std,fishing_mortality
 ,ave_f,fishing_mortality_average
 ,maxf,fishing_mortality_max
@@ -281,3 +281,6 @@ Dynamic_Bzero,Dynamic_Bzero,dynamic_biomass_zero
 ,enc_catch,
 ,mnage_smry,
 ,mnage_catch,
+,ssb,spawning_biomass
+,ssb_nofishing,spawning_biomass_no_fishing
+,f_msy,fishing_mortality_msy
