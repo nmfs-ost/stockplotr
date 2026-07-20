@@ -71,3 +71,12 @@ test_that("missing arguments trigger warnings or errors", {
 
   unlink(fs::path("fixtures", "ss3_models_converted"), recursive = TRUE)
 })
+
+test_that("invalid URL input triggers an error", {
+  expect_error(
+    convert_output(
+      file = "https://invalid.invalid/Report.sso"
+    ),
+    "Invalid URL."
+  )
+})

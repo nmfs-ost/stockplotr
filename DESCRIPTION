@@ -43,7 +43,6 @@ Imports:
     ggplot2 (>= 4.0.0),
     glue,
     gt,
-    httr,
     kableExtra,
     naniar,
     prodlim,
