@@ -27,6 +27,38 @@ calc_kqs <- function(returned_kq,
                      relative = NULL,
                      ...){
   
+  # plot_stock_recruitment()-----
+  if (returned_kq == "sr.age.min") {
+    return(
+      dat |>
+        dplyr::filter(!is.na(year) & !is.na(age)) |>
+        dplyr::slice(which.min(age)) |>
+        dplyr::select(age) |>
+        as.numeric()
+    )
+  }
+  
+  # plot_spawning_biomass()-----
+  if (returned_kq == "rel.ssb.min") {
+    return(
+      ggplot2::ggplot_build(final)[["data"]][[2]] |>
+        as.data.frame() |>
+        dplyr::pull(y) |>
+        min() |>
+        round(digits = 2)
+    )
+  }
+  
+  if (returned_kq == "rel.ssb.max") {
+    return(
+      ggplot2::ggplot_build(final)[["data"]][[2]] |>
+        as.data.frame() |>
+        dplyr::pull(y) |>
+        max() |>
+        round(digits = 2)
+    )
+  }
+  
   # plot_biomass()-----
   if (returned_kq == "rel.B.min") {
     return(
@@ -141,7 +173,7 @@ calc_kqs <- function(returned_kq,
     return(as.numeric(B.msy) + as.numeric(B.msy.min_uncert))
   }
   
-  # plot_fishing_mortality()---
+  # plot_fishing_mortality()-----
   if (returned_kq == "F.min") {
     return(
       prepared_data$estimate |>
