@@ -228,6 +228,7 @@ plot_spawning_biomass <- function(
         ggplot2::geom_point(ggplot2::aes(x = min_year - 1, y = ref_point)) + # should I keep -1 or set as first year?
         theme_noaa()
     } else {
+      # add apply/purrr/or for loop for reference lines -- not just the first anymore
       final <- reference_line(
         plot = plt,
         dat = rp_dat,
