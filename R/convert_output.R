@@ -38,6 +38,14 @@
 #'   save_dir = here::here("standard_output.rda")
 #' )
 #' }
+row_match <- function(x, table, nomatch = NA) {
+  if (inherits(table, "matrix")) table <- as.data.frame(table)
+  if (is.null(dim(x))) x <- as.data.frame(matrix(x, nrow = 1))
+  x_concat <- do.call("paste", c(x[, , drop = FALSE], sep = "\r"))
+  table_concat <- do.call("paste", c(table[, , drop = FALSE], sep = "\r"))
+  match(x_concat, table_concat, nomatch = nomatch)
+}
+
 convert_output <- function(
   file,
   model = NULL,
@@ -337,7 +345,7 @@ convert_output <- function(
             # identify first row
             row <- df2[1, ]
             # find row number that matches 'row'
-            rownum <- prodlim::row.match(as.vector(row), df1)
+            rownum <- row_match(as.vector(row), df1)
             # make row the header names for first df
             colnames(df1) <- row
             # Subset data frame
@@ -602,7 +610,7 @@ convert_output <- function(
             # check for age and length comps
             rows <- df1 |> dplyr::filter_all(dplyr::any_vars(. %in% c("age_bins", "len_bins")))
             if (length(rows) > 1) {
-              matchr <- prodlim::row.match(rows, df1)
+              matchr <- row_match(rows, df1)
               df1a <- df1[matchr[1]:matchr[2] - 1, ]
               df1a <- Filter(function(x) !all(is.na(x)), df1a)
               df1b <- df1[matchr[2]:nrow(df1), ]
@@ -741,7 +749,7 @@ convert_output <- function(
               # # make row the header names for first df
               # colnames(df1) <- row
               # # find row number that matches 'row'
-              # rownum <- prodlim::row.match(row, df1)
+              # rownum <- row_match(row, df1)
               # # Subset data frame
               # df3 <- df1[-c(1:rownum), ]
               # colnames(df3) <- tolower(row)
@@ -770,7 +778,7 @@ convert_output <- function(
               # make row the header names for first df
               colnames(df1) <- row
               # find row number that matches 'row'
-              rownum <- prodlim::row.match(row, df1)
+              rownum <- row_match(row, df1)
               # Subset data frame
               df3 <- df1[-(1:rownum), ]
               colnames(df3) <- tolower(row)
@@ -914,7 +922,7 @@ convert_output <- function(
               # make row the header names for first df
               colnames(df1) <- row
               # find row number that matches 'row'
-              rownum <- prodlim::row.match(row, df1)
+              rownum <- row_match(row, df1)
               # Subset data frame
               df3 <- df1[-c(1:rownum), ]
               colnames(df3) <- tolower(row)
@@ -1093,7 +1101,7 @@ convert_output <- function(
             # this is a temporary fix to a specific bug
             # I have seen this issue in the past and I am not sure how to recognize this generally
             if (any(parm_sel == "AGE_SELEX" & c("1", "2", "3") %notin% row)) {
-              rownum <- prodlim::row.match(row, df1)
+              rownum <- row_match(row, df1)
               # Subset data frame
               df1 <- df1[-c(1:rownum), ]
               cols_to_keep <- which(sapply(df1, function(x) !all(is.na(x))))
@@ -1106,7 +1114,7 @@ convert_output <- function(
             colnames(df1) <- row
 
             # find row number that matches 'row'
-            rownum <- prodlim::row.match(row, df1)
+            rownum <- row_match(row, df1)
             # Subset data frame
             df3 <- df1[-c(1:rownum), ]
             colnames(df3) <- tolower(row)

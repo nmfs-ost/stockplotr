@@ -45,7 +45,6 @@ Imports:
     gt,
     kableExtra,
     naniar,
-    prodlim,
     purrr,
     rlang,
     scales,
