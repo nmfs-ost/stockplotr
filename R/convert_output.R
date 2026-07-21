@@ -108,9 +108,13 @@ convert_output <- function(
   if (is.character(file)) {
     url_pattern <- "^(https?|ftp|file):\\/\\/[-A-Za-z0-9+&@#\\/%?=~_|!:,.;]*[-A-Za-z0-9+&@#\\/%=~_|]$"
     if (grepl(url_pattern, file)) {
-      check <- httr::HEAD(file)
-      url <- httr::status_code(check)
-      if (url == 404) cli::cli_abort(c(message = "Invalid URL."))
+      check <- tryCatch({
+        headers <- utils::curlGetHeaders(file)
+        attributes(headers)[["status"]]
+      }, error = function(e) {
+        404
+      })
+      if (check == 404) cli::cli_abort(c(message = "Invalid URL."))
     } else {
       if (!file.exists(file)) {
         cli::cli_abort(c(
