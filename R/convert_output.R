@@ -38,14 +38,6 @@
 #'   save_dir = here::here("standard_output.rda")
 #' )
 #' }
-row_match <- function(x, table, nomatch = NA) {
-  if (inherits(table, "matrix")) table <- as.data.frame(table)
-  if (is.null(dim(x))) x <- as.data.frame(matrix(x, nrow = 1))
-  x_concat <- do.call("paste", c(x[, , drop = FALSE], sep = "\r"))
-  table_concat <- do.call("paste", c(table[, , drop = FALSE], sep = "\r"))
-  match(x_concat, table_concat, nomatch = nomatch)
-}
-
 convert_output <- function(
   file,
   model = NULL,
