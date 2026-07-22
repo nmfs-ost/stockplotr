@@ -18,11 +18,11 @@ globvar <- c(
   "Component", "age_bins", "alt_label", "final_df", "init", "keyword", "len_bins",
   "like", "match_key", "morph", "nsim", "output", "output_order", "parm_stdev", "seas",
   "sexes", "subseas", "unique_count", "value", "yr", "fleet_names", "across",
-  "everything", "fleet_name", "name", "value_new", "y", ".",
+  "everything", "fleet_name", "name", "value_new", "y", ".", "x",
   # Rceattle conout terms
   "n", "observation", "selectivity_block", "log_sd", "fleet_code",
   "q_block", "species", "indices_observed", "indices_predicted",
   "catch_h", "catch", "catch_predicted", "age0_length1", "sample_size",
-  "dim_info", "label_init"
+  "dim_info", "label_init", "unit_label"
 )
 if (getRversion() >= "2.15.1") utils::globalVariables(globvar)

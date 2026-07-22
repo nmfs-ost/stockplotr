@@ -17,16 +17,16 @@ filter_data(
 )
 }
 \arguments{
-\item{dat}{A tibble or named list of tibbles (input as `list()`)
+\item{dat}{Data frame or list. A tibble or named list of tibbles (input as `list()`)
 returned from \link[stockplotr]{convert_output}.
 
 If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{label_name}{a string of the name of the label that is used to filter
+\item{label_name}{String. Name of the label used to filter
 the data.}
 
-\item{module}{(Optional) A string indicating the module_name found in `dat`.
+\item{module}{Character vector. (Optional) Module name found in `dat`.
 If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
@@ -34,34 +34,34 @@ Default: NULL
 If the interactive and >1 module_name is found, user will select the
 module_name in the console. @seealso [filter_data()]}
 
-\item{era}{A string naming the era of data.
+\item{era}{String. Era of data.
 
 Default: "time"
 
 Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
-\item{geom}{A string stating the geom used for the plot.
+\item{geom}{String. Geom used for the plot.
 
 Default: "line".
 
 Options: "line", "point", or "area"}
 
-\item{group}{A string of a single column that groups the data.
+\item{group}{String. Single column that groups the data.
 
 Set group = "none" to summarize data over all indexing values.
 
 Default: NULL
 Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
-\item{facet}{A string or vector of strings of a column name.
+\item{facet}{Character vector. Column name or names used for faceting.
 
 Default: NULL}
 
-\item{scale_amount}{A number to scale the y-axis values.
+\item{scale_amount}{Number. A number to scale the y-axis values.
 
 Default: 1}
 
-\item{interactive}{A logical value indicating if the environment is interactive.
+\item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
 Default: `FALSE`}
 }

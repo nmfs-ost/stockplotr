@@ -7,21 +7,21 @@
 convert_output(file, model = NULL, fleet_names = NULL, save_dir = NULL)
 }
 \arguments{
-\item{file}{Assessment model output file path}
+\item{file}{Path. Assessment model output file path}
 
-\item{model}{Assessment model used in evaluation
+\item{model}{String. Assessment model used in evaluation
 
 Default: NULL
 
 Options: "ss3", "bam", "fims", "rceattle"}
 
-\item{fleet_names}{Names of fleets in the assessment model as
+\item{fleet_names}{Character vector. Names of fleets in the assessment model as
  shortened in the output file. If fleet names are not properly read, then
  indicate the fleets names as an acronym in a vector
 
  Default: NULL}
 
-\item{save_dir}{File path to save the converted output file.
+\item{save_dir}{Path. File path to save the converted output file.
 
 Default: NULL}
 }

@@ -1,18 +1,18 @@
 #' Plot Stock Recruit Relationship
 #'
 #' @inheritParams plot_spawning_biomass
-#' @param interactive Indicate whether the environment the
+#' @param interactive Logical. TRUE/FALSE; indicate whether the environment the
 #' plot is being made in is interactive. By default, this
 #' is set to false. If true, dependent on your data, a
 #' option menu will pop-up.
 #'
 #' Default: TRUE
 #'
-#' @param spawning_biomass_label Units for spawning biomass
+#' @param spawning_biomass_label String. Units for spawning biomass
 #'
 #' Default: "mt"
 #'
-#' @param recruitment_label units for recruitment
+#' @param recruitment_label String. Units for recruitment
 #'
 #' Default: "mt"
 #'
@@ -178,11 +178,8 @@ plot_stock_recruitment <- function(
   # Make RDA
   if (make_rda) {
     # Obtain relevant key quantities for captions/alt text
-    sr.age.min <- dat |>
-      dplyr::filter(!is.na(year) & !is.na(age)) |>
-      dplyr::slice(which.min(age)) |>
-      dplyr::select(age) |>
-      as.numeric()
+    sr.age.min <- calc_kqs(returned_kq = "sr.age.min",
+                           dat = dat)
     sr.ssb.units <- spawning_biomass_label
     sr.ssb.min <- min(sr$spawning_biomass, na.rm = TRUE) |> round(digits = 3)
     sr.ssb.max <- max(sr$spawning_biomass, na.rm = TRUE) |> round(digits = 3)
@@ -215,7 +212,7 @@ plot_stock_recruitment <- function(
     create_rda(
       object = final,
       # get name of function and remove "plot_" from it
-      topic_label = gsub("plot_", "", tail(as.character(sys.call()[[1]]), n = 1)),
+      topic_label = gsub("plot_", "", utils::tail(as.character(sys.call()[[1]]), n = 1)),
       fig_or_table = "figure",
       dat = dat,
       dir = figures_dir # ,

@@ -2,18 +2,18 @@
 #'
 #' Format stock assessment output files to a standardized format.
 #'
-#' @param file Assessment model output file path
-#' @param model Assessment model used in evaluation
+#' @param file Path. Assessment model output file path
+#' @param model String. Assessment model used in evaluation
 #'
 #' Default: NULL
 #'
 #' Options: "ss3", "bam", "fims", "rceattle"
-#' @param fleet_names Names of fleets in the assessment model as
+#' @param fleet_names Character vector. Names of fleets in the assessment model as
 #'  shortened in the output file. If fleet names are not properly read, then
 #'  indicate the fleets names as an acronym in a vector
 #'
 #'  Default: NULL
-#' @param save_dir File path to save the converted output file.
+#' @param save_dir Path. File path to save the converted output file.
 #'
 #' Default: NULL
 #'
@@ -102,9 +102,13 @@ convert_output <- function(
   if (is.character(file)) {
     url_pattern <- "^(https?|ftp|file):\\/\\/[-A-Za-z0-9+&@#\\/%?=~_|!:,.;]*[-A-Za-z0-9+&@#\\/%=~_|]$"
     if (grepl(url_pattern, file)) {
-      check <- httr::HEAD(file)
-      url <- httr::status_code(check)
-      if (url == 404) cli::cli_abort(c(message = "Invalid URL."))
+      check <- tryCatch({
+        headers <- utils::curlGetHeaders(file)
+        attributes(headers)[["status"]]
+      }, error = function(e) {
+        404
+      })
+      if (check == 404) cli::cli_abort(c(message = "Invalid URL."))
     } else {
       if (!file.exists(file)) {
         cli::cli_abort(c(
@@ -412,7 +416,7 @@ convert_output <- function(
               # identify first row
               row <- df2[1, ]
               # find row number that matches 'row'
-              rownum <- prodlim::row.match(as.vector(row), df1)
+              rownum <- row_match(as.vector(row), df1)
               # make row the header names for first df
               colnames(df1) <- row
               # Subset data frame
@@ -432,7 +436,6 @@ convert_output <- function(
                 
               }
             }
-            
             # Remove any leftover NA columns if still present
             NA_cols <- which(sapply(df3, function(x) all(is.na(x))))
             if (length(NA_cols) > 0) df3 <- df3[, -NA_cols]
@@ -692,7 +695,7 @@ convert_output <- function(
             # check for age and length comps
             rows <- df1 |> dplyr::filter_all(dplyr::any_vars(. %in% c("age_bins", "len_bins")))
             if (length(rows) > 1) {
-              matchr <- prodlim::row.match(rows, df1)
+              matchr <- row_match(rows, df1)
               df1a <- df1[matchr[1]:matchr[2] - 1, ]
               df1a <- Filter(function(x) !all(is.na(x)), df1a)
               df1b <- df1[matchr[2]:nrow(df1), ]
@@ -831,7 +834,7 @@ convert_output <- function(
               # # make row the header names for first df
               # colnames(df1) <- row
               # # find row number that matches 'row'
-              # rownum <- prodlim::row.match(row, df1)
+              # rownum <- row_match(row, df1)
               # # Subset data frame
               # df3 <- df1[-c(1:rownum), ]
               # colnames(df3) <- tolower(row)
@@ -861,7 +864,7 @@ convert_output <- function(
                 # make row the header names for first df
                 colnames(df1) <- row
                 # find row number that matches 'row'
-                rownum <- prodlim::row.match(row, df1)
+                rownum <- row_match(row, df1)
                 # Subset data frame
                 df3 <- df1[-(1:rownum), ]
                 colnames(df3) <- tolower(row)
@@ -869,7 +872,6 @@ convert_output <- function(
                 df3 <- extract
                 colnames(df3) <- tolower(colnames(df3))
               }
-              
               # check if there are estimate and acual values within the df
               if (any(grepl("actual", colnames(df3)) | grepl("more_f", colnames(df3)))) {
                 actual_col <- grep("actual", colnames(df3))
@@ -1011,7 +1013,7 @@ convert_output <- function(
                 # make row the header names for first df
                 colnames(df1) <- row
                 # find row number that matches 'row'
-                rownum <- prodlim::row.match(row, df1)
+                rownum <- row_match(row, df1)
                 # Subset data frame
                 df3 <- df1[-c(1:rownum), ]
                 colnames(df3) <- tolower(row)
@@ -1019,7 +1021,6 @@ convert_output <- function(
                 df3 <- extract
                 colnames(df3) <- tolower(colnames(df3))
               }
-              
               # Pull out indexing variables and remove from labels
               df4 <- df3 |>
                 dplyr::select(intersect(colnames(df3), c("label", "value", "init", "parm_stdev"))) |>
@@ -1197,7 +1198,7 @@ convert_output <- function(
               # this is a temporary fix to a specific bug
               # I have seen this issue in the past and I am not sure how to recognize this generally
               if (any(parm_sel == "AGE_SELEX" & c("1", "2", "3") %notin% row)) {
-                rownum <- prodlim::row.match(row, df1)
+                rownum <- row_match(row, df1)
                 # Subset data frame
                 df1 <- df1[-c(1:rownum), ]
                 cols_to_keep <- which(sapply(df1, function(x) !all(is.na(x))))
@@ -1210,7 +1211,7 @@ convert_output <- function(
               colnames(df1) <- row
               
               # find row number that matches 'row'
-              rownum <- prodlim::row.match(row, df1)
+              rownum <- row_match(row, df1)
               # Subset data frame
               df3 <- df1[-c(1:rownum), ]
               colnames(df3) <- tolower(row)
@@ -1224,7 +1225,6 @@ convert_output <- function(
               }
               colnames(df3) <- tolower(colnames(df3))
             }
-            
             # aa.al names
             naming <- c(
               "biomass", "discard", "catch",

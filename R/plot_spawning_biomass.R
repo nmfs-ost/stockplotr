@@ -3,70 +3,70 @@
 #' Plot spawning biomass with a reference line as a dashed line. The figure can
 #' also be made relative to this reference line rather than in absolute units.
 #'
-#' @param dat A tibble or named list of tibbles (input as `list()`)
+#' @param dat Data frame or list. A tibble or named list of tibbles (input as `list()`)
 #' returned from \link[stockplotr]{convert_output}.
 #'
 #' If inputting a list of tibbles, the first tibble's reference point defined
 #' in `ref_line` is used to plot a reference line or calculate relative spawning biomass.
-#' @param geom A string stating the geom used for the plot.
+#' @param geom String. Geom used for the plot.
 #'
 #' Default: "line".
 #'
 #' Options: "line", "point", or "area"
-#' @param group A string of a single column that groups the data.
+#' @param group String. Single column that groups the data.
 #'
 #' Set group = "none" to summarize data over all indexing values.
 #'
 #' Default: NULL
 #' Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL
 #'
-#' @param facet A string or vector of strings of a column name.
+#' @param facet Character vector. Column name or names used for faceting.
 #'
 #' Default: NULL
-#' @param era A string naming the era of data.
+#' @param era String. Era of data.
 #'
 #' Default: "time"
 #'
 #' Options: "early", "time", "fore" (forecast), or NULL (all data)
-#' @param ref_line A string specifying a reference point name.
+#' @param ref_line String. Reference point name.
 #'
 #' Default: "target"
 #'
 #' Options: (including, but not limited to) "target", "msy", and "unfished"
 #' If the reference point is not found in the data, set ref_line = c("name" = value).
-#' @param unit_label A string specifying spawning biomass unit.
+#' @param unit_label String. Spawning biomass unit.
 #'
 #' Default: "mt"
-#' @param lbs A logical value indicating whether to convert the y-axis values from
+#' @param lbs Logical. TRUE/FALSE; indicate whether to convert the y-axis values from
 #' kilograms to pounds. The default units match the default in the
 #' unit_label argument - 'mt'.
 #'
 #' Default: `FALSE`
-#' @param module (Optional) A string indicating the module_name found in `dat`.
+#' @param module Character vector. (Optional) Module name found in `dat`.
 #' If selecting >1 module, place them in a vector like c("module1", "module2").
 #'
 #' Default: NULL
 #'
 #' If the interactive and >1 module_name is found, user will select the
 #' module_name in the console. @seealso [filter_data()]
-#' @param scale_amount A number to scale the y-axis values.
+#' @param scale_amount Number. A number to scale the y-axis values.
 #'
 #' Default: 1
-#' @param relative A logical value specifying to set y-axis values relative to
+#' @param relative Logical. TRUE/FALSE; specify whether to set y-axis values relative to
 #' the ref_line value.
 #'
 #' Default: `FALSE`
-#' @param make_rda A logical value indicating whether to save the object and
+#' @param make_rda Logical. TRUE/FALSE; indicate whether to save the object and
 #' make an automated caption and alternative text in the form of an `rda` object. If TRUE,
 #' the rda will be exported to the folder indicated in the argument "figures_dir".
 #'
 #' Default: `FALSE`.
-#' @param figures_dir A string indicating a path to the "figures" folder.
+#' @param figures_dir Path. Path to the "figures" folder.
 #'
 #' Default: `getwd()`
 #'
 #' The folder is created within the path if it does not exist.
-#' @param interactive A logical value indicating if the environment is interactive.
+#' @param interactive Logical. TRUE/FALSE; indicate whether the environment is interactive.
 #'
 #' Default: `FALSE`
 #' @param ... Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}
@@ -242,18 +242,13 @@ plot_spawning_biomass <- function(
   ### Make RDA ----
   if (make_rda) {
     if (relative) {
-      # pulling out the 2nd df in 'data' works for several datasets
-      rel.ssb.min <- ggplot2::ggplot_build(final)[["data"]][[2]] |>
-        as.data.frame() |>
-        dplyr::pull(y) |>
-        min() |>
-        round(digits = 2)
-      rel.ssb.max <- ggplot2::ggplot_build(final)[["data"]][[2]] |>
-        as.data.frame() |>
-        dplyr::pull(y) |>
-        max() |>
-        round(digits = 2)
-
+      rel.ssb.min <- calc_kqs(returned_kq = "rel.ssb.min",
+                              final = final)
+      
+     
+      rel.ssb.max <- calc_kqs(returned_kq = "rel.ssb.max",
+                              final = final)
+        
       # calculate & export key quantities
       export_kqs(rel.ssb.min, rel.ssb.max)
 

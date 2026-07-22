@@ -1,14 +1,14 @@
 #' Plot Total Biomass at Age (BAA)
 #'
 #' @inheritParams plot_abundance_at_age
-#' @param scale_amount A number describing how much to scale down the biomass at
+#' @param scale_amount Number. A number describing how much to scale down the biomass at
 #' age. For example, scale_amount = 100 would scale down a value
 #' from 500,000 --> 5,000. This scale will be reflected in the legend label if
 #' proportion is set to FALSE.
 #'
 #' Default: 1,000
 #'
-#' @param interactive TRUE/FALSE; indicate whether the environment in which the
+#' @param interactive Logical. TRUE/FALSE; indicate whether the environment in which the
 #' function is operating  is interactive. This bypasses some options for
 #' filtering when preparing data for the plot.
 #'
@@ -144,7 +144,7 @@ plot_biomass_at_age <- function(
     create_rda(
       object = plot,
       # get name of function and remove "plot_" from it
-      topic_label = gsub("plot_", "", tail(as.character(sys.call()[[1]]), n = 1)),
+      topic_label = gsub("plot_", "", utils::tail(as.character(sys.call()[[1]]), n = 1)),
       fig_or_table = "figure",
       dat,
       unit_label = "mt"

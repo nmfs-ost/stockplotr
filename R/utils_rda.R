@@ -2,12 +2,247 @@
 # RDA utility functions
 # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+#' Calculate key quantities
+#' 
+#' @param returned_kq String. Key quantity to be returned.
+#' @param prepared_data Data frame. The prepared_data object.
+#' @param dat Data frame. The original data object.
+#' @param final ggplot2 object. The final figure.
+#' @param relative Logical. TRUE/FALSE; specify whether to set y-axis values relative to the ref_line value.
+#' @param ... Additional arguments to be passed to the function.
+#' 
+#' @return The value of the specified key quantity.
+#' 
+#' @examples \dontrun{
+#' calc_kqs(
+#'   returned_kq = "F.min",
+#'   dat = dat
+#' )
+#' }
+
+calc_kqs <- function(returned_kq,
+                     prepared_data = NULL,
+                     dat = NULL,
+                     final = NULL,
+                     relative = NULL,
+                     ...){
+  
+  # plot_stock_recruitment()-----
+  if (returned_kq == "sr.age.min") {
+    return(
+      dat |>
+        dplyr::filter(!is.na(year) & !is.na(age)) |>
+        dplyr::slice(which.min(age)) |>
+        dplyr::select(age) |>
+        as.numeric()
+    )
+  }
+  
+  # plot_spawning_biomass()-----
+  if (returned_kq == "rel.ssb.min") {
+    return(
+      ggplot2::ggplot_build(final)[["data"]][[2]] |>
+        as.data.frame() |>
+        dplyr::pull(y) |>
+        min() |>
+        round(digits = 2)
+    )
+  }
+  
+  if (returned_kq == "rel.ssb.max") {
+    return(
+      ggplot2::ggplot_build(final)[["data"]][[2]] |>
+        as.data.frame() |>
+        dplyr::pull(y) |>
+        max() |>
+        round(digits = 2)
+    )
+  }
+  
+  # plot_biomass()-----
+  if (returned_kq == "rel.B.min") {
+    return(
+      ggplot2::ggplot_build(final)[["data"]][[2]] |>
+        as.data.frame() |>
+        dplyr::pull(y) |>
+        min()
+    )
+  }
+  
+  if (returned_kq == "rel.B.max") {
+    return(
+      ggplot2::ggplot_build(final)[["data"]][[2]] |>
+        as.data.frame() |>
+        dplyr::pull(y) |>
+        max()
+    )
+  }
+  
+  if (returned_kq == "B.min") {
+    return(min(prepared_data$estimate))
+  }
+  
+  if (returned_kq == "B.max") {
+    return(max(prepared_data$estimate))
+  }
+  
+  if (returned_kq == "B.start.year") {
+    return(min(prepared_data$year) |> round(digits = 3))
+  }
+  
+  if (returned_kq == "B.end.year") {
+    return(max(prepared_data$year) |> round(digits = 3))
+  }
+  
+  if (returned_kq == "B.terminal.year") {
+    return(
+      filter_data(
+        dat = dat,
+        label_name = ifelse(relative, "biomass_biomass_unfished|biomass_ratio", "^biomass$"),
+        geom = "line",
+        group = NULL,
+        facet = NULL,
+        era = "time",
+        module = "TIME_SERIES",
+        scale_amount = 1,
+        interactive = FALSE
+      ) |>
+        dplyr::filter(year == max(year)) |>
+        dplyr::pull(year) |>
+        unique()
+    )
+  }
+  
+  if (returned_kq == "sb_msy") {
+    return(
+      dat |>
+        dplyr::filter(label == "spawning_biomass_msy") |>
+        dplyr::select(estimate) |>
+        as.numeric()
+    )
+  }
+  
+  if (returned_kq == "b_sb_msy") {
+    return(
+      dat |>
+        dplyr::filter(label == "biomass_msy_spawning_biomass_msy") |>
+        dplyr::select(estimate) |>
+        as.numeric()
+    )
+  }
+  
+  if (returned_kq == "B.msy") {
+    if ("spawning_biomass_msy" %in% dat$label) {
+      sb_msy <- dat |>
+        dplyr::filter(label == "spawning_biomass_msy") |>
+        dplyr::select(estimate) |>
+        as.numeric()
+      b_sb_msy <- dat |>
+        dplyr::filter(label == "biomass_msy_spawning_biomass_msy") |>
+        dplyr::select(estimate) |>
+        as.numeric()
+      return(round(sb_msy * b_sb_msy, digits = 3))
+    } else if ("bmsy" %in% dat$label) {
+      return(
+        dat |>
+          dplyr::filter(label == "bmsy") |>
+          dplyr::select(estimate) |>
+          as.numeric()
+      )
+    }
+  }
+  
+  if (returned_kq == "B.msy.min_uncert") {
+    return(
+      dat |>
+        dplyr::filter(label == "bmsy") |>
+        dplyr::select(uncertainty) |>
+        as.numeric()
+    )
+  }
+  
+  if (returned_kq == "B.msy.min") {
+    B.msy <- dat |> dplyr::filter(label == "bmsy") |> dplyr::select(estimate) |> as.numeric()
+    B.msy.min_uncert <- dat |> dplyr::filter(label == "bmsy") |> dplyr::select(uncertainty) |> as.numeric()
+    return(as.numeric(B.msy) - as.numeric(B.msy.min_uncert))
+  }
+  
+  if (returned_kq == "B.msy.max") {
+    B.msy <- dat |> dplyr::filter(label == "bmsy") |> dplyr::select(estimate) |> as.numeric()
+    B.msy.min_uncert <- dat |> dplyr::filter(label == "bmsy") |> dplyr::select(uncertainty) |> as.numeric()
+    return(as.numeric(B.msy) + as.numeric(B.msy.min_uncert))
+  }
+  
+  # plot_fishing_mortality()-----
+  if (returned_kq == "F.min") {
+    return(
+      prepared_data$estimate |>
+        na.omit() |>
+        min() |>
+        round(digits = 3)
+    )
+  }
+  
+  if (returned_kq == "F.max") {
+    return(
+      prepared_data$estimate |>
+        na.omit() |>
+        max() |>
+        round(digits = 3)
+    )
+  }
+  
+  if (returned_kq == "F.terminal.year") {
+    return(
+      filter_data(
+        dat = dat,
+        label_name = "^fishing_mortality$",
+        geom = "line",
+        era = "time",
+        group = NULL,
+        facet = NULL,
+        module = "TIME_SERIES",
+        scale_amount = 1,
+        interactive = FALSE
+      ) |>
+        dplyr::filter(year == max(year)) |>
+        dplyr::pull(year) |>
+        unique()
+    )
+  }
+  
+  if (returned_kq == "F.target") {
+    return(
+      dat |>
+        dplyr::filter(grepl('f_target', label) | grepl('f_msy', label) | (grepl('fishing_mortality_msy', label) & is.na(year))) |>
+        dplyr::pull(estimate) |>
+        round(digits = 3)
+    )
+  }
+  
+  if (returned_kq == "f.limit") {
+    if ("log_flimit" %in% unique(dat$label)) {
+      return(
+        dat |>
+          dplyr::filter(label == "log_flimit", module_name == "estimated_params") |>
+          dplyr::pull(estimate) |>
+          exp() |>
+          round(digits = 3)
+      )
+    } else {
+      return(NA)
+    }
+  }
+}
+
+
+
 # TODO: update key quantities functions to work with a specified 'dir' instead of default 'getwd()'?
 # TODO: update key quantities functions for plots that need to extract values from KQs csv to calculate their own, dependent KQs (none present in current plotting functions)
 
 #' Substitute key quantities' values into template
 #'
-#' @param df Dataframe created by importing "key_quantity_template.csv" or
+#' @param df Data frame. Dataframe created by importing "key_quantity_template.csv" or
 #' "key_quantities.csv", empty or partially-filled templates with key
 #' quantity names and other associated information
 #' @param ... Key quantity objects whose values will be added to the output
@@ -191,36 +426,36 @@ insert_kqs <- function(...) {
 
 #' Create the rda package for a plot or table
 #'
-#' @param object Table or plot object
-#' @param topic_label A string that names the object
-#' @param fig_or_table A string identifying if the object is a "table" or "figure"
-#' @param dat Data frame containing data which will fill in captions and
+#' @param object Object. Table or plot object
+#' @param topic_label String. Name of the object
+#' @param fig_or_table String. Indicates whether the object is a "table" or "figure"
+#' @param dat Data frame. Data which will fill in captions and
 #' alternative text for the object
-#' @param dir Directory to where the rda will be saved
+#' @param dir Path. Directory to where the rda will be saved
 #'
 #' Default: the working directory (`getwd()`)
 #'
-#' @param year Assessment year
+#' @param year Number. Assessment year
 #'
 #' Default: the current year
 #'
-#' @param ref_line Reference line value
+#' @param ref_line String. Reference line value
 #'
 #' Default: "msy"
 #'
 #' Options: Including, but not limited to: "msy", "target", "unfished"
 #'
-#' @param scale_amount A number describing how much to scale down the quantities
+#' @param scale_amount Number. A number describing how much to scale down the quantities
 #' shown on the y axis. For example, scale_amount = 100 would scale down a value
 #' from 500,000 --> 5,000. This scale will be reflected in the y axis label.
 #'
 #' Default: 1
 #'
-#' @param unit_label A string containing a unit label for the y-axis
+#' @param unit_label String. Unit label for the y-axis
 #'
 #' Default: "mt"
 #'
-#' @param table_df The data frame that the table will be made into for purposes
+#' @param table_df Data frame. The data frame that the table will be made into for purposes
 #' of exporting a latex formatted table.
 #'
 #' @returns An rda package for a plot or table object. Requires an
@@ -512,17 +747,17 @@ create_rda <- function(
 #' Extract a figure or table's caption and alternative text for usage when
 #' generating a figure or table. Typically used before stockplotr::export_rda().
 #'
-#' @param topic_label A string that describes a figure or table's label. These
+#' @param topic_label String. Figure or table label. These
 #' labels are found in the "label" column of the "captions_alt_text.csv" file
 #' and are used to link the figure or table with its caption/alt text.
 #'
 #' Default: NULL
 #'
-#' @param fig_or_table A string describing whether the plot is a figure or table.
+#' @param fig_or_table String. Indicates whether the plot is a figure or table.
 #'
 #' Default: NULL
 #'
-#' @param dir The directory containing the "captions_alt_text.csv" file.
+#' @param dir Path. The directory containing the "captions_alt_text.csv" file.
 #'
 #' Default: the working directory (`getwd()`)
 #'
@@ -588,36 +823,36 @@ extract_caps_alttext <- function(topic_label = NULL,
 #' Export a figure/table, and its caption and alternative text, to an rda object.
 #' Typically used after stockplotr::extract_caps_alttext().
 #'
-#' @param object The final figure (ggplot) or table (flextable) object.
+#' @param object Object. The final figure (ggplot) or table (flextable) object.
 #'
 #' Default: NULL
 #'
-#' @param caps_alttext The object containing a figure's caption and alternative
+#' @param caps_alttext Data frame or list. The object containing a figure's caption and alternative
 #' text, in a list, or a table's caption, likely generated with
 #' stockplotr::extract_caps_alttext().
 #'
 #' Default: NULL
 #'
-#' @param figures_tables_dir If the user has already created folders containing
+#' @param figures_tables_dir Path. If the user has already created folders containing
 #' figures and tables ("figures" and "tables"), figures_tables_dir represents
 #' the location of these folders. Otherwise, these two folders will be created
 #' automatically, then used to store the exported rda files.
 #'
 #' Default: NULL
 #'
-#' @param topic_label A string that describes a figure or table's label. These
+#' @param topic_label String. Figure or table label. These
 #' labels are found in the "label" column of the "captions_alt_text.csv" file
 #' and are used to link the figure or table with its caption/alt text.
 #'
 #' Default: NULL
 #'
-#' @param fig_or_table A string describing whether the plot is a figure or table.
+#' @param fig_or_table String. Indicates whether the plot is a figure or table.
 #'
 #' Default: NULL
 #'
 #' Options: "figure", "table"
 #'
-#' @param latex_table The object containing a LaTeX-based table.
+#' @param latex_table Table object. The object containing a LaTeX-based table.
 #'
 #' Default: NULL
 #'

@@ -22,30 +22,30 @@ plot_biomass(
 )
 }
 \arguments{
-\item{dat}{A tibble or named list of tibbles (input as `list()`)
+\item{dat}{Data frame or list. A tibble or named list of tibbles (input as `list()`)
 returned from \link[stockplotr]{convert_output}.
 
 If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{geom}{A string stating the geom used for the plot.
+\item{geom}{String. Geom used for the plot.
 
 Default: "line".
 
 Options: "line", "point", or "area"}
 
-\item{group}{A string of a single column that groups the data.
+\item{group}{String. Single column that groups the data.
 
 Set group = "none" to summarize data over all indexing values.
 
 Default: NULL
 Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
-\item{facet}{A string or vector of strings of a column name.
+\item{facet}{Character vector. Column name or names used for faceting.
 
 Default: NULL}
 
-\item{ref_line}{A string specifying the type of reference you want to
+\item{ref_line}{String. Type of reference point to
   compare biomass to. The default `"msy"` looks for
   `"biomass_msy"` in the `"label"` column of `dat`. The actual
   searching in `dat` is case-agnostic and will work with either upper- or
@@ -57,17 +57,17 @@ Default: "msy"
 
 Options: Including, but not limited to: "target", "MSY", "unfished"}
 
-\item{era}{A string naming the era of data.
+\item{era}{String. Era of data.
 
 Default: "time"
 
 Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
-\item{unit_label}{units for biomass
+\item{unit_label}{String. Biomass units
 
 Default: "mt"}
 
-\item{module}{(Optional) A string indicating the module_name found in `dat`.
+\item{module}{Character vector. (Optional) Module name found in `dat`.
 If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
@@ -75,28 +75,28 @@ Default: NULL
 If the interactive and >1 module_name is found, user will select the
 module_name in the console. @seealso [filter_data()]}
 
-\item{scale_amount}{A number to scale the y-axis values.
+\item{scale_amount}{Number. A number to scale the y-axis values.
 
 Default: 1}
 
-\item{relative}{A logical value specifying to set y-axis values relative to
+\item{relative}{Logical. TRUE/FALSE; specify whether to set y-axis values relative to
 the ref_line value.
 
 Default: `FALSE`}
 
-\item{make_rda}{A logical value indicating whether to save the object and
+\item{make_rda}{Logical. TRUE/FALSE; indicate whether to save the object and
 make an automated caption and alternative text in the form of an `rda` object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
 
 Default: `FALSE`.}
 
-\item{figures_dir}{A string indicating a path to the "figures" folder.
+\item{figures_dir}{Path. Path to the "figures" folder.
 
 Default: `getwd()`
 
 The folder is created within the path if it does not exist.}
 
-\item{interactive}{A logical value indicating if the environment is interactive.
+\item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
 Default: `FALSE`}
 

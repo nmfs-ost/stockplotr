@@ -52,6 +52,17 @@ get_ncol <- function(file, skip = 0) {
 
 #------------------------------------------------------------------------------
 
+#---- row_match ----
+row_match <- function(x, table, nomatch = NA) {
+  if (inherits(table, "matrix")) table <- as.data.frame(table)
+  if (is.null(dim(x))) x <- as.data.frame(matrix(x, nrow = 1))
+  x_concat <- do.call("paste", c(x[, , drop = FALSE], sep = "\r"))
+  table_concat <- do.call("paste", c(table[, , drop = FALSE], sep = "\r"))
+  match(x_concat, table_concat, nomatch = nomatch)
+}
+
+#------------------------------------------------------------------------------
+
 # Helper for SS3 output converter
 # Function to extract rows, identify the dfs, and clean them up
 # SS3_extract_df <- function(dat, label) {

@@ -3,23 +3,23 @@
 #' Export all figures and tables to Rda files within one function.
 #'
 #' @inheritParams plot_spawning_biomass
-#' @param recruitment_scale_amount A number describing how much to scale down
+#' @param recruitment_scale_amount Number. A number describing how much to scale down
 #' the recruitment quantities shown on the y axis. For example,
 #' recruitment_scale_amount = 100 would scale down a value from 500,000 -->
 #' 5,000. This scale will be reflected in the y axis label.
 #'
 #' Default: 1
 #'
-#' @param recruitment_unit_label Units for recruitment
+#' @param recruitment_unit_label String. Recruitment units
 #'
 #' Default: "mt"
 #'
-#' @param figures_tables_dir The location of the folder containing
+#' @param figures_tables_dir Path. The location of the folder containing
 #' figures and tables ("figures" and "tables").
 #'
 #' Default: the working directory (`getwd()`)
 #'
-#' @param ref_line A string specifying the type of reference you want to
+#' @param ref_line String. Type of reference point to
 #' compare biomass to. The default is `"msy"`, which looks for
 #' `"biomass_msy"` in the `"label"` column of `dat`. The actual
 #' searching in `dat` is case agnostic and will work with either upper- or
@@ -33,75 +33,75 @@
 #'
 #' Options: Including, but not limited to: "target", "MSY", "unfished"
 #'
-#' @param biomass_scale_amount A number describing how much to scale down the
+#' @param biomass_scale_amount Number. A number describing how much to scale down the
 #' biomass quantities shown on the y axis. See `recruitment_scale_amount`.
 #'
 #' Default: 1
 #'
-#' @param landings_unit_label Units for landings
+#' @param landings_unit_label String. Landings units
 #'
 #' Default: "mt"
 #'
-#' @param biomass_unit_label Units for biomass
+#' @param biomass_unit_label String. Biomass units
 #'
 #' Default: "mt"
 #'
-#' @param spawning_biomass_label Units for spawning biomass
+#' @param spawning_biomass_label String. Spawning biomass units
 #'
 #' Default: "mt"
 #'
-#' @param spawning_biomass_scale_amount  A number describing how much to scale down the
+#' @param spawning_biomass_scale_amount Number.  A number describing how much to scale down the
 #' spawning biomass quantities shown on the y axis. See `recruitment_scale_amount`.
 #'
 #' Default: 1
 #'
-#' @param ref_line_sb Identical definition as `ref_line`, but this argument is
+#' @param ref_line_sb String. Same as `ref_line`, but this argument is
 #' applied to plot_spawning_biomass.
 #'
 #' Default: "msy"
 #'
 #' Options: Including, but not limited to: "target", "MSY", "unfished"
 #'
-#' @param abundance_at_age_scale_amount  A number describing how much to scale down the
+#' @param abundance_at_age_scale_amount Number.  A number describing how much to scale down the
 #' abundance quantities shown via bubble size. See `recruitment_scale_amount`.
 #'
 #' Default: 1
 #'
-#' @param abundance_at_age_unit_label Abbreviated units for abundance at age
+#' @param abundance_at_age_unit_label String. Abbreviated abundance at age units
 #'
 #' Default: "fish"
 #'
-#' @param biomass_at_age_scale_amount  A number describing how much to scale down the
+#' @param biomass_at_age_scale_amount Number.  A number describing how much to scale down the
 #' biomass quantities shown via bubble size. See `recruitment_scale_amount`.
 #'
 #' Default: 1
 #'
-#' @param biomass_at_age_unit_label Abbreviated units for biomass at age
+#' @param biomass_at_age_unit_label String. Abbreviated biomass at age units
 #'
 #' Default: "mt"
 #'
-#' @param index_unit_label Units for index of abundance/CPUE
+#' @param index_unit_label String. Index of abundance/CPUE units
 #'
 #' Default: ""
 #'
-#' @param biomass_unit_label Abbreviated units for biomass
+#' @param biomass_unit_label String. Abbreviated biomass units
 #'
 #' Default: "mt"
 #'
-#' @param catch_unit_label Abbreviated units for catch
+#' @param catch_unit_label String. Abbreviated catch units
 #'
 #' Default: "mt"
 #'
-#' @param catch_scale_amount A number describing how much to scale down the
+#' @param catch_scale_amount Number. A number describing how much to scale down the
 #' catch quantities shown via bubble size. See `recruitment_scale_amount`.
 #'
 #' Default: 1
 #'
-#' @param landings_unit_label Units for landings
+#' @param landings_unit_label String. Landings units
 #'
 #' Default: "mt"
 #'
-#' @param proportional T/F to scale size of bubble plots
+#' @param proportional Logical. TRUE/FALSE; scale size of bubble plots
 #'
 #' Default: `TRUE`
 #'
@@ -402,6 +402,7 @@ save_all_plots <- function(
         unit_label = biomass_at_age_unit_label,
         scale_amount = biomass_at_age_scale_amount,
         proportional = proportional,
+        interactive = FALSE,
         make_rda = TRUE,
         figures_dir = figures_tables_dir
       ) # |>

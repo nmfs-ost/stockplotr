@@ -17,9 +17,9 @@ plot_abundance_at_age(
 )
 }
 \arguments{
-\item{dat}{A data frame returned from \link[stockplotr]{convert_output}}
+\item{dat}{Data frame. A data frame returned from \link[stockplotr]{convert_output}}
 
-\item{facet}{a string or vector of strings of a column that facets the data.
+\item{facet}{Character vector. Column name or names used for faceting.
 Set facet = "none" to summarize the data in a single plot.
 
 Default: NULL
@@ -27,11 +27,11 @@ Default: NULL
 Options: Including, but not limited to: "year", "area", "fleet", "sex", "none",
 NULL}
 
-\item{unit_label}{units for abundance
+\item{unit_label}{String. Abundance units
 
 Default: "fish"}
 
-\item{scale_amount}{A number describing how much to scale down the abundance at
+\item{scale_amount}{Number. A number describing how much to scale down the abundance at
 age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders
 of magnitude (e.g., 1, 10, 100, 1000, etc.). For example, scale_amount = 100
 would scale down a value from 500,000 --> 5,000 and would report abundance in
@@ -40,7 +40,7 @@ in the legend label if proportional is set to FALSE.
 
 Default: 1,000}
 
-\item{proportional}{Set size of points relative to z when TRUE, point
+\item{proportional}{Logical. TRUE/FALSE; set size of points relative to z when TRUE, point
 size are relative to one another while when set to FALSE, point size
 is relative to z
 
@@ -58,13 +58,13 @@ module_name in the console. @seealso [filter_data()]}
 
 Default: `FALSE`}
 
-\item{make_rda}{TRUE/FALSE; indicate whether to produce an .rda file containing
+\item{make_rda}{Logical. TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,
 the .rda will be exported to the folder indicated in the argument "rda_dir".
 
 Default: `FALSE`}
 
-\item{figures_dir}{The location of the folder containing the generated .rda files
+\item{figures_dir}{Path. Folder containing the generated .rda files
 ("rda_files") that will be created if the argument `make_rda` = TRUE.
 
 Default: the working directory (`getwd()`)}

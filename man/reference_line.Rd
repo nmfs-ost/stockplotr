@@ -7,22 +7,22 @@
 reference_line(plot, dat, label_name, reference, scale_amount = 1, lbs = FALSE)
 }
 \arguments{
-\item{plot}{a ggplot2 object where the reference line will be added}
+\item{plot}{Plot object. A ggplot2 object where the reference line will be added}
 
-\item{dat}{standard data frame where reference point should be extracted}
+\item{dat}{Data frame. Standard data frame where reference point should be extracted}
 
-\item{label_name}{string of the name of the quantity that users want to
+\item{label_name}{String. Name of the quantity that users want to
 extract the reference point from}
 
-\item{reference}{string of the reference point
+\item{reference}{String of the reference point
 
 Options: Including, but not limited to: "msy", "unfished", "target"}
 
-\item{scale_amount}{A number to scale the y-axis values.
+\item{scale_amount}{Number. A number to scale the y-axis values.
 
 Default: 1}
 
-\item{lbs}{A logical value indicating whether to convert the y-axis values from
+\item{lbs}{Logical. TRUE/FALSE; indicate whether to convert the y-axis values from
 kilograms to pounds. The default units match the default in the
 unit_label argument - 'mt'.
 

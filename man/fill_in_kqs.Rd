@@ -7,7 +7,7 @@
 fill_in_kqs(df, ...)
 }
 \arguments{
-\item{df}{Dataframe created by importing "key_quantity_template.csv" or
+\item{df}{Data frame. Dataframe created by importing "key_quantity_template.csv" or
 "key_quantities.csv", empty or partially-filled templates with key
 quantity names and other associated information}
 

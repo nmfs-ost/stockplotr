@@ -70,3 +70,104 @@ If possible, please submit a reproducible example ([reprex](https://reprex.tidyv
 ## Contributing questions
 
 Have a question? Ask it in our [Discussions page](https://github.com/nmfs-ost/stockplotr/discussions). You can categorize it under General, Ideas, Q&A, and more.
+
+## Figure and Table Development Guide
+
+This guide summarizes the workflow used by the `plot_x` and `table_x` functions in `R/`.
+Use it as a template when building a new figure or table function from the existing package patterns.
+
+If a new figure or table does not fit an existing category, please let us know. We can try to build the pipeline to incorporate it into the existing workflow.
+
+### Overview
+
+Most functions begin with standardized output from `convert_output()`.
+That data is then narrowed to one label or related labels, reshaped if needed, and finally rendered as a plot or table.
+
+The recurring helper functions are executed in the following order:
+
+- `filter_data()` to isolate the target label(s) and apply module, era, grouping, faceting, and scaling choices.
+- `process_data()` to detect indexing variables, set `group_var`, and decide whether additional variables should become grouping or facetting variables.
+- `process_table()` for table-specific label handling and row/column organization.
+- `create_rda()` to export the figure/table as an rda file, and the figure/table's associated information.
+
+### How the figure functions are built
+
+The figure functions follow the same basic sequence:
+
+1. **Filter the data.**  
+   Pick the relevant label (a regular expression) with `filter_data()`.  
+   This is where the data used as the basis for each figure is filtered from its original state. Variables such as `year`, `age`, `fleet`, `area`, `sex`, a specific module, or a specific era are used to remove unnecessary data. Confidence intervals are calculated in this step.
+
+2. **Process the filtered data.**  
+   Run `process_data()` to identify the index structure and to decide how the data should be grouped or faceted. In this step, the data gets narrowed down to the indexed data columns.
+
+3. **Choose the plot builder.**  
+   - `plot_timeseries()` for standard time-series figures. As the name suggests, these plots are meant to show a variable over time. However, these plots can be adapted to show other variables on the x and y axes.
+   - `plot_obsvpred()` for observed-vs-predicted index figures
+   - `plot_aa()` for age- or length-composition bubble plots
+   - `plot_error()` for point/error summaries
+
+4. **Add figure-specific layers.**  
+   Examples from the existing functions include:
+   - `reference_line()` and `calculate_reference_point()`
+   - `average_age_line()` for abundance/biomass-at-age plots
+   - `cohort_line()` for catch-composition plots
+   - extra overlays for expected recruitment or stock-recruit curves
+
+5. **Apply the final theme.**  
+  Add NOAA theming to figures with `theme_noaa()`.
+  
+6. **Return the figure**.
+  The figure is shown in the Plots pane and returned as a `ggplot` object, even if it's not exported.
+
+7. **Add capability to export the figure and associated materials.**  
+   If `make_rda = TRUE`, the figure function usually:
+   - calculates key quantities,
+   - writes them with `export_kqs()`,
+   - inserts them into captions and alt text with `insert_kqs()`,
+   - and saves the final object with `create_rda()`.
+   These steps are important for creating alternative text and captions for the figures. Make sure to reference inst/resources/captions_alt_text_template.csv and inst/resources/key_quantity_template.csv to ensure the key quantities are properly inserted into an accurate caption and alt text.
+
+#### Figure families
+
+- **Time-series plots:** `plot_biomass()`, `plot_spawning_biomass()`, `plot_recruitment()`, `plot_landings()`, `plot_fishing_mortality()`, `plot_natural_mortality()`
+- **Observation/comparison plots:** `plot_index()`, `plot_stock_recruitment()`, `plot_recruitment_deviations()`
+- **Age-composition plots:** `plot_abundance_at_age()`, `plot_biomass_at_age()`, `plot_catch_comp()`
+
+### How the table functions are built
+
+The data-driven table functions use a shorter version of the same workflow:
+
+1. **Filter the data.**  
+   Use `filter_data()` to isolate the label or labels needed for the table.
+
+2. **Clean and round values.**  
+   The existing tables round `estimate` and `uncertainty` before formatting.
+
+3. **Process the table structure.**  
+   `process_table()` determines which variables are indexing the data, handles multiple labels, and prepares the data for table formatting.
+
+4. **Merge estimates and uncertainty.**  
+   `merge_error()` combines the value and error columns into a single column where needed.
+
+5. **Render the final table.**  
+   - The prepared data are converted to a `gt` table. `add_theme()` applies formatting to the table.
+   
+6. **Return the table**.
+  The table is returned as a `gt` object, even if it's not exported.
+
+7. **Add capability to export the table and associated materials.**  
+   As with plots, `make_rda = TRUE` triggers `export_kqs()`, `insert_kqs()`, and `create_rda()`.
+
+#### Table families
+
+Tables are unique and do not have the same system of families as the figures.
+
+### Last steps
+
+Once your figure or table is developed (🎉!), please complete these tasks:
+
+1. Test it with different kinds of model outputs: SS3, BAM, Rceattle, r4ss, etc.
+2. Add the figure to `save_all_plots()`. Depending on the plot, you may need to add a new argument to the Roxygen.
+3. Update the `save_all_plots()` test in `tests/testthat/test-save_all_plots.R`.
+4. Create unit tests for your figure or table function in `tests/testthat/`. This will entail creating a new test file (e.g., `test-plot_new_function.R`) and adding unit tests. Most/all can be copied from an existing test file and modified for your new function. If you are unfamiliar with the {testthat} framework, please leave a comment on your PR and let us know. We are happy to work with you to develop a unit test.
