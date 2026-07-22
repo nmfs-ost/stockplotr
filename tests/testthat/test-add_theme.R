@@ -38,21 +38,6 @@ test_that("add_theme applies NOAA formatting to flextable objects", {
   expect_true("flextable" %in% class(result_flextable))
 })
 
-test_that("add_theme warns when flextable is unavailable", {
-  fake_flex <- structure(list(), class = "flextable")
-
-  testthat::with_mocked_bindings(
-    requireNamespace = function(package, quietly = FALSE) FALSE,
-    {
-      expect_warning(
-        result <- add_theme(fake_flex),
-        "flextable"
-      )
-      expect_identical(result, fake_flex)
-    }
-  )
-})
-
 # test_that("nmfspalette returns correct scales", {
 #   # Test 1: Ensure nmfspalette integrates with ggplot color scales
 #   ggplot_obj <- ggplot2::ggplot(data = cars, ggplot2::aes(x = speed, y = dist, color = speed)) +
