@@ -760,7 +760,7 @@ filter_data <- function(
           group_var = .data[[group]]
         )
     }
-    list_of_data[[get_id(dat)[i]]] <- data
+    list_of_data[[ifelse(model_label, get_id(dat)[i], "1")]] <- data
   }
   # Put in
   plot_data <- dplyr::bind_rows(list_of_data, .id = "model")
@@ -845,21 +845,22 @@ calculate_reference_point <- function(
   dat <- dat |>
     dplyr::mutate(label = tolower(label)) |>
     dplyr::filter(is.na(year))
+  reference_rows <- grep(
+    pattern = glue::glue("^{reference_name}$"),
+    x = dat[["label"]]
+  )
+  if (length(reference_rows) == 0) {
+    return(NULL)
+  }
   # Check if the reference point exists in the data
   if (inherits(try(solve(as.numeric(dat[
-    grep(
-      pattern = glue::glue("^{reference_name}$"),
-      x = dat[["label"]]
-    ),
+    reference_rows,
     "estimate"
   ])), silent = TRUE), "try-error")) {
     ref_line_val <- NULL
   } else {
     ref_line_val <- as.numeric(dat[
-      grep(
-        pattern = glue::glue("^{reference_name}$"),
-        x = dat[["label"]]
-      ),
+      reference_rows,
       "estimate"
     ])
   }
