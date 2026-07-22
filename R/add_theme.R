@@ -8,7 +8,7 @@
 #' @returns Add the standard formatting for stock assessment reports for any
 #' figure or table.
 #' @details Currently, the function is able to format objects from:
-#' ggplot (ggplot2), base r plot, flextable (flextable), gt tables (gt), and kable tables (kableExtra).
+#' ggplot (ggplot2), base r plot, flextable (flextable, when installed), gt tables (gt), and kable tables (kableExtra).
 #' @export
 #'
 #' @examples add_theme(ggplot2::ggplot(data = cars, ggplot2::aes(x = speed, y = dist)) +
@@ -16,22 +16,27 @@
 add_theme <- function(x, discrete = TRUE) {
   # this is bad coding practice, but what I have for now
   if (class(x)[1] == "flextable") {
-    FitFlextableToPage <- function(ft, pgwidth = 6) {
-      ft_out <- ft |> flextable::autofit()
+    if (!requireNamespace("flextable", quietly = TRUE)) {
+      warning("The 'flextable' package is not installed. Returning the flextable object unchanged.", call. = FALSE)
+      theme_obj <- x
+    } else {
+      FitFlextableToPage <- function(ft, pgwidth = 6) {
+        ft_out <- ft |> flextable::autofit()
 
-      ft_out <- flextable::width(ft_out, width = dim(ft_out)$widths * pgwidth / (flextable::flextable_dim(ft_out)$widths))
-      return(ft_out)
+        ft_out <- flextable::width(ft_out, width = dim(ft_out)$widths * pgwidth / (flextable::flextable_dim(ft_out)$widths))
+        return(ft_out)
+      }
+      theme_obj <- x |>
+        flextable::merge_h(i = 1, part = "header") |>
+        flextable::align(part = "header", align = "center") |>
+        # flextable::font(fontname = "arial narrow",
+        #                 part = "all") |>
+        flextable::bold(part = "header") |>
+        flextable::add_header_lines(top = FALSE) |>
+        flextable::align(align = "center", part = "body") |>
+        flextable::autofit()
+      # FitFlextableToPage()
     }
-    theme_obj <- x |>
-      flextable::merge_h(i = 1, part = "header") |>
-      flextable::align(part = "header", align = "center") |>
-      # flextable::font(fontname = "arial narrow",
-      #                 part = "all") |>
-      flextable::bold(part = "header") |>
-      flextable::add_header_lines(top = FALSE) |>
-      flextable::align(align = "center", part = "body") |>
-      flextable::autofit()
-    # FitFlextableToPage()
   } else if (class(x)[1][1] == "gt_tbl") {
     # gt object
     theme_obj <- x |>

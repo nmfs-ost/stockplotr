@@ -22,7 +22,7 @@ Add NOAA formatting to figure or table
 }
 \details{
 Currently, the function is able to format objects from:
-ggplot (ggplot2), base r plot, flextable (flextable), gt tables (gt), and kable tables (kableExtra).
+ggplot (ggplot2), base r plot, flextable (flextable, when installed), gt tables (gt), and kable tables (kableExtra).
 }
 \examples{
 add_theme(ggplot2::ggplot(data = cars, ggplot2::aes(x = speed, y = dist)) +

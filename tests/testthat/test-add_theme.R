@@ -7,13 +7,6 @@ test_that("add_theme applies NOAA formatting correctly", {
   expect_true(inherits(result_ggplot, "ggplot"))
   expect_true(ggplot2::is_ggplot(result_ggplot))
 
-  # Test with a flextable object
-  flex_obj <- flextable::flextable(head(cars))
-  result_flextable <- add_theme(flex_obj)
-
-  expect_true(inherits(result_flextable, "flextable"))
-  expect_true("flextable" %in% class(result_flextable))
-
   # Test with a gt table object
   gt_obj <- gt::gt(head(cars))
   result_gt <- add_theme(gt_obj)
@@ -33,6 +26,16 @@ test_that("add_theme applies NOAA formatting correctly", {
 
   unsupported_obj2 <- list(1, 3, 4)
   expect_error(add_theme(unsupported_obj2))
+})
+
+test_that("add_theme applies NOAA formatting to flextable objects", {
+  testthat::skip_if_not_installed("flextable")
+
+  flex_obj <- flextable::flextable(head(cars))
+  result_flextable <- add_theme(flex_obj)
+
+  expect_true(inherits(result_flextable, "flextable"))
+  expect_true("flextable" %in% class(result_flextable))
 })
 
 # test_that("nmfspalette returns correct scales", {

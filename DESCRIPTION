@@ -38,7 +38,6 @@ Imports:
     cli,
     data.table,
     dplyr,
-    flextable,
     fs,
     ggplot2 (>= 4.0.0),
     glue,
@@ -56,6 +55,7 @@ Imports:
     utils,
     withr
 Suggests:
+    flextable,
     here,
     knitr,
     quarto,
