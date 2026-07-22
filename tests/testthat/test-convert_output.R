@@ -80,3 +80,16 @@ test_that("invalid URL input triggers an error", {
     "Invalid URL."
   )
 })
+
+test_that("row_match returns matching row positions", {
+  row_match <- getFromNamespace("row_match", "stockplotr")
+
+  table <- data.frame(
+    a = c("header", "x", "y"),
+    b = c("value", "1", "2")
+  )
+
+  expect_equal(row_match(c("header", "value"), table), 1)
+  expect_equal(row_match(data.frame(a = "y", b = "2"), table), 3)
+  expect_true(is.na(row_match(c("missing", "row"), table)))
+})
