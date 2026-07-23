@@ -28,6 +28,10 @@ table_projections <- function(
     make_rda = FALSE,
     tables_dir = getwd()
     ) {
+  # TODO: fix issue with parantheses around units
+  # TODO: fix issue where F is being rounded to 0 no matter the number of digits
+  # TODO: Figure out issue with duplicated catch in converter from Rceattle
+  
   # check if catch in data else landings
   catch_lab <- ifelse(
     any(grepl("catch$", dat$label)),
@@ -45,7 +49,7 @@ table_projections <- function(
       cli::cli_alert_info(paste0("Processing ", x))
       filtered_data <- filter_data(
         dat = dat,
-        label_name = paste0(x, "$"),
+        label_name = paste0("^", x, "$"),
         geom = "line",
         era = "fore",
         module = module,
@@ -59,9 +63,18 @@ table_projections <- function(
         "Uncertainty",
         unique(filtered_data$uncertainty_label)
       )
+      extra_grouping <- check_grouping(filtered_data)[-grep("year|age", check_grouping(filtered_data))]
+      if (length(extra_grouping) > 1) {
+        cli::cli_abort(
+          "Table not created due to {extra_grouping} variables in {x}."
+        )
+        # return() # uncomment if requested to return smaller table
+      }
       # process to reduce columns
-      processed_data <- process_table(filtered_data,
-                                      digits = ifelse(x == "fishing_mortality", 5, 2))
+      processed_data <- process_table(
+        filtered_data,
+        digits = ifelse(x == "fishing_mortality", 5, 2)
+      )
       data <- processed_data[[1]]
       group <- processed_data[[2]]
 
@@ -75,7 +88,7 @@ table_projections <- function(
     }
   )
   
-  combine_data <- purrr::reduce(lab_list, dplyr::full_join, by = c("Year")) |>
+  combine_data <- purrr::reduce(purrr::compact(lab_list), dplyr::full_join, by = c("Year")) |>
     gt::gt()
   
   final_table <- add_theme(combine_data)
