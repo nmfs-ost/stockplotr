@@ -529,11 +529,9 @@ cohort_line <- function(
 #' Preformatted reference line
 #'
 #' @inheritParams plot_spawning_biomass
-#' @param plot Plot object. A ggplot2 object where the reference line will be added
-#' @param dat Data frame. Standard data frame where reference point should be extracted
 #' @param label_name String. Name of the quantity that users want to
 #' extract the reference point from
-#' @param reference String of the reference point
+#' @param ref_line String of the reference point
 #'
 #' Options: Including, but not limited to: "msy", "unfished", "target"
 #'
@@ -546,49 +544,34 @@ cohort_line <- function(
 #' reference_line(dat, "biomass", "msy")
 #' }
 reference_line <- function(
-  plot,
-  dat,
   label_name,
-  reference,
-  scale_amount = 1,
-  lbs = FALSE
+  ref_line,
+  scale_amount = 1
 ) {
-  if (!is.null(names(reference))) {
-    ref_line_val <- reference[[1]]
-    reference <- names(reference)
-  } else {
-    # calculate reference point value
-    ref_line_val <- calculate_reference_point(
-      dat = dat,
-      reference_name = glue::glue("{label_name}_{reference}"),
-      lbs = lbs
-    )
-  }
+  # Extract reference line values and labels
+  ref_line_val <- ref_line[[1]]
+  reference <- names(ref_line)
 
-  # Add geom for ref line
-  if (is.null(ref_line_val)) {
-    plot
-  } else {
-    plot +
-      ggplot2::geom_hline(
-        # ggplot2::aes(
-        yintercept = ref_line_val / scale_amount,
-        # ),
-        color = "black",
-        linetype = "dashed"
-      ) +
-      ggplot2::annotate(
-        geom = "text",
-        # TODO: need to change this for general process
-        x = as.numeric(max(ggplot2::ggplot_build(plot)[["data"]][[2]][["x"]], na.rm = TRUE)), # - as.numeric(max(dat$year[dat$era == "time"], na.rm = TRUE))/200,
-        y = ref_line_val / scale_amount,
-        label = glue::glue("{stringr::str_replace_all(label_name, '_', '~')}[{reference}]"), # list(bquote(label_name[.(reference)])),
-        parse = TRUE,
-        hjust = 1,
-        vjust = 0,
-        size = 5 # this is not foolproof
-      )
-  }
+  list(
+    # Add geom for ref line
+    ggplot2::geom_hline(
+      yintercept = ref_line_val / scale_amount,
+      color = "black",
+      linetype = "dashed"
+    ),
+    # add line annotation
+    ggplot2::annotate(
+      geom = "text",
+      # TODO: need to change this for general process
+      x = Inf,
+      y = ref_line_val / scale_amount,
+      label = glue::glue("{stringr::str_replace_all(label_name, '_', '~')}[{reference}]"), # list(bquote(label_name[.(reference)])),
+      parse = TRUE,
+      hjust = 1.05, # slight offset so text doesn't hit border
+      vjust = -0.5, #slightly above line
+      size = 5 # this is not foolproof
+    )
+  )
 }
 
 #------------------------------------------------------------------------------

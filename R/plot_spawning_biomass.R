@@ -146,11 +146,11 @@ plot_spawning_biomass <- function(
     }
   )
   # Pull first df if in a list to find reference point
-  if (!is.data.frame(dat)) {
-    rp_dat <- dat[[1]]
-  } else {
-    rp_dat <- dat
-  }
+  # if (!is.data.frame(dat)) {
+  #   rp_dat <- dat[[1]]
+  # } else {
+  #   rp_dat <- dat
+  # }
 
   if (relative & scale_amount > 1) {
     cli::cli_alert_warning("Scale amount is not applicable when relative = TRUE. Resetting scale_amount to 1.")
@@ -206,38 +206,61 @@ plot_spawning_biomass <- function(
     ...
   )
   # Add reference line
+  # Conditions for ref line
+  # 1. all are comparing same value = msy, target, unfished...
+  # 2. custom input vector = c("sabe23_msy"=30, "sable25_msy"=40) -- user must indicate which model in label otherwise it will assign in order of dat
+  # 3. input vector of labels = c("msy", "target")
   # getting data set - an ifelse statement in the fxn wasn't working
   if (relative) {
     # don't add any reference line here and just add theme for final plot
     final <- plt + theme_noaa()
   } else {
-    if ("unfished" %in% c(names(ref_line), ref_line)) {
-      # find the minimum x axis value from the plot
-      min_year <- min <- ggplot2::ggplot_build(plt)[["data"]][[2]] |>
-        as.data.frame() |>
-        dplyr::pull(x) |>
-        min() |>
-        round(digits = 2)
-      # find the reference point value for unfished
-      ref_point <- calculate_reference_point(
-        dat = rp_dat,
-        reference_name = "spawing_biomass_unfished"
-      ) / scale_amount
-      # add point to plot and add theme
-      final <- plt +
-        ggplot2::geom_point(ggplot2::aes(x = min_year - 1, y = ref_point)) + # should I keep -1 or set as first year?
-        theme_noaa()
-    } else {
-      # add apply/purrr/or for loop for reference lines -- not just the first anymore
-      final <- reference_line(
-        plot = plt,
-        dat = rp_dat,
-        lbs = lbs,
-        label_name = "spawning_biomass",
-        reference = ref_line,
-        scale_amount = scale_amount
-      ) + theme_noaa()
+    plt2 <- plt
+    # Put into for loop and add lines sequentially to plt
+    for (i in 1:length(ref_line)) {
+      # find the reference point value
+      if (is.null(names(ref_line[i]))) {
+        ref_line_x <- calculate_reference_point(
+          dat = dat[[i]],
+          reference_name = i,
+          lbs = lbs
+        ) / scale_amount
+        ref_line_x <- setNames(ref_line_x, i)
+      } else {
+        ref_line_x <- ref_line[i] / scale_amount
+      }
+      
+        if ("unfished" %in% names(ref_line_x)) {
+        # find the minimum x axis value from the plot
+        min_year <- min <- ggplot2::ggplot_build(plt)[["data"]][[2]] |> # I think this was causing issues on linux
+          as.data.frame() |>
+          dplyr::pull(x) |>
+          min() |>
+          round(digits = 2)
+        # add point to plot and add theme
+        plt2 <- plt2 +
+          ggplot2::geom_point(ggplot2::aes(x = min_year - 1, y = ref_point)) + # should I keep -1 or set as first year?
+          theme_noaa()
+      } else {
+        # add apply/purrr/or for loop for reference lines -- not just the first anymore
+        plt2 <- plt2 +
+          reference_line(
+            label_name = names(dat)[i], #"spawning_biomass",
+            ref_line = ref_line_x,
+            scale_amount = 1
+          )
+          
+        #   reference_line(
+        #   plot = plt,
+        #   dat = rp_dat,
+        #   lbs = lbs,
+        #   label_name = "spawning_biomass",
+        #   reference = ref_line,
+        #   scale_amount = scale_amount
+        # ) + theme_noaa()
+      }
     }
+    final <- plt2 + theme_noaa()
   }
 
   ### Make RDA ----
