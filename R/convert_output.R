@@ -46,12 +46,6 @@ convert_output <- function(
 ) {
   # check if entered save_dir exists so doesn't waste user time finding this out at the end
   if (!is.null(save_dir)) {
-    # if (!dir.exists(stringr::str_extract(save_dir, "^.*/(?=[^/]+\\.[^/]+$)") |> stringr::str_remove("/$"))) {
-    #   cli::cli_abort("save_dir not a valid path.")
-    # } else {
-    #   # create new save_dir with file name
-    #   save_dir <- file.path(save_dir, "std_output.rda")
-    # }
     if (!grepl(".rda", save_dir)) {
       cli::cli_alert("save_dir does not contain a file name. Saved output will be named `std_output.rda`.")
       save_dir <- file.path(save_dir, "std_output.rda")
@@ -88,7 +82,7 @@ convert_output <- function(
     bio_pattern = NA,
     settlement = NA,
     morph = NA,
-    # beg/mid = NA, # need to identify df where this is applicable
+    beg_mid = NA,
     type = NA,
     factor = NA,
     # sexes = NA, # remove sexes to see how it impacts the results
@@ -158,6 +152,10 @@ convert_output <- function(
         cli::cli_alert_info("Processing Rceattle output file...")
         "rceattle"
       },
+      "list" = {
+        cli::cli_alert_info("Processing SS3 r4ss output file...")
+        "ss3"
+      },
       cli::cli_abort("Unknown file type. Please indicate model.")
     )
   }
@@ -166,118 +164,182 @@ convert_output <- function(
   #### SS3 ####
   # Convert SS3 output Report.sso file
   if (tolower(model) == "ss3") {
-    # read SS3 report file
-    dat <- utils::read.table(
-      file = file,
-      col.names = 1:get_ncol(file),
-      fill = TRUE,
-      quote = "",
-      colClasses = "character", # reads all data as characters
-      nrows = -1,
-      comment.char = "",
-      blank.lines.skip = FALSE
-    )
-    # Check SS3 model version
-    vers <- stringr::str_extract(dat[1, 1], "[0-9].[0-9][0-9].[0-9][0-9]") # .[0-9]
-    if (vers < 3.3) {
-      cli::cli_abort("This function in its current state can not process the data.")
+    if (is.character(file)) {
+      # report.sso file
+      # read SS3 report file
+      dat <- utils::read.table(
+        file = file,
+        col.names = 1:get_ncol(file),
+        fill = TRUE,
+        quote = "",
+        colClasses = "character", # reads all data as characters
+        nrows = -1,
+        comment.char = "",
+        blank.lines.skip = FALSE
+      )
+      # Check SS3 model version
+      vers <- stringr::str_extract(dat[1, 1], "[0-9].[0-9][0-9].[0-9][0-9]") # .[0-9]
+      if (vers < 3.3) {
+        cli::cli_abort("This function in its current state can not process the data.")
+      }
+      
+      # Extract fleet names
+      if (is.null(fleet_names)) {
+        fleet_names <- SS3_extract_fleet(dat, vers)
+      }
+      # Output fleet names in console
+      cli::cli_alert_info("Identified fleet names:")
+      cli::cli_alert_info("{fleet_names}")
+      
+      # Estimated and focal parameters to put into reformatted output df - naming conventions from SS3
+      # Extract keywords from ss3 file
+      # Find row where keywords start
+      keywords_start_row <- which(apply(dat, 1, function(row) any(grepl("#_KeyWords_of_tables_available_in_report_sso", row))))
+      # Extract this first chunk of keywords to identify the first reported df - most likely DEFINITIONS
+      first_blank_after <- which(apply(dat, 1, function(row) all(is.na(row) | row == "")) & (seq_len(nrow(dat)) > keywords_start_row))[1]
+      rows <- c(keywords_start_row, first_blank_after)
+      # Extract the metric using the rows from above as a guide and clean up empty columns
+      keyword_1 <- dat[rows[1]:(rows[2] - 1), ] |>
+        naniar::replace_with_na_all(condition = ~ .x == "")
+      keyword_1 <- Filter(function(x) !all(is.na(x)), keyword_1)[-c(1:3), ]
+      colnames(keyword_1) <- c("output", "keyword", "output_order")
+      keyword_1 <- keyword_1 |>
+        dplyr::mutate(output_order = as.numeric(stringr::str_extract(output_order, "\\d+$"))) |>
+        dplyr::filter(output_order == 1) |>
+        dplyr::pull(keyword)
+      # identify first reported keyword
+      keywords_end_row <- which(apply(dat, 1, function(row) any(grepl(keyword_1, row))))[2] - 12 # 12 rows behind is the last entry for keywords
+      # always extract the second entry bc the first is just in the list of keywords
+      
+      keywords <- dat[keywords_start_row:keywords_end_row, ][-c(1:3), c(1:3)] |>
+        naniar::replace_with_na_all(condition = ~ .x == "")
+      keywords <- Filter(function(x) !all(is.na(x)), keywords)
+      colnames(keywords) <- c("output", "keyword", "output_order")
+      param_names <- keywords |>
+        dplyr::mutate(output_order = as.numeric(stringr::str_extract(output_order, "\\d+$"))) |>
+        dplyr::filter(output == "Y") |>
+        dplyr::pull(keyword)
+      
+      # Group parameters base on table pattern
+      std <- c(
+        "DERIVED_QUANTITIES",
+        "MGparm_By_Year_after_adjustments",
+        "CATCH",
+        "SPAWN_RECRUIT",
+        "TIME_SERIES",
+        "DISCARD_OUTPUT",
+        "INDEX_2",
+        "FIT_LEN_COMPS",
+        "FIT_AGE_COMPS",
+        "FIT_SIZE_COMPS",
+        "SELEX_database",
+        "Growth_Parameters",
+        "Kobe_Plot"
+      )
+      std2 <- c("OVERALL_COMPS")
+      cha <- c("Dynamic_Bzero")
+      rand <- c(
+        "Input_Variance_Adjustment",
+        "SPR_SERIES",
+        "selparm(Size)_By_Year_after_adjustments",
+        "selparm(Age)_By_Year_after_adjustments",
+        "BIOLOGY",
+        "SPR/YPR_Profile",
+        "Biology_at_age_in_endyr",
+        "SPAWN_RECR_CURVE",
+        "PARAMETERS"
+      )
+      info <- c(
+        "LIKELIHOOD",
+        "DEFINITIONS"
+      )
+      aa.al <- c(
+        "BIOMASS_AT_AGE",
+        "BIOMASS_AT_LENGTH",
+        "DISCARD_AT_AGE",
+        "CATCH_AT_AGE",
+        "F_AT_AGE",
+        "MEAN_SIZE_TIMESERIES",
+        "NUMBERS_AT_AGE",
+        "NUMBERS_AT_LENGTH",
+        "AGE_SELEX",
+        "LEN_SELEX",
+        "MEAN_BODY_WT(Begin)",
+        "Natural_Mortality"
+      )
+      nn <- c(
+        "MORPH_INDEXING",
+        "EXPLOITATION",
+        "DISCARD_SPECIFICATION",
+        "INDEX_1",
+        "MEAN_BODY_WT_OUTPUT"
+      )
+      # Intentionally left empty
+      single_val <- c()
+    } else {
+      # r4ss::ss_output
+      dat <- file
+      # Extract fleet names
+      if (is.null(fleet_names)) {
+        fleet_names <- dat$FleetNames
+      }
+      # Output fleet names in console
+      cli::cli_alert_info("Identified fleet names:")
+      cli::cli_alert_info("{fleet_names}")
+      
+      param_names <- names(dat)
+      
+      std <- c(
+        "recruit", # STD
+        "exploitation", # STD
+        "catch", # STD
+        "timeseries", # STD
+        "discard", # STD
+        "kobe", # maybe STD
+        "cpue", # STD
+        "derived_quants", #STD
+        "Dynamic_Bzero", # STD
+        "len_comp_fit_table", # STD
+        "age_comp_fit_table" # STD
+      )
+      rand <- c(
+        "SPAWN_RECRUIT_CURVE", # RAND
+        "sprseries", # RAND
+        "parameters" # RAND
+        # "equil_yeild", # SKIP FOR NOW - RAND 
+      )
+      aa.al <- c(
+        "sizeselex", # AA.AL
+        "ageselex", # AA.AL
+        "Natural_Mortality", # AA.AL
+        "fatage", # AA.AL
+        "natage", # AA.AL
+        "batage", # AA.AL
+        "natlen", # AA.AL
+        "batlen", # AA.AL
+        "discard_at_age", # AA.AL
+        "catage", # AA.AL
+        "Z_at_age", # AA.AL - DO WE NEED BOTH? THIS AND Z_BY_AREA
+        "M_at_age", # AA.AL - DO WE NEED BOTH? THIS AND M_BY_AREA
+        "Z_by_area", # AA.AL
+        "M_by_area" # AA.AL
+      )
+        # "growth_series" # ? UNSURE THIS IS NULL IN EXAMPLE
+        # "mngwt" # ???
+      single_val <- c(
+        "sprtarg", # single value
+        "btarg", # single value
+        "SBzero" # SINGLE VALUE
+      )
+      # ntentionally empty
+      std2 <- c()
+      cha <- c()
+      info <- c()
     }
-
-    # Extract fleet names
-    if (is.null(fleet_names)) {
-      fleet_names <- SS3_extract_fleet(dat, vers)
-    }
-    # Output fleet names in console
-    cli::cli_alert_info("Identified fleet names:")
-    cli::cli_alert_info("{fleet_names}")
-
+    
     # Extract units
-
-
-    # Estimated and focal parameters to put into reformatted output df - naming conventions from SS3
-    # Extract keywords from ss3 file
-    # Find row where keywords start
-    keywords_start_row <- which(apply(dat, 1, function(row) any(grepl("#_KeyWords_of_tables_available_in_report_sso", row))))
-    # Extract this first chunk of keywords to identify the first reported df - most likely DEFINITIONS
-    first_blank_after <- which(apply(dat, 1, function(row) all(is.na(row) | row == "")) & (seq_len(nrow(dat)) > keywords_start_row))[1]
-    rows <- c(keywords_start_row, first_blank_after)
-    # Extract the metric using the rows from above as a guide and clean up empty columns
-    keyword_1 <- dat[rows[1]:(rows[2] - 1), ] |>
-      naniar::replace_with_na_all(condition = ~ .x == "")
-    keyword_1 <- Filter(function(x) !all(is.na(x)), keyword_1)[-c(1:3), ]
-    colnames(keyword_1) <- c("output", "keyword", "output_order")
-    keyword_1 <- keyword_1 |>
-      dplyr::mutate(output_order = as.numeric(stringr::str_extract(output_order, "\\d+$"))) |>
-      dplyr::filter(output_order == 1) |>
-      dplyr::pull(keyword)
-    # identify first reported keyword
-    keywords_end_row <- which(apply(dat, 1, function(row) any(grepl(keyword_1, row))))[2] - 12 # 12 rows behind is the last entry for keywords
-    # always extract the second entry bc the first is just in the list of keywords
-
-    keywords <- dat[keywords_start_row:keywords_end_row, ][-c(1:3), c(1:3)] |>
-      naniar::replace_with_na_all(condition = ~ .x == "")
-    keywords <- Filter(function(x) !all(is.na(x)), keywords)
-    colnames(keywords) <- c("output", "keyword", "output_order")
-    param_names <- keywords |>
-      dplyr::mutate(output_order = as.numeric(stringr::str_extract(output_order, "\\d+$"))) |>
-      dplyr::filter(output == "Y") |>
-      dplyr::pull(keyword)
-
-    # Group parameters base on table pattern
-    std <- c(
-      "DERIVED_QUANTITIES",
-      "MGparm_By_Year_after_adjustments",
-      "CATCH",
-      "SPAWN_RECRUIT",
-      "TIME_SERIES",
-      "DISCARD_OUTPUT",
-      "INDEX_2",
-      "FIT_LEN_COMPS",
-      "FIT_AGE_COMPS",
-      "FIT_SIZE_COMPS",
-      "SELEX_database",
-      "Growth_Parameters",
-      "Kobe_Plot"
-    )
-    std2 <- c("OVERALL_COMPS")
-    cha <- c("Dynamic_Bzero")
-    rand <- c(
-      "Input_Variance_Adjustment",
-      "SPR_SERIES",
-      "selparm(Size)_By_Year_after_adjustments",
-      "selparm(Age)_By_Year_after_adjustments",
-      "BIOLOGY",
-      "SPR/YPR_Profile",
-      "Biology_at_age_in_endyr",
-      "SPAWN_RECR_CURVE",
-      "PARAMETERS"
-    )
-    info <- c(
-      "LIKELIHOOD",
-      "DEFINITIONS"
-    )
-    aa.al <- c(
-      "BIOMASS_AT_AGE",
-      "BIOMASS_AT_LENGTH",
-      "DISCARD_AT_AGE",
-      "CATCH_AT_AGE",
-      "F_AT_AGE",
-      "MEAN_SIZE_TIMESERIES",
-      "NUMBERS_AT_AGE",
-      "NUMBERS_AT_LENGTH",
-      "AGE_SELEX",
-      "LEN_SELEX",
-      "MEAN_BODY_WT(Begin)",
-      "Natural_Mortality"
-    )
-    nn <- c(
-      "MORPH_INDEXING",
-      "EXPLOITATION",
-      "DISCARD_SPECIFICATION",
-      "INDEX_1",
-      "MEAN_BODY_WT_OUTPUT"
-    )
-
+    
+    
     # Loop for all identified parameters to extract for plotting and use
     # Create list of parameters that were not found in the output file
     # 1,4,10,17,19,20,22,32,37
@@ -292,57 +354,88 @@ convert_output <- function(
       "settlement", "birthseas", "count",
       "kind"
     )
-
+    
     errors <- c(
       "StdDev", "sd", "std", "stddev",
       "se", "SE",
       "cv", "CV"
+      # "dev" # not included bc this is dev in model, not uncertainty of the value
     )
-
+    
     miss_parms <- c()
     out_list <- list()
     #### SS3 loop ####
     for (i in seq_along(param_names)) {
       # Processing data frame
       parm_sel <- param_names[i]
-      if (parm_sel %in% c(std, std2, cha, rand, aa.al)) {
-        cli::cli_alert(glue::glue("Processing {parm_sel}"))
-        extract <- SS3_extract_df(dat, parm_sel)
+      if (parm_sel %in% c(std, std2, cha, rand, aa.al, single_val)) {
+        cli::cli_alert(glue::glue("Processing {parm_sel}")) # Remove [{i}] 
+        if(is.character(file)) {
+          extract <- SS3_extract_df(dat, parm_sel)
+        } else {
+          extract <- file[[parm_sel]]
+        }
+        
         if (!is.data.frame(extract)) {
-          miss_parms <- c(miss_parms, parm_sel)
-          cli::cli_alert(glue::glue("Skipped {parm_sel}"))
-          next
+          if (is.numeric(extract)) {
+            df <- data.frame(
+              label = parm_sel,
+              module_name = parm_sel,
+              estimate = extract[[1]]
+            )
+            df[setdiff(tolower(names(out_new)), tolower(names(df)))] <- NA
+            out_list[[parm_sel]] <- df
+          } else {
+            miss_parms <- c(miss_parms, parm_sel)
+            cli::cli_alert(glue::glue("Skipped {parm_sel}"))
+            next
+          }
         } else {
           ##### STD ####
           # 1,4,10,17,19,36
           if (parm_sel %in% std) {
-            # remove first row - naming
-            df1 <- extract[-1, ]
-            # Find first row without NAs = headers
-            # temp fix for catch df - I have only seen this issue for Hake example
-            if (any(is.na(df1[1, ])) & parm_sel == "CATCH") {
-              df1 <- df1[-1, ]
-              cols_to_keep <- which(sapply(df1, function(x) !all(is.na(x))))
-              df1 <- df1 |> dplyr::select(dplyr::all_of(c(names(cols_to_keep))))
-              df2 <- df1
+            if (is.character(file)) {
+              # remove first row - naming
+              df1 <- extract[-1, ]
+              # Find first row without NAs = headers
+              # temp fix for catch df - I have only seen this issue for Hake example
+              if (any(is.na(df1[1, ])) & parm_sel == "CATCH") {
+                df1 <- df1[-1, ]
+                cols_to_keep <- which(sapply(df1, function(x) !all(is.na(x))))
+                df1 <- df1 |> dplyr::select(dplyr::all_of(c(names(cols_to_keep))))
+                df2 <- df1
+              } else {
+                df2 <- df1[stats::complete.cases(df1), ]
+              }
+              if (any(c("#") %in% df2[, 1])) {
+                full_row <- which(apply(df1, 1, function(row) is.na(row) | row == " " | row == "-" | row == "#"))[1]
+                df1 <- df1[-full_row[1], ]
+                df1 <- Filter(function(x) !all(is.na(x)), df1)
+                df2 <- df1[stats::complete.cases(df1), ]
+              }
+              # identify first row
+              row <- df2[1, ]
+              # find row number that matches 'row'
+              rownum <- row_match(as.vector(row), df1)
+              # make row the header names for first df
+              colnames(df1) <- row
+              # Subset data frame
+              df3 <- df1[-c(1:rownum), ]
+              colnames(df3) <- tolower(row)
             } else {
-              df2 <- df1[stats::complete.cases(df1), ]
+              # from 4rss output
+              df3 <- extract
+              colnames(df3) <- tolower(colnames(df3))
+              # ID any column names that are fleets (exploitation module in r4ss)
+              if (any(tolower(fleet_names) %in% colnames(df3))) {
+                for (i in intersect(tolower(fleet_names), colnames(df3))) {
+                  col_name <- glue::glue("exploitation_{i}")
+                  df3 <- df3 |>
+                    dplyr::rename(!!col_name := i)
+                }
+                
+              }
             }
-            if (any(c("#") %in% df2[, 1])) {
-              full_row <- which(apply(df1, 1, function(row) is.na(row) | row == " " | row == "-" | row == "#"))[1]
-              df1 <- df1[-full_row[1], ]
-              df1 <- Filter(function(x) !all(is.na(x)), df1)
-              df2 <- df1[stats::complete.cases(df1), ]
-            }
-            # identify first row
-            row <- df2[1, ]
-            # find row number that matches 'row'
-            rownum <- row_match(as.vector(row), df1)
-            # make row the header names for first df
-            colnames(df1) <- row
-            # Subset data frame
-            df3 <- df1[-c(1:rownum), ]
-            colnames(df3) <- tolower(row)
             # Remove any leftover NA columns if still present
             NA_cols <- which(sapply(df3, function(x) all(is.na(x))))
             if (length(NA_cols) > 0) df3 <- df3[, -NA_cols]
@@ -372,7 +465,7 @@ convert_output <- function(
             } else if (any(colnames(df3) %in% c(factors, errors))) {
               # Keeping check here if case arises that there is a similar situation to the error
               # aka there are multiple columns containing the string and they are not selected properly
-
+              
               if ("sexes" %in% colnames(df3)) {
                 df3 <- df3 |>
                   # add in case if sexes is present and add sex as na if so
@@ -386,7 +479,15 @@ convert_output <- function(
               } else {
                 df3 <- dplyr::mutate(df3, sex = NA)
               }
-
+              
+              # Identify which errors were identified in a column & rename
+              err_col_id <- colnames(df3)[grepl(paste0(errors, "$", collapse = "|"), colnames(df3))]
+              # rename error column
+              if (length(err_col_id) > 0) {
+                uncert_name <- stringr::str_extract(err_col_id, paste0(errors, collapse = "|"))
+                df3 <- df3 |>
+                  dplyr::rename(!!uncert_name := err_col_id)
+              }
               df4 <- df3 |>
                 tidyr::pivot_longer(
                   !tidyselect::any_of(c(factors, errors)),
@@ -397,6 +498,7 @@ convert_output <- function(
                   fleet = if ("fleet" %notin% colnames(df3)) {
                     dplyr::case_when(
                       # "fleet" %in% colnames(.data) ~ fleet,
+                      grepl(paste0(tolower(fleet_names), collapse = "|"), label) ~ stringr::str_extract(label, paste(tolower(fleet_names), collapse = "|")),
                       grepl(":_[0-9]$", label) ~ stringr::str_extract(label, "(?<=_)[0-9]+"),
                       grepl(":_[0-9][0-9]$", label) ~ stringr::str_extract(label, "(?<=_)[0-9][0-9]+"),
                       TRUE ~ NA
@@ -432,7 +534,8 @@ convert_output <- function(
                       sex == 1 ~ "female",
                       sex == 2 ~ "male",
                       sex == 3 ~ "both",
-                      TRUE ~ sex
+                      sex == 0 ~ "combined",
+                      TRUE ~ as.character(sex)
                     )
                   },
                   growth_pattern = dplyr::case_when(
@@ -441,34 +544,22 @@ convert_output <- function(
                     grepl("_gp:[0-9][0-9]$", label) ~ stringr::str_extract(label, "(?<=:)[0-9][0-9]$"),
                     TRUE ~ NA
                   ),
-                  month = dplyr::case_when(
-                    grepl("_month_[0-9]+$", label) ~ stringr::str_extract(label, "(?<=month_)[0-9]+$"),
-                    TRUE ~ ifelse(any(grepl("^month$", colnames(df3))), month, NA) # this might remove month
-                  )
+                  month = if ("month" %in% colnames(df3)) {
+                      month
+                    } else {
+                      dplyr::case_when(
+                        grepl("_month_[0-9]+$", label) ~ stringr::str_extract(label, "(?<=month_)[0-9]+$"),
+                        TRUE ~ ifelse(any(grepl("^month$", colnames(df3))), month, NA) # this might remove month
+                      )
+                    }
                 )
-
-              # if ("fleet" %in% colnames(df3)) {
-              #   df4 <- df4 |>
-              #     dplyr::mutate(
-              #       fleet = dplyr::case_when(
-              #         "fleet" %in% colnames(df3) ~ fleet,
-              #         # grepl("):_[0-9]$", label) ~ stringr::str_extract(label, "(?<=_)[0-9]$"),
-              #         # grepl("):_[0-9][0-9]+$", label) ~ stringr::str_extract(label, "(?<=_)[0-9][0-9]$"),
-              #         TRUE ~ NA
-              #       ),
-              #       label = stringr::str_extract(label, "^.*?(?=_\\d|_gp|_fem|_mal|_sx|:|$)")
-              #     )
-              # } else {
+              
               df4 <- df4 |>
                 dplyr::mutate(
-                  # fleet = dplyr::case_when(
-                  #   grepl("):_[0-9]$", label) ~ stringr::str_extract(label, "(?<=_)[0-9]$"),
-                  #   grepl("):_[0-9][0-9]+$", label) ~ stringr::str_extract(label, "(?<=_)[0-9][0-9]$"),
-                  #   TRUE ~ NA
-                  # ),
                   label = dplyr::case_when(
                     grepl("?_month_[0-9]_?", label) ~ stringr::str_replace(label, "_?month_\\d?", ""),
                     grepl("?_area_[0-9]_?", label) ~ stringr::str_replace(label, "_?area_\\d?", ""),
+                    grepl(paste0(tolower(fleet_names), collapse = "|"), label) ~ stringr::str_remove(label, paste0("_", tolower(fleet_names), collapse = "|")),
                     TRUE ~ stringr::str_extract(label, "^.*?(?=_\\d|_gp|_fem|_mal|_sx|:|$)")
                   )
                 )
@@ -477,18 +568,26 @@ convert_output <- function(
               cli::cli_alert_warning(glue::glue("Data frame not compatible in {parm_sel}."))
             }
             if (any(colnames(df4) %in% c("value"))) df4 <- dplyr::rename(df4, estimate = value)
-
+            
             # Check if error values are in the labels column and extract out
             if (any(sapply(paste0("(^|[_.])", errors, "($|[_.])"), function(x) grepl(x, unique(df4$label))))) {
               err_names <- unique(df4$label)[grepl(paste(paste0("(^|[_.])", errors, "($|[_.])"), collapse = "|"), unique(df4$label)) & !unique(df4$label) %in% errors]
               if (any(grepl("sel", err_names))) {
                 df4 <- df4
-              } else if (length(intersect(errors, colnames(df4))) == 1) {
+              } else if (length(intersect(errors, colnames(df4))) == 1 && "raw_dev" %notin% unique(df4$label)) {
                 df4 <- df4[-grep(paste(errors, "_", collapse = "|", sep = ""), df4$label), ]
               } else if (parm_sel == "MGparm_By_Year_after_adjustments") { # this is too specific
                 df4 <- df4
                 cli::cli_alert_info("Error values are present, but are unique to the data frame and not to a selected parameter.")
               } else {
+                # remove dev and raw_dev from output -- no place for it atm
+                if ("raw_dev" %in% unique(df4$label)) {
+                  df4 <- df4 |> dplyr::filter(label != "raw_dev")
+                  err_names <- err_names[-grep("raw_dev", err_names)]
+                }
+                if ("dev" %in% unique(df4$label)) {
+                  df4 <- df4 |> dplyr::filter(label != "dev")
+                }
                 df4 <- df4 |>
                   tidyr::pivot_wider(
                     names_from = label,
@@ -548,7 +647,7 @@ convert_output <- function(
                 }
               }
             }
-
+            
             df5 <- df4 |>
               dplyr::select(tidyselect::any_of(c("label", "estimate", "year", factors, errors))) |>
               dplyr::mutate(
@@ -556,14 +655,9 @@ convert_output <- function(
                 label = dplyr::case_when(
                   label == "f" ~ "fishing_mortality",
                   TRUE ~ label
-                ),
-                estimate = dplyr::if_else(
-                  grepl("-|_", estimate),
-                  NA,
-                  estimate
                 )
               )
-
+            
             if (any(colnames(df5) %in% errors)) {
               df5 <- df5 |>
                 dplyr::mutate(uncertainty_label = intersect(names(df5), errors)) |>
@@ -577,13 +671,12 @@ convert_output <- function(
                 )
               colnames(df5) <- tolower(names(df5))
             }
-
             if ("seas" %in% colnames(df5)) df5 <- dplyr::rename(df5, season = seas)
-
+            
             if ("subseas" %in% colnames(df5)) df5 <- dplyr::rename(df5, subseason = subseas)
-
+            
             if ("like" %in% colnames(df5)) df5 <- dplyr::rename(df5, likelihood = like)
-
+            
             df5[setdiff(tolower(names(out_new)), tolower(names(df5)))] <- NA
             if (ncol(out_new) < ncol(df5)) {
               diff <- setdiff(names(df5), names(out_new))
@@ -683,7 +776,7 @@ convert_output <- function(
             # Add to new dataframe
             df5 <- Reduce(rbind, comps_list)
             out_list[[parm_sel]] <- df5
-
+            
             ##### cha ####
           } else if (parm_sel %in% cha) {
             # Only one keyword characterized as this
@@ -727,8 +820,8 @@ convert_output <- function(
             # "SPAWN_RECR_CURVE"
             # "Biology_at_age_in_endyr"
             # "PARAMETERS"
-
-            if (parm_sel == "SPAWN_RECR_CURVE") {
+            
+            if (parm_sel %in% c("SPAWN_RECR_CURVE", "SPAWN_RECRUIT_CURVE")) {
               # 32
               # TODO: add this to converter
               # set labels to "fitted_line_x"
@@ -759,21 +852,26 @@ convert_output <- function(
               # skipping for now cuz not needed
               miss_parms <- c(miss_parms, parm_sel)
               next
-            } else if (parm_sel == "SPR_SERIES") {
-              # split into the 3 dfs then stack - make sure all factors are present
-              # remove first row - naming
-              df1 <- extract[-1, ]
-              # Find first row without NAs = headers
-              df2 <- df1[stats::complete.cases(df1), ]
-              # identify first row
-              row <- df2[1, ]
-              # make row the header names for first df
-              colnames(df1) <- row
-              # find row number that matches 'row'
-              rownum <- row_match(row, df1)
-              # Subset data frame
-              df3 <- df1[-(1:rownum), ]
-              colnames(df3) <- tolower(row)
+            } else if (parm_sel %in% c("sprseries", "SPR_SERIES")) {
+              if (is.character(file)) {
+                # split into the 3 dfs then stack - make sure all factors are present
+                # remove first row - naming
+                df1 <- extract[-1, ]
+                # Find first row without NAs = headers
+                df2 <- df1[stats::complete.cases(df1), ]
+                # identify first row
+                row <- df2[1, ]
+                # make row the header names for first df
+                colnames(df1) <- row
+                # find row number that matches 'row'
+                rownum <- row_match(row, df1)
+                # Subset data frame
+                df3 <- df1[-(1:rownum), ]
+                colnames(df3) <- tolower(row)
+              } else {
+                df3 <- extract
+                colnames(df3) <- tolower(colnames(df3))
+              }
               # check if there are estimate and acual values within the df
               if (any(grepl("actual", colnames(df3)) | grepl("more_f", colnames(df3)))) {
                 actual_col <- grep("actual", colnames(df3))
@@ -798,7 +896,7 @@ convert_output <- function(
                     # label = paste("estimate_", label, sep = ""),
                     morph = NA
                   )
-
+                
                 sub_df2 <- df3[, c(1:2, (actual_col + 1):(moref_col - 1))] |>
                   tidyr::pivot_longer(
                     cols = -c(yr, era),
@@ -898,26 +996,31 @@ convert_output <- function(
             } else if (parm_sel == "Biology_at_age_in_endyr") {
               miss_parms <- c(miss_parms, parm_sel)
               next
-            } else if (parm_sel == "PARAMETERS") {
-              df1 <- extract[-1, ]
-              # Find first row without NAs = headers
-              # temp fix for catch df
-              df2 <- df1[stats::complete.cases(df1), ]
-              if (any(c("#") %in% df2[, 1])) {
-                full_row <- which(apply(df1, 1, function(row) is.na(row) | row == " " | row == "-" | row == "#"))[1]
-                df1 <- df1[-full_row[1], ]
-                df1 <- Filter(function(x) !all(is.na(x)), df1)
+            } else if (tolower(parm_sel) == "parameters") {
+              if (is.character(file)) {
+                df1 <- extract[-1, ]
+                # Find first row without NAs = headers
+                # temp fix for catch df
                 df2 <- df1[stats::complete.cases(df1), ]
+                if (any(c("#") %in% df2[, 1])) {
+                  full_row <- which(apply(df1, 1, function(row) is.na(row) | row == " " | row == "-" | row == "#"))[1]
+                  df1 <- df1[-full_row[1], ]
+                  df1 <- Filter(function(x) !all(is.na(x)), df1)
+                  df2 <- df1[stats::complete.cases(df1), ]
+                }
+                # identify first row
+                row <- df2[1, ]
+                # make row the header names for first df
+                colnames(df1) <- row
+                # find row number that matches 'row'
+                rownum <- row_match(row, df1)
+                # Subset data frame
+                df3 <- df1[-c(1:rownum), ]
+                colnames(df3) <- tolower(row)
+              } else {
+                df3 <- extract
+                colnames(df3) <- tolower(colnames(df3))
               }
-              # identify first row
-              row <- df2[1, ]
-              # make row the header names for first df
-              colnames(df1) <- row
-              # find row number that matches 'row'
-              rownum <- row_match(row, df1)
-              # Subset data frame
-              df3 <- df1[-c(1:rownum), ]
-              colnames(df3) <- tolower(row)
               # Pull out indexing variables and remove from labels
               df4 <- df3 |>
                 dplyr::select(intersect(colnames(df3), c("label", "value", "init", "parm_stdev"))) |>
@@ -1018,6 +1121,7 @@ convert_output <- function(
                   # fix remaining labels
                   label = ifelse(grepl("_GP$", label), stringr::str_remove(label, "_GP$"), label),
                   label = ifelse(grepl("_Fem|_Mal", label), stringr::str_remove(label, "_Fem$|_Mal$"), label),
+                  label = ifelse(grepl(paste0(fleet_names, collapse = "|"), label), stringr::str_remove(label, paste0("_", fleet_names, collapse = "|")), label),
                   module_name = parm_sel
                 )
               # match to out_new
@@ -1076,45 +1180,55 @@ convert_output <- function(
             #### aa.al ####
           } else if (parm_sel %in% aa.al) {
             # 8,9,11,12,13,14,15,16,28,29
-            # remove first row - naming
-            df1 <- extract[-1, ]
-            # Find first row without NAs = headers
-            df2 <- df1[stats::complete.cases(df1), ]
-            # identify first row
-            row <- df2[1, ]
-            if (any(row %in% "XX")) {
-              loc_xx <- grep("XX", row)
-              row <- row[row != "XX"]
-              df1 <- df1[, -loc_xx]
-            }
-
-            # TODO: apply this next if statement to a general process so it's part of the standard cleaning
-            # check if the headers make sense
-            # this is a temporary fix to a specific bug
-            # I have seen this issue in the past and I am not sure how to recognize this generally
-            if (any(parm_sel == "AGE_SELEX" & c("1", "2", "3") %notin% row)) {
+            if (is.character(file)) {
+              # remove first row - naming
+              df1 <- extract[-1, ]
+              # Find first row without NAs = headers
+              df2 <- df1[stats::complete.cases(df1), ]
+              # identify first row
+              row <- df2[1, ]
+              if (any(row %in% "XX")) {
+                loc_xx <- grep("XX", row)
+                row <- row[row != "XX"]
+                df1 <- df1[, -loc_xx]
+              }
+              
+              # TODO: apply this next if statement to a general process so it's part of the standard cleaning
+              # check if the headers make sense
+              # this is a temporary fix to a specific bug
+              # I have seen this issue in the past and I am not sure how to recognize this generally
+              if (any(parm_sel == "AGE_SELEX" & c("1", "2", "3") %notin% row)) {
+                rownum <- row_match(row, df1)
+                # Subset data frame
+                df1 <- df1[-c(1:rownum), ]
+                cols_to_keep <- which(sapply(df1, function(x) !all(is.na(x))))
+                df1 <- df1 |> dplyr::select(dplyr::all_of(c(names(cols_to_keep))))
+                df2 <- df1[stats::complete.cases(df1), ]
+                row <- df2[1, ]
+              }
+              
+              # make row the header names for first df
+              colnames(df1) <- row
+              
+              # find row number that matches 'row'
               rownum <- row_match(row, df1)
               # Subset data frame
-              df1 <- df1[-c(1:rownum), ]
-              cols_to_keep <- which(sapply(df1, function(x) !all(is.na(x))))
-              df1 <- df1 |> dplyr::select(dplyr::all_of(c(names(cols_to_keep))))
-              df2 <- df1[stats::complete.cases(df1), ]
-              row <- df2[1, ]
+              df3 <- df1[-c(1:rownum), ]
+              colnames(df3) <- tolower(row)
+            } else {
+              # Remove XX columns left in dataframe
+              if (any("xx" %in% tolower(colnames(extract)))) {
+                # ID which cols contain XX
+                df3 <- extract[, -grep("xx", tolower(colnames(extract)))]
+              } else {
+                df3 <- extract
+              }
+              colnames(df3) <- tolower(colnames(df3))
             }
-
-            # make row the header names for first df
-            colnames(df1) <- row
-
-            # find row number that matches 'row'
-            rownum <- row_match(row, df1)
-            # Subset data frame
-            df3 <- df1[-c(1:rownum), ]
-            colnames(df3) <- tolower(row)
-
             # aa.al names
             naming <- c(
               "biomass", "discard", "catch",
-              "f", "mean_size", "numbers", "sel",
+              "f", "mean_size", "numbers", "Lsel", "sel",
               "mean_body_wt", "natural_mortality"
             )
             if (stringr::str_detect(tolower(parm_sel), paste(naming, collapse = "|"))) {
@@ -1123,18 +1237,41 @@ convert_output <- function(
               if (label == "f") {
                 label <- "fishing_mortality"
               }
-            }
+            } else (
+              # add conditions for naming label from aa.al
+              label <- switch(
+                parm_sel,
+                # "sizeselex" = "selectivity_length",
+                "ageselex" = "selectivity_age",
+                "Natural_Mortality" = "natural_mortality_age",
+                "fatage" = "fishing_mortality_age",
+                "natage" = "abundance_age",
+                "batage" = "biomass_age",
+                "natlen" = "abundance_length",
+                "batlen" = "biomass_length",
+                "discard_at_age" = "discard_age",
+                "catage" = "catch_age",
+                "Z_at_age" = "total_mortality_age",
+                "M_at_age" = "natural_mortality_age",
+                "Z_by_area" = "total_mortality",
+                "M_by_area" = "natural_mortality"
+                )
+            )
             if (grepl("age", tolower(parm_sel))) {
               fac <- "age"
             } else if (any(grepl("length|len", tolower(parm_sel)))) {
               fac <- "len_bins"
             } else if (any(grepl("size", tolower(parm_sel)))) {
-              fac <- "age"
+              fac <- "len_bins"
             } else {
               fac <- "age"
             }
+            
+            # remove fac from label
+            if (grepl(glue::glue("_{fac}"), label)) label <- stringr::str_remove(label, glue::glue("_{fac}"))
+            
             # Reformat dataframe
-            if (any(colnames(df3) %in% c("Yr", "yr", "year"))) {
+            if (any(colnames(df3) %in% c("Yr", "yr"))) {
               df3 <- df3 |>
                 dplyr::rename(year = yr)
             }
@@ -1201,6 +1338,11 @@ convert_output <- function(
               df4 <- df4 |>
                 dplyr::rename(likelihood = like)
             }
+            # Rename beg/mid if present
+            if (any(grepl("beg/mid", colnames(df4)))) {
+              df4 <- df4 |>
+                dplyr::rename(beg_mid = "beg/mid")
+            }
             # Check for error in the df
             if (any(grepl(paste0("^", errors, "$", collapse = "|"), colnames(df4)))) {
               error_col <- colnames(df4)[grep(paste0("^", errors, "$", collapse = "|"), colnames(df4))]
@@ -1243,8 +1385,9 @@ convert_output <- function(
             next
           }
         } # close if param is in output file
+        #### skip parm in ss3 ####
       } else {
-        cli::cli_alert(glue::glue("Skipped {parm_sel}"))
+        if (is.character(file)) cli::cli_alert(glue::glue("Skipped [{i}] {parm_sel}"))
         next
       }
     } # close loop
@@ -2204,7 +2347,13 @@ convert_output <- function(
     # Remove 'X' column if it exists
     var_names_sheet <- var_names_sheet |>
       dplyr::select(-dplyr::any_of("X"))
-    out_new <- dplyr::left_join(out_new, var_names_sheet, by = c("module_name", "label")) |>
+    if (tolower(model) == "ss3" & !is.character(file)) {
+      var_names_sheet <- var_names_sheet |> dplyr::select(-module_name)
+      out_new <- dplyr::left_join(out_new, var_names_sheet, by = "label")
+    } else {
+      out_new <- dplyr::left_join(out_new, var_names_sheet, by = c("module_name", "label"))
+    }
+    out_new <- out_new |>
       dplyr::mutate(label = dplyr::case_when(
         !is.na(alt_label) ~ alt_label,
         # TODO: add this to ss3_var_names.xlsx

@@ -10,6 +10,7 @@ plot_biomass_at_age(
   unit_label = "mt",
   scale_amount = 1000,
   proportional = TRUE,
+  module = NULL,
   interactive = TRUE,
   make_rda = FALSE,
   figures_dir = getwd()
@@ -42,6 +43,14 @@ size are relative to one another while when set to FALSE, point size
 is relative to z
 
 Default: `TRUE`}
+
+\item{module}{(Optional) A string indicating the module_name found in `dat`.
+If selecting >1 module, place them in a vector like c("module1", "module2").
+
+Default: NULL
+
+If the interactive and >1 module_name is found, user will select the
+module_name in the console. @seealso [filter_data()]}
 
 \item{interactive}{Logical. TRUE/FALSE; indicate whether the environment in which the
 function is operating  is interactive. This bypasses some options for

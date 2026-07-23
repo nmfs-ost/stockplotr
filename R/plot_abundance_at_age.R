@@ -28,6 +28,16 @@
 #'
 #' Default: `TRUE`
 #'
+#' @param module (Optional) A string indicating the module_name found in `dat`.
+#' If selecting >1 module, place them in a vector like c("module1", "module2").
+#'
+#' Default: NULL
+#'
+#' If the interactive and >1 module_name is found, user will select the
+#' module_name in the console. @seealso [filter_data()]
+#' @param interactive A logical value indicating if the environment is interactive.
+#'
+#' Default: `FALSE`
 #' @param make_rda Logical. TRUE/FALSE; indicate whether to produce an .rda file containing
 #' a list with the figure/table, caption, and alternative text (if figure). If TRUE,
 #' the .rda will be exported to the folder indicated in the argument "rda_dir".
@@ -70,6 +80,8 @@ plot_abundance_at_age <- function(
   unit_label = "fish",
   scale_amount = 1000,
   proportional = TRUE,
+  module = NULL,
+  interactive = TRUE,
   make_rda = FALSE,
   figures_dir = getwd()
 ) {
@@ -85,8 +97,9 @@ plot_abundance_at_age <- function(
     label_name = "abundance",
     geom = "point",
     group = "age",
+    module = module,
     scale_amount = scale_amount,
-    interactive = FALSE
+    interactive = interactive
   )
 
   if (!is.null(facet) && facet == "none") {

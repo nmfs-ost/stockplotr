@@ -45,6 +45,7 @@ plot_biomass_at_age <- function(
   unit_label = "mt",
   scale_amount = 1000,
   proportional = TRUE,
+  module = NULL,
   interactive = TRUE,
   make_rda = FALSE,
   figures_dir = getwd()
@@ -62,6 +63,7 @@ plot_biomass_at_age <- function(
     geom = "point",
     group = "age",
     era = "time",
+    module = module,
     scale_amount = scale_amount,
     interactive = interactive
   )
