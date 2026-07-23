@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">stockplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.12.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.13.0</span>
       </span>
     </div>
 
@@ -98,6 +98,7 @@
 <span>  unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
 <span>  scale_amount <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>  proportional <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  module <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  interactive <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  make_rda <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  figures_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -138,6 +139,14 @@ proportion is set to FALSE.</p>
 size are relative to one another while when set to FALSE, point size
 is relative to z</p>
 <p>Default: `TRUE`</p></dd>
+
+
+<dt id="arg-module">module<a class="anchor" aria-label="anchor" href="#arg-module"></a></dt>
+<dd><p>(Optional) A string indicating the module_name found in `dat`.
+If selecting &gt;1 module, place them in a vector like c("module1", "module2").</p>
+<p>Default: NULL</p>
+<p>If the interactive and &gt;1 module_name is found, user will select the
+module_name in the console. @seealso [filter_data()]</p></dd>
 
 
 <dt id="arg-interactive">interactive<a class="anchor" aria-label="anchor" href="#arg-interactive"></a></dt>
