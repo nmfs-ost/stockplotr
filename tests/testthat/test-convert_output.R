@@ -100,3 +100,19 @@ test_that("row_match returns matching row positions", {
   expect_equal(row_match(data.frame(a = "y", b = "2"), table), 3)
   expect_true(is.na(row_match(c("missing", "row"), table)))
 })
+
+test_that("replace_empty_with_na_all replaces empty strings only", {
+  replace_empty_with_na_all <- getFromNamespace("replace_empty_with_na_all", "stockplotr")
+
+  dat <- data.frame(
+    a = c("x", "", NA),
+    b = c("", "y", ""),
+    c = 1:3
+  )
+
+  out <- replace_empty_with_na_all(dat)
+
+  expect_equal(out$a, c("x", NA, NA))
+  expect_equal(out$b, c(NA, "y", NA))
+  expect_equal(out$c, 1:3)
+})
