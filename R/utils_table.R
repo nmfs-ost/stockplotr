@@ -224,13 +224,8 @@ merge_error <- function(
           !!l_col := ifelse(
             !is.na(.data[[uncert_col]]),
             paste0(.data[[l_col]], " (", .data[[uncert_col]], ")"),
-            # maybe not good practice to insert dash?
-            # ifelse(
-            #   is.na(.data[[l_col]]),
-            "-"
-            #   as.character(.data[[l_col]])
-            # )
-          )
+            .data[[l_col]]
+         )
         ) |>
         # Remove uncertainty colummn id'd in this step of the loop
         dplyr::select(-dplyr::all_of(uncert_col))
