@@ -139,7 +139,7 @@ table_landings <- function(
   final <- lapply(df_list, function(df) {
     df |>
       gt::gt() |>
-      theme_table()
+      add_theme()
   })
 
   # export figure to rda if argument = T
