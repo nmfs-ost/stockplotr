@@ -9,12 +9,6 @@
 #' Default: c("catch" = "mt", "spawning_biomass" = "mt", 
 #' "fishing_mortality" = "")
 #' 
-#' @param uncertainty_label Character vector. Abbreviated uncertainty label for
-#' each quantity
-#' 
-#' Default: c("catch" = "stddev", "spawning_biomass" = "stddev",
-#' "fishing_mortality" = "stddev")
-#'
 #' @return A formatted gt table object.
 #' @details We would like to thank Dan Hennen for sharing his projections table
 #' function code, which served as the foundation for this function.
@@ -29,16 +23,24 @@
 table_projections <- function(
     dat,
     unit_label = c("catch" = "mt", "spawning_biomass" = "mt", "fishing_mortality" = ""),
-    uncertainty_label = c("catch" = "stddev", "spawning_biomass" = "stddev", "fishing_mortality" = "stddev"),
     interactive = TRUE,
     module = NULL,
     make_rda = FALSE,
     tables_dir = getwd()
     ) {
-  
+  # check if catch in data else landings
+  catch_lab <- ifelse(
+    any(grepl("catch$", dat$label)),
+    "catch",
+    "landings_weight"
+  )
+  # change default unit and uncert labs when catch is changed to landings
+  if ("landings" %notin% names(unit_label) | "landings" %notin% names(unit_label)) {
+    unit_label <- c(unit_label, "landings_weight" = unit_label[["catch"]])
+  }
   # iterate through 3 label_names
   lab_list <- purrr::map(
-    c("catch", "spawning_biomass", "fishing_mortality"),
+    c(catch_lab, "spawning_biomass", "fishing_mortality"),
     function(x) {
       cli::cli_alert_info(paste0("Processing ", x))
       filtered_data <- filter_data(
@@ -52,6 +54,11 @@ table_projections <- function(
       ) |>
         dplyr::mutate(estimate = round(as.numeric(estimate), digits = 0)) |>
         dplyr::mutate(uncertainty = round(as.numeric(uncertainty), digits = 2))
+      uncertainty_label <- ifelse(
+        is.na(unique(filtered_data$uncertainty_label)),
+        "Uncertainty",
+        unique(filtered_data$uncertainty_label)
+      )
       # process to reduce columns
       processed_data <- process_table(filtered_data,
                                       digits = ifelse(x == "fishing_mortality", 5, 2))
@@ -63,7 +70,7 @@ table_projections <- function(
         table_data = data,
         id_col_vals = group,
         unit_label = unit_label[grepl(x, names(unit_label))][[1]],
-        uncert_lab = uncertainty_label[grepl(x, names(uncertainty_label))][[1]]
+        uncert_lab = uncertainty_label
       )[[1]]
     }
   )
