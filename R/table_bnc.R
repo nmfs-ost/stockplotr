@@ -160,7 +160,7 @@
 #     )
 
 #   # add theming to final table
-#   final <- suppressWarnings(add_theme(bnc))
+#   final <- suppressWarnings(theme_table(bnc))
 
 #   # export figure to rda if argument = T
 #   if (make_rda == TRUE) {

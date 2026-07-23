@@ -131,7 +131,7 @@ table_index <- function(
   final <- lapply(df_list, function(df) {
     df |>
       gt::gt() |>
-      add_theme()
+      theme_table()
   })
   
   # export figure to rda if argument = T
