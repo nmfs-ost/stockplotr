@@ -2,7 +2,7 @@
 % Please edit documentation in R/theme_noaa.R
 \name{theme_noaa}
 \alias{theme_noaa}
-\title{Add NOAA theming to ggplot2 object. The palette is from the 'viridis' package, which contains palettes distinguishable by those with color vision deficiency.}
+\title{Add NOAA theming to ggplot2 object}
 \usage{
 theme_noaa(discrete = TRUE, ...)
 }
@@ -17,7 +17,7 @@ Default: TRUE}
 A list applying a theme to a ggplot2 object.
 }
 \description{
-Add NOAA theming to ggplot2 object. The palette is from the 'viridis' package, which contains palettes distinguishable by those with color vision deficiency.
+The palette is from the 'viridis' package, which contains palettes distinguishable by those with color vision deficiency.
 }
 \examples{
 ggplot2::ggplot(

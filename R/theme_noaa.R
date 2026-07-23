@@ -1,4 +1,6 @@
-#' Add NOAA theming to ggplot2 object. The palette is from the 'viridis' package, which contains palettes distinguishable by those with color vision deficiency.
+#' Add NOAA theming to ggplot2 object
+#' 
+#' The palette is from the 'viridis' package, which contains palettes distinguishable by those with color vision deficiency.
 #'
 #' @param discrete Logical. TRUE/FALSE; indicate whether the color or fill aesthetic is discrete.
 #'
