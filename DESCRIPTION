@@ -43,7 +43,6 @@ Imports:
     glue,
     gt,
     kableExtra,
-    naniar,
     purrr,
     rlang,
     scales,

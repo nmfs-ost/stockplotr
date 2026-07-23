@@ -200,7 +200,7 @@ convert_output <- function(
       rows <- c(keywords_start_row, first_blank_after)
       # Extract the metric using the rows from above as a guide and clean up empty columns
       keyword_1 <- dat[rows[1]:(rows[2] - 1), ] |>
-        naniar::replace_with_na_all(condition = ~ .x == "")
+        replace_empty_with_na_all()
       keyword_1 <- Filter(function(x) !all(is.na(x)), keyword_1)[-c(1:3), ]
       colnames(keyword_1) <- c("output", "keyword", "output_order")
       keyword_1 <- keyword_1 |>
@@ -212,7 +212,7 @@ convert_output <- function(
       # always extract the second entry bc the first is just in the list of keywords
       
       keywords <- dat[keywords_start_row:keywords_end_row, ][-c(1:3), c(1:3)] |>
-        naniar::replace_with_na_all(condition = ~ .x == "")
+        replace_empty_with_na_all()
       keywords <- Filter(function(x) !all(is.na(x)), keywords)
       colnames(keywords) <- c("output", "keyword", "output_order")
       param_names <- keywords |>

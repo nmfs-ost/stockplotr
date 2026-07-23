@@ -63,6 +63,19 @@ row_match <- function(x, table, nomatch = NA) {
 
 #------------------------------------------------------------------------------
 
+replace_empty_with_na_all <- function(dat) {
+  dat <- as.data.frame(dat)
+  for (col in seq_along(dat)) {
+    if (is.character(dat[[col]])) {
+      is_empty <- !is.na(dat[[col]]) & dat[[col]] == ""
+      dat[[col]][is_empty] <- NA_character_
+    }
+  }
+  dat
+}
+
+#------------------------------------------------------------------------------
+
 # Helper for SS3 output converter
 # Function to extract rows, identify the dfs, and clean them up
 # SS3_extract_df <- function(dat, label) {
@@ -84,7 +97,7 @@ row_match <- function(x, table, nomatch = NA) {
 
 #   # Extract the metric using the rows from above as a guide and clean up empty columns
 #   clean_df <- dat[rows[1]:(rows[2] - 1), ] |>
-#     naniar::replace_with_na_all(condition = ~ .x == "")
+#     replace_empty_with_na_all()
 #   clean_df <- Filter(function(x) !all(is.na(x)), clean_df)
 
 #   clean_df
@@ -182,7 +195,7 @@ SS3_extract_fleet <- function(dat, vers) {
 
   # Extract the metric using the rows from above as a guide and clean up empty columns
   clean_df <- dat[rows[1]:(rows[2] - 1), ] |>
-    naniar::replace_with_na_all(condition = ~ .x == "")
+    replace_empty_with_na_all()
   fleets <- switch(i,
     "1" = {
       fleet_names <- Filter(function(x) !all(is.na(x)), clean_df)[-1, 9]$X9
@@ -192,7 +205,7 @@ SS3_extract_fleet <- function(dat, vers) {
     },
     {
       clean_df <- dat[rows[1]:(rows[2] - 1), ] |>
-        naniar::replace_with_na_all(condition = ~ .x == "")
+        replace_empty_with_na_all()
       fleet_info <- Filter(function(x) !all(is.na(x)), clean_df)[-1, ]
       stats::setNames(fleet_info[[ncol(fleet_info)]], fleet_info[[1]])
     }
