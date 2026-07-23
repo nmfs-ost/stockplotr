@@ -42,7 +42,7 @@ theme_table <- function(x) {
         style = gt::cell_text(weight = "bold"),
         locations = gt::cells_column_labels()
       )
-  } else if (class(x)[1] == "knitr_kable") {
+  } else if (class(x)[1] %in% c("kableExtra", "knitr_kable")) {
     theme_obj <- x
   } else {
     cli::cli_alert_danger("NOAA formatting cannot be applied to this object.")
