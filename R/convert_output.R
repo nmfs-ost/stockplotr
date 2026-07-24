@@ -102,12 +102,15 @@ convert_output <- function(
   if (is.character(file)) {
     url_pattern <- "^(https?|ftp|file):\\/\\/[-A-Za-z0-9+&@#\\/%?=~_|!:,.;]*[-A-Za-z0-9+&@#\\/%=~_|]$"
     if (grepl(url_pattern, file)) {
-      check <- tryCatch({
-        headers <- utils::curlGetHeaders(file)
-        attributes(headers)[["status"]]
-      }, error = function(e) {
-        404
-      })
+      check <- tryCatch(
+        {
+          headers <- utils::curlGetHeaders(file)
+          attributes(headers)[["status"]]
+        },
+        error = function(e) {
+          404
+        }
+      )
       if (check == 404) cli::cli_abort(c(message = "Invalid URL."))
     } else {
       if (!file.exists(file)) {
@@ -182,7 +185,7 @@ convert_output <- function(
       if (vers < 3.3) {
         cli::cli_abort("This function in its current state can not process the data.")
       }
-      
+
       # Extract fleet names
       if (is.null(fleet_names)) {
         fleet_names <- SS3_extract_fleet(dat, vers)
@@ -190,7 +193,7 @@ convert_output <- function(
       # Output fleet names in console
       cli::cli_alert_info("Identified fleet names:")
       cli::cli_alert_info("{fleet_names}")
-      
+
       # Estimated and focal parameters to put into reformatted output df - naming conventions from SS3
       # Extract keywords from ss3 file
       # Find row where keywords start
@@ -210,7 +213,7 @@ convert_output <- function(
       # identify first reported keyword
       keywords_end_row <- which(apply(dat, 1, function(row) any(grepl(keyword_1, row))))[2] - 12 # 12 rows behind is the last entry for keywords
       # always extract the second entry bc the first is just in the list of keywords
-      
+
       keywords <- dat[keywords_start_row:keywords_end_row, ][-c(1:3), c(1:3)] |>
         replace_empty_with_na_all()
       keywords <- Filter(function(x) !all(is.na(x)), keywords)
@@ -219,7 +222,7 @@ convert_output <- function(
         dplyr::mutate(output_order = as.numeric(stringr::str_extract(output_order, "\\d+$"))) |>
         dplyr::filter(output == "Y") |>
         dplyr::pull(keyword)
-      
+
       # Group parameters base on table pattern
       std <- c(
         "DERIVED_QUANTITIES",
@@ -286,9 +289,9 @@ convert_output <- function(
       # Output fleet names in console
       cli::cli_alert_info("Identified fleet names:")
       cli::cli_alert_info("{fleet_names}")
-      
+
       param_names <- names(dat)
-      
+
       std <- c(
         "recruit", # STD
         "exploitation", # STD
@@ -297,7 +300,7 @@ convert_output <- function(
         "discard", # STD
         "kobe", # maybe STD
         "cpue", # STD
-        "derived_quants", #STD
+        "derived_quants", # STD
         "Dynamic_Bzero", # STD
         "len_comp_fit_table", # STD
         "age_comp_fit_table" # STD
@@ -306,7 +309,7 @@ convert_output <- function(
         "SPAWN_RECRUIT_CURVE", # RAND
         "sprseries", # RAND
         "parameters" # RAND
-        # "equil_yeild", # SKIP FOR NOW - RAND 
+        # "equil_yeild", # SKIP FOR NOW - RAND
       )
       aa.al <- c(
         "sizeselex", # AA.AL
@@ -324,8 +327,8 @@ convert_output <- function(
         "Z_by_area", # AA.AL
         "M_by_area" # AA.AL
       )
-        # "growth_series" # ? UNSURE THIS IS NULL IN EXAMPLE
-        # "mngwt" # ???
+      # "growth_series" # ? UNSURE THIS IS NULL IN EXAMPLE
+      # "mngwt" # ???
       single_val <- c(
         "sprtarg", # single value
         "btarg", # single value
@@ -336,10 +339,10 @@ convert_output <- function(
       cha <- c()
       info <- c()
     }
-    
+
     # Extract units
-    
-    
+
+
     # Loop for all identified parameters to extract for plotting and use
     # Create list of parameters that were not found in the output file
     # 1,4,10,17,19,20,22,32,37
@@ -354,14 +357,14 @@ convert_output <- function(
       "settlement", "birthseas", "count",
       "kind"
     )
-    
+
     errors <- c(
       "StdDev", "sd", "std", "stddev",
       "se", "SE",
       "cv", "CV"
       # "dev" # not included bc this is dev in model, not uncertainty of the value
     )
-    
+
     miss_parms <- c()
     out_list <- list()
     #### SS3 loop ####
@@ -369,13 +372,13 @@ convert_output <- function(
       # Processing data frame
       parm_sel <- param_names[i]
       if (parm_sel %in% c(std, std2, cha, rand, aa.al, single_val)) {
-        cli::cli_alert(glue::glue("Processing {parm_sel}")) # Remove [{i}] 
-        if(is.character(file)) {
+        cli::cli_alert(glue::glue("Processing {parm_sel}")) # Remove [{i}]
+        if (is.character(file)) {
           extract <- SS3_extract_df(dat, parm_sel)
         } else {
           extract <- file[[parm_sel]]
         }
-        
+
         if (!is.data.frame(extract)) {
           if (is.numeric(extract)) {
             df <- data.frame(
@@ -433,7 +436,6 @@ convert_output <- function(
                   df3 <- df3 |>
                     dplyr::rename(!!col_name := i)
                 }
-                
               }
             }
             # Remove any leftover NA columns if still present
@@ -465,7 +467,7 @@ convert_output <- function(
             } else if (any(colnames(df3) %in% c(factors, errors))) {
               # Keeping check here if case arises that there is a similar situation to the error
               # aka there are multiple columns containing the string and they are not selected properly
-              
+
               if ("sexes" %in% colnames(df3)) {
                 df3 <- df3 |>
                   # add in case if sexes is present and add sex as na if so
@@ -479,7 +481,7 @@ convert_output <- function(
               } else {
                 df3 <- dplyr::mutate(df3, sex = NA)
               }
-              
+
               # Identify which errors were identified in a column & rename
               err_col_id <- colnames(df3)[grepl(paste0(errors, "$", collapse = "|"), colnames(df3))]
               # rename error column
@@ -545,15 +547,15 @@ convert_output <- function(
                     TRUE ~ NA
                   ),
                   month = if ("month" %in% colnames(df3)) {
-                      month
-                    } else {
-                      dplyr::case_when(
-                        grepl("_month_[0-9]+$", label) ~ stringr::str_extract(label, "(?<=month_)[0-9]+$"),
-                        TRUE ~ ifelse(any(grepl("^month$", colnames(df3))), month, NA) # this might remove month
-                      )
-                    }
+                    month
+                  } else {
+                    dplyr::case_when(
+                      grepl("_month_[0-9]+$", label) ~ stringr::str_extract(label, "(?<=month_)[0-9]+$"),
+                      TRUE ~ ifelse(any(grepl("^month$", colnames(df3))), month, NA) # this might remove month
+                    )
+                  }
                 )
-              
+
               df4 <- df4 |>
                 dplyr::mutate(
                   label = dplyr::case_when(
@@ -568,7 +570,7 @@ convert_output <- function(
               cli::cli_alert_warning(glue::glue("Data frame not compatible in {parm_sel}."))
             }
             if (any(colnames(df4) %in% c("value"))) df4 <- dplyr::rename(df4, estimate = value)
-            
+
             # Check if error values are in the labels column and extract out
             if (any(sapply(paste0("(^|[_.])", errors, "($|[_.])"), function(x) grepl(x, unique(df4$label))))) {
               err_names <- unique(df4$label)[grepl(paste(paste0("(^|[_.])", errors, "($|[_.])"), collapse = "|"), unique(df4$label)) & !unique(df4$label) %in% errors]
@@ -647,7 +649,7 @@ convert_output <- function(
                 }
               }
             }
-            
+
             df5 <- df4 |>
               dplyr::select(tidyselect::any_of(c("label", "estimate", "year", factors, errors))) |>
               dplyr::mutate(
@@ -657,7 +659,7 @@ convert_output <- function(
                   TRUE ~ label
                 )
               )
-            
+
             if (any(colnames(df5) %in% errors)) {
               df5 <- df5 |>
                 dplyr::mutate(uncertainty_label = intersect(names(df5), errors)) |>
@@ -672,11 +674,11 @@ convert_output <- function(
               colnames(df5) <- tolower(names(df5))
             }
             if ("seas" %in% colnames(df5)) df5 <- dplyr::rename(df5, season = seas)
-            
+
             if ("subseas" %in% colnames(df5)) df5 <- dplyr::rename(df5, subseason = subseas)
-            
+
             if ("like" %in% colnames(df5)) df5 <- dplyr::rename(df5, likelihood = like)
-            
+
             df5[setdiff(tolower(names(out_new)), tolower(names(df5)))] <- NA
             if (ncol(out_new) < ncol(df5)) {
               diff <- setdiff(names(df5), names(out_new))
@@ -776,7 +778,7 @@ convert_output <- function(
             # Add to new dataframe
             df5 <- Reduce(rbind, comps_list)
             out_list[[parm_sel]] <- df5
-            
+
             ##### cha ####
           } else if (parm_sel %in% cha) {
             # Only one keyword characterized as this
@@ -820,7 +822,7 @@ convert_output <- function(
             # "SPAWN_RECR_CURVE"
             # "Biology_at_age_in_endyr"
             # "PARAMETERS"
-            
+
             if (parm_sel %in% c("SPAWN_RECR_CURVE", "SPAWN_RECRUIT_CURVE")) {
               # 32
               # TODO: add this to converter
@@ -896,7 +898,7 @@ convert_output <- function(
                     # label = paste("estimate_", label, sep = ""),
                     morph = NA
                   )
-                
+
                 sub_df2 <- df3[, c(1:2, (actual_col + 1):(moref_col - 1))] |>
                   tidyr::pivot_longer(
                     cols = -c(yr, era),
@@ -1192,7 +1194,7 @@ convert_output <- function(
                 row <- row[row != "XX"]
                 df1 <- df1[, -loc_xx]
               }
-              
+
               # TODO: apply this next if statement to a general process so it's part of the standard cleaning
               # check if the headers make sense
               # this is a temporary fix to a specific bug
@@ -1206,10 +1208,10 @@ convert_output <- function(
                 df2 <- df1[stats::complete.cases(df1), ]
                 row <- df2[1, ]
               }
-              
+
               # make row the header names for first df
               colnames(df1) <- row
-              
+
               # find row number that matches 'row'
               rownum <- row_match(row, df1)
               # Subset data frame
@@ -1237,26 +1239,27 @@ convert_output <- function(
               if (label == "f") {
                 label <- "fishing_mortality"
               }
-            } else (
-              # add conditions for naming label from aa.al
-              label <- switch(
-                parm_sel,
-                # "sizeselex" = "selectivity_length",
-                "ageselex" = "selectivity_age",
-                "Natural_Mortality" = "natural_mortality_age",
-                "fatage" = "fishing_mortality_age",
-                "natage" = "abundance_age",
-                "batage" = "biomass_age",
-                "natlen" = "abundance_length",
-                "batlen" = "biomass_length",
-                "discard_at_age" = "discard_age",
-                "catage" = "catch_age",
-                "Z_at_age" = "total_mortality_age",
-                "M_at_age" = "natural_mortality_age",
-                "Z_by_area" = "total_mortality",
-                "M_by_area" = "natural_mortality"
+            } else {
+              (
+                # add conditions for naming label from aa.al
+                label <- switch(parm_sel,
+                  # "sizeselex" = "selectivity_length",
+                  "ageselex" = "selectivity_age",
+                  "Natural_Mortality" = "natural_mortality_age",
+                  "fatage" = "fishing_mortality_age",
+                  "natage" = "abundance_age",
+                  "batage" = "biomass_age",
+                  "natlen" = "abundance_length",
+                  "batlen" = "biomass_length",
+                  "discard_at_age" = "discard_age",
+                  "catage" = "catch_age",
+                  "Z_at_age" = "total_mortality_age",
+                  "M_at_age" = "natural_mortality_age",
+                  "Z_by_area" = "total_mortality",
+                  "M_by_area" = "natural_mortality"
                 )
-            )
+              )
+            }
             if (grepl("age", tolower(parm_sel))) {
               fac <- "age"
             } else if (any(grepl("length|len", tolower(parm_sel)))) {
@@ -1266,10 +1269,10 @@ convert_output <- function(
             } else {
               fac <- "age"
             }
-            
+
             # remove fac from label
             if (grepl(glue::glue("_{fac}"), label)) label <- stringr::str_remove(label, glue::glue("_{fac}"))
-            
+
             # Reformat dataframe
             if (any(colnames(df3) %in% c("Yr", "yr"))) {
               df3 <- df3 |>
@@ -2337,9 +2340,9 @@ convert_output <- function(
   # temporarily add call to local csv so I can test
   # con_file <- glue::glue("~/GitHub/stockplotr/inst/resources/{model}_var_names.csv")
   var_names_sheet <- utils::read.csv(con_file, na.strings = "")
-  
+
   if (tolower(model) == "bam") {
-    var_names_sheet <- var_names_sheet |> 
+    var_names_sheet <- var_names_sheet |>
       dplyr::mutate(label = tolower(label))
   }
 

@@ -178,8 +178,10 @@ plot_stock_recruitment <- function(
   # Make RDA
   if (make_rda) {
     # Obtain relevant key quantities for captions/alt text
-    sr.age.min <- calc_kqs(returned_kq = "sr.age.min",
-                           dat = dat)
+    sr.age.min <- calc_kqs(
+      returned_kq = "sr.age.min",
+      dat = dat
+    )
     sr.ssb.units <- spawning_biomass_label
     sr.ssb.min <- min(sr$spawning_biomass, na.rm = TRUE) |> round(digits = 3)
     sr.ssb.max <- max(sr$spawning_biomass, na.rm = TRUE) |> round(digits = 3)

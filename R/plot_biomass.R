@@ -84,10 +84,10 @@ plot_biomass <- function(
     cli::cli_alert_warning("Scale amount is not applicable when relative = TRUE. Resetting scale_amount to 1.")
     scale_amount <- 1
   }
-  
+
   orig_group <- group
   orig_facet <- facet
-  
+
   # Filter data for biomass
   # TODO: determine method to ID that first point in the timeseries is actually Bunfished ref pt
   prepared_data <- filter_data(
@@ -177,10 +177,14 @@ plot_biomass <- function(
   ### Make RDA ----
   if (make_rda) {
     if (relative) {
-      rel.B.min <- calc_kqs(returned_kq = "rel.B.min",
-                            final = final)
-      rel.B.max <- calc_kqs(returned_kq = "rel.B.max",
-                            final = final)
+      rel.B.min <- calc_kqs(
+        returned_kq = "rel.B.min",
+        final = final
+      )
+      rel.B.max <- calc_kqs(
+        returned_kq = "rel.B.max",
+        final = final
+      )
 
       # calculate & export key quantities
       export_kqs(rel.B.min, rel.B.max)
@@ -188,10 +192,14 @@ plot_biomass <- function(
       # Add key quantities to captions/alt text
       insert_kqs(rel.B.min, rel.B.max)
     } else {
-      B.min <- calc_kqs(returned_kq = "B.min",
-                        prepared_data = prepared_data)
-      B.max <- calc_kqs(returned_kq = "B.max",
-                        prepared_data = prepared_data)
+      B.min <- calc_kqs(
+        returned_kq = "B.min",
+        prepared_data = prepared_data
+      )
+      B.max <- calc_kqs(
+        returned_kq = "B.max",
+        prepared_data = prepared_data
+      )
 
       export_kqs(B.min, B.max)
       insert_kqs(B.min, B.max)
@@ -199,41 +207,61 @@ plot_biomass <- function(
 
     B.ref.pt <- as.character(ref_line)
     B.units <- as.character(unit_label)
-    B.start.year <- calc_kqs(returned_kq = "B.start.year",
-                             prepared_data = prepared_data)
-    B.end.year <- calc_kqs(returned_kq = "B.end.year", 
-                           prepared_data = prepared_data)
-    B.terminal.year <- calc_kqs(returned_kq = "B.terminal.year",
-                                dat = dat,
-                                relative = relative)
+    B.start.year <- calc_kqs(
+      returned_kq = "B.start.year",
+      prepared_data = prepared_data
+    )
+    B.end.year <- calc_kqs(
+      returned_kq = "B.end.year",
+      prepared_data = prepared_data
+    )
+    B.terminal.year <- calc_kqs(
+      returned_kq = "B.terminal.year",
+      dat = dat,
+      relative = relative
+    )
 
     # SS3, FIMS
     if ("spawning_biomass_msy" %in% dat$label) {
-      sb_msy <- calc_kqs(returned_kq = "sb_msy",
-                         dat = dat)
-      b_sb_msy <- calc_kqs(returned_kq = "b_sb_msy",
-                           dat = dat)
-      B.msy <- calc_kqs(returned_kq = "B.msy",
-                        dat = dat)
+      sb_msy <- calc_kqs(
+        returned_kq = "sb_msy",
+        dat = dat
+      )
+      b_sb_msy <- calc_kqs(
+        returned_kq = "b_sb_msy",
+        dat = dat
+      )
+      B.msy <- calc_kqs(
+        returned_kq = "B.msy",
+        dat = dat
+      )
       B.msy.min <- NA
       B.msy.max <- NA
-    # BAM
+      # BAM
     } else if ("bmsy" %in% dat$label) {
-      B.msy <- calc_kqs(returned_kq = "B.msy", 
-                        dat = dat)
-      B.msy.min_uncert <- calc_kqs(returned_kq = "B.msy.min_uncert",
-                                   dat = dat)
-      B.msy.min <- calc_kqs(returned_kq = "B.msy.min", 
-                            dat = dat)
-      B.msy.max <- calc_kqs(returned_kq = "B.msy.max",
-                            dat = dat)
-    # Rceattle
+      B.msy <- calc_kqs(
+        returned_kq = "B.msy",
+        dat = dat
+      )
+      B.msy.min_uncert <- calc_kqs(
+        returned_kq = "B.msy.min_uncert",
+        dat = dat
+      )
+      B.msy.min <- calc_kqs(
+        returned_kq = "B.msy.min",
+        dat = dat
+      )
+      B.msy.max <- calc_kqs(
+        returned_kq = "B.msy.max",
+        dat = dat
+      )
+      # Rceattle
     } else {
       B.msy <- NA
       B.msy.min <- NA
       B.msy.max <- NA
     }
-    
+
     export_kqs(
       B.ref.pt,
       B.units,

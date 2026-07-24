@@ -3,30 +3,28 @@
 # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 #' Calculate key quantities
-#' 
+#'
 #' @param returned_kq String. Key quantity to be returned.
 #' @param prepared_data Data frame. The prepared_data object.
 #' @param dat Data frame. The original data object.
 #' @param final ggplot2 object. The final figure.
 #' @param relative Logical. TRUE/FALSE; specify whether to set y-axis values relative to the ref_line value.
 #' @param ... Additional arguments to be passed to the function.
-#' 
+#'
 #' @return The value of the specified key quantity.
-#' 
+#'
 #' @examples \dontrun{
 #' calc_kqs(
 #'   returned_kq = "F.min",
 #'   dat = dat
 #' )
 #' }
-
 calc_kqs <- function(returned_kq,
                      prepared_data = NULL,
                      dat = NULL,
                      final = NULL,
                      relative = NULL,
-                     ...){
-  
+                     ...) {
   # plot_stock_recruitment()-----
   if (returned_kq == "sr.age.min") {
     return(
@@ -37,7 +35,7 @@ calc_kqs <- function(returned_kq,
         as.numeric()
     )
   }
-  
+
   # plot_spawning_biomass()-----
   if (returned_kq == "rel.ssb.min") {
     return(
@@ -48,7 +46,7 @@ calc_kqs <- function(returned_kq,
         round(digits = 2)
     )
   }
-  
+
   if (returned_kq == "rel.ssb.max") {
     return(
       ggplot2::ggplot_build(final)[["data"]][[2]] |>
@@ -58,7 +56,7 @@ calc_kqs <- function(returned_kq,
         round(digits = 2)
     )
   }
-  
+
   # plot_biomass()-----
   if (returned_kq == "rel.B.min") {
     return(
@@ -68,7 +66,7 @@ calc_kqs <- function(returned_kq,
         min()
     )
   }
-  
+
   if (returned_kq == "rel.B.max") {
     return(
       ggplot2::ggplot_build(final)[["data"]][[2]] |>
@@ -77,23 +75,23 @@ calc_kqs <- function(returned_kq,
         max()
     )
   }
-  
+
   if (returned_kq == "B.min") {
     return(min(prepared_data$estimate))
   }
-  
+
   if (returned_kq == "B.max") {
     return(max(prepared_data$estimate))
   }
-  
+
   if (returned_kq == "B.start.year") {
     return(min(prepared_data$year) |> round(digits = 3))
   }
-  
+
   if (returned_kq == "B.end.year") {
     return(max(prepared_data$year) |> round(digits = 3))
   }
-  
+
   if (returned_kq == "B.terminal.year") {
     return(
       filter_data(
@@ -112,7 +110,7 @@ calc_kqs <- function(returned_kq,
         unique()
     )
   }
-  
+
   if (returned_kq == "sb_msy") {
     return(
       dat |>
@@ -121,7 +119,7 @@ calc_kqs <- function(returned_kq,
         as.numeric()
     )
   }
-  
+
   if (returned_kq == "b_sb_msy") {
     return(
       dat |>
@@ -130,7 +128,7 @@ calc_kqs <- function(returned_kq,
         as.numeric()
     )
   }
-  
+
   if (returned_kq == "B.msy") {
     if ("spawning_biomass_msy" %in% dat$label) {
       sb_msy <- dat |>
@@ -151,7 +149,7 @@ calc_kqs <- function(returned_kq,
       )
     }
   }
-  
+
   if (returned_kq == "B.msy.min_uncert") {
     return(
       dat |>
@@ -160,19 +158,31 @@ calc_kqs <- function(returned_kq,
         as.numeric()
     )
   }
-  
+
   if (returned_kq == "B.msy.min") {
-    B.msy <- dat |> dplyr::filter(label == "bmsy") |> dplyr::select(estimate) |> as.numeric()
-    B.msy.min_uncert <- dat |> dplyr::filter(label == "bmsy") |> dplyr::select(uncertainty) |> as.numeric()
+    B.msy <- dat |>
+      dplyr::filter(label == "bmsy") |>
+      dplyr::select(estimate) |>
+      as.numeric()
+    B.msy.min_uncert <- dat |>
+      dplyr::filter(label == "bmsy") |>
+      dplyr::select(uncertainty) |>
+      as.numeric()
     return(as.numeric(B.msy) - as.numeric(B.msy.min_uncert))
   }
-  
+
   if (returned_kq == "B.msy.max") {
-    B.msy <- dat |> dplyr::filter(label == "bmsy") |> dplyr::select(estimate) |> as.numeric()
-    B.msy.min_uncert <- dat |> dplyr::filter(label == "bmsy") |> dplyr::select(uncertainty) |> as.numeric()
+    B.msy <- dat |>
+      dplyr::filter(label == "bmsy") |>
+      dplyr::select(estimate) |>
+      as.numeric()
+    B.msy.min_uncert <- dat |>
+      dplyr::filter(label == "bmsy") |>
+      dplyr::select(uncertainty) |>
+      as.numeric()
     return(as.numeric(B.msy) + as.numeric(B.msy.min_uncert))
   }
-  
+
   # plot_fishing_mortality()-----
   if (returned_kq == "F.min") {
     return(
@@ -182,7 +192,7 @@ calc_kqs <- function(returned_kq,
         round(digits = 3)
     )
   }
-  
+
   if (returned_kq == "F.max") {
     return(
       prepared_data$estimate |>
@@ -191,7 +201,7 @@ calc_kqs <- function(returned_kq,
         round(digits = 3)
     )
   }
-  
+
   if (returned_kq == "F.terminal.year") {
     return(
       filter_data(
@@ -210,16 +220,16 @@ calc_kqs <- function(returned_kq,
         unique()
     )
   }
-  
+
   if (returned_kq == "F.target") {
     return(
       dat |>
-        dplyr::filter(grepl('f_target', label) | grepl('f_msy', label) | (grepl('fishing_mortality_msy', label) & is.na(year))) |>
+        dplyr::filter(grepl("f_target", label) | grepl("f_msy", label) | (grepl("fishing_mortality_msy", label) & is.na(year))) |>
         dplyr::pull(estimate) |>
         round(digits = 3)
     )
   }
-  
+
   if (returned_kq == "f.limit") {
     if ("log_flimit" %in% unique(dat$label)) {
       return(
@@ -234,7 +244,6 @@ calc_kqs <- function(returned_kq,
     }
   }
 }
-
 
 
 # TODO: update key quantities functions to work with a specified 'dir' instead of default 'getwd()'?
