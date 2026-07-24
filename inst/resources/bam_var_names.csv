@@ -244,10 +244,6 @@ LD.pr.tseries,L.klb,landings_weight
 LD.pr.tseries,L.knum,landings_numbers
 LD.pr.tseries,D.klb,discard_weight
 LD.pr.tseries,D.knum,discard_numbers
-LD.pr.tseries,l.klb,landings_weight
-LD.pr.tseries,l.knum,landings_numbers
-LD.pr.tseries,d.klb,discard_weight
-LD.pr.tseries,d.knum,discard_numbers
 a.series,length,length
 a.series,length.cv,length_cv
 a.series,length.sd,length_sd
