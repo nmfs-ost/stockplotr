@@ -151,7 +151,7 @@ The data-driven table functions use a shorter version of the same workflow:
    `merge_error()` combines the value and error columns into a single column where needed.
 
 5. **Render the final table.**  
-   - The prepared data are converted to a `gt` table. `add_theme()` applies formatting to the table.
+   - The prepared data are converted to a `gt` table. `theme_table()` applies formatting to the table.
    
 6. **Return the table**.
   The table is returned as a `gt` object, even if it's not exported.
