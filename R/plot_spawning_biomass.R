@@ -245,19 +245,11 @@ plot_spawning_biomass <- function(
         # add apply/purrr/or for loop for reference lines -- not just the first anymore
         plt2 <- plt2 +
           reference_line(
-            label_name = names(dat)[i], #"spawning_biomass",
+            # conditionally add label name
+            label_name = ifelse(length(names(ref_line)) == 1, "spawning_biomass", names(dat)[i]), #"spawning_biomass",
             ref_line = ref_line_x,
             scale_amount = 1
           )
-          
-        #   reference_line(
-        #   plot = plt,
-        #   dat = rp_dat,
-        #   lbs = lbs,
-        #   label_name = "spawning_biomass",
-        #   reference = ref_line,
-        #   scale_amount = scale_amount
-        # ) + theme_noaa()
       }
     }
     final <- plt2 + theme_noaa()
