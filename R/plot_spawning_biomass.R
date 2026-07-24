@@ -242,13 +242,17 @@ plot_spawning_biomass <- function(
   ### Make RDA ----
   if (make_rda) {
     if (relative) {
-      rel.ssb.min <- calc_kqs(returned_kq = "rel.ssb.min",
-                              final = final)
-      
-     
-      rel.ssb.max <- calc_kqs(returned_kq = "rel.ssb.max",
-                              final = final)
-        
+      rel.ssb.min <- calc_kqs(
+        returned_kq = "rel.ssb.min",
+        final = final
+      )
+
+
+      rel.ssb.max <- calc_kqs(
+        returned_kq = "rel.ssb.max",
+        final = final
+      )
+
       # calculate & export key quantities
       export_kqs(rel.ssb.min, rel.ssb.max)
 
