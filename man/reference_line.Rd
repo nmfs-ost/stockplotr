@@ -4,29 +4,19 @@
 \alias{reference_line}
 \title{Preformatted reference line}
 \usage{
-reference_line(plot, dat, label_name, reference, scale_amount = 1, lbs = FALSE)
+reference_line(label_name, ref_line, scale_amount = 1)
 }
 \arguments{
-\item{plot}{Plot object. A ggplot2 object where the reference line will be added}
-
-\item{dat}{Data frame. Standard data frame where reference point should be extracted}
-
 \item{label_name}{String. Name of the quantity that users want to
 extract the reference point from}
 
-\item{reference}{String of the reference point
+\item{ref_line}{String of the reference point
 
 Options: Including, but not limited to: "msy", "unfished", "target"}
 
 \item{scale_amount}{Number. A number to scale the y-axis values.
 
 Default: 1}
-
-\item{lbs}{Logical. TRUE/FALSE; indicate whether to convert the y-axis values from
-kilograms to pounds. The default units match the default in the
-unit_label argument - 'mt'.
-
-Default: `FALSE`}
 }
 \value{
 A ggplot2 geom_hline object for a reference point that can be added
