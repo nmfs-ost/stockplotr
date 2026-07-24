@@ -145,12 +145,6 @@ plot_spawning_biomass <- function(
       )
     }
   )
-  # Pull first df if in a list to find reference point
-  # if (!is.data.frame(dat)) {
-  #   rp_dat <- dat[[1]]
-  # } else {
-  #   rp_dat <- dat
-  # }
 
   if (relative & scale_amount > 1) {
     cli::cli_alert_warning("Scale amount is not applicable when relative = TRUE. Resetting scale_amount to 1.")
@@ -216,23 +210,26 @@ plot_spawning_biomass <- function(
     final <- plt + theme_noaa()
   } else {
     plt2 <- plt
+    # Check if length of ref_line = dat
+    # replicate value if not
+    if (length(ref_line) != length(dat)) ref_line <- rep(ref_line, length(dat))
     # Put into for loop and add lines sequentially to plt
     for (i in 1:length(ref_line)) {
       # find the reference point value
       if (is.null(names(ref_line[i]))) {
         ref_line_x <- calculate_reference_point(
           dat = dat[[i]],
-          reference_name = i,
+          reference_name = glue::glue("spawning_biomass_{ref_line[i]}"),
           lbs = lbs
         ) / scale_amount
-        ref_line_x <- setNames(ref_line_x, i)
+        ref_line_x <- setNames(ref_line_x, ref_line[i])
       } else {
         ref_line_x <- ref_line[i] / scale_amount
       }
       
         if ("unfished" %in% names(ref_line_x)) {
         # find the minimum x axis value from the plot
-        min_year <- min <- ggplot2::ggplot_build(plt)[["data"]][[2]] |> # I think this was causing issues on linux
+        min_year <- min <- ggplot2::ggplot_build(plt2)[["data"]][[2]] |> # I think this was causing issues on linux?
           as.data.frame() |>
           dplyr::pull(x) |>
           min() |>
