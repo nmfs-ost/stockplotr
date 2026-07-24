@@ -76,14 +76,58 @@ plot_fishing_mortality <- function(
     facet = facet,
     ...
   )
-  # Add reference line and theme
-  final <- reference_line(
-    plot = plt,
-    dat = dat,
-    label_name = "fishing_mortality",
-    reference = ref_line,
-    scale_amount = 1
-  ) + theme_noaa()
+  # Add reference line
+  # Conditions for ref line
+  # 1. all are comparing same value = msy, target, unfished...
+  # 2. custom input vector = c("sable23_msy"=30, "sable25_msy"=40) -- user must indicate which model in label otherwise it will assign in order of dat
+  # 3. input vector of labels = c("msy", "target")
+  # getting data set - an ifelse statement in the fxn wasn't working
+  if (relative) {
+    # don't add any reference line here and just add theme for final plot
+    final <- plt + theme_noaa()
+  } else {
+    plt2 <- plt
+    # Check if length of ref_line = dat
+    # replicate value if not
+    if (length(ref_line) != length(dat)) ref_line <- rep(ref_line, length(dat))
+    # Put into for loop and add lines sequentially to plt
+    for (i in 1:length(ref_line)) {
+      # find the reference point value
+      if (is.null(names(ref_line[i]))) {
+        ref_line_x <- calculate_reference_point(
+          dat = dat[[i]],
+          reference_name = glue::glue("fishing_mortality_{ref_line[i]}"),
+          lbs = lbs
+        ) / scale_amount
+        ref_line_x <- setNames(ref_line_x, ref_line[i])
+      } else {
+        ref_line_x <- ref_line[i] / scale_amount
+      }
+      
+      if ("unfished" %in% names(ref_line_x)) {
+        # find the minimum x axis value from the plot
+        min_year <- min <- ggplot2::ggplot_build(plt2)[["data"]][[2]] |> # I think this was causing issues on linux?
+          as.data.frame() |>
+          dplyr::pull(x) |>
+          min() |>
+          round(digits = 2)
+        # add point to plot and add theme
+        plt2 <- plt2 +
+          ggplot2::geom_point(ggplot2::aes(x = min_year - 1, y = ref_point)) + # should I keep -1 or set as first year?
+          theme_noaa()
+      } else {
+        # add apply/purrr/or for loop for reference lines -- not just the first anymore
+        plt2 <- plt2 +
+          reference_line(
+            # conditionally add label name
+            label_name = ifelse(length(names(ref_line)) == 1, "fishing_mortality", names(dat)[i]), #"spawning_biomass",
+            ref_line = ref_line_x,
+            scale_amount = 1
+          )
+      }
+    }
+    final <- plt2 + theme_noaa()
+  }
 
   ### Make RDA ----
   if (make_rda) {
