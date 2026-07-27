@@ -202,19 +202,17 @@ plot_biomass <- function(
 
     B.ref.pt <- as.character(ref_line)
     B.units <- as.character(unit_label)
-    B.start.year <- calc_kqs(
-      returned_kq = "B.start.year",
-      prepared_data = prepared_data
-    )
-    B.end.year <- calc_kqs(
-      returned_kq = "B.end.year",
-      prepared_data = prepared_data
-    )
-    B.terminal.year <- calc_kqs(
-      returned_kq = "B.terminal.year",
-      dat = dat,
-      relative = relative
-    )
+
+    B.start.year <- calc_kqs(returned_kq = "B.start.year",
+                             prepared_data = prepared_data)
+    B.end.year <- calc_kqs(returned_kq = "B.end.year", 
+                           prepared_data = prepared_data)
+    B.terminal.year <- calc_kqs(returned_kq = "B.terminal.year",
+                                dat = dat,
+                                relative = relative)
+    B.terminal.est <- calc_kqs(returned_kq = "B.terminal.est",
+                                dat = dat,
+                                relative = relative)
 
     # SS3, FIMS
     if ("spawning_biomass_msy" %in% dat$label) {
@@ -265,7 +263,8 @@ plot_biomass <- function(
       B.terminal.year,
       B.msy.min,
       B.msy.max,
-      B.msy
+      B.msy,
+      B.terminal.est
     )
 
     insert_kqs(
@@ -276,7 +275,8 @@ plot_biomass <- function(
       B.terminal.year,
       B.msy.min,
       B.msy.max,
-      B.msy
+      B.msy,
+      B.terminal.est
     )
 
     insert_kqs(
@@ -287,7 +287,8 @@ plot_biomass <- function(
       B.terminal.year,
       B.msy.min,
       B.msy.max,
-      B.msy
+      B.msy,
+      B.terminal.est
     )
 
     create_rda(

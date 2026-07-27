@@ -110,7 +110,26 @@ calc_kqs <- function(returned_kq,
         unique()
     )
   }
-
+  
+  if (returned_kq == "B.terminal.est") {
+    return(
+      filter_data(
+        dat = dat,
+        label_name = ifelse(relative, "biomass_biomass_unfished|biomass_ratio", "^biomass$"),
+        geom = "line",
+        group = NULL,
+        facet = NULL,
+        era = "time",
+        module = "TIME_SERIES",
+        scale_amount = 1,
+        interactive = FALSE
+      ) |>
+        dplyr::filter(year == max(year)) |>
+        dplyr::pull(estimate) |>
+        unique()
+    )
+  }
+  
   if (returned_kq == "sb_msy") {
     return(
       dat |>
@@ -230,7 +249,7 @@ calc_kqs <- function(returned_kq,
     )
   }
 
-  if (returned_kq == "f.limit") {
+  if (returned_kq == "F.limit") {
     if ("log_flimit" %in% unique(dat$label)) {
       return(
         dat |>
@@ -243,7 +262,41 @@ calc_kqs <- function(returned_kq,
       return(NA)
     }
   }
-}
+  
+  if (returned_kq == "F.terminal.est") {
+    F.terminal.year <- filter_data(
+        dat = dat,
+        label_name = "^fishing_mortality$",
+        geom = "line",
+        era = "time",
+        group = NULL,
+        facet = NULL,
+        module = "TIME_SERIES",
+        scale_amount = 1,
+        interactive = FALSE
+      ) |>
+        dplyr::filter(year == max(year)) |>
+        dplyr::pull(year) |>
+        unique()
+    
+    return(
+      filter_data(
+      dat = dat,
+      label_name = "^fishing_mortality$",
+      geom = "line",
+      era = NULL,
+      group = NULL,
+      facet = NULL,
+      module = "DERIVED_QUANTITIES",
+      scale_amount = 1,
+      interactive = FALSE
+    ) |>
+      dplyr::filter(year == F.terminal.year) |>
+      dplyr::pull(estimate) |>
+      unique()
+    )
+    }
+  }
 
 
 # TODO: update key quantities functions to work with a specified 'dir' instead of default 'getwd()'?
