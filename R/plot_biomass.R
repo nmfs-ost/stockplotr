@@ -211,8 +211,14 @@ plot_biomass <- function(
                                 dat = dat,
                                 relative = relative)
     B.terminal.est <- calc_kqs(returned_kq = "B.terminal.est",
-                                dat = dat,
-                                relative = relative)
+                               dat = dat,
+                               relative = relative)
+    B.terminal.min <- calc_kqs(returned_kq = "B.terminal.min",
+                               dat = dat,
+                               relative = relative)
+    B.terminal.max <- calc_kqs(returned_kq = "B.terminal.max",
+                               dat = dat,
+                               relative = relative)
 
     # SS3, FIMS
     if ("spawning_biomass_msy" %in% dat$label) {
@@ -232,23 +238,13 @@ plot_biomass <- function(
       B.msy.max <- NA
       # BAM
     } else if ("bmsy" %in% dat$label) {
-      B.msy <- calc_kqs(
-        returned_kq = "B.msy",
-        dat = dat
-      )
-      B.msy.min_uncert <- calc_kqs(
-        returned_kq = "B.msy.min_uncert",
-        dat = dat
-      )
-      B.msy.min <- calc_kqs(
-        returned_kq = "B.msy.min",
-        dat = dat
-      )
-      B.msy.max <- calc_kqs(
-        returned_kq = "B.msy.max",
-        dat = dat
-      )
-      # Rceattle
+      B.msy <- calc_kqs(returned_kq = "B.msy", 
+                        dat = dat)
+      B.msy.min <- calc_kqs(returned_kq = "B.msy.min", 
+                            dat = dat)
+      B.msy.max <- calc_kqs(returned_kq = "B.msy.max",
+                            dat = dat)
+    # Rceattle
     } else {
       B.msy <- NA
       B.msy.min <- NA
@@ -264,7 +260,9 @@ plot_biomass <- function(
       B.msy.min,
       B.msy.max,
       B.msy,
-      B.terminal.est
+      B.terminal.est,
+      B.terminal.min,
+      B.terminal.max
     )
 
     insert_kqs(
@@ -276,7 +274,9 @@ plot_biomass <- function(
       B.msy.min,
       B.msy.max,
       B.msy,
-      B.terminal.est
+      B.terminal.est,
+      B.terminal.min,
+      B.terminal.max
     )
 
     insert_kqs(
@@ -288,7 +288,9 @@ plot_biomass <- function(
       B.msy.min,
       B.msy.max,
       B.msy,
-      B.terminal.est
+      B.terminal.est,
+      B.terminal.min,
+      B.terminal.max
     )
 
     create_rda(

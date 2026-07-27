@@ -127,6 +127,16 @@ plot_fishing_mortality <- function(
                         dat = dat)
     F.terminal.est <- calc_kqs(returned_kq = "F.terminal.est",
                         dat = dat)
+    F.terminal.min <- calc_kqs(returned_kq = "F.terminal.min",
+                               dat = dat)
+    F.terminal.max <- calc_kqs(returned_kq = "F.terminal.max",
+                               dat = dat)
+    F.MSY.terminal <- calc_kqs(returned_kq = "F.MSY.terminal",
+                               dat = dat)
+    F.MSY.terminal.max <- calc_kqs(returned_kq = "F.MSY.terminal.max",
+                               dat = dat)
+    F.MSY.terminal.min <- calc_kqs(returned_kq = "F.MSY.terminal.min",
+                               dat = dat)
     
     export_kqs(
       F.ref.pt,
@@ -135,7 +145,12 @@ plot_fishing_mortality <- function(
       F.terminal.year,
       F.target,
       F.limit,
-      F.terminal.est
+      F.terminal.est,
+      F.terminal.min,
+      F.terminal.max,
+      F.MSY.terminal.max,
+      F.MSY.terminal.min,
+      F.MSY.terminal
     )
 
     insert_kqs(
@@ -145,7 +160,12 @@ plot_fishing_mortality <- function(
       F.terminal.year,
       F.target,
       F.limit,
-      F.terminal.est
+      F.terminal.est,
+      F.terminal.min,
+      F.terminal.max,
+      F.MSY.terminal.max,
+      F.MSY.terminal.min,
+      F.MSY.terminal
     )
 
     create_rda(
