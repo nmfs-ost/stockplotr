@@ -1112,3 +1112,61 @@ plot_obsvpred <- function(
   }
   final
 }
+
+#------------------------------------------------------------------------------
+
+add_reference_line <- function(
+    dat,
+    ref_line,
+    label,
+    lbs = FALSE,
+    scale_amount = 1
+) {
+  ref_lines_list <- list()
+  if (!is.null(ref_line)) {
+    # Check if length of ref_line = dat
+    # replicate value if not
+    if (!is.data.frame(dat) & length(ref_line) != length(dat)) ref_line <- rep(ref_line, length(dat))
+    # Put into for loop and add lines sequentially to plt
+    for (i in 1:length(ref_line)) {
+      # find the reference point value
+      if (is.null(names(ref_line[i]))) {
+        ref_line_x <- calculate_reference_point(
+          dat = if (is.data.frame(dat)) { dat } else { dat[[i]] },
+          reference_name = glue::glue("{label}_{ref_line[i]}"),
+          lbs = lbs
+        ) / scale_amount
+        ref_line_x <- setNames(ref_line_x, ref_line[i])
+      } else {
+        ref_line_x <- ref_line[i] / scale_amount
+      }
+      
+      if ("unfished" %in% names(ref_line_x)) {
+        # find the minimum x axis value from the plot
+        min_year <- dat |> 
+          dplyr::filter(grepl(label, label)) |>
+          dplyr::pull(estimate) |>
+          min() |>
+          round(digits = 2)
+        # add point to plot and add theme
+        # plt2 <- plt2 +
+        ref_lines_list <- append(ref_lines_list,
+          ggplot2::geom_point(ggplot2::aes(x = min_year - 1, y = ref_point)) + # should I keep -1 or set as first year?
+            theme_noaa()
+        )
+      } else {
+        # add apply/purrr/or for loop for reference lines -- not just the first anymore
+        # plt2 <- plt2 +
+        ref_lines_list <- append(ref_lines_list,
+          reference_line(
+            # conditionally add label name
+            label_name = ifelse(length(names(dat)[i]) == 1, "spawning_biomass", names(dat)[i]), #"spawning_biomass",
+            ref_line = ref_line_x,
+            scale_amount = scale_amount
+          )
+        )
+      }
+    } # close ref_line for loop
+  } # close if ref_line NULL
+  ref_lines_list
+}
