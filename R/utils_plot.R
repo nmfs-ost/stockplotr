@@ -1165,6 +1165,7 @@ add_reference_line <- function(
           round(digits = 2)
         # add point to plot and add theme
         # plt2 <- plt2 +
+        # TODO: set color for each point to match that of the line for the model
         ref_lines_list <- append(ref_lines_list,
           ggplot2::geom_point(ggplot2::aes(x = min_year - 1, y = ref_line_x)) # should I keep -1 or set as first year?
         )
