@@ -1130,8 +1130,7 @@ add_reference_line <- function(
   # getting data set - an ifelse statement in the fxn wasn't working
   ref_lines_list <- list()
   if (!is.null(ref_line)) {
-    # Check if length of ref_line = dat
-    # replicate value if not
+    # Check if length of ref_line = dat -- replicate value if not
     if (!is.data.frame(dat) & length(ref_line) != length(dat)) ref_line <- rep(ref_line, length(dat))
     # Put into for loop and add lines sequentially to plt
     for (i in 1:length(ref_line)) {
@@ -1142,23 +1141,32 @@ add_reference_line <- function(
           reference_name = glue::glue("{label}_{ref_line[i]}"),
           lbs = lbs
         ) / scale_amount
+        if (length(ref_line_x) == 0) {
+          cli::cli_alert_warning("{label}_{ref_line[i]} not found for {ifelse(is.data.frame(dat), 'data', names(dat[i]))}")
+          next
+        }
         ref_line_x <- setNames(ref_line_x, ref_line[i])
       } else {
         ref_line_x <- ref_line[i] / scale_amount
       }
       
       if ("unfished" %in% names(ref_line_x)) {
+        if (is.data.frame(dat)) {
+          sel_dat <- dat
+        } else {
+          sel_dat <- dat[[i]]
+        }
+        plt_lab <- label
         # find the minimum x axis value from the plot
-        min_year <- dat |> 
-          dplyr::filter(grepl(label, label)) |>
-          dplyr::pull(estimate) |>
-          min() |>
+        min_year <- sel_dat |> 
+          dplyr::filter(grepl(plt_lab, label), year != 1) |>
+          dplyr::pull(year) |>
+          min(na.rm = TRUE) |>
           round(digits = 2)
         # add point to plot and add theme
         # plt2 <- plt2 +
         ref_lines_list <- append(ref_lines_list,
-          ggplot2::geom_point(ggplot2::aes(x = min_year - 1, y = ref_point)) + # should I keep -1 or set as first year?
-            theme_noaa()
+          ggplot2::geom_point(ggplot2::aes(x = min_year - 1, y = ref_line_x)) # should I keep -1 or set as first year?
         )
       } else {
         # add apply/purrr/or for loop for reference lines -- not just the first anymore
@@ -1166,7 +1174,7 @@ add_reference_line <- function(
         ref_lines_list <- append(ref_lines_list,
           reference_line(
             # conditionally add label name
-            label_name = ifelse(length(names(dat)[i]) == 1, "spawning_biomass", names(dat)[i]), #"spawning_biomass",
+            label_name = ifelse(length(names(dat)[i]) == 1, label, names(dat)[i]), #"spawning_biomass",
             ref_line = ref_line_x,
             scale_amount = scale_amount
           )

@@ -149,8 +149,7 @@ plot_biomass <- function(
       add_reference_line(
         dat = dat, 
         ref_line = ref_line, 
-        label = "biomass", 
-        lbs = lbs,
+        label = "biomass",
         scale_amount = scale_amount
       ) +
       theme_noaa()

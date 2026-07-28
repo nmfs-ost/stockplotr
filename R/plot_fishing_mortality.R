@@ -82,20 +82,13 @@ plot_fishing_mortality <- function(
   # 2. custom input vector = c("sable23_msy"=30, "sable25_msy"=40) -- user must indicate which model in label otherwise it will assign in order of dat
   # 3. input vector of labels = c("msy", "target")
   # getting data set - an ifelse statement in the fxn wasn't working
-  if (relative) {
-    # don't add any reference line here and just add theme for final plot
-    final <- plt + theme_noaa()
-  } else {
-    final <- plt +
+  final <- plt +
       add_reference_line(
         dat = dat, 
         ref_line = ref_line, 
-        label = "fishing_mortality", 
-        lbs = lbs,
-        scale_amount = scale_amount
+        label = "fishing_mortality"
       ) +
       theme_noaa()
-  }
 
   ### Make RDA ----
   if (make_rda) {
