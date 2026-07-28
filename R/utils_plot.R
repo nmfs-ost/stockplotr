@@ -214,8 +214,25 @@ plot_timeseries <- function(
     )
   )
 
+  exp_lims <- TRUE
+  # min, max y axis value
+  min_y <- min(dat$estimate, na.rm = TRUE)
+  max_y <- max(dat$estimate, na.rm = TRUE)
+  
+  # if both min and max y values are negative, check if the distance to zero is greater than 50% of the span of the y-axis values. If so, set exp_lims to FALSE to avoid expanding the limits to include zero.
+  if(min_y < 0 & max_y < 0){
+    span <- max_y - min_y
+    dist_to_zero <- abs(max_y)
+    perc_of_plot <- -(max_y-span)
+    if(perc_of_plot > 50){
+      exp_lims <- FALSE
+    } 
+  }
+  
+  y_limits <- if (exp_lims) ggplot2::expand_limits(y = 0) else NULL
+  
   # Put together final plot
-  final <- labs + breaks + ggplot2::expand_limits(y = 0) +
+  final <- labs + breaks + y_limits +
     ggplot2::scale_y_continuous(
       labels = scales::label_comma()
     )
