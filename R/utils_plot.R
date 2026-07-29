@@ -91,7 +91,11 @@ plot_timeseries <- function(
             # TODO: add more groupings
             # shape = ifelse(any(grepl("shape", names(group))), .data[[group[[grep("shape", names(group))]]]], 1),
             # color = ifelse(any(grepl("color", names(group))), .data[[group[[grep("color", names(group))]]]], "black")
-            color = model,
+            color = if (length(unique(.data[["model"]])) > 1) {
+              interaction(model, group_var)
+            } else {
+              group_var
+            },
             shape = group_var
           ),
           # size = point_size,
@@ -148,8 +152,14 @@ plot_timeseries <- function(
           ggplot2::aes(
             x = .data[[x]],
             y = .data[[y]],
-            fill = model
+            fill = if (length(unique(.data[["model"]])) > 1) {
+              interaction(model, group_var)
+            } else {
+              group_var
+            }
           ),
+          position = "identity",
+          alpha = 0.5,
           ...
         )
     }
@@ -596,8 +606,7 @@ reference_line <- function(
       ) +
       ggplot2::annotate(
         geom = "text",
-        # TODO: need to change this for general process
-        x = as.numeric(max(ggplot2::ggplot_build(plot)[["data"]][[2]][["x"]], na.rm = TRUE)), # - as.numeric(max(dat$year[dat$era == "time"], na.rm = TRUE))/200,
+        x = as.numeric(max(dat$year[dat$era == "time"], na.rm = TRUE)),
         y = ref_line_val / scale_amount,
         label = glue::glue("{stringr::str_replace_all(label_name, '_', '~')}[{reference}]"), # list(bquote(label_name[.(reference)])),
         parse = TRUE,
@@ -1063,9 +1072,27 @@ plot_obsvpred <- function(
       minor.ticks = TRUE
     )
   )
+  
+  exp_lims <- TRUE
+  # min, max y axis value
+  min_y <- min(dat$estimate, na.rm = TRUE)
+  max_y <- max(dat$estimate, na.rm = TRUE)
+  
+  # if both min and max y values are negative, check if the distance to zero is greater than 50% of the span of the y-axis values. If so, set exp_lims to FALSE to avoid expanding the limits to include zero.
+  if(min_y < 0 & max_y < 0){
+    span <- max_y - min_y
+    dist_to_zero <- abs(max_y)
+    perc_of_plot <- -(max_y-span)
+    if(perc_of_plot > 50){
+      exp_lims <- FALSE
+    } 
+  }
+  
+  y_limits <- if (exp_lims) ggplot2::expand_limits(y = 0) else NULL
+  
 
   # Put together final plot
-  final <- labs + breaks + ggplot2::expand_limits(y = 0) +
+  final <- labs + breaks + y_limits +
     ggplot2::scale_y_continuous(
       labels = scales::label_comma()
     )
