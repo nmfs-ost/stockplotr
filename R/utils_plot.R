@@ -234,6 +234,9 @@ plot_timeseries <- function(
     span <- max_y - min_y
     dist_to_zero <- abs(max_y)
     perc_of_plot <- -(max_y-span)
+    cli::cli_alert_info("Estimates are negative.")
+    cli::cli_alert_info("If estimates were log-transformed, please update the y axis label for accuracy.")
+    cli::cli_alert_info("Example: log({ylab})")
     if(perc_of_plot > 50){
       exp_lims <- FALSE
     } 
@@ -1083,6 +1086,9 @@ plot_obsvpred <- function(
     span <- max_y - min_y
     dist_to_zero <- abs(max_y)
     perc_of_plot <- -(max_y-span)
+    cli::cli_alert_info("Estimates are negative.")
+    cli::cli_alert_info("If estimates were log-transformed, please update the y axis label for accuracy.")
+    cli::cli_alert_info("Example: log({ylab})")
     if(perc_of_plot > 50){
       exp_lims <- FALSE
     } 
