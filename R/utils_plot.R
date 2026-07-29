@@ -71,34 +71,19 @@ plot_timeseries <- function(
 ) {
   # Start plot
   plot <- ggplot2::ggplot()
-  # make into new geom?
-  # more defaults and fxnality for ggplot
 
   # Add geom
   plot <- switch(geom,
     "point" = {
-      # point_size = ifelse(
-      #   is.null(list(...)$size),
-      #   2.0,
-      #   list(...)$size
-      # )
       plot +
         ggplot2::geom_point(
           data = dat,
           ggplot2::aes(
             .data[[x]],
             .data[[y]],
-            # TODO: add more groupings
-            # shape = ifelse(any(grepl("shape", names(group))), .data[[group[[grep("shape", names(group))]]]], 1),
-            # color = ifelse(any(grepl("color", names(group))), .data[[group[[grep("color", names(group))]]]], "black")
-            color = if (length(unique(.data[["model"]])) > 1) {
-              interaction(model, group_var)
-            } else {
-              group_var
-            },
+            color = model,
             shape = group_var
           ),
-          # size = point_size,
           ...
         )
     },
@@ -123,7 +108,8 @@ plot_timeseries <- function(
               }
             }
           ),
-          alpha = 0.3
+          alpha = 0.3,
+          show.legend = ifelse(all(is.na(dat$estimate_lower)), FALSE, TRUE)
         ) +
         # }
         ggplot2::geom_line(
@@ -131,8 +117,6 @@ plot_timeseries <- function(
           ggplot2::aes(
             x = .data[[x]],
             y = .data[[y]],
-            # linetype = group_var,
-            # linetype = ifelse(!is.null(group), group_var, "solid"),
             color = {
               if (length(unique(.data[["model"]])) > 1) {
                 interaction(model, group_var)
@@ -141,7 +125,7 @@ plot_timeseries <- function(
               }
             }
           ),
-          # linewidth = 1.0,
+          show.legend = FALSE, #ifelse(all(is.na(dat$estimate_lower)), TRUE, FALSE),
           ...
         )
     },
@@ -152,11 +136,7 @@ plot_timeseries <- function(
           ggplot2::aes(
             x = .data[[x]],
             y = .data[[y]],
-            fill = if (length(unique(.data[["model"]])) > 1) {
-              interaction(model, group_var)
-            } else {
-              group_var
-            }
+            fill = interaction(model, group_var) # model
           ),
           position = "identity",
           alpha = 0.5,
@@ -205,15 +185,7 @@ plot_timeseries <- function(
       # return plot if option beyond line and point for now
       labs
     )
-  } # else if (length(unique(dat$model)) == 1) {
-  #   labs <- switch(geom,
-  #     "line" = labs + ggplot2::guides(color = "none"),
-  #     "point" = labs + ggplot2::guides(color = "none"),
-  #     "area" = labs + ggplot2::guides(fill = "none"),
-  #     # return plot if option beyond line and point for now
-  #     labs
-  #   )
-  # }
+  }
 
   # Calc axis breaks
   x_n_breaks <- axis_breaks(dat[[x]])
@@ -576,7 +548,8 @@ cohort_line <- function(
 reference_line <- function(
   label_name,
   ref_line,
-  scale_amount = 1
+  scale_amount = 1,
+  model_name = "1"
 ) {
   # Extract reference line values and labels
   ref_line_val <- ref_line[[1]]
@@ -585,21 +558,25 @@ reference_line <- function(
   list(
     # Add geom for ref line
     ggplot2::geom_hline(
-      yintercept = ref_line_val / scale_amount,
-      color = "black",
-      linetype = "dashed"
+      data = data.frame(yintercept = ref_line_val, model = model_name, group_var = "1"),
+      ggplot2::aes(
+        yintercept = ref_line_val / scale_amount,
+        color = interaction(model, group_var) # model
+      ),
+      linetype = "dashed",
+      show.legend = FALSE
     ),
     # add line annotation
     ggplot2::annotate(
       geom = "text",
       # TODO: need to change this for general process
-      x = Inf,
+      x = -Inf,
       y = ref_line_val / scale_amount,
-      label = glue::glue("{stringr::str_replace_all(label_name, '_', '~')}[{reference}]"), # list(bquote(label_name[.(reference)])),
+      label = glue::glue("{reference}"), # glue::glue("{stringr::str_replace_all(label_name, '_', '~')}[{reference}]"), # list(bquote(label_name[.(reference)])),
       parse = TRUE,
-      hjust = 1.05, # slight offset so text doesn't hit border
-      vjust = -0.5, #slightly above line
-      size = 5 # this is not foolproof
+      hjust = -0.05, # slight offset so text doesn't hit border
+      vjust = -0.5 # , #slightly above line
+      # size = 5 # this is not foolproof
     )
   )
 }
@@ -1145,7 +1122,7 @@ add_reference_line <- function(
           cli::cli_alert_warning("{label}_{ref_line[i]} not found for {ifelse(is.data.frame(dat), 'data', names(dat[i]))}")
           next
         }
-        ref_line_x <- utils::setNames(ref_line_x, ref_line[i])
+        ref_line_x <- stats::setNames(ref_line_x, ref_line[i])
       } else {
         ref_line_x <- ref_line[i] / scale_amount
       }
@@ -1167,7 +1144,7 @@ add_reference_line <- function(
         # plt2 <- plt2 +
         # TODO: set color for each point to match that of the line for the model
         ref_lines_list <- append(ref_lines_list,
-          ggplot2::geom_point(ggplot2::aes(x = min_year - 1, y = ref_line_x)) # should I keep -1 or set as first year?
+          ggplot2::geom_point(ggplot2::aes(x = min_year - 1, y = ref_line_x, color = model)) # should I keep -1 or set as first year?
         )
       } else {
         # add apply/purrr/or for loop for reference lines -- not just the first anymore
@@ -1177,7 +1154,8 @@ add_reference_line <- function(
             # conditionally add label name
             label_name = ifelse(length(names(dat)[i]) == 1, label, names(dat)[i]), #"spawning_biomass",
             ref_line = ref_line_x,
-            scale_amount = scale_amount
+            scale_amount = scale_amount,
+            model_name = ifelse(is.data.frame(dat), "1", names(dat)[i])
           )
         )
       }
