@@ -177,7 +177,7 @@ calc_kqs <- function(returned_kq,
   if (returned_kq == "F.min") {
     return(
       prepared_data$estimate |>
-        na.omit() |>
+        data.table::na.omit() |>
         min() |>
         round(digits = 3)
     )
@@ -186,7 +186,7 @@ calc_kqs <- function(returned_kq,
   if (returned_kq == "F.max") {
     return(
       prepared_data$estimate |>
-        na.omit() |>
+        data.table::na.omit() |>
         max() |>
         round(digits = 3)
     )

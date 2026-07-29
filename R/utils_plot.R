@@ -1145,7 +1145,7 @@ add_reference_line <- function(
           cli::cli_alert_warning("{label}_{ref_line[i]} not found for {ifelse(is.data.frame(dat), 'data', names(dat[i]))}")
           next
         }
-        ref_line_x <- setNames(ref_line_x, ref_line[i])
+        ref_line_x <- utils::setNames(ref_line_x, ref_line[i])
       } else {
         ref_line_x <- ref_line[i] / scale_amount
       }
