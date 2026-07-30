@@ -1,7 +1,7 @@
-#' Landed catch by fleet and year table
+#' Weight at age table
 #'
 #' @inheritParams plot_recruitment
-#' @param unit_label String. Abbreviated landings units
+#' @param unit_label String. Abbreviated weight units
 #'
 #' Default: "mt"
 #' @param group String. Single column that groups the data.
@@ -24,14 +24,8 @@
 #' rda files ("tables") that will be created if the argument `make_rda` = TRUE.
 #'
 #' Default: the working directory (`getwd()`)
-#' @param label String. The label that will be chosen from the input file. If unspecified,
-#' the function will search the "label" column and use the first matching label
-#' in this ordered list: "landings_weight",  "landings_numbers", "landings_expected",
-#' "landings_predicted", "landings".
 #'
-#' Default: NULL
-#'
-#' @returns A table ready of landed catch by fleet and year.
+#' @returns A report-ready table of weight by age class and year.
 #'
 #' @details The input is from an assessment model output file
 #' translated to a standardized output (\link[stockplotr]{convert_output}).
@@ -45,24 +39,25 @@
 #' table_weight_at_age(stockplotr::example_data)
 #'
 #' table_weight_at_age(
-#'   stockplotr::example_data,
-#'   unit_label = "landings label",
-#'   group = "fleet"
+#'   dat = stockplotr::example_data,
+#'   unit_label = "grams"
 #' )
 table_weight_at_age <- function(
   dat,
   unit_label = "mt",
   era = NULL,
   interactive = TRUE,
-  # group = NULL,
-  # method = "sum",
-  module = NULL,
-  label = NULL,
+  group = NULL,
+  method = "sum",
+  # module = NULL,
+  # label = NULL,
   digits = 4,
   scale_amount = 1,
   make_rda = FALSE,
   tables_dir = getwd()
 ) {
+  #TODO: Update to allow for showing other indexing vars like fleet, area, etc
+  
   # Filter data for body weight
   prepared_data <- filter_data(
     dat = dat,
@@ -85,9 +80,11 @@ table_weight_at_age <- function(
     dat = prepared_data,
     # group = group,
     # method = method,
-    label = label,
+    # label = label,
     digits = digits
-  )
+  ) |>
+    suppressWarnings()
+  
   table_data <- table_data_info[[1]]
   indexed_vars <- table_data_info[[2]]
   id_col_vals <- table_data_info[[3]]
@@ -113,6 +110,7 @@ table_weight_at_age <- function(
     dplyr::mutate(Weight = round(Weight, digits = digits)) |>
     tidyr::pivot_wider(names_from = age,
                        values_from = Weight) |>
+    dplyr::rename_with(stringr::str_to_title) |>
     gt::gt(
       rowname_col = NULL,
       groupname_col = NULL
@@ -151,14 +149,14 @@ table_weight_at_age <- function(
   }
 
   # Send table(s) to viewer
-  if (!is.data.frame(table_data)) {
-    for (t in final) {
-      print(t)
-    }
-    # Return table list invisibly
-    return(invisible(final))
-  } else {
-    # Return finished table (when only one table)
+  # if (!is.data.frame(table_data)) {
+  #   for (t in final) {
+  #     print(t)
+  #   }
+  #   # Return table list invisibly
+  #   return(invisible(final))
+  # } else {
+  #   # Return finished table (when only one table)
     return(final)
-  }
+  # }
 }
