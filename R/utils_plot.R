@@ -108,8 +108,8 @@ plot_timeseries <- function(
               }
             }
           ),
-          alpha = 0.3,
-          show.legend = ifelse(all(is.na(dat$estimate_lower)), FALSE, TRUE)
+          alpha = 0.3 #,
+          # show.legend = ifelse(all(is.na(dat$estimate_lower)), FALSE, TRUE)
         ) +
         # }
         ggplot2::geom_line(
@@ -125,7 +125,7 @@ plot_timeseries <- function(
               }
             }
           ),
-          show.legend = FALSE, #ifelse(all(is.na(dat$estimate_lower)), TRUE, FALSE),
+          # show.legend = FALSE, #ifelse(all(is.na(dat$estimate_lower)), TRUE, FALSE),
           ...
         )
     },
