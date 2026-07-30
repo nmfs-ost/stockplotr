@@ -96,8 +96,7 @@ plot_discard <- function(
       predicted_label = "discard_predicted",
       ylab = discard_label,
       group = group,
-      facet = facet,
-      ...
+      facet = facet
     )
   } else {
     plt <- plot_timeseries(
