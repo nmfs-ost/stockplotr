@@ -103,7 +103,7 @@ convert_output <- function(
     url_pattern <- "^(https?|ftp|file):\\/\\/[-A-Za-z0-9+&@#\\/%?=~_|!:,.;]*[-A-Za-z0-9+&@#\\/%=~_|]$"
     if (grepl(url_pattern, file)) {
       check <- tryCatch({
-        headers <- utils::curlGetHeaders(file)
+        headers <- curlGetHeaders(file)
         attributes(headers)[["status"]]
       }, error = function(e) {
         404
