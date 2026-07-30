@@ -103,13 +103,12 @@ convert_output <- function(
     url_pattern <- "^(https?|ftp|file):\\/\\/[-A-Za-z0-9+&@#\\/%?=~_|!:,.;]*[-A-Za-z0-9+&@#\\/%=~_|]$"
     if (grepl(url_pattern, file)) {
       check <- tryCatch({
-        con <- url(file, open = "rb")
-        on.exit(close(con), add = TRUE)
-        length(readBin(con, what = "raw", n = 1)) == 1
+        headers <- curlGetHeaders(file)
+        attributes(headers)[["status"]]
       }, error = function(e) {
-        FALSE
+        404
       })
-      if (!check) cli::cli_abort(c(message = "Invalid URL."))
+      if (check == 404) cli::cli_abort(c(message = "Invalid URL."))
     } else {
       if (!file.exists(file)) {
         cli::cli_abort(c(
