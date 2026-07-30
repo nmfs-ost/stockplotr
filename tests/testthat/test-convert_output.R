@@ -79,6 +79,13 @@ test_that("r4ss::ss_output object is compatible.", {
   expect_equal(dim(result)[2], 34)
 })
 
+test_that("URL input is compatible", {
+  expect_no_error(result <- convert_output(
+    file = "https://raw.githubusercontent.com/pfmc-assessments/petrale/main/models/2023.a050.003_FIMS_case-study_wtatage/Report.sso"
+  ))
+  expect_equal(dim(result)[2], 34)
+})
+
 test_that("invalid URL input triggers an error", {
   expect_error(
     convert_output(
