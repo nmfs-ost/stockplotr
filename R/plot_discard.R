@@ -111,54 +111,45 @@ plot_discard <- function(
   
   ### Make RDA ----
   if (make_rda) {
-    if (relative) {
-      rel.ssb.min <- calc_kqs(returned_kq = "rel.ssb.min",
-                              final = final)
-      
-      
-      rel.ssb.max <- calc_kqs(returned_kq = "rel.ssb.max",
-                              final = final)
-      
-      # calculate & export key quantities
-      export_kqs(rel.ssb.min, rel.ssb.max)
-      
-      # Add key quantities to captions/alt text
-      insert_kqs(rel.ssb.min, rel.ssb.max)
-    } else {
-      ssb.min <- min(plot_data$estimate) |> round(digits = 3)
-      ssb.max <- max(plot_data$estimate) |> round(digits = 3)
-      
-      export_kqs(ssb.min, ssb.max)
-      insert_kqs(ssb.min, ssb.max)
-    }
+    fleet.or.survey.name
+
+    mod.fit.discard.units
     
     # Obtain relevant key quantities for captions/alt text
-    ssb.ref.pt <- as.character(ref_line)
-    ssb.units <- as.character(unit_label)
-    ssb.start.year <- min(plot_data$year)
-    ssb.end.year <- max(plot_data$year)
+    mod.fit.discards.min <- min(discards$estimate) |> round(digits = 3)
+    mod.fit.discards.max <- max(discards$estimate) |> round(digits = 3)
+    
+    mod.fit.discards.start.year <- min(discards$year)
+    mod.fit.discards.end.year <- max(discards$year)
+    
+    fleet.or.survey.name <- paste0(unique(discards$fleet), collapse = ", ")
+    mod.fit.discard.units <- as.character(unit_label)
     
     # calculate & export key quantities
     export_kqs(
-      ssb.ref.pt,
-      ssb.units,
-      ssb.start.year,
-      ssb.end.year
+      mod.fit.discards.min,
+      mod.fit.discards.max,
+      mod.fit.discards.start.year,
+      mod.fit.discards.end.year,
+      fleet.or.survey.name,
+      mod.fit.discard.units
     )
     
     # Add key quantities to captions/alt text
     insert_kqs(
-      ssb.ref.pt,
-      ssb.units,
-      ssb.start.year,
-      ssb.end.year
+      mod.fit.discards.min,
+      mod.fit.discards.max,
+      mod.fit.discards.start.year,
+      mod.fit.discards.end.year,
+      fleet.or.survey.name,
+      mod.fit.discard.units
     )
     
     create_rda(
-      object = final,
+      object = plt,
       topic_label = "discards",
       fig_or_table = "figure",
-      dat = rp_dat,
+      dat = discards,
       dir = figures_dir,
       scale_amount = scale_amount,
       unit_label = unit_label
