@@ -57,7 +57,7 @@ plot_discard <- function(
   # Filter data for discards
   prepared_data <- filter_data(
     dat = dat,
-    label_name = "^discard$|discard_weight",
+    label_name = "^discard",
     geom = "line",
     era = era,
     group = group,
@@ -66,6 +66,16 @@ plot_discard <- function(
     scale_amount = scale_amount,
     interactive = interactive
   )
+  
+  if (any(grepl("observed|predicted",unique(prepared_data$label)))) {
+    # select only the observed and predicted discards for plotting
+    prepared_data <- prepared_data |>
+     dplyr::filter(grepl("predicted|observed", label))
+  } else if (length(unique(prepared_data$label)) > 1) {
+    cli::cli_alert_info("Multiple discard labels found. Using the first label: {unique(prepared_data$label)[1]}")
+    prepared_data <- prepared_data |>
+      dplyr::filter(label == unique(prepared_data$label)[1])
+  }
   
   # Process the data to remove unneccessary columns and information
   p_dat <- process_data(
@@ -79,13 +89,26 @@ plot_discard <- function(
   facet <- p_dat[[3]]
   
   # make the plot
-  plt <- plot_timeseries(
-    discards,
-    ylab = discard_label,
-    group = group,
-    facet = if (length(facet) > 0) facet else NULL#,
-    # ...
-  )
+  if (any(grepl("observed|predicted",unique(prepared_data$label)))) {
+    plt <- plot_timeseries(
+      discards,
+      ylab = discard_label,
+      group = group,
+      facet = if (length(facet) > 0) facet else NULL#,
+      # ...
+    )
+  } else {
+    plt <- plot_obsvpred(
+      dat = discards,
+      observed_label = "discard_observed",
+      predicted_label = "discard_predicted",
+      ylab = discard_label,
+      group = group,
+      facet = facet
+    )
+  }
+  
+  
   
   ### Make RDA ----
   if (make_rda) {

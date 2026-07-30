@@ -996,7 +996,13 @@ plot_obsvpred <- function(
       ggplot2::aes(
         .data[[x]],
         .data[[y]],
-        color = model
+        color = {
+          if (length(unique(dat$model)) > 1) {
+            interaction(model, group_var)
+          } else {
+            group_var
+          }
+        }
       ),
       shape = 16
       # ...
@@ -1006,7 +1012,13 @@ plot_obsvpred <- function(
       ggplot2::aes(
         x = .data[[x]],
         y = .data[[y]],
-        color = model
+        color = {
+          if (length(unique(dat$model)) > 1) {
+            interaction(model, group_var)
+          } else {
+            group_var
+          }
+        }
       ),
       linetype = "solid"
     )
@@ -1026,16 +1038,21 @@ plot_obsvpred <- function(
     labs <- plot + ggplot2::labs(
       x = xlab,
       y = ylab,
-      color = "Model"
+      color = if (length(unique(dat$model)) > 1) {
+            glue::glue("Model.{group}")
+          } else {
+            group
+          }
     )
   }
 
   # Remove linetype or point when there is no grouping
-  if (is.null(group) & length(unique(dat$model)) == 1) {
-    labs <- labs + ggplot2::guides(linetype = "none", shape = "none")
-  }
-  if (length(unique(dat$model)) == 1) {
-    labs <- labs + ggplot2::guides(color = "none")
+  if (is.null(group)) {
+    if(length(unique(dat$model)) == 1) {
+      labs <- labs + ggplot2::guides(linetype = "none", shape = "none")
+    } else {
+      labs <- labs + ggplot2::guides(color = "none")
+    }
   }
 
   # Calc axis breaks
