@@ -60,7 +60,7 @@ parms,SSBmsy,spawning_biomass_msy
 parms,msst,msst
 parms,Bmsy,biomass_msy
 parms,Rmsy,recruitment_msy
-parms,sprmsy,spr_msy
+parms,sprmsy,spawning_potential_ratio_msy
 parms,Dmsy.knum,discard_msy_numbers
 parms,Dmsy.klb,discard_msy_weight
 parms,Fend.Fmsy,F_F_msy
@@ -204,7 +204,7 @@ t.series,SSB.msst,SB_msst
 t.series,SSB.SSBFproxy,SB_SB_Fproxy
 t.series,B.B0,B_B0
 t.series,MatFemB,mature_female_biomass
-t.series,SPR.static,spr
+t.series,SPR.static,spawning_potential_ratio
 t.series,total.L.klb,landings_weight
 t.series,total.L.knum,landings_numbers
 t.series,total.D.klb,discards_weight
@@ -267,15 +267,15 @@ a.series,Nage.eq.init,Nage_eq_init
 a.series,log.Nage2plus.init.dev,log_Nage2plus_plus.init_dev
 eq.series,F.eq,fishing_mortality
 eq.series,spr.eq,spr
-eq.series,R.eq,recruitment
+eq.series,R.eq,spawning_potential_ratio
 eq.series,SSB.eq,spawning_biomass
 eq.series,B.eq,biomass
 eq.series,L.eq.klb,landings_weight
 eq.series,D.eq.knum,discard_numbers
 eq.series,D.eq.klb,discard_weight
-pr.series,F.spr,f_spr
-pr.series,spr,spr
-pr.series,SPR,spr
+pr.series,F.spr,fishing_mortality_spawning_potential_ratio
+pr.series,spr,spawning_potential_ratio
+pr.series,SPR,spawning_potential_ratio
 pr.series,ypr.lb,ypr
 pr.series,total.lb,total_lb
 CLD.est.mats,Lw,Lw

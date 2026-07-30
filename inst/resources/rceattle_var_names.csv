@@ -157,7 +157,7 @@ quantities,max_catch_hat,
 quantities,n_at_age,abundance
 quantities,nbyage0,abundance_rec_hat_f0
 quantities,nbyagef,abundance_rec_hat_f_target
-quantities,nbyagespr,abundance_spr
+quantities,nbyagespr,abundance_spawning_potential_ratio
 quantities,pop_scalar,
 quantities,proj_f,fishing_mortality
 quantities,r,recruitment
@@ -169,10 +169,10 @@ quantities,ration,
 quantities,sb0,spawning_biomass_0
 quantities,sbf,spawning_biomass_target
 quantities,sel,selectivity
-quantities,spr0,
-quantities,sprfinit,spr_initial
-quantities,sprlimit,spr_limit
-quantities,sprtarget,spr_target
+quantities,spr0,spawning_potential_ratio_0
+quantities,sprfinit,spawning_potential_ratio_initial
+quantities,sprlimit,spawning_potential_ratio_limit
+quantities,sprtarget,spawning_potential_ratio_target
 quantities,ssb,spawning_biomass
 quantities,ssb_depletion,spawning_biomass_depletion
 quantities,steepness,
