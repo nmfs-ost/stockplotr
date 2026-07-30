@@ -996,15 +996,10 @@ plot_obsvpred <- function(
       ggplot2::aes(
         .data[[x]],
         .data[[y]],
-        color = {
-          if (length(unique(dat$model)) > 1) {
-            interaction(model, group_var)
-          } else {
-            group_var
-          }
-        }
-      ),
-      shape = 16
+        color = group_var,
+        shape = model
+      )
+      # shape = 16
       # ...
     ) +
     ggplot2::geom_line(
@@ -1012,15 +1007,10 @@ plot_obsvpred <- function(
       ggplot2::aes(
         x = .data[[x]],
         y = .data[[y]],
-        color = {
-          if (length(unique(dat$model)) > 1) {
-            interaction(model, group_var)
-          } else {
-            group_var
-          }
-        }
-      ),
-      linetype = "solid"
+        color = group_var,
+        linetype = model
+      )
+      # linetype = "solid"
     )
 
   # Add labels to axis and legend

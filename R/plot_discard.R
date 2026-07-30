@@ -90,25 +90,24 @@ plot_discard <- function(
   
   # make the plot
   if (any(grepl("observed|predicted",unique(prepared_data$label)))) {
-    plt <- plot_timeseries(
-      discards,
-      ylab = discard_label,
-      group = group,
-      facet = if (length(facet) > 0) facet else NULL#,
-      # ...
-    )
-  } else {
     plt <- plot_obsvpred(
       dat = discards,
       observed_label = "discard_observed",
       predicted_label = "discard_predicted",
       ylab = discard_label,
       group = group,
-      facet = facet
+      facet = facet,
+      ...
+    )
+  } else {
+    plt <- plot_timeseries(
+      discards,
+      ylab = discard_label,
+      group = group,
+      facet = if (length(facet) > 0) facet else NULL,
+      ...
     )
   }
-  
-  
   
   ### Make RDA ----
   if (make_rda) {
