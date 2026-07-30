@@ -44,6 +44,7 @@ est.params,table,Parameters used in the base stock assessment model and whether 
 F.per.fleet.per.year,table,Partial fishing mortality estimates for each fleet in the assessment model.,
 bnc,table,"Historical biomass, spawning biomass, abundance, and catch time   series estimated by the base configuration of the stock assessment model.",
 naa,table,Historical population abundance (numbers) estimated by the base model for each age group.,
+waa,table,Model estimate of population weight over time in waa.units for each age group.,
 catchability,table,Catchability over time for fleet catchability.fleet.,
 sensitivity.runs,table,"Forecasted catch, biomass, spawning biomass, recruitment, fishing mortality, and stock status as projected from the base model configuration.",
 catch_comp,figure,Fishery age composition (caa.start.year-caa.end.year). The area of the circle is proportional to the catch. Diagonal lines indicated the top 5\\% strongest year classes.,"Bubble plot showing estimated total catch at age. The x axis shows the year, which spans from caa.start.year to caa.end.year. The y axis shows age, which spans from caa.age.min to caa.age.max. The size of the bubbles range from tot.catch.min to tot.catch.max."

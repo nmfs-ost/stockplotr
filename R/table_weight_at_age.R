@@ -51,7 +51,7 @@
 #' )
 table_weight_at_age <- function(
   dat,
-  unit_label = "g",
+  unit_label = "mt",
   era = NULL,
   interactive = TRUE,
   # group = NULL,
@@ -66,7 +66,7 @@ table_weight_at_age <- function(
   # Filter data for body weight
   prepared_data <- filter_data(
     dat = dat,
-    label_name = "body_weight",
+    label_name = "body_weight|wgt.klb",
     geom = "point",
     era = NULL,
     module = module,
@@ -105,14 +105,16 @@ table_weight_at_age <- function(
   
   # transform df into table
   final <- waa_data |>
+    dplyr::ungroup() |>
     dplyr::mutate(age = as.numeric(age)) |>
     dplyr::arrange(sex, age) |>
+    dplyr::select(where(~ !all(is.na(.)))) |>
     dplyr::mutate(Weight = round(Weight, digits = digits)) |>
     tidyr::pivot_wider(names_from = age,
                        values_from = Weight) |>
-      gt::gt(
-        rowname_col = NULL,
-        groupname_col = NULL
+    gt::gt(
+      rowname_col = NULL,
+      groupname_col = NULL
       ) |>
       theme_table()
 
@@ -122,13 +124,13 @@ table_weight_at_age <- function(
   if (make_rda == TRUE) {
     if (length(df_list) == 1) {
       # Obtain relevant key quantities for captions/alt text
-      landings.units <- unit_label
+      waa.units <- unit_label
 
       # calculate & export key quantities
-      export_kqs(landings.units)
+      export_kqs(waa.units)
 
       # Add key quantities to captions/alt text
-      insert_kqs(landings.units)
+      insert_kqs(waa.units)
 
       create_rda(
         object = final$label,
