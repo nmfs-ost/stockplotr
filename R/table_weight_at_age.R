@@ -66,13 +66,14 @@ table_weight_at_age <- function(
   # Filter data for body weight
   prepared_data <- filter_data(
     dat = dat,
-    label_name = "body_weight|wgt.klb",
+    label_name = "body_weight|wgt.klb|weight_hat",
     geom = "point",
     era = NULL,
     module = module,
     scale_amount = scale_amount,
     interactive = interactive
-  )
+  ) |>
+    dplyr::distinct(.keep_all = TRUE)
 
   # Add check if there is any data
   if (nrow(prepared_data) == 0) {
@@ -83,7 +84,7 @@ table_weight_at_age <- function(
   table_data_info <- process_table(
     dat = prepared_data,
     # group = group,
-    method = method,
+    # method = method,
     label = label,
     digits = digits
   )
