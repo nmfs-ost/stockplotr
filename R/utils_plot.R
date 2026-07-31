@@ -92,7 +92,11 @@ plot_timeseries <- function(
             # shape = ifelse(any(grepl("shape", names(group))), .data[[group[[grep("shape", names(group))]]]], 1),
             # color = ifelse(any(grepl("color", names(group))), .data[[group[[grep("color", names(group))]]]], "black")
             color = if (length(unique(.data[["model"]])) > 1) {
-              interaction(model, group_var)
+              if (length(unique(.data[["group_var"]])) == 1) {
+                model
+              } else {
+                interaction(model, group_var)
+              }
             } else {
               group_var
             },
@@ -198,7 +202,7 @@ plot_timeseries <- function(
   }
 
   # Remove linetype or point when there is no grouping
-  if (is.null(group) & length(unique(dat$model)) == 1) {
+  if (is.null(group)) {
     labs <- switch(geom,
       "line" = labs + ggplot2::guides(linetype = "none"),
       "point" = labs + ggplot2::guides(shape = "none"),

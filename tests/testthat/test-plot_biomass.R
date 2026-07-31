@@ -94,3 +94,19 @@ test_that("rda file made when indicated", {
   file.remove(fs::path(getwd(), "key_quantities.csv"))
   unlink(fs::path(getwd(), "figures"), recursive = T)
 })
+
+test_that("multi-model point biomass legend uses model names only", {
+  plot <- plot_biomass(
+    dat = list("petrale" = stockplotr::example_data, "skate" = stockplotr::example_data),
+    ref_line = c("petrale_ref" = 30000, "skate_ref" = 400),
+    geom = "point",
+    module = "TIME_SERIES",
+    interactive = FALSE
+  )
+
+  color_scale <- ggplot2::ggplot_build(plot)$plot$scales$get_scales("colour")
+  color_labels <- color_scale$get_labels()
+
+  expect_setequal(color_labels, c("petrale", "skate"))
+  expect_false(any(grepl("\\.1$", color_labels)))
+})
