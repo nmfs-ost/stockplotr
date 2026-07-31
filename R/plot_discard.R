@@ -22,7 +22,7 @@
 #' @examples
 #' plot_discard(
 #'   dat = example_data,
-#'   module = "DISCARD_AT_AGE"
+#'   module = "DISCARD_OUTPUT"
 #' )
 plot_discard <- function(
     dat,
