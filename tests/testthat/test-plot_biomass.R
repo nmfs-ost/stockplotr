@@ -94,3 +94,18 @@ test_that("rda file made when indicated", {
   file.remove(fs::path(getwd(), "key_quantities.csv"))
   unlink(fs::path(getwd(), "figures"), recursive = T)
 })
+
+test_that("plot_biomass multi-model point legend maps colors by model", {
+  skate <- stockplotr::example_data
+  p <- plot_biomass(
+    dat = list("petrale" = stockplotr::example_data, "skate" = skate),
+    ref_line = c("petrale_ref" = 30000, "skate_ref" = 400),
+    geom = "point",
+    module = "TIME_SERIES",
+    interactive = FALSE
+  )
+
+  expect_s3_class(p, "gg")
+  expect_true(rlang::quo_is_null(p$layers[[1]]$mapping$shape))
+  expect_equal(as.character(rlang::get_expr(p$layers[[1]]$mapping$colour)), "model")
+})

@@ -82,25 +82,44 @@ plot_timeseries <- function(
       #   2.0,
       #   list(...)$size
       # )
-      plot +
-        ggplot2::geom_point(
-          data = dat,
-          ggplot2::aes(
-            .data[[x]],
-            .data[[y]],
-            # TODO: add more groupings
-            # shape = ifelse(any(grepl("shape", names(group))), .data[[group[[grep("shape", names(group))]]]], 1),
-            # color = ifelse(any(grepl("color", names(group))), .data[[group[[grep("color", names(group))]]]], "black")
-            color = if (length(unique(.data[["model"]])) > 1) {
-              interaction(model, group_var)
-            } else {
-              group_var
-            },
-            shape = group_var
-          ),
-          # size = point_size,
-          ...
-        )
+      if (is.null(group)) {
+        plot +
+          ggplot2::geom_point(
+            data = dat,
+            ggplot2::aes(
+              .data[[x]],
+              .data[[y]],
+              color = if (length(unique(.data[["model"]])) > 1) {
+                model
+              } else {
+                group_var
+              }
+            ),
+            shape = 16,
+            # size = point_size,
+            ...
+          )
+      } else {
+        plot +
+          ggplot2::geom_point(
+            data = dat,
+            ggplot2::aes(
+              .data[[x]],
+              .data[[y]],
+              # TODO: add more groupings
+              # shape = ifelse(any(grepl("shape", names(group))), .data[[group[[grep("shape", names(group))]]]], 1),
+              # color = ifelse(any(grepl("color", names(group))), .data[[group[[grep("color", names(group))]]]], "black")
+              color = if (length(unique(.data[["model"]])) > 1) {
+                interaction(model, group_var)
+              } else {
+                group_var
+              },
+              shape = group_var
+            ),
+            # size = point_size,
+            ...
+          )
+      }
     },
     "line" = {
       plot +
