@@ -981,8 +981,7 @@ plot_obsvpred <- function(
   xlab = "Year",
   ylab = NULL,
   group = NULL,
-  facet = NULL,
-  ...
+  facet = NULL
 ) {
   # Start plot
   plot <- ggplot2::ggplot()

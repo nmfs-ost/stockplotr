@@ -21,8 +21,8 @@
 #'
 #' @examples
 #' plot_discard(
-#'   dat = example_data
-#'   
+#'   dat = example_data,
+#'   module = "DISCARD_AT_AGE"
 #' )
 plot_discard <- function(
     dat,
@@ -102,9 +102,8 @@ plot_discard <- function(
     plt <- plot_timeseries(
       discards,
       ylab = discard_label,
-      group = group,
       facet = if (length(facet) > 0) facet else NULL,
-      ...
+      group = group
     )
   }
   

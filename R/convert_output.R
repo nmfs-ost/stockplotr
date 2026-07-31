@@ -563,6 +563,11 @@ convert_output <- function(
                     TRUE ~ stringr::str_extract(label, "^.*?(?=_\\d|_gp|_fem|_mal|_sx|:|$)")
                   )
                 )
+              
+              if (parm_sel == "DISCARD_OUTPUT") {
+                df4 <- df4 |>
+                  dplyr::mutate(label = glue::glue("discard_{label}"))
+              }
               # }
             } else {
               cli::cli_alert_warning(glue::glue("Data frame not compatible in {parm_sel}."))
@@ -1291,6 +1296,10 @@ convert_output <- function(
               df3 <- df3 |>
                 dplyr::select(-tidyselect::any_of("label")) |>
                 dplyr::rename(label = factor)
+            } else if ("type" %in% colnames(df3)) {
+              df3 <- df3 |>
+                dplyr::mutate(label = glue::glue("{label}_{type}")) |>
+                dplyr::select(-type)
             } else {
               df3 <- dplyr::mutate(df3, label = label[1])
             }
