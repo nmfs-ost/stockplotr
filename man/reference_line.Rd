@@ -4,19 +4,21 @@
 \alias{reference_line}
 \title{Preformatted reference line}
 \usage{
-reference_line(label_name, ref_line, scale_amount = 1)
+reference_line(label_name, ref_line, scale_amount = 1, model_name = "1")
 }
 \arguments{
 \item{label_name}{String. Name of the quantity that users want to
 extract the reference point from}
 
-\item{ref_line}{String of the reference point
-
-Options: Including, but not limited to: "msy", "unfished", "target"}
+\item{ref_line}{String. Reference point(s)}
 
 \item{scale_amount}{Number. A number to scale the y-axis values.
 
 Default: 1}
+
+\item{model_name}{String. Name of the model that will be present in the legend.
+
+Options: Including, but not limited to: "msy", "unfished", "target"}
 }
 \value{
 A ggplot2 geom_hline object for a reference point that can be added
