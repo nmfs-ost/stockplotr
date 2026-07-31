@@ -118,7 +118,7 @@ plot_discard <- function(
     mod.fit.discards.end.year <- max(discards$year)
     
     fleet.or.survey.name <- paste0(unique(discards$fleet), collapse = ", ")
-    mod.fit.discard.units <- as.character(unit_label)
+    mod.fit.discards.units <- as.character(unit_label)
     
     # calculate & export key quantities
     export_kqs(
@@ -127,7 +127,7 @@ plot_discard <- function(
       mod.fit.discards.start.year,
       mod.fit.discards.end.year,
       fleet.or.survey.name,
-      mod.fit.discard.units
+      mod.fit.discards.units
     )
     
     # Add key quantities to captions/alt text
@@ -137,7 +137,7 @@ plot_discard <- function(
       mod.fit.discards.start.year,
       mod.fit.discards.end.year,
       fleet.or.survey.name,
-      mod.fit.discard.units
+      mod.fit.discards.units
     )
     
     create_rda(
