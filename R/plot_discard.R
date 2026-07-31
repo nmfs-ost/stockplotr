@@ -110,10 +110,6 @@ plot_discard <- function(
   
   ### Make RDA ----
   if (make_rda) {
-    fleet.or.survey.name
-
-    mod.fit.discard.units
-    
     # Obtain relevant key quantities for captions/alt text
     mod.fit.discards.min <- min(discards$estimate) |> round(digits = 3)
     mod.fit.discards.max <- max(discards$estimate) |> round(digits = 3)
@@ -146,7 +142,7 @@ plot_discard <- function(
     
     create_rda(
       object = plt,
-      topic_label = "discards",
+      topic_label = "mod.fit.discards",
       fig_or_table = "figure",
       dat = discards,
       dir = figures_dir,
