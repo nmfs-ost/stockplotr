@@ -533,7 +533,7 @@ cohort_line <- function(
 #' @inheritParams plot_spawning_biomass
 #' @param label_name String. Name of the quantity that users want to
 #' extract the reference point from
-#' @param ref_line String of the reference point
+#' @param ref_line String. Reference point(s)
 #'
 #' Options: Including, but not limited to: "msy", "unfished", "target"
 #'

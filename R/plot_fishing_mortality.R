@@ -77,11 +77,6 @@ plot_fishing_mortality <- function(
     ...
   )
   # Add reference line
-  # Conditions for ref line
-  # 1. all are comparing same value = msy, target, unfished...
-  # 2. custom input vector = c("sable23_msy"=30, "sable25_msy"=40) -- user must indicate which model in label otherwise it will assign in order of dat
-  # 3. input vector of labels = c("msy", "target")
-  # getting data set - an ifelse statement in the fxn wasn't working
   final <- plt +
       add_reference_line(
         dat = dat, 
