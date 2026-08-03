@@ -284,3 +284,6 @@ Dynamic_Bzero,Dynamic_Bzero,dynamic_biomass_zero
 ,ssb,spawning_biomass
 ,ssb_nofishing,spawning_biomass_no_fishing
 ,f_msy,fishing_mortality_msy
+DISCARD_OUTPUT,discard_obs,discard_observed
+DISCARD_OUTPUT,discard_exp,discard_predicted
+DISCARD_OUTPUT,discard_dev,discard_deviation

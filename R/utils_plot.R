@@ -169,11 +169,11 @@ plot_timeseries <- function(
   if (length(unique(dat$model)) > 1 & !is.null(group)) {
     labs <- plot + ggplot2::labs(
       x = xlab,
-      y = ylab
-      # color = "Model",
-      # linetype = cap_first_letter(group),
-      # fill = cap_first_letter(group),
-      # shape = cap_first_letter(group)
+      y = ylab,
+      color = "Model",
+      linetype = cap_first_letter(group),
+      fill = cap_first_letter(group),
+      shape = cap_first_letter(group)
     ) +
       ggplot2::theme(legend.title = ggplot2::element_blank())
   } else {
@@ -1010,8 +1010,7 @@ plot_obsvpred <- function(
   xlab = "Year",
   ylab = NULL,
   group = NULL,
-  facet = NULL,
-  ...
+  facet = NULL
 ) {
   # Start plot
   plot <- ggplot2::ggplot()
@@ -1025,9 +1024,10 @@ plot_obsvpred <- function(
       ggplot2::aes(
         .data[[x]],
         .data[[y]],
-        color = model
-      ),
-      shape = 16
+        color = group_var,
+        shape = model
+      )
+      # shape = 16
       # ...
     ) +
     ggplot2::geom_line(
@@ -1035,36 +1035,52 @@ plot_obsvpred <- function(
       ggplot2::aes(
         x = .data[[x]],
         y = .data[[y]],
-        color = model
-      ),
-      linetype = "solid"
+        color = group_var,
+        linetype = model
+      )
+      # linetype = "solid"
     )
 
   # Add labels to axis and legend
   if (length(unique(dat$model)) > 1 & !is.null(group)) {
     labs <- plot + ggplot2::labs(
       x = xlab,
-      y = ylab
+      y = ylab,
       # color = "Model",
       # linetype = cap_first_letter(group),
       # fill = cap_first_letter(group),
-      # shape = cap_first_letter(group)
+      shape = "Model"
     ) +
       ggplot2::theme(legend.title = ggplot2::element_blank())
   } else {
     labs <- plot + ggplot2::labs(
       x = xlab,
       y = ylab,
-      color = "Model"
+      color = if (length(unique(dat$model)) > 1) {
+            glue::glue("Model.{cap_first_letter(group)}")
+          } else {
+            cap_first_letter(group)
+          },
+      shape = if (length(unique(dat$model)) > 1) {
+        "Model"
+      } else {
+        ""
+      },
+      linetype = if (length(unique(dat$model)) > 1) {
+        "Model"
+      } else {
+        ""
+      }
     )
   }
 
   # Remove linetype or point when there is no grouping
-  if (is.null(group) & length(unique(dat$model)) == 1) {
-    labs <- labs + ggplot2::guides(linetype = "none", shape = "none")
-  }
-  if (length(unique(dat$model)) == 1) {
-    labs <- labs + ggplot2::guides(color = "none")
+  if (is.null(group)) {
+    if(length(unique(dat$model)) == 1) {
+      labs <- labs + ggplot2::guides(linetype = "none", shape = "none")
+    } else {
+      labs <- labs + ggplot2::guides(color = "none")
+    }
   }
 
   # Calc axis breaks
