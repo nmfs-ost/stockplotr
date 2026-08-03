@@ -86,7 +86,17 @@ plot_fishing_mortality <- function(
       theme_noaa()
   
   if (!is.data.frame(dat)) {
-    final <- final + ggplot2::scale_color_discrete(breaks = names(dat))
+    if (!is.null(names(ref_line))) {
+      if (any(
+        grepl(
+          glue::glue("^fishing_mortality_{ref_line}"),
+          # TODO: make this check more efficient
+          ifelse(is.data.frame(dat), dat[["label"]], sapply(dat, `[[`, "label"))
+        )
+      )) {
+        final <- final + ggplot2::scale_color_discrete(breaks = names(dat))
+      }
+    }
   }
 
   ### Make RDA ----
