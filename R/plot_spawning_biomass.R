@@ -28,9 +28,9 @@
 #' Default: "time"
 #'
 #' Options: "early", "time", "fore" (forecast), or NULL (all data)
-#' @param ref_line String or named vector. Reference point name (and value if 
-#' custom). When multiple models are being compared, a reference line for each 
-#' model will appear, if desired. The following options can be used to customize 
+#' @param ref_line String or named vector. Reference point name (and value if
+#' custom). When multiple models are being compared, a reference line for each
+#' model will appear, if desired. The following options can be used to customize
 #' the reference line:
 #' 1. all lines are comparing same ref_line = "msy", ref_line = "target", ref_line = "unfished", etc
 #' 2. custom input vector - ref_line = c("sable23_msy"=30, "sable25_msy"=40) -- user must indicate which model in label otherwise it will assign in order of dat
@@ -112,7 +112,7 @@
 #' \dontrun{
 #' plot_spawning_biomass(
 #'   dat = list("2023" = model1, "2025" = model2),
-#'   ref_line = c("SBF30"=1500,"SBF40"=2300)
+#'   ref_line = c("SBF30" = 1500, "SBF40" = 2300)
 #' )
 #' }
 plot_spawning_biomass <- function(
@@ -216,17 +216,17 @@ plot_spawning_biomass <- function(
     # don't add any reference line here and just add theme for final plot
     final <- plt + theme_noaa()
   } else {
-    final <- plt + 
+    final <- plt +
       add_reference_line(
-        dat = dat, 
-        ref_line = ref_line, 
-        label = "spawning_biomass", 
+        dat = dat,
+        ref_line = ref_line,
+        label = "spawning_biomass",
         lbs = lbs,
         scale_amount = scale_amount
-      ) + 
+      ) +
       theme_noaa()
   }
-  
+
   if (!is.data.frame(dat)) {
     if (!is.null(names(ref_line))) {
       if (any(
@@ -244,13 +244,17 @@ plot_spawning_biomass <- function(
   ### Make RDA ----
   if (make_rda) {
     if (relative) {
-      rel.ssb.min <- calc_kqs(returned_kq = "rel.ssb.min",
-                              final = final)
-      
-     
-      rel.ssb.max <- calc_kqs(returned_kq = "rel.ssb.max",
-                              final = final)
-        
+      rel.ssb.min <- calc_kqs(
+        returned_kq = "rel.ssb.min",
+        final = final
+      )
+
+
+      rel.ssb.max <- calc_kqs(
+        returned_kq = "rel.ssb.max",
+        final = final
+      )
+
       # calculate & export key quantities
       export_kqs(rel.ssb.min, rel.ssb.max)
 

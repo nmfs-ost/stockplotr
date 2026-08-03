@@ -14,8 +14,7 @@ plot_obsvpred(
   xlab = "Year",
   ylab = NULL,
   group = NULL,
-  facet = NULL,
-  ...
+  facet = NULL
 )
 }
 \arguments{
@@ -63,8 +62,6 @@ Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", 
 (e.g. "year", "area", etc.)
 
 Default: NULL}
-
-\item{...}{Inherited arguments from internal functions from ggplot2::geom_xx}
 }
 \value{
 A plot of observed vs. predicted data for a stock assessment report.

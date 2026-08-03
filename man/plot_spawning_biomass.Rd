@@ -46,11 +46,11 @@ Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", 
 
 Default: NULL}
 
-\item{ref_line}{String or named vector. Reference point name (and value if 
-custom). When multiple models are being compared, a reference line for each 
-model will appear, if desired. The following options can be used to customize 
+\item{ref_line}{String or named vector. Reference point name (and value if
+custom). When multiple models are being compared, a reference line for each
+model will appear, if desired. The following options can be used to customize
 the reference line:
-1. all lines are comparing same ref_line = "msy", ref_line = "target", ref_line = "unfished", ect
+1. all lines are comparing same ref_line = "msy", ref_line = "target", ref_line = "unfished", etc
 2. custom input vector - ref_line = c("sable23_msy"=30, "sable25_msy"=40) -- user must indicate which model in label otherwise it will assign in order of dat
 3. input vector of labels - ref_line = c("msy", "target")
 
@@ -147,7 +147,7 @@ plot_spawning_biomass(
 \dontrun{
 plot_spawning_biomass(
   dat = list("2023" = model1, "2025" = model2),
-  ref_line = c("SBF30"=1500,"SBF40"=2300)
+  ref_line = c("SBF30" = 1500, "SBF40" = 2300)
 )
 }
 }

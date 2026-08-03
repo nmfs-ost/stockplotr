@@ -108,7 +108,7 @@ plot_timeseries <- function(
               }
             }
           ),
-          alpha = 0.3 #,
+          alpha = 0.3 # ,
           # show.legend = ifelse(all(is.na(dat$estimate_lower)), FALSE, TRUE)
         ) +
         # }
@@ -200,22 +200,22 @@ plot_timeseries <- function(
   # min, max y axis value
   min_y <- min(dat$estimate, na.rm = TRUE)
   max_y <- max(dat$estimate, na.rm = TRUE)
-  
+
   # if both min and max y values are negative, check if the distance to zero is greater than 50% of the span of the y-axis values. If so, set exp_lims to FALSE to avoid expanding the limits to include zero.
-  if(min_y < 0 & max_y < 0){
+  if (min_y < 0 & max_y < 0) {
     span <- max_y - min_y
     dist_to_zero <- abs(max_y)
-    perc_of_plot <- -(max_y-span)
+    perc_of_plot <- -(max_y - span)
     cli::cli_alert_info("Estimates are negative.")
     cli::cli_alert_info("If estimates were log-transformed, please update the y axis label for accuracy.")
     cli::cli_alert_info("Example: log({ylab})")
-    if(perc_of_plot > 50){
+    if (perc_of_plot > 50) {
       exp_lims <- FALSE
-    } 
+    }
   }
-  
+
   y_limits <- if (exp_lims) ggplot2::expand_limits(y = 0) else NULL
-  
+
   # Put together final plot
   final <- labs + breaks + y_limits +
     ggplot2::scale_y_continuous(
@@ -1019,10 +1019,10 @@ plot_obsvpred <- function(
       x = xlab,
       y = ylab,
       color = if (length(unique(dat$model)) > 1) {
-            glue::glue("Model.{cap_first_letter(group)}")
-          } else {
-            cap_first_letter(group)
-          },
+        glue::glue("Model.{cap_first_letter(group)}")
+      } else {
+        cap_first_letter(group)
+      },
       shape = if (length(unique(dat$model)) > 1) {
         "Model"
       } else {
@@ -1038,7 +1038,7 @@ plot_obsvpred <- function(
 
   # Remove linetype or point when there is no grouping
   if (is.null(group)) {
-    if(length(unique(dat$model)) == 1) {
+    if (length(unique(dat$model)) == 1) {
       labs <- labs + ggplot2::guides(linetype = "none", shape = "none")
     } else {
       labs <- labs + ggplot2::guides(color = "none")
@@ -1053,27 +1053,27 @@ plot_obsvpred <- function(
       minor.ticks = TRUE
     )
   )
-  
+
   exp_lims <- TRUE
   # min, max y axis value
   min_y <- min(dat$estimate, na.rm = TRUE)
   max_y <- max(dat$estimate, na.rm = TRUE)
-  
+
   # if both min and max y values are negative, check if the distance to zero is greater than 50% of the span of the y-axis values. If so, set exp_lims to FALSE to avoid expanding the limits to include zero.
-  if(min_y < 0 & max_y < 0){
+  if (min_y < 0 & max_y < 0) {
     span <- max_y - min_y
     dist_to_zero <- abs(max_y)
-    perc_of_plot <- -(max_y-span)
+    perc_of_plot <- -(max_y - span)
     cli::cli_alert_info("Estimates are negative.")
     cli::cli_alert_info("If estimates were log-transformed, please update the y axis label for accuracy.")
     cli::cli_alert_info("Example: log({ylab})")
-    if(perc_of_plot > 50){
+    if (perc_of_plot > 50) {
       exp_lims <- FALSE
-    } 
+    }
   }
-  
+
   y_limits <- if (exp_lims) ggplot2::expand_limits(y = 0) else NULL
-  
+
 
   # Put together final plot
   final <- labs + breaks + y_limits +
@@ -1094,11 +1094,11 @@ plot_obsvpred <- function(
 #------------------------------------------------------------------------------
 
 add_reference_line <- function(
-    dat,
-    ref_line,
-    label,
-    lbs = FALSE,
-    scale_amount = 1
+  dat,
+  ref_line,
+  label,
+  lbs = FALSE,
+  scale_amount = 1
 ) {
   # Add reference line
   # Conditions for ref line
@@ -1115,7 +1115,11 @@ add_reference_line <- function(
       # find the reference point value
       if (is.null(names(ref_line[i]))) {
         ref_line_x <- calculate_reference_point(
-          dat = if (is.data.frame(dat)) { dat } else { dat[[i]] },
+          dat = if (is.data.frame(dat)) {
+            dat
+          } else {
+            dat[[i]]
+          },
           reference_name = glue::glue("{label}_{ref_line[i]}"),
           lbs = lbs
         ) / scale_amount
@@ -1127,7 +1131,7 @@ add_reference_line <- function(
       } else {
         ref_line_x <- ref_line[i] / scale_amount
       }
-      
+
       if ("unfished" %in% names(ref_line_x)) {
         if (is.data.frame(dat)) {
           sel_dat <- dat
@@ -1136,7 +1140,7 @@ add_reference_line <- function(
         }
         plt_lab <- label
         # find the minimum x axis value from the plot
-        min_year <- sel_dat |> 
+        min_year <- sel_dat |>
           dplyr::filter(grepl(plt_lab, label), year != 1) |>
           dplyr::pull(year) |>
           min(na.rm = TRUE) |>
@@ -1144,16 +1148,18 @@ add_reference_line <- function(
         # add point to plot and add theme
         # plt2 <- plt2 +
         # TODO: set color for each point to match that of the line for the model
-        ref_lines_list <- append(ref_lines_list,
+        ref_lines_list <- append(
+          ref_lines_list,
           ggplot2::geom_point(ggplot2::aes(x = min_year - 1, y = ref_line_x, color = model)) # should I keep -1 or set as first year?
         )
       } else {
         # add apply/purrr/or for loop for reference lines -- not just the first anymore
         # plt2 <- plt2 +
-        ref_lines_list <- append(ref_lines_list,
+        ref_lines_list <- append(
+          ref_lines_list,
           reference_line(
             # conditionally add label name
-            label_name = ifelse(length(names(dat)[i]) == 1, label, names(dat)[i]), #"spawning_biomass",
+            label_name = ifelse(length(names(dat)[i]) == 1, label, names(dat)[i]), # "spawning_biomass",
             ref_line = ref_line_x,
             scale_amount = scale_amount,
             model_name = ifelse(is.data.frame(dat), "1", names(dat)[i])
