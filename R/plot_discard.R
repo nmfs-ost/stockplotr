@@ -110,11 +110,11 @@ plot_discard <- function(
   ### Make RDA ----
   if (make_rda) {
     # Obtain relevant key quantities for captions/alt text
-    mod.fit.discards.min <- min(discards$estimate) |> round(digits = 3)
-    mod.fit.discards.max <- max(discards$estimate) |> round(digits = 3)
+    mod.fit.discards.min <- min(discards$estimate, na.rm = TRUE) |> round(digits = 3)
+    mod.fit.discards.max <- max(discards$estimate, na.rm = TRUE) |> round(digits = 3)
     
-    mod.fit.discards.start.year <- min(discards$year)
-    mod.fit.discards.end.year <- max(discards$year)
+    mod.fit.discards.start.year <- min(discards$year, na.rm = TRUE)
+    mod.fit.discards.end.year <- max(discards$year, na.rm = TRUE)
     
     fleet.or.survey.name <- paste0(unique(discards$fleet), collapse = ", ")
     mod.fit.discards.units <- as.character(unit_label)

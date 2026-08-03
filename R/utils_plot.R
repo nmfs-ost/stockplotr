@@ -159,11 +159,11 @@ plot_timeseries <- function(
   if (length(unique(dat$model)) > 1 & !is.null(group)) {
     labs <- plot + ggplot2::labs(
       x = xlab,
-      y = ylab
-      # color = "Model",
-      # linetype = cap_first_letter(group),
-      # fill = cap_first_letter(group),
-      # shape = cap_first_letter(group)
+      y = ylab,
+      color = "Model",
+      linetype = cap_first_letter(group),
+      fill = cap_first_letter(group),
+      shape = cap_first_letter(group)
     ) +
       ggplot2::theme(legend.title = ggplot2::element_blank())
   } else {
@@ -1016,11 +1016,11 @@ plot_obsvpred <- function(
   if (length(unique(dat$model)) > 1 & !is.null(group)) {
     labs <- plot + ggplot2::labs(
       x = xlab,
-      y = ylab
+      y = ylab,
       # color = "Model",
       # linetype = cap_first_letter(group),
       # fill = cap_first_letter(group),
-      # shape = cap_first_letter(group)
+      shape = "Model"
     ) +
       ggplot2::theme(legend.title = ggplot2::element_blank())
   } else {
@@ -1028,10 +1028,20 @@ plot_obsvpred <- function(
       x = xlab,
       y = ylab,
       color = if (length(unique(dat$model)) > 1) {
-            glue::glue("Model.{group}")
+            glue::glue("Model.{cap_first_letter(group)}")
           } else {
-            group
-          }
+            cap_first_letter(group)
+          },
+      shape = if (length(unique(dat$model)) > 1) {
+        "Model"
+      } else {
+        ""
+      },
+      linetype = if (length(unique(dat$model)) > 1) {
+        "Model"
+      } else {
+        ""
+      }
     )
   }
 
