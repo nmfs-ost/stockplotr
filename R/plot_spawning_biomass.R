@@ -28,9 +28,15 @@
 #' Default: "time"
 #'
 #' Options: "early", "time", "fore" (forecast), or NULL (all data)
-#' @param ref_line String. Reference point name.
+#' @param ref_line String or named vector. Reference point name (and value if 
+#' custom). When multiple models are being compared, a reference line for each 
+#' model will appear, if desired. The following options can be used to customize 
+#' the reference line:
+#' 1. all lines are comparing same ref_line = "msy", ref_line = "target", ref_line = "unfished", etc
+#' 2. custom input vector - ref_line = c("sable23_msy"=30, "sable25_msy"=40) -- user must indicate which model in label otherwise it will assign in order of dat
+#' 3. input vector of labels - ref_line = c("msy", "target")
 #'
-#' Default: "target"
+#' Default: "msy"
 #'
 #' Options: (including, but not limited to) "target", "msy", and "unfished"
 #' If the reference point is not found in the data, set ref_line = c("name" = value).
@@ -103,6 +109,12 @@
 #'   interactive = FALSE,
 #'   module = "TIME_SERIES"
 #' )
+#' \dontrun{
+#' plot_spawning_biomass(
+#'   dat = list("2023" = model1, "2025" = model2),
+#'   ref_line = c("SBF30"=1500,"SBF40"=2300)
+#' )
+#' }
 plot_spawning_biomass <- function(
   dat,
   geom = "line",
@@ -145,12 +157,6 @@ plot_spawning_biomass <- function(
       )
     }
   )
-  # Pull first df if in a list to find reference point
-  if (!is.data.frame(dat)) {
-    rp_dat <- dat[[1]]
-  } else {
-    rp_dat <- dat
-  }
 
   if (relative & scale_amount > 1) {
     cli::cli_alert_warning("Scale amount is not applicable when relative = TRUE. Resetting scale_amount to 1.")
@@ -206,37 +212,32 @@ plot_spawning_biomass <- function(
     ...
   )
   # Add reference line
-  # getting data set - an ifelse statement in the fxn wasn't working
   if (relative) {
     # don't add any reference line here and just add theme for final plot
     final <- plt + theme_noaa()
   } else {
-    if ("unfished" %in% c(names(ref_line), ref_line)) {
-      # find the minimum x axis value from the plot
-      min_year <- min <- ggplot2::ggplot_build(plt)[["data"]][[2]] |>
-        as.data.frame() |>
-        dplyr::pull(x) |>
-        min() |>
-        round(digits = 2)
-      # find the reference point value for unfished
-      ref_point <- calculate_reference_point(
-        dat = rp_dat,
-        reference_name = "spawing_biomass_unfished"
-      ) / scale_amount
-      # add point to plot and add theme
-      final <- plt +
-        ggplot2::geom_point(ggplot2::aes(x = min_year - 1, y = ref_point)) + # should I keep -1 or set as first year?
-        theme_noaa()
-    } else {
-      # add apply/purrr/or for loop for reference lines -- not just the first anymore
-      final <- reference_line(
-        plot = plt,
-        dat = rp_dat,
+    final <- plt + 
+      add_reference_line(
+        dat = dat, 
+        ref_line = ref_line, 
+        label = "spawning_biomass", 
         lbs = lbs,
-        label_name = "spawning_biomass",
-        reference = ref_line,
         scale_amount = scale_amount
-      ) + theme_noaa()
+      ) + 
+      theme_noaa()
+  }
+  
+  if (!is.data.frame(dat)) {
+    if (!is.null(names(ref_line))) {
+      if (any(
+        grepl(
+          glue::glue("^spawning_biomass_{ref_line}"), # ifelse(is.null(names(ref_line)), x, names(ref_line))
+          # TODO: make this check more efficient
+          ifelse(is.data.frame(dat), dat[["label"]], sapply(dat, `[[`, "label"))
+        )
+      )) {
+        final <- final + ggplot2::scale_color_discrete(breaks = names(dat))
+      }
     }
   }
 

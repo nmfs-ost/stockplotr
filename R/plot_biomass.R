@@ -141,36 +141,31 @@ plot_biomass <- function(
     ...
   )
   # Add reference line
-  # getting data set - an ifelse statement in the fxn wasn't working
   if (relative) {
     # don't add any reference line here and just add theme for final plot
     final <- plt + theme_noaa()
   } else {
-    if ("unfished" %in% c(names(ref_line), ref_line)) {
-      # find the minimum x axis value from the plot
-      min_year <- min <- ggplot2::ggplot_build(plt)[["data"]][[2]] |>
-        as.data.frame() |>
-        dplyr::pull(x) |>
-        min() |>
-        round(digits = 2)
-      # find the reference point value for unfished
-      ref_point <- calculate_reference_point(
-        dat = stockplotr::example_data,
-        reference_name = "biomass_unfished"
-      ) / scale_amount
-      # add point to plot and add theme
-      final <- plt +
-        ggplot2::geom_point(ggplot2::aes(x = min_year - 1, y = ref_point)) + # should I keep -1 or set as first year?
-        theme_noaa()
-    } else {
-      final <- reference_line(
-        plot = plt,
-        dat = rp_dat,
-        label_name = "biomass",
-        reference = ref_line,
+    final <- plt +
+      add_reference_line(
+        dat = dat, 
+        ref_line = ref_line, 
+        label = "biomass",
         scale_amount = scale_amount
       ) +
-        theme_noaa()
+      theme_noaa()
+  }
+  
+  if (!is.data.frame(dat)) {
+    if (!is.null(names(ref_line))) {
+      if (any(
+        grepl(
+          glue::glue("^biomass_{ref_line}"),
+          # TODO: make this check more efficient
+          ifelse(is.data.frame(dat), dat[["label"]], sapply(dat, `[[`, "label"))
+        )
+      )) {
+        final <- final + ggplot2::scale_color_discrete(breaks = names(dat))
+      }
     }
   }
 

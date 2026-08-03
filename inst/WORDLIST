@@ -1,4 +1,5 @@
 BAM
+Birthseason
 CPUE
 FIMS
 FIMSdiags
@@ -13,12 +14,12 @@ Preformatted
 Rda
 Rmarkdown
 Rmd
+Subseason
 aa
 alttext
 asar
 bam
 birthseas
-birthseason
 cha
 cmd
 conjuction
@@ -29,6 +30,7 @@ dat
 dataframe's
 diagonostic
 dplyr
+ect
 facetting
 fims
 flextable

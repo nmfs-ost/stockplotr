@@ -71,34 +71,19 @@ plot_timeseries <- function(
 ) {
   # Start plot
   plot <- ggplot2::ggplot()
-  # make into new geom?
-  # more defaults and fxnality for ggplot
 
   # Add geom
   plot <- switch(geom,
     "point" = {
-      # point_size = ifelse(
-      #   is.null(list(...)$size),
-      #   2.0,
-      #   list(...)$size
-      # )
       plot +
         ggplot2::geom_point(
           data = dat,
           ggplot2::aes(
             .data[[x]],
             .data[[y]],
-            # TODO: add more groupings
-            # shape = ifelse(any(grepl("shape", names(group))), .data[[group[[grep("shape", names(group))]]]], 1),
-            # color = ifelse(any(grepl("color", names(group))), .data[[group[[grep("color", names(group))]]]], "black")
-            color = if (length(unique(.data[["model"]])) > 1) {
-              interaction(model, group_var)
-            } else {
-              group_var
-            },
+            color = model,
             shape = group_var
           ),
-          # size = point_size,
           ...
         )
     },
@@ -123,7 +108,8 @@ plot_timeseries <- function(
               }
             }
           ),
-          alpha = 0.3
+          alpha = 0.3 #,
+          # show.legend = ifelse(all(is.na(dat$estimate_lower)), FALSE, TRUE)
         ) +
         # }
         ggplot2::geom_line(
@@ -131,8 +117,6 @@ plot_timeseries <- function(
           ggplot2::aes(
             x = .data[[x]],
             y = .data[[y]],
-            # linetype = group_var,
-            # linetype = ifelse(!is.null(group), group_var, "solid"),
             color = {
               if (length(unique(.data[["model"]])) > 1) {
                 interaction(model, group_var)
@@ -141,7 +125,7 @@ plot_timeseries <- function(
               }
             }
           ),
-          # linewidth = 1.0,
+          # show.legend = FALSE, #ifelse(all(is.na(dat$estimate_lower)), TRUE, FALSE),
           ...
         )
     },
@@ -152,11 +136,7 @@ plot_timeseries <- function(
           ggplot2::aes(
             x = .data[[x]],
             y = .data[[y]],
-            fill = if (length(unique(.data[["model"]])) > 1) {
-              interaction(model, group_var)
-            } else {
-              group_var
-            }
+            fill = interaction(model, group_var) # model
           ),
           position = "identity",
           alpha = 0.5,
@@ -205,15 +185,7 @@ plot_timeseries <- function(
       # return plot if option beyond line and point for now
       labs
     )
-  } # else if (length(unique(dat$model)) == 1) {
-  #   labs <- switch(geom,
-  #     "line" = labs + ggplot2::guides(color = "none"),
-  #     "point" = labs + ggplot2::guides(color = "none"),
-  #     "area" = labs + ggplot2::guides(fill = "none"),
-  #     # return plot if option beyond line and point for now
-  #     labs
-  #   )
-  # }
+  }
 
   # Calc axis breaks
   x_n_breaks <- axis_breaks(dat[[x]])
@@ -559,11 +531,10 @@ cohort_line <- function(
 #' Preformatted reference line
 #'
 #' @inheritParams plot_spawning_biomass
-#' @param plot Plot object. A ggplot2 object where the reference line will be added
-#' @param dat Data frame. Standard data frame where reference point should be extracted
 #' @param label_name String. Name of the quantity that users want to
 #' extract the reference point from
-#' @param reference String of the reference point
+#' @param ref_line String. Reference point(s)
+#' @param model_name String. Name of the model that will be present in the legend.
 #'
 #' Options: Including, but not limited to: "msy", "unfished", "target"
 #'
@@ -576,48 +547,39 @@ cohort_line <- function(
 #' reference_line(dat, "biomass", "msy")
 #' }
 reference_line <- function(
-  plot,
-  dat,
   label_name,
-  reference,
+  ref_line,
   scale_amount = 1,
-  lbs = FALSE
+  model_name = "1"
 ) {
-  if (!is.null(names(reference))) {
-    ref_line_val <- reference[[1]]
-    reference <- names(reference)
-  } else {
-    # calculate reference point value
-    ref_line_val <- calculate_reference_point(
-      dat = dat,
-      reference_name = glue::glue("{label_name}_{reference}"),
-      lbs = lbs
-    )
-  }
+  # Extract reference line values and labels
+  ref_line_val <- ref_line[[1]]
+  reference <- names(ref_line)
 
-  # Add geom for ref line
-  if (is.null(ref_line_val)) {
-    plot
-  } else {
-    plot +
-      ggplot2::geom_hline(
-        # ggplot2::aes(
+  list(
+    # Add geom for ref line
+    ggplot2::geom_hline(
+      data = data.frame(yintercept = ref_line_val, model = model_name, group_var = "1"),
+      ggplot2::aes(
         yintercept = ref_line_val / scale_amount,
-        # ),
-        color = "black",
-        linetype = "dashed"
-      ) +
-      ggplot2::annotate(
-        geom = "text",
-        x = as.numeric(max(dat$year[dat$era == "time"], na.rm = TRUE)),
-        y = ref_line_val / scale_amount,
-        label = glue::glue("{stringr::str_replace_all(label_name, '_', '~')}[{reference}]"), # list(bquote(label_name[.(reference)])),
-        parse = TRUE,
-        hjust = 1,
-        vjust = 0,
-        size = 5 # this is not foolproof
-      )
-  }
+        color = interaction(model, group_var) # model
+      ),
+      linetype = "dashed",
+      show.legend = FALSE
+    ),
+    # add line annotation
+    ggplot2::annotate(
+      geom = "text",
+      # TODO: need to change this for general process
+      x = -Inf,
+      y = ref_line_val / scale_amount,
+      label = glue::glue("{reference}"), # glue::glue("{stringr::str_replace_all(label_name, '_', '~')}[{reference}]"), # list(bquote(label_name[.(reference)])),
+      parse = TRUE,
+      hjust = -0.05, # slight offset so text doesn't hit border
+      vjust = -0.5 # , #slightly above line
+      # size = 5 # this is not foolproof
+    )
+  )
 }
 
 #------------------------------------------------------------------------------
@@ -1127,4 +1089,78 @@ plot_obsvpred <- function(
     final <- final + ggplot2::facet_wrap(facet_formula)
   }
   final
+}
+
+#------------------------------------------------------------------------------
+
+add_reference_line <- function(
+    dat,
+    ref_line,
+    label,
+    lbs = FALSE,
+    scale_amount = 1
+) {
+  # Add reference line
+  # Conditions for ref line
+  # 1. all are comparing same value = msy, target, unfished...
+  # 2. custom input vector = c("sable23_msy"=30, "sable25_msy"=40) -- user must indicate which model in label otherwise it will assign in order of dat
+  # 3. input vector of labels = c("msy", "target")
+  # getting data set - an ifelse statement in the fxn wasn't working
+  ref_lines_list <- list()
+  if (!is.null(ref_line)) {
+    # Check if length of ref_line = dat -- replicate value if not
+    if (!is.data.frame(dat) & length(ref_line) != length(dat)) ref_line <- rep(ref_line, length(dat))
+    # Put into for loop and add lines sequentially to plt
+    for (i in 1:length(ref_line)) {
+      # find the reference point value
+      if (is.null(names(ref_line[i]))) {
+        ref_line_x <- calculate_reference_point(
+          dat = if (is.data.frame(dat)) { dat } else { dat[[i]] },
+          reference_name = glue::glue("{label}_{ref_line[i]}"),
+          lbs = lbs
+        ) / scale_amount
+        if (length(ref_line_x) == 0 || is.na(ref_line_x)) {
+          cli::cli_alert_warning("{label}_{ref_line[i]} not found for {ifelse(is.data.frame(dat), 'data', names(dat[i]))}")
+          next
+        }
+        ref_line_x <- stats::setNames(ref_line_x, ref_line[i])
+      } else {
+        ref_line_x <- ref_line[i] / scale_amount
+      }
+      
+      if ("unfished" %in% names(ref_line_x)) {
+        if (is.data.frame(dat)) {
+          sel_dat <- dat
+        } else {
+          sel_dat <- dat[[i]]
+        }
+        plt_lab <- label
+        # find the minimum x axis value from the plot
+        min_year <- sel_dat |> 
+          dplyr::filter(grepl(plt_lab, label), year != 1) |>
+          dplyr::pull(year) |>
+          min(na.rm = TRUE) |>
+          round(digits = 2)
+        # add point to plot and add theme
+        # plt2 <- plt2 +
+        # TODO: set color for each point to match that of the line for the model
+        ref_lines_list <- append(ref_lines_list,
+          ggplot2::geom_point(ggplot2::aes(x = min_year - 1, y = ref_line_x, color = model)) # should I keep -1 or set as first year?
+        )
+      } else {
+        # add apply/purrr/or for loop for reference lines -- not just the first anymore
+        # plt2 <- plt2 +
+        ref_lines_list <- append(ref_lines_list,
+          reference_line(
+            # conditionally add label name
+            label_name = ifelse(length(names(dat)[i]) == 1, label, names(dat)[i]), #"spawning_biomass",
+            ref_line = ref_line_x,
+            scale_amount = scale_amount,
+            model_name = ifelse(is.data.frame(dat), "1", names(dat)[i])
+          )
+        )
+      }
+    } # close ref_line for loop
+  } # close if ref_line NULL
+  ref_lines_list
 }
