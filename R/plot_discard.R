@@ -107,6 +107,8 @@ plot_discard <- function(
     )
   }
   
+  final <- plot + theme_noaa()
+  
   ### Make RDA ----
   if (make_rda) {
     # Obtain relevant key quantities for captions/alt text
@@ -140,7 +142,7 @@ plot_discard <- function(
     )
     
     create_rda(
-      object = plt,
+      object = final,
       topic_label = "mod.fit.discards",
       fig_or_table = "figure",
       dat = discards,
@@ -150,5 +152,5 @@ plot_discard <- function(
     )
   }
   # Output final plot
-  plt + theme_noaa()
+  final
 }
