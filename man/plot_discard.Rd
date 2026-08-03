@@ -98,8 +98,8 @@ use them in groupings and/or facetting. @seealso [process_data()].
 }
 \examples{
 plot_discard(
-  dat = example_data
-  
+  dat = stockplotr:::example_data,
+  module = "DISCARD_OUTPUT"
 )
 }
 \seealso{

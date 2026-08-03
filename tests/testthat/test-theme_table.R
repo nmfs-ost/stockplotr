@@ -1,5 +1,4 @@
 test_that("theme_table applies NOAA formatting correctly", {
-
   # Test with a gt table object
   gt_obj <- gt::gt(head(cars))
   result_gt <- theme_table(gt_obj)
