@@ -21,7 +21,7 @@
 #'
 #' @examples
 #' plot_discard(
-#'   dat = example_data,
+#'   dat = stockplotr:::example_data,
 #'   module = "DISCARD_OUTPUT"
 #' )
 plot_discard <- function(
