@@ -226,6 +226,10 @@ plot_spawning_biomass <- function(
       ) + 
       theme_noaa()
   }
+  
+  if (!is.data.frame(dat)) {
+    final <- final + ggplot2::scale_color_discrete(breaks = names(dat))
+  }
 
   ### Make RDA ----
   if (make_rda) {

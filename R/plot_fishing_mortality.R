@@ -84,6 +84,10 @@ plot_fishing_mortality <- function(
         label = "fishing_mortality"
       ) +
       theme_noaa()
+  
+  if (!is.data.frame(dat)) {
+    final <- final + ggplot2::scale_color_discrete(breaks = names(dat))
+  }
 
   ### Make RDA ----
   if (make_rda) {
