@@ -1119,7 +1119,7 @@ add_reference_line <- function(
           reference_name = glue::glue("{label}_{ref_line[i]}"),
           lbs = lbs
         ) / scale_amount
-        if (length(ref_line_x) == 0) {
+        if (length(ref_line_x) == 0 || is.na(ref_line_x)) {
           cli::cli_alert_warning("{label}_{ref_line[i]} not found for {ifelse(is.data.frame(dat), 'data', names(dat[i]))}")
           next
         }
