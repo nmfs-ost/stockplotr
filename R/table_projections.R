@@ -28,8 +28,6 @@ table_projections <- function(
     make_rda = FALSE,
     tables_dir = getwd()
     ) {
-  # TODO: fix issue where F is being rounded to 0 no matter the number of digits
-  
   # check if catch in data else landings
   catch_lab <- ifelse(
     any(grepl("catch$", dat$label)),
@@ -54,7 +52,7 @@ table_projections <- function(
         scale_amount = 1,
         interactive = interactive
       ) |>
-        dplyr::mutate(estimate = round(as.numeric(estimate), digits = 0)) |>
+        dplyr::mutate(estimate = ifelse(x != "fishing_mortality", round(as.numeric(estimate), digits = 0), round(as.numeric(estimate), digits = 4))) |>
         dplyr::mutate(uncertainty = round(as.numeric(uncertainty), digits = 2))
       uncertainty_label <- ifelse(
         is.na(unique(filtered_data$uncertainty_label)),
