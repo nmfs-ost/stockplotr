@@ -76,7 +76,6 @@ plot_landings <- function(
     dat = prepared_data,
     group = group,
     facet = facet,
-    method = "sum",
     lbs = lbs
   )
   prepared_data <- processed_data[[1]]

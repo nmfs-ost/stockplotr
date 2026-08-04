@@ -143,7 +143,6 @@ SS3_extract_df <- function(dat, label) {
 
 SS3_extract_fleet <- function(dat, vers) {
   # Determine where fleet names are located base on model version
-  # TODO: test other SS3 models and/or write converter based on r4ss::ss_output
   vers <- as.numeric(stringr::str_replace(vers, "3.30.", ""))
   if (vers < 20.00) {
     i <- 1
