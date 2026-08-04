@@ -207,12 +207,12 @@ merge_error <- function(
     for (l_col in label_cols) {
       # Identify the error column that contains l_col in the name
       # Extract the fleet suffix (e.g., "cl") by grabbing whatever is after the dash
-      index_suffix <- stringr::str_extract(
-        tolower(l_col),
-        paste(
-          stringr::str_escape(unlist(id_col_vals, use.names = FALSE)),
-          collapse = "|")
-        )
+      # index_suffix <- stringr::str_extract(
+      #   tolower(l_col),
+      #   paste(
+      #     stringr::str_escape(unlist(id_col_vals, use.names = FALSE)),
+      #     collapse = "|")
+      #   )
       
       # Identify which uncert col aligns with l_col
       uncert_col <- uncert_cols[grep(l_col, uncert_cols)]
@@ -237,7 +237,10 @@ merge_error <- function(
     header_labs2 <- header_labs2 |> 
       # remove double parentheses if present
       stringr::str_replace_all("\\(\\(", "(") |> 
-      stringr::str_replace_all("\\)\\)", ")")
+      stringr::str_replace_all("\\)\\)", ")") |>
+      stringr::str_replace_all("\\( \\(", "(") |>
+      stringr::str_replace_all("\\) \\)", ")")
+      
     colnames(tab_dat) <- c(header_labs[1], header_labs2)
     
     return(tab_dat)
