@@ -28,9 +28,7 @@ table_projections <- function(
     make_rda = FALSE,
     tables_dir = getwd()
     ) {
-  # TODO: fix issue with parantheses around units
   # TODO: fix issue where F is being rounded to 0 no matter the number of digits
-  # TODO: Figure out issue with duplicated catch in converter from Rceattle
   
   # check if catch in data else landings
   catch_lab <- ifelse(
