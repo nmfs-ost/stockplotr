@@ -89,7 +89,7 @@ table_projections <- function(
   
   final_table <- add_theme(combine_data)
   
-  # export figure to rda if argument = T
+  # export table to rda if argument = T
   if (make_rda == TRUE) {
     # No key quantities for captions/alt text since only values
     # are units for catch, SB, and F, which are specified for
@@ -108,15 +108,15 @@ table_projections <- function(
     }
      
       create_rda(
-        object = final_table$label,
+        object = final_table,
         # get name of function and remove "table_" from it
-        topic_label = gsub("table_", "", tail(as.character(sys.call()[[1]]), n = 1)),
+        topic_label = "projection.ts",
         fig_or_table = "table",
         dat = dat,
         dir = tables_dir,
         scale_amount = 1,
         unit_label = unit_label,
-        table_df = final_table
+        table_df = final_table$`_data`
       )
     }
 
