@@ -45,13 +45,13 @@ plot_selectivity <- function(
   figures_dir = getwd(),
   ...
 ) {
-  
+
   #TODO: update alt text/caption
   #TODO: revamp this to work for age as type, and for different blocks and
   #other complexities
   
   label_name <- ifelse(type == "length",
-         "length_selectivity",
+         "selectivity_length",
          "selectivity")
   
   # Extract selectivity
@@ -81,28 +81,16 @@ plot_selectivity <- function(
   groups <- processed_data[[2]]
   facets <- processed_data[[3]]
   
-  if ("age" %in% groups){
-    group <- stringr::str_remove(group, "age")
-    
+  if ("age" %in% groups | groups == "length_bins"){
+    # groups <- stringr::str_remove(groups, "age")
+    groups <- facets[1]
+    facets <- facets[-1]
     prepared_data <- prepared_data |>
-      dplyr::mutate(age = as.numeric(age))
+      dplyr::mutate(age = as.numeric(age),
+                    group_var = .data[[groups]])
     if (groups == ""){
       groups <- NULL
     }
-  # replace group with first element of facet if 
-  # group = age or length_bins
-  if (any(grepl("age|length_bins", facet))){
-    facet <- facet[!grepl("age|length_bins", facet)]
-  }
-  if (group == "age" | group == "length_bins") {
-    group <- facet[1]
-    facet <- facet[-1]
-    prepared_data <- prepared_data |>
-      dplyr::mutate(group_var = as.character(.data[[group]]))
-  }
-  
-  if ("age" %in% facet | "length_bins" %in% facet) {
-    facet <- facet[!facet %in% c("age", "length_bins")]
   }
   
   # Check if there is >1 label
@@ -115,20 +103,17 @@ plot_selectivity <- function(
   # Plot
   # TODO: left off here. Need to show fleets, models, other groupings
   final <- plot_timeseries(
-    dat = prepared_data,
+    dat = prepared_data |> dplyr::filter(year == max(prepared_data$year, na.rm = TRUE)),
     x = ifelse(type == "length",
                "year",
                "age"),
     y = "estimate",
-   # color = "group_var",
     geom = "line",
-    xlab = ifelse(age_type,
-                  "Age",
-                  paste0("Length Bin (", unit_label, ")")),
+    xlab = "Age",
     ylab = "Selectivity",
-    group = group,
-    facet = facet,
-    ...
+    group = groups,
+    facet = facets#,
+    #...
   ) +
     theme_noaa()
 final
