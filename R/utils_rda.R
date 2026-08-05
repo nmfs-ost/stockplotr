@@ -88,7 +88,7 @@ calc_kqs <- function(returned_kq,
       group = NULL,
       facet = NULL,
       era = "time",
-      module = "TIME_SERIES",
+      module = ifelse("t.series" %in% dat$module_name, "t.series", "TIME_SERIES"),
       scale_amount = 1,
       interactive = FALSE
     )  |>
@@ -107,9 +107,14 @@ calc_kqs <- function(returned_kq,
       dplyr::select(uncertainty) |> 
       as.numeric()
     
-    B.terminal.min <- round((B.terminal.est - B.terminal.uncert), digits = 3)
-    
-    B.terminal.max <- round((B.terminal.est + B.terminal.uncert), digits = 3)
+    if (is.na(B.terminal.uncert)){
+      B.terminal.uncert <- NA
+      B.terminal.min <- NA
+      B.terminal.max <- NA
+    } else {
+      B.terminal.min <- round((B.terminal.est - B.terminal.uncert), digits = 3)
+      B.terminal.max <- round((B.terminal.est + B.terminal.uncert), digits = 3)
+    }
     
     if (returned_kq == "B.terminal.min") {
       return(B.terminal.min)
