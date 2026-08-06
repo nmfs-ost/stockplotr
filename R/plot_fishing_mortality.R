@@ -116,9 +116,10 @@ plot_fishing_mortality <- function(
     F.ref.pt <- as.character(ref_line)
     F.start.year <- min(prepared_data$year)
     F.end.year <- max(prepared_data$year)
-    F.terminal.year <- calc_kqs(
-      returned_kq = "F.terminal.year",
-      dat = dat
+
+    F.terminal.year <- calc_kqs(returned_kq = "F.terminal.year",
+      dat = dat,
+      module = selected_module
     )
     
     F.target <- calc_kqs(returned_kq = "F.target",
@@ -126,11 +127,14 @@ plot_fishing_mortality <- function(
     F.limit <- calc_kqs(returned_kq = "F.limit",
                         dat = dat)
     F.terminal.est <- calc_kqs(returned_kq = "F.terminal.est",
-                        dat = dat)
+                        dat = dat,
+                        module = selected_module)
     F.terminal.min <- calc_kqs(returned_kq = "F.terminal.min",
-                               dat = dat)
+                               dat = dat,
+                               module = selected_module)
     F.terminal.max <- calc_kqs(returned_kq = "F.terminal.max",
-                               dat = dat)
+                               dat = dat,
+                               module = selected_module)
     F.MSY.terminal <- calc_kqs(returned_kq = "F.MSY.terminal",
                                dat = dat)
     F.MSY.terminal.max <- calc_kqs(returned_kq = "F.MSY.terminal.max",

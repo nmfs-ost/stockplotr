@@ -242,7 +242,7 @@ calc_kqs <- function(returned_kq,
       group = NULL,
       facet = NULL,
       era = NULL,
-      module = "DERIVED_QUANTITIES",
+      module = selected_module,
       scale_amount = 1,
       interactive = FALSE
     ) |>
@@ -253,19 +253,25 @@ calc_kqs <- function(returned_kq,
       dplyr::pull(year) |>
       unique()
     
-    F.terminal.est <- F.terminal.df |>
+    if (length(unique(F.terminal.df$fleet)) > 1) {
+      F.terminal.est <- NA
+      F.terminal.uncert <- NA
+      F.terminal.min <- NA
+      F.terminal.max <- NA
+    } else {
+      F.terminal.est <- F.terminal.df |>
       dplyr::pull(estimate) |>
-      unique()
-    
-    F.terminal.uncert <- F.terminal.df |>
-      dplyr::select(uncertainty) |> 
-      as.numeric()
-    
-    F.terminal.min <- round((F.terminal.est - F.terminal.uncert), digits = 3)
-    
-    F.terminal.max <- round((F.terminal.est + F.terminal.uncert), digits = 3)
-    
-    F.terminal.est <- round(F.terminal.est, digits = 3)
+      unique() |>
+        as.numeric() |>
+        round(digits = 3)
+      F.terminal.uncert <- F.terminal.df |>
+        dplyr::select(uncertainty) |> 
+        as.numeric()
+      
+      F.terminal.min <- round((F.terminal.est - F.terminal.uncert), digits = 3)
+      F.terminal.max <- round((F.terminal.est + F.terminal.uncert), digits = 3)
+      F.terminal.est <- round(F.terminal.est, digits = 3)
+    }
     
     if (returned_kq == "F.terminal.min") {
       return(F.terminal.min)
@@ -278,6 +284,11 @@ calc_kqs <- function(returned_kq,
   }
   
   if (returned_kq %in% c("F.MSY.terminal", "F.MSY.terminal.min", "F.MSY.terminal.max")) {
+    if (!"f_msy" %in% unique(dat$label)) {
+      F.msy.est <- NA
+      F.msy.terminal.min <- NA
+      F.msy.terminal.max <- NA
+    } else {
     F.msy.terminal.df <- dat |>
       dplyr::filter(label == "f_msy")
     
@@ -292,7 +303,7 @@ calc_kqs <- function(returned_kq,
     F.msy.terminal.min <- round((F.msy.est - F.msy.uncert), digits = 3)
     F.msy.terminal.max <- round((F.msy.est + F.msy.uncert), digits = 3)
     F.msy.est <- round(F.msy.est, digits = 3)
-    
+    }
     if (returned_kq == "F.MSY.terminal") {
       return(F.msy.est)
     } else if (returned_kq == "F.MSY.terminal.min"){
