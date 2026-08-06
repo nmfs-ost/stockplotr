@@ -7,8 +7,6 @@
 table_projections(
   dat,
   unit_label = c(catch = "mt", spawning_biomass = "mt", fishing_mortality = ""),
-  uncertainty_label = c(catch = "stddev", spawning_biomass = "stddev", fishing_mortality
-    = "stddev"),
   interactive = TRUE,
   module = NULL,
   make_rda = FALSE,
@@ -16,7 +14,7 @@ table_projections(
 )
 }
 \arguments{
-\item{dat}{A tibble or named list of tibbles (input as `list()`)
+\item{dat}{Data frame or list. A tibble or named list of tibbles (input as `list()`)
 returned from \link[stockplotr]{convert_output}.
 
 If inputting a list of tibbles, the first tibble's reference point defined
@@ -27,17 +25,11 @@ in `ref_line` is used to plot a reference line or calculate relative spawning bi
 Default: c("catch" = "mt", "spawning_biomass" = "mt", 
 "fishing_mortality" = "")}
 
-\item{uncertainty_label}{Character vector. Abbreviated uncertainty label for
-each quantity
-
-Default: c("catch" = "stddev", "spawning_biomass" = "stddev",
-"fishing_mortality" = "stddev")}
-
-\item{interactive}{A logical value indicating if the environment is interactive.
+\item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
 Default: `FALSE`}
 
-\item{module}{(Optional) A string indicating the module_name found in `dat`.
+\item{module}{Character vector. (Optional) Module name found in `dat`.
 If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
@@ -45,13 +37,13 @@ Default: NULL
 If the interactive and >1 module_name is found, user will select the
 module_name in the console. @seealso [filter_data()]}
 
-\item{make_rda}{A logical value indicating whether to save the object and
+\item{make_rda}{Logical. TRUE/FALSE; indicate whether to save the object and
 make an automated caption and alternative text in the form of an `rda` object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
 
 Default: `FALSE`.}
 
-\item{tables_dir}{The location of the folder containing the generated table
+\item{tables_dir}{Path. The location of the folder containing the generated table
 rda files ("tables") that will be created if the argument `make_rda` = TRUE.
 
 Default: the working directory (`getwd()`)}
