@@ -212,12 +212,15 @@ calc_kqs <- function(returned_kq,
   }
 
   if (returned_kq == "F.target") {
-    return(
-      dat |>
-        dplyr::filter(grepl("f_target", label) | grepl("f_msy", label) | (grepl("fishing_mortality_msy", label) & is.na(year))) |>
+
+    F.target <- dat |>
+        dplyr::filter(grepl('f_target', label) | grepl('f_msy', label) | (grepl('fishing_mortality_msy', label) & is.na(year))) |>
         dplyr::pull(estimate) |>
         round(digits = 3)
-    )
+    if (length(F.target > 1)){
+      F.target <- NA
+    }
+    return(F.target)
   }
 
   if (returned_kq == "F.limit") {
