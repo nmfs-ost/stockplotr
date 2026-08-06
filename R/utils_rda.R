@@ -24,7 +24,9 @@ calc_kqs <- function(returned_kq,
                      dat = NULL,
                      final = NULL,
                      relative = NULL,
-                     ...) {
+                     module = NULL,
+                     ...){
+  
   # plot_stock_recruitment()-----
   if (returned_kq == "sr.age.min") {
     return(
@@ -88,24 +90,37 @@ calc_kqs <- function(returned_kq,
       group = NULL,
       facet = NULL,
       era = "time",
-      module = ifelse("t.series" %in% dat$module_name, "t.series", "TIME_SERIES"),
+      module = selected_module,
       scale_amount = 1,
       interactive = FALSE
     )  |>
       dplyr::filter(year == max(year))
+    
+    B.terminal.year <- B.terminal.df |>
+      dplyr::pull(year) |>
+      unique()   
     
     B.terminal.est <- B.terminal.df |>
       dplyr::pull(estimate) |>
       unique() |>
       round(digits = 3)
     
-    B.terminal.year <- B.terminal.df |>
-      dplyr::pull(year) |>
-      unique()
-    
-    B.terminal.uncert <- B.terminal.df |>
+    if (length(B.terminal.est) > 1){
+      B.terminal.est <- B.terminal.df |>
+        dplyr::filter(is.na(age)) |>
+        dplyr::pull(estimate) |>
+        unique() |>
+        round(digits = 3)
+      
+      B.terminal.uncert <- B.terminal.df |>
+      dplyr::filter(is.na(age)) |>
       dplyr::select(uncertainty) |> 
       as.numeric()
+    } else {
+      B.terminal.uncert <- B.terminal.df |>
+        dplyr::select(uncertainty) |> 
+        as.numeric()  
+      }
     
     if (is.na(B.terminal.uncert)){
       B.terminal.uncert <- NA
@@ -286,6 +301,7 @@ calc_kqs <- function(returned_kq,
       return(F.msy.terminal.max)
     }
   }
+  rm(selected_module)
 }
 
 # TODO: update key quantities functions to work with a specified 'dir' instead of default 'getwd()'?

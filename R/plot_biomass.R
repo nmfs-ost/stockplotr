@@ -209,16 +209,20 @@ plot_biomass <- function(
                            prepared_data = prepared_data)
     B.terminal.year <- calc_kqs(returned_kq = "B.terminal.year",
                                 dat = dat,
-                                relative = relative)
+                                relative = relative,
+                                module = selected_module)
     B.terminal.est <- calc_kqs(returned_kq = "B.terminal.est",
                                dat = dat,
-                               relative = relative)
+                               relative = relative,
+                               module = selected_module)
     B.terminal.min <- calc_kqs(returned_kq = "B.terminal.min",
                                dat = dat,
-                               relative = relative)
+                               relative = relative,
+                               module = selected_module)
     B.terminal.max <- calc_kqs(returned_kq = "B.terminal.max",
                                dat = dat,
-                               relative = relative)
+                               relative = relative,
+                               module = selected_module)
 
     # SS3, FIMS
     if ("spawning_biomass_msy" %in% dat$label) {

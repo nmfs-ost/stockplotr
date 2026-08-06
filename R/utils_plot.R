@@ -761,6 +761,8 @@ filter_data <- function(
         dplyr::filter(
           module_name %in% module
         )
+      # export module to environment for use with key quantity calc
+      selected_module <<- module
     } else {
       cli::cli_alert_warning("Multiple module names found in data. \n")
       options <- c()
@@ -775,16 +777,20 @@ filter_data <- function(
             multiple = TRUE,
             title = "Select one or more of the following module names"
           )
-          selected_module <- intersect(
+          # use <<- to export module to environment for use with key quantity calc
+          selected_module <<- intersect(
             unique(plot_data$module_name),
             question1
           )
+          
         } else {
-          selected_module <- unique(plot_data$module_name)[1]
+          # use <<- to export module to environment for use with key quantity calc
+          selected_module <<- unique(plot_data$module_name)[1]
           cli::cli_alert_info("Selection bypassed. Filtering by {selected_module}.")
         }
       } else {
-        selected_module <- unique(plot_data$module_name)[1]
+        # use <<- to export module to environment for use with key quantity calc
+        selected_module <<- unique(plot_data$module_name)[1]
         cli::cli_alert_info(glue::glue("Environment not interactive. Selecting {selected_module}."))
       }
       if (length(selected_module) > 0) {
