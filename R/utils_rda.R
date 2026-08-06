@@ -117,6 +117,9 @@ calc_kqs <- function(returned_kq,
       dplyr::filter(is.na(age)) |>
       dplyr::select(uncertainty) |> 
       as.numeric()
+      if (length(B.terminal.est) == 0){
+        B.terminal.est <- NA
+      }
     } else {
       B.terminal.uncert <- B.terminal.df |>
         dplyr::select(uncertainty) |> 
