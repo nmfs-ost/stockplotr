@@ -10,6 +10,7 @@ calc_kqs(
   dat = NULL,
   final = NULL,
   relative = NULL,
+  module = NULL,
   ...
 )
 }
@@ -23,6 +24,8 @@ calc_kqs(
 \item{final}{ggplot2 object. The final figure.}
 
 \item{relative}{Logical. TRUE/FALSE; specify whether to set y-axis values relative to the ref_line value.}
+
+\item{module}{String. Module name found in `dat`.}
 
 \item{...}{Additional arguments to be passed to the function.}
 }

@@ -9,6 +9,7 @@
 #' @param dat Data frame. The original data object.
 #' @param final ggplot2 object. The final figure.
 #' @param relative Logical. TRUE/FALSE; specify whether to set y-axis values relative to the ref_line value.
+#' @param module String. Module name found in `dat`. 
 #' @param ... Additional arguments to be passed to the function.
 #'
 #' @return The value of the specified key quantity.
