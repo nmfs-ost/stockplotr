@@ -53,8 +53,7 @@ plot_recruitment_deviations <- function(
   processed_data <- process_data(
     dat = filter_data,
     group = "none",
-    facet = NULL,
-    method = "mean"
+    facet = NULL
   )
   filter_data <- processed_data[[1]]
   group <- processed_data[[2]]
