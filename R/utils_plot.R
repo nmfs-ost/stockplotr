@@ -232,7 +232,14 @@ plot_timeseries <- function(
     facet <- paste("~", paste(facet, collapse = " + "))
     facet_formula <- stats::reformulate(facet)
 
-    final <- final + ggplot2::facet_wrap(facet_formula)
+    final <- final + ggplot2::facet_wrap(facet_formula, labeller = function(labels) {
+      # Clean column names (e.g., "growth_pattern" -> "Growth Pattern")
+      names(labels) <- tools::toTitleCase(gsub("_", " ", names(labels)))
+      
+      # Combine into "Variable: Value" format
+      lapply(names(labels), function(var) paste0(var, ": ", labels[[var]]))
+    }
+    )
   }
   final
 }
@@ -434,7 +441,13 @@ plot_aa <- function(
     facet <- paste("~ ", paste(facet, collapse = " + "))
     facet_formula <- stats::reformulate(facet)
     # facet_formula <- stats::reformulate(facet)
-    plot <- plot + ggplot2::facet_wrap(facet_formula)
+    plot <- plot + ggplot2::facet_wrap(facet_formula, labeller = function(labels) {
+      # Clean column names (e.g., "growth_pattern" -> "Growth Pattern")
+      names(labels) <- tools::toTitleCase(gsub("_", " ", names(labels)))
+      # Combine into "Variable: Value" format
+      lapply(names(labels), function(var) paste0(var, ": ", labels[[var]]))
+    }
+    )
   }
   plot
 }
@@ -1086,8 +1099,16 @@ plot_obsvpred <- function(
     facet <- paste("~", paste(facet, collapse = " + "))
     facet_formula <- stats::reformulate(facet)
 
-    final <- final + ggplot2::facet_wrap(facet_formula)
-  }
+    final <- final + ggplot2::facet_wrap(facet_formula,
+                                         labeller = function(labels) {
+      # Clean column names (e.g., "growth_pattern" -> "Growth Pattern")
+      names(labels) <- tools::toTitleCase(gsub("_", " ", names(labels)))
+
+      # Combine into "Variable: Value" format
+      lapply(names(labels), function(var) paste0(var, ": ", labels[[var]]))
+    }
+  )
+}
   final
 }
 
