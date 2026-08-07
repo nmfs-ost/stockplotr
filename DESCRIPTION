@@ -50,8 +50,7 @@ Imports:
     tibble,
     tidyr,
     tidyselect,
-    utils,
-    withr
+    utils
 Suggests:
     flextable,
     here,
