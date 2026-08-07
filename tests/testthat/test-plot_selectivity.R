@@ -1,7 +1,8 @@
 test_that("plot_selectivity generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_selectivity(stockplotr::example_data
+    plot_selectivity(
+      stockplotr::example_data
     )
   )
 
@@ -25,7 +26,6 @@ test_that("plot_selectivity generates plots without errors", {
       stockplotr::example_data |>
         dplyr::filter(year == 2008),
       unit_label = "mm",
-      era = NULL,
       group = NULL,
       facet = NULL,
       interactive = TRUE,
@@ -47,8 +47,8 @@ test_that("plot_selectivity generates plots without errors", {
 test_that("rda file made when indicated", {
   # export rda
   plot_selectivity(
-    stockplotr::example_data |>
-      dplyr::filter(year == 2021),
+    stockplotr::example_data,
+    module = "AGE_SELEX",
     figures_dir = getwd(),
     make_rda = TRUE
   )

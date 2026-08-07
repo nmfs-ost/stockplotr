@@ -78,6 +78,7 @@ plot_selectivity <- function(
   } else {
     prepared_data <- processed_data[[1]] |>
       dplyr::mutate(age = as.numeric(age))
+    type <- "age"
   }
   
   # |> dplyr::mutate(group_var = NA)
@@ -135,7 +136,7 @@ plot_selectivity <- function(
     
     selectivity.type.low <- tolower(selectivity.type.cap)
     
-    selectivity.x <- ifelse(age_type,
+    selectivity.x <- ifelse(type == "age",
                                 "years",
                             unit_label)
     
@@ -143,13 +144,13 @@ plot_selectivity <- function(
     
     selectivity.end.year <- max(prepared_data$year)
     
-    selectivity.x.min <- ifelse(age_type,
+    selectivity.x.min <- ifelse(type == "age",
                                 min(prepared_data$age),
                                 min(prepared_data$length_bins)) |>
       as.numeric() |>
       round(digits = 3)
     
-    selectivity.x.max <- ifelse(age_type,
+    selectivity.x.max <- ifelse(type == "age",
                                 max(prepared_data$age),
                                 max(prepared_data$length_bins)) |>
       as.numeric() |>

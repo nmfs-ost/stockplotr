@@ -440,7 +440,7 @@ save_all_plots <- function(
   tryCatch(
     {
       cli::cli_h2("plot_selectivity")
-      plot_indices(dat,
+      plot_selectivity(dat,
                    # unit_label = selectivity_unit_label, # commenting this out because if interactive = FALSE, unit_label is not used as age is selected (over length), which doesn't require a unit label
                    make_rda = TRUE,
                    interactive = FALSE,
