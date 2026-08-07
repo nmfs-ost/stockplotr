@@ -25,7 +25,7 @@ calc_kqs(
 
 \item{relative}{Logical. TRUE/FALSE; specify whether to set y-axis values relative to the ref_line value.}
 
-\item{module}{String. Module name found in `dat`.}
+\item{module}{Character vector. Module name found in `dat$module_name`.}
 
 \item{...}{Additional arguments to be passed to the function.}
 }

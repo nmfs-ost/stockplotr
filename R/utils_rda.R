@@ -9,7 +9,7 @@
 #' @param dat Data frame. The original data object.
 #' @param final ggplot2 object. The final figure.
 #' @param relative Logical. TRUE/FALSE; specify whether to set y-axis values relative to the ref_line value.
-#' @param module String. Module name found in `dat`. 
+#' @param module Character vector. Module name found in `dat$module_name`. 
 #' @param ... Additional arguments to be passed to the function.
 #'
 #' @return The value of the specified key quantity.
@@ -41,9 +41,9 @@ calc_kqs <- function(returned_kq,
 
   # plot_spawning_biomass()-----
   if (returned_kq %in% c("rel.ssb.min", "rel.ssb.max")) {
-    rel.ssb <- ggplot2::ggplot_build(final)[["data"]][[2]] |>
+    rel.ssb <- final[["layers"]][[2]][["data"]] |>
         as.data.frame() |>
-        dplyr::pull(y)
+        dplyr::pull(estimate)
     rel.ssb.min <- rel.ssb |>
         min() |>
         round(digits = 3)
@@ -55,9 +55,9 @@ calc_kqs <- function(returned_kq,
 
   # plot_biomass()-----
   if (returned_kq %in% c("rel.B.min", "rel.B.max")) {
-    rel.B <- ggplot2::ggplot_build(final)[["data"]][[2]] |>
+    rel.B <- final[["layers"]][[2]][["data"]]  |>
         as.data.frame() |>
-        dplyr::pull(y)
+        dplyr::pull(estimate)
     rel.B.min <- rel.B |>
         min() |>
         round(digits = 3)
