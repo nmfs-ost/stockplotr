@@ -3,6 +3,7 @@ Birthseason
 CPUE
 FIMS
 FIMSdiags
+Hennen
 Lifecycle
 MSY
 Modelling
@@ -30,7 +31,6 @@ dat
 dataframe's
 diagonostic
 dplyr
-ect
 facetting
 fims
 flextable
@@ -65,6 +65,7 @@ seealso
 socio
 ss
 sso
+stddev
 str
 stringr
 subseason
