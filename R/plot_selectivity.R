@@ -76,7 +76,7 @@ plot_selectivity <- function(
   # this extracts all possible groups and facets- disregards
   # user's specified group and facet in args (made "group" vs "groups",
   # "facet" vs "facets")
-  if (label_name == "length") {
+  if (type == "length") {
     prepared_data <- processed_data[[1]] |>
       dplyr::mutate(length_bins = as.numeric(length_bins))
   } else {
@@ -88,7 +88,7 @@ plot_selectivity <- function(
   groups <- processed_data[[2]]
   facets <- processed_data[[3]]
   
-  if ("age" %in% groups | groups == "length_bins" | groups == "year"){
+  if (any(facets == "age" | facets == "length_bins" | facets == "year")){
     facets <- facets[!grepl("length_bins|age|year", facets)]
   }
   
@@ -114,7 +114,7 @@ plot_selectivity <- function(
   final <- plot_timeseries(
     dat = prepared_data |> dplyr::filter(year == max(prepared_data$year, na.rm = TRUE)),
     x = ifelse(type == "length",
-               "year",
+               "length_bins",
                "age"),
     y = "estimate",
     geom = "line",
