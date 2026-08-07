@@ -123,8 +123,7 @@ plot_index <- function(
       names(labels) <- tools::toTitleCase(gsub("_", " ", names(labels)))
       # Combine into "Variable: Value" format
       lapply(names(labels), function(var) paste0(var, ": ", labels[[var]]))
-    }
-    )
+    })
   }
 
   ### Make RDA ----

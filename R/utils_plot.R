@@ -235,11 +235,10 @@ plot_timeseries <- function(
     final <- final + ggplot2::facet_wrap(facet_formula, labeller = function(labels) {
       # Clean column names (e.g., "growth_pattern" -> "Growth Pattern")
       names(labels) <- tools::toTitleCase(gsub("_", " ", names(labels)))
-      
+
       # Combine into "Variable: Value" format
       lapply(names(labels), function(var) paste0(var, ": ", labels[[var]]))
-    }
-    )
+    })
   }
   final
 }
@@ -446,8 +445,7 @@ plot_aa <- function(
       names(labels) <- tools::toTitleCase(gsub("_", " ", names(labels)))
       # Combine into "Variable: Value" format
       lapply(names(labels), function(var) paste0(var, ": ", labels[[var]]))
-    }
-    )
+    })
   }
   plot
 }
@@ -1100,15 +1098,15 @@ plot_obsvpred <- function(
     facet_formula <- stats::reformulate(facet)
 
     final <- final + ggplot2::facet_wrap(facet_formula,
-                                         labeller = function(labels) {
-      # Clean column names (e.g., "growth_pattern" -> "Growth Pattern")
-      names(labels) <- tools::toTitleCase(gsub("_", " ", names(labels)))
+      labeller = function(labels) {
+        # Clean column names (e.g., "growth_pattern" -> "Growth Pattern")
+        names(labels) <- tools::toTitleCase(gsub("_", " ", names(labels)))
 
-      # Combine into "Variable: Value" format
-      lapply(names(labels), function(var) paste0(var, ": ", labels[[var]]))
-    }
-  )
-}
+        # Combine into "Variable: Value" format
+        lapply(names(labels), function(var) paste0(var, ": ", labels[[var]]))
+      }
+    )
+  }
   final
 }
 
