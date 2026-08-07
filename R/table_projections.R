@@ -87,7 +87,7 @@ table_projections <- function(
   combine_data <- purrr::reduce(purrr::compact(lab_list), dplyr::full_join, by = c("Year")) |>
     gt::gt()
   
-  final_table <- add_theme(combine_data)
+  final_table <- theme_table(combine_data)
   
   # export table to rda if argument = T
   if (make_rda == TRUE) {
