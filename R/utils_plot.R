@@ -793,7 +793,6 @@ filter_data <- function(
             unique(plot_data$module_name),
             question1
           )
-          
         } else {
           # use <<- to export module to environment for use with key quantity calc
           selected_module <<- unique(plot_data$module_name)[1]
