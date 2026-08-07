@@ -207,14 +207,14 @@ merge_error <- function(
     for (l_col in label_cols) {
       # Identify the error column that contains l_col in the name
       # Extract the fleet suffix (e.g., "cl") by grabbing whatever is after the dash
-      index_suffix <- stringr::str_extract(
-        tolower(l_col),
-        paste(
-          stringr::str_escape(unlist(id_col_vals, use.names = FALSE)),
-          collapse = "|"
-        )
-      )
 
+      # index_suffix <- stringr::str_extract(
+      #   tolower(l_col),
+      #   paste(
+      #     stringr::str_escape(unlist(id_col_vals, use.names = FALSE)),
+      #     collapse = "|")
+      #   )
+      
       # Identify which uncert col aligns with l_col
       uncert_col <- uncert_cols[grep(l_col, uncert_cols)]
 
@@ -224,13 +224,8 @@ merge_error <- function(
           !!l_col := ifelse(
             !is.na(.data[[uncert_col]]),
             paste0(.data[[l_col]], " (", .data[[uncert_col]], ")"),
-            # maybe not good practice to insert dash?
-            # ifelse(
-            #   is.na(.data[[l_col]]),
-            "-"
-            #   as.character(.data[[l_col]])
-            # )
-          )
+            .data[[l_col]]
+         )
         ) |>
         # Remove uncertainty colummn id'd in this step of the loop
         dplyr::select(-dplyr::all_of(uncert_col))
@@ -239,7 +234,14 @@ merge_error <- function(
     # Adjust all header label names now
     header_labs <- stringr::str_replace_all(colnames(tab_dat), "_", " ") |>
       stringr::str_to_title()
-    header_labs2 <- glue::glue("{header_labs[-1]}{ifelse(unit_label!='', paste0(' ', unit_label,' '), ' ')}({uncert_lab})")
+    header_labs2 <- glue::glue("{header_labs[-1]}{ifelse(unit_label!='', paste0(' (', unit_label,') '), ' ')}{ifelse(uncert_lab!='Uncertainty', paste0(' (',uncert_lab, ')'),'')}")
+    header_labs2 <- header_labs2 |> 
+      # remove double parentheses if present
+      stringr::str_replace_all("\\(\\(", "(") |> 
+      stringr::str_replace_all("\\)\\)", ")") |>
+      stringr::str_replace_all("\\( \\(", "(") |>
+      stringr::str_replace_all("\\) \\)", ")")
+      
     colnames(tab_dat) <- c(header_labs[1], header_labs2)
 
     return(tab_dat)

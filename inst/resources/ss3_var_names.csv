@@ -9,12 +9,6 @@ DERIVED_QUANTITIES,SPRratio,spawning_potential_ratio_ratio
 AGE_SELEX,F,fishing_mortality
 DERIVED_QUANTITIES,F,fishing_mortality
 F_AT_AGE,F,fishing_mortality
-AGE_SELEX,F,fishing_mortality
-DERIVED_QUANTITIES,F,fishing_mortality
-F_AT_AGE,F,fishing_mortality
-AGE_SELEX,F,fishing_mortality
-DERIVED_QUANTITIES,F,fishing_mortality
-F_AT_AGE,F,fishing_mortality
 DERIVED_QUANTITIES,Bratio,biomass_ratio
 DERIVED_QUANTITIES,SSB_unfished,spawning_biomass_unfished
 DERIVED_QUANTITIES,Totbio_unfished,biomass_unfished
@@ -32,7 +26,7 @@ DERIVED_QUANTITIES,SPR_MSY,spawning_potential_ratio_msy
 DERIVED_QUANTITIES,annF_MSY,f_msy
 DERIVED_QUANTITIES,Dead_Catch_MSY,dead_catch_msy
 DERIVED_QUANTITIES,Ret_Catch_MSY,catch_msy
-DERIVED_QUANTITIES,B_MSY/SSB_unfished,biomass_msy_spawning_biomass_msy
+DERIVED_QUANTITIES,B_MSY/SSB_unfished,biomass_msy_spawning_biomass_unfished
 DERIVED_QUANTITIES,ForeCatch,catch
 DERIVED_QUANTITIES,OFLCatch,catch_ofl
 DERIVED_QUANTITIES,ForeCatchret,catch_retained
