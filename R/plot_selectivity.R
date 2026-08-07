@@ -1,14 +1,9 @@
 #' Plot selectivity
 #'
 #' @inheritParams plot_spawning_biomass
+#' @param unit_label units for length-based selectivity.
 #' 
-#' @param type Type of selectivity to plot
-#' 
-#' Default: "age"
-#' 
-#' Options: "age", "length"
-
-#' @param unit_label units for length-based selectivity
+#' Default: "cm"
 #' 
 #' @returns A plot showing selectivity by age or length.
 #'
@@ -35,7 +30,7 @@
 #' )
 plot_selectivity <- function(
   dat,
-  type = "age",
+  # type = "age",
   unit_label = "cm",
   group = NULL,
   facet = NULL,
@@ -50,14 +45,14 @@ plot_selectivity <- function(
   #TODO: revamp this to work for age as type, and for different blocks and
   #other complexities
   
-  label_name <- ifelse(type == "length",
-         "selectivity_length",
-         "selectivity")
+  # label_name <- ifelse(type == "length",
+  #        "selectivity_length",
+  #        "selectivity")
   
   # Extract selectivity
   selectivity <- filter_data(
     dat = dat,
-    label_name = label_name,
+    label_name = "selectivity",
     geom = "line",
     era = NULL,
     group = group,
@@ -76,9 +71,10 @@ plot_selectivity <- function(
   # this extracts all possible groups and facets- disregards
   # user's specified group and facet in args (made "group" vs "groups",
   # "facet" vs "facets")
-  if (type == "length") {
+  if ("length_bins" %in% colnames(processed_data[[1]])) {
     prepared_data <- processed_data[[1]] |>
       dplyr::mutate(length_bins = as.numeric(length_bins))
+    type <- "length"
   } else {
     prepared_data <- processed_data[[1]] |>
       dplyr::mutate(age = as.numeric(age))
@@ -118,7 +114,9 @@ plot_selectivity <- function(
                "age"),
     y = "estimate",
     geom = "line",
-    xlab = "Age",
+    xlab = ifelse(type == "length",
+                  glue::glue("Length ({unit_label})"),
+                  "Age"),
     ylab = "Selectivity",
     group = groups,
     facet = facets,
@@ -131,9 +129,9 @@ plot_selectivity <- function(
   # Make RDA
   if (make_rda) {
     # Obtain relevant key quantities for captions/alt text
-    selectivity.type.cap <- ifelse(age_type,
-                              "Age",
-                              "Length")
+    selectivity.type.cap <- ifelse(type == "length",
+                              "Length",
+                              "Age")
     
     selectivity.type.low <- tolower(selectivity.type.cap)
     
