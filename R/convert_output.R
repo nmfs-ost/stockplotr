@@ -371,7 +371,7 @@ convert_output <- function(
     for (i in seq_along(param_names)) {
       # Processing data frame
       parm_sel <- param_names[i]
-      if (parm_sel %in% c(std, std2, cha, rand, aa.al, single_val)) {
+      if (parm_sel %in% c(std, std2, cha, rand, info, aa.al, single_val)) {
         cli::cli_alert(glue::glue("Processing {parm_sel}")) # Remove [{i}]
         if (is.character(file)) {
           extract <- SS3_extract_df(dat, parm_sel)
@@ -1166,7 +1166,7 @@ convert_output <- function(
             #   # Add to out list
             #   out_list[[parm_sel]] <- df2
             # } else 
-            if (parm_sel == "DEFINITIONS") {
+           if (parm_sel == "DEFINITIONS") {
               # Extract start year and end year for iding era
               start_year <- as.numeric(extract[which(apply(extract, 1, function(row) any(row == "Start_year:"))), 2])
               end_year <- as.numeric(extract[which(apply(extract, 1, function(row) any(row == "End_year:"))), 2])
