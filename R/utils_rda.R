@@ -113,10 +113,15 @@ calc_kqs <- function(returned_kq,
         unique() |>
         round(digits = 3)
       
+      if (length(B.terminal.est) > 0){
+        B.terminal.est <- NA
+        B.terminal.uncert <- NA
+      } else {
       B.terminal.uncert <- B.terminal.df |>
-      dplyr::filter(is.na(age)) |>
-      dplyr::select(uncertainty) |> 
-      as.numeric()
+        dplyr::filter(is.na(age)) |>
+        dplyr::select(uncertainty) |> 
+        as.numeric()
+      }
       if (length(B.terminal.est) == 0){
         B.terminal.est <- NA
       }
