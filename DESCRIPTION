@@ -42,7 +42,6 @@ Imports:
     ggplot2 (>= 4.0.0),
     glue,
     gt,
-    kableExtra,
     purrr,
     rlang,
     scales,
@@ -51,11 +50,11 @@ Imports:
     tibble,
     tidyr,
     tidyselect,
-    utils,
-    withr
+    utils
 Suggests:
     flextable,
     here,
+    kableExtra,
     knitr,
     quarto,
     rmarkdown,

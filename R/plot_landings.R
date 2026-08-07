@@ -76,11 +76,10 @@ plot_landings <- function(
     dat = prepared_data,
     group = group,
     facet = facet,
-    method = "sum",
     lbs = lbs
   )
   prepared_data <- processed_data[[1]]
-  group <- processed_data[2]
+  group <- processed_data[[2]]
   facet <- processed_data[[3]]
 
   # Check if there is >1 label

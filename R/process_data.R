@@ -158,7 +158,7 @@ process_data <- function(
     if (!is.null(group) && group == "age") {
       if ("age" %in% index_variables) index_variables <- index_variables[-grep("age", index_variables)]
     }
-    if (!is.null(facet) && facet == "age") {
+    if (!is.null(facet) && length(facet) == 1 && facet == "age") {
       if ("age" %in% index_variables) index_variables <- index_variables[-grep("age", index_variables)]
     }
   }
@@ -358,6 +358,11 @@ process_data <- function(
       )
   }
 
+  if (is.null(group) && length(facet) > 0) {
+    group <- facet[1]
+    facet <- facet[-1]
+  }
+  
   # Export list of objects
   list(
     # variable,

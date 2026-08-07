@@ -130,9 +130,9 @@ AGE_SELEX,dead*wt,
 Kobe_Plot,b/bmsy,b_bmsy
 Kobe_Plot,f/fmsy,f_fmsy
 ,Fstd_Btgt,
-AGE_SELEX,Asel,selectivity
+AGE_SELEX,Asel,asel
 AGE_SELEX,Fecund,fecundity
-AGE_SELEX,Asel2,size_selectivity_size_at_age
+AGE_SELEX,Asel2,selectivity_age
 AGE_SELEX,sel*wt,
 AGE_SELEX,sel*ret*wt,
 AGE_SELEX,sel_nums,
@@ -232,7 +232,7 @@ FIT_AGE_COMPS,m_exp,
 FIT_AGE_COMPS,m_durwat,
 FIT_AGE_COMPS,%f_obs,
 FIT_AGE_COMPS,%f_exp,
-LEN_SELEX,Lsel,length_selectivity
+LEN_SELEX,Lsel,selectivity_length
 LEN_SELEX,Ret,retention
 LEN_SELEX,Mort,discard_mortality
 LEN_SELEX,Keep,keep
