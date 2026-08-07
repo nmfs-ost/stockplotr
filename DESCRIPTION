@@ -42,7 +42,6 @@ Imports:
     ggplot2 (>= 4.0.0),
     glue,
     gt,
-    kableExtra,
     purrr,
     rlang,
     scales,
@@ -56,6 +55,7 @@ Imports:
 Suggests:
     flextable,
     here,
+    kableExtra,
     knitr,
     quarto,
     rmarkdown,
