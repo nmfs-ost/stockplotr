@@ -76,18 +76,27 @@ plot_selectivity <- function(
   # this extracts all possible groups and facets- disregards
   # user's specified group and facet in args (made "group" vs "groups",
   # "facet" vs "facets")
-  prepared_data <- processed_data[[1]]
+  if (label_name == "length") {
+    prepared_data <- processed_data[[1]] |>
+      dplyr::mutate(length_bins = as.numeric(length_bins))
+  } else {
+    prepared_data <- processed_data[[1]] |>
+      dplyr::mutate(age = as.numeric(age))
+  }
+  
   # |> dplyr::mutate(group_var = NA)
   groups <- processed_data[[2]]
   facets <- processed_data[[3]]
   
-  if ("age" %in% groups | groups == "length_bins"){
-    # groups <- stringr::str_remove(groups, "age")
+  if ("age" %in% groups | groups == "length_bins" | groups == "year"){
+    facets <- facets[!grepl("length_bins|age|year", facets)]
+  }
+  
+  if (groups == "age" | groups == "length_bins" | groups == "year"){
     groups <- facets[1]
     facets <- facets[-1]
     prepared_data <- prepared_data |>
-      dplyr::mutate(age = as.numeric(age),
-                    group_var = .data[[groups]])
+      dplyr::mutate(group_var = .data[[groups]])
     if (groups == ""){
       groups <- NULL
     }
@@ -112,11 +121,11 @@ plot_selectivity <- function(
     xlab = "Age",
     ylab = "Selectivity",
     group = groups,
-    facet = facets#,
-    #...
+    facet = facets,
+    ...
   ) +
     theme_noaa()
-final
+  final
 
 
   # Make RDA
