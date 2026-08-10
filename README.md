@@ -65,9 +65,11 @@ Then, once your converted model results are saved as an object in your R environ
 ```r
 data <- stockplotr::example_data
 
-# create a landings figure from your object
+# create a landings figure and table from your object
 plot_spawning_biomass(data)
-```
+table_landings(data)
+
+ ```
 
 Example Plot | Example Table |
 :------------|---------------:
@@ -97,10 +99,9 @@ stakeholders. We encourage interested users to contribute to this package using
 their custom code when they find it may be useful across the nation.
 
 > [!NOTE]
-> An additional package to plot model diagnostics called [{FIMSdiags}](https://github.com/NOAA-FIMS/FIMSdiags) 
-> is being worked on for the Fisheries Integrated Modelling System [FIMS] that 
-> will natively work with the output used for {stockplotr} since the model output 
-> for FIMS works together with {stockplotr}.
+> Model diagnostic plots within the [{Fisheries Integrated Modelling System (FIMS)}] (https://github.com/NOAA-FIMS/FIMS) are in development.
+> These plots will work natively with {stockplotr} since the FIMS model output virtually matches the {stockplotr} standardized output format.   
+
 
 ## Disclaimer
 
