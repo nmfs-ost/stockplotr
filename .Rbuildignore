@@ -8,3 +8,5 @@
 ^pkgdown$
 ^\.positai$
 ^\.claude$
+^\.octocov\.yml$
+^\.devcontainer$
