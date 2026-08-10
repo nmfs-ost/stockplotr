@@ -65,9 +65,11 @@ Then, once your converted model results are saved as an object in your R environ
 ```r
 data <- stockplotr::example_data
 
-# create a landings figure from your object
+# create a landings figure and table from your object
 plot_spawning_biomass(data)
-```
+table_landings(data)
+
+ ```
 
 Example Plot | Example Table |
 :------------|---------------:
