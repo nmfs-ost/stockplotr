@@ -55,7 +55,7 @@ Imports:
 Suggests:
     flextable,
     here,
-    kableExtra,    
+    kableExtra,
     knitr,
     quarto,
     rmarkdown,

@@ -117,31 +117,48 @@ plot_fishing_mortality <- function(
     F.start.year <- min(prepared_data$year)
     F.end.year <- max(prepared_data$year)
 
-    F.terminal.year <- calc_kqs(returned_kq = "F.terminal.year",
+    F.terminal.year <- calc_kqs(
+      returned_kq = "F.terminal.year",
       dat = dat,
       module = selected_module
     )
-    
-    F.target <- calc_kqs(returned_kq = "F.target",
-                         dat = dat)
-    F.limit <- calc_kqs(returned_kq = "F.limit",
-                        dat = dat)
-    F.terminal.est <- calc_kqs(returned_kq = "F.terminal.est",
-                        dat = dat,
-                        module = selected_module)
-    F.terminal.min <- calc_kqs(returned_kq = "F.terminal.min",
-                               dat = dat,
-                               module = selected_module)
-    F.terminal.max <- calc_kqs(returned_kq = "F.terminal.max",
-                               dat = dat,
-                               module = selected_module)
-    F.MSY.terminal <- calc_kqs(returned_kq = "F.MSY.terminal",
-                               dat = dat)
-    F.MSY.terminal.max <- calc_kqs(returned_kq = "F.MSY.terminal.max",
-                               dat = dat)
-    F.MSY.terminal.min <- calc_kqs(returned_kq = "F.MSY.terminal.min",
-                               dat = dat)
-    
+
+    F.target <- calc_kqs(
+      returned_kq = "F.target",
+      dat = dat
+    )
+    F.limit <- calc_kqs(
+      returned_kq = "F.limit",
+      dat = dat
+    )
+    F.terminal.est <- calc_kqs(
+      returned_kq = "F.terminal.est",
+      dat = dat,
+      module = selected_module
+    )
+    F.terminal.min <- calc_kqs(
+      returned_kq = "F.terminal.min",
+      dat = dat,
+      module = selected_module
+    )
+    F.terminal.max <- calc_kqs(
+      returned_kq = "F.terminal.max",
+      dat = dat,
+      module = selected_module
+    )
+    F.MSY.terminal <- calc_kqs(
+      returned_kq = "F.MSY.terminal",
+      dat = dat
+    )
+    F.MSY.terminal.max <- calc_kqs(
+      returned_kq = "F.MSY.terminal.max",
+      dat = dat
+    )
+    F.MSY.terminal.min <- calc_kqs(
+      returned_kq = "F.MSY.terminal.min",
+      dat = dat
+    )
+
     export_kqs(
       F.ref.pt,
       F.start.year,

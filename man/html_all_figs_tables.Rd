@@ -26,6 +26,6 @@ html_all_figs_tables(figures_tables_dir = "my_figures_tables_dir")
 }
 }
 \seealso{
-\code{\link[asar:create_figures_doc]{asar::create_figures_doc()}},
-\code{\link[asar:create_tables_doc]{asar::create_tables_doc()}}
+\href{https://github.com/nmfs-ost/asar/blob/main/R/create_figures_doc.R}{asar::create_figures_doc()},
+\href{https://github.com/nmfs-ost/asar/blob/main/R/create_tables_doc.R}{asar::create_tables_doc()}
 }
