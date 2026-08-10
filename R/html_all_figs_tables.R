@@ -11,8 +11,8 @@
 #' html and qmd files that show all tables and figures.
 #'
 #' @seealso
-#' \code{\link[asar:create_figures_doc]{asar::create_figures_doc()}},
-#' \code{\link[asar:create_tables_doc]{asar::create_tables_doc()}}
+#' \href{https://github.com/nmfs-ost/asar/blob/main/R/create_figures_doc.R}{asar::create_figures_doc()},
+#' \href{https://github.com/nmfs-ost/asar/blob/main/R/create_tables_doc.R}{asar::create_tables_doc()}
 #'
 #'
 #' @export
