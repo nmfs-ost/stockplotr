@@ -47,10 +47,3 @@ applyTo: "**/*.qmd, **/*.scss, **/*.css, **/*.js, _quarto.yml"
   - Show errors next to fields with `aria-describedby`.
   - Use ARIA roles as a last resort.
 
-Adobe Acrobat
-
-
-Summarize this
-
-
-Ask AI Assistant
