@@ -54,10 +54,4 @@ tools: ['extensions', 'codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 
 ### Git
 - You may stage and commit files only when the user explicitly tells you to. Do not do it automatically.
 
-Adobe Acrobat
 
-
-Summarize this
-
-
-Ask AI Assistant
