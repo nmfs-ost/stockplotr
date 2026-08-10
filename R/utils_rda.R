@@ -20,6 +20,7 @@
 #'   dat = dat
 #' )
 #' }
+#' @noRd
 calc_kqs <- function(returned_kq,
                      prepared_data = NULL,
                      dat = NULL,
@@ -351,6 +352,7 @@ calc_kqs <- function(returned_kq,
 #'   F.max
 #' )
 #' }
+#' @noRd
 fill_in_kqs <- function(df, ...) {
   arg_names <- sapply(substitute(list(...))[-1], deparse)
   arg_values <- list(...)
@@ -388,6 +390,7 @@ fill_in_kqs <- function(df, ...) {
 #'   F.max
 #' )
 #' }
+#' @noRd
 export_kqs <- function(...) {
   # Open new or existing key quantities csv
   if (file.exists(fs::path(getwd(), "key_quantities.csv"))) {
@@ -428,6 +431,7 @@ export_kqs <- function(...) {
 #'   F.max
 #' )
 #' }
+#' @noRd
 insert_kqs <- function(...) {
   if (file.exists(fs::path(getwd(), "captions_alt_text.csv"))) {
     cli::cli_alert_info("Captions/alternative text file (captions_alt_text.csv) exists. Newly calculated key quantities will be added to it.", wrap = TRUE)
