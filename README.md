@@ -56,7 +56,7 @@ Please refer to the [{asar} tutorial](https://connect.fisheries.noaa.gov/asar_tu
 Then, once your converted model results are saved as an object in your R environment, you can use {stockplotr} functions to create plots from the object.
 
 > [!TIP]
-> {stockplotr} plots or tables are exported as `ggplot2` or `flextable` objects 
+> {stockplotr} plots or tables are exported as `ggplot2` or `gt` objects 
 > meaning that users can use the same process to add new data, formatting, or 
 > other customizations to the plot beyond the baseline made by this package
 
