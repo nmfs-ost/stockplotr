@@ -153,8 +153,9 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">stockplotr</span><span class="fu">::</span><span class="va"><a href="reference/example_data.html">example_data</a></span></span>
 <span></span>
-<span><span class="co"># create a landings figure from your object</span></span>
-<span><span class="fu"><a href="reference/plot_spawning_biomass.html">plot_spawning_biomass</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co"># create a landings figure and table from your object</span></span>
+<span><span class="fu"><a href="reference/plot_spawning_biomass.html">plot_spawning_biomass</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/table_landings.html">table_landings</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="44%">
@@ -193,7 +194,7 @@
 </h2>
 <p>We hope that this package will be able to be a one stop shop for plots regarding interpreting assessment models and presenting the results to managers and relevant stakeholders. We encourage interested users to contribute to this package using their custom code when they find it may be useful across the nation.</p>
 <blockquote>
-<p>[!NOTE] An additional package to plot model diagnostics called <a href="https://github.com/NOAA-FIMS/FIMSdiags" class="external-link">{FIMSdiags}</a> is being worked on for the Fisheries Integrated Modelling System [FIMS] that will natively work with the output used for {stockplotr} since the model output for FIMS works together with {stockplotr}.</p>
+<p>[!NOTE] Model diagnostic plots within the [{Fisheries Integrated Modelling System (FIMS)}] (<a href="https://github.com/NOAA-FIMS/FIMS" class="external-link uri">https://github.com/NOAA-FIMS/FIMS</a>) are in development. These plots will work natively with {stockplotr} since the FIMS model output virtually matches the {stockplotr} standardized output format.</p>
 </blockquote>
 </div>
 <div class="section level2">
