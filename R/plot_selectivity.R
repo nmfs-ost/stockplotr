@@ -25,7 +25,7 @@
 #' )
 #' plot_selectivity(
 #'   dat = stockplotr:::example_data,
-#'   module = "AGE_SELEX",
+#'   module = "LEN_SELEX",
 #'   make_rda = FALSE
 #' )
 plot_selectivity <- function(
@@ -41,13 +41,6 @@ plot_selectivity <- function(
   ...
 ) {
 
-  #TODO: update alt text/caption
-  #TODO: revamp this to work for age as type, and for different blocks and
-  #other complexities
-  
-  # label_name <- ifelse(type == "length",
-  #        "selectivity_length",
-  #        "selectivity")
   
   # Extract selectivity
   selectivity <- filter_data(
@@ -68,9 +61,6 @@ plot_selectivity <- function(
     facet = c(group, facet)
   )
   
-  # this extracts all possible groups and facets- disregards
-  # user's specified group and facet in args (made "group" vs "groups",
-  # "facet" vs "facets")
   if ("length_bins" %in% colnames(processed_data[[1]])) {
     prepared_data <- processed_data[[1]] |>
       dplyr::mutate(length_bins = as.numeric(length_bins))
