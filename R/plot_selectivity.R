@@ -20,12 +20,12 @@
 #' plot_selectivity(
 #'   dat = stockplotr:::example_data,
 #'   interactive = TRUE,
-#'   module = "TIME_SERIES",
+#'   module = "AGE_SELEX",
 #'   make_rda = FALSE
 #' )
 #' plot_selectivity(
 #'   dat = stockplotr:::example_data,
-#'   module = "TIME_SERIES",
+#'   module = "AGE_SELEX",
 #'   make_rda = FALSE
 #' )
 plot_selectivity <- function(
