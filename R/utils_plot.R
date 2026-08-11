@@ -123,7 +123,7 @@ plot_timeseries <- function(
               } else if (length(unique(.data[["group_var"]])) > 1) {
                 group_var
               } else {
-                .data[[group]]
+                NULL # .data[[group]]
               }
             }
           ),
@@ -200,8 +200,8 @@ plot_timeseries <- function(
 
   exp_lims <- TRUE
   # min, max y axis value
-  min_y <- min(dat$estimate, na.rm = TRUE)
-  max_y <- max(dat$estimate, na.rm = TRUE)
+  min_y <- min(dat[[y]], na.rm = TRUE)
+  max_y <- max(dat[[y]], na.rm = TRUE)
 
   # if both min and max y values are negative, check if the distance to zero is greater than 50% of the span of the y-axis values. If so, set exp_lims to FALSE to avoid expanding the limits to include zero.
   if (min_y < 0 & max_y < 0) {

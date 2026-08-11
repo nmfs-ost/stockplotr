@@ -298,6 +298,7 @@ process_data <- function(
           values_from = estimate
         ) |>
         suppressWarnings()
+      # if (ncol(pivot_data) > 1) column_data <- pivot_data[-1] else column_data <- pivot_data
       column_data <- pivot_data[-1]
     }
     # compare grouping columns to see if all the same
