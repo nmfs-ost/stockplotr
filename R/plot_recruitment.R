@@ -107,13 +107,12 @@ plot_recruitment <- function(
     dat = recruitment,
     x = "year",
     y = "predicted_recruitment",
-    # color = "black",
     geom = geom,
     xlab = "Year",
     ylab = recruitment_label,
     group = group,
     facet = facet,
-    ...
+    # ...
   ) +
     theme_noaa()
 
