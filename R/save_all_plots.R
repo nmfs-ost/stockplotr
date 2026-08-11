@@ -174,7 +174,7 @@ save_all_plots <- function(
         dat,
         unit_label = recruitment_unit_label,
         scale_amount = recruitment_scale_amount,
-        interactive = FALSE,
+        interactive = interactive,
         module = "TIME_SERIES",
         make_rda = TRUE,
         figures_dir = figures_tables_dir
@@ -228,7 +228,7 @@ save_all_plots <- function(
         unit_label = landings_unit_label,
         make_rda = TRUE,
         figures_dir = figures_tables_dir,
-        interactive = FALSE
+        interactive = interactive
       ) # |>
       # suppressWarnings() |>
       # invisible()
@@ -247,7 +247,7 @@ save_all_plots <- function(
       plot_fishing_mortality(dat,
         make_rda = TRUE,
         figures_dir = figures_tables_dir,
-        interactive = FALSE
+        interactive = interactive
       ) # |>
       # suppressWarnings() |>
       # invisible()
@@ -267,7 +267,7 @@ save_all_plots <- function(
         module = "Natural_Mortality",
         make_rda = TRUE,
         figures_dir = figures_tables_dir,
-        interactive = FALSE
+        interactive = interactive
       ) # |>
       # suppressWarnings() |>
       # invisible()
@@ -284,7 +284,7 @@ save_all_plots <- function(
       cli::cli_h2("plot_recruitment_deviations")
       plot_recruitment_deviations(
         dat,
-        interactive = FALSE,
+        interactive = interactive,
         make_rda = TRUE,
         figures_dir = figures_tables_dir
       ) #|>
@@ -305,7 +305,7 @@ save_all_plots <- function(
         spawning_biomass_label,
         recruitment_label = recruitment_unit_label,
         make_rda = TRUE,
-        interactive = FALSE,
+        interactive = interactive,
         module = "SPAWN_RECRUIT",
         figures_dir = figures_tables_dir
       )
@@ -355,6 +355,7 @@ save_all_plots <- function(
         unit_label = abundance_at_age_unit_label,
         scale_amount = abundance_at_age_scale_amount,
         proportional = proportional,
+        interactive = interactive,
         make_rda = TRUE,
         figures_dir = figures_tables_dir
       ) # |>
@@ -377,7 +378,7 @@ save_all_plots <- function(
         unit_label = catch_unit_label,
         scale_amount = catch_scale_amount,
         proportional = proportional,
-        interactive = FALSE,
+        interactive = interactive,
         make_rda = TRUE,
         figures_dir = figures_tables_dir
       ) # |>
@@ -402,7 +403,7 @@ save_all_plots <- function(
         unit_label = biomass_at_age_unit_label,
         scale_amount = biomass_at_age_scale_amount,
         proportional = proportional,
-        interactive = FALSE,
+        interactive = interactive,
         make_rda = TRUE,
         figures_dir = figures_tables_dir
       ) # |>
@@ -424,7 +425,7 @@ save_all_plots <- function(
       plot_index(dat,
         unit_label = index_unit_label,
         make_rda = TRUE,
-        interactive = FALSE,
+        interactive = interactive,
         figures_dir = figures_tables_dir
       ) # |> suppressWarnings() |> invisible()
     },
@@ -483,7 +484,7 @@ save_all_plots <- function(
       cli::cli_h2("table_index")
       table_index(
         dat,
-        interactive = FALSE,
+        interactive = interactive,
         make_rda = TRUE,
         tables_dir = figures_tables_dir
       ) # |>
@@ -502,7 +503,7 @@ save_all_plots <- function(
       cli::cli_h2("table_landings")
       table_landings(dat,
         unit_label = landings_unit_label,
-        interactive = FALSE,
+        interactive = interactive,
         make_rda = TRUE,
         tables_dir = figures_tables_dir
       ) # |>

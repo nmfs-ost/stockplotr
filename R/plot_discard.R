@@ -107,7 +107,7 @@ plot_discard <- function(
     )
   }
 
-  final <- plot + theme_noaa()
+  final <- plt + theme_noaa()
 
   ### Make RDA ----
   if (make_rda) {

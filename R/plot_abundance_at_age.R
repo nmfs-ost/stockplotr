@@ -28,7 +28,7 @@
 #'
 #' Default: `TRUE`
 #'
-#' @param module (Optional) A string indicating the module_name found in `dat`.
+#' @param module (Optional) A string indicating the module_name found in `dat$module_name`.
 #' If selecting >1 module, place them in a vector like c("module1", "module2").
 #'
 #' Default: NULL
