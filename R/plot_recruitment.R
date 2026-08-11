@@ -112,7 +112,7 @@ plot_recruitment <- function(
     ylab = recruitment_label,
     group = group,
     facet = facet,
-    # ...
+    ...
   ) +
     theme_noaa()
 
