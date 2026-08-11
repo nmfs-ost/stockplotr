@@ -42,8 +42,7 @@ plot_recruitment <- function(
   interactive = TRUE,
   module = NULL,
   make_rda = FALSE,
-  figures_dir = getwd(),
-  ...
+  figures_dir = getwd()
 ) {
   # TODO: Fix the unit label if scaling
   recruitment_label <- label_magnitude(
@@ -111,8 +110,8 @@ plot_recruitment <- function(
     xlab = "Year",
     ylab = recruitment_label,
     group = group,
-    facet = facet,
-    ...
+    facet = facet # ,
+    # ...
   ) +
     theme_noaa()
 

@@ -80,12 +80,12 @@ containing associated caption and alternative text for the figure.
 plot_selectivity(
   dat = stockplotr:::example_data,
   interactive = TRUE,
-  module = "TIME_SERIES",
+  module = "AGE_SELEX",
   make_rda = FALSE
 )
 plot_selectivity(
   dat = stockplotr:::example_data,
-  module = "TIME_SERIES",
+  module = "LEN_SELEX",
   make_rda = FALSE
 )
 }
