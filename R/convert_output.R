@@ -290,6 +290,10 @@ convert_output <- function(
       cli::cli_alert_info("Identified fleet names:")
       cli::cli_alert_info("{fleet_names}")
 
+      # Extract start year and end year
+      start_year <- file$startyr
+      end_year <- file$endyr
+      
       param_names <- names(dat)
 
       std <- c(
