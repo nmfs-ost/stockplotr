@@ -110,7 +110,7 @@ table_projections <- function(
       create_rda(
         object = final_table,
         # get name of function and remove "table_" from it
-        topic_label = "projection.ts",
+        topic_label = "projections",
         fig_or_table = "table",
         dat = dat,
         dir = tables_dir,

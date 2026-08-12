@@ -22,12 +22,6 @@
 #' unit_label argument - 'metric tons'.
 #'
 #' Default: `FALSE`
-#' @param method String. Method for summarizing data when group
-#' is set to "none".
-#'
-#' Default: "sum"
-#'
-#' Options: "sum" or "mean"
 #'
 #' @returns List of 3 objects:
 #' \item{data}{A data frame of the processed data ready for plotting.}
@@ -52,7 +46,7 @@
 #'     geom = "line",
 #'     module = "TIME_SERIES"
 #'   )
-#'   process_data(dat = filtered, method = "sum")
+#'   process_data(dat = filtered)
 #' }
 process_data <- function(
   dat,
@@ -351,6 +345,12 @@ process_data <- function(
 #' @param digits Number. Numeric value indicating the number of rounding digits.
 #'
 #' Default: 2
+#' @param method String. Method for summarizing data when group
+#' is set to "none".
+#'
+#' Default: "sum"
+#'
+#' Options: "sum" or "mean"
 #' @returns A dataframe of processed data ready for formatting into a table.
 #' @details Input is an object created with \link[stockplotr]{filter_data}.
 #'
