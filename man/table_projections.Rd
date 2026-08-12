@@ -60,7 +60,7 @@ function code, which served as the foundation for this function.
 }
 \examples{
 table_projections(
- dat = stockplotr:::example_data,
+ dat = stockplotr::example_data,
  interactive = FALSE,
  module = "DERIVED_QUANTITIES")
 

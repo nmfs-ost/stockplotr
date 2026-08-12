@@ -27,9 +27,7 @@ save_all_plots(
   catch_unit_label = "mt",
   catch_scale_amount = 1,
   projections_unit_label = c(catch = "mt", spawning_biomass = "mt", fishing_mortality =
-    ""),
-  projections_uncert_label = c(catch = "stddev", spawning_biomass = "stddev",
-    fishing_mortality = "stddev")
+    "")
 )
 }
 \arguments{
