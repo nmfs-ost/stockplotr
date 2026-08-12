@@ -22,7 +22,6 @@
 <url><loc>nmfs-ost.github.io/stockplotr/reference/extract_caps_alttext.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/fill_in_kqs.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/filter_data.html</loc></url>
-<url><loc>nmfs-ost.github.io/stockplotr/reference/html_all_figs_tables.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/index.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/insert_kqs.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/merge_error.html</loc></url>
@@ -40,6 +39,7 @@
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_obsvpred.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_recruitment.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_recruitment_deviations.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/plot_selectivity.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_spawning_biomass.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_stock_recruitment.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_timeseries.html</loc></url>
