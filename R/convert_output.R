@@ -1566,28 +1566,37 @@ convert_output <- function(
               df2 <- df2 |>
                 dplyr::mutate(
                   fleet = dplyr::case_when(
-                    grepl(paste(fleet_names, collapse = "|"), label) ~ stringr::str_extract(label, paste(fleet_names, collapse = "|")),
+                    grepl(paste(fleet_names, collapse = "|"), tolower(label)) ~ stringr::str_extract(tolower(label), paste(fleet_names, collapse = "|")),
                     # grepl(paste(fleet_names, collapse = "|"), label) ~ stringr::str_extract(ex, paste(fleet_names,collapse="|")),
                     TRUE ~ NA
                   ),
                   # Number after fleet name is what? variable among df?
                   age = dplyr::case_when(
+                    grepl("r0$|b0$", tolower(label)) ~ NA,
                     module_name != "parms" & grepl(".Age[0-9]+.", label) ~ stringr::str_extract(label, "(?<=.Age?)[0-9]+"),
                     module_name != "parms" & grepl("[0-9]+$", label) & as.numeric(stringr::str_extract(label, "[0-9]+$")) < 30 ~ stringr::str_extract(label, "[0-9]+$"),
+                    module_name != "parms" & grepl("_age[0-9]+.", label) ~ stringr::str_extract(label, "(?<=_age?)[0-9]+"),
                     TRUE ~ NA
                   ),
                   label = dplyr::case_when(
                     # below will only work properly if there are age varying parameters without fleet names in it
                     module_name == "parms" & !grepl(paste(".", fleet_names, sep = "", collapse = "|"), tolower(label)) ~ label,
+                    module_name == "parm.cons" & !grepl(paste("_", fleet_names, sep = "", collapse = "|"), tolower(label)) ~ label,
                     grepl(paste(".", fleet_names, "d[0-9]+", sep = "", collapse = "|"), tolower(label)) ~ stringr::str_replace(tolower(label), paste(".", fleet_names, "d[0-9]+", sep = "", collapse = "|"), ".d"),
                     grepl(paste(".", fleet_names, "[0-9]+$", sep = "", collapse = "|"), tolower(label)) ~ stringr::str_replace(tolower(label), paste(fleet_names, sep = "", collapse = "|"), ""), # "[0-9]+",
                     grepl(paste(".", fleet_names, "$", sep = "", collapse = "|"), tolower(label)) ~ stringr::str_replace(tolower(label), paste(".", fleet_names, sep = "", collapse = "|"), ""),
+                    grepl(paste("_", fleet_names, "_", sep = "", collapse = "|"), tolower(label)) ~ stringr::str_replace(tolower(label), paste("_", fleet_names, sep = "", collapse = "|"), ""),
                     grepl(paste(".", fleet_names, ".d$", sep = "", collapse = "|"), tolower(label)) ~ stringr::str_replace(tolower(label), paste(".", fleet_names, sep = "", collapse = "|"), ""),
                     grepl(".Age[0-9]+.[a-z]+", label) ~ stringr::str_replace(label, ".Age[0-9]+.[a-z]+", ""),
                     grepl("[0-9]+$", label) ~ stringr::str_replace(label, "[0-9]+$", ""),
                     # !is.na(fleet) | !is.na(age) ~ stringr::str_replace(label, paste(c(paste(".", fleet_names, "[0-9]+", sep = ""), ".Age[0-9]+.[a-z]+", "[0-9]+$"), collapse = "|"), ""),
                     # as.numeric(stringr::str_extract(label, "[0-9]+$")) == 0 ~ label,
                     # as.numeric(stringr::str_extract(label, "[0-9]+$")) < 30 ~ stringr::str_remove(label, "[0-9]+$"),
+                    TRUE ~ label
+                  ),
+                  # additional manipulation of label to remove age in parm.cons
+                  label = dplyr::case_when(
+                    module_name == "parm.cons" & grepl("_age[0-9]+.[a-z]+", label) ~ stringr::str_replace(label, "_age[0-9]+.[a-z]+", ""),
                     TRUE ~ label
                   )
                 )

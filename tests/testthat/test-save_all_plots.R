@@ -25,6 +25,7 @@ test_that("save_all_plots works when all figures/tables are plotted", {
     "catch_comp_figure.rda",
     "abundance_at_age_figure.rda",
     "recruitment_figure.rda",
+    "selectivity_figure.rda",
     "recruitment_deviations_figure.rda",
     "spawning_biomass_figure.rda",
     "stock_recruitment_figure.rda"
