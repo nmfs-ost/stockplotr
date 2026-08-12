@@ -16,7 +16,7 @@
 #' @export
 #' @examples
 #' table_projections(
-#'  dat = stockplotr:::example_data,
+#'  dat = stockplotr::example_data,
 #'  interactive = FALSE,
 #'  module = "DERIVED_QUANTITIES")
 #'

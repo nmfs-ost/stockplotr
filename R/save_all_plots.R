@@ -172,8 +172,8 @@ save_all_plots <- function(
   # imported from table_index- zero unique arguments
   # imported from table_landings- zero unique arguments
   # imported from table_projections
-  projections_unit_label = c("catch" = "mt", "spawning_biomass" = "mt", "fishing_mortality" = ""),
-  projections_uncert_label = c("catch" = "stddev", "spawning_biomass" = "stddev", "fishing_mortality" = "stddev")
+  projections_unit_label = c("catch" = "mt", "spawning_biomass" = "mt", "fishing_mortality" = "")
+  # projections_uncert_label = c("catch" = "stddev", "spawning_biomass" = "stddev", "fishing_mortality" = "stddev")
 ) {
   make_rda <- TRUE
 
@@ -537,7 +537,7 @@ save_all_plots <- function(
       cli::cli_h2("table_projections")
       table_projections(dat,
                      unit_label = projections_unit_label,
-                     uncertainty_label = projections_uncert_label,
+                     # uncertainty_label = projections_uncert_label,
                      interactive = FALSE,
                      make_rda = TRUE,
                      tables_dir = figures_tables_dir

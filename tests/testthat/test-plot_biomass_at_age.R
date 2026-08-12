@@ -1,7 +1,7 @@
 test_that("plot_biomass_at_age generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_biomass_at_age(stockplotr::example_data)
+    plot_biomass_at_age(stockplotr::example_data,module = "BIOMASS_AT_AGE")
   )
 
   # expect error-free plot with many arguments
@@ -11,6 +11,7 @@ test_that("plot_biomass_at_age generates plots without errors", {
       unit_label = "metric tons",
       proportional = FALSE,
       scale_amount = 10,
+      module = "BIOMASS_AT_AGE",
       make_rda = FALSE,
       figures_dir = getwd()
     )
@@ -22,6 +23,7 @@ test_that("plot_biomass_at_age generates plots without errors", {
       stockplotr::example_data,
       unit_label = "metric tons",
       scale_amount = 1,
+      module = "BIOMASS_AT_AGE",
       make_rda = FALSE,
       figures_dir = getwd()
     ),

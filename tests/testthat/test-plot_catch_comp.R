@@ -2,7 +2,7 @@
 test_that("plot_catch_comp generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_catch_comp(stockplotr::example_data)
+    plot_catch_comp(stockplotr::example_data, module = "CATCH_AT_AGE")
   )
 
   # expect error-free plot with many arguments
@@ -12,6 +12,7 @@ test_that("plot_catch_comp generates plots without errors", {
       facet = "area",
       unit_label = "fish",
       scale_amount = 1000,
+      module = "CATCH_AT_AGE",
       make_rda = FALSE,
       figures_dir = getwd()
     )
@@ -23,6 +24,7 @@ test_that("plot_catch_comp generates plots without errors", {
       stockplotr::example_data,
       unit_label = "fish",
       scale_amount = 1,
+      module = "CATCH_AT_AGE",
       make_rda = FALSE,
       figures_dir = getwd()
     ),
