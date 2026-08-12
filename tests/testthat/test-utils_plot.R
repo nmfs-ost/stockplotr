@@ -78,7 +78,7 @@ test_that("plot_aa and helper line builders return expected outputs", {
     group_var = "1"
   )
 
-  proportional_plot <- plot_aa(aa_dat, proportional = TRUE)
+  expect_no_warning(proportional_plot <- plot_aa(aa_dat, proportional = TRUE))
   expect_s3_class(proportional_plot, "gg")
   expect_equal(proportional_plot$theme$legend.position, "none")
 
