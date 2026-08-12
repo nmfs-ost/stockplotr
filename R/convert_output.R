@@ -471,12 +471,7 @@ convert_output <- function(
               if ("sexes" %in% colnames(df3)) {
                 df3 <- df3 |>
                   # add in case if sexes is present and add sex as na if so
-                  dplyr::mutate(
-                    sex = dplyr::case_when(
-                      any(grepl("^sexes$", colnames(df3))) ~ sexes,
-                      TRUE ~ NA
-                    )
-                  ) |>
+                  dplyr::mutate(sex = if (any(grepl("^sexes$", colnames(df3)))) sexes else NA) |>
                   dplyr::select(-sexes)
               } else {
                 df3 <- dplyr::mutate(df3, sex = NA)
@@ -1410,10 +1405,7 @@ convert_output <- function(
     }
     out_new <- Reduce(rbind, out_list)
     out_new <- out_new |>
-      dplyr::mutate(fleet = dplyr::case_when(
-        any(unique(out_new$fleet) %in% fleet_names) ~ fleet,
-        TRUE ~ fleet_names[fleet]
-      ))
+      dplyr::mutate(fleet = if (any(unique(out_new$fleet) %in% fleet_names)) fleet else fleet_names[fleet])
   } else if (model %in% c("bam", "BAM")) {
     #### BAM ####
     # Extract values from BAM output - model file after following ADMB2R
