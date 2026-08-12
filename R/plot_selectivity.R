@@ -2,9 +2,9 @@
 #'
 #' @inheritParams plot_spawning_biomass
 #' @param unit_label units for length-based selectivity.
-#' 
+#'
 #' Default: "cm"
-#' 
+#'
 #' @returns A plot showing selectivity by age or length.
 #'
 #' @details The input is from an assessment model output file
@@ -40,8 +40,6 @@ plot_selectivity <- function(
   figures_dir = getwd(),
   ...
 ) {
-
-  
   # Extract selectivity
   selectivity <- filter_data(
     dat = dat,
@@ -53,14 +51,14 @@ plot_selectivity <- function(
     interactive = interactive,
     module = module
   )
-  
+
   # process data
   processed_data <- process_data(
     dat = selectivity,
     group = "year",
     facet = c(group, facet)
   )
-  
+
   if ("length_bins" %in% colnames(processed_data[[1]])) {
     prepared_data <- processed_data[[1]] |>
       dplyr::mutate(length_bins = as.numeric(length_bins))
@@ -70,44 +68,46 @@ plot_selectivity <- function(
       dplyr::mutate(age = as.numeric(age))
     type <- "age"
   }
-  
+
   # |> dplyr::mutate(group_var = NA)
   groups <- processed_data[[2]]
   facets <- processed_data[[3]]
-  
-  if (any(facets == "age" | facets == "length_bins" | facets == "year")){
+
+  if (any(facets == "age" | facets == "length_bins" | facets == "year")) {
     facets <- facets[!grepl("length_bins|age|year", facets)]
   }
-  
-  if (groups == "age" | groups == "length_bins" | groups == "year"){
+
+  if (groups == "age" | groups == "length_bins" | groups == "year") {
     groups <- facets[1]
     facets <- facets[-1]
     prepared_data <- prepared_data |>
       dplyr::mutate(group_var = .data[[groups]])
-    if (groups == ""){
+    if (groups == "") {
       groups <- NULL
     }
   }
-  
+
   # Check if there is >1 label
   if (length(unique(prepared_data$label)) > 1) {
     prepared_data <- prepared_data |>
       # always select the first label if TRUE
       dplyr::filter(label == unique(label)[1])
   }
-  
+
   # Plot
   # TODO: left off here. Need to show fleets, models, other groupings
   final <- plot_timeseries(
     dat = prepared_data |> dplyr::filter(year == max(prepared_data$year, na.rm = TRUE)),
     x = ifelse(type == "length",
-               "length_bins",
-               "age"),
+      "length_bins",
+      "age"
+    ),
     y = "estimate",
     geom = "line",
     xlab = ifelse(type == "length",
-                  glue::glue("Length ({unit_label})"),
-                  "Age"),
+      glue::glue("Length ({unit_label})"),
+      "Age"
+    ),
     ylab = "Selectivity",
     group = groups,
     facet = facets,
@@ -121,28 +121,32 @@ plot_selectivity <- function(
   if (make_rda) {
     # Obtain relevant key quantities for captions/alt text
     selectivity.type.cap <- ifelse(type == "length",
-                              "Length",
-                              "Age")
-    
+      "Length",
+      "Age"
+    )
+
     selectivity.type.low <- tolower(selectivity.type.cap)
-    
+
     selectivity.x <- ifelse(type == "age",
-                                "years",
-                            unit_label)
-    
+      "years",
+      unit_label
+    )
+
     selectivity.start.year <- min(prepared_data$year)
-    
+
     selectivity.end.year <- max(prepared_data$year)
-    
+
     selectivity.x.min <- ifelse(type == "age",
-                                min(prepared_data$age),
-                                min(prepared_data$length_bins)) |>
+      min(prepared_data$age),
+      min(prepared_data$length_bins)
+    ) |>
       as.numeric() |>
       round(digits = 3)
-    
+
     selectivity.x.max <- ifelse(type == "age",
-                                max(prepared_data$age),
-                                max(prepared_data$length_bins)) |>
+      max(prepared_data$age),
+      max(prepared_data$length_bins)
+    ) |>
       as.numeric() |>
       round(digits = 3)
 

@@ -20,7 +20,7 @@ test_that("plot_selectivity generates plots without errors", {
       figures_dir = getwd()
     )
   )
-  
+
   expect_no_error(
     plot_selectivity(
       stockplotr::example_data |>

@@ -363,7 +363,7 @@ process_data <- function(
     group <- facet[1]
     facet <- facet[-1]
   }
-  
+
   # Export list of objects
   list(
     # variable,
