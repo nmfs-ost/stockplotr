@@ -29,7 +29,7 @@ Default: c("catch" = "mt", "spawning_biomass" = "mt",
 
 Default: `FALSE`}
 
-\item{module}{Character vector. (Optional) Module name found in `dat`.
+\item{module}{Character vector. (Optional) Module name found in `dat$module_name`.
 If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
