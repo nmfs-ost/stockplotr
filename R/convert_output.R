@@ -2364,7 +2364,14 @@ convert_output <- function(
       var_names_sheet <- var_names_sheet |> dplyr::select(-module_name)
       out_new <- dplyr::left_join(out_new, var_names_sheet, by = "label")
     } else {
-      out_new <- dplyr::left_join(out_new, var_names_sheet, by = c("module_name", "label"))
+      var_names_sheet <- var_names_sheet |>
+        dplyr::distinct(module_name, label, .keep_all = TRUE)
+      out_new <- dplyr::left_join(
+        out_new,
+        var_names_sheet,
+        by = c("module_name", "label"),
+        relationship = "many-to-one"
+      )
     }
     out_new <- out_new |>
       dplyr::mutate(label = dplyr::case_when(
