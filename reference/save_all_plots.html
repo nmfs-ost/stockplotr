@@ -113,7 +113,9 @@
 <span>  index_unit_label <span class="op">=</span> <span class="st">""</span>,</span>
 <span>  biomass_unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
 <span>  catch_unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
-<span>  catch_scale_amount <span class="op">=</span> <span class="fl">1</span></span>
+<span>  catch_scale_amount <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  projections_unit_label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>catch <span class="op">=</span> <span class="st">"mt"</span>, spawning_biomass <span class="op">=</span> <span class="st">"mt"</span>, fishing_mortality <span class="op">=</span></span>
+<span>    <span class="st">""</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -247,6 +249,19 @@ biomass quantities shown via bubble size. See `recruitment_scale_amount`.</p>
 <dd><p>Number. A number describing how much to scale down the
 catch quantities shown via bubble size. See `recruitment_scale_amount`.</p>
 <p>Default: 1</p></dd>
+
+
+<dt id="arg-projections-unit-label">projections_unit_label<a class="anchor" aria-label="anchor" href="#arg-projections-unit-label"></a></dt>
+<dd><p>Units for projections quantities</p>
+<p>Default: c("catch" = "mt", "spawning_biomass" = "mt",
+"fishing_mortality" = "")</p></dd>
+
+
+<dt id="arg-projections-uncert-label">projections_uncert_label<a class="anchor" aria-label="anchor" href="#arg-projections-uncert-label"></a></dt>
+<dd><p>Abbreviated uncertainty label for
+each quantity</p>
+<p>Default: c("catch" = "stddev", "spawning_biomass" = "stddev",
+"fishing_mortality" = "stddev")</p></dd>
 
 </dl></div>
     <div id="value">

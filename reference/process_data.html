@@ -92,7 +92,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">process_data</span><span class="op">(</span><span class="va">dat</span>, group <span class="op">=</span> <span class="cn">NULL</span>, facet <span class="op">=</span> <span class="cn">NULL</span>, lbs <span class="op">=</span> <span class="cn">FALSE</span>, method <span class="op">=</span> <span class="st">"sum"</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">process_data</span><span class="op">(</span><span class="va">dat</span>, group <span class="op">=</span> <span class="cn">NULL</span>, facet <span class="op">=</span> <span class="cn">NULL</span>, lbs <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -123,13 +123,6 @@ variables identified in the data by the function.</p>
 kilograms to pounds. The default units match the default in the
 unit_label argument - 'metric tons'.</p>
 <p>Default: `FALSE`</p></dd>
-
-
-<dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
-<dd><p>String. Method for summarizing data when group
-is set to "none".</p>
-<p>Default: "sum"</p>
-<p>Options: "sum" or "mean"</p></dd>
 
 </dl></div>
     <div id="value">
@@ -165,7 +158,7 @@ dataframe output from <a href="filter_data.html">filter_data</a>.</p>
 <span class="r-in"><span>    geom <span class="op">=</span> <span class="st">"line"</span>,</span></span>
 <span class="r-in"><span>    module <span class="op">=</span> <span class="st">"TIME_SERIES"</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="fu">process_data</span><span class="op">(</span>dat <span class="op">=</span> <span class="va">filtered</span>, method <span class="op">=</span> <span class="st">"sum"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">process_data</span><span class="op">(</span>dat <span class="op">=</span> <span class="va">filtered</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 322 × 8</span></span>
