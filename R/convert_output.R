@@ -2,7 +2,8 @@
 #'
 #' Format stock assessment output files to a standardized format.
 #'
-#' @param file Path. Assessment model output file path
+#' @param file Path. Assessment model output file path. Currently accepts SS3 
+#' Report.sso file, BAM .rda file, Rceattle model object, and FIMS model object.
 #' @param model String. Assessment model used in evaluation
 #'
 #' Default: NULL
@@ -13,7 +14,9 @@
 #'  indicate the fleets names as an acronym in a vector
 #'
 #'  Default: NULL
-#' @param save_dir Path. File path to save the converted output file.
+#' @param save_dir Path. Full file path to save the converted output file. If 
+#' saved file name is not indicated, the file will be saved as "std_output.rda" 
+#' in the file path provided.
 #'
 #' Default: NULL
 #'
@@ -22,7 +25,7 @@
 #' @returns A reformatted and standardized version of assessment model results
 #'         for application in building a stock assessment reports and to easily
 #'         adapt results among regional assessments.
-#' @details The resulting object is simply a transformed and machine readable
+#' @details The resulting object is a long-format, transformed and machine readable
 #' version of a model output file. Converted data frame is always returned.
 #' It will also be saved if save_dir is not NULL.
 #'
