@@ -1,7 +1,8 @@
 test_that("plot_biomass_at_age generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_biomass_at_age(stockplotr::example_data)
+    plot_biomass_at_age(stockplotr::example_data,
+                        module = "BIOMASS_AT_AGE")
   )
 
   # expect error-free plot with many arguments
@@ -11,6 +12,7 @@ test_that("plot_biomass_at_age generates plots without errors", {
       unit_label = "metric tons",
       proportional = FALSE,
       scale_amount = 10,
+      module = "BIOMASS_AT_AGE",
       make_rda = FALSE,
       figures_dir = getwd()
     )
@@ -22,6 +24,7 @@ test_that("plot_biomass_at_age generates plots without errors", {
       stockplotr::example_data,
       unit_label = "metric tons",
       scale_amount = 1,
+      module = "BIOMASS_AT_AGE",
       make_rda = FALSE,
       figures_dir = getwd()
     ),
@@ -33,6 +36,7 @@ test_that("rda file made when indicated", {
   # export rda
   plot_biomass_at_age(
     stockplotr::example_data,
+    module = "BIOMASS_AT_AGE",
     figures_dir = getwd(),
     make_rda = TRUE
   )
@@ -127,6 +131,7 @@ test_that("plot_biomass_at_age generates error when biomass label is not found",
 test_that("plot is made proportional and does not contain a legend", {
   plot <- plot_biomass_at_age(
     stockplotr::example_data,
+    module = "BIOMASS_AT_AGE",
     unit_label = "fish",
     proportional = TRUE,
     scale_amount = 1,
@@ -139,6 +144,7 @@ test_that("plot is made proportional and does not contain a legend", {
 test_that("plot contains a legend", {
   plot <- plot_biomass_at_age(
     stockplotr::example_data,
+    module = "BIOMASS_AT_AGE",
     proportional = FALSE,
     unit_label = "fish",
     scale_amount = 1,

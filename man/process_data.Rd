@@ -4,7 +4,7 @@
 \alias{process_data}
 \title{Processing for figures}
 \usage{
-process_data(dat, group = NULL, facet = NULL, lbs = FALSE, method = "sum")
+process_data(dat, group = NULL, facet = NULL, lbs = FALSE)
 }
 \arguments{
 \item{dat}{Data frame. Pre-filtered data from \link[stockplotr]{filter_data} following a
@@ -28,13 +28,6 @@ kilograms to pounds. The default units match the default in the
 unit_label argument - 'metric tons'.
 
 Default: `FALSE`}
-
-\item{method}{String. Method for summarizing data when group
-is set to "none".
-
-Default: "sum"
-
-Options: "sum" or "mean"}
 }
 \value{
 List of 3 objects:
@@ -62,6 +55,6 @@ dataframe output from \link[stockplotr]{filter_data}.
     geom = "line",
     module = "TIME_SERIES"
   )
-  process_data(dat = filtered, method = "sum")
+  process_data(dat = filtered)
 }
 }

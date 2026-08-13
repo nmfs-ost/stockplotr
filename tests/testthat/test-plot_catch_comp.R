@@ -2,7 +2,8 @@
 test_that("plot_catch_comp generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_catch_comp(stockplotr::example_data)
+    plot_catch_comp(stockplotr::example_data, 
+                    module = "CATCH_AT_AGE")
   )
 
   # expect error-free plot with many arguments
@@ -12,6 +13,7 @@ test_that("plot_catch_comp generates plots without errors", {
       facet = "area",
       unit_label = "fish",
       scale_amount = 1000,
+      module = "CATCH_AT_AGE",
       make_rda = FALSE,
       figures_dir = getwd()
     )
@@ -23,6 +25,7 @@ test_that("plot_catch_comp generates plots without errors", {
       stockplotr::example_data,
       unit_label = "fish",
       scale_amount = 1,
+      module = "CATCH_AT_AGE",
       make_rda = FALSE,
       figures_dir = getwd()
     ),
@@ -34,6 +37,7 @@ test_that("rda file made when indicated", {
   # export rda
   plot_catch_comp(
     stockplotr::example_data,
+    module = "CATCH_AT_AGE",
     figures_dir = getwd(),
     make_rda = TRUE
   )
@@ -142,6 +146,7 @@ test_that("plot is made proportional and does not contain a legend", {
   plot <- plot_catch_comp(
     stockplotr::example_data,
     unit_label = "fish",
+    module = "CATCH_AT_AGE",
     proportional = TRUE,
     scale_amount = 1,
     make_rda = FALSE,
@@ -154,6 +159,7 @@ test_that("plot contains a legend", {
   plot <- plot_catch_comp(
     stockplotr::example_data,
     proportional = FALSE,
+    module = "CATCH_AT_AGE",
     unit_label = "fish",
     scale_amount = 1,
     make_rda = FALSE,
@@ -167,6 +173,7 @@ test_that("year class lines are plotted", {
     stockplotr::example_data,
     proportional = FALSE,
     unit_label = "fish",
+    module = "CATCH_AT_AGE",
     scale_amount = 1,
     make_rda = FALSE,
     figures_dir = getwd()
