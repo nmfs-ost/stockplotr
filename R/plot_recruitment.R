@@ -68,8 +68,7 @@ plot_recruitment <- function(
   processed_data <- process_data(
     dat = recruitment,
     group = group,
-    facet = facet,
-    method = "sum"
+    facet = facet
   )
   recruitment <- processed_data[[1]]
   group <- processed_data[[2]]

@@ -1,0 +1,125 @@
+#' Create Projection Summary Table
+#'
+#' Generates a table showing assumed and projected years of Catch, SB, and F.
+#'
+#' @inheritParams table_landings
+#' 
+#' @param unit_label Character vector. Abbreviated unit label for each quantity
+#' 
+#' Default: c("catch" = "mt", "spawning_biomass" = "mt", 
+#' "fishing_mortality" = "")
+#' 
+#' @return A formatted gt table object.
+#' @details We would like to thank Dan Hennen for sharing his projections table
+#' function code, which served as the foundation for this function.
+#' 
+#' @export
+#' @examples
+#' table_projections(
+#'  dat = stockplotr::example_data,
+#'  interactive = FALSE,
+#'  module = "DERIVED_QUANTITIES")
+#'
+table_projections <- function(
+    dat,
+    unit_label = c("catch" = "mt", "spawning_biomass" = "mt", "fishing_mortality" = ""),
+    interactive = TRUE,
+    module = NULL,
+    make_rda = FALSE,
+    tables_dir = getwd()
+    ) {
+  # check if catch in data else landings
+  catch_lab <- ifelse(
+    any(grepl("catch$", dat$label)),
+    "catch",
+    "landings_weight"
+  )
+  # change default unit and uncert labs when catch is changed to landings
+  if ("landings" %notin% names(unit_label) | "landings" %notin% names(unit_label)) {
+    unit_label <- c(unit_label, "landings_weight" = unit_label[["catch"]])
+  }
+  # iterate through 3 label_names
+  lab_list <- purrr::map(
+    c(catch_lab, "spawning_biomass", "fishing_mortality"),
+    function(x) {
+      cli::cli_alert_info(paste0("Processing ", x))
+      filtered_data <- filter_data(
+        dat = dat,
+        label_name = paste0("^", x, "$"),
+        geom = "line",
+        era = "fore",
+        module = module,
+        scale_amount = 1,
+        interactive = interactive
+      ) |>
+        dplyr::mutate(estimate = ifelse(x != "fishing_mortality", round(as.numeric(estimate), digits = 0), round(as.numeric(estimate), digits = 4))) |>
+        dplyr::mutate(uncertainty = round(as.numeric(uncertainty), digits = 2))
+      uncertainty_label <- ifelse(
+        is.na(unique(filtered_data$uncertainty_label)),
+        "Uncertainty",
+        unique(filtered_data$uncertainty_label)
+      )
+      extra_grouping <- check_grouping(filtered_data)[-grep("year|age", check_grouping(filtered_data))]
+      if (length(extra_grouping) > 1) {
+        cli::cli_abort(
+          "Table not created due to {extra_grouping} variables in {x}."
+        )
+        # return() # uncomment if requested to return smaller table
+      }
+      # process to reduce columns
+      processed_data <- process_table(
+        filtered_data,
+        digits = ifelse(x == "fishing_mortality", 5, 2)
+      )
+      data <- processed_data[[1]]
+      group <- processed_data[[2]]
+
+      # merge data with uncertainty and unit labels
+      merge_error(
+        table_data = data,
+        id_col_vals = group,
+        unit_label = unit_label[grepl(x, names(unit_label))][[1]],
+        uncert_lab = uncertainty_label
+      )[[1]]
+    }
+  )
+  
+  combine_data <- purrr::reduce(purrr::compact(lab_list), dplyr::full_join, by = c("Year")) |>
+    gt::gt()
+  
+  final_table <- theme_table(combine_data)
+  
+  # export table to rda if argument = T
+  if (make_rda == TRUE) {
+    # No key quantities for captions/alt text since only values
+    # are units for catch, SB, and F, which are specified for
+    # the main figures/tables for each
+    # So, export captions/alt text csv if absent
+    if (!file.exists(fs::path(getwd(), "captions_alt_text.csv"))) {
+      caps_alttext <- utils::read.csv(
+        system.file("resources", "captions_alt_text_template.csv", package = "stockplotr")
+      )
+      # export df with captions and alt text to csv
+      utils::write.csv(
+        x = caps_alttext,
+        file = fs::path(getwd(), "captions_alt_text.csv"),
+        row.names = FALSE
+      )    
+    }
+     
+      create_rda(
+        object = final_table,
+        # get name of function and remove "table_" from it
+        topic_label = "projections",
+        fig_or_table = "table",
+        dat = dat,
+        dir = tables_dir,
+        scale_amount = 1,
+        unit_label = unit_label,
+        table_df = final_table$`_data`
+      )
+    }
+
+  # Send table(s) to viewer
+  return(final_table)
+}
