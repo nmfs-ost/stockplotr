@@ -662,7 +662,7 @@ convert_output <- function(
                   label == "f" ~ "fishing_mortality",
                   TRUE ~ label
                 ),
-                estimate = as.numeric(estimate)
+                estimate = suppressWarnings(as.numeric(estimate))
                   # dplyr::if_else(
                   # grepl("-|_", as.numeric(estimate)),
                   # NA,
