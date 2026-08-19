@@ -92,7 +92,7 @@ table_catch <- function(
   if ("Fleet" %in% colnames(catch)){
     catch <- catch |>
       tidyr::pivot_wider(names_from = Fleet,
-                         names_glue = "Fleet {Fleet} {unit_label}",
+                         names_glue = stringr::str_glue("Fleet {{Fleet}}{unit_label}"),
                          values_from = Total_catch)
   } else {
     catch <- catch |>
@@ -106,18 +106,17 @@ table_catch <- function(
 
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
-    if (length(df_list) == 1) {
       # Obtain relevant key quantities for captions/alt text
-      catch.units <- unit_label
+      tot.catch.units <- unit_label
 
       # calculate & export key quantities
-      export_kqs(catch.units)
+      export_kqs(tot.catch.units)
 
       # Add key quantities to captions/alt text
-      insert_kqs(catch.units)
+      insert_kqs(tot.catch.units)
 
       create_rda(
-        object = final[[1]],
+        object = final,
         # get name of function and remove "table_" from it
         topic_label = gsub("table_", "", utils::tail(as.character(sys.call()[[1]]), n = 1)),
         fig_or_table = "table",
@@ -127,21 +126,11 @@ table_catch <- function(
         unit_label = unit_label,
         table_df = final
       )
-    }
-  } else {
+
     cli::cli_alert_warning("Multiple tables cannot be exported at this time.")
     cli::cli_alert_info("We are currently developing this feature.")
   }
 
   # Send table(s) to viewer
-  if (!is.data.frame(table_data)) {
-    for (t in final) {
-      print(t)
-    }
-    # Return table list invisibly
-    return(invisible(final))
-  } else {
-    # Return finished table (when only one table)
-    return(final)
-  }
+  final
 }
