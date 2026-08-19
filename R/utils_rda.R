@@ -9,7 +9,7 @@
 #' @param dat Data frame. The original data object.
 #' @param final ggplot2 object. The final figure.
 #' @param relative Logical. TRUE/FALSE; specify whether to set y-axis values relative to the ref_line value.
-#' @param module Character vector. Module name found in `dat$module_name`. 
+#' @param module Character vector. Module name found in `dat$module_name`.
 #' @param ... Additional arguments to be passed to the function.
 #'
 #' @return The value of the specified key quantity.
@@ -26,8 +26,7 @@ calc_kqs <- function(returned_kq,
                      final = NULL,
                      relative = NULL,
                      module = NULL,
-                     ...){
-  
+                     ...) {
   # plot_stock_recruitment()-----
   if (returned_kq == "sr.age.min") {
     return(
@@ -42,11 +41,11 @@ calc_kqs <- function(returned_kq,
   # plot_spawning_biomass()-----
   if (returned_kq %in% c("rel.ssb.min", "rel.ssb.max")) {
     rel.ssb <- final[["layers"]][[2]][["data"]] |>
-        as.data.frame() |>
-        dplyr::pull(estimate)
+      as.data.frame() |>
+      dplyr::pull(estimate)
     rel.ssb.min <- rel.ssb |>
-        min() |>
-        round(digits = 3)
+      min() |>
+      round(digits = 3)
     rel.ssb.max <- rel.ssb |>
       max() |>
       round(digits = 3)
@@ -55,12 +54,12 @@ calc_kqs <- function(returned_kq,
 
   # plot_biomass()-----
   if (returned_kq %in% c("rel.B.min", "rel.B.max")) {
-    rel.B <- final[["layers"]][[2]][["data"]]  |>
-        as.data.frame() |>
-        dplyr::pull(estimate)
+    rel.B <- final[["layers"]][[2]][["data"]] |>
+      as.data.frame() |>
+      dplyr::pull(estimate)
     rel.B.min <- rel.B |>
-        min() |>
-        round(digits = 3)
+      min() |>
+      round(digits = 3)
     rel.B.max <- rel.B |>
       max() |>
       round(digits = 3)
@@ -82,7 +81,7 @@ calc_kqs <- function(returned_kq,
   if (returned_kq == "B.end.year") {
     return(max(prepared_data$year) |> round(digits = 3))
   }
- 
+
   if (returned_kq %in% c("B.terminal.min", "B.terminal.max", "B.terminal.year", "B.terminal.est")) {
     B.terminal.df <- filter_data(
       dat = dat,
@@ -94,44 +93,44 @@ calc_kqs <- function(returned_kq,
       module = selected_module,
       scale_amount = 1,
       interactive = FALSE
-    )  |>
+    ) |>
       dplyr::filter(year == max(year))
-    
+
     B.terminal.year <- B.terminal.df |>
       dplyr::pull(year) |>
-      unique()   
-    
+      unique()
+
     B.terminal.est <- B.terminal.df |>
       dplyr::pull(estimate) |>
       unique() |>
       round(digits = 3)
-    
-    if (length(B.terminal.est) > 1){
+
+    if (length(B.terminal.est) > 1) {
       B.terminal.est <- B.terminal.df |>
         dplyr::filter(is.na(age)) |>
         dplyr::pull(estimate) |>
         unique() |>
         round(digits = 3)
-      
-      if (length(B.terminal.est) > 0){
+
+      if (length(B.terminal.est) > 0) {
         B.terminal.est <- NA
         B.terminal.uncert <- NA
       } else {
-      B.terminal.uncert <- B.terminal.df |>
-        dplyr::filter(is.na(age)) |>
-        dplyr::select(uncertainty) |> 
-        as.numeric()
+        B.terminal.uncert <- B.terminal.df |>
+          dplyr::filter(is.na(age)) |>
+          dplyr::select(uncertainty) |>
+          as.numeric()
       }
-      if (length(B.terminal.est) == 0){
+      if (length(B.terminal.est) == 0) {
         B.terminal.est <- NA
       }
     } else {
       B.terminal.uncert <- B.terminal.df |>
-        dplyr::select(uncertainty) |> 
-        as.numeric()  
-      }
-    
-    if (is.na(B.terminal.uncert)){
+        dplyr::select(uncertainty) |>
+        as.numeric()
+    }
+
+    if (is.na(B.terminal.uncert)) {
       B.terminal.uncert <- NA
       B.terminal.min <- NA
       B.terminal.max <- NA
@@ -139,17 +138,18 @@ calc_kqs <- function(returned_kq,
       B.terminal.min <- round((B.terminal.est - B.terminal.uncert), digits = 3)
       B.terminal.max <- round((B.terminal.est + B.terminal.uncert), digits = 3)
     }
-    
+
     if (returned_kq == "B.terminal.min") {
       return(B.terminal.min)
-    } else if (returned_kq == "B.terminal.max"){
-      return(B.terminal.max) } else if (returned_kq == "B.terminal.est"){
-        return (B.terminal.est)
-      } else if (returned_kq == "B.terminal.year") {
-        return(B.terminal.year)
-      }
+    } else if (returned_kq == "B.terminal.max") {
+      return(B.terminal.max)
+    } else if (returned_kq == "B.terminal.est") {
+      return(B.terminal.est)
+    } else if (returned_kq == "B.terminal.year") {
+      return(B.terminal.year)
+    }
   }
-  
+
   if (returned_kq == "sb_msy") {
     return(
       dat |>
@@ -192,15 +192,15 @@ calc_kqs <- function(returned_kq,
       )
     }
   }
-  
+
   if (returned_kq %in% c("B.msy.min", "B.msy.max")) {
-    B.msy <- dat |> 
-      dplyr::filter(label == "bmsy") |> 
-      dplyr::select(estimate) |> 
+    B.msy <- dat |>
+      dplyr::filter(label == "bmsy") |>
+      dplyr::select(estimate) |>
       as.numeric()
-    B.msy_uncert <- dat |> 
-      dplyr::filter(label == "bmsy") |> 
-      dplyr::select(uncertainty) |> 
+    B.msy_uncert <- dat |>
+      dplyr::filter(label == "bmsy") |>
+      dplyr::select(uncertainty) |>
       as.numeric()
     B.msy.min <- round((B.msy - B.msy_uncert), digits = 3)
     B.msy.max <- round((B.msy + B.msy_uncert), digits = 3)
@@ -210,23 +210,22 @@ calc_kqs <- function(returned_kq,
   # plot_fishing_mortality()-----
   if (returned_kq %in% c("F.max", "F.min")) {
     F.df <- prepared_data$estimate |>
-        na.omit() 
-      F.max <- F.df |>
-        max() |>
-        round(digits = 3)
-      F.min <- F.df |>
-        min() |>
-        round(digits = 3)
+      na.omit()
+    F.max <- F.df |>
+      max() |>
+      round(digits = 3)
+    F.min <- F.df |>
+      min() |>
+      round(digits = 3)
     return(ifelse(returned_kq == "F.max", F.max, F.min))
   }
 
   if (returned_kq == "F.target") {
-
     F.target <- dat |>
-        dplyr::filter(grepl('f_target', label) | grepl('f_msy', label) | (grepl('fishing_mortality_msy', label) & is.na(year))) |>
-        dplyr::pull(estimate) |>
-        round(digits = 3)
-    if (length(F.target > 1)){
+      dplyr::filter(grepl("f_target", label) | grepl("f_msy", label) | (grepl("fishing_mortality_msy", label) & is.na(year))) |>
+      dplyr::pull(estimate) |>
+      round(digits = 3)
+    if (length(F.target > 1)) {
       F.target <- NA
     }
     return(F.target)
@@ -245,7 +244,7 @@ calc_kqs <- function(returned_kq,
       return(NA)
     }
   }
-  
+
   if (returned_kq %in% c("F.terminal.min", "F.terminal.max", "F.terminal.year", "F.terminal.est")) {
     F.terminal.df <- filter_data(
       dat = dat,
@@ -260,11 +259,11 @@ calc_kqs <- function(returned_kq,
     ) |>
       dplyr::filter(year == max(year)) |>
       unique()
-    
+
     F.terminal.year <- F.terminal.df |>
       dplyr::pull(year) |>
       unique()
-    
+
     if (length(unique(F.terminal.df$fleet)) > 1) {
       F.terminal.est <- NA
       F.terminal.uncert <- NA
@@ -272,55 +271,56 @@ calc_kqs <- function(returned_kq,
       F.terminal.max <- NA
     } else {
       F.terminal.est <- F.terminal.df |>
-      dplyr::pull(estimate) |>
-      unique() |>
+        dplyr::pull(estimate) |>
+        unique() |>
         as.numeric() |>
         round(digits = 3)
       F.terminal.uncert <- F.terminal.df |>
-        dplyr::select(uncertainty) |> 
+        dplyr::select(uncertainty) |>
         as.numeric()
-      
+
       F.terminal.min <- round((F.terminal.est - F.terminal.uncert), digits = 3)
       F.terminal.max <- round((F.terminal.est + F.terminal.uncert), digits = 3)
       F.terminal.est <- round(F.terminal.est, digits = 3)
     }
-    
+
     if (returned_kq == "F.terminal.min") {
       return(F.terminal.min)
-    } else if (returned_kq == "F.terminal.max"){
-      return(F.terminal.max) } else if (returned_kq == "F.terminal.est"){
-        return (F.terminal.est)
-      } else if (returned_kq == "F.terminal.year") {
-        return(F.terminal.year)
-      }
+    } else if (returned_kq == "F.terminal.max") {
+      return(F.terminal.max)
+    } else if (returned_kq == "F.terminal.est") {
+      return(F.terminal.est)
+    } else if (returned_kq == "F.terminal.year") {
+      return(F.terminal.year)
+    }
   }
-  
+
   if (returned_kq %in% c("F.MSY.terminal", "F.MSY.terminal.min", "F.MSY.terminal.max")) {
     if (!"f_msy" %in% unique(dat$label)) {
       F.msy.est <- NA
       F.msy.terminal.min <- NA
       F.msy.terminal.max <- NA
     } else {
-    F.msy.terminal.df <- dat |>
-      dplyr::filter(label == "f_msy")
-    
-    F.msy.est <- F.msy.terminal.df |>
-      dplyr::pull(estimate) |>
-      as.numeric()
-    
-    F.msy.uncert <- F.msy.terminal.df |>
-      dplyr::pull(uncertainty) |>
-      as.numeric()
-    
-    F.msy.terminal.min <- round((F.msy.est - F.msy.uncert), digits = 3)
-    F.msy.terminal.max <- round((F.msy.est + F.msy.uncert), digits = 3)
-    F.msy.est <- round(F.msy.est, digits = 3)
+      F.msy.terminal.df <- dat |>
+        dplyr::filter(label == "f_msy")
+
+      F.msy.est <- F.msy.terminal.df |>
+        dplyr::pull(estimate) |>
+        as.numeric()
+
+      F.msy.uncert <- F.msy.terminal.df |>
+        dplyr::pull(uncertainty) |>
+        as.numeric()
+
+      F.msy.terminal.min <- round((F.msy.est - F.msy.uncert), digits = 3)
+      F.msy.terminal.max <- round((F.msy.est + F.msy.uncert), digits = 3)
+      F.msy.est <- round(F.msy.est, digits = 3)
     }
     if (returned_kq == "F.MSY.terminal") {
       return(F.msy.est)
-    } else if (returned_kq == "F.MSY.terminal.min"){
+    } else if (returned_kq == "F.MSY.terminal.min") {
       return(F.msy.terminal.min)
-    } else if (returned_kq == "F.MSY.terminal.max"){
+    } else if (returned_kq == "F.MSY.terminal.max") {
       return(F.msy.terminal.max)
     }
   }

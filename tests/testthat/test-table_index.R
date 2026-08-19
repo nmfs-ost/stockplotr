@@ -40,11 +40,11 @@ test_that("rda file made when indicated", {
     make_rda = TRUE,
     tables_dir = getwd()
   )
-  
+
   # expect that both tables dir and the index_table.rda file exist
   expect_true(dir.exists(fs::path(getwd(), "tables")))
   expect_true(file.exists(fs::path(getwd(), "tables", "index_table.rda")))
-  
+
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
   unlink(fs::path(getwd(), "tables"), recursive = T)
@@ -58,7 +58,7 @@ test_that("rda file made when indicated", {
     make_rda = TRUE,
     tables_dir = getwd()
   )
-  
+
   # load the rda file and check that it contains the expected object
   load(fs::path(getwd(), "tables", "index_table.rda"))
   # expect rda contains three objects: table, caption, and latex table
@@ -71,9 +71,9 @@ test_that("rda file made when indicated", {
   expect_false(
     is.null(rda$latex_table)
   )
-  
+
   expect_true(rda$caption == "Calculated index of abundance and corresponding CVs for the fleets and surveys identified in the column headers. ")
-  
+
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
   unlink(fs::path(getwd(), "tables"), recursive = T)

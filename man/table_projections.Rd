@@ -22,7 +22,7 @@ in `ref_line` is used to plot a reference line or calculate relative spawning bi
 
 \item{unit_label}{Character vector. Abbreviated unit label for each quantity
 
-Default: c("catch" = "mt", "spawning_biomass" = "mt", 
+Default: c("catch" = "mt", "spawning_biomass" = "mt",
 "fishing_mortality" = "")}
 
 \item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
@@ -60,8 +60,9 @@ function code, which served as the foundation for this function.
 }
 \examples{
 table_projections(
- dat = stockplotr::example_data,
- interactive = FALSE,
- module = "DERIVED_QUANTITIES")
+  dat = stockplotr::example_data,
+  interactive = FALSE,
+  module = "DERIVED_QUANTITIES"
+)
 
 }

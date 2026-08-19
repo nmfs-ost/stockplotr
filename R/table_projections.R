@@ -3,31 +3,32 @@
 #' Generates a table showing assumed and projected years of Catch, SB, and F.
 #'
 #' @inheritParams table_landings
-#' 
+#'
 #' @param unit_label Character vector. Abbreviated unit label for each quantity
-#' 
-#' Default: c("catch" = "mt", "spawning_biomass" = "mt", 
+#'
+#' Default: c("catch" = "mt", "spawning_biomass" = "mt",
 #' "fishing_mortality" = "")
-#' 
+#'
 #' @return A formatted gt table object.
 #' @details We would like to thank Dan Hennen for sharing his projections table
 #' function code, which served as the foundation for this function.
-#' 
+#'
 #' @export
 #' @examples
 #' table_projections(
-#'  dat = stockplotr::example_data,
-#'  interactive = FALSE,
-#'  module = "DERIVED_QUANTITIES")
+#'   dat = stockplotr::example_data,
+#'   interactive = FALSE,
+#'   module = "DERIVED_QUANTITIES"
+#' )
 #'
 table_projections <- function(
-    dat,
-    unit_label = c("catch" = "mt", "spawning_biomass" = "mt", "fishing_mortality" = ""),
-    interactive = TRUE,
-    module = NULL,
-    make_rda = FALSE,
-    tables_dir = getwd()
-    ) {
+  dat,
+  unit_label = c("catch" = "mt", "spawning_biomass" = "mt", "fishing_mortality" = ""),
+  interactive = TRUE,
+  module = NULL,
+  make_rda = FALSE,
+  tables_dir = getwd()
+) {
   # check if catch in data else landings
   catch_lab <- ifelse(
     any(grepl("catch$", dat$label)),
@@ -83,12 +84,12 @@ table_projections <- function(
       )[[1]]
     }
   )
-  
+
   combine_data <- purrr::reduce(purrr::compact(lab_list), dplyr::full_join, by = c("Year")) |>
     gt::gt()
-  
+
   final_table <- theme_table(combine_data)
-  
+
   # export table to rda if argument = T
   if (make_rda == TRUE) {
     # No key quantities for captions/alt text since only values
@@ -104,21 +105,21 @@ table_projections <- function(
         x = caps_alttext,
         file = fs::path(getwd(), "captions_alt_text.csv"),
         row.names = FALSE
-      )    
-    }
-     
-      create_rda(
-        object = final_table,
-        # get name of function and remove "table_" from it
-        topic_label = "projections",
-        fig_or_table = "table",
-        dat = dat,
-        dir = tables_dir,
-        scale_amount = 1,
-        unit_label = unit_label,
-        table_df = final_table$`_data`
       )
     }
+
+    create_rda(
+      object = final_table,
+      # get name of function and remove "table_" from it
+      topic_label = "projections",
+      fig_or_table = "table",
+      dat = dat,
+      dir = tables_dir,
+      scale_amount = 1,
+      unit_label = unit_label,
+      table_df = final_table$`_data`
+    )
+  }
 
   # Send table(s) to viewer
   return(final_table)

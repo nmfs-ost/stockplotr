@@ -82,7 +82,7 @@ process_data <- function(
 
   # check for additional indexed variables
   index_variables <- check_grouping(dat)
-  
+
   # Set group_var to identified grouping
   if (!is.null(group) && group != "none") {
     data <- dplyr::mutate(
@@ -324,7 +324,7 @@ process_data <- function(
     group <- facet[1]
     facet <- facet[-1]
   }
-  
+
   # Export list of objects
   list(
     # variable,
@@ -382,23 +382,23 @@ process_table <- function(
     index_variables <- c(index_variables, mod_index)
   }
 
-  if (!is.null(group)){
+  if (!is.null(group)) {
     id_group <- group
   } else {
     id_group <- index_variables[-grep("year|age|length_bin", index_variables)]
   }
   cols <- index_variables[grep("year|age|length_bin", index_variables)]
-  
-  if (!is.null(group)){
-    if (any(is.na(dat[[group]]))){
+
+  if (!is.null(group)) {
+    if (any(is.na(dat[[group]]))) {
       dat <- dat |>
         dplyr::filter(!is.na(.data[[group]]))
     }
-  } else if (!is.null(id_group)){
-    if (length(id_group) > 1){
+  } else if (!is.null(id_group)) {
+    if (length(id_group) > 1) {
       cli::cli_alert_warning("Data contains >1 indexing variable. Selecting {id_group[1]}.")
     }
-    if (length(id_group) > 0 && any(is.na(dat[[id_group]]))){
+    if (length(id_group) > 0 && any(is.na(dat[[id_group]]))) {
       dat <- dat |>
         dplyr::filter(!is.na(.data[[id_group]]))
     }
@@ -504,12 +504,12 @@ process_table <- function(
     mod_dat <- dplyr::filter(dat, model == mod)
     mod_index_variables <- check_grouping(mod_dat)
     mod_id_group <- mod_index_variables[-grep("year|age|length_bin", mod_index_variables)]
-    
+
     # overriding mod_id_group when user inputs `group` argument
-    if (!is.null(group) && (group %in% mod_id_group)){
+    if (!is.null(group) && (group %in% mod_id_group)) {
       mod_id_group <- group
     }
-    
+
     mod_cols <- mod_index_variables[grep("year|age|length_bin", mod_index_variables)]
     mod_uncert_lab <- unique(mod_dat$uncertainty_label)
     if (length(mod_uncert_lab) == 1 && is.na(mod_uncert_lab)) {
