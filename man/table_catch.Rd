@@ -82,7 +82,10 @@ table_catch(stockplotr::example_data)
 
 table_catch(
   stockplotr::example_data,
-  unit_label = "lbs"
+  unit_label = "lbs",
+  module = "TIME_SERIES",
+  digits = 4,
+  scale_amount = 100
 )
 }
 \seealso{
