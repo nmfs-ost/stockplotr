@@ -25,6 +25,12 @@ test_that("convert_output works for SS3", {
   expect_equal(dim(output)[2], 34)
 })
 
+test_that("convert_output does not emit scalar case_when deprecation warning", {
+  expect_no_warning(convert_output(
+    file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso")
+  ))
+})
+
 
 test_that("convert_output saves model ss3 hake output file", {
   dir.create(fs::path("fixtures", "ss3_models_converted", "Hake_2018"), recursive = TRUE)

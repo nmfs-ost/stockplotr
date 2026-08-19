@@ -479,12 +479,7 @@ convert_output <- function(
               if ("sexes" %in% colnames(df3)) {
                 df3 <- df3 |>
                   # add in case if sexes is present and add sex as na if so
-                  dplyr::mutate(
-                    sex = dplyr::case_when(
-                      any(grepl("^sexes$", colnames(df3))) ~ sexes,
-                      TRUE ~ NA
-                    )
-                  ) |>
+                  dplyr::mutate(sex = if (any(grepl("^sexes$", colnames(df3)))) sexes else NA) |>
                   dplyr::select(-sexes)
               } else {
                 df3 <- dplyr::mutate(df3, sex = NA)
@@ -671,7 +666,7 @@ convert_output <- function(
                   label == "f" ~ "fishing_mortality",
                   TRUE ~ label
                 ),
-                estimate = as.numeric(estimate)
+                estimate = suppressWarnings(as.numeric(estimate))
                   # dplyr::if_else(
                   # grepl("-|_", as.numeric(estimate)),
                   # NA,
@@ -1429,10 +1424,7 @@ convert_output <- function(
     out_new <- Reduce(rbind, out_list)
     out_new <- out_new |>
       dplyr::mutate(
-        fleet = dplyr::case_when(
-          any(unique(out_new$fleet) %in% fleet_names) ~ fleet,
-          TRUE ~ fleet_names[fleet]
-        ),
+        fleet = if (any(unique(out_new$fleet) %in% fleet_names)) fleet else fleet_names[fleet],
         era = dplyr::case_when(
           !is.na(era) ~ era,
           year < start_year ~ "init",
@@ -2399,7 +2391,14 @@ convert_output <- function(
       var_names_sheet <- var_names_sheet |> dplyr::select(-module_name)
       out_new <- dplyr::left_join(out_new, var_names_sheet, by = "label")
     } else {
-      out_new <- dplyr::left_join(out_new, var_names_sheet, by = c("module_name", "label"))
+      var_names_sheet <- var_names_sheet |>
+        dplyr::distinct(module_name, label, .keep_all = TRUE)
+      out_new <- dplyr::left_join(
+        out_new,
+        var_names_sheet,
+        by = c("module_name", "label"),
+        relationship = "many-to-one"
+      )
     }
     out_new <- out_new |>
       dplyr::mutate(label = dplyr::case_when(

@@ -375,10 +375,7 @@ plot_aa <- function(
     dplyr::mutate(
       age = as.numeric(age),
       # zvar = .data[[z]],
-      zvar = dplyr::case_when(
-        proportional ~ sqrt(.data[[z]]),
-        TRUE ~ .data[[z]]
-      )
+      zvar = if (proportional) sqrt(.data[[z]]) else .data[[z]]
     )
   # Caclaulate x-axis breaks
   x_n_breaks <- axis_breaks(dat[[x]])
