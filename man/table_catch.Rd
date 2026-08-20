@@ -78,7 +78,8 @@ There are options to return a [gt::gt()] object or export an rda object
 containing a gt-based table, caption, and LaTeX-based table.
 }
 \examples{
-table_catch(stockplotr::example_data)
+table_catch(stockplotr::example_data,
+module = "TIME_SERIES")
 
 table_catch(
   stockplotr::example_data,
