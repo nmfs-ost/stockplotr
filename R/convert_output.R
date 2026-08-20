@@ -626,19 +626,6 @@ convert_output <- function(
                     df4 <- df4 |>
                       dplyr::filter(!(label %in% err_names[2:length(err_names)]))
                   }
-                  # Find overlapping error values if still present
-                  find_error_value <- function(column_names, to_match_vector) {
-                    vals <- vapply(column_names, function(col_name) {
-                      match <- vapply(to_match_vector, function(err) {
-                        pattern <- paste0("(^|[_.])", err, "($|[_.])")
-                        if (grepl(pattern, col_name)) err else NA_character_
-                      }, FUN.VALUE = character(1))
-                      stats::na.omit(match)[1]
-                    }, FUN.VALUE = character(1))
-                    # }
-                    # only unique values and those that intersect with values vector
-                    intersect(unique(vals), to_match_vector)
-                  }
                   # SS: I am not entirely sure what this step is doing, but is a good check
                   if (any(grepl(paste(err_names, collapse = "|"), colnames(df4)))) {
                     err_name <- find_error_value(names(df4), errors)
