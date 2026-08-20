@@ -26,7 +26,8 @@
 #' @export
 #'
 #' @examples
-#' table_catch(stockplotr::example_data)
+#' table_catch(stockplotr::example_data,
+#' module = "TIME_SERIES")
 #'
 #' table_catch(
 #'   stockplotr::example_data,
