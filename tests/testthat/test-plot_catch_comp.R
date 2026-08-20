@@ -2,8 +2,9 @@
 test_that("plot_catch_comp generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_catch_comp(stockplotr::example_data, 
-                    module = "CATCH_AT_AGE")
+    plot_catch_comp(stockplotr::example_data,
+      module = "CATCH_AT_AGE"
+    )
   )
 
   # expect error-free plot with many arguments

@@ -100,15 +100,15 @@
 #' @param landings_unit_label String. Landings units
 #'
 #' Default: "mt"
-#' 
+#'
 #' @param projections_unit_label Units for projections quantities
 #'
-#' Default: c("catch" = "mt", "spawning_biomass" = "mt", 
+#' Default: c("catch" = "mt", "spawning_biomass" = "mt",
 #' "fishing_mortality" = "")
-#' 
+#'
 #' @param projections_uncert_label Abbreviated uncertainty label for
 #' each quantity
-#' 
+#'
 #' Default: c("catch" = "stddev", "spawning_biomass" = "stddev",
 #' "fishing_mortality" = "stddev")
 #'
@@ -450,16 +450,16 @@ save_all_plots <- function(
       print(e)
     }
   )
-  
-  
+
+
   tryCatch(
     {
       cli::cli_h2("plot_selectivity")
       plot_selectivity(dat,
-                   # unit_label = selectivity_unit_label, # commenting this out because if interactive = FALSE, unit_label is not used as age is selected (over length), which doesn't require a unit label
-                   make_rda = TRUE,
-                   interactive = FALSE,
-                   figures_dir = figures_tables_dir
+        # unit_label = selectivity_unit_label, # commenting this out because if interactive = FALSE, unit_label is not used as age is selected (over length), which doesn't require a unit label
+        make_rda = TRUE,
+        interactive = FALSE,
+        figures_dir = figures_tables_dir
       ) # |> suppressWarnings() |> invisible()
     },
     error = function(e) {
@@ -531,16 +531,16 @@ save_all_plots <- function(
       print(e)
     }
   )
-  
+
   tryCatch(
     {
       cli::cli_h2("table_projections")
       table_projections(dat,
-                     unit_label = projections_unit_label,
-                     # uncertainty_label = projections_uncert_label,
-                     interactive = FALSE,
-                     make_rda = TRUE,
-                     tables_dir = figures_tables_dir
+        unit_label = projections_unit_label,
+        # uncertainty_label = projections_uncert_label,
+        interactive = FALSE,
+        make_rda = TRUE,
+        tables_dir = figures_tables_dir
       ) # |>
       # suppressWarnings() |>
       # invisible()

@@ -142,7 +142,7 @@ Default: 1}
 
 \item{projections_unit_label}{Units for projections quantities
 
-Default: c("catch" = "mt", "spawning_biomass" = "mt", 
+Default: c("catch" = "mt", "spawning_biomass" = "mt",
 "fishing_mortality" = "")}
 
 \item{projections_uncert_label}{Abbreviated uncertainty label for

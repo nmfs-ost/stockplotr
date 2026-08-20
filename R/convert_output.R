@@ -2,7 +2,7 @@
 #'
 #' Format stock assessment output file to a standardized tibble.
 #'
-#' @param file Path. Assessment model output file path. Currently accepts SS3 
+#' @param file Path. Assessment model output file path. Currently accepts SS3
 #' Report.sso file, BAM .rda file, Rceattle model object, and FIMS model object.
 #' @param model String. Assessment model used in evaluation
 #'
@@ -10,13 +10,13 @@
 #'
 #' Options: "ss3", "bam", "fims", "rceattle"
 #' @param fleet_names Character vector. Names of fleets in the assessment model as
-#'  shortened in the output file or names of fleets to replace the native fleet 
-#'  names in the output. For example, if fleet names in the model are 1, 2, 3 
+#'  shortened in the output file or names of fleets to replace the native fleet
+#'  names in the output. For example, if fleet names in the model are 1, 2, 3
 #'  then fleet_names = c("fleet1" = 1, "fleet2" = 2, "fleet3" = 3).
 #'
 #'  Default: NULL
-#' @param save_dir Path. Full file path to save the converted output file. If 
-#' saved file name is not indicated, the file will be saved as "std_output.rda" 
+#' @param save_dir Path. Full file path to save the converted output file. If
+#' saved file name is not indicated, the file will be saved as "std_output.rda"
 #' in the file path provided.
 #'
 #' Default: NULL
@@ -297,7 +297,7 @@ convert_output <- function(
       # Extract start year and end year
       start_year <- file$startyr
       end_year <- file$endyr
-      
+
       param_names <- names(dat)
 
       std <- c(
@@ -667,10 +667,10 @@ convert_output <- function(
                   TRUE ~ label
                 ),
                 estimate = suppressWarnings(as.numeric(estimate))
-                  # dplyr::if_else(
-                  # grepl("-|_", as.numeric(estimate)),
-                  # NA,
-                  # estimate
+                # dplyr::if_else(
+                # grepl("-|_", as.numeric(estimate)),
+                # NA,
+                # estimate
                 # )
               )
 
@@ -1168,8 +1168,8 @@ convert_output <- function(
             #   df2[setdiff(tolower(names(out_new)), tolower(names(df2)))] <- NA
             #   # Add to out list
             #   out_list[[parm_sel]] <- df2
-            # } else 
-           if (parm_sel == "DEFINITIONS") {
+            # } else
+            if (parm_sel == "DEFINITIONS") {
               # Extract start year and end year for iding era
               start_year <- as.numeric(extract[which(apply(extract, 1, function(row) any(row == "Start_year:"))), 2])
               end_year <- as.numeric(extract[which(apply(extract, 1, function(row) any(row == "End_year:"))), 2])
@@ -1430,7 +1430,7 @@ convert_output <- function(
           year < start_year ~ "init",
           year >= start_year & year <= end_year ~ "time",
           year > end_year ~ "fore",
-        TRUE ~ NA_character_
+          TRUE ~ NA_character_
         )
       )
   } else if (model %in% c("bam", "BAM")) {

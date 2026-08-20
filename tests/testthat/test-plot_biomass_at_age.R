@@ -2,7 +2,8 @@ test_that("plot_biomass_at_age generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
     plot_biomass_at_age(stockplotr::example_data,
-                        module = "BIOMASS_AT_AGE")
+      module = "BIOMASS_AT_AGE"
+    )
   )
 
   # expect error-free plot with many arguments

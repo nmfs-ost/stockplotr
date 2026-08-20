@@ -16,7 +16,6 @@ test_that("table_projections generates plots without errors", {
       tables_dir = getwd()
     )
   )
-
 })
 
 test_that("rda file made when indicated", {
