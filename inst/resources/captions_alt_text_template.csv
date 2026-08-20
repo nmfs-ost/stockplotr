@@ -32,7 +32,7 @@ proj.catch,figure,Forecasted catch in proj.catch.units over future years for dif
 proj.biomass,table,Forecasted biomass over future years for different fishing mortality scenarios.,
 report.version.model.changes,table,Document version history briefly describing when major changes or updates are made to each version of the report.,
 projections,table,"Forecasted catch, spawning biomass, and fishing mortality over future years. ",
-catch,table,Observed (points) and model estimated (line) catch over time for fleet catch.fleet.,
+catch,table,Total catch over time.,
 life.history.params,table,Life history parameters used in the stock assessment model. The last column of the table indicates whether the parameters were estimated by the model or fixed.,
 landings,table,Landed catch by fleet and year in landings.units.,
 discards,table,Discarded catch by fleet and year in discards.tbl.units.,
