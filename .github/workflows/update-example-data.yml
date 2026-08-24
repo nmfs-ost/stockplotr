@@ -33,6 +33,7 @@ jobs:
         run: Rscript data-raw/DATASET.R
 
       - name: Commit and push updated example data
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
