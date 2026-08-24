@@ -2,7 +2,7 @@
 # Path to SS3 output file
 EX_REPORT_PATH <- file.path("inst", "extdata", "Report.sso")
 # Install stockplotr
-devtools::install_github("nmfs-ost/stockplotr")
+devtools::install_local(".")
 # Convert output
 example_data <- stockplotr::convert_output(EX_REPORT_PATH)
 # Save object as rda into raw_data
