@@ -54,7 +54,7 @@ test_that("filter_data handles data frames and lists", {
 test_that("filter_data uses the first module when selection is empty", {
   testthat::local_mocked_bindings(
     interactive = function() TRUE,
-    .package = "stockplotr"
+    .package = "base"
   )
   testthat::local_mocked_bindings(
     select.list = function(...) character(0),
