@@ -13,6 +13,21 @@ make_utils_plot_data <- function() {
   )
 }
 
+make_utils_plot_multimodule_data <- function() {
+  tibble::tibble(
+    label = c("biomass", "biomass", "biomass", "biomass"),
+    estimate = c(100, 120, 80, 90),
+    module_name = c("TIME_SERIES", "TIME_SERIES", "AGE_SERIES", "AGE_SERIES"),
+    year = c(2000, 2001, 2000, 2001),
+    fleet = c("fleet_a", "fleet_a", "fleet_a", "fleet_a"),
+    age = c(1, 1, 1, 1),
+    season = c("spring", "spring", "spring", "spring"),
+    uncertainty = c(10, 10, 10, 10),
+    uncertainty_label = c("se", "se", "se", "se"),
+    era = c("time", "time", "time", "time")
+  )
+}
+
 test_that("filter_data handles data frames and lists", {
   dat <- make_utils_plot_data()
 
@@ -34,6 +49,37 @@ test_that("filter_data handles data frames and lists", {
   )
   expect_setequal(unique(filtered_list$model), c("model_one", "model_two"))
   expect_setequal(unique(filtered_list$group_var), c("model_one", "model_two"))
+})
+
+test_that("filter_data uses the first module when selection is empty", {
+  testthat::local_mocked_bindings(
+    interactive = function() TRUE,
+    .package = "base"
+  )
+  testthat::local_mocked_bindings(
+    select.list = function(...) character(0),
+    .package = "utils"
+  )
+
+  filtered <- filter_data(
+    dat = make_utils_plot_multimodule_data(),
+    label_name = "biomass",
+    geom = "line",
+    interactive = TRUE
+  )
+
+  expect_equal(unique(filtered$module_name), "TIME_SERIES")
+})
+
+test_that("filter_data uses the first module in non-interactive mode", {
+  filtered <- filter_data(
+    dat = make_utils_plot_multimodule_data(),
+    label_name = "biomass",
+    geom = "line",
+    interactive = FALSE
+  )
+
+  expect_equal(unique(filtered$module_name), "TIME_SERIES")
 })
 
 test_that("plot_timeseries and plot_error return expected layers", {
