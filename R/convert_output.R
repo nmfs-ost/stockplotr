@@ -70,6 +70,8 @@ convert_output <- function(
     birthseas = NA,
     initial = NA,
     estimate = NA,
+    # TODO: put units back in
+    # we'll have to manually assign units per module
     # units = NA,
     uncertainty = NA,
     uncertainty_label = NA,
@@ -169,6 +171,7 @@ convert_output <- function(
 
 
   #### SS3 ####
+  # SS3 groupings: https://docs.google.com/spreadsheets/d/11-k0xOo3Bit1MbJf2ZjmymzsUNCRhgGkVfXV1jNEdbM/edit?gid=0#gid=0
   # Convert SS3 output Report.sso file
   if (tolower(model) == "ss3") {
     if (is.character(file)) {
@@ -348,7 +351,13 @@ convert_output <- function(
       info <- c()
     }
 
-    # Extract units
+    # TODO: Extract units
+    # all weight units = kg (90% sure)
+    # all length units = cm (80% sure)
+    # recruitment: could be one of several options (kg, egg production, number of fish)
+      # we can find this info in another module (SB)
+    # most quantities probably kg (vs cm)
+    # some quantities (e.g., indices) have no units; may be something like effort (e.g., trawls per hour)
 
 
     # Loop for all identified parameters to extract for plotting and use
