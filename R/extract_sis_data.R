@@ -10,7 +10,13 @@
 #' 
 #' Default: The working directory.
 #' 
-#'  
+#' @param model_results Filepath to the standardized, converted model output
+#' .rda file generated with `stockplotr::convert_output()`. If provided, will be
+#' used to generate figures and key quantities used to populate the SIS templates 
+#' if key_quantities.csv does not exist.
+#'
+#' Default: NULL
+#' 
 #' @details This function acts within the following workflow:
 #' 
 #' 1. When a stock assessment is scheduled to conclude, SIS will generate an
@@ -33,7 +39,8 @@
 #' }
 #'
 extract_sis_data <- function(sis_data_dir = getwd(),
-                             key_quantities_dir = getwd()
+                             key_quantities_dir = getwd(),
+                             model_results = NULL
                              ) {
   # Check if existing data files exist; if not, start from blank templates
   if (!exists(fs::path(sis_data_dir, "sis_assmt_template.csv"))) {
@@ -42,7 +49,6 @@ extract_sis_data <- function(sis_data_dir = getwd(),
   } else {
     assmt_dat <- read.csv(fs::path(sis_data_dir, "sis_assmt_template.csv"), stringsAsFactors = FALSE)
         cli::cli_alert_info("Found existing sis_assmt_template.csv in {sis_data_dir}.")
-
   }
   
   if (!exists(fs::path(sis_data_dir, "sis_ts_template.csv"))) {
@@ -54,132 +60,89 @@ extract_sis_data <- function(sis_data_dir = getwd(),
   }
   
   # extract key quantities from csv and assign to variables
-  # TODO: make test to check if key_quantities.csv exists; if not, ask if they want to 
-  # TODO: explain which variables are from which plots
-  # landings, biomass, fmort...
-  # export rdas for plot_fishing_mortality() and other relevant plots
-  kqs <- read.csv(fs::path(key_quantities_dir,
+  kqs_path <- fs::path(key_quantities_dir, "key_quantities.csv")
+  if (exists(kqs_path)){
+    kqs <- read.csv(fs::path(key_quantities_dir,
                            "key_quantities.csv"), 
                   stringsAsFactors = FALSE)
+    cli::cli_alert_info("Found existing key_quantities.csv in {key_quantities_dir}.")
+  } else {
+    cli::cli_alert_warning("No existing key_quantities.csv found in {key_quantities_dir}.")
+    cli::cli_alert_info("To obtain key quantities, run the following functions and specify `make_rda = TRUE`:")
+    cli::cli_bullets(c(
+      "*" = "plot_fishing_mortality()",
+      "*" = "plot_biomass()",
+      "*" = "plot_landings()"
+    ))
+    
+    # make_rdas_q <- readline("Do you want to create these plots now? (Y/N)")
+    # 
+    # if (!interactive()) {make_rdas_q <- "n"}
+    # if (regexpr(make_rdas_q, "n", ignore.case = TRUE) == 1) {
+    #   cli::cli_alert_danger("Fishing mortality, biomass, and landings plots will not be created.")
+    # } else if (regexpr(make_rdas_q, "y", ignore.case = TRUE) == 1) {
+    #   if (is.null(model_results)) {
+    #     cli::cli_alert_danger("No model results file provided. Plots will not be created.")
+    #   }
+    #   cli::cli_alert_info("Creating plots:")
+    #   
+    #   load(model_results)
+    #   
+    #   cli::cli_alert_info("  * Fishing mortality")
+    #   plot_fishing_mortality(dat = out_new,
+    #                          make_rda = TRUE)
+    #   
+    #   cli::cli_alert_info("  * Biomass")
+    #   plot_biomass(dat = out_new,
+    #                make_rda = TRUE)
+    #   
+    #   cli::cli_alert_info("  * Landings")
+    #   plot_landings(dat = out_new,
+    #                 make_rda = TRUE)
+    #   
+    #   cli::cli_alert_success("Plots created.")
+    # } else {
+    #   cli::cli_alert_danger("Invalid input. Plots will not be created.")
+    # }
+  }
   
-  # AS_LAST_DATA_YEAR <- kqs |>
-  #   dplyr::filter(key_quantity == "landings.end.year") |>
-  #   dplyr::select(value) |>
-  #   as.numeric()
-  # 
-  # AS_FMSY <- kqs |>
-  #   dplyr::filter(key_quantity == "F.MSY.terminal") |>
-  #   dplyr::select(value) |>
-  #   as.numeric()
-  # 
-  # AS_BMSY <- kqs |>
-  #   dplyr::filter(key_quantity == "B.msy") |>
-  #   dplyr::select(value) |>
-  #   as.numeric()
-  # 
-  # AS_BMSY_MIN <- kqs |>
-  #   dplyr::filter(key_quantity == "B.msy.min") |>
-  #   dplyr::select(value) |>
-  #   as.numeric()
-  # 
-  # AS_BMSY_MAX <- kqs |>
-  #   dplyr::filter(key_quantity == "B.msy.max") |>
-  #   dplyr::select(value) |>
-  #   as.numeric()
-  # 
-  # AS_B_YEAR <- kqs |>
-  #   dplyr::filter(key_quantity == "B.terminal.year") |>
-  #   dplyr::select(value) |>
-  #   as.numeric()
-  # 
-  # AS_F_YEAR <- kqs |>
-  #   dplyr::filter(key_quantity == "F.terminal.year") |>
-  #   dplyr::select(value) |>
-  #   as.numeric()
-  # 
-  # AS_FTARGET <- kqs |>
-  #   dplyr::filter(key_quantity == "F.target") |>
-  #   dplyr::select(value) |>
-  #   as.numeric()
-  # 
-  # AS_FLIMIT <- kqs |>
-  #   dplyr::filter(key_quantity == "F.limit") |>
-  #   dplyr::select(value) |>
-  #   as.numeric()
-  # 
-  # AS_B_BEST <- kqs |>
-  #   dplyr::filter(key_quantity == "B.terminal.est") |>
-  #   dplyr::select(value) |>
-  #   as.numeric()
-  # 
-  # AS_F_BEST <- kqs |>
-  #   dplyr::filter(key_quantity == "F.terminal.est") |>
-  #   dplyr::select(value) |>
-  #   as.numeric()
-  # 
-  # AS_B_MIN <- kqs |>
-  #   dplyr::filter(key_quantity == "B.terminal.min") |>
-  #   dplyr::select(value) |>
-  #   as.numeric()
-  # 
-  # AS_B_MAX <- kqs |>
-  #   dplyr::filter(key_quantity == "B.terminal.max") |>
-  #   dplyr::select(value) |>
-  #   as.numeric()
-  # 
-  # AS_F_MIN <- kqs |>
-  #   dplyr::filter(key_quantity == "F.terminal.min") |>
-  #   dplyr::select(value) |>
-  #   as.numeric()
-  # 
-  # AS_F_MAX <- kqs |>
-  #   dplyr::filter(key_quantity == "F.terminal.max") |>
-  #   dplyr::select(value) |>
-  #   as.numeric()
-  # 
-  # AS_FMSY_MAX <- kqs |>
-  #   dplyr::filter(key_quantity == "F.MSY.terminal.max") |>
-  #   dplyr::select(value) |>
-  #   as.numeric()
-  # 
-  # AS_FMSY_MIN <- kqs |>
-  #   dplyr::filter(key_quantity == "F.MSY.terminal.min") |>
-  #   dplyr::select(value) |>
-  #   as.numeric()
-
-  # insert values into the sis_assmt_template.csv file
-  mapping <- tibble::tribble(
-    ~key_quantity,          ~Variable,
-    "landings.end.year",    "AS_LAST_DATA_YEAR",
-    "F.MSY.terminal",       "AS_FMSY",
-    "B.msy",                "AS_BMSY",
-    "B.msy.min",            "AS_BMSY_MIN",
-    "B.msy.max",            "AS_BMSY_MAX",
-    "B.terminal.year",      "AS_B_YEAR",
-    "F.terminal.year",      "AS_F_YEAR",
-    "F.target",             "AS_FTARGET",
-    "F.limit",              "AS_FLIMIT",
-    "B.terminal.est",       "AS_B_BEST",
-    "F.terminal.est",       "AS_F_BEST",
-    "B.terminal.min",       "AS_B_MIN",
-    "B.terminal.max",       "AS_B_MAX",
-    "F.terminal.min",       "AS_F_MIN",
-    "F.terminal.max",       "AS_F_MAX",
-    "F.MSY.terminal.max",   "AS_FMSY_MAX",
-    "F.MSY.terminal.min",   "AS_FMSY_MIN"
-  )
+  if (exists(kqs_path)){
+    # insert values into the sis_assmt_template.csv file
+    mapping <- tibble::tribble(
+      ~key_quantity,          ~Variable,
+      "landings.end.year",    "AS_LAST_DATA_YEAR",
+      "F.MSY.terminal",       "AS_FMSY",
+      "B.msy",                "AS_BMSY",
+      "B.msy.min",            "AS_BMSY_MIN",
+      "B.msy.max",            "AS_BMSY_MAX",
+      "B.terminal.year",      "AS_B_YEAR",
+      "F.terminal.year",      "AS_F_YEAR",
+      "F.target",             "AS_FTARGET",
+      "F.limit",              "AS_FLIMIT",
+      "B.terminal.est",       "AS_B_BEST",
+      "F.terminal.est",       "AS_F_BEST",
+      "B.terminal.min",       "AS_B_MIN",
+      "B.terminal.max",       "AS_B_MAX",
+      "F.terminal.min",       "AS_F_MIN",
+      "F.terminal.max",       "AS_F_MAX",
+      "F.MSY.terminal.max",   "AS_FMSY_MAX",
+      "F.MSY.terminal.min",   "AS_FMSY_MIN"
+    )
+    
+    # Extract values and format into a key-value matching table
+    new_vals <- kqs |> 
+      dplyr::inner_join(mapping, by = "key_quantity") |> 
+      dplyr::mutate(value = as.numeric(value)) |> 
+      dplyr::select(Variable, new_value = value)
+    
+    # Update assmt_dat
+    assmt_dat <- assmt_dat |> 
+      dplyr::left_join(new_vals, by = "Variable") |> 
+      dplyr::mutate(Value = ifelse(!is.na(new_value), new_value, Value)) |> 
+      dplyr::select(-new_value)
+  }
   
-  # Extract values and format into a key-value matching table
-  new_vals <- kqs |> 
-    dplyr::inner_join(mapping, by = "key_quantity") |> 
-    dplyr::mutate(value = as.numeric(value)) |> 
-    dplyr::select(Variable, new_value = value)
-  
-  # Update assmt_dat
-  assmt_dat <- assmt_dat |> 
-    dplyr::left_join(new_vals, by = "Variable") |> 
-    dplyr::mutate(Value = ifelse(!is.na(new_value), new_value, Value)) |> 
-    dplyr::select(-new_value)
+  # obtain time series data
   
   
   
