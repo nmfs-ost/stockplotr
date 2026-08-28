@@ -4,10 +4,18 @@
 \alias{extract_sis_data}
 \title{Extract data from model results to send to SIS}
 \usage{
-extract_sis_data(sis_data_dir = getwd(), key_quantities_dir = getwd())
+extract_sis_data(
+  sis_data_dir = getwd(),
+  key_quantities_dir = getwd(),
+  figures_tables_dir = getwd()
+)
 }
 \arguments{
 \item{sis_data_dir}{Path. Location of the existing sis_assmt_template.csv and sis_ts_template.csv files, or, if absent, where new versions of the files should be saved.
+
+Default: The working directory.}
+
+\item{figures_tables_dir}{Path. Location of the existing 'figures' and 'tables' directories.
 
 Default: The working directory.}
 
