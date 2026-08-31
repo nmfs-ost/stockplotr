@@ -26,17 +26,17 @@
 #' @export
 #'
 #' @examples
-#' table_catch(stockplotr::example_data,
+#' table_total_catch(stockplotr::example_data,
 #' module = "TIME_SERIES")
 #'
-#' table_catch(
+#' table_total_catch(
 #'   stockplotr::example_data,
 #'   unit_label = "lbs",
 #'   module = "TIME_SERIES",
 #'   digits = 4,
 #'   scale_amount = 100
 #' )
-table_catch <- function(
+table_total_catch <- function(
   dat,
   unit_label = "mt",
   era = NULL,

@@ -495,8 +495,8 @@ save_all_plots <- function(
 
   tryCatch(
     {
-      cli::cli_h2("table_catch")
-      table_catch(
+      cli::cli_h2("table_total_catch")
+      table_total_catch(
         dat,
         unit_label = catch_unit_label,
         interactive = interactive,
@@ -507,7 +507,7 @@ save_all_plots <- function(
       # invisible()
     },
     error = function(e) {
-      cli::cli_alert_danger("table_catch failed to run.")
+      cli::cli_alert_danger("table_total_catch failed to run.")
       cli::cli_alert("Tip: check that your arguments are correct.")
       print(e)
     }

@@ -1,7 +1,7 @@
-test_that("table_catch generates plots without errors", {
+test_that("table_total_catch generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    table_catch(
+    table_total_catch(
       stockplotr::example_data,
       interactive = FALSE,
       module = "TIME_SERIES"
@@ -10,7 +10,7 @@ test_that("table_catch generates plots without errors", {
 
   # expect error-free plot with many arguments
   expect_no_error(
-    table_catch(
+    table_total_catch(
       dat = stockplotr::example_data,
       unit_label = "mt",
       interactive = FALSE,
@@ -24,7 +24,7 @@ test_that("table_catch generates plots without errors", {
   # expect gt object is returned
   # adjust this test to work for multiple output tables
   # expect_s3_class(
-  #   table_catch(
+  #   table_total_catch(
   #     dat = stockplotr::example_data,
   #     unit_label = "mt",
   #     era = NULL,
@@ -39,7 +39,7 @@ test_that("table_catch generates plots without errors", {
 
 test_that("rda file made when indicated", {
   # export rda
-  table_catch(
+  table_total_catch(
     dat = stockplotr::example_data,
     unit_label = "mt",
     era = NULL,
@@ -59,11 +59,11 @@ test_that("rda file made when indicated", {
   unlink(fs::path(getwd(), "tables"), recursive = T)
 })
 
-test_that("table_catch generates error with incorrect module", {
+test_that("table_total_catch generates error with incorrect module", {
   # expect error
   # Need to test this -- not exactly the right test/result
   expect_error(
-    table_catch(
+    table_total_catch(
       dat = stockplotr::example_data,
       unit_label = "mt",
       era = NULL,
@@ -78,7 +78,7 @@ test_that("table_catch generates error with incorrect module", {
 
 test_that("rda file made when indicated", {
   # export rda
-  table_catch(
+  table_total_catch(
     dat = stockplotr::example_data,
     module = "TIME_SERIES",
     make_rda = TRUE,
@@ -96,7 +96,7 @@ test_that("rda file made when indicated", {
 
   
   # export rda
-  table_catch(
+  table_total_catch(
     dat = stockplotr::example_data,
     module = "TIME_SERIES",
     make_rda = TRUE,
