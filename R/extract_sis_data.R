@@ -2,7 +2,9 @@
 #'
 #' Semi-automate the extraction of key quantities from model results for eventual transmittance to SIS via `asar::export_to_sis()`.
 #' 
-#' @param sis_data_dir Path. Location of the existing sis_assmt_template.csv and sis_ts_template.csv files, or, if absent, where new versions of the files should be saved.
+#' @param sis_data_dir Path. Location of the existing sis_assmt_template.csv 
+#' file, or, if absent, where a new version of sis_assmt_template.csv and
+#' sis_ts_template.csv should be saved.
 #' 
 #' Default: The working directory.
 #' 
@@ -49,13 +51,7 @@ extract_sis_data <- function(sis_data_dir = getwd(),
         cli::cli_alert_info("Found existing sis_assmt_template.csv in {sis_data_dir}.")
   }
   
-  if (!file.exists(fs::path(sis_data_dir, "sis_ts_template.csv"))) {
-    ts_dat <- read.csv(fs::path("inst/resources/sis_ts_template.csv"), stringsAsFactors = FALSE) 
-    cli::cli_alert_info("No existing sis_ts_template.csv found in {sis_data_dir}. Using blank template.")
-  } else {
-    ts_dat <- read.csv(fs::path(sis_data_dir, "sis_ts_template.csv"), stringsAsFactors = FALSE)
-    cli::cli_alert_info("Found existing sis_ts_template.csv in {sis_data_dir}.")
-  }
+    ts_dat <- read.csv(fs::path("inst/resources/sis_ts_template.csv"), stringsAsFactors = FALSE)
   
   # extract key quantities from csv and assign to variables
   kqs_path <- fs::path(key_quantities_dir, "key_quantities.csv")
@@ -270,21 +266,47 @@ extract_sis_data <- function(sis_data_dir = getwd(),
     cli::cli_abort("No time series summaries were extracted. Please check the figures and tables directories.")
   }
   
-  # TODO: add all_summaries to ts_dat, matching by year and variable name
-  test <- all_summaries |>
+  ts_dat_filled <- all_summaries |>
     dplyr::rename("Year" = "year") |>
     tidyr::pivot_longer(cols = -Year, names_to = "Category", values_to = "Value") |>
-    dplyr::mutate(Primary = ifelse(tolower(Category) == primary, "Y", ""))
+    dplyr::mutate(Primary = ifelse(tolower(Category) == primary, "Y", "")) |>
+    dplyr::mutate(Description = dplyr::case_when(
+      Category == "Abundance" ~ "Total Abundance",
+      Category == "Spawners" ~ assmt_dat$Value[assmt_dat$Variable == "AS_B_BASIS"],
+      Category == "Recruitment" ~ "Recruits - Age 1",
+      Category == "Fmort" ~ assmt_dat$Value[assmt_dat$Variable == "AS_F_BASIS"],
+      Category == "Index" ~ "Estimated Index",
+      Category == "Catch" ~ "Estimated Total Catch",
+      TRUE ~ NA
+    )) |>
+    dplyr::mutate(Unit = dplyr::case_when(
+      Category == "Abundance" ~ "Number of Fish",
+      Category == "Spawners" ~ assmt_dat$Value[assmt_dat$Variable == "AS_B_UNIT"],
+      Category == "Recruitment" ~ ifelse(kqs$value[kqs$key_quantity == "recruitment.units"] == "mt", "Metric Tons", kqs$value[kqs$key_quantity == "recruitment.units"]),
+      Category == "Fmort" ~ assmt_dat$Value[assmt_dat$Variable == "AS_F_UNIT"],
+      Category == "Index" ~ "",
+      Category == "Catch" ~ ifelse(kqs$value[kqs$key_quantity == "tot.catch.units"] == " (mt)", "Metric Tons", kqs$value[kqs$key_quantity == "tot.catch.units"]),
+      TRUE ~ NA
+    )) |>
+    dplyr::relocate(Value, .after = Unit)
   
-  # At end: if assmt_dat$Value is NA and Default is 95, change it to Default
+  # Ensure ts_dat_filled has same cols as ts_dat
+  ifelse(colnames(ts_dat_filled) == colnames(ts_dat),
+         TRUE,
+         cli::cli_abort("Time series data does not match template structure."))
+
+  # if assmt_dat$Value is NA and Default is 95, change it to Default
   for (i in seq_len(nrow(assmt_dat))) {
     if (is.na(assmt_dat$Value[i]) & assmt_dat$Default[i] == 95) {
       assmt_dat$Value[i] <- assmt_dat$Default[i]
     }
   }
+  
+  # export files
+  # if existing copies are present, check user wants to overwrite values; OR just add new ones?
+  
+  write.csv(assmt_dat, fs::path(sis_data_dir, "sis_assmt_template.csv"), row.names = FALSE)
+  write.csv(ts_dat_filled, fs::path(sis_data_dir, "sis_ts_template.csv"), row.names = FALSE) 
+  
   #TODO: show an example of a filled-out template
 }
-
-# if existing copies are present, check user wants to overwrite values; OR just add new ones?
-
-
