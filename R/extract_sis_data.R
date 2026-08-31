@@ -194,21 +194,32 @@ extract_sis_data <- function(sis_data_dir = getwd(),
     cli::cli_alert_danger("Some time series data will not be extracted.")
   } else {
     table_ts <- TRUE
-    #tryCatch(
-      #{
-        #TODO: update this once catch table released
-      #   load(fs::path(figures_tables_dir, "tables", "catch_table.rda"))
-      #   catch <- rda[["figure"]][["layers"]][["geom_line"]]$data
-      #   catch <- aaa |>
-      #     dplyr::group_by(year) |>
-      #     dplyr::summarise(sum = sum(total_fish)) |>
-      #     dplyr::rename(abundance = sum)
-      # },
-      # error = function(e) {
-      #   cli::cli_alert_warning("The 'catch_table.rda' file was not found in the figures folder. Catch data will not be extracted.")
-      #   catch <<- NULL
-      # }
-    #)
+    tryCatch(
+    {
+      load(fs::path(figures_tables_dir, "tables", "total_catch_table.rda"))
+      catch <- rda[["table"]][["_data"]]
+      catch_cols <- colnames(catch)
+      cols_without_catch <- c("Sex", "Area", "Season", "Type")
+      if (any(cols_without_catch %in% catch_cols)) {
+        catch <- catch |>
+          dplyr::select(-dplyr::any_of(cols_without_catch))
+      }
+      catch <- catch |>
+        # remove values in parentheses, if present
+        dplyr::mutate(dplyr::across(!Year, ~ stringr::str_remove_all(.x, "\\s*\\(.*?\\)"))) |>
+        dplyr::mutate(dplyr::across(!Year, ~ stringr::str_remove_all(.x, ","))) |>
+        dplyr::mutate(dplyr::across(!Year, ~ as.numeric(.x))) |>
+        # summarize non-Year rows
+        dplyr::rowwise() |>
+        dplyr::mutate(Catch = sum(c_across(!Year), na.rm = TRUE)) |>
+        dplyr::ungroup() |>
+        dplyr::select(Year, Catch)
+    },
+    error = function(e) {
+      cli::cli_alert_warning("The 'total_catch_table.rda' file was not found in the figures folder. Catch data will not be extracted.")
+      catch <<- NULL
+    }
+    )
   }
   
   if(exists("fig_ts")){
@@ -228,8 +239,10 @@ extract_sis_data <- function(sis_data_dir = getwd(),
   }
   if (exists("table_ts") & exists("catch")){
     if (exists("all_summaries")){
+      catch <- catch |>
+        dplyr::rename(year = Year)
       all_summaries <- dplyr::full_join(all_summaries,
-                                      get("catch"),
+                                      catch,
                                       by = "year")
       summaries <- c(summaries, "catch")
     } else {
