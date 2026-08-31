@@ -11,7 +11,9 @@ extract_sis_data(
 )
 }
 \arguments{
-\item{sis_data_dir}{Path. Location of the existing sis_assmt_template.csv and sis_ts_template.csv files, or, if absent, where new versions of the files should be saved.
+\item{sis_data_dir}{Path. Location of the existing sis_assmt_template.csv 
+file, or, if absent, where a new version of sis_assmt_template.csv and
+sis_ts_template.csv should be saved.
 
 Default: The working directory.}
 
