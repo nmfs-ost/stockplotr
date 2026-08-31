@@ -57,7 +57,7 @@ table_total_catch <- function(
   # Filter data for catch
   prepared_data <- filter_data(
     dat = dat,
-    label_name = "catch",
+    label_name = "^catch",
     geom = "line",
     era = era,
     module = module,

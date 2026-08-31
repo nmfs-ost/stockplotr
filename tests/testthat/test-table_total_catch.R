@@ -49,9 +49,9 @@ test_that("rda file made when indicated", {
     tables_dir = getwd()
   )
 
-  # expect that both tables dir and the catch_table.rda file exist
+  # expect that both tables dir and the total_catch_table.rda file exist
   expect_true(dir.exists(fs::path(getwd(), "tables")))
-  expect_true(file.exists(fs::path(getwd(), "tables", "catch_table.rda")))
+  expect_true(file.exists(fs::path(getwd(), "tables", "total_catch_table.rda")))
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
@@ -85,9 +85,9 @@ test_that("rda file made when indicated", {
     tables_dir = getwd()
   )
   
-  # expect that both tables dir and the catch_table.rda file exist
+  # expect that both tables dir and the total_catch_table.rda file exist
   expect_true(dir.exists(fs::path(getwd(), "tables")))
-  expect_true(file.exists(fs::path(getwd(), "tables", "catch_table.rda")))
+  expect_true(file.exists(fs::path(getwd(), "tables", "total_catch_table.rda")))
   
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
@@ -104,7 +104,7 @@ test_that("rda file made when indicated", {
   )
   
   # load the rda file and check that it contains the expected object
-  load(fs::path(getwd(), "tables", "catch_table.rda"))
+  load(fs::path(getwd(), "tables", "total_catch_table.rda"))
   # expect rda contains three objects: table, caption, and latex table
   expect_false(
     is.null(rda$table)
@@ -116,7 +116,7 @@ test_that("rda file made when indicated", {
     is.null(rda$latex_table)
   )
   
-  expect_true(rda$caption == "Total catch over time.")
+  expect_true(rda$caption == "Total catch by fleet over time.")
   
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
