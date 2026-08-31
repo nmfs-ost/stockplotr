@@ -495,6 +495,26 @@ save_all_plots <- function(
 
   tryCatch(
     {
+      cli::cli_h2("table_total_catch")
+      table_total_catch(
+        dat,
+        unit_label = catch_unit_label,
+        interactive = interactive,
+        make_rda = TRUE,
+        tables_dir = figures_tables_dir
+      ) # |>
+      # suppressWarnings() |>
+      # invisible()
+    },
+    error = function(e) {
+      cli::cli_alert_danger("table_total_catch failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      print(e)
+    }
+  )
+  
+  tryCatch(
+    {
       cli::cli_h2("table_index")
       table_index(
         dat,
@@ -549,7 +569,7 @@ save_all_plots <- function(
       cli::cli_alert_danger("table_projections failed to run.")
       cli::cli_alert("Tip: check that your arguments are correct.")
       cli::cli_li("projections_unit_label = {projections_unit_label}")
-      cli::cli_li("projections_uncert_label = {projections_uncert_label}")
+      # cli::cli_li("projections_uncert_label = {projections_uncert_label}")
       print(e)
     }
   )
