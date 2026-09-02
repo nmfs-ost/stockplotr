@@ -512,7 +512,7 @@ save_all_plots <- function(
       print(e)
     }
   )
-  
+
   tryCatch(
     {
       cli::cli_h2("table_index")

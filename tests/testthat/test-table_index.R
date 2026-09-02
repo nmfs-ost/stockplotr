@@ -49,7 +49,7 @@ test_that("rda file made when indicated", {
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
   unlink(fs::path(getwd(), "tables"), recursive = T)
 
-  
+
   # export rda
   table_index(
     dat = stockplotr::example_data,

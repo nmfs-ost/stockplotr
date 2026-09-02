@@ -144,6 +144,12 @@ Default: 1}
 
 Default: c("catch" = "mt", "spawning_biomass" = "mt",
 "fishing_mortality" = "")}
+
+\item{projections_uncert_label}{Abbreviated uncertainty label for
+each quantity
+
+Default: c("catch" = "stddev", "spawning_biomass" = "stddev",
+"fishing_mortality" = "stddev")}
 }
 \value{
 Rda files for each figure/table.
