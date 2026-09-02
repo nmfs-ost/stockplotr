@@ -70,9 +70,6 @@ convert_output <- function(
     birthseas = NA,
     initial = NA,
     estimate = NA,
-    # TODO: put units back in
-    # we'll have to manually assign units per module
-    # units = NA,
     uncertainty = NA,
     uncertainty_label = NA,
     likelihood = NA,
@@ -350,15 +347,6 @@ convert_output <- function(
       cha <- c()
       info <- c()
     }
-
-    # TODO: Extract units
-    # all weight units = kg (90% sure)
-    # all length units = cm (80% sure)
-    # recruitment: could be one of several options (kg, egg production, number of fish)
-      # we can find this info in another module (SB)
-    # most quantities probably kg (vs cm)
-    # some quantities (e.g., indices) have no units; may be something like effort (e.g., trawls per hour)
-
 
     # Loop for all identified parameters to extract for plotting and use
     # Create list of parameters that were not found in the output file
