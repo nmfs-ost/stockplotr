@@ -34,7 +34,9 @@
 #' @examples
 #' \dontrun{
 #' extract_sis_data(
-#'   sis_data_dir = getwd()
+#'   sis_data_dir = getwd(),
+#'   key_quantities_dir = "my_dir",
+#'   figures_tables_dir = "my_other_dir"
 #' )
 #' }
 #'
@@ -48,7 +50,7 @@ extract_sis_data <- function(sis_data_dir = getwd(),
     cli::cli_alert_info("No existing sis_assmt_template.csv found in {sis_data_dir}. Using blank template.")
   } else {
     assmt_dat <- read.csv(fs::path(sis_data_dir, "sis_assmt_template.csv"), stringsAsFactors = FALSE)
-        cli::cli_alert_info("Found existing sis_assmt_template.csv in {sis_data_dir}.")
+        cli::cli_alert_success("Found existing sis_assmt_template.csv in {sis_data_dir}.")
   }
   
     ts_dat <- read.csv(fs::path("inst/resources/sis_ts_template.csv"), stringsAsFactors = FALSE)
@@ -59,7 +61,7 @@ extract_sis_data <- function(sis_data_dir = getwd(),
     kqs <- read.csv(fs::path(key_quantities_dir,
                            "key_quantities.csv"), 
                   stringsAsFactors = FALSE)
-    cli::cli_alert_info("Found existing key_quantities.csv in {key_quantities_dir}.")
+    cli::cli_alert_success("Found existing key_quantities.csv in {key_quantities_dir}.")
   } else {
     cli::cli_alert_warning("No existing key_quantities.csv found in {key_quantities_dir}.")
     cli::cli_alert_info("To obtain key quantities relevant to the sis_assmt_template.csv, run the following functions and specify `make_rda = TRUE`:")
@@ -123,7 +125,7 @@ extract_sis_data <- function(sis_data_dir = getwd(),
           dplyr::rename(Abundance = sum)
       },
       error = function(e) {
-        cli::cli_alert_warning("The 'abundance_at_age_figure.rda' file was not found in the figures folder. Abundance data will not be extracted.")
+        cli::cli_alert_warning("Abundance data was not extracted from the 'abundance_at_age_figure.rda' file.")
         abundance <<- NULL
       }
     )
@@ -138,7 +140,7 @@ extract_sis_data <- function(sis_data_dir = getwd(),
         dplyr::rename(Spawners = sum)
     },
     error = function(e) {
-      cli::cli_alert_warning("The 'spawning_biomass_figure.rda' file was not found in the figures folder. Spawning biomass data will not be extracted.")
+      cli::cli_alert_warning("Spawning biomass data was not extracted from the 'spawning_biomass_figure.rda' file.")
       spawning_biomass <<- NULL
     }
     )
@@ -153,7 +155,7 @@ extract_sis_data <- function(sis_data_dir = getwd(),
         dplyr::rename(Recruitment = sum)
     },
     error = function(e) {
-      cli::cli_alert_warning("The 'recruitment_figure.rda' file was not found in the figures folder. Recruitment data will not be extracted.")
+      cli::cli_alert_warning("Recruitment data was not extracted from the 'recruitment_figure.rda' file.")
       recruitment <<- NULL
     })
     
@@ -167,7 +169,7 @@ extract_sis_data <- function(sis_data_dir = getwd(),
         dplyr::rename(Fmort = mean)
     },
     error = function(e) {
-      cli::cli_alert_warning("The 'fishing_mortality_figure.rda' file was not found in the figures folder. Fishing mortality data will not be extracted.")
+      cli::cli_alert_warning("Fishing mortality data was not extracted from the 'fishing_mortality_figure.rda' file.")
       fishing_mortality <<- NULL
     })
     
@@ -181,7 +183,7 @@ extract_sis_data <- function(sis_data_dir = getwd(),
         dplyr::rename(Index = mean)
     },
     error = function(e) {
-      cli::cli_alert_warning("The 'index_figure.rda' file was not found in the figures folder. Index data will not be extracted.")
+      cli::cli_alert_warning("Index data was not extracted from the 'index_figure.rda' file.")
       index <<- NULL
     })
   }
@@ -212,7 +214,7 @@ extract_sis_data <- function(sis_data_dir = getwd(),
         dplyr::select(Year, Catch)
     },
     error = function(e) {
-      cli::cli_alert_warning("The 'total_catch_table.rda' file was not found in the figures folder. Catch data will not be extracted.")
+      cli::cli_alert_warning("Catch data will not be extracted from the 'total_catch_table.rda' file.")
       catch <<- NULL
     }
     )
@@ -220,6 +222,8 @@ extract_sis_data <- function(sis_data_dir = getwd(),
   
   if(exists("fig_ts")){
     summaries <- c("abundance", "spawning_biomass", "recruitment", "fishing_mortality", "index")
+    
+    summaries <- summaries[sapply(summaries, function(x) !is.null(get(x)))] 
     
     # join all summaries by year
     all_summaries <- c()
@@ -247,7 +251,8 @@ extract_sis_data <- function(sis_data_dir = getwd(),
   }
   
   ts_options <- summaries[!is.na(summaries)]
-  cli::cli_alert_info("The following time series summaries were extracted: {ts_options}.")
+  cli::cli_alert_info("The following time series summaries were extracted:")
+  cli::cli_ul(ts_options)
   primary_options1 <- c("fishing_mortality", "recruitment", "catch")
   primary_options2 <- c("spawning_biomass", "abundance")
   
@@ -263,7 +268,11 @@ extract_sis_data <- function(sis_data_dir = getwd(),
       cli::cli_alert_info("These categories will be used as the Primary time series.")
       primary <- ts_options
     }} else {
-      cli::cli_alert_info("At most two categories can be chosen as Primary time series: <fishing_mortality OR recruitment OR catch> and <spawning_biomass OR abundance>.")
+      cli::cli_alert_info("At most, two categories can be chosen as Primary time series:")
+      cli::cli_ul(c(
+        "fishing_mortality OR recruitment OR catch",
+        "spawning_biomass OR abundance"
+      ))
       if (interactive()) {
       primary1 <- readline("Which category should be designated as Primary 1?")
       primary2 <- readline("Which category should be designated as Primary 2?")   
@@ -274,7 +283,11 @@ extract_sis_data <- function(sis_data_dir = getwd(),
         }
       } else {
         # choose Fmort as first primary if present, otherwise Recruitment, otherwise Catch; and choose Spawners if present, otherwise Biomass
-        cli::cli_alert_info("The following categories will be chosen, in order of preference, as Primary time series: <fishing_mortality OR recruitment OR catch> and <spawning_biomass OR abundance>.")
+        cli::cli_alert_info("The following categories will be chosen, in order of preference, as Primary time series:")
+        cli::cli_ul(c(
+          "fishing_mortality OR recruitment OR catch, and",
+          "spawning_biomass OR abundance"
+        ))
         primary1 <- ifelse("fishing_mortality" %in% ts_options,
                           "fishing_mortality",
                           ifelse("recruitment" %in% ts_options,
@@ -362,6 +375,10 @@ extract_sis_data <- function(sis_data_dir = getwd(),
     } else {
       cli::cli_alert_info("Files not overwritten. Please rename the files, then rerun this function to save the data extracted in this function.")
     }
+  } else {
+    write.csv(assmt_dat, assmt_dat_path, row.names = FALSE)
+    write.csv(ts_dat_filled, ts_dat_path, row.names = FALSE)
+    cli::cli_alert_success("Files saved successfully in {sis_data_dir}.")
   }
   
   #TODO: show an example of a filled-out template
