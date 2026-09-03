@@ -207,7 +207,7 @@ extract_sis_data <- function(sis_data_dir = getwd(),
         dplyr::mutate(dplyr::across(!Year, ~ as.numeric(.x))) |>
         # summarize non-Year rows
         dplyr::rowwise() |>
-        dplyr::mutate(Catch = sum(c_across(!Year), na.rm = TRUE)) |>
+        dplyr::mutate(Catch = sum(dplyr::c_across(!Year), na.rm = TRUE)) |>
         dplyr::ungroup() |>
         dplyr::select(Year, Catch)
     },
@@ -247,43 +247,89 @@ extract_sis_data <- function(sis_data_dir = getwd(),
   }
   
   ts_options <- summaries[!is.na(summaries)]
+  cli::cli_alert_info("The following time series summaries were extracted: {ts_options}.")
+  primary_options1 <- c("fishing_mortality", "recruitment", "catch")
+  primary_options2 <- c("spawning_biomass", "abundance")
   
-  if (length(ts_options) > 1){
-    cli::cli_alert_info("Multiple time series summaries were extracted: {ts_options}.")
-    primary <- readline("Which category should be designated as the Primary time series?")
-    
-    if (!interactive()) {
-      primary <- "abundance"
-      cli::cli_alert_info("Primary category set to 'abundance' by default in non-interactive mode.")
-    }
-    if (primary %notin% ts_options) {
-      cli::cli_abort("Invalid primary category specified. Please choose from: {ts_options}.")
-    }
+  if (length(ts_options) == 0) {
+    primary <- NA
+    cli::cli_alert_info("Zero time series summaries were extracted. Please check the figures and tables directories.")
   } else if (length(ts_options) == 1) {
     primary <- ts_options
     cli::cli_alert_info("Only one time series summary was extracted ({primary}) and will be used as the Primary time series.")
-  } else {
-    cli::cli_abort("No time series summaries were extracted. Please check the figures and tables directories.")
-  }
+  } else if (length(ts_options) == 2) {
+    cli::cli_alert_info("Two time series summaries were extracted ({ts_options}).")
+    if (any(ts_options %in% primary_options1) & any(ts_options %in% primary_options2)) {
+      cli::cli_alert_info("These categories will be used as the Primary time series.")
+      primary <- ts_options
+    }} else {
+      cli::cli_alert_info("At most two categories can be chosen as Primary time series: <fishing_mortality OR recruitment OR catch> and <spawning_biomass OR abundance>.")
+      if (interactive()) {
+      primary1 <- readline("Which category should be designated as Primary 1?")
+      primary2 <- readline("Which category should be designated as Primary 2?")   
+        if (primary1 %notin% ts_options | primary2 %notin% ts_options) {
+          cli::cli_abort("Invalid Primary category specified. Please choose from: {ts_options}.")
+        } else {
+          primary <- c(primary1, primary2)
+        }
+      } else {
+        # choose Fmort as first primary if present, otherwise Recruitment, otherwise Catch; and choose Spawners if present, otherwise Biomass
+        cli::cli_alert_info("The following categories will be chosen, in order of preference, as Primary time series: <fishing_mortality OR recruitment OR catch> and <spawning_biomass OR abundance>.")
+        primary1 <- ifelse("fishing_mortality" %in% ts_options,
+                          "fishing_mortality",
+                          ifelse("recruitment" %in% ts_options,
+                                 "recruitment",
+                                 ifelse("catch" %in% ts_options,
+                                        "catch",
+                                        NA)))
+        primary2 <- ifelse("spawning_biomass" %in% ts_options,
+                          "spawning_biomass",
+                          ifelse("abundance" %in% ts_options,
+                                 "abundance",
+                                 NA))
+        primary <- c(primary1, primary2)
+        primary <- primary[!is.na(primary)]
+        if (length(primary) == 0) {
+          cli::cli_alert_danger("No valid Primary categories found.")
+          primary <- NA
+        } else {
+        cli::cli_alert_info("Primary categor{?y/ies} set to {primary} by default in non-interactive mode.")
+        }
+      }
+    }
+  
+  if (length(primary) == 0) {primary <- NA} 
+  
+  category_pairs <- list(
+    "fishing_mortality" = "Fmort",
+    "recruitment" = "Recruitment",
+    "catch" = "Catch",
+    "spawning_biomass" = "Spawners",
+    "abundance" = "Abundance", # aka biomass
+    "index" = "Index"
+  )
+  
+  primary <- unlist(lapply(primary, function(x) category_pairs[[x]]))
   
   ts_dat_filled <- all_summaries |>
     dplyr::rename("Year" = "year") |>
     tidyr::pivot_longer(cols = -Year, names_to = "Category", values_to = "Value") |>
-    dplyr::mutate(Primary = ifelse(tolower(Category) == primary, "Y", "")) |>
+    dplyr::mutate(Primary = ifelse(tolower(Category) %in% tolower(primary), "Y", "")) |>
+    # dplyr::mutate(Primary = ifelse(tolower(Category) == primary, "Y", "")) |>
     dplyr::mutate(Description = dplyr::case_when(
       Category == "Abundance" ~ "Total Abundance",
-      Category == "Spawners" ~ assmt_dat$Value[assmt_dat$Variable == "AS_B_BASIS"],
+      Category == "Spawners" ~ as.character(assmt_dat$Value[assmt_dat$Variable == "AS_B_BASIS"]),
       Category == "Recruitment" ~ "Recruits - Age 1",
-      Category == "Fmort" ~ assmt_dat$Value[assmt_dat$Variable == "AS_F_BASIS"],
+      Category == "Fmort" ~ as.character(assmt_dat$Value[assmt_dat$Variable == "AS_F_BASIS"]),
       Category == "Index" ~ "Estimated Index",
       Category == "Catch" ~ "Estimated Total Catch",
       TRUE ~ NA
     )) |>
     dplyr::mutate(Unit = dplyr::case_when(
       Category == "Abundance" ~ "Number of Fish",
-      Category == "Spawners" ~ assmt_dat$Value[assmt_dat$Variable == "AS_B_UNIT"],
+      Category == "Spawners" ~ as.character(assmt_dat$Value[assmt_dat$Variable == "AS_B_UNIT"]),
       Category == "Recruitment" ~ ifelse(kqs$value[kqs$key_quantity == "recruitment.units"] == "mt", "Metric Tons", kqs$value[kqs$key_quantity == "recruitment.units"]),
-      Category == "Fmort" ~ assmt_dat$Value[assmt_dat$Variable == "AS_F_UNIT"],
+      Category == "Fmort" ~ as.character(assmt_dat$Value[assmt_dat$Variable == "AS_F_UNIT"]),
       Category == "Index" ~ "",
       Category == "Catch" ~ ifelse(kqs$value[kqs$key_quantity == "tot.catch.units"] == " (mt)", "Metric Tons", kqs$value[kqs$key_quantity == "tot.catch.units"]),
       TRUE ~ NA
@@ -291,9 +337,9 @@ extract_sis_data <- function(sis_data_dir = getwd(),
     dplyr::relocate(Value, .after = Unit)
   
   # Ensure ts_dat_filled has same cols as ts_dat
-  ifelse(colnames(ts_dat_filled) == colnames(ts_dat),
-         TRUE,
-         cli::cli_abort("Time series data does not match template structure."))
+  if (isFALSE(any(colnames(ts_dat_filled) == colnames(ts_dat)))) {
+      cli::cli_abort("Time series data does not match template structure.")
+  }
 
   # if assmt_dat$Value is NA and Default is 95, change it to Default
   for (i in seq_len(nrow(assmt_dat))) {
@@ -303,10 +349,20 @@ extract_sis_data <- function(sis_data_dir = getwd(),
   }
   
   # export files
-  # if existing copies are present, check user wants to overwrite values; OR just add new ones?
+  assmt_dat_path <- fs::path(sis_data_dir, "sis_assmt_template.csv")
+  ts_dat_path <- fs::path(sis_data_dir, "sis_ts_template.csv")
   
-  write.csv(assmt_dat, fs::path(sis_data_dir, "sis_assmt_template.csv"), row.names = FALSE)
-  write.csv(ts_dat_filled, fs::path(sis_data_dir, "sis_ts_template.csv"), row.names = FALSE) 
+  if (file.exists(assmt_dat_path) | file.exists(ts_dat_path)) {
+    cli::cli_alert_info("Existing sis_assmt_template.csv or sis_ts_template.csv found in {sis_data_dir}.")
+    overwrite <- readline("Do you want to overwrite the existing files? (y/n): ")
+    if (tolower(overwrite) == "y") {
+      write.csv(assmt_dat, assmt_dat_path, row.names = FALSE)
+      write.csv(ts_dat_filled, ts_dat_path, row.names = FALSE)
+      cli::cli_alert_success("Files overwritten successfully.")
+    } else {
+      cli::cli_alert_info("Files not overwritten. Please rename the files, then rerun this function to save the data extracted in this function.")
+    }
+  }
   
   #TODO: show an example of a filled-out template
 }
