@@ -44,7 +44,9 @@ This function acts within the following workflow:
 \examples{
 \dontrun{
 extract_sis_data(
-  sis_data_dir = getwd()
+  sis_data_dir = getwd(),
+  key_quantities_dir = "my_dir",
+  figures_tables_dir = "my_other_dir"
 )
 }
 
