@@ -259,6 +259,7 @@ plot_timeseries <- function(
 #' @details The user can create a line, point, or area plot, where the x-axis is
 #' year and y can vary for any time series quantity. Currently, grouping is
 #' restricted to one group where faceting can be any number of facets.
+#' @noRd
 #'
 plot_error <- function(
   dat,
@@ -544,6 +545,7 @@ cohort_line <- function(
 #' @param label_name String. Name of the quantity that users want to
 #' extract the reference point from
 #' @param ref_line String. Reference point(s)
+#' @param scale_amount The amount to scale the reference line value by.
 #' @param model_name String. Name of the model that will be present in the legend.
 #'
 #' Options: Including, but not limited to: "msy", "unfished", "target"
@@ -643,6 +645,14 @@ cap_first_letter <- function(s) {
 #' @inheritParams plot_spawning_biomass
 #' @param label_name String. Name of the label used to filter
 #' the data.
+#' @param module A character string specifying the module to filter by.
+#' @param era A character string specifying the era to filter by.
+#' @param geom The geometric object to use for the plot.
+#' @param group The grouping variable for the plot.
+#' @param facet The faceting variable for the plot.
+#' @param scale_amount The amount to scale the data by.
+#' @param interactive A logical value indicating whether to use interactive mode.
+#'
 #'
 #' @returns a data frame that is preformatted for plotting with ggplot2.
 #' @export

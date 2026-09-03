@@ -28,7 +28,7 @@ Description: Creates exploratory and finished tables and figures for stock
     materials. The advantage of using this package over others is that it
     applies to a range of stock assessment model outputs and standardizes
     them.
-License: MIT + file LICENSE
+License: MIT
 URL: https://github.com/nmfs-ost/stockplotr,
     https://noaa-fisheries-integrated-toolbox.r-universe.dev/stockplotr
 BugReports: https://github.com/nmfs-ost/stockplotr/issues
