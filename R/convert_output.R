@@ -70,7 +70,6 @@ convert_output <- function(
     birthseas = NA,
     initial = NA,
     estimate = NA,
-    # units = NA,
     uncertainty = NA,
     uncertainty_label = NA,
     likelihood = NA,
@@ -169,6 +168,7 @@ convert_output <- function(
 
 
   #### SS3 ####
+  # SS3 groupings: https://docs.google.com/spreadsheets/d/11-k0xOo3Bit1MbJf2ZjmymzsUNCRhgGkVfXV1jNEdbM/edit?gid=0#gid=0
   # Convert SS3 output Report.sso file
   if (tolower(model) == "ss3") {
     if (is.character(file)) {
@@ -347,9 +347,6 @@ convert_output <- function(
       cha <- c()
       info <- c()
     }
-
-    # Extract units
-
 
     # Loop for all identified parameters to extract for plotting and use
     # Create list of parameters that were not found in the output file
