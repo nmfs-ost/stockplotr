@@ -79,7 +79,8 @@ containing a gt-based table, caption, and LaTeX-based table.
 }
 \examples{
 table_total_catch(stockplotr::example_data,
-module = "TIME_SERIES")
+  module = "TIME_SERIES"
+)
 
 table_total_catch(
   stockplotr::example_data,

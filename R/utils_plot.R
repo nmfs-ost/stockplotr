@@ -783,12 +783,16 @@ filter_data <- function(
       }
       if (interactive()) {
         if (interactive) {
-          question1 <- utils::select.list(
+          selected <- utils::select.list(
             options,
             multiple = TRUE,
-            preselect = options[1],
             title = "Select one or more of the following module names"
           )
+          question1 <- if (length(selected) == 0 || identical(selected, "")) {
+            options[1]
+          } else {
+            selected
+          }
           # use <<- to export module to environment for use with key quantity calc
           selected_module <<- intersect(module_names, question1)
           if (length(selected_module) < 1) {

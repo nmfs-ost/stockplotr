@@ -94,7 +94,7 @@ calc_kqs <- function(returned_kq,
       scale_amount = 1,
       interactive = FALSE
     ) |>
-      dplyr::filter(year == max(year))
+      dplyr::filter(year == max(year, na.rm = T))
 
     B.terminal.year <- B.terminal.df |>
       dplyr::pull(year) |>
@@ -257,7 +257,7 @@ calc_kqs <- function(returned_kq,
       scale_amount = 1,
       interactive = FALSE
     ) |>
-      dplyr::filter(year == max(year)) |>
+      dplyr::filter(year == max(year, na.rm = T)) |>
       unique()
 
     F.terminal.year <- F.terminal.df |>
