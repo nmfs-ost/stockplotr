@@ -397,6 +397,7 @@ process_table <- function(
   } else if (!is.null(id_group)) {
     if (length(id_group) > 1) {
       cli::cli_alert_warning("Data contains >1 indexing variable. Selecting {id_group[1]}.")
+      id_group <- id_group[1]
     }
     if (length(id_group) > 0 && any(is.na(dat[[id_group]]))) {
       dat <- dat |>

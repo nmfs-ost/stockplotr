@@ -165,13 +165,18 @@ table_bnc <- function(
   
   table_data_info <- process_table(
     dat = prepared_data,
-    # group = group,
+    group = group,
     method = method,
     label = label
   )
   table_data <- table_data_info[[1]]
   indexed_vars <- table_data_info[[2]]
   id_col_vals <- table_data_info[[3]]
+  
+  # test if id_col_vals is a list of lists; then unnest it
+  if (is.list(id_col_vals) && length(id_col_vals) > 0 && purrr::every(id_col_vals, is.list)) {
+    id_col_vals <- unlist(id_col_vals$`1`)
+  }
   
   # id_group_vals <- sapply(id_cols, function(x) unique(prepared_data[[x]]), simplify = FALSE)
 
@@ -180,8 +185,8 @@ table_bnc <- function(
     table_data,
     uncert_lab,
     fleets,
-    label = "landings",
-    unit_label
+    # label = "landings",
+    unit_label = c("biomass", "catch", "abundance")
   )
   
   #   # Bring together quantities for table
