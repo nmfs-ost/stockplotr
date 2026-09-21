@@ -8,14 +8,22 @@ table_reference_points <- function(
     tables_dir = getwd()
 ) {
   # Not taking a standard approach to this table
+  # Approach
+  # - named vector of row for RP with the "value" extracted using extract function
+  # - extract fxn pulls the estimate and units
+  # - str_replace units with units from extraction
+  # - append values in a vector
+  # - add to df
+  # - df into table + theme_noaa()
+  
   # Below are ones specifically for NW -- need R&D for other regions
   labels <- c(
-    "Unfished Spawning Output (units)",
-    "Unfished Age 4+ Biomass (units)", # is this value for the fully selected ages + (aka varies by stock) ?
-    "{year} Spawning Ouput (units)",
-    "Unfished Recruitment (R0)",
-    "{year} Spawning Output (units)",
-    "{year} Fraction Unfished",
+    "Unfished Spawning Output (units)" = "spawning_biomass_unfished",
+    "Unfished Age 4+ Biomass (units)" = "biomass_unfished", # is this value for the fully selected ages + (aka varies by stock) ?
+    "{year} Spawning Ouput (units)" = "spawning_biomass", # @assessment year
+    "Unfished Recruitment (R0)" = "r0",
+    # "{year} Spawning Output (units)" = "spawning_biomass",
+    "{year} Fraction Unfished" = "", # ? not sure of name in output
     "Reference Points Based SO40%", # ?
     "Proxy Spawning Output (units) SO40%",
     "SPR Resulting in SO40%",
