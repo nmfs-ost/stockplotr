@@ -43,6 +43,11 @@ extract_sis_data <- function(sis_data_dir = getwd(),
                              key_quantities_dir = getwd(),
                              figures_tables_dir = getwd()
                              ) {
+  # check if existing figures and tables folders exist; if both absent, throw an error
+  if (!dir.exists(fs::path(figures_tables_dir, "figures")) & !dir.exists(fs::path(figures_tables_dir, "tables"))) {
+    cli::cli_abort("Neither 'figures' nor 'tables' folders were found in {figures_tables_dir}. Please check the `figures_tables_dir` path, or export figures and tables, and then try again.")
+    }
+  
   # Check if existing data files exist; if not, start from blank templates
   if (!file.exists(fs::path(sis_data_dir, "sis_assmt_template.csv"))) {
     assmt_dat <- read.csv(fs::path("inst/resources/sis_assmt_template.csv"), stringsAsFactors = FALSE)
@@ -116,7 +121,7 @@ extract_sis_data <- function(sis_data_dir = getwd(),
     # ABUNDANCE
     tryCatch(
       {
-        load(fs::path(figures_tables_dir, "figures", "abundance_at_age_figure.rda"))
+        load(fs::path(figures_tables_dir, "figures", "abundance_at_age_figure.rda")) |> suppressWarnings()
         aaa <- rda[["figure"]][["layers"]][["geom_line"]]$data
         abundance <- aaa |>
           dplyr::group_by(year) |>
@@ -131,7 +136,7 @@ extract_sis_data <- function(sis_data_dir = getwd(),
     
     # SPAWNERS
     tryCatch({
-      load(fs::path(figures_tables_dir, "figures", "spawning_biomass_figure.rda"))
+      load(fs::path(figures_tables_dir, "figures", "spawning_biomass_figure.rda")) |> suppressWarnings()
       sb <- rda[["figure"]][["layers"]][["geom_line"]]$data
       spawning_biomass <- sb |>
         dplyr::group_by(year) |>
@@ -146,7 +151,7 @@ extract_sis_data <- function(sis_data_dir = getwd(),
     
     # RECRUITMENT
     tryCatch({
-      load(fs::path(figures_tables_dir, "figures", "recruitment_figure.rda"))
+      load(fs::path(figures_tables_dir, "figures", "recruitment_figure.rda")) |> suppressWarnings()
       rec <- rda[["figure"]][["layers"]][["geom_line"]]$data
       recruitment <- rec |>
         dplyr::group_by(year) |>
@@ -160,7 +165,7 @@ extract_sis_data <- function(sis_data_dir = getwd(),
     
     # FISHING MORTALITY
     tryCatch({
-      load(fs::path(figures_tables_dir, "figures", "fishing_mortality_figure.rda"))
+      load(fs::path(figures_tables_dir, "figures", "fishing_mortality_figure.rda")) |> suppressWarnings()
       fm <- rda[["figure"]][["layers"]][["geom_line"]]$data
       fishing_mortality <- fm |>
         dplyr::group_by(year) |>
@@ -174,7 +179,7 @@ extract_sis_data <- function(sis_data_dir = getwd(),
     
     # INDEX
     tryCatch({
-      load(fs::path(figures_tables_dir, "figures", "index_figure.rda"))
+      load(fs::path(figures_tables_dir, "figures", "index_figure.rda")) |> suppressWarnings()
       index <- rda[["figure"]][["layers"]][["geom_line"]]$data
       index <- index |>
         dplyr::group_by(year) |>
@@ -189,11 +194,12 @@ extract_sis_data <- function(sis_data_dir = getwd(),
   if (!dir.exists(fs::path(figures_tables_dir, "tables"))) {
     cli::cli_alert_info("'tables' folder not found in {sis_data_dir}.")
     cli::cli_alert_danger("Some time series data will not be extracted.")
+    catch <- NULL
   } else {
     table_ts <- TRUE
     tryCatch(
     {
-      load(fs::path(figures_tables_dir, "tables", "total_catch_table.rda"))
+      load(fs::path(figures_tables_dir, "tables", "total_catch_table.rda")) |> suppressWarnings()
       catch <- rda[["table"]][["_data"]]
       catch_cols <- colnames(catch)
       cols_without_catch <- c("Sex", "Area", "Season", "Type")
@@ -236,8 +242,8 @@ extract_sis_data <- function(sis_data_dir = getwd(),
       }
     }
   }
-  if (exists("table_ts") & exists("catch")){
-    if (exists("all_summaries")){
+  if (exists("table_ts") & !is.null(catch)){
+    if (!is.null(all_summaries) & exists("fig_ts")){
       catch <- catch |>
         dplyr::rename(year = Year)
       all_summaries <- dplyr::full_join(all_summaries,
@@ -246,6 +252,7 @@ extract_sis_data <- function(sis_data_dir = getwd(),
       summaries <- c(summaries, "catch")
     } else {
       all_summaries <- get("catch")
+      summaries <- "catch"
     }
   }
   
@@ -324,7 +331,7 @@ extract_sis_data <- function(sis_data_dir = getwd(),
   primary <- unlist(lapply(primary, function(x) category_pairs[[x]]))
   
   ts_dat_filled <- all_summaries |>
-    dplyr::rename("Year" = "year") |>
+    dplyr::rename_with(~ "Year", .cols = matches("^year$")) |>
     tidyr::pivot_longer(cols = -Year, names_to = "Category", values_to = "Value") |>
     dplyr::mutate(Primary = ifelse(tolower(Category) %in% tolower(primary), "Y", "")) |>
     # dplyr::mutate(Primary = ifelse(tolower(Category) == primary, "Y", "")) |>
