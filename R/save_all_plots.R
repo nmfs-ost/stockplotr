@@ -164,7 +164,7 @@ save_all_plots <- function(
   # imported from plot_index
   index_unit_label = "",
   # imported from table_afsc_tier- add potential unique arguments after dev
-  # imported from table_bnc
+  # imported from table_biomass_abundance_catch
   biomass_unit_label = "mt",
   catch_unit_label = "mt",
   catch_scale_amount = 1,
@@ -471,8 +471,8 @@ save_all_plots <- function(
   # tables
   tryCatch(
     {
-      cli::cli_h2("table_bnc")
-      table_bnc(
+      cli::cli_h2("table_biomass_abundance_catch")
+      table_biomass_abundance_catch(
         dat,
         biomass_unit_label,
         catch_unit_label,
@@ -484,7 +484,7 @@ save_all_plots <- function(
       # invisible()
     },
     error = function(e) {
-      cli::cli_alert_danger("table_bnc failed to run.")
+      cli::cli_alert_danger("table_biomass_abundance_catch failed to run.")
       cli::cli_alert("Tip: check that your arguments are correct.")
       cli::cli_li("biomass_unit_label = {biomass_unit_label}")
       cli::cli_li("catch_unit_label = {catch_unit_label}")

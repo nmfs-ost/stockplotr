@@ -30,10 +30,6 @@ alternative text for the object}
 
 Default: the working directory (`getwd()`)}
 
-\item{year}{Number. Assessment year
-
-Default: the current year}
-
 \item{ref_line}{String. Reference line value
 
 Default: "msy"
@@ -53,7 +49,7 @@ Default: "mt"}
 \item{table_df}{Data frame. The data frame that the table will be made into for purposes
 of exporting a latex formatted table.}
 
-\item{year}{Assessment year
+\item{year}{Number. Assessment year
 
 Default: the current year}
 }
