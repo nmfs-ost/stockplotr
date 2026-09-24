@@ -45,11 +45,10 @@
 #' @examples
 #' table_biomass_abundance_catch(stockplotr::example_data)
 #'
-#' TODO: UPDATE EXAMPLE WITH MODULE NAMES
 #' table_biomass_abundance_catch(stockplotr::example_data,
 #'   biomass_unit_label = "b label",
 #'   catch_unit_label = "catch label",
-#'   module = c(),
+#'   module = c("TIME_SERIES", "CATCH", "TIME_SERIES"),
 #'   interactive = FALSE
 #' )
 table_biomass_abundance_catch <- function(
@@ -68,8 +67,9 @@ table_biomass_abundance_catch <- function(
   
   named_vec <- c("^biomass$" = biomass_unit_label,
                  "catch$|landings_observed" = catch_unit_label,
-                 "mature_abundance|^abundance" = abundance_unit_label)
-  
+                # "mature_abundance|^abundance" = abundance_unit_label)
+  "^abundance" = abundance_unit_label)
+
   # Aiming for totals
   # iterate through label_names
   lab_list <- purrr::map(
@@ -151,38 +151,32 @@ table_biomass_abundance_catch <- function(
   
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
-    if (length(df_list) == 1) {
       # Obtain relevant key quantities for captions/alt text
-      bnc.b.units <- biomass_unit_label
-      bnc.catch.units <- catch_unit_label
-      bnc.sb.units <- sb_unit_label
+      biomass_abundance_catch.b.units <- biomass_unit_label
+      biomass_abundance_catch.catch.units <- catch_unit_label
+      biomass_abundance_catch.abundance.units <- abundance_unit_label
       
       # calculate & export key quantities
-      export_kqs(bnc.b.units,
-                 bnc.catch.units,
-                 bnc.sb.units)
+      export_kqs(biomass_abundance_catch.b.units,
+                 biomass_abundance_catch.catch.units,
+                 biomass_abundance_catch.abundance.units)
       
       # Add key quantities to captions/alt text
-      insert_kqs(bnc.b.units,
-                 bnc.catch.units,
-                 bnc.sb.units)
+      insert_kqs(biomass_abundance_catch.b.units,
+                 biomass_abundance_catch.catch.units,
+                 biomass_abundance_catch.abundance.units)
       
       create_rda(
-        object = final$label,
+        object = final_table,
         # get name of function and remove "table_" from it
         topic_label = gsub("table_", "", as.character(sys.call()[[1]])),
         fig_or_table = "table",
         dat = dat,
         dir = tables_dir,
         scale_amount = 1,
-        unit_label = biomass_unit_label,
-        table_df = final
+        table_df = final_table
       )
     }
-  } else {
-    cli::cli_alert_warning("Multiple tables cannot be exported at this time.")
-    cli::cli_alert_info("We are currently developing this feature.")
-  }
   
   final_table
 }
