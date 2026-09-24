@@ -217,8 +217,7 @@ plot_stock_recruitment <- function(
       topic_label = gsub("plot_", "", utils::tail(as.character(sys.call()[[1]]), n = 1)),
       fig_or_table = "figure",
       dat = dat,
-      dir = figures_dir # ,
-      # unit_label = unit_label
+      dir = figures_dir
     )
   }
   final +

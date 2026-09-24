@@ -195,8 +195,7 @@ plot_fishing_mortality <- function(
       dat = dat,
       dir = figures_dir,
       ref_line = ifelse(!is.null(names(ref_line)), names(ref_line), ref_line),
-      scale_amount = 1,
-      unit_label = "" # no unit for F
+      scale_amount = 1
     )
   }
   # Output final plot

@@ -27,18 +27,20 @@ test_that("extract_caps_alttext works for figures", {
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  file.remove(fs::path(getwd(), "key_quantities.csv"))
 })
 
 test_that("extract_caps_alttext works for tables", {
-  topic_label <- "bnc"
+  topic_label <- "biomass_abundance_catch"
   fig_or_table <- "table"
 
-  B.min <- 100
-  B.max <- 200
+  biomass_abundance_catch.b.units <- "mt"
+  biomass_abundance_catch.abundance.units <- "hundreds of fish"
+  biomass_abundance_catch.catch.units <- "kg"
 
   # add KQs to caps/alt text csv
-  insert_kqs(B.min, B.max)
+  insert_kqs(biomass_abundance_catch.b.units,
+             biomass_abundance_catch.abundance.units,
+             biomass_abundance_catch.catch.units)
 
   # extract this plot's caption and alt text
   caps_alttext <- extract_caps_alttext(
@@ -51,9 +53,8 @@ test_that("extract_caps_alttext works for tables", {
   expect_true(length(caps_alttext) == 1)
 
   # expect the first 4 words of the caption
-  expect_true("Historical biomass, spawning biomass," == stringr::word(caps_alttext, 1, 4))
+  expect_true("Historical biomass (mt), abundance" == stringr::word(caps_alttext, 1, 4))
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  file.remove(fs::path(getwd(), "key_quantities.csv"))
 })

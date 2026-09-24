@@ -147,8 +147,7 @@ plot_discard <- function(
       fig_or_table = "figure",
       dat = discards,
       dir = figures_dir,
-      scale_amount = scale_amount,
-      unit_label = unit_label
+      scale_amount = scale_amount
     )
   }
   # Output final plot

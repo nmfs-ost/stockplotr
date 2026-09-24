@@ -61,7 +61,7 @@ export_rda(
   final = final_table_object,
   caps_alttext = caps_alttext_object,
   figures_tables_dir = here::here(),
-  topic_label = "bnc",
+  topic_label = "biomass_abundance_catch",
   fig_or_table = "table",
   latex_table = "latex_table"
 )
