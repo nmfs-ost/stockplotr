@@ -98,11 +98,10 @@ a gt-based table, caption, and LaTeX-based table.
 \examples{
 table_biomass_abundance_catch(stockplotr::example_data)
 
-TODO: UPDATE EXAMPLE WITH MODULE NAMES
 table_biomass_abundance_catch(stockplotr::example_data,
   biomass_unit_label = "b label",
   catch_unit_label = "catch label",
-  module = c(),
+  module = c("TIME_SERIES", "CATCH", "TIME_SERIES"),
   interactive = FALSE
 )
 }

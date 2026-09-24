@@ -386,6 +386,9 @@ process_table <- function(
     id_group <- group
   } else {
     id_group <- index_variables[-grep("year|age|length_bin", index_variables)]
+    if (length(id_group) == 0) {
+      id_group <- NULL
+    }
   }
   cols <- index_variables[grep("year|age|length_bin", index_variables)]
 

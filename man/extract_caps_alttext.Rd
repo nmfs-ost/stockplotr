@@ -37,7 +37,7 @@ extract_caps_alttext(
 )
 
 extract_caps_alttext(
-  topic_label = "bnc",
+  topic_label = "biomass_abundance_catch",
   fig_or_table = "table",
   dir = getwd()
 )

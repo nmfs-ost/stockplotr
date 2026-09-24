@@ -163,12 +163,11 @@ save_all_plots <- function(
   biomass_at_age_unit_label = "mt",
   # imported from plot_index
   index_unit_label = "",
-  # imported from table_afsc_tier- add potential unique arguments after dev
   # imported from table_biomass_abundance_catch
   biomass_unit_label = "mt",
   catch_unit_label = "mt",
+  # imported from plot_catch_comp
   catch_scale_amount = 1,
-  # imported from table_harvest_projection- add potential unique arguments after dev
   # imported from table_index- zero unique arguments
   # imported from table_landings- zero unique arguments
   # imported from table_projections

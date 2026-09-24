@@ -541,10 +541,6 @@ insert_kqs <- function(...) {
 #'
 #' Default: 1
 #'
-#' @param unit_label String. Unit label for the y-axis
-#'
-#' Default: "mt"
-#'
 #' @param table_df Data frame. The data frame that the table will be made into for purposes
 #' of exporting a latex formatted table.
 #'
@@ -570,7 +566,6 @@ create_rda <- function(
   dir = getwd(),
   ref_line = "msy",
   scale_amount = 1,
-  unit_label = "mt",
   table_df = NULL
 ) {
   # extract this plot's caption and alt text
@@ -863,7 +858,7 @@ create_rda <- function(
 #' )
 #'
 #' extract_caps_alttext(
-#'   topic_label = "bnc",
+#'   topic_label = "biomass_abundance_catch",
 #'   fig_or_table = "table",
 #'   dir = getwd()
 #' )
@@ -957,7 +952,7 @@ extract_caps_alttext <- function(topic_label = NULL,
 #'   final = final_table_object,
 #'   caps_alttext = caps_alttext_object,
 #'   figures_tables_dir = here::here(),
-#'   topic_label = "bnc",
+#'   topic_label = "biomass_abundance_catch",
 #'   fig_or_table = "table",
 #'   latex_table = "latex_table"
 #' )

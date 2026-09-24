@@ -12,7 +12,6 @@ create_rda(
   dir = getwd(),
   ref_line = "msy",
   scale_amount = 1,
-  unit_label = "mt",
   table_df = NULL
 )
 }
@@ -41,10 +40,6 @@ shown on the y axis. For example, scale_amount = 100 would scale down a value
 from 500,000 --> 5,000. This scale will be reflected in the y axis label.
 
 Default: 1}
-
-\item{unit_label}{String. Unit label for the y-axis
-
-Default: "mt"}
 
 \item{table_df}{Data frame. The data frame that the table will be made into for purposes
 of exporting a latex formatted table.}
