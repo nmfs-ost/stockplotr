@@ -1,15 +1,10 @@
 #' Biomass, abundance, and catch time series table
 #'
 #' @inheritParams plot_recruitment
-#' @param biomass_unit_label Abbreviated units for biomass
-#' Default: "mt"
 #' 
-#' @param abundance_unit_label Abbreviated units for abundance
-#' Default: "fish"
-#' 
-#' 
-#' @param catch_unit_label Abbreviated units for catch
-#' Default: "mt"
+#' @param unit_label Character vector. Abbreviated unit label for each quantity
+#'
+#' Default: c("biomass" = "mt", "abundance" = "fish", "catch" = "mt")
 #' 
 #' @param group A string of a single column that groups the data.
 #'
@@ -17,6 +12,7 @@
 #'
 #' Default: NULL
 #' Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL
+#' 
 #' @param method A string describing the method of summarizing data when group
 #' is set to "none".
 #'
@@ -46,16 +42,13 @@
 #' table_biomass_abundance_catch(stockplotr::example_data)
 #'
 #' table_biomass_abundance_catch(stockplotr::example_data,
-#'   biomass_unit_label = "b label",
-#'   catch_unit_label = "catch label",
+#'   unit_label = c("biomass" = "kg", "abundance" = "eggs", "catch" = "kg"),
 #'   module = c("TIME_SERIES", "CATCH", "TIME_SERIES"),
 #'   interactive = FALSE
 #' )
 table_biomass_abundance_catch <- function(
     dat,
-    biomass_unit_label = "mt",
-    abundance_unit_label = "fish",
-    catch_unit_label = "mt",
+    unit_label = c("biomass" = "mt", "abundance" = "fish", "catch" = "mt"),
     era = NULL,
     interactive = TRUE,
     group = NULL,
@@ -65,10 +58,9 @@ table_biomass_abundance_catch <- function(
     make_rda = FALSE,
     tables_dir = getwd()) {
   
-  named_vec <- c("^biomass$" = biomass_unit_label,
-                 "catch$|landings_observed" = catch_unit_label,
-                # "mature_abundance|^abundance" = abundance_unit_label)
-  "^abundance" = abundance_unit_label)
+  named_vec <- c("^biomass$" = unit_label[[1]],
+                 "^abundance" = unit_label[[2]],
+                 "catch$|landings_observed" = unit_label[[3]])
 
   # Aiming for totals
   # iterate through label_names
@@ -152,19 +144,19 @@ table_biomass_abundance_catch <- function(
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
       # Obtain relevant key quantities for captions/alt text
-      biomass_abundance_catch.b.units <- biomass_unit_label
-      biomass_abundance_catch.catch.units <- catch_unit_label
-      biomass_abundance_catch.abundance.units <- abundance_unit_label
+      biomass_abundance_catch.b.units <- unit_label[[1]]
+      biomass_abundance_catch.abundance.units <- unit_label[[2]]
+      biomass_abundance_catch.catch.units <- unit_label[[3]]
       
       # calculate & export key quantities
       export_kqs(biomass_abundance_catch.b.units,
-                 biomass_abundance_catch.catch.units,
-                 biomass_abundance_catch.abundance.units)
+                 biomass_abundance_catch.abundance.units,
+                 biomass_abundance_catch.catch.units)
       
       # Add key quantities to captions/alt text
       insert_kqs(biomass_abundance_catch.b.units,
-                 biomass_abundance_catch.catch.units,
-                 biomass_abundance_catch.abundance.units)
+                 biomass_abundance_catch.abundance.units,
+                 biomass_abundance_catch.catch.units)
       
       create_rda(
         object = final_table,
