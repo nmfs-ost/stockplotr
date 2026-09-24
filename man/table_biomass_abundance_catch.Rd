@@ -6,9 +6,7 @@
 \usage{
 table_biomass_abundance_catch(
   dat,
-  biomass_unit_label = "mt",
-  abundance_unit_label = "fish",
-  catch_unit_label = "mt",
+  unit_label = c(biomass = "mt", abundance = "fish", catch = "mt"),
   era = NULL,
   interactive = TRUE,
   group = NULL,
@@ -26,14 +24,9 @@ returned from \link[stockplotr]{convert_output}.
 If inputting a list of tibbles, the first tibble's reference point defined
 in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{biomass_unit_label}{Abbreviated units for biomass
-Default: "mt"}
+\item{unit_label}{Character vector. Abbreviated unit label for each quantity
 
-\item{abundance_unit_label}{Abbreviated units for abundance
-Default: "fish"}
-
-\item{catch_unit_label}{Abbreviated units for catch
-Default: "mt"}
+Default: c("biomass" = "mt", "abundance" = "fish", "catch" = "mt")}
 
 \item{era}{String. Era of data.
 
@@ -99,8 +92,7 @@ a gt-based table, caption, and LaTeX-based table.
 table_biomass_abundance_catch(stockplotr::example_data)
 
 table_biomass_abundance_catch(stockplotr::example_data,
-  biomass_unit_label = "b label",
-  catch_unit_label = "catch label",
+  unit_label = c("biomass" = "kg", "abundance" = "eggs", "catch" = "kg"),
   module = c("TIME_SERIES", "CATCH", "TIME_SERIES"),
   interactive = FALSE
 )

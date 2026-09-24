@@ -84,10 +84,6 @@
 #'
 #' Default: ""
 #'
-#' @param biomass_unit_label String. Abbreviated biomass units
-#'
-#' Default: "mt"
-#'
 #' @param catch_unit_label String. Abbreviated catch units
 #'
 #' Default: "mt"
@@ -146,6 +142,7 @@ save_all_plots <- function(
   figures_tables_dir = getwd(),
   # imported from plot_biomass
   ref_line = "msy",
+  biomass_unit_label = "mt",
   biomass_scale_amount = 1,
   # imported from plot_landings
   landings_unit_label = "mt",
@@ -164,9 +161,9 @@ save_all_plots <- function(
   # imported from plot_index
   index_unit_label = "",
   # imported from table_biomass_abundance_catch
-  biomass_unit_label = "mt",
-  catch_unit_label = "mt",
+  bac_unit_label = c("biomass" = "mt", "abundance" = "fish", "catch" = "mt"),
   # imported from plot_catch_comp
+  catch_unit_label = "mt",
   catch_scale_amount = 1,
   # imported from table_index- zero unique arguments
   # imported from table_landings- zero unique arguments
@@ -473,9 +470,8 @@ save_all_plots <- function(
       cli::cli_h2("table_biomass_abundance_catch")
       table_biomass_abundance_catch(
         dat,
-        biomass_unit_label,
-        catch_unit_label,
-        spawning_biomass_label,
+        unit_label = bac_unit_label,
+        interactive = interactive,
         make_rda = TRUE,
         tables_dir = figures_tables_dir
       ) # |>
@@ -485,9 +481,7 @@ save_all_plots <- function(
     error = function(e) {
       cli::cli_alert_danger("table_biomass_abundance_catch failed to run.")
       cli::cli_alert("Tip: check that your arguments are correct.")
-      cli::cli_li("biomass_unit_label = {biomass_unit_label}")
-      cli::cli_li("catch_unit_label = {catch_unit_label}")
-      cli::cli_li("spawning_biomass_label = {spawning_biomass_label}")
+      cli::cli_li("unit_label = {bac_unit_label}")
       print(e)
     }
   )
