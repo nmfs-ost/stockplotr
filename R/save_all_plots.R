@@ -83,9 +83,9 @@
 #' @param index_unit_label String. Index of abundance/CPUE units
 #'
 #' Default: ""
-#' 
+#'
 #' @param bnc_unit_label String. Abbreviated biomass, abundance, and catch units
-#' 
+#'
 #' Default: c("biomass" = "mt", "abundance" = "fish", "catch" = "mt")
 #'
 #' @param catch_unit_label String. Abbreviated catch units
