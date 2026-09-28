@@ -99,15 +99,15 @@ plot_stock_recruitment <- function(
 
   # Extract spawning biomass
   sb <- filter_data(
-    dat = dat |>
-      dplyr::filter(!is.na(year)),
+    dat = dat,
     label_name = "spawning biomass",
     geom = "point",
     era = era,
     scale_amount = scale_amount,
     interactive = interactive,
     module = module
-  ) 
+  ) |>
+    dplyr::filter(!is.na(year))
 
   process_sb <- process_data(
     sb
