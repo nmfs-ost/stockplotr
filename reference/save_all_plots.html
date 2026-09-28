@@ -101,6 +101,7 @@
 <span>  interactive <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  figures_tables_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  ref_line <span class="op">=</span> <span class="st">"msy"</span>,</span>
+<span>  biomass_unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
 <span>  biomass_scale_amount <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  landings_unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
 <span>  spawning_biomass_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
@@ -111,7 +112,7 @@
 <span>  biomass_at_age_scale_amount <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  biomass_at_age_unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
 <span>  index_unit_label <span class="op">=</span> <span class="st">""</span>,</span>
-<span>  biomass_unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
+<span>  bnc_unit_label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>biomass <span class="op">=</span> <span class="st">"mt"</span>, abundance <span class="op">=</span> <span class="st">"fish"</span>, catch <span class="op">=</span> <span class="st">"mt"</span><span class="op">)</span>,</span>
 <span>  catch_unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
 <span>  catch_scale_amount <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  projections_unit_label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>catch <span class="op">=</span> <span class="st">"mt"</span>, spawning_biomass <span class="op">=</span> <span class="st">"mt"</span>, fishing_mortality <span class="op">=</span></span>
@@ -179,6 +180,11 @@ indicate the reference line in the form c("label" = value).</p>
 <p>Options: Including, but not limited to: "target", "MSY", "unfished"</p></dd>
 
 
+<dt id="arg-biomass-unit-label">biomass_unit_label<a class="anchor" aria-label="anchor" href="#arg-biomass-unit-label"></a></dt>
+<dd><p>String. Biomass units</p>
+<p>Default: "mt"</p></dd>
+
+
 <dt id="arg-biomass-scale-amount">biomass_scale_amount<a class="anchor" aria-label="anchor" href="#arg-biomass-scale-amount"></a></dt>
 <dd><p>Number. A number describing how much to scale down the
 biomass quantities shown on the y axis. See `recruitment_scale_amount`.</p>
@@ -235,9 +241,9 @@ biomass quantities shown via bubble size. See `recruitment_scale_amount`.</p>
 <p>Default: ""</p></dd>
 
 
-<dt id="arg-biomass-unit-label">biomass_unit_label<a class="anchor" aria-label="anchor" href="#arg-biomass-unit-label"></a></dt>
-<dd><p>String. Abbreviated biomass units</p>
-<p>Default: "mt"</p></dd>
+<dt id="arg-bnc-unit-label">bnc_unit_label<a class="anchor" aria-label="anchor" href="#arg-bnc-unit-label"></a></dt>
+<dd><p>String. Abbreviated biomass, abundance, and catch units</p>
+<p>Default: c("biomass" = "mt", "abundance" = "fish", "catch" = "mt")</p></dd>
 
 
 <dt id="arg-catch-unit-label">catch_unit_label<a class="anchor" aria-label="anchor" href="#arg-catch-unit-label"></a></dt>
