@@ -10,6 +10,8 @@
 #' "spr" plots spawning potential ratio. "fishing_intensity" plots 1-SPR.
 #' "spr_ratio" plots quantity associated with SPRratio label (may be user
 #' specified in some models; e.g., Stock Synthesis).
+#' 
+#' @param ylab String. Y-axis label to show.
 #'
 #' @returns A plot showing spawning potential ratio (SPR).
 #'
@@ -29,7 +31,8 @@
 #'   unit_label = "metric tons",
 #'   group = "fleet",
 #'   interactive = FALSE,
-#'   make_rda = FALSE
+#'   make_rda = FALSE,
+#'   ylab = "SPR"
 #' )
 #' plot_spr(
 #'   dat = stockplotr:::example_data,
@@ -37,7 +40,8 @@
 #'   unit_label = "metric tons",
 #'   facet = "fleet",
 #'   interactive = FALSE,
-#'   make_rda = FALSE
+#'   make_rda = FALSE,
+#'   ylab = "(1-SPR)/(1-SPR_ref)"
 #' )
 plot_spr <- function(
   dat,
@@ -51,6 +55,7 @@ plot_spr <- function(
   interactive = TRUE,
   make_rda = FALSE,
   figures_dir = getwd(),
+  ylab = NULL,
   ...
 ) {
   
@@ -75,10 +80,15 @@ plot_spr <- function(
    dplyr::filter(!is.na(year))
   
   # set y axis label
-  if (unique(prepared_data$label) == "spawning_potential_ratio_ratio"){
-    spr_label <- "Relative Fishing Intensity: (1-SPR)/(1-SPR_50%)"
-  } else {
-    spr_label <- "Spawning Potential Ratio"
+  # default values if ylab not provided
+  if(is.null(ylab)){
+    if(quantity=="spr"){
+      ylab <- "SPR (Spawning Potential Ratio)"
+    }else if(quantity=="fishing_intensity"){
+      ylab <- "Fishing Intensity (1-SPR)"
+    }else{
+      ylab <- "SPR Ratio"
+    }
   }
   
   
@@ -118,7 +128,7 @@ plot_spr <- function(
     dat = prepared_data,
     y = "estimate",
     geom = geom,
-    ylab = spr_label,
+    ylab = ylab,
     group = group,
     facet = facet,
     ...
