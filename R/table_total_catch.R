@@ -57,17 +57,17 @@ table_total_catch <- function(
 
   # Filter data for catch
   prepared_data <- filter_data(
-    dat = dat,
+    dat = dat |>
+      dplyr::filter(!is.na(year),
+                    !is.na(estimate),
+                    label %in% c("catch_retained", "catch_dead", "catch_selected", "catch")),
     label_name = "^catch",
     geom = "line",
     era = era,
     module = module,
     scale_amount = scale_amount,
     interactive = interactive
-  ) |>
-    dplyr::filter(label %in% c("catch_retained", "catch_dead", "catch_selected", "catch")) |>
-    dplyr::filter(!is.na(year)) |>
-    dplyr::filter(!is.na(estimate))
+  )
 
   # Check if there is any data and if all labels contain "catchability", not "catch"
   if (nrow(prepared_data) == 0 | unique(stringr::str_detect(prepared_data$label, "catchability"))) {

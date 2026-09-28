@@ -58,7 +58,8 @@ plot_biomass_at_age <- function(
   )
   # Filter data
   b <- filter_data(
-    dat = dat,
+    dat = dat |>
+      dplyr::filter(!is.na(age)),
     label_name = "^biomass",
     geom = "point",
     group = "age",

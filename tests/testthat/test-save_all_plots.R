@@ -22,8 +22,8 @@ test_that("save_all_plots works when all figures/tables are plotted", {
     "index_figure.rda",
     "landings_figure.rda",
     "natural_mortality_figure.rda",
-    # "biomass_at_age_figure.rda", # comment out bc as is this needs to be interactive to select correct module -- TODO: release fix to filter BAA plot data for non-NAs in age
-    # "catch_comp_figure.rda", # same TODO as above
+    "biomass_at_age_figure.rda",
+    "catch_comp_figure.rda",
     "recruitment_deviations_figure.rda",
     "recruitment_figure.rda",
     "selectivity_figure.rda",

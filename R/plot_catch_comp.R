@@ -86,7 +86,8 @@ plot_catch_comp <- function(
   )
   # Filter data
   catch <- filter_data(
-    dat = dat,
+    dat = dat |>
+      dplyr::filter(!is.na(age)),
     label_name = "catch|landings",
     era = era,
     geom = "point",
