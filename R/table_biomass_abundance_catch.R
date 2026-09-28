@@ -144,17 +144,17 @@ table_biomass_abundance_catch <- function(
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
       # Obtain relevant key quantities for captions/alt text
-      biomass_abundance_catch.b.units <- unit_label[[1]]
+      biomass_abundance_catch.biomass.units <- unit_label[[1]]
       biomass_abundance_catch.abundance.units <- unit_label[[2]]
       biomass_abundance_catch.catch.units <- unit_label[[3]]
       
       # calculate & export key quantities
-      export_kqs(biomass_abundance_catch.b.units,
+      export_kqs(biomass_abundance_catch.biomass.units,
                  biomass_abundance_catch.abundance.units,
                  biomass_abundance_catch.catch.units)
       
       # Add key quantities to captions/alt text
-      insert_kqs(biomass_abundance_catch.b.units,
+      insert_kqs(biomass_abundance_catch.biomass.units,
                  biomass_abundance_catch.abundance.units,
                  biomass_abundance_catch.catch.units)
       

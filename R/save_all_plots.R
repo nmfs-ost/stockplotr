@@ -83,6 +83,10 @@
 #' @param index_unit_label String. Index of abundance/CPUE units
 #'
 #' Default: ""
+#' 
+#' @param bnc_unit_label String. Abbreviated biomass, abundance, and catch units
+#' 
+#' Default: c("biomass" = "mt", "abundance" = "fish", "catch" = "mt")
 #'
 #' @param catch_unit_label String. Abbreviated catch units
 #'
@@ -161,7 +165,7 @@ save_all_plots <- function(
   # imported from plot_index
   index_unit_label = "",
   # imported from table_biomass_abundance_catch
-  bac_unit_label = c("biomass" = "mt", "abundance" = "fish", "catch" = "mt"),
+  bnc_unit_label = c("biomass" = "mt", "abundance" = "fish", "catch" = "mt"),
   # imported from plot_catch_comp
   catch_unit_label = "mt",
   catch_scale_amount = 1,
@@ -470,7 +474,7 @@ save_all_plots <- function(
       cli::cli_h2("table_biomass_abundance_catch")
       table_biomass_abundance_catch(
         dat,
-        unit_label = bac_unit_label,
+        unit_label = bnc_unit_label,
         interactive = interactive,
         make_rda = TRUE,
         tables_dir = figures_tables_dir
@@ -481,7 +485,7 @@ save_all_plots <- function(
     error = function(e) {
       cli::cli_alert_danger("table_biomass_abundance_catch failed to run.")
       cli::cli_alert("Tip: check that your arguments are correct.")
-      cli::cli_li("unit_label = {bac_unit_label}")
+      cli::cli_li("unit_label = {bnc_unit_label}")
       print(e)
     }
   )

@@ -33,12 +33,12 @@ test_that("extract_caps_alttext works for tables", {
   topic_label <- "biomass_abundance_catch"
   fig_or_table <- "table"
 
-  biomass_abundance_catch.b.units <- "mt"
+  biomass_abundance_catch.biomass.units <- "mt"
   biomass_abundance_catch.abundance.units <- "hundreds of fish"
   biomass_abundance_catch.catch.units <- "kg"
 
   # add KQs to caps/alt text csv
-  insert_kqs(biomass_abundance_catch.b.units,
+  insert_kqs(biomass_abundance_catch.biomass.units,
              biomass_abundance_catch.abundance.units,
              biomass_abundance_catch.catch.units)
 

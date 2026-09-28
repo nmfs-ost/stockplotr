@@ -24,7 +24,7 @@ save_all_plots(
   biomass_at_age_scale_amount = 1,
   biomass_at_age_unit_label = "mt",
   index_unit_label = "",
-  bac_unit_label = c(biomass = "mt", abundance = "fish", catch = "mt"),
+  bnc_unit_label = c(biomass = "mt", abundance = "fish", catch = "mt"),
   catch_unit_label = "mt",
   catch_scale_amount = 1,
   projections_unit_label = c(catch = "mt", spawning_biomass = "mt", fishing_mortality =
@@ -131,6 +131,10 @@ Default: "mt"}
 \item{index_unit_label}{String. Index of abundance/CPUE units
 
 Default: ""}
+
+\item{bnc_unit_label}{String. Abbreviated biomass, abundance, and catch units
+
+Default: c("biomass" = "mt", "abundance" = "fish", "catch" = "mt")}
 
 \item{catch_unit_label}{String. Abbreviated catch units
 
