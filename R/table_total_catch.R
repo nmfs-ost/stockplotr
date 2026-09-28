@@ -181,7 +181,6 @@ table_total_catch <- function(
       dat = dat,
       dir = tables_dir,
       scale_amount = 1,
-      unit_label = unit_label,
       table_df = final
     )
 

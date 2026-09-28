@@ -42,7 +42,7 @@ test_that("export_rda works for figures", {
 })
 
 test_that("export_rda works for tables", {
-  topic_label <- "bnc"
+  topic_label <- "biomass_abundance_catch"
   fig_or_table <- "table"
 
   B.min <- 100
@@ -73,9 +73,9 @@ test_that("export_rda works for tables", {
     fig_or_table = fig_or_table
   )
 
-  # expect that both tables dir and the bnc_table.rda file exist
+  # expect that both tables dir and the biomass_abundance_catch_table.rda file exist
   expect_true(dir.exists(fs::path(getwd(), "tables")))
-  expect_true(file.exists(fs::path(getwd(), "tables", "bnc_table.rda")))
+  expect_true(file.exists(fs::path(getwd(), "tables", "biomass_abundance_catch_table.rda")))
 
   # erase temporary testing files
   file.remove(fs::path(getwd(), "captions_alt_text.csv"))

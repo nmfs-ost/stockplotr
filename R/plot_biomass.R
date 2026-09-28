@@ -322,8 +322,7 @@ plot_biomass <- function(
       dat = rp_dat,
       dir = figures_dir,
       ref_line = ifelse(!is.null(names(ref_line)), names(ref_line), ref_line),
-      scale_amount = scale_amount,
-      unit_label = unit_label
+      scale_amount = scale_amount
     )
   }
   # Output final plot

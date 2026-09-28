@@ -13,6 +13,7 @@ save_all_plots(
   interactive = FALSE,
   figures_tables_dir = getwd(),
   ref_line = "msy",
+  biomass_unit_label = "mt",
   biomass_scale_amount = 1,
   landings_unit_label = "mt",
   spawning_biomass_label = "mt",
@@ -23,7 +24,7 @@ save_all_plots(
   biomass_at_age_scale_amount = 1,
   biomass_at_age_unit_label = "mt",
   index_unit_label = "",
-  biomass_unit_label = "mt",
+  bnc_unit_label = c(biomass = "mt", abundance = "fish", catch = "mt"),
   catch_unit_label = "mt",
   catch_scale_amount = 1,
   projections_unit_label = c(catch = "mt", spawning_biomass = "mt", fishing_mortality =
@@ -80,6 +81,10 @@ Default: "msy"
 
 Options: Including, but not limited to: "target", "MSY", "unfished"}
 
+\item{biomass_unit_label}{String. Biomass units
+
+Default: "mt"}
+
 \item{biomass_scale_amount}{Number. A number describing how much to scale down the
 biomass quantities shown on the y axis. See `recruitment_scale_amount`.
 
@@ -127,9 +132,9 @@ Default: "mt"}
 
 Default: ""}
 
-\item{biomass_unit_label}{String. Abbreviated biomass units
+\item{bnc_unit_label}{String. Abbreviated biomass, abundance, and catch units
 
-Default: "mt"}
+Default: c("biomass" = "mt", "abundance" = "fish", "catch" = "mt")}
 
 \item{catch_unit_label}{String. Abbreviated catch units
 

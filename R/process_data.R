@@ -386,6 +386,9 @@ process_table <- function(
     id_group <- group
   } else {
     id_group <- index_variables[-grep("year|age|length_bin", index_variables)]
+    if (length(id_group) == 0) {
+      id_group <- NULL
+    }
   }
   cols <- index_variables[grep("year|age|length_bin", index_variables)]
 
@@ -397,6 +400,7 @@ process_table <- function(
   } else if (!is.null(id_group)) {
     if (length(id_group) > 1) {
       cli::cli_alert_warning("Data contains >1 indexing variable. Selecting {id_group[1]}.")
+      id_group <- id_group[1]
     }
     if (length(id_group) > 0 && any(is.na(dat[[id_group]]))) {
       dat <- dat |>
