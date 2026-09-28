@@ -1,6 +1,15 @@
 #' Plot spawning potential ratio (SPR)
 #'
 #' @inheritParams plot_spawning_biomass
+#' @param quantity String. SPR quantity to plot.
+#' 
+#' Default: "spr".
+#'
+#' Options: "spr", "fishing_intensity", or "spr_ratio".
+#' 
+#' "spr" plots spawning potential ratio. "fishing_intensity" plots 1-SPR.
+#' "spr_ratio" plots quantity associated with SPRratio label (may be user
+#' specified in some models; e.g., Stock Synthesis).
 #'
 #' @returns A plot showing spawning potential ratio (SPR).
 #'
@@ -16,6 +25,7 @@
 #' @examples
 #' plot_spr(
 #'   dat = stockplotr:::example_data,
+#'   quantity = "spr",
 #'   unit_label = "metric tons",
 #'   group = "fleet",
 #'   interactive = FALSE,
@@ -23,6 +33,7 @@
 #' )
 #' plot_spr(
 #'   dat = stockplotr:::example_data,
+#'   quantity = "spr_ratio
 #'   unit_label = "metric tons",
 #'   facet = "fleet",
 #'   interactive = FALSE,
@@ -30,6 +41,7 @@
 #' )
 plot_spr <- function(
   dat,
+  quantity = c("spr", "fishing_intensity", "spr_ratio"),
   geom = "line",
   group = NULL,
   facet = NULL,
@@ -41,11 +53,15 @@ plot_spr <- function(
   figures_dir = getwd(),
   ...
 ) {
+  
+  quantity <- match.arg(quantity)
 
+  label_filter <- ifelse(quantity=="spr_ratio", "^spawning_potential_ratio", "spr")
+  
   # Filter data for spr
   prepared_data <- filter_data(
     dat = dat,
-    label_name = "^spawning_potential_ratio",
+    label_name = label_filter,
     geom = geom,
     #TODO: change this to era once stockplotr::example_data updated
     era = NULL,
@@ -88,14 +104,13 @@ plot_spr <- function(
   if (!is.null(group)) {
     if (group %notin% colnames(prepared_data)) group <- NULL
   }
-
-  # Extract ref_line value
-  #TODO: update this once ref_line PR merged
-  if (is.null(names(ref_line))){
-    ref_pt <- calculate_reference_point(
-      dat = dat,
-      reference_name = glue::glue("spawning_potential_ratio_{ref_line}")
-    )
+  
+  # calculate fishing intensity on the fly as 1-SPR
+  if(quantity=="fishing_intensity"){
+    prepared_data <- prepared_data %>% 
+      mutate(
+        estimate = 1-estimate,
+      )
   }
   
   # inital base plot
@@ -112,9 +127,19 @@ plot_spr <- function(
                         color = "grey") +
     ggplot2::geom_hline(yintercept = 0,
                         color = "grey") +
-    ggplot2::geom_hline(yintercept = ref_pt,
-                        color = "red") +
+    # ggplot2::geom_hline(yintercept = ref_pt,
+    #                     color = "red") +
     theme_noaa()
+  
+    plt <- reference_line(
+      plot = plt,
+      dat = dat,
+      lbs = FALSE,
+      label_name = "spawning_potential_ratio",
+      reference = ref_line,
+      scale_amount = 1
+    ) + theme_noaa()
+  
 
   if (length(unique(prepared_data$group_var)) == 1) {
     plt <- plt + ggplot2::theme(legend.position = "none")
