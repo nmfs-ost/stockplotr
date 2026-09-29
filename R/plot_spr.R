@@ -153,25 +153,35 @@ plot_spr <- function(
   if (make_rda) {
     # TODO: Update caption, alt text, and quantities once plot is finalized
     # Obtain relevant key quantities for captions/alt text
+    spr.quantity <- switch(quantity,
+                           "spr"="spawning potential ratio (SPR) (SB~current~/SB~unfished~)",
+                           "fishing_intensity"="fishing intensity (1-SPR) (1-SB~current~/SB~unfished~)",
+                           "spr_ratio"="relative fishing intensity (1-SPR)/(1-SPR~target~)"
+                          )
+    
     spr.start.year <- min(prepared_data$year)
     spr.end.year <- max(prepared_data$year)
     spr.min <- min(prepared_data$estimate) |> round(digits = 3)
     spr.max <- max(prepared_data$estimate) |> round(digits = 3)
-
+    spr.ref.pt <- as.character(ref_line)
+    
     # calculate & export key quantities
     export_kqs(
+      spr.quantity,
       spr.start.year,
       spr.end.year,
       spr.min,
-      spr.max
+      spr.ref.pt
     )
 
     # Add key quantities to captions/alt text
     insert_kqs(
+      spr.quantity,
       spr.start.year,
       spr.end.year,
       spr.min,
-      spr.max
+      spr.max,
+      spr.ref.pt
     )
 
     create_rda(

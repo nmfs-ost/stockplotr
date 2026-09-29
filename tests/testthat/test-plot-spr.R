@@ -37,7 +37,7 @@ test_that("rda file made when indicated", {
   # export rda
   plot_spr(
     stockplotr::example_data,
-    ref_line = "biomass_target",
+    ref_line = "msy",
     module = "DERIVED_QUANTITIES",
     make_rda = TRUE,
     figures_dir = getwd()
