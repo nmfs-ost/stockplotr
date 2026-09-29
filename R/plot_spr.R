@@ -60,8 +60,12 @@ plot_spr <- function(
 ) {
   
   quantity <- match.arg(quantity)
-
-  label_filter <- ifelse(quantity=="spr_ratio", "^spawning_potential_ratio", "spr")
+  
+  label_filter <- switch(quantity,
+                          "spr"="spr$", # only get SPR from SPR_SERIES
+                          "fishing_intensity"="spr_report$", # spr_report is apparently 1-SPR
+                          "spr_ratio"="^spawning_potential_ratio"
+                         )
   
   # Filter data for spr
   prepared_data <- filter_data(
@@ -82,13 +86,11 @@ plot_spr <- function(
   # set y axis label
   # default values if ylab not provided
   if(is.null(ylab)){
-    if(quantity=="spr"){
-      ylab <- "SPR (Spawning Potential Ratio)"
-    }else if(quantity=="fishing_intensity"){
-      ylab <- "Fishing Intensity (1-SPR)"
-    }else{
-      ylab <- "SPR Ratio"
-    }
+    ylab <- switch(quantity, 
+                   "spr"="SPR (Spawning Potential Ratio)",
+                   "fishing_intensity"="Fishing Intensity (1-SPR)",
+                   "spr_ratio"="SPR Ratio"
+                   )
   }
   
   
@@ -115,14 +117,6 @@ plot_spr <- function(
     if (group %notin% colnames(prepared_data)) group <- NULL
   }
   
-  # calculate fishing intensity on the fly as 1-SPR
-  if(quantity=="fishing_intensity"){
-    prepared_data <- prepared_data %>% 
-      mutate(
-        estimate = 1-estimate,
-      )
-  }
-  
   # inital base plot
   plt <- plot_timeseries(
     dat = prepared_data,
@@ -131,7 +125,7 @@ plot_spr <- function(
     ylab = ylab,
     group = group,
     facet = facet,
-    ...
+    # ...
   ) +
     ggplot2::geom_hline(yintercept = 1,
                         color = "grey") +
