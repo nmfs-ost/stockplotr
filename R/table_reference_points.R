@@ -16,6 +16,29 @@ table_reference_points <- function(
   # - add to df
   # - df into table + theme_noaa()
   
+  # TODO: add option to add comparison to previous assessment -- input of 2 models
+  # OR just make it so they can add any number of models to make comparisons -- intention is year prev and curr but could be sensitivity?
+  
+  # reference point described as "common conceptual summary metrics" from 2023 pacific hake assessment doc
+  
+  # First draft labels
+  labels <- c(
+    "M",
+    "Unfished Recruitment (R0)",
+    "Unfished spawning biomass (units)",
+    "F_{MSY}", #indicate what the proxy is through user input?
+    "MSY (units)",
+    "SB_{MSY} (units)",
+    "SPR_{MSY}",
+    "F_{target}",
+    "Terminal F",
+    "Terminal Biomass", # spawning biomass better?
+    "OFL (units)",
+    "ABC (units)",
+    "Overfished", #Y/N or calc'd?
+    "Overfishing" #Y/N or calc'd?
+  )
+  
   # Below are ones specifically for NW -- need R&D for other regions
   labels <- c(
     "Unfished Spawning Output (units)" = "spawning_biomass_unfished",
@@ -43,6 +66,51 @@ table_reference_points <- function(
   values <- c()
   upper <- c()
   lower <- c()
+  
+  # NEFSC ref pts table
+  labels <- c(
+    "F_{msy proxy}",
+    "SSB_{msy} (units)",
+    "MSY (units)",
+    "Median recruits (age-0) (units)",
+    "overfishing", # calc'd quantity
+    "Overfished" # calc'd quantity
+  )
+  
+  # SEFSC similar table
+  labels <- c(
+    "MSST",
+    "MFMT",
+    "F_{MSY}",
+    "MSY",
+    "B_{MSY}",
+    "R_{MSY}",
+    "OY",
+    "F_{OY}",
+    "F_{target}",
+    "Yield at F_{target} (equlibrium)",
+    "M",
+    "Terminal F",
+    "Terminal Biomass",
+    "Exploitation Status (F/MFMT)",
+    "Biomass Status (F/MSST)"
+  )
+  
+  # AFSC
+  labels <- c(
+    "M",
+    # "Tier",
+    # "Projected total (3+) biomass (units)",
+    "Female spawning biomass (units)",
+    "F_{OFL}",
+    "maxF_{ABC}",
+    "F_{ABC}",
+    "OFL (units)",
+    "maxABC (units)",
+    "ABC (units)",
+    "Overfished",
+    "Overfishing"
+  )
   
   extract_value <- function(dat, value) {
     search <- dat |>
