@@ -193,7 +193,7 @@ plot_spawning_potential_ratio <- function(
       dat = dat,
       dir = figures_dir,
       scale_amount = scale_amount,
-      unit_label = unit_label
+scale_amount = scale_amount
     )
   }
   # Output final plot
