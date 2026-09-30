@@ -59,7 +59,10 @@ plot_spawning_potential_ratio <- function(
   ...
 ) {
   
-  quantity <- match.arg(quantity)
+  if (length(quantity) > 1) 
+    quantity <- "spr" 
+  else  
+    quantity <- match.arg(quantity)
   
   label_filter <- switch(quantity,
                           "spr"="spr$", # only get SPR from SPR_SERIES
@@ -125,14 +128,12 @@ plot_spawning_potential_ratio <- function(
     ylab = ylab,
     group = group,
     facet = facet,
-    # ...
+    ...
   ) +
     ggplot2::geom_hline(yintercept = 1,
                         color = "grey") +
     ggplot2::geom_hline(yintercept = 0,
                         color = "grey") +
-    # ggplot2::geom_hline(yintercept = ref_pt,
-    #                     color = "red") +
     theme_noaa()
   
     plt <- reference_line(
