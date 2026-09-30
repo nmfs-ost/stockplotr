@@ -1,21 +1,21 @@
-test_that("plot_spr generates plots without errors", {
+test_that("plot_spawning_potential_ratio generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_spr(stockplotr::example_data, quantity="spr"),
+    plot_spawning_potential_ratio(stockplotr::example_data, quantity="spr"),
   )
   
   expect_no_error(
-    plot_spr(stockplotr::example_data, quantity="fishing_intensity")
+    plot_spawning_potential_ratio(stockplotr::example_data, quantity="fishing_intensity")
   )
   
   expect_no_error(
-    plot_spr(stockplotr::example_data, quantity="spr_ratio")
+    plot_spawning_potential_ratio(stockplotr::example_data, quantity="spr_ratio")
   )
   
   
   # expect error-free plot with many arguments
   expect_no_error(
-    plot_spr(
+    plot_spawning_potential_ratio(
       stockplotr::example_data,
       quantity = "spr_ratio",
       ref_line = "biomass_target"
@@ -25,7 +25,7 @@ test_that("plot_spr generates plots without errors", {
   
   # expect ggplot object is returned
   expect_s3_class(
-    plot_spr(
+    plot_spawning_potential_ratio(
       stockplotr::example_data,
       ref_line = c("target" = 0.80)
     ),
@@ -35,7 +35,7 @@ test_that("plot_spr generates plots without errors", {
 
 test_that("rda file made when indicated", {
   # export rda
-  plot_spr(
+  plot_spawning_potential_ratio(
     stockplotr::example_data,
     ref_line = "msy",
     module = "DERIVED_QUANTITIES",

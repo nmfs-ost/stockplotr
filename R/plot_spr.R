@@ -25,7 +25,7 @@
 #' @export
 #'
 #' @examples
-#' plot_spr(
+#' plot_spawning_potential_ratio(
 #'   dat = stockplotr:::example_data,
 #'   quantity = "spr",
 #'   unit_label = "metric tons",
@@ -34,7 +34,7 @@
 #'   make_rda = FALSE,
 #'   ylab = "SPR"
 #' )
-#' plot_spr(
+#' plot_spawning_potential_ratio(
 #'   dat = stockplotr:::example_data,
 #'   quantity = "spr_ratio
 #'   unit_label = "metric tons",
@@ -43,7 +43,7 @@
 #'   make_rda = FALSE,
 #'   ylab = "(1-SPR)/(1-SPR_ref)"
 #' )
-plot_spr <- function(
+plot_spawning_potential_ratio <- function(
   dat,
   quantity = c("spr", "fishing_intensity", "spr_ratio"),
   geom = "line",
