@@ -2378,6 +2378,7 @@ convert_output <- function(
   if (tolower(model) == "bam") {
     var_names_sheet <- var_names_sheet |>
       dplyr::mutate(label = tolower(label))
+    out_new <- out_new |> dplyr::mutate(label = tolower(label))
   }
 
   if (file.exists(con_file)) {
