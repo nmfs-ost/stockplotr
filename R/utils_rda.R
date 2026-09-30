@@ -324,6 +324,37 @@ calc_kqs <- function(returned_kq,
       return(F.msy.terminal.max)
     }
   }
+  
+  extract_value <- function(
+    returned_kq,
+    dat = NULL,
+    final = NULL,
+    relative = NULL,
+    module = NULL
+  ) {
+    search <- dat |>
+      dplyr::filter(grepl(glue::glue("^{value}"), returned_kq), module_name = module_name)
+    search_no_yr <- search |> dplyr::filter(is.na(year)) |> dplyr::pull(estimate)
+    if (length(search_no_yr) > 1) {
+      # check if values are equivalent
+      if (length(unique(search_no_yr)) == 1) {
+        return(search_no_yr[1])
+      } else {
+        # check if it can be summarized ?
+        search_sum <- search |>
+          dplyr::group_by(factors) |>
+          dplyr::summarise(est = mean(estimate)) 
+      }
+    } else if (length(search_no_yr) == 0) {
+      return("-")
+    } else {
+      # return value
+      search_no_yr
+    }
+  }
+  value <- extract_value()
+  # TODO: add if/else for warning if value was found or not
+  
   rm(selected_module)
 }
 
