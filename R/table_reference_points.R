@@ -3,7 +3,8 @@ table_reference_points <- function(
     unit_label = "mt",
     module = NULL,
     digits = 2,
-    scale_amount = 1,
+    reference = "msy",
+    additional_values,
     make_rda = FALSE,
     tables_dir = getwd()
 ) {
@@ -16,25 +17,33 @@ table_reference_points <- function(
   # - add to df
   # - df into table + theme_noaa()
   
+  # - default to "msy" but allow change ref_line like in plot reference lines
+  
   # TODO: add option to add comparison to previous assessment -- input of 2 models
   # OR just make it so they can add any number of models to make comparisons -- intention is year prev and curr but could be sensitivity?
   
   # reference point described as "common conceptual summary metrics" from 2023 pacific hake assessment doc
   
   # First draft labels
+  # reference points used for projections and management positions
   labels <- c(
-    "M",
-    "Unfished Recruitment (R0)",
-    "Unfished spawning biomass (units)",
-    "F_{MSY}", #indicate what the proxy is through user input?
-    "MSY (units)",
-    "SB_{MSY} (units)",
+    "M" = "natural_mortality", # maybe not
+    "Unfished Recruitment (R0)" = "R0",
+    "Unfished spawning biomass (units)" = "spawning_biomass_unfished",
+    "F_{MSY}" = "fishing_mortality_msy", #indicate what the proxy is through user input?
+    "MSY (units)" = "msy",
+    "SB_{MSY} (units)" = "", # in kq
     "SPR_{MSY}",
-    "F_{target}",
-    "Terminal F",
-    "Terminal Biomass", # spawning biomass better?
+    # AK does not report MSY -- uses proxy same with NW
+    # or a proxy for MSY
+    "F_{target}", # in kq
+    "Terminal F", # in kq
+    "Terminal Biomass", # spawning biomass better?; in kq
     "OFL (units)",
     "ABC (units)",
+    "Average Recruitment", # mean or medium over timeseries or over last x # of years
+    "Exploitation rate", # potentially in addition to F -- sometimes completely different consider
+    "Depletion", # fraction unfished terminal SB/unfished SB, potentially SBratio in SS3 
     "Overfished", #Y/N or calc'd?
     "Overfishing" #Y/N or calc'd?
   )
@@ -73,7 +82,7 @@ table_reference_points <- function(
     "SSB_{msy} (units)",
     "MSY (units)",
     "Median recruits (age-0) (units)",
-    "overfishing", # calc'd quantity
+    "Overfishing", # calc'd quantity
     "Overfished" # calc'd quantity
   )
   
@@ -111,26 +120,9 @@ table_reference_points <- function(
     "Overfished",
     "Overfishing"
   )
-  
-  extract_value <- function(dat, value) {
-    search <- dat |>
-      dplyr::filter(grepl(glue::glue("^{value}"), label))
-    search_no_yr <- search |> dplyr::filter(is.na(year)) |> dplyr::pull(estimate)
-    if (length(search_no_yr) > 1) {
-      # check if values are equivalent
-      if (length(unique(search_no_yr)) == 1) {
-        return(search_no_yr[1])
-      } else {
-        # check if it can be summarized ?
-        search_sum <- search |>
-          dplyr::group_by(factors) |>
-          dplyr::summarise(est = mean(estimate)) 
-      }
-    } else if (length(search_no_yr) == 0) {
-      return("-")
-    } else {
-      # return value
-      search_no_yr
-    }
+  for (i in seq_along(labels)) {
+    kq <- labels[i]
+    calc_kqs()
   }
+ 
 }
