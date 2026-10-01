@@ -108,6 +108,8 @@ create_latex_table <- function(data,
 #' @param id_group String. The identifying index variable as a string
 #'
 #' Default: NULL
+#' @noRd
+#' 
 
 check_label_differences <- function(dat, index_variables, id_group = NULL) {
   # Loop over model to perform checks if the model columns are identical
@@ -192,6 +194,7 @@ check_label_differences <- function(dat, index_variables, id_group = NULL) {
 #' @returns List of formatted dataframes that contain column names formatted
 #' for a table along with a merge of values in the estimate and error columns
 #' to reduce redundancy in the table.
+#' @noRd
 #'
 merge_error <- function(
   table_data,

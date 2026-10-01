@@ -1,9 +1,6 @@
 #' Plot Total Biomass
 #'
 #' @inheritParams plot_spawning_biomass
-#' @param unit_label String. Biomass units
-#'
-#' Default: "mt"
 #' @param ref_line String. Type of reference point to
 #'   compare biomass to. The default `"msy"` looks for
 #'   `"biomass_msy"` in the `"label"` column of `dat`. The actual
