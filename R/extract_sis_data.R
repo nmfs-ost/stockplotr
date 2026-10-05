@@ -48,6 +48,12 @@
 #' \strong{Catch}: `stockplotr::plot_total_catch()`
 #' 
 #' 
+#' If a `sis_assmt_template.csv` file is present, data are extracted and used to populate the `sis_ts_template.csv` in the following circumstances:
+#' "AS_B_UNIT" is used to populate the "Unit" column for the Biomass AND Spawners categories.
+#' "AS_F_UNIT" is used to populate the "Unit" column for the Fmort category.
+#' The "tot.catch.units" value is used to populate the "Unit" column for the Catch category.
+#' 
+#' 
 #' @export
 #'
 #' @examples
@@ -70,14 +76,14 @@ extract_sis_data <- function(sis_data_dir = getwd(),
   
   # Check if existing data files exist; if not, start from blank templates
   if (!file.exists(fs::path(sis_data_dir, "sis_assmt_template.csv"))) {
-    assmt_dat <- read.csv(fs::path("inst/resources/sis_assmt_template.csv"), stringsAsFactors = FALSE)
+    assmt_dat <- utils::read.csv(system.file("resources", "sis_assmt_template.csv", package = "stockplotr"))
     cli::cli_alert_info("No existing sis_assmt_template.csv found in {sis_data_dir}. Using blank template.")
   } else {
     assmt_dat <- read.csv(fs::path(sis_data_dir, "sis_assmt_template.csv"), stringsAsFactors = FALSE)
         cli::cli_alert_success("Found existing sis_assmt_template.csv in {sis_data_dir}.")
   }
   
-    ts_dat <- read.csv(fs::path("inst/resources/sis_ts_template.csv"), stringsAsFactors = FALSE)
+  ts_dat <- utils::read.csv(system.file("resources", "sis_ts_template.csv", package = "stockplotr"))
   
   # extract key quantities from csv and assign to variables
   kqs_path <- fs::path(key_quantities_dir, "key_quantities.csv")
@@ -320,9 +326,11 @@ extract_sis_data <- function(sis_data_dir = getwd(),
           primary <- c(primary, primary1)
         }
       } else {
-          primary <- c(primary, primary_options2[1])
-          cli::cli_alert_info("Primary categor{?y/ies} set to {primary} by default in non-interactive mode.")
-        }
+        primary <- c(primary, primary_options2[1])
+        cli::cli_alert_info("Primary categor{?y/ies} set to {primary} by default in non-interactive mode.")
+      }
+  } else if (any(primary_options2 %in% ts_options)) {
+    primary <- c(primary, ts_options[ts_options %in% primary_options2])
   }
   
   if (length(primary) == 0) {primary <- NA} 
@@ -338,6 +346,36 @@ extract_sis_data <- function(sis_data_dir = getwd(),
   
   primary <- unlist(lapply(primary, function(x) category_pairs[[x]]))
   
+  # identify sis_assmt_template AS_B_UNIT values if coded
+  b_unit <- assmt_dat$Value[assmt_dat$Variable == "AS_B_UNIT"]
+  if (as.numeric(b_unit) %in% 1:8) {
+    b_unit <- switch(b_unit,
+                     "1" = "Metric Tons",
+                     "2" = "Thousand Metric Tons",
+                     "3" = "Adult spawners - Natural & Hatchery - Escapement",
+                     "4" = "Adult spawners - Hatchery - Escapement",
+                     "5" = "Adult spawners - Natural - Escapement",
+                     "6" = "Number of Eggs",
+                     "7" = "kg / tow",
+                     "8" = "Number of Fish"
+    )
+  }
+  
+  # identify sis_assmt_template AS_F_UNIT values if coded
+  f_unit <- assmt_dat$Value[assmt_dat$Variable == "AS_F_UNIT"]
+  if (as.numeric(f_unit) %in% 1:7) {
+    f_unit <- switch(f_unit,
+                     "1" = "Apical F",
+                     "2" = "Fully-selected F",
+                     "3" = "Exploitation Rate",
+                     "4" = "Relative F",
+                     "5" = "Metric Tons",
+                     "6" = "1 - SPR",
+                     "7" = "Z - M"
+    )
+  }
+  
+  
   ts_dat_filled <- all_summaries |>
     dplyr::rename_with(~ "Year", .cols = matches("^year$")) |>
     tidyr::pivot_longer(cols = -Year, names_to = "Category", values_to = "Value") |>
@@ -352,9 +390,9 @@ extract_sis_data <- function(sis_data_dir = getwd(),
       TRUE ~ NA
     )) |>
     dplyr::mutate(Unit = dplyr::case_when(
-      Category == "Biomass" ~ as.character(assmt_dat$Value[assmt_dat$Variable == "AS_B_UNIT"]),
-      Category == "Spawners" ~ as.character(assmt_dat$Value[assmt_dat$Variable == "AS_B_UNIT"]),
-      Category == "Fmort" ~ as.character(assmt_dat$Value[assmt_dat$Variable == "AS_F_UNIT"]),
+      Category == "Biomass" ~ as.character(b_unit),
+      Category == "Spawners" ~ as.character(b_unit),
+      Category == "Fmort" ~ as.character(f_unit),
       Category == "Index" ~ "", 
       Category == "Catch" ~ ifelse(kqs$value[kqs$key_quantity == "tot.catch.units"] == " (mt)", "Metric Tons", kqs$value[kqs$key_quantity == "tot.catch.units"]),
       Category == "Recruitment" ~ "Number of Fish",

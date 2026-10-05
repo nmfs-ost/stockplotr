@@ -1,8 +1,22 @@
 test_that("extract_sis_data() runs with all possible rdas present", {
-  save_all_plots(example_data)
-  table_total_catch(example_data, module = "TIME_SERIES",interactive = FALSE, make_rda = TRUE)
-  expect_no_error(extract_sis_data())
-  
+  save_all_plots(stockplotr::example_data)
+  table_total_catch(stockplotr::example_data,
+                    module = "TIME_SERIES",
+                    interactive = FALSE,
+                    make_rda = TRUE)
+
+  files <- c(
+    fs::path("figures",
+             c("biomass_figure.rda", "spawning_biomass_figure.rda", "abundance_at_age_figure.rda", "fishing_mortality_figure.rda",  "index_figure.rda")
+             ),
+    fs::path("tables",
+             "total_catch_table.rda")
+  )
+
+  expect_true(all(file.exists(files)))
+
+  extract_sis_data()
+
   # erase temporary testing files
   file.remove(fs::path(getwd(), "sis_assmt_template.csv"))
   file.remove(fs::path(getwd(), "sis_ts_template.csv"))
@@ -13,14 +27,14 @@ test_that("extract_sis_data() runs with all possible rdas present", {
 })
 
 test_that("extract_sis_data() runs with some of all possible rdas present", {
-  plot_biomass(example_data, module = "TIME_SERIES", interactive = FALSE, make_rda = TRUE)
-  plot_fishing_mortality(example_data,interactive = FALSE, make_rda = TRUE)
+  plot_biomass(stockplotr::example_data, module = "TIME_SERIES", interactive = FALSE, make_rda = TRUE)
+  plot_fishing_mortality(stockplotr::example_data, interactive = FALSE, make_rda = TRUE)
   expect_no_error(extract_sis_data())
-  
+
   # test that extract_sis_data() exports csvs
   expect_true(file.exists(fs::path(getwd(), "sis_assmt_template.csv")))
   expect_true(file.exists(fs::path(getwd(), "sis_ts_template.csv")))
-  
+
   # erase temporary testing files
   file.remove(fs::path(getwd(), "sis_assmt_template.csv"))
   file.remove(fs::path(getwd(), "sis_ts_template.csv"))

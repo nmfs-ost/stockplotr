@@ -59,6 +59,12 @@ in the plotting functions:
 \strong{Index of Abundance}: `stockplotr::plot_index()`
 
 \strong{Catch}: `stockplotr::plot_total_catch()`
+
+
+If a `sis_assmt_template.csv` file is present, data are extracted and used to populate the `sis_ts_template.csv` in the following circumstances:
+"AS_B_UNIT" is used to populate the "Unit" column for the Biomass AND Spawners categories.
+"AS_F_UNIT" is used to populate the "Unit" column for the Fmort category.
+The "tot.catch.units" value is used to populate the "Unit" column for the Catch category.
 }
 \examples{
 \dontrun{
