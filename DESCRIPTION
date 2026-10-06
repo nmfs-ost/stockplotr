@@ -54,11 +54,14 @@ Imports:
 Suggests:
     flextable,
     here,
+    jsonlite,
     kableExtra,
     knitr,
     quarto,
     rmarkdown,
-    testthat (>= 3.0.0)
+    svglite,
+    testthat (>= 3.0.0),
+    zip
 VignetteBuilder: 
     knitr
 Config/roxygen2/version: 8.1.0

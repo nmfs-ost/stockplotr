@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>stockplotr · Assessment explorer</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <script src="report-data.js" defer></script>
+  <script src="dashboard.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to figures</a>
+  <aside class="sidebar" aria-label="Report navigation">
+    <a href="#gallery" class="brand" aria-label="stockplotr figure gallery"><span class="brand-mark" aria-hidden="true">≈</span><span>stockplotr<small>ASSESSMENT EXPLORER</small></span></a>
+    <div class="nav-label">EXPLORE THE ASSESSMENT</div>
+    <nav id="categories" aria-label="Figure categories"></nav>
+    <div class="sidebar-note"><span class="status-dot"></span> Made to travel<h3>Your assessment.<br>Anywhere.</h3><p>This report works offline. Share the ZIP, extract it, and open index.html.</p><a href="START-HERE.txt" download>Sharing instructions ↗</a></div>
+    <div class="sidebar-footer" id="version"></div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar"><span>ASSESSMENT / <strong>FIGURE LIBRARY</strong></span><div><span class="offline"><span class="status-dot"></span> Offline ready</span><button id="print" class="quiet">Print view</button></div></header>
+    <main id="main" tabindex="-1">
+      <section class="hero"><div class="hero-copy"><div class="eyebrow">FROM MODEL OUTPUT TO UNDERSTANDING</div><h1 id="report-title"></h1><p id="report-subtitle"></p></div><div class="hero-stats"><div><strong id="figure-count">—</strong><span>figures ready</span></div><div><strong id="category-count">—</strong><span>themes to explore</span></div></div></section>
+      <div class="controls"><div class="view-switch" role="group" aria-label="View"><button id="gallery-view" aria-pressed="true">▦ Gallery</button><button id="explore-view" aria-pressed="false">◫ Explorer</button><button id="compare-view" aria-pressed="false">⇄ Compare <span id="compare-count">0</span></button></div><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Search figures, captions, modules…" aria-label="Search figures"></label></div>
+      <div class="section-heading"><div><h2 id="section-title">All figures</h2><p id="results" role="status" aria-live="polite"></p></div><label class="sort-label">Order <select id="sort" aria-label="Figure order"><option value="catalog">Assessment order</option><option value="title">A–Z</option></select></label></div>
+      <p id="notice" class="notice" role="status" hidden></p>
+      <section id="gallery" class="gallery" aria-label="Figure gallery"></section>
+      <section id="explorer" hidden aria-label="Figure explorer"><div class="explorer-nav"><button id="previous">← Previous</button><label>Figure <select id="figure-select" aria-label="Select figure"></select></label><button id="next">Next →</button></div><article id="detail" class="detail"></article></section>
+      <section id="comparison" hidden aria-label="Figure comparison"><p class="comparison-help">Select up to three figures in the gallery to compare. Each figure retains its own axes and units.</p><div id="comparison-grid" class="comparison-grid"></div></section>
+      <footer class="report-footer"><span id="generated"></span><a href="manifest.json" download>Report manifest ↗</a></footer>
+      <noscript><p>This dashboard needs JavaScript enabled. You can still open images in the figures folder and source data in the data folder.</p></noscript>
+    </main>
+  </div>
+  <dialog id="zoom-dialog" aria-labelledby="zoom-title"><header class="zoom-toolbar"><h2 id="zoom-title"></h2><label>Magnification <input id="zoom-level" type="range" min="100" max="300" step="25" value="100"><output id="zoom-value">100%</output></label><button id="close-zoom" autofocus>Close ✕</button></header><div class="zoom-scroll" tabindex="0" aria-label="Enlarged figure; scroll to pan"><img id="zoom-image" alt=""></div></dialog>
+</body>
+</html>

@@ -66,6 +66,51 @@ Example Plot | Example Table |
 :------------|---------------:
 ![Example landings plot from stockplotr](man/figures/landings_plot_ex.png) | ![Example landings tables from stockplotr](man/figures/landings_table_ex.png)
 
+### Portable assessment dashboard
+
+Create a searchable figure gallery with an explorer, side-by-side comparisons,
+image enlargement, and SVG, PNG and source CSV downloads:
+
+```r
+# Optional packages needed only to build a dashboard
+install.packages(c("jsonlite", "svglite", "zip"))
+
+report <- stockplotr::create_dashboard(
+  stockplotr::example_data,
+  output_dir = "example-dashboard",
+  title = "Example stock assessment"
+)
+utils::browseURL(report$index)
+
+# See all 14 figures, their plotting functions and preferred source modules
+stockplotr::dashboard_figures()
+```
+
+Send **example-dashboard.zip**. The recipient extracts the whole archive and
+double-clicks **index.html**. No R, Quarto, Java, server or internet connection is
+needed. The JavaScript viewer and all figure assets travel with the report.
+Search, compare and enlarge work offline; the underlying figures retain their
+stockplotr formatting and do not have point-level hover values.
+
+Captions and alternative text come from stockplotr's figure exports. Missing
+figures are listed with their reasons, also available in `report$figures`.
+Use a new output directory for each report. To select figures or override a
+plot's units or source module:
+
+```r
+stockplotr::create_dashboard(
+  stockplotr::example_data,
+  output_dir = "population-dashboard",
+  figures = c("spawning_biomass", "biomass", "recruitment"),
+  plot_args = list(recruitment = list(unit_label = "fish"))
+)
+```
+
+Biomass and catch-weight labels default to metric tons; recruitment and abundance
+labels default to fish. Check that labels match your source data: these arguments
+label quantities and do not convert units. See `?create_dashboard` for the full
+interface and [the extension guide](inst/dashboard/README.md) for adding figures.
+
 ## Contributions
 
 Have you identified any suggestions for improvement, bugs, or questions? Please see our [Contributing page](https://github.com/nmfs-ost/stockplotr/blob/main/CONTRIBUTING.md) for more information on how to make effective contributions to {stockplotr}.
