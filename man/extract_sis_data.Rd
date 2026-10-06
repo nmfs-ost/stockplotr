@@ -65,6 +65,9 @@ If a `sis_assmt_template.csv` file is present, data are extracted and used to po
 "AS_B_UNIT" is used to populate the "Unit" column for the Biomass AND Spawners categories.
 "AS_F_UNIT" is used to populate the "Unit" column for the Fmort category.
 The "tot.catch.units" value is used to populate the "Unit" column for the Catch category.
+
+Units for index of abundance and recruitment (age 1) are set to 
+*blank* and "Number of Fish", respectively.
 }
 \examples{
 \dontrun{

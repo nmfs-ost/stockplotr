@@ -53,6 +53,9 @@
 #' "AS_F_UNIT" is used to populate the "Unit" column for the Fmort category.
 #' The "tot.catch.units" value is used to populate the "Unit" column for the Catch category.
 #' 
+#' Units for index of abundance and recruitment (age 1) are set to 
+#' *blank* and "Number of Fish", respectively.
+#' 
 #' 
 #' @export
 #'
