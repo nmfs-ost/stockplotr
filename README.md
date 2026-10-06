@@ -74,7 +74,7 @@ Thank you for helping us improve this package!
 
 ## Progress, Goals, & Timeline
 
-What are we working on? When do we aim to complete it? What have we accomplished? Check out our [GitHub Project Board](https://github.com/orgs/nmfs-ost/projects/45/) and [Milestones](https://github.com/nmfs-ost/stockplotr/milestones) to see the package development status and our goals for the next few months.
+What are we working on? When do we aim to complete it? What have we accomplished? Check out our [GitHub Project Board](https://github.com/orgs/nmfs-ost/projects/57/) and [Milestones](https://github.com/nmfs-ost/stockplotr/milestones) to see the package development status and our goals for the next few months.
 
 ## Code of Conduct
 
