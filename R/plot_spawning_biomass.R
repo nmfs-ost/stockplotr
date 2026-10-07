@@ -47,7 +47,7 @@
 #' unit label reflected in the data. Please refer to the argument `scale_amount`.
 #'
 #' Default: NULL
-#' @param lbs Logical. TRUE/FALSE; indicate whether to convert the y-axis values from
+#' @param lbs `r lifecycle::badge('deprecated')` Logical. TRUE/FALSE; indicate whether to convert the y-axis values from
 #' kilograms to pounds. The default units match the default in the
 #' unit_label argument - 'mt'. -- Deprecate
 #'
@@ -130,7 +130,7 @@ plot_spawning_biomass <- function(
   ref_line = "msy",
   unit_label = NULL,
   era = NULL,
-  # lbs = FALSE,
+  lbs = lifecycle::deprecate(),
   module = NULL,
   scale_amount = 1,
   relative = FALSE,
