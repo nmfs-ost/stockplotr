@@ -40,12 +40,16 @@
 #'
 #' Options: (including, but not limited to) "target", "msy", and "unfished"
 #' If the reference point is not found in the data, set ref_line = c("name" = value).
-#' @param unit_label String. Spawning biomass unit.
+#' @param unit_label String. Spawning biomass unit as indicated from the data. 
+#' When setting a unit of pounds please use one of the following keywords: 
+#' "lbs", "pounds", "lb". For example "1000s of lbs" would still be recognized 
+#' as pounds. Do not set unit label to the desired order of magnitude rather the
+#' unit label reflected in the data. Please refer to the argument `scale_amount`.
 #'
-#' Default: "mt"
+#' Default: NULL
 #' @param lbs Logical. TRUE/FALSE; indicate whether to convert the y-axis values from
 #' kilograms to pounds. The default units match the default in the
-#' unit_label argument - 'mt'.
+#' unit_label argument - 'mt'. -- Deprecate
 #'
 #' Default: `FALSE`
 #' @param module Character vector. (Optional) Module name found in `dat$module_name`.
@@ -55,7 +59,10 @@
 #'
 #' If the interactive and >1 module_name is found, user will select the
 #' module_name in the console. @seealso [filter_data()]
-#' @param scale_amount Number. A number to scale the y-axis values.
+#' @param scale_amount Number. A number to scale the y-axis values. If > 1, the
+#'  magnitude of the scale amount will be added to the unit label 
+#'  (e.g. scale_amount = 1000 with a unit label of "1000s of lbs" will result
+#'   in "thousands of 1000s of lbs")
 #'
 #' Default: 1
 #' @param relative Logical. TRUE/FALSE; specify whether to set y-axis values relative to
@@ -121,9 +128,9 @@ plot_spawning_biomass <- function(
   group = NULL,
   facet = NULL,
   ref_line = "msy",
-  unit_label = "mt",
+  unit_label = NULL,
   era = NULL,
-  lbs = FALSE,
+  # lbs = FALSE,
   module = NULL,
   scale_amount = 1,
   relative = FALSE,
@@ -132,32 +139,7 @@ plot_spawning_biomass <- function(
   interactive = TRUE,
   ...
 ) {
-  # this assumes that the previous units were metric tons
-  if (lbs && unit_label %notin% c("lbs", "pounds", "lb")) {
-    cli::cli_alert_info("Unit label was not changed. Setting unit_label to 'lbs'.")
-    unit_label <- "lbs"
-  }
-
-  # TODO: Fix the unit label if scaling. Maybe this is up to the user to do if
-  #       they want something scaled then they have to supply a better unit name
-  #       or we create a helper function to do this.
-  spawning_biomass_label <- ifelse(
-    relative,
-    yes = "Relative spawning biomass",
-    no = {
-      label_magnitude(
-        label = "Spawning Biomass",
-        unit_label = unit_label,
-        scale_amount = dplyr::if_else(
-          lbs,
-          ifelse(unit_label %in% c("mt", "mts", "metric tons", "metric ton"), 1000, 1) * scale_amount,
-          scale_amount
-        ),
-        legend = TRUE
-      )
-    }
-  )
-
+  # TODO: start deprecation procedure for argument lbs
   if (relative & scale_amount > 1) {
     cli::cli_alert_warning("Scale amount is not applicable when relative = TRUE. Resetting scale_amount to 1.")
     scale_amount <- 1
@@ -175,7 +157,31 @@ plot_spawning_biomass <- function(
     scale_amount = scale_amount,
     interactive = interactive
   )
-
+  # extract unit if unit_label is null and set lbs to F by default
+  lbs <- FALSE
+  if (is.null(unit_label)) {
+    unit_label <- unique(prepared_data$unit)
+    if (is.na(unit_label)) cli::cli_abort("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+  } else {
+    if (grepl("lbs|pounds|lb", unit_label, ignore.case = TRUE)) lbs <- TRUE
+  }
+  
+  # TODO: Fix the unit label if scaling. Maybe this is up to the user to do if
+  #       they want something scaled then they have to supply a better unit name
+  #       or we create a helper function to do this.
+  spawning_biomass_label <- ifelse(
+    relative,
+    yes = "Relative spawning biomass",
+    no = {
+      label_magnitude(
+        label = "Spawning Biomass",
+        unit_label = unit_label,
+        scale_amount = scale_amount,
+        legend = TRUE
+      )
+    }
+  )
+  
   if (relative) {
     if (nrow(prepared_data) == 0) {
       cli::cli_abort("No data found for relative biomass. Please check that your data contains a label for 'biomass_biomass_unfished'.")
