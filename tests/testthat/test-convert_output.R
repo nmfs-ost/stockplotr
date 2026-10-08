@@ -129,3 +129,97 @@ test_that("replace_empty_with_na_all replaces empty strings only", {
   expect_equal(out$b, c(NA, "y", NA))
   expect_equal(out$c, 1:3)
 })
+
+test_that("convert_output works for Rceattle", {
+  fit_path <- test_path("fixtures", "rceattle_goa_atf.rds")
+
+  # Both documented input modes: a path, and an already-loaded fit.
+  expect_no_error(from_path <- convert_output(
+    file = fit_path,
+    model = "rceattle"
+  ))
+  expect_no_error(from_object <- convert_output(
+    file = readRDS(fit_path),
+    model = "rceattle"
+  ))
+
+  expect_equal(dim(from_path)[2], 35)
+  expect_equal(from_path, from_object)
+
+  # Every row says which module it came from.
+  expect_false(any(is.na(from_path[["module_name"]])))
+
+  # Predicted composition binds column-wise to the observations, one row of
+  # age_hat per row of comp_data, so reading age_hat row by row reproduces the
+  # series exactly. A cross join repeats it once per row of comp_data instead.
+  fit <- readRDS(fit_path)
+  age_hat <- as.vector(t(fit[["quantities"]][["age_hat"]]))
+  expect_equal(
+    as.numeric(from_path[from_path[["label"]] == "composition_predicted", ][["estimate"]]),
+    age_hat[age_hat != 0]
+  )
+
+  # The index series are the fit's own values, in order.
+  expect_equal(
+    as.numeric(from_path[from_path[["label"]] == "index_predicted", ][["estimate"]]),
+    unname(as.numeric(fit[["quantities"]][["index_hat"]]))
+  )
+
+  # A derived time series carries its years, rather than falling into the
+  # `year = NA` branch.
+  biomass <- from_path[from_path[["label"]] == "biomass", ]
+  expect_gt(nrow(biomass), 0)
+  expect_false(any(is.na(biomass[["year"]])))
+  expect_true(all(is.finite(as.numeric(biomass[["estimate"]]))))
+})
+
+test_that("convert_output accepts .RDS as well as .rds for Rceattle", {
+  # saveRDS() output is conventionally named either way, and real Rceattle
+  # assessment files use the upper-case form.
+  upper <- tempfile(fileext = ".RDS")
+  on.exit(unlink(upper), add = TRUE)
+  saveRDS(readRDS(test_path("fixtures", "rceattle_goa_atf.rds")), upper)
+  expect_no_error(convert_output(file = upper, model = "rceattle"))
+})
+
+test_that("convert_output says so when an Rceattle fit carries no sdrep", {
+  # getsd = FALSE leaves sdrep NULL, and every derived time series lives there,
+  # so the converted output holds only the input data.
+  no_sd <- readRDS(test_path("fixtures", "rceattle_goa_atf.rds"))
+  no_sd[["sdrep"]] <- NULL
+
+  # Matched on a single word, since cli wraps a message and a phrase can be
+  # split across a line break.
+  expect_warning(
+    out <- convert_output(file = no_sd, model = "rceattle"),
+    "sdrep"
+  )
+  expect_false("biomass" %in% out[["label"]])
+  expect_true("catch" %in% out[["label"]])
+})
+
+test_that("convert_output refuses an Rceattle fit of unknown species count", {
+  # The standardized output has no species dimension, so an unreadable species
+  # count must stop the conversion rather than risk merging two stocks.
+  no_nspp <- readRDS(test_path("fixtures", "rceattle_goa_atf.rds"))
+  no_nspp[["data_list"]][["nspp"]] <- NULL
+
+  expect_error(
+    convert_output(file = no_nspp, model = "rceattle"),
+    "species count is unknown"
+  )
+})
+
+test_that("convert_output refuses a multispecies Rceattle fit", {
+  # The standardized output describes one stock and has no species dimension.
+  # CEATTLE is a multispecies model, so this must fail rather than return rows
+  # in which two stocks share a year.
+  multi <- readRDS(test_path("fixtures", "rceattle_goa_atf.rds"))
+  multi[["data_list"]][["nspp"]] <- 3L
+
+  # Matched on a phrase short enough that cli's wrapping cannot split it.
+  expect_error(
+    convert_output(file = multi, model = "rceattle"),
+    "Rceattle model has 3 species"
+  )
+})
