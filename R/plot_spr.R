@@ -129,11 +129,6 @@ plot_spawning_potential_ratio <- function(
   if (make_rda) {
     # TODO: Update caption, alt text, and quantities once plot is finalized
     # Obtain relevant key quantities for captions/alt text
-    spr.quantity <- switch(quantity,
-                           "spr"="spawning potential ratio (SPR) (SB~current~/SB~unfished~)",
-                           "fishing_intensity"="fishing intensity (1-SPR) (1-SB~current~/SB~unfished~)",
-                           "spr_ratio"="relative fishing intensity (1-SPR)/(1-SPR~target~)"
-                          )
     
     spr.start.year <- min(prepared_data$year)
     spr.end.year <- max(prepared_data$year)
@@ -143,7 +138,6 @@ plot_spawning_potential_ratio <- function(
     
     # calculate & export key quantities
     export_kqs(
-      spr.quantity,
       spr.start.year,
       spr.end.year,
       spr.min,
@@ -152,7 +146,6 @@ plot_spawning_potential_ratio <- function(
 
     # Add key quantities to captions/alt text
     insert_kqs(
-      spr.quantity,
       spr.start.year,
       spr.end.year,
       spr.min,
@@ -167,8 +160,7 @@ plot_spawning_potential_ratio <- function(
       fig_or_table = "figure",
       dat = dat,
       dir = figures_dir,
-      scale_amount = scale_amount,
-scale_amount = 1
+      scale_amount = 1
     )
   }
   # Output final plot
