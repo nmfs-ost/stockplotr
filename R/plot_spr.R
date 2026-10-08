@@ -1,15 +1,6 @@
 #' Plot spawning potential ratio (SPR)
 #'
 #' @inheritParams plot_spawning_biomass
-#' @param quantity String. SPR quantity to plot.
-#' 
-#' Default: "spr".
-#'
-#' Options: "spr", "fishing_intensity", or "spr_ratio".
-#' 
-#' "spr" plots spawning potential ratio. "fishing_intensity" plots 1-SPR.
-#' "spr_ratio" plots quantity associated with SPRratio label (may be user
-#' specified in some models; e.g., Stock Synthesis).
 #' 
 #' @param ylab String. Y-axis label to show.
 #'
@@ -27,7 +18,6 @@
 #' @examples
 #' plot_spawning_potential_ratio(
 #'   dat = stockplotr:::example_data,
-#'   quantity = "spr",
 #'   unit_label = "metric tons",
 #'   group = "fleet",
 #'   interactive = FALSE,
@@ -36,16 +26,15 @@
 #' )
 #' plot_spawning_potential_ratio(
 #'   dat = stockplotr:::example_data,
-#'   quantity = "spr_ratio
 #'   unit_label = "metric tons",
 #'   facet = "fleet",
+#'   module = "DERIVED_QUANTITIES",
 #'   interactive = FALSE,
 #'   make_rda = FALSE,
 #'   ylab = "(1-SPR)/(1-SPR_ref)"
 #' )
 plot_spawning_potential_ratio <- function(
   dat,
-  quantity = c("spr", "fishing_intensity", "spr_ratio"),
   geom = "line",
   group = NULL,
   facet = NULL,
@@ -59,21 +48,10 @@ plot_spawning_potential_ratio <- function(
   ...
 ) {
   
-  if (length(quantity) > 1) 
-    quantity <- "spr" 
-  else  
-    quantity <- match.arg(quantity)
-  
-  label_filter <- switch(quantity,
-                          "spr"="spr$", # only get SPR from SPR_SERIES
-                          "fishing_intensity"="spr_report$", # spr_report is apparently 1-SPR
-                          "spr_ratio"="^spawning_potential_ratio"
-                         )
-  
   # Filter data for spr
   prepared_data <- filter_data(
     dat = dat,
-    label_name = label_filter,
+    label_name = "spr",
     geom = geom,
     #TODO: change this to era once stockplotr::example_data updated
     era = NULL,
@@ -82,20 +60,16 @@ plot_spawning_potential_ratio <- function(
     module = module,
     scale_amount = 1,
     interactive = interactive
-  )  |>
-  # filter NA from year
-   dplyr::filter(!is.na(year))
+  ) |>
+    # filter NA from year
+    dplyr::filter(!is.na(year))
   
-  # set y axis label
-  # default values if ylab not provided
-  if(is.null(ylab)){
-    ylab <- switch(quantity, 
-                   "spr"="SPR (Spawning Potential Ratio)",
-                   "fishing_intensity"="Fishing Intensity (1-SPR)",
-                   "spr_ratio"="SPR Ratio"
-                   )
+  if(nrow(prepared_data)==0){
+    # We could potentially make this more informative if we know the model type
+    # by reporting the common MODULE used by other packages (e.g., DERIVED_QUANTITIES
+    # for SS3 models, or t.series for BAM models).
+    cli::cli_alert(glue::glue("There is no data available to be plotted. Try selecting a different module."))
   }
-  
   
   # Process data
   processed_data <- process_data(
@@ -129,6 +103,7 @@ plot_spawning_potential_ratio <- function(
     group = group,
     facet = facet,
     ...
+    # ...
   ) +
     ggplot2::geom_hline(yintercept = 1,
                         color = "grey") +
