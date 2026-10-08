@@ -31,8 +31,8 @@ map,alpha,,
 map,beta,,
 map,beta_rec_pars,,
 map,catch_ln_sd,ln_catch_sd,
-map,comp_weights,composition_weights,kg
-map,diet_comp_weights,diet_composition_weights,kg
+map,comp_weights,composition_weights,
+map,diet_comp_weights,diet_composition_weights,
 map,dummy,,
 map,index_ln_q,,
 map,index_ln_sd,,
@@ -72,8 +72,8 @@ phase_params,alpha,,
 phase_params,beta,,
 phase_params,beta_rec_pars,,
 phase_params,catch_ln_sd,ln_catch_sd,
-phase_params,comp_weights,composition_weights,kg
-phase_params,diet_comp_weights,diet_composition_weights,kg
+phase_params,comp_weights,composition_weights,
+phase_params,diet_comp_weights,diet_composition_weights,
 phase_params,dummy,,
 phase_params,index_ln_q,,
 phase_params,index_ln_sd,,
@@ -109,36 +109,36 @@ phase_params,sel_curve_pen,,
 phase_params,sel_dev_ln_sd,,
 phase_params,sel_inf,,
 phase_params,sel_inf_dev,,
-quantities,age_hat,catch,kg
-quantities,age_obs_hat,catch_adjusted,kg
-quantities,avail_food,,kg
+quantities,age_hat,catch,thousands of fish
+quantities,age_obs_hat,catch_adjusted,thousands of fish
+quantities,avail_food,,mt
 quantities,avg_r,recruitment_mean,
-quantities,avgn_at_age,abundance_average,numbers
-quantities,b0,,kg
-quantities,b_eaten,,kg
-quantities,b_eaten_as_prey,,kg
-quantities,biomass,,kg
-quantities,biomass_at_age,biomass,kg
-quantities,biomass_depletion,biomass_biomass_unfished,kg
-quantities,catch_hat,landings,kg
+quantities,avgn_at_age,abundance_average,thousands of fish
+quantities,b0,,mt
+quantities,b_eaten,,mt
+quantities,b_eaten_as_prey,,mt
+quantities,biomass,,mt
+quantities,biomass_at_age,biomass,mt
+quantities,biomass_depletion,biomass_biomass_unfished,proportion
+quantities,catch_hat,landings,
 quantities,comp_hat,,
 quantities,comp_n,,
-quantities,comp_obs,,kg
-quantities,consumption_at_age,,kg
+quantities,comp_obs,,proportion
+quantities,consumption_at_age,,kg per fish per yr
 quantities,diet_hat,,
-quantities,diet_obs,,kg
-quantities,dynamicb0,,kg
-quantities,dynamicsb0,,kg
-quantities,dynamicsbf,,kg
-quantities,exploitable_biomass,,kg
+quantities,diet_obs,,proportion
+quantities,dynamicb0,,mt
+quantities,dynamicsb0,,mt
+quantities,dynamicsbf,,mt
+quantities,exploitable_biomass,,mt
 quantities,f_at_age,fishing_mortality,
 quantities,f_flt,fishing_mortality,
 quantities,f_flt_age,fishing_mortality,
 quantities,f_spp,fishing_mortality,
-quantities,flimit,fishing_mortality_target,
+quantities,flimit,fishing_mortality_limit,
 quantities,flt_sel_maxage,,
 quantities,ft,,
-quantities,ftarget,fishing_mortality_limit,
+quantities,ftarget,fishing_mortality_target,
 quantities,gam_a,,
 quantities,gam_b,,
 quantities,index_hat,,
@@ -148,16 +148,16 @@ quantities,jnll_comp,,
 quantities,ln_catch_sd,,
 quantities,ln_index_sd,,
 quantities,log_index_hat,,
-quantities,log_ssb,log_spawning_biomass,kg
+quantities,log_ssb,log_spawning_biomass,log mt
 quantities,m1_at_age,m1,
 quantities,m2_at_age,m2,
 quantities,m2_prop,proportion_m2,
 quantities,m_at_age,natural_mortality,
-quantities,max_catch_hat,,kg
-quantities,n_at_age,abundance,numbers
-quantities,nbyage0,abundance_rec_hat_f0,numbers
+quantities,max_catch_hat,,
+quantities,n_at_age,abundance,thousands of fish
+quantities,nbyage0,abundance_rec_hat_f0,thousands of fish
 quantities,nbyagef,abundance_rec_hat_f_target,
-quantities,nbyagespr,abundance_spr,numbers
+quantities,nbyagespr,abundance_spr,fish per recruit
 quantities,pop_scalar,,
 quantities,proj_f,fishing_mortality,
 quantities,r,recruitment,
@@ -166,15 +166,15 @@ quantities,r_hat,,
 quantities,r_init,recruitment_initial,
 quantities,r_sd,recruitment_sd,
 quantities,ration,,
-quantities,sb0,spawning_biomass_0,kg
-quantities,sbf,spawning_biomass_target,kg
+quantities,sb0,spawning_biomass_0,mt
+quantities,sbf,spawning_biomass_target,mt
 quantities,sel,selectivity,
 quantities,spr0,,
 quantities,sprfinit,spr_initial,
 quantities,sprlimit,spr_limit,
 quantities,sprtarget,spr_target,
-quantities,ssb,spawning_biomass,kg
-quantities,ssb_depletion,spawning_biomass_depletion,kg
+quantities,ssb,spawning_biomass,mt
+quantities,ssb_depletion,spawning_biomass_depletion,proportion
 quantities,steepness,,
 quantities,stom_div_bio,,
 quantities,suit_other,,
@@ -184,19 +184,19 @@ quantities,unweighted_jnll_comp,,
 quantities,vulnerability,,
 quantities,vulnerability_other,,
 quantities,z_at_age,total_mortality,
-sdrep,biomass,,kg
+sdrep,biomass,,mt
 sdrep,index_ln_q,,
 sdrep,init_dev,,
 sdrep,ln_f,,
 sdrep,ln_sel_slp,,
 sdrep,ln_sel_slp_dev,,
 sdrep,log_index_hat,,
-sdrep,log_ssb,log_spawning_biomass,kg
-sdrep,pop_scalar,,kg
+sdrep,log_ssb,log_spawning_biomass,log mt
+sdrep,pop_scalar,,multiplier
 sdrep,r,recruitment,
 sdrep,r_sd,recruitment_sd,
 sdrep,rec_dev,recruitment_deviations,
 sdrep,rec_pars,recruitment_parameters,
 sdrep,sel_inf,,
 sdrep,sel_inf_dev,,
-sdrep,ssb,spawning_biomass,kg
+sdrep,ssb,spawning_biomass,mt
