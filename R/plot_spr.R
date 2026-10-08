@@ -1,6 +1,8 @@
 #' Plot spawning potential ratio (SPR)
 #'
 #' @inheritParams plot_spawning_biomass
+#' 
+#' @param ylab String. Y-axis label to show.
 #'
 #' @returns A plot showing spawning potential ratio (SPR).
 #'
@@ -14,21 +16,24 @@
 #' @export
 #'
 #' @examples
-#' plot_spr(
+#' plot_spawning_potential_ratio(
 #'   dat = stockplotr:::example_data,
 #'   unit_label = "metric tons",
 #'   group = "fleet",
 #'   interactive = FALSE,
-#'   make_rda = FALSE
+#'   make_rda = FALSE,
+#'   ylab = "SPR"
 #' )
-#' plot_spr(
+#' plot_spawning_potential_ratio(
 #'   dat = stockplotr:::example_data,
 #'   unit_label = "metric tons",
 #'   facet = "fleet",
+#'   module = "DERIVED_QUANTITIES",
 #'   interactive = FALSE,
-#'   make_rda = FALSE
+#'   make_rda = FALSE,
+#'   ylab = "(1-SPR)/(1-SPR_ref)"
 #' )
-plot_spr <- function(
+plot_spawning_potential_ratio <- function(
   dat,
   geom = "line",
   group = NULL,
@@ -39,13 +44,14 @@ plot_spr <- function(
   interactive = TRUE,
   make_rda = FALSE,
   figures_dir = getwd(),
+  ylab = NULL,
   ...
 ) {
-
+  
   # Filter data for spr
   prepared_data <- filter_data(
     dat = dat,
-    label_name = "^spawning_potential_ratio",
+    label_name = "spr",
     geom = geom,
     #TODO: change this to era once stockplotr::example_data updated
     era = NULL,
@@ -54,17 +60,16 @@ plot_spr <- function(
     module = module,
     scale_amount = 1,
     interactive = interactive
-  )  |>
-  # filter NA from year
-   dplyr::filter(!is.na(year))
+  ) |>
+    # filter NA from year
+    dplyr::filter(!is.na(year))
   
-  # set y axis label
-  if (unique(prepared_data$label) == "spawning_potential_ratio_ratio"){
-    spr_label <- "Relative Fishing Intensity: (1-SPR)/(1-SPR_50%)"
-  } else {
-    spr_label <- "Spawning Potential Ratio"
+  if(nrow(prepared_data)==0){
+    # We could potentially make this more informative if we know the model type
+    # by reporting the common MODULE used by other packages (e.g., DERIVED_QUANTITIES
+    # for SS3 models, or t.series for BAM models).
+    cli::cli_alert(glue::glue("There is no data available to be plotted. Try selecting a different module."))
   }
-  
   
   # Process data
   processed_data <- process_data(
@@ -88,33 +93,33 @@ plot_spr <- function(
   if (!is.null(group)) {
     if (group %notin% colnames(prepared_data)) group <- NULL
   }
-
-  # Extract ref_line value
-  #TODO: update this once ref_line PR merged
-  if (is.null(names(ref_line))){
-    ref_pt <- calculate_reference_point(
-      dat = dat,
-      reference_name = glue::glue("spawning_potential_ratio_{ref_line}")
-    )
-  }
   
   # inital base plot
   plt <- plot_timeseries(
     dat = prepared_data,
     y = "estimate",
     geom = geom,
-    ylab = spr_label,
+    ylab = ylab,
     group = group,
     facet = facet,
     ...
+    # ...
   ) +
     ggplot2::geom_hline(yintercept = 1,
                         color = "grey") +
     ggplot2::geom_hline(yintercept = 0,
                         color = "grey") +
-    ggplot2::geom_hline(yintercept = ref_pt,
-                        color = "red") +
     theme_noaa()
+  
+    plt <- reference_line(
+      plot = plt,
+      dat = dat,
+      lbs = FALSE,
+      label_name = "spawning_potential_ratio",
+      reference = ref_line,
+      scale_amount = 1
+    ) + theme_noaa()
+  
 
   if (length(unique(prepared_data$group_var)) == 1) {
     plt <- plt + ggplot2::theme(legend.position = "none")
@@ -124,17 +129,19 @@ plot_spr <- function(
   if (make_rda) {
     # TODO: Update caption, alt text, and quantities once plot is finalized
     # Obtain relevant key quantities for captions/alt text
+    
     spr.start.year <- min(prepared_data$year)
     spr.end.year <- max(prepared_data$year)
     spr.min <- min(prepared_data$estimate) |> round(digits = 3)
     spr.max <- max(prepared_data$estimate) |> round(digits = 3)
-
+    spr.ref.pt <- as.character(ref_line)
+    
     # calculate & export key quantities
     export_kqs(
       spr.start.year,
       spr.end.year,
       spr.min,
-      spr.max
+      spr.ref.pt
     )
 
     # Add key quantities to captions/alt text
@@ -142,7 +149,8 @@ plot_spr <- function(
       spr.start.year,
       spr.end.year,
       spr.min,
-      spr.max
+      spr.max,
+      spr.ref.pt
     )
 
     create_rda(
@@ -152,8 +160,7 @@ plot_spr <- function(
       fig_or_table = "figure",
       dat = dat,
       dir = figures_dir,
-      scale_amount = scale_amount,
-      unit_label = unit_label
+      scale_amount = 1
     )
   }
   # Output final plot
