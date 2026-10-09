@@ -34,7 +34,13 @@ navbar:
       icon: fa-solid fa-key
       # Make the link open in a new tab
       target: "_blank"
+      
+    tutorials:
+      text: Workshop
+      icon: fa-regular fa-map
+      href: https://nmfs-ost.github.io/workflows-workshop/
+      target: "_blank"
 
   structure:
-    left: [home, reference, cheatsheet, sourcecode, articles, news]
+    left: [home, reference, cheatsheet, tutorials, sourcecode, articles, news]
     right: [search, issue, github]
