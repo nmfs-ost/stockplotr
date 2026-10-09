@@ -2,7 +2,7 @@ module_name,label,alt_label,unit
 DERIVED_QUANTITIES,SSB_Virgin,spawning_biomass_unfished,kg
 DERIVED_QUANTITIES,SSB_Initial,spawning_biomass_initial,kg
 DERIVED_QUANTITIES,SSB,spawning_biomass,kg
-DERIVED_QUANTITIES,Recr_Virgin,spawning_biomass,kg
+DERIVED_QUANTITIES,Recr_Virgin,recruitment_unfished,kg
 DERIVED_QUANTITIES,Recr_Initial,recruitment_initial,kg
 DERIVED_QUANTITIES,Recr,recruitment,kg
 DERIVED_QUANTITIES,SPRratio,spawning_potential_ratio_ratio,
