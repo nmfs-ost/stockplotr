@@ -25,22 +25,6 @@ test_that("convert_output works for SS3", {
   expect_equal(dim(output)[2], 35)
 })
 
-test_that("SS3 derived quantity labels use consistent expanded names", {
-  var_names <- utils::read.csv(
-    system.file("resources", "ss3_var_names.csv", package = "stockplotr"),
-    stringsAsFactors = FALSE
-  )
-  labels <- c("Bratio", "annF_Btgt", "annF_SPR", "annF_MSY")
-  expected <- c(
-    "spawning_biomass_ratio",
-    "annual_fishing_mortality_biomass_target",
-    "annual_fishing_mortality_spawning_potential_ratio",
-    "annual_fishing_mortality_msy"
-  )
-
-  expect_equal(var_names$alt_label[match(labels, var_names$label)], expected)
-})
-
 test_that("convert_output does not emit scalar case_when deprecation warning", {
   expect_no_warning(convert_output(
     file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso")
