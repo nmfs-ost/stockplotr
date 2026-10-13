@@ -1,7 +1,7 @@
 test_that("plot_abundance_at_age generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_abundance_at_age(stockplotr::example_data)
+    plot_abundance_at_age(stockplotr::example_data, interactive = FALSE)
   )
 
   # expect error-free plot with many arguments
@@ -12,7 +12,8 @@ test_that("plot_abundance_at_age generates plots without errors", {
       unit_label = "fish",
       scale_amount = 1000,
       make_rda = FALSE,
-      figures_dir = getwd()
+      figures_dir = getwd(),
+      interactive = FALSE
     )
   )
 
@@ -23,7 +24,8 @@ test_that("plot_abundance_at_age generates plots without errors", {
       unit_label = "fish",
       scale_amount = 1,
       make_rda = FALSE,
-      figures_dir = getwd()
+      figures_dir = getwd(),
+      interactive = FALSE
     ),
     "gg"
   )
@@ -34,7 +36,8 @@ test_that("rda file made when indicated", {
   plot_abundance_at_age(
     stockplotr::example_data,
     figures_dir = getwd(),
-    make_rda = TRUE
+    make_rda = TRUE,
+    interactive = FALSE
   )
 
   # expect that both figures dir and the abundance_at_age_figure.rda file exist
@@ -55,7 +58,8 @@ test_that("plot_abundance_at_age generates error with scaling <1", {
       unit_label = "fish",
       scale_amount = 0.1,
       make_rda = FALSE,
-      figures_dir = getwd()
+      figures_dir = getwd(),
+      interactive = FALSE
     )
   )
 })
@@ -132,7 +136,8 @@ test_that("plot_abundance_at_age generates error when abundance label is not fou
       unit_label = "fish",
       scale_amount = 1,
       make_rda = FALSE,
-      figures_dir = getwd()
+      figures_dir = getwd(),
+      interactive = FALSE
     )
   )
 })
@@ -144,7 +149,8 @@ test_that("plot is made proportional and does not contain a legend", {
     proportional = TRUE,
     scale_amount = 1,
     make_rda = FALSE,
-    figures_dir = getwd()
+    figures_dir = getwd(),
+    interactive = FALSE
   )
   expect_true(plot$theme$legend.position == "none")
 })
@@ -156,7 +162,8 @@ test_that("plot contains a legend", {
     unit_label = "fish",
     scale_amount = 1,
     make_rda = FALSE,
-    figures_dir = getwd()
+    figures_dir = getwd(),
+    interactive = FALSE
   )
   expect_true(!is.null(plot$theme$legend.position))
 })

@@ -1,7 +1,7 @@
 test_that("plot_natural_mortality generate without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_natural_mortality(stockplotr::example_data, module = "Natural_Mortality")
+    plot_natural_mortality(stockplotr::example_data, module = "Natural_Mortality", interactive = FALSE)
   )
 
   # This check is moot with the more flextible approach and labelling?
@@ -14,7 +14,8 @@ test_that("plot_natural_mortality generate without errors", {
   expect_s3_class(
     plot_natural_mortality(
       stockplotr::example_data,
-      module = "Natural_Mortality"
+      module = "Natural_Mortality",
+      interactive = FALSE
     ),
     "gg"
   )
@@ -26,7 +27,8 @@ test_that("rda file made when indicated", {
     stockplotr::example_data,
     module = "Natural_Mortality",
     make_rda = TRUE,
-    figures_dir = getwd()
+    figures_dir = getwd(),
+    interactive = FALSE
   )
 
   # expect that both figures dir and the natural_mortality_figure.rda file exist

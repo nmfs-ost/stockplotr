@@ -2,7 +2,8 @@ test_that("plot_stock_recruitment generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
     stockplotr::plot_stock_recruitment(
-      dat = stockplotr::example_data
+      dat = stockplotr::example_data,
+      interactive = FALSE
     )
   )
 
@@ -13,7 +14,8 @@ test_that("plot_stock_recruitment generates plots without errors", {
       spawning_biomass_label = "mt",
       recruitment_label = "mt",
       make_rda = FALSE,
-      figures_dir = getwd()
+      figures_dir = getwd(),
+      interactive = FALSE
     )
   )
 
@@ -25,7 +27,8 @@ test_that("plot_stock_recruitment generates plots without errors", {
       spawning_biomass_label = "mt",
       recruitment_label = "mt",
       make_rda = FALSE,
-      figures_dir = getwd()
+      figures_dir = getwd(),
+      interactive = FALSE
     ),
     "gg"
   )
@@ -38,7 +41,8 @@ test_that("rda file made when indicated", {
     spawning_biomass_label = "mt",
     recruitment_label = "mt",
     make_rda = TRUE,
-    figures_dir = getwd()
+    figures_dir = getwd(),
+    interactive = FALSE
   )
 
   # expect that both figures dir and the sr_figure.rda file exist

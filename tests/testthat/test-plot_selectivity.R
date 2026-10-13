@@ -2,7 +2,8 @@ test_that("plot_selectivity generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
     plot_selectivity(
-      stockplotr::example_data
+      stockplotr::example_data,
+      interactive = FALSE
     )
   )
 
@@ -14,7 +15,7 @@ test_that("plot_selectivity generates plots without errors", {
       era = NULL,
       group = NULL,
       facet = NULL,
-      interactive = TRUE,
+      interactive = FALSE,
       module = "AGE_SELEX",
       make_rda = FALSE,
       figures_dir = getwd()
@@ -28,7 +29,7 @@ test_that("plot_selectivity generates plots without errors", {
       unit_label = "mm",
       group = NULL,
       facet = NULL,
-      interactive = TRUE,
+      interactive = FALSE,
       module = "LEN_SELEX",
       make_rda = FALSE,
       figures_dir = getwd()
@@ -38,7 +39,8 @@ test_that("plot_selectivity generates plots without errors", {
   # expect ggplot object is returned
   expect_s3_class(
     plot_selectivity(
-      stockplotr::example_data
+      stockplotr::example_data,
+      interactive = FALSE
     ),
     "gg"
   )
@@ -50,7 +52,8 @@ test_that("rda file made when indicated", {
     stockplotr::example_data,
     module = "AGE_SELEX",
     figures_dir = getwd(),
-    make_rda = TRUE
+    make_rda = TRUE,
+    interactive = FALSE
   )
 
   # expect that both figures dir and the selectivity_figure.rda file exist

@@ -3,7 +3,8 @@ test_that("plot_catch_comp generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
     plot_catch_comp(stockplotr::example_data,
-      module = "CATCH_AT_AGE"
+      module = "CATCH_AT_AGE",
+      interactive = FALSE
     )
   )
 
@@ -16,7 +17,8 @@ test_that("plot_catch_comp generates plots without errors", {
       scale_amount = 1000,
       module = "CATCH_AT_AGE",
       make_rda = FALSE,
-      figures_dir = getwd()
+      figures_dir = getwd(),
+      interactive = FALSE
     )
   )
 
@@ -28,7 +30,8 @@ test_that("plot_catch_comp generates plots without errors", {
       scale_amount = 1,
       module = "CATCH_AT_AGE",
       make_rda = FALSE,
-      figures_dir = getwd()
+      figures_dir = getwd(),
+      interactive = FALSE
     ),
     "gg"
   )
@@ -40,7 +43,8 @@ test_that("rda file made when indicated", {
     stockplotr::example_data,
     module = "CATCH_AT_AGE",
     figures_dir = getwd(),
-    make_rda = TRUE
+    make_rda = TRUE,
+    interactive = FALSE
   )
 
   # expect that both figures dir and the catch_comp_figure.rda file exist
@@ -61,7 +65,8 @@ test_that("plot_catch_comp generates error with scaling <1", {
       unit_label = "fish",
       scale_amount = 0.1,
       make_rda = FALSE,
-      figures_dir = getwd()
+      figures_dir = getwd(),
+      interactive = FALSE
     )
   )
 })
@@ -138,7 +143,8 @@ test_that("plot_catch_comp generates error when catch label is not found", {
       unit_label = "fish",
       scale_amount = 1,
       make_rda = FALSE,
-      figures_dir = getwd()
+      figures_dir = getwd(),
+      interactive = FALSE
     )
   )
 })
@@ -151,7 +157,8 @@ test_that("plot is made proportional and does not contain a legend", {
     proportional = TRUE,
     scale_amount = 1,
     make_rda = FALSE,
-    figures_dir = getwd()
+    figures_dir = getwd(),
+    interactive = FALSE
   )
   expect_true(plot$theme$legend.position == "none")
 })
@@ -164,7 +171,8 @@ test_that("plot contains a legend", {
     unit_label = "fish",
     scale_amount = 1,
     make_rda = FALSE,
-    figures_dir = getwd()
+    figures_dir = getwd(),
+    interactive = FALSE
   )
   expect_true(!is.null(plot$theme$legend.position))
 })
@@ -177,7 +185,8 @@ test_that("year class lines are plotted", {
     module = "CATCH_AT_AGE",
     scale_amount = 1,
     make_rda = FALSE,
-    figures_dir = getwd()
+    figures_dir = getwd(),
+    interactive = FALSE
   )
   has_lines_layer <- function(p) {
     # Get the layer information from the plot

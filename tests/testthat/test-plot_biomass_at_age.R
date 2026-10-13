@@ -2,7 +2,8 @@ test_that("plot_biomass_at_age generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
     plot_biomass_at_age(stockplotr::example_data,
-      module = "BIOMASS_AT_AGE"
+      module = "BIOMASS_AT_AGE",
+      interactive = FALSE
     )
   )
 
@@ -15,7 +16,8 @@ test_that("plot_biomass_at_age generates plots without errors", {
       scale_amount = 10,
       module = "BIOMASS_AT_AGE",
       make_rda = FALSE,
-      figures_dir = getwd()
+      figures_dir = getwd(),
+      interactive = FALSE
     )
   )
 
@@ -27,7 +29,8 @@ test_that("plot_biomass_at_age generates plots without errors", {
       scale_amount = 1,
       module = "BIOMASS_AT_AGE",
       make_rda = FALSE,
-      figures_dir = getwd()
+      figures_dir = getwd(),
+      interactive = FALSE
     ),
     "gg"
   )
@@ -39,7 +42,8 @@ test_that("rda file made when indicated", {
     stockplotr::example_data,
     module = "BIOMASS_AT_AGE",
     figures_dir = getwd(),
-    make_rda = TRUE
+    make_rda = TRUE,
+    interactive = FALSE
   )
 
   # expect that both figures dir and the biomass_at_age_figure.rda file exist
@@ -124,7 +128,8 @@ test_that("plot_biomass_at_age generates error when biomass label is not found",
       unit_label = "fish",
       scale_amount = 1,
       make_rda = FALSE,
-      figures_dir = getwd()
+      figures_dir = getwd(),
+      interactive = FALSE
     )
   )
 })
@@ -137,7 +142,8 @@ test_that("plot is made proportional and does not contain a legend", {
     proportional = TRUE,
     scale_amount = 1,
     make_rda = FALSE,
-    figures_dir = getwd()
+    figures_dir = getwd(),
+    interactive = FALSE
   )
   expect_true(plot$theme$legend.position == "none")
 })
@@ -150,7 +156,8 @@ test_that("plot contains a legend", {
     unit_label = "fish",
     scale_amount = 1,
     make_rda = FALSE,
-    figures_dir = getwd()
+    figures_dir = getwd(),
+    interactive = FALSE
   )
   expect_true(!is.null(plot$theme$legend.position))
 })

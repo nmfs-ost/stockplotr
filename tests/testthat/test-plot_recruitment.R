@@ -2,7 +2,8 @@ test_that("plot_recruitment generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
     plot_recruitment(stockplotr::example_data,
-      module = "TIME_SERIES"
+      module = "TIME_SERIES",
+      interactive = FALSE
     )
   )
 
@@ -15,7 +16,8 @@ test_that("plot_recruitment generates plots without errors", {
       module = "TIME_SERIES",
       # relative = FALSE,
       make_rda = FALSE,
-      figures_dir = getwd()
+      figures_dir = getwd(),
+      interactive = FALSE
     )
   )
 
@@ -43,7 +45,8 @@ test_that("plot_recruitment generates plots without errors", {
       # relative = TRUE,
       module = "TIME_SERIES",
       make_rda = FALSE,
-      figures_dir = getwd()
+      figures_dir = getwd(),
+      interactive = FALSE
     ),
     "gg"
   )
@@ -55,7 +58,8 @@ test_that("rda file made when indicated", {
     stockplotr::example_data,
     module = "TIME_SERIES",
     figures_dir = getwd(),
-    make_rda = TRUE
+    make_rda = TRUE,
+    interactive = FALSE
   )
 
   # expect that both figures dir and the recruitment_figure.rda file exist
