@@ -545,6 +545,7 @@ cohort_line <- function(
 #' extract the reference point from
 #' @param ref_line String. Reference point(s)
 #' @param model_name String. Name of the model that will be present in the legend.
+#' @param direction String. Direction of reference line (either 'h' for horizontal or 'v' for vertical)
 #'
 #' Options: Including, but not limited to: "msy", "unfished", "target"
 #'
@@ -560,36 +561,68 @@ reference_line <- function(
   label_name,
   ref_line,
   scale_amount = 1,
-  model_name = "1"
+  model_name = "1",
+  direction = "h"
 ) {
   # Extract reference line values and labels
   ref_line_val <- ref_line[[1]]
   reference <- names(ref_line)
 
-  list(
-    # Add geom for ref line
-    ggplot2::geom_hline(
-      data = data.frame(yintercept = ref_line_val, model = model_name, group_var = "1"),
-      ggplot2::aes(
-        yintercept = ref_line_val / scale_amount,
-        color = interaction(model, group_var) # model
-      ),
-      linetype = "dashed",
-      show.legend = FALSE
-    ),
-    # add line annotation
-    ggplot2::annotate(
-      geom = "text",
-      # TODO: need to change this for general process
-      x = -Inf,
-      y = ref_line_val / scale_amount,
-      label = glue::glue("{reference}"), # glue::glue("{stringr::str_replace_all(label_name, '_', '~')}[{reference}]"), # list(bquote(label_name[.(reference)])),
-      parse = TRUE,
-      hjust = -0.05, # slight offset so text doesn't hit border
-      vjust = -0.5 # , #slightly above line
-      # size = 5 # this is not foolproof
-    )
+  switch(direction, 
+    "h" = {
+        list(
+          # Add geom for ref line
+          ggplot2::geom_hline(
+            data = data.frame(yintercept = ref_line_val, model = model_name, group_var = "1"),
+            ggplot2::aes(
+              yintercept = ref_line_val / scale_amount,
+              color = interaction(model, group_var) # model
+            ),
+            linetype = "dashed",
+            show.legend = FALSE
+          ),
+          # add line annotation
+          ggplot2::annotate(
+            geom = "text",
+            # TODO: need to change this for general process
+            x = -Inf,
+            y = ref_line_val / scale_amount,
+            label = glue::glue("{reference}"), # glue::glue("{stringr::str_replace_all(label_name, '_', '~')}[{reference}]"), # list(bquote(label_name[.(reference)])),
+            parse = TRUE,
+            hjust = -0.05, # slight offset so text doesn't hit border
+            vjust = -0.5 # , #slightly above line
+            # size = 5 # this is not foolproof
+          )
+        )
+    },
+    "v" = {
+      list(
+        # Add geom for ref line
+        ggplot2::geom_vline(
+          data = data.frame(yintercept = ref_line_val, model = model_name, group_var = "1"),
+          ggplot2::aes(
+            xintercept = ref_line_val / scale_amount,
+            color = interaction(model, group_var) # model
+          ),
+          linetype = "dashed",
+          show.legend = FALSE
+        ),
+        # add line annotation
+        ggplot2::annotate(
+          geom = "text",
+          # TODO: need to change this for general process
+          y = -Inf,
+          x = ref_line_val / scale_amount,
+          label = glue::glue("{reference}"), # glue::glue("{stringr::str_replace_all(label_name, '_', '~')}[{reference}]"), # list(bquote(label_name[.(reference)])),
+          parse = TRUE,
+          hjust = -0.05, # slight offset so text doesn't hit border
+          vjust = -0.5 # , #slightly above line
+          # size = 5 # this is not foolproof
+        )
+      )
+    }
   )
+  
 }
 
 #------------------------------------------------------------------------------
@@ -1131,7 +1164,8 @@ add_reference_line <- function(
   ref_line,
   label,
   lbs = FALSE,
-  scale_amount = 1
+  scale_amount = 1,
+  plot_direction = "h"
 ) {
   # Add reference line
   # Conditions for ref line
@@ -1195,7 +1229,8 @@ add_reference_line <- function(
             label_name = ifelse(length(names(dat)[i]) == 1, label, names(dat)[i]), # "spawning_biomass",
             ref_line = ref_line_x,
             scale_amount = scale_amount,
-            model_name = ifelse(is.data.frame(dat), "1", names(dat)[i])
+            model_name = ifelse(is.data.frame(dat), "1", names(dat)[i]),
+            direction = plot_direction
           )
         )
       }

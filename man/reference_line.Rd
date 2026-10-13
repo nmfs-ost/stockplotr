@@ -4,7 +4,13 @@
 \alias{reference_line}
 \title{Preformatted reference line}
 \usage{
-reference_line(label_name, ref_line, scale_amount = 1, model_name = "1")
+reference_line(
+  label_name,
+  ref_line,
+  scale_amount = 1,
+  model_name = "1",
+  direction = "h"
+)
 }
 \arguments{
 \item{label_name}{String. Name of the quantity that users want to
@@ -16,7 +22,9 @@ extract the reference point from}
 
 Default: 1}
 
-\item{model_name}{String. Name of the model that will be present in the legend.
+\item{model_name}{String. Name of the model that will be present in the legend.}
+
+\item{direction}{String. Direction of reference line (either 'h' for horizontal or 'v' for vertical)
 
 Options: Including, but not limited to: "msy", "unfished", "target"}
 }
