@@ -545,6 +545,7 @@ cohort_line <- function(
 #' extract the reference point from
 #' @param ref_line String. Reference point(s)
 #' @param model_name String. Name of the model that will be present in the legend.
+#' @param direction String. Direction of reference line (either 'h' for horizontal or 'v' for vertical)
 #'
 #' Options: Including, but not limited to: "msy", "unfished", "target"
 #'
