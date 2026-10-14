@@ -18,11 +18,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Samantha Schiano \email{samantha.schiano@noaa.gov} (\href{https://orcid.org/0009-0003-3744-6428}{ORCID})
+\strong{Maintainer}: Samantha Bredeck \email{samantha.bredeck@noaa.gov} (\href{https://orcid.org/0009-0003-3744-6428}{ORCID})
 
 Authors:
 \itemize{
-  \item Samantha Schiano \email{samantha.schiano@noaa.gov} (\href{https://orcid.org/0009-0003-3744-6428}{ORCID})
+  \item Samantha Bredeck \email{samantha.bredeck@noaa.gov} (\href{https://orcid.org/0009-0003-3744-6428}{ORCID})
   \item Sophie Breitbart \email{sophie.breitbart@noaa.gov} (\href{https://orcid.org/0000-0001-9641-9786}{ORCID}) [contributor]
   \item Steve Saul \email{steven.saul@noaa.gov}
 }

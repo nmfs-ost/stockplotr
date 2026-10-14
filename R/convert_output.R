@@ -21,7 +21,7 @@
 #'
 #' Default: NULL
 #'
-#' @author Samantha Schiano
+#' @author Samantha Bredeck
 #'
 #' @returns A reformatted and standardized tibble of assessment model results
 #'         for application in building stock assessment reports and to easily
