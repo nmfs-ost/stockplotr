@@ -12,7 +12,6 @@ test_that("plot_selectivity generates plots without errors", {
     plot_selectivity(
       stockplotr::example_data |>
         dplyr::filter(year == 2020),
-      era = NULL,
       group = NULL,
       facet = NULL,
       interactive = FALSE,

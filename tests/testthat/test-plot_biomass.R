@@ -45,7 +45,7 @@ test_that("plot_biomass generates plots without errors", {
   expect_no_error(
     plot_biomass(
       stockplotr::example_data,
-      ref_point = c("target" = 18000),
+      ref_line = c("target" = 18000),
       unit_label = "metric tons",
       scale_amount = 1,
       relative = FALSE,
