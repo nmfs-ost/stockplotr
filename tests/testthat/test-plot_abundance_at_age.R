@@ -1,7 +1,10 @@
 test_that("plot_abundance_at_age generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_abundance_at_age(stockplotr::example_data)
+    plot_abundance_at_age(
+      stockplotr::example_data,
+      interactive = FALSE
+    )
   )
 
   # expect error-free plot with many arguments
@@ -11,6 +14,7 @@ test_that("plot_abundance_at_age generates plots without errors", {
       facet = "area",
       unit_label = "fish",
       scale_amount = 1000,
+      interactive = FALSE,
       make_rda = FALSE,
       figures_dir = getwd()
     )
@@ -22,6 +26,7 @@ test_that("plot_abundance_at_age generates plots without errors", {
       stockplotr::example_data,
       unit_label = "fish",
       scale_amount = 1,
+      interactive = FALSE,
       make_rda = FALSE,
       figures_dir = getwd()
     ),
@@ -34,6 +39,7 @@ test_that("rda file made when indicated", {
   plot_abundance_at_age(
     stockplotr::example_data,
     figures_dir = getwd(),
+      interactive = FALSE,
     make_rda = TRUE
   )
 
@@ -54,6 +60,7 @@ test_that("plot_abundance_at_age generates error with scaling <1", {
       stockplotr::example_data,
       unit_label = "fish",
       scale_amount = 0.1,
+      interactive = FALSE,
       make_rda = FALSE,
       figures_dir = getwd()
     )
@@ -131,6 +138,7 @@ test_that("plot_abundance_at_age generates error when abundance label is not fou
       sample_data,
       unit_label = "fish",
       scale_amount = 1,
+      interactive = FALSE,
       make_rda = FALSE,
       figures_dir = getwd()
     )
@@ -143,6 +151,7 @@ test_that("plot is made proportional and does not contain a legend", {
     unit_label = "fish",
     proportional = TRUE,
     scale_amount = 1,
+    interactive = FALSE,
     make_rda = FALSE,
     figures_dir = getwd()
   )
@@ -155,6 +164,7 @@ test_that("plot contains a legend", {
     proportional = FALSE,
     unit_label = "fish",
     scale_amount = 1,
+    interactive = FALSE,
     make_rda = FALSE,
     figures_dir = getwd()
   )

@@ -80,6 +80,7 @@ test_that("rda file made when indicated", {
   # export rda
   table_landings(
     dat = stockplotr::example_data,
+    interactive = FALSE,
     make_rda = TRUE,
     tables_dir = getwd()
   )
@@ -96,6 +97,7 @@ test_that("rda file made when indicated", {
   # export rda
   table_landings(
     dat = stockplotr::example_data,
+    interactive = FALSE,
     make_rda = TRUE,
     tables_dir = getwd()
   )

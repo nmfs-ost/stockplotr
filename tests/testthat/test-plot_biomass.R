@@ -29,7 +29,10 @@
 test_that("plot_biomass generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_biomass(stockplotr::example_data)
+    plot_biomass(
+      stockplotr::example_data,
+      interactive = FALSE
+    )
   )
 
   # TODO: Update test
@@ -46,6 +49,7 @@ test_that("plot_biomass generates plots without errors", {
       unit_label = "metric tons",
       scale_amount = 1,
       relative = FALSE,
+      interactive = FALSE,
       make_rda = FALSE,
       figures_dir = getwd(),
       module = "TIME_SERIES"
@@ -58,7 +62,8 @@ test_that("plot_biomass generates plots without errors", {
       stockplotr::example_data,
       unit_label = "mt",
       # scale_amount = 10,
-      relative = TRUE
+      relative = TRUE,
+      interactive = FALSE
     )
   )
 
@@ -68,6 +73,7 @@ test_that("plot_biomass generates plots without errors", {
       stockplotr::example_data,
       unit_label = "metric tons",
       scale_amount = 1,
+      interactive = FALSE,
       make_rda = FALSE,
       figures_dir = getwd(),
       module = "TIME_SERIES"
@@ -81,6 +87,7 @@ test_that("rda file made when indicated", {
   plot_biomass(
     stockplotr::example_data,
     figures_dir = getwd(),
+    interactive = FALSE,
     make_rda = TRUE,
     module = "TIME_SERIES"
   )

@@ -1,8 +1,10 @@
 test_that("plot_recruitment_deviations generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_recruitment_deviations(stockplotr::example_data,
-      module = "SPAWN_RECRUIT"
+    plot_recruitment_deviations(
+      stockplotr::example_data,
+      module = "SPAWN_RECRUIT",
+      interactive = FALSE
     )
   )
 
@@ -11,6 +13,7 @@ test_that("plot_recruitment_deviations generates plots without errors", {
     plot_recruitment_deviations(
       stockplotr::example_data,
       module = "SPAWN_RECRUIT",
+      interactive = FALSE,
       make_rda = FALSE,
       figures_dir = getwd()
     )
@@ -21,6 +24,7 @@ test_that("plot_recruitment_deviations generates plots without errors", {
     plot_recruitment_deviations(
       stockplotr::example_data,
       module = "SPAWN_RECRUIT",
+      interactive = FALSE,
       make_rda = FALSE,
       figures_dir = getwd()
     ),
@@ -33,6 +37,7 @@ test_that("rda file made when indicated", {
   plot_recruitment_deviations(
     stockplotr::example_data,
     module = "SPAWN_RECRUIT",
+    interactive = FALSE,
     make_rda = TRUE,
     figures_dir = getwd()
   )

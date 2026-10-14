@@ -81,6 +81,7 @@ test_that("rda file made when indicated", {
   table_total_catch(
     dat = stockplotr::example_data,
     module = "TIME_SERIES",
+    interactive = FALSE,
     make_rda = TRUE,
     tables_dir = getwd()
   )
@@ -99,6 +100,7 @@ test_that("rda file made when indicated", {
   table_total_catch(
     dat = stockplotr::example_data,
     module = "TIME_SERIES",
+    interactive = FALSE,
     make_rda = TRUE,
     tables_dir = getwd()
   )

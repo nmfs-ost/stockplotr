@@ -38,6 +38,7 @@ test_that("rda file made when indicated", {
   table_biomass_abundance_catch(
     dat = stockplotr::example_data,
     module = c("TIME_SERIES", "CATCH", "TIME_SERIES"),
+    interactive = FALSE,
     make_rda = TRUE,
     tables_dir = getwd()
   )

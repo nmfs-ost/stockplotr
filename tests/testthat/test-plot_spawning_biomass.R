@@ -1,12 +1,18 @@
 test_that("plot_spawning_biomass generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_spawning_biomass(stockplotr::example_data)
+    plot_spawning_biomass(
+      stockplotr::example_data,
+      interactive = FALSE
+    )
   )
 
   # expect plot with warnings if ref_point not indicated
   expect_message(
-    plot_spawning_biomass(stockplotr::example_data)
+    plot_spawning_biomass(
+      stockplotr::example_data,
+      interactive = FALSE
+    )
   )
 
   # expect error-free plot with many arguments
@@ -15,7 +21,8 @@ test_that("plot_spawning_biomass generates plots without errors", {
       stockplotr::example_data,
       unit_label = "metric tons",
       scale_amount = 1,
-      ref_line = "msy"
+      ref_line = "msy",
+      interactive = FALSE
     )
   )
 
@@ -26,7 +33,8 @@ test_that("plot_spawning_biomass generates plots without errors", {
       unit_label = "metric tons",
       scale_amount = 1,
       ref_line = c("msy" = 2000000),
-      relative = FALSE
+      relative = FALSE,
+      interactive = FALSE
     ),
     "gg"
   )
@@ -40,6 +48,7 @@ test_that("rda file made when indicated", {
     scale_amount = 1,
     ref_line = "msy",
     module = "TIME_SERIES",
+    interactive = FALSE,
     make_rda = TRUE,
     figures_dir = getwd()
   )
