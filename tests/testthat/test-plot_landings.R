@@ -29,11 +29,5 @@ test_that("rda file made when indicated", {
   )
 
   # expect that both figures dir and the landings_figure.rda file exist
-  expect_true(dir.exists(fs::path(getwd(), "figures")))
-  expect_true(file.exists(fs::path(getwd(), "figures", "landings_figure.rda")))
-
-  # erase temporary testing files
-  file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  file.remove(fs::path(getwd(), "key_quantities.csv"))
-  unlink(fs::path(getwd(), "figures"), recursive = T)
+  check_and_remove_tmp_files("landings_figure.rda")
 })
