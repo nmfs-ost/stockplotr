@@ -3,7 +3,7 @@ Package: stockplotr
 Title: Tables and Figures for Stock Assessments
 Version: 0.15.0
 Authors@R: c(
-    person("Samantha", "Schiano", , "samantha.schiano@noaa.gov", role = c("aut", "cre"),
+    person("Samantha", "Bredeck", , "samantha.bredeck@noaa.gov", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0003-3744-6428")),
     person("Sophie", "Breitbart", , "sophie.breitbart@noaa.gov", role = c("aut", "ctb"),
            comment = c(ORCID = "0000-0001-9641-9786")),
@@ -13,7 +13,7 @@ Authors@R: c(
     person("Megumi", "Oshima", , "megumi.oshima@noaa.gov", role = "ctb",
            comment = c(ORCID = "0000-0002-8249-1442"))
   )
-Maintainer: Samantha Schiano <samantha.schiano@noaa.gov>
+Maintainer: Samantha Bredeck <samantha.bredeck@noaa.gov>
 Description: Creates exploratory and finished tables and figures for stock
     assessment documents from U.S. stock assessment model outputs. This
     packages addresses parts of the stock assessment workflow that

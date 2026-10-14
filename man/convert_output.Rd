@@ -53,5 +53,5 @@ convert_output(
 }
 }
 \author{
-Samantha Schiano
+Samantha Bredeck
 }
