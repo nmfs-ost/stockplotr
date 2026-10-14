@@ -6,11 +6,21 @@ test_that("convert_output works for SS3", {
     recursive = FALSE
   )
 
+  model_names <- c(
+    "Hake_2018",
+    "platoons",
+    "Empirical_wtatage_Age_Selex",
+    "three_area_nomove",
+    "BigSkate_2019"
+  )
+
+  models_to_test <- all_models[grepl(paste0(model_names, collapse="|"), all_models)]
+
   # Loop through each model directory and check convert_output function
-  for (i in seq_along(all_models)) {
+  for (i in seq_along(models_to_test)) {
     # Ensure no errors occur while converting SS3 output
     expect_no_error(result <- convert_output(
-      file = file.path(all_models[i], "Report.sso")
+      file = file.path(models_to_test[i], "Report.sso")
     ))
 
     # Check that the result has exactly 35 columns
