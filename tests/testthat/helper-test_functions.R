@@ -8,12 +8,15 @@
 #' 
 #' @param filename String. filename of figure/table .rda file
 #' @param dir String. directory where filename exists
+#' @param figs_or_tables String. whether check for a "figures" or "tables" internal directory
 #' 
-check_and_remove_tmp_files <- function(filename, dir=fs::path(getwd())){
+#' DEFAULT: "figures"
+#' 
+check_and_remove_tmp_files <- function(filename, dir=fs::path(getwd()), figs_or_tables="figures"){
     # expect that both figures dir and the abundance_at_age_figure.rda file exist
     expect_true(dir.exists(dir)) # this check needs to exist in case save dir isnt getwd()
-    expect_true(dir.exists(fs::path(dir, "figures")))
-    expect_true(file.exists(fs::path(dir, "figures", filename)))
+    expect_true(dir.exists(fs::path(dir, figs_or_tables)))
+    expect_true(file.exists(fs::path(dir, figs_or_tables, filename)))
 
     # erase temporary testing files
     captions_file <- fs::path(dir, "captions_alt_text.csv")
@@ -25,5 +28,5 @@ check_and_remove_tmp_files <- function(filename, dir=fs::path(getwd())){
     if(fs::file_exists(keyquant_file))
         fs::file_delete(keyquant_file)
 
-    unlink(fs::path(dir, "figures"), recursive = T)
+    unlink(fs::path(dir, figs_or_tables), recursive = T)
 }

@@ -86,25 +86,6 @@ test_that("rda file made when indicated", {
     tables_dir = getwd()
   )
 
-  # expect that both tables dir and the total_catch_table.rda file exist
-  expect_true(dir.exists(fs::path(getwd(), "tables")))
-  expect_true(file.exists(fs::path(getwd(), "tables", "total_catch_table.rda")))
-
-  # erase temporary testing files
-  file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  file.remove(fs::path(getwd(), "key_quantities.csv"))
-  unlink(fs::path(getwd(), "tables"), recursive = T)
-
-
-  # export rda
-  table_total_catch(
-    dat = stockplotr::example_data,
-    module = "TIME_SERIES",
-    interactive = FALSE,
-    make_rda = TRUE,
-    tables_dir = getwd()
-  )
-
   # load the rda file and check that it contains the expected object
   load(fs::path(getwd(), "tables", "total_catch_table.rda"))
   # expect rda contains three objects: table, caption, and latex table
@@ -121,7 +102,5 @@ test_that("rda file made when indicated", {
   expect_true(rda$caption == "Total catch by fleet over time.")
 
   # erase temporary testing files
-  file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  file.remove(fs::path(getwd(), "key_quantities.csv"))
-  unlink(fs::path(getwd(), "tables"), recursive = T)
+  check_and_remove_tmp_files("total_catch_table.rda", figs_or_tables="tables")
 })

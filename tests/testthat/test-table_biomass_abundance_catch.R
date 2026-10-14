@@ -44,13 +44,7 @@ test_that("rda file made when indicated", {
   )
 
   # expect that both tables dir and the biomass_abundance_catch_table.rda file exist
-  expect_true(dir.exists(fs::path(getwd(), "tables")))
-  expect_true(file.exists(fs::path(getwd(), "tables", "biomass_abundance_catch_table.rda")))
-
-  # erase temporary testing files
-  file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  file.remove(fs::path(getwd(), "key_quantities.csv"))
-  unlink(fs::path(getwd(), "tables"), recursive = T)
+  check_and_remove_tmp_files("biomass_abundance_catch_table.rda", figs_or_tables="tables")
 })
 
 test_that("table_biomass_abundance_catch generates error with incorrect module", {
