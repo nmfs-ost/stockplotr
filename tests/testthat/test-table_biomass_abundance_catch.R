@@ -58,7 +58,7 @@ test_that("table_biomass_abundance_catch generates error with incorrect module",
     table_biomass_abundance_catch(
       dat = stockplotr::example_data,
       interactive = FALSE,
-      module = "SPR_SERIES",
+      module = "DERIVED_QUANTITIES",
       make_rda = FALSE,
       tables_dir = getwd()
     )
