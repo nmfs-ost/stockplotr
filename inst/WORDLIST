@@ -1,3 +1,4 @@
+agedbase
 BAM
 BMSY
 Birthseason
@@ -8,11 +9,16 @@ FMSY
 FTARGET
 Fmort
 Hennen
+Jeffreys
+lendbase
 Lifecycle
+mis
 MSY
 Modelling
 NOAA
+Nsamp
 ORCID
+pearson
 Petrale
 Pre
 Preformatted
@@ -21,6 +27,7 @@ Rda
 Rmarkdown
 Rmd
 Spawners
+SSMethod
 StockSmart
 Subseason
 aa
