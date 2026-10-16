@@ -41,3 +41,26 @@
 #' }
 #'
 "example_data"
+
+#' Example composition data
+#'
+#' Simulated sex-specific age compositions for a fishery (2001-2020) and a
+#' survey (2005-2020), used to demonstrate the composition plotting
+#' functions. Observed fishery compositions were generated with dome-shaped
+#' selectivity while the expected values assume asymptotic selectivity, so
+#' the fishery shows a pattern of misfit at older ages. See
+#' `data-raw/example_comp_data.R` for the simulation code.
+#'
+#' @format A tibble with 1080 rows and 8 variables:
+#' \describe{
+#'   \item{comp_type}{Type of composition ("age")}
+#'   \item{fleet}{Fleet or survey name}
+#'   \item{year}{Year of the observation}
+#'   \item{sex}{"female" or "male"; proportions sum to one across both sexes within a year and fleet}
+#'   \item{bin}{Age bin}
+#'   \item{observed}{Observed proportion}
+#'   \item{expected}{Model-expected proportion}
+#'   \item{n}{Input sample size}
+#' }
+#' @seealso [prepare_comp_data()], [plot_comp()]
+"example_comp_data"

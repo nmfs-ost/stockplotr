@@ -1,0 +1,177 @@
+---
+title: "Composition data diagnostics"
+output:
+  html_document:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Composition data diagnostics}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 9,
+  fig.height = 7,
+  out.width = "100%"
+)
+```
+
+```{r setup}
+library(stockplotr)
+```
+
+Age and length compositions are often the most informative, and the hardest
+to fit, data in a stock assessment. {stockplotr} has a set of plots for
+composition data based on the figures that
+[r4ss](https://github.com/r4ss/r4ss) makes for Stock Synthesis models. Each
+type of plot shows the data in a different way:
+
+| Plot | Function | What it shows |
+|------|----------|---------------|
+| Distributions of observations | `plot_comp(show_expected = FALSE)` | The most intuitive way to look at compositions |
+| Bubble plot of observations | `plot_comp_bubble()` | Cohort strength over time |
+| Distributions of observed and expected values | `plot_comp()` | An intuitive way to look at fit |
+| Pearson residuals | `plot_comp_residuals()` | Blocks or stripes of misfit among years or bins |
+| Sex ratios | `plot_comp_sex_ratio()` | Trends in misfit for bins with small proportions, which have small residuals |
+| Mean age or length | `plot_comp_mean()` | Trends among years; Francis (2011) data weights |
+
+Each function can plot each fleet separately or summarize all fleets. Use
+`fleet` to choose fleets, and `aggregate = TRUE` in `plot_comp()` and
+`plot_comp_sex_ratio()` to combine all years.
+
+## Composition data
+
+The plotting functions take composition data in one of several formats and
+standardize it with `prepare_comp_data()`:
+
+* A tidy data frame with columns `year`, `bin`, and `observed`, and,
+  optionally, `fleet`, `sex`, `expected`, `n` (sample size), `pearson`, and
+  `comp_type` ("age" or "length").
+* FIMS output with `observed` and `expected` columns, such as the output of
+  `FIMS::get_estimates()`.
+* {stockplotr} standard output from `convert_output()` with labels such as
+  `age_composition_proportion` and `age_composition_expected`.
+* Output from `r4ss::SS_output()`, either the whole list or its `lendbase` or
+  `agedbase` data frames.
+
+This vignette uses `example_comp_data`, which holds simulated sex-specific age
+compositions for a fishery and a survey. The observed fishery data were
+simulated with dome-shaped selectivity, but the expected values assume
+asymptotic selectivity. The diagnostics below should show that misfit.
+
+```{r}
+head(example_comp_data)
+```
+
+If Pearson residuals are not supplied, `prepare_comp_data()` calculates them
+assuming a multinomial distribution,
+$r = (o - e) / \sqrt{e (1 - e) / N}$, using the sample size `n`.
+
+## Observations
+
+Distributions are the most intuitive way to look at compositions. For
+sex-specific data, females are shown above zero and males below.
+
+```{r obs-dist}
+plot_comp(example_comp_data, fleet = "Survey", show_expected = FALSE)
+```
+
+Bubble plots make it easier to see strong and weak year classes moving
+through the population as diagonal lines.
+
+```{r obs-bubble}
+plot_comp_bubble(example_comp_data)
+```
+
+## Fits to the data
+
+Adding the expected values to the distribution plot shows the fit to each
+year.
+
+```{r fit-dist}
+plot_comp(example_comp_data, fleet = "Fishery")
+```
+
+Aggregating across years gives an overview of each fleet. Years are weighted
+by their sample sizes.
+
+```{r fit-agg, fig.height = 4}
+plot_comp(example_comp_data, aggregate = TRUE)
+```
+
+### Pearson residuals
+
+Pearson residuals are a more statistically rigorous way to look at fit.
+Filled bubbles show where more fish were observed than expected, and open
+bubbles where fewer were observed. Here, the fishery has consistently
+negative residuals at older ages, which is the pattern caused by the
+mis-specified selectivity.
+
+```{r resid}
+plot_comp_residuals(example_comp_data)
+```
+
+### Sex ratios
+
+The proportion female in each bin, female / (female + male), can show
+trends in misfit for bins with small proportions, since those bins have small
+residuals. Vertical lines are Jeffreys intervals based on the sample size in
+each bin.
+
+```{r sex-ratio}
+plot_comp_sex_ratio(example_comp_data, fleet = "Survey")
+```
+
+```{r sex-ratio-agg, fig.height = 4}
+plot_comp_sex_ratio(example_comp_data, aggregate = TRUE)
+```
+
+### Mean age or length
+
+The time series of mean age or length was developed as a diagnostic for the
+Francis (2011) data weighting method, but it is also a useful summary of
+trends in the data and the fit. Thick intervals are based on the input sample
+sizes and thin, capped intervals on the sample sizes after applying the
+Francis weight shown in each panel label. A weight well below one, as for the
+fishery here, means the input sample sizes are too large relative to how well
+the model can fit the mean of the compositions.
+
+```{r mean, fig.height = 4}
+set.seed(1) # the interval for the Francis weight is bootstrapped
+plot_comp_mean(example_comp_data)
+```
+
+## Using model output
+
+With FIMS, pass the estimates directly:
+
+```{r fims, eval = FALSE}
+estimates <- FIMS::get_estimates(fit)
+plot_comp_residuals(estimates, comp_type = "age")
+plot_comp_mean(estimates, comp_type = "length")
+```
+
+FIMS reports years as indices (`year_i`); add a `year` column to plot
+calendar years. FIMS estimates do not currently include composition sample
+sizes. Add an
+`n` column, or supply Pearson residuals in a `pearson` column, to get
+residuals and intervals.
+
+With Stock Synthesis, use the output of `r4ss::SS_output()`. Pearson residuals
+and adjusted sample sizes are taken from the model output, and the Francis
+weights match `r4ss::SSMethod.TA1.8()`:
+
+```{r ss3, eval = FALSE}
+replist <- r4ss::SS_output("path/to/model")
+plot_comp(replist, comp_type = "length", fleet = "FISHERY")
+plot_comp_residuals(replist, comp_type = "age")
+```
+
+## References
+
+Francis, R.I.C.C. (2011). Data weighting in statistical fisheries stock
+assessment models. Canadian Journal of Fisheries and Aquatic Sciences 68:
+1124-1138.
