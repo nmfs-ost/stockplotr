@@ -1,7 +1,11 @@
 BAM
+BMSY
 Birthseason
 CPUE
 FIMS
+FLIMIT
+FMSY
+FTARGET
 Fmort
 Hennen
 Lifecycle
@@ -17,6 +21,7 @@ Rda
 Rmarkdown
 Rmd
 Spawners
+StockSmart
 Subseason
 aa
 alttext
@@ -57,7 +62,6 @@ preformatted
 rceattle
 rda
 rda's
-rdas
 rdat
 rowid
 satf
