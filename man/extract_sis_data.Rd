@@ -17,12 +17,12 @@ existing sis_assmt_template.csv file.
 
 Default: The working directory.}
 
-\item{key_quantities_dir}{Path. Location of the existing key_quantities.csv 
+\item{key_quantities_dir}{Path. Location of the existing key_quantities.csv
 file.
 
 Default: The working directory.}
 
-\item{figures_tables_dir}{Path. Location of the existing 'figures' and 
+\item{figures_tables_dir}{Path. Location of the existing 'figures' and
 'tables' directories.
 
 Default: The working directory.}
