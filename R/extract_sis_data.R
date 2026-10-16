@@ -3,26 +3,26 @@
 #' Semi-automate the extraction of key quantities from model results and time
 #' series data from exported figure/table `.rda` files for eventual transmittance
 #' to SIS via `asar::export_to_sis()`.
-#' 
+#'
 #' @param sis_data_dir Path. Location to save the sis_assmt_template.csv and
 #' sis_ts_template.csv files or, if present, the location of the
 #' existing sis_assmt_template.csv file.
-#' 
+#'
 #' Default: The working directory.
-#' 
-#' @param key_quantities_dir Path. Location of the existing key_quantities.csv 
+#'
+#' @param key_quantities_dir Path. Location of the existing key_quantities.csv
 #' file.
-#' 
+#'
 #' Default: The working directory.
-#' 
-#' @param figures_tables_dir Path. Location of the existing 'figures' and 
+#'
+#' @param figures_tables_dir Path. Location of the existing 'figures' and
 #' 'tables' directories.
-#' 
+#'
 #' Default: The working directory.
-#' 
+#'
 #' @details See the "Automating data extraction for SIS" vignette for a
 #' detailed overview of the workflow and requirements for this function.
-#' 
+#'
 #' @export
 #'
 #' @examples
@@ -36,30 +36,33 @@
 #'
 extract_sis_data <- function(sis_data_dir = getwd(),
                              key_quantities_dir = getwd(),
-                             figures_tables_dir = getwd()
-                             ) {
+                             figures_tables_dir = getwd()) {
   # check if existing figures and tables folders exist; if both absent, throw an error
   if (!dir.exists(fs::path(figures_tables_dir, "figures")) & !dir.exists(fs::path(figures_tables_dir, "tables"))) {
     cli::cli_abort("Neither 'figures' nor 'tables' folders were found in {figures_tables_dir}. Please check the `figures_tables_dir` path, or export figures and tables, and then try again.")
-    }
-  
+  }
+
   # Check if existing data files exist; if not, start from blank templates
   if (!file.exists(fs::path(sis_data_dir, "sis_assmt_template.csv"))) {
     assmt_dat <- utils::read.csv(system.file("resources", "sis_assmt_template.csv", package = "stockplotr"))
     cli::cli_alert_info("No existing sis_assmt_template.csv found in {sis_data_dir}. Using blank template.")
   } else {
     assmt_dat <- read.csv(fs::path(sis_data_dir, "sis_assmt_template.csv"), stringsAsFactors = FALSE)
-        cli::cli_alert_success("Found existing sis_assmt_template.csv in {sis_data_dir}.")
+    cli::cli_alert_success("Found existing sis_assmt_template.csv in {sis_data_dir}.")
   }
-  
+
   ts_dat <- utils::read.csv(system.file("resources", "sis_ts_template.csv", package = "stockplotr"))
-  
+
   # extract key quantities from csv and assign to variables
   kqs_path <- fs::path(key_quantities_dir, "key_quantities.csv")
-  if (file.exists(kqs_path)){
-    kqs <- read.csv(fs::path(key_quantities_dir,
-                           "key_quantities.csv"), 
-                  stringsAsFactors = FALSE)
+  if (file.exists(kqs_path)) {
+    kqs <- read.csv(
+      fs::path(
+        key_quantities_dir,
+        "key_quantities.csv"
+      ),
+      stringsAsFactors = FALSE
+    )
     cli::cli_alert_success("Found existing key_quantities.csv in {key_quantities_dir}.")
   } else {
     cli::cli_alert_warning("No existing key_quantities.csv found in {key_quantities_dir}.")
@@ -69,8 +72,8 @@ extract_sis_data <- function(sis_data_dir = getwd(),
       "*" = "plot_biomass()"
     ))
   }
-  
-  if (file.exists(kqs_path)){
+
+  if (file.exists(kqs_path)) {
     # insert values into the sis_assmt_template.csv file
     mapping <- tibble::tribble(
       ~key_quantity,          ~Variable,
@@ -92,20 +95,20 @@ extract_sis_data <- function(sis_data_dir = getwd(),
       "F.MSY.terminal.max",   "AS_FMSY_MAX",
       "F.MSY.terminal.min",   "AS_FMSY_MIN"
     )
-    
+
     # Extract values and format into a key-value matching table
-    new_vals <- kqs |> 
-      dplyr::inner_join(mapping, by = "key_quantity") |> 
-      dplyr::mutate(value = as.numeric(value)) |> 
+    new_vals <- kqs |>
+      dplyr::inner_join(mapping, by = "key_quantity") |>
+      dplyr::mutate(value = as.numeric(value)) |>
       dplyr::select(Variable, new_value = value)
-    
+
     # Update assmt_dat
-    assmt_dat <- assmt_dat |> 
-      dplyr::left_join(new_vals, by = "Variable") |> 
-      dplyr::mutate(Value = ifelse(!is.na(new_value), new_value, Value)) |> 
+    assmt_dat <- assmt_dat |>
+      dplyr::left_join(new_vals, by = "Variable") |>
+      dplyr::mutate(Value = ifelse(!is.na(new_value), new_value, Value)) |>
       dplyr::select(-new_value)
   }
-  
+
   # obtain time series data
   if (!dir.exists(fs::path(figures_tables_dir, "figures"))) {
     cli::cli_alert_info("'figures' folder not found in {sis_data_dir}.")
@@ -127,76 +130,83 @@ extract_sis_data <- function(sis_data_dir = getwd(),
         biomass <<- NULL
       }
     )
-    
+
     # SPAWNERS (fits under "abundance" category)
-    tryCatch({
-      load(fs::path(figures_tables_dir, "figures", "spawning_biomass_figure.rda")) |> suppressWarnings()
-      sb <- rda[["figure"]][["layers"]][["geom_line"]]$data
-      spawning_biomass <- sb |>
-        dplyr::group_by(year) |>
-        dplyr::summarise(sum = sum(estimate)) |>
-        dplyr::rename(Spawners = sum)
-    },
-    error = function(e) {
-      cli::cli_alert_warning("Spawning biomass data was not extracted from the 'spawning_biomass_figure.rda' file.")
-      spawning_biomass <<- NULL
-    }
+    tryCatch(
+      {
+        load(fs::path(figures_tables_dir, "figures", "spawning_biomass_figure.rda")) |> suppressWarnings()
+        sb <- rda[["figure"]][["layers"]][["geom_line"]]$data
+        spawning_biomass <- sb |>
+          dplyr::group_by(year) |>
+          dplyr::summarise(sum = sum(estimate)) |>
+          dplyr::rename(Spawners = sum)
+      },
+      error = function(e) {
+        cli::cli_alert_warning("Spawning biomass data was not extracted from the 'spawning_biomass_figure.rda' file.")
+        spawning_biomass <<- NULL
+      }
     )
-    
+
     # RECRUITMENT
-    tryCatch({
-      load(fs::path(figures_tables_dir, "figures", "abundance_at_age_figure.rda")) |> suppressWarnings()
-      rec <- rda[["figure"]][["layers"]][["geom_point"]][["data"]]
-      recruitment <- rec |>
-        dplyr::filter(age == 1) |>
-        dplyr::group_by(year) |>
-        dplyr::summarise(sum = sum(estimate)) |>
-        dplyr::rename(Recruitment = sum)
-    },
-    error = function(e) {
-      cli::cli_alert_warning("Recruitment (age 1) data was not extracted from the 'abundance_at_age_figure.rda' file.")
-      recruitment <<- NULL
-      
-      # this is for recruitment in mt- not age-1, which is what SIS expects
-    #   load(fs::path(figures_tables_dir, "figures", "recruitment_figure.rda")) |> suppressWarnings()
-    #   rec <- rda[["figure"]][["layers"]][["geom_line"]]$data
-    #   recruitment <- rec |>
-    #     dplyr::group_by(year) |>
-    #     dplyr::summarise(sum = sum(predicted_recruitment)) |>
-    #     dplyr::rename(Recruitment = sum)
-    # },
-    # error = function(e) {
-    #   cli::cli_alert_warning("Recruitment data was not extracted from the 'recruitment_figure.rda' file.")
-    #   recruitment <<- NULL
-    })
-    
+    tryCatch(
+      {
+        load(fs::path(figures_tables_dir, "figures", "abundance_at_age_figure.rda")) |> suppressWarnings()
+        rec <- rda[["figure"]][["layers"]][["geom_point"]][["data"]]
+        recruitment <- rec |>
+          dplyr::filter(age == 1) |>
+          dplyr::group_by(year) |>
+          dplyr::summarise(sum = sum(estimate)) |>
+          dplyr::rename(Recruitment = sum)
+      },
+      error = function(e) {
+        cli::cli_alert_warning("Recruitment (age 1) data was not extracted from the 'abundance_at_age_figure.rda' file.")
+        recruitment <<- NULL
+
+        # this is for recruitment in mt- not age-1, which is what SIS expects
+        #   load(fs::path(figures_tables_dir, "figures", "recruitment_figure.rda")) |> suppressWarnings()
+        #   rec <- rda[["figure"]][["layers"]][["geom_line"]]$data
+        #   recruitment <- rec |>
+        #     dplyr::group_by(year) |>
+        #     dplyr::summarise(sum = sum(predicted_recruitment)) |>
+        #     dplyr::rename(Recruitment = sum)
+        # },
+        # error = function(e) {
+        #   cli::cli_alert_warning("Recruitment data was not extracted from the 'recruitment_figure.rda' file.")
+        #   recruitment <<- NULL
+      }
+    )
+
     # FISHING MORTALITY
-    tryCatch({
-      load(fs::path(figures_tables_dir, "figures", "fishing_mortality_figure.rda")) |> suppressWarnings()
-      fm <- rda[["figure"]][["layers"]][["geom_line"]]$data
-      fishing_mortality <- fm |>
-        dplyr::group_by(year) |>
-        dplyr::summarise(mean = mean(estimate)) |>
-        dplyr::rename(Fmort = mean)
-    },
-    error = function(e) {
-      cli::cli_alert_warning("Fishing mortality data was not extracted from the 'fishing_mortality_figure.rda' file.")
-      fishing_mortality <<- NULL
-    })
-    
+    tryCatch(
+      {
+        load(fs::path(figures_tables_dir, "figures", "fishing_mortality_figure.rda")) |> suppressWarnings()
+        fm <- rda[["figure"]][["layers"]][["geom_line"]]$data
+        fishing_mortality <- fm |>
+          dplyr::group_by(year) |>
+          dplyr::summarise(mean = mean(estimate)) |>
+          dplyr::rename(Fmort = mean)
+      },
+      error = function(e) {
+        cli::cli_alert_warning("Fishing mortality data was not extracted from the 'fishing_mortality_figure.rda' file.")
+        fishing_mortality <<- NULL
+      }
+    )
+
     # INDEX
-    tryCatch({
-      load(fs::path(figures_tables_dir, "figures", "index_figure.rda")) |> suppressWarnings()
-      index <- rda[["figure"]][["layers"]][["geom_line"]]$data
-      index <- index |>
-        dplyr::group_by(year) |>
-        dplyr::summarise(mean = mean(estimate)) |>
-        dplyr::rename(Index = mean)
-    },
-    error = function(e) {
-      cli::cli_alert_warning("Index data was not extracted from the 'index_figure.rda' file.")
-      index <<- NULL
-    })
+    tryCatch(
+      {
+        load(fs::path(figures_tables_dir, "figures", "index_figure.rda")) |> suppressWarnings()
+        index <- rda[["figure"]][["layers"]][["geom_line"]]$data
+        index <- index |>
+          dplyr::group_by(year) |>
+          dplyr::summarise(mean = mean(estimate)) |>
+          dplyr::rename(Index = mean)
+      },
+      error = function(e) {
+        cli::cli_alert_warning("Index data was not extracted from the 'index_figure.rda' file.")
+        index <<- NULL
+      }
+    )
   }
   if (!dir.exists(fs::path(figures_tables_dir, "tables"))) {
     cli::cli_alert_info("'tables' folder not found in {sis_data_dir}.")
@@ -205,38 +215,38 @@ extract_sis_data <- function(sis_data_dir = getwd(),
   } else {
     table_ts <- TRUE
     tryCatch(
-    {
-      load(fs::path(figures_tables_dir, "tables", "total_catch_table.rda")) |> suppressWarnings()
-      catch <- rda[["table"]][["_data"]]
-      catch_cols <- colnames(catch)
-      cols_without_catch <- c("Sex", "Area", "Season", "Type")
-      if (any(cols_without_catch %in% catch_cols)) {
+      {
+        load(fs::path(figures_tables_dir, "tables", "total_catch_table.rda")) |> suppressWarnings()
+        catch <- rda[["table"]][["_data"]]
+        catch_cols <- colnames(catch)
+        cols_without_catch <- c("Sex", "Area", "Season", "Type")
+        if (any(cols_without_catch %in% catch_cols)) {
+          catch <- catch |>
+            dplyr::select(-dplyr::any_of(cols_without_catch))
+        }
         catch <- catch |>
-          dplyr::select(-dplyr::any_of(cols_without_catch))
+          # remove values in parentheses, if present
+          dplyr::mutate(dplyr::across(!Year, ~ stringr::str_remove_all(.x, "\\s*\\(.*?\\)"))) |>
+          dplyr::mutate(dplyr::across(!Year, ~ stringr::str_remove_all(.x, ","))) |>
+          dplyr::mutate(dplyr::across(!Year, ~ as.numeric(.x))) |>
+          # summarize non-Year rows
+          dplyr::rowwise() |>
+          dplyr::mutate(Catch = sum(dplyr::c_across(!Year), na.rm = TRUE)) |>
+          dplyr::ungroup() |>
+          dplyr::select(Year, Catch)
+      },
+      error = function(e) {
+        cli::cli_alert_warning("Catch data will not be extracted from the 'total_catch_table.rda' file.")
+        catch <<- NULL
       }
-      catch <- catch |>
-        # remove values in parentheses, if present
-        dplyr::mutate(dplyr::across(!Year, ~ stringr::str_remove_all(.x, "\\s*\\(.*?\\)"))) |>
-        dplyr::mutate(dplyr::across(!Year, ~ stringr::str_remove_all(.x, ","))) |>
-        dplyr::mutate(dplyr::across(!Year, ~ as.numeric(.x))) |>
-        # summarize non-Year rows
-        dplyr::rowwise() |>
-        dplyr::mutate(Catch = sum(dplyr::c_across(!Year), na.rm = TRUE)) |>
-        dplyr::ungroup() |>
-        dplyr::select(Year, Catch)
-    },
-    error = function(e) {
-      cli::cli_alert_warning("Catch data will not be extracted from the 'total_catch_table.rda' file.")
-      catch <<- NULL
-    }
     )
   }
-  
-  if(exists("fig_ts")){
+
+  if (exists("fig_ts")) {
     summaries <- c("biomass", "spawning_biomass", "recruitment", "fishing_mortality", "index")
-    
-    summaries <- summaries[sapply(summaries, function(x) !is.null(get(x)))] 
-    
+
+    summaries <- summaries[sapply(summaries, function(x) !is.null(get(x)))]
+
     # join all summaries by year
     all_summaries <- c()
     for (i in seq_along(summaries)) {
@@ -244,25 +254,27 @@ extract_sis_data <- function(sis_data_dir = getwd(),
         all_summaries <- get(summaries[i])
       } else {
         all_summaries <- dplyr::full_join(all_summaries,
-                                          get(summaries[i]),
-                                          by = "year")
+          get(summaries[i]),
+          by = "year"
+        )
       }
     }
   }
-  if (exists("table_ts") & !is.null(catch)){
-    if (!is.null(all_summaries) & exists("fig_ts")){
+  if (exists("table_ts") & !is.null(catch)) {
+    if (!is.null(all_summaries) & exists("fig_ts")) {
       catch <- catch |>
         dplyr::rename(year = Year)
       all_summaries <- dplyr::full_join(all_summaries,
-                                      catch,
-                                      by = "year")
+        catch,
+        by = "year"
+      )
       summaries <- c(summaries, "catch")
     } else {
       all_summaries <- get("catch")
       summaries <- "catch"
     }
   }
-  
+
   ts_options <- summaries[!is.na(summaries)]
   cli::cli_alert_info("The following time series summaries were extracted:")
   cli::cli_ul(ts_options)
@@ -281,23 +293,25 @@ extract_sis_data <- function(sis_data_dir = getwd(),
   if (all(primary_options2 %in% ts_options)) {
     cli::cli_alert_info("One of the following categories can be a Primary time series:")
     cli::cli_ul(primary_options2)
-      if (interactive()) {
+    if (interactive()) {
       primary1 <- readline("Which category should be chosen? ")
-        if (primary1 %notin% primary_options2) {
-          cli::cli_abort("Invalid Primary category specified. Please choose from: {primary_options2}.")
-        } else {
-          primary <- c(primary, primary1)
-        }
+      if (primary1 %notin% primary_options2) {
+        cli::cli_abort("Invalid Primary category specified. Please choose from: {primary_options2}.")
       } else {
-        primary <- c(primary, primary_options2[1])
-        cli::cli_alert_info("Primary categor{?y/ies} set to {primary} by default in non-interactive mode.")
+        primary <- c(primary, primary1)
       }
+    } else {
+      primary <- c(primary, primary_options2[1])
+      cli::cli_alert_info("Primary categor{?y/ies} set to {primary} by default in non-interactive mode.")
+    }
   } else if (any(primary_options2 %in% ts_options)) {
     primary <- c(primary, ts_options[ts_options %in% primary_options2])
   }
-  
-  if (length(primary) == 0) {primary <- NA} 
-  
+
+  if (length(primary) == 0) {
+    primary <- NA
+  }
+
   category_pairs <- list(
     "fishing_mortality" = "Fmort",
     "recruitment" = "Recruitment",
@@ -306,41 +320,41 @@ extract_sis_data <- function(sis_data_dir = getwd(),
     "biomass" = "Biomass",
     "index" = "Index"
   )
-  
+
   primary <- unlist(lapply(primary, function(x) category_pairs[[x]]))
-  
+
   # identify sis_assmt_template AS_B_UNIT values if coded
   b_unit <- assmt_dat$Value[assmt_dat$Variable == "AS_B_UNIT"]
   if (as.numeric(b_unit) %in% 1:8) {
     b_unit <- switch(b_unit,
-                     "1" = "Metric Tons",
-                     "2" = "Thousand Metric Tons",
-                     "3" = "Adult spawners - Natural & Hatchery - Escapement",
-                     "4" = "Adult spawners - Hatchery - Escapement",
-                     "5" = "Adult spawners - Natural - Escapement",
-                     "6" = "Number of Eggs",
-                     "7" = "kg / tow",
-                     "8" = "Number of Fish"
+      "1" = "Metric Tons",
+      "2" = "Thousand Metric Tons",
+      "3" = "Adult spawners - Natural & Hatchery - Escapement",
+      "4" = "Adult spawners - Hatchery - Escapement",
+      "5" = "Adult spawners - Natural - Escapement",
+      "6" = "Number of Eggs",
+      "7" = "kg / tow",
+      "8" = "Number of Fish"
     )
   }
-  
+
   # identify sis_assmt_template AS_F_UNIT values if coded
   f_unit <- assmt_dat$Value[assmt_dat$Variable == "AS_F_UNIT"]
   if (as.numeric(f_unit) %in% 1:7) {
     f_unit <- switch(f_unit,
-                     "1" = "Apical F",
-                     "2" = "Fully-selected F",
-                     "3" = "Exploitation Rate",
-                     "4" = "Relative F",
-                     "5" = "Metric Tons",
-                     "6" = "1 - SPR",
-                     "7" = "Z - M"
+      "1" = "Apical F",
+      "2" = "Fully-selected F",
+      "3" = "Exploitation Rate",
+      "4" = "Relative F",
+      "5" = "Metric Tons",
+      "6" = "1 - SPR",
+      "7" = "Z - M"
     )
   }
-  
-  
+
+
   ts_dat_filled <- all_summaries |>
-    dplyr::rename_with(~ "Year", .cols = matches("^year$")) |>
+    dplyr::rename_with(~"Year", .cols = matches("^year$")) |>
     tidyr::pivot_longer(cols = -Year, names_to = "Category", values_to = "Value") |>
     dplyr::mutate(Primary = ifelse(tolower(Category) %in% tolower(primary), "Y", "")) |>
     dplyr::mutate(Description = dplyr::case_when(
@@ -356,16 +370,16 @@ extract_sis_data <- function(sis_data_dir = getwd(),
       Category == "Biomass" ~ as.character(b_unit),
       Category == "Spawners" ~ as.character(b_unit),
       Category == "Fmort" ~ as.character(f_unit),
-      Category == "Index" ~ "", 
+      Category == "Index" ~ "",
       Category == "Catch" ~ ifelse(kqs$value[kqs$key_quantity == "tot.catch.units"] == " (mt)", "Metric Tons", kqs$value[kqs$key_quantity == "tot.catch.units"]),
       Category == "Recruitment" ~ "Number of Fish",
       TRUE ~ NA
     )) |>
     dplyr::relocate(Value, .after = Unit)
-  
+
   # Ensure ts_dat_filled has same cols as ts_dat
   if (isFALSE(any(colnames(ts_dat_filled) == colnames(ts_dat)))) {
-      cli::cli_abort("Time series data does not match template structure.")
+    cli::cli_abort("Time series data does not match template structure.")
   }
 
   # if assmt_dat$Value is NA and Default is 95, change it to Default
@@ -374,11 +388,11 @@ extract_sis_data <- function(sis_data_dir = getwd(),
       assmt_dat$Value[i] <- assmt_dat$Default[i]
     }
   }
-  
+
   # export files
   assmt_dat_path <- fs::path(sis_data_dir, "sis_assmt_template.csv")
   ts_dat_path <- fs::path(sis_data_dir, "sis_ts_template.csv")
-  
+
   if (file.exists(assmt_dat_path) | file.exists(ts_dat_path)) {
     cli::cli_alert_info("Existing sis_assmt_template.csv or sis_ts_template.csv found in {sis_data_dir}.")
     overwrite <- readline("Do you want to overwrite the existing files? (y/n): ")
