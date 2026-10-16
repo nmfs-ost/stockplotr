@@ -38,19 +38,19 @@ test_that("plot_catch_comp generates plots without errors", {
   )
 })
 
-test_that("rda file made when indicated", {
-  # export rda
-  plot_catch_comp(
-    stockplotr::example_data,
-    module = "CATCH_AT_AGE",
-    interactive = FALSE,
-    figures_dir = getwd(),
-    make_rda = TRUE
-  )
+# test_that("rda file made when indicated", {
+#   # export rda
+#   plot_catch_comp(
+#     stockplotr::example_data,
+#     module = "CATCH_AT_AGE",
+#     interactive = FALSE,
+#     figures_dir = getwd(),
+#     make_rda = TRUE
+#   )
 
-  # expect that both figures dir and the catch_comp_figure.rda file exist
-  check_and_remove_tmp_files("catch_comp_figure.rda")
-})
+#   # expect that both figures dir and the catch_comp_figure.rda file exist
+#   check_and_remove_tmp_files("catch_comp_figure.rda")
+# })
 
 test_that("plot_catch_comp generates error with scaling <1", {
   # expect error

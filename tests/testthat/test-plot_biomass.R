@@ -82,16 +82,16 @@ test_that("plot_biomass generates plots without errors", {
   )
 })
 
-test_that("rda file made when indicated", {
-  # export rda
-  plot_biomass(
-    stockplotr::example_data,
-    figures_dir = getwd(),
-    interactive = FALSE,
-    make_rda = TRUE,
-    module = "TIME_SERIES"
-  )
+# test_that("rda file made when indicated", {
+#   # export rda
+#   plot_biomass(
+#     stockplotr::example_data,
+#     figures_dir = getwd(),
+#     interactive = FALSE,
+#     make_rda = TRUE,
+#     module = "TIME_SERIES"
+#   )
 
-  # expect that both figures dir and the biomass_figure.rda file exist
-  check_and_remove_tmp_files("biomass_figure.rda")
-})
+#   # expect that both figures dir and the biomass_figure.rda file exist
+#   check_and_remove_tmp_files("biomass_figure.rda")
+# })

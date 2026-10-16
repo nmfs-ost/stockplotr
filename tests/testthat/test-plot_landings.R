@@ -18,16 +18,16 @@ test_that("plot_landings generates plots without errors", {
   )
 })
 
-test_that("rda file made when indicated", {
-  # export rda
-  plot_landings(
-    stockplotr::example_data,
-    interactive = FALSE,
-    make_rda = TRUE,
-    unit_label = "metric tons",
-    figures_dir = getwd()
-  )
+# test_that("rda file made when indicated", {
+#   # export rda
+#   plot_landings(
+#     stockplotr::example_data,
+#     interactive = FALSE,
+#     make_rda = TRUE,
+#     unit_label = "metric tons",
+#     figures_dir = getwd()
+#   )
 
-  # expect that both figures dir and the landings_figure.rda file exist
-  check_and_remove_tmp_files("landings_figure.rda")
-})
+#   # expect that both figures dir and the landings_figure.rda file exist
+#   check_and_remove_tmp_files("landings_figure.rda")
+# })

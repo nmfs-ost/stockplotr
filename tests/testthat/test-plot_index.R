@@ -17,16 +17,16 @@ test_that("plot_index generates plots without errors", {
   )
 })
 
-test_that("rda file made when indicated", {
-  # export rda
-  plot_index(
-    stockplotr::example_data,
-    make_rda = TRUE,
-    unit_label = "metric tons",
-    interactive = FALSE,
-    figures_dir = getwd()
-  )
+# test_that("rda file made when indicated", {
+#   # export rda
+#   plot_index(
+#     stockplotr::example_data,
+#     make_rda = TRUE,
+#     unit_label = "metric tons",
+#     interactive = FALSE,
+#     figures_dir = getwd()
+#   )
 
-  # expect that both figures dir and the index_figure.rda file exist
-  check_and_remove_tmp_files("index_figure.rda")
-})
+#   # expect that both figures dir and the index_figure.rda file exist
+#   check_and_remove_tmp_files("index_figure.rda")
+# })

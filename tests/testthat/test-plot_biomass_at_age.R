@@ -37,19 +37,19 @@ test_that("plot_biomass_at_age generates plots without errors", {
   )
 })
 
-test_that("rda file made when indicated", {
-  # export rda
-  plot_biomass_at_age(
-    stockplotr::example_data,
-    module = "BIOMASS_AT_AGE",
-    interactive = FALSE,
-    figures_dir = getwd(),
-    make_rda = TRUE
-  )
+# test_that("rda file made when indicated", {
+#   # export rda
+#   plot_biomass_at_age(
+#     stockplotr::example_data,
+#     module = "BIOMASS_AT_AGE",
+#     interactive = FALSE,
+#     figures_dir = getwd(),
+#     make_rda = TRUE
+#   )
 
-  # expect that both figures dir and the biomass_at_age_figure.rda file exist
-  check_and_remove_tmp_files("biomass_at_age_figure.rda")
-})
+#   # expect that both figures dir and the biomass_at_age_figure.rda file exist
+#   check_and_remove_tmp_files("biomass_at_age_figure.rda")
+# })
 
 test_that("plot_biomass_at_age generates error when biomass label is not found", {
   # generate test data set

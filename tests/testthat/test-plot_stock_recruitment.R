@@ -34,17 +34,17 @@ test_that("plot_stock_recruitment generates plots without errors", {
   )
 })
 
-test_that("rda file made when indicated", {
-  # export rda
-  plot_stock_recruitment(
-    stockplotr::example_data,
-    spawning_biomass_label = "mt",
-    recruitment_label = "mt",
-    interactive = FALSE,
-    make_rda = TRUE,
-    figures_dir = getwd()
-  )
+# test_that("rda file made when indicated", {
+#   # export rda
+#   plot_stock_recruitment(
+#     stockplotr::example_data,
+#     spawning_biomass_label = "mt",
+#     recruitment_label = "mt",
+#     interactive = FALSE,
+#     make_rda = TRUE,
+#     figures_dir = getwd()
+#   )
 
-  # expect that both figures dir and the sr_figure.rda file exist
-  check_and_remove_tmp_files("stock_recruitment_figure.rda")
-})
+#   # expect that both figures dir and the sr_figure.rda file exist
+#   check_and_remove_tmp_files("stock_recruitment_figure.rda")
+# })

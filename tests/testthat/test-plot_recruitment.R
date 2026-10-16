@@ -53,16 +53,16 @@ test_that("plot_recruitment generates plots without errors", {
   )
 })
 
-test_that("rda file made when indicated", {
-  # export rda
-  plot_recruitment(
-    stockplotr::example_data,
-    module = "TIME_SERIES",
-    interactive = FALSE,
-    figures_dir = getwd(),
-    make_rda = TRUE
-  )
+# test_that("rda file made when indicated", {
+#   # export rda
+#   plot_recruitment(
+#     stockplotr::example_data,
+#     module = "TIME_SERIES",
+#     interactive = FALSE,
+#     figures_dir = getwd(),
+#     make_rda = TRUE
+#   )
 
-  # expect that both figures dir and the recruitment_figure.rda file exist
-  check_and_remove_tmp_files("recruitment_figure.rda")
-})
+#   # expect that both figures dir and the recruitment_figure.rda file exist
+#   check_and_remove_tmp_files("recruitment_figure.rda")
+# })

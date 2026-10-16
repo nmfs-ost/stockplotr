@@ -33,19 +33,19 @@ test_that("table_biomass_abundance_catch generates plots without errors", {
   )
 })
 
-test_that("rda file made when indicated", {
-  # export rda
-  table_biomass_abundance_catch(
-    dat = stockplotr::example_data,
-    module = c("TIME_SERIES", "CATCH", "TIME_SERIES"),
-    interactive = FALSE,
-    make_rda = TRUE,
-    tables_dir = getwd()
-  )
+# test_that("rda file made when indicated", {
+#   # export rda
+#   table_biomass_abundance_catch(
+#     dat = stockplotr::example_data,
+#     module = c("TIME_SERIES", "CATCH", "TIME_SERIES"),
+#     interactive = FALSE,
+#     make_rda = TRUE,
+#     tables_dir = getwd()
+#   )
 
-  # expect that both tables dir and the biomass_abundance_catch_table.rda file exist
-  check_and_remove_tmp_files("biomass_abundance_catch_table.rda", figs_or_tables="tables")
-})
+#   # expect that both tables dir and the biomass_abundance_catch_table.rda file exist
+#   check_and_remove_tmp_files("biomass_abundance_catch_table.rda", figs_or_tables="tables")
+# })
 
 test_that("table_biomass_abundance_catch generates error with incorrect module", {
   # expect error

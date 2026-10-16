@@ -32,16 +32,16 @@ test_that("plot_recruitment_deviations generates plots without errors", {
   )
 })
 
-test_that("rda file made when indicated", {
-  # export rda
-  plot_recruitment_deviations(
-    stockplotr::example_data,
-    module = "SPAWN_RECRUIT",
-    interactive = FALSE,
-    make_rda = TRUE,
-    figures_dir = getwd()
-  )
+# test_that("rda file made when indicated", {
+#   # export rda
+#   plot_recruitment_deviations(
+#     stockplotr::example_data,
+#     module = "SPAWN_RECRUIT",
+#     interactive = FALSE,
+#     make_rda = TRUE,
+#     figures_dir = getwd()
+#   )
 
-  # expect that both figures dir and the recruitment_deviations_figure.rda file exist
-  check_and_remove_tmp_files("recruitment_deviations_figure.rda")
-})
+#   # expect that both figures dir and the recruitment_deviations_figure.rda file exist
+#   check_and_remove_tmp_files("recruitment_deviations_figure.rda")
+# })

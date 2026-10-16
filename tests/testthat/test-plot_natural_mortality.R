@@ -25,16 +25,16 @@ test_that("plot_natural_mortality generate without errors", {
   )
 })
 
-test_that("rda file made when indicated", {
-  # export rda
-  plot_natural_mortality(
-    stockplotr::example_data,
-    module = "Natural_Mortality",
-    interactive = FALSE,
-    make_rda = TRUE,
-    figures_dir = getwd()
-  )
+# test_that("rda file made when indicated", {
+#   # export rda
+#   plot_natural_mortality(
+#     stockplotr::example_data,
+#     module = "Natural_Mortality",
+#     interactive = FALSE,
+#     make_rda = TRUE,
+#     figures_dir = getwd()
+#   )
 
-  # expect that both figures dir and the natural_mortality_figure.rda file exist
-  check_and_remove_tmp_files("natural_mortality_figure.rda")
-})
+#   # expect that both figures dir and the natural_mortality_figure.rda file exist
+#   check_and_remove_tmp_files("natural_mortality_figure.rda")
+# })

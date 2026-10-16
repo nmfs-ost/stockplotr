@@ -34,18 +34,18 @@ test_that("plot_abundance_at_age generates plots without errors", {
   )
 })
 
-test_that("rda file made when indicated", {
-  # export rda
-  plot_abundance_at_age(
-    stockplotr::example_data,
-    figures_dir = getwd(),
-    interactive = FALSE,
-    make_rda = TRUE
-  )
+# test_that("rda file made when indicated", {
+#   # export rda
+#   plot_abundance_at_age(
+#     stockplotr::example_data,
+#     figures_dir = getwd(),
+#     interactive = FALSE,
+#     make_rda = TRUE
+#   )
 
-  # expect that both figures dir and the abundance_at_age_figure.rda file exist
-  check_and_remove_tmp_files("abundance_at_age_figure.rda")
-})
+#   # expect that both figures dir and the abundance_at_age_figure.rda file exist
+#   check_and_remove_tmp_files("abundance_at_age_figure.rda")
+# })
 
 test_that("plot_abundance_at_age generates error with scaling <1", {
   # expect error

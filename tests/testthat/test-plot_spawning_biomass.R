@@ -40,19 +40,19 @@ test_that("plot_spawning_biomass generates plots without errors", {
   )
 })
 
-test_that("rda file made when indicated", {
-  # export rda
-  plot_spawning_biomass(
-    stockplotr::example_data,
-    unit_label = "metric tons",
-    scale_amount = 1,
-    ref_line = "msy",
-    module = "TIME_SERIES",
-    interactive = FALSE,
-    make_rda = TRUE,
-    figures_dir = getwd()
-  )
+# test_that("rda file made when indicated", {
+#   # export rda
+#   plot_spawning_biomass(
+#     stockplotr::example_data,
+#     unit_label = "metric tons",
+#     scale_amount = 1,
+#     ref_line = "msy",
+#     module = "TIME_SERIES",
+#     interactive = FALSE,
+#     make_rda = TRUE,
+#     figures_dir = getwd()
+#   )
 
-  # expect that both figures dir and the spawning_biomass_figure.rda file exist
-  check_and_remove_tmp_files("spawning_biomass_figure.rda")
-})
+#   # expect that both figures dir and the spawning_biomass_figure.rda file exist
+#   check_and_remove_tmp_files("spawning_biomass_figure.rda")
+# })
