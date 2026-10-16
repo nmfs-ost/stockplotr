@@ -63,7 +63,8 @@ VignetteBuilder:
     knitr
 Config/roxygen2/version: 8.1.0
 Config/testthat/edition: 3
-Config/testthat/parallel: false
+Config/testthat/parallel: true
+Config/testthat/start-first: save_all_plots*, convert_output*
 Encoding: UTF-8
 Language: en-US
 LazyData: true

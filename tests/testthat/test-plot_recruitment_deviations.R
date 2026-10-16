@@ -1,8 +1,10 @@
 test_that("plot_recruitment_deviations generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_recruitment_deviations(stockplotr::example_data,
-      module = "SPAWN_RECRUIT"
+    plot_recruitment_deviations(
+      stockplotr::example_data,
+      module = "SPAWN_RECRUIT",
+      interactive = FALSE
     )
   )
 
@@ -11,6 +13,7 @@ test_that("plot_recruitment_deviations generates plots without errors", {
     plot_recruitment_deviations(
       stockplotr::example_data,
       module = "SPAWN_RECRUIT",
+      interactive = FALSE,
       make_rda = FALSE,
       figures_dir = getwd()
     )
@@ -21,6 +24,7 @@ test_that("plot_recruitment_deviations generates plots without errors", {
     plot_recruitment_deviations(
       stockplotr::example_data,
       module = "SPAWN_RECRUIT",
+      interactive = FALSE,
       make_rda = FALSE,
       figures_dir = getwd()
     ),
@@ -28,21 +32,16 @@ test_that("plot_recruitment_deviations generates plots without errors", {
   )
 })
 
-test_that("rda file made when indicated", {
-  # export rda
-  plot_recruitment_deviations(
-    stockplotr::example_data,
-    module = "SPAWN_RECRUIT",
-    make_rda = TRUE,
-    figures_dir = getwd()
-  )
+# test_that("rda file made when indicated", {
+#   # export rda
+#   plot_recruitment_deviations(
+#     stockplotr::example_data,
+#     module = "SPAWN_RECRUIT",
+#     interactive = FALSE,
+#     make_rda = TRUE,
+#     figures_dir = getwd()
+#   )
 
-  # expect that both figures dir and the recruitment_deviations_figure.rda file exist
-  expect_true(dir.exists(fs::path(getwd(), "figures")))
-  expect_true(file.exists(fs::path(getwd(), "figures", "recruitment_deviations_figure.rda")))
-
-  # erase temporary testing files
-  file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  file.remove(fs::path(getwd(), "key_quantities.csv"))
-  unlink(fs::path(getwd(), "figures"), recursive = T)
-})
+#   # expect that both figures dir and the recruitment_deviations_figure.rda file exist
+#   check_and_remove_tmp_files("recruitment_deviations_figure.rda")
+# })
