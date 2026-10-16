@@ -17,11 +17,11 @@ table_total_catch(
 )
 }
 \arguments{
-\item{dat}{Data frame or list. A tibble or named list of tibbles (input as `list()`)
+\item{dat}{Data frame or list. A tibble or named list of tibbles (input as \code{list()})
 returned from \link[stockplotr]{convert_output}.
 
 If inputting a list of tibbles, the first tibble's reference point defined
-in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
+in \code{ref_line} is used to plot a reference line or calculate relative spawning biomass.}
 
 \item{unit_label}{String. Abbreviated catch units
 
@@ -35,15 +35,15 @@ Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
 \item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
-Default: `FALSE`}
+Default: \code{FALSE}}
 
-\item{module}{Character vector. (Optional) Module name found in `dat$module_name`.
+\item{module}{Character vector. (Optional) Module name found in \code{dat$module_name}.
 If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
 
 If the interactive and >1 module_name is found, user will select the
-module_name in the console. @seealso [filter_data()]}
+module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 
 \item{scale_amount}{Number. A number to scale the y-axis values.
 
@@ -55,15 +55,15 @@ table will be rounded to.
 Default: 2}
 
 \item{make_rda}{Logical. TRUE/FALSE; indicate whether to save the object and
-make an automated caption and alternative text in the form of an `rda` object. If TRUE,
+make an automated caption and alternative text in the form of an \code{rda} object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
 
-Default: `FALSE`.}
+Default: \code{FALSE}.}
 
 \item{tables_dir}{Path. The location of the folder containing the generated table
-rda files ("tables") that will be created if the argument `make_rda` = TRUE.
+rda files ("tables") that will be created if the argument \code{make_rda} = TRUE.
 
-Default: the working directory (`getwd()`)}
+Default: the working directory (\code{getwd()})}
 }
 \value{
 A table ready of landed catch by fleet and year.
@@ -74,7 +74,7 @@ Catch (table) by fleet, gear type, sector
 \details{
 The input is from an assessment model output file
 translated to a standardized output (\link[stockplotr]{convert_output}).
-There are options to return a [gt::gt()] object or export an rda object
+There are options to return a \code{\link[gt:gt]{gt::gt()}} object or export an rda object
 containing a gt-based table, caption, and LaTeX-based table.
 }
 \examples{
@@ -91,5 +91,5 @@ table_total_catch(
 )
 }
 \seealso{
-[convert_output()], [filter_data()], [process_table()], [export_kqs()], [insert_kqs()], [create_rda()]
+\code{\link[=convert_output]{convert_output()}}, \code{\link[=filter_data]{filter_data()}}, \code{\link[=process_table]{process_table()}}, \code{\link[=export_kqs]{export_kqs()}}, \code{\link[=insert_kqs]{insert_kqs()}}, \code{\link[=create_rda]{create_rda()}}
 }

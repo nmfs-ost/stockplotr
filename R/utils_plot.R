@@ -875,8 +875,13 @@ get_id <- function(dat) {
 
 #------------------------------------------------------------------------------
 
-# Calculate reference value point
-
+#' Calculate reference value point
+#'
+#' @inheritParams plot_spawning_biomass dat lbs
+#' @param reference_name a string of the name of the reference point (e.g. "spawning biomass msy")
+#'
+#' @returns the value of the reference point name found in the dat file.
+#' @export
 calculate_reference_point <- function(
   dat,
   reference_name,

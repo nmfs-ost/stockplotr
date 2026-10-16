@@ -58,7 +58,7 @@ Options: Including, but not limited to: "sex", "area", "fleet"}
 size are relative to one another while when set to FALSE, point size
 is relative to z
 
-Default: `TRUE`}
+Default: \code{TRUE}}
 
 \item{...}{Inherited arguments from internal functions from
 \link[ggplot2]{geom_point}}

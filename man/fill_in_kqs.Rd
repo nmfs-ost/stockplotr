@@ -22,7 +22,7 @@ newly-added values of key quantities indicated via ellipsis.
 Substitute key quantities' values into template
 }
 \details{
-The returned dataframe is input for [fill_in_kqs()].
+The returned dataframe is input for \code{\link[=fill_in_kqs]{fill_in_kqs()}}.
 }
 \examples{
 \dontrun{
@@ -34,5 +34,5 @@ fill_in_kqs(
 }
 }
 \seealso{
-[export_kqs()], [insert_kqs()]
+\code{\link[=export_kqs]{export_kqs()}}, \code{\link[=insert_kqs]{insert_kqs()}}
 }

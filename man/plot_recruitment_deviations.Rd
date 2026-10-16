@@ -15,19 +15,19 @@ plot_recruitment_deviations(
 )
 }
 \arguments{
-\item{dat}{Data frame or list. A tibble or named list of tibbles (input as `list()`)
+\item{dat}{Data frame or list. A tibble or named list of tibbles (input as \code{list()})
 returned from \link[stockplotr]{convert_output}.
 
 If inputting a list of tibbles, the first tibble's reference point defined
-in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
+in \code{ref_line} is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{module}{Character vector. (Optional) Module name found in `dat$module_name`.
+\item{module}{Character vector. (Optional) Module name found in \code{dat$module_name}.
 If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
 
 If the interactive and >1 module_name is found, user will select the
-module_name in the console. @seealso [filter_data()]}
+module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 
 \item{era}{String. Era of data.
 
@@ -37,17 +37,17 @@ Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
 \item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
-Default: `FALSE`}
+Default: \code{FALSE}}
 
 \item{make_rda}{Logical. TRUE/FALSE; indicate whether to save the object and
-make an automated caption and alternative text in the form of an `rda` object. If TRUE,
+make an automated caption and alternative text in the form of an \code{rda} object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
 
-Default: `FALSE`.}
+Default: \code{FALSE}.}
 
 \item{figures_dir}{Path. Path to the "figures" folder.
 
-Default: `getwd()`
+Default: \code{getwd()}
 
 The folder is created within the path if it does not exist.}
 
@@ -62,7 +62,7 @@ Plot recruitment deviations
 \details{
 The input is from an assessment model output file
 translated to a standardized output (\link[stockplotr]{convert_output}).
-There are options to return a `ggplot2` object or export an .rda object
+There are options to return a \code{ggplot2} object or export an .rda object
 containing associated caption and alternative text for the figure.
 }
 \note{
@@ -83,6 +83,6 @@ plot_recruitment_deviations(
 )
 }
 \seealso{
-[convert_output()], [plot_error()], [filter_data()],
-[process_data()], [export_kqs()], [insert_kqs()], [create_rda()]
+\code{\link[=convert_output]{convert_output()}}, \code{\link[=plot_error]{plot_error()}}, \code{\link[=filter_data]{filter_data()}},
+\code{\link[=process_data]{process_data()}}, \code{\link[=export_kqs]{export_kqs()}}, \code{\link[=insert_kqs]{insert_kqs()}}, \code{\link[=create_rda]{create_rda()}}
 }

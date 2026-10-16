@@ -19,11 +19,11 @@ plot_fishing_mortality(
 )
 }
 \arguments{
-\item{dat}{Data frame or list. A tibble or named list of tibbles (input as `list()`)
+\item{dat}{Data frame or list. A tibble or named list of tibbles (input as \code{list()})
 returned from \link[stockplotr]{convert_output}.
 
 If inputting a list of tibbles, the first tibble's reference point defined
-in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
+in \code{ref_line} is used to plot a reference line or calculate relative spawning biomass.}
 
 \item{geom}{String. Geom used for the plot.
 
@@ -46,9 +46,11 @@ Default: NULL}
 custom). When multiple models are being compared, a reference line for each
 model will appear, if desired. The following options can be used to customize
 the reference line:
-1. all lines are comparing same ref_line = "msy", ref_line = "target", ref_line = "unfished", etc
-2. custom input vector - ref_line = c("sable23_msy"=30, "sable25_msy"=40) -- user must indicate which model in label otherwise it will assign in order of dat
-3. input vector of labels - ref_line = c("msy", "target")
+\enumerate{
+\item all lines are comparing same ref_line = "msy", ref_line = "target", ref_line = "unfished", etc
+\item custom input vector - ref_line = c("sable23_msy"=30, "sable25_msy"=40) -- user must indicate which model in label otherwise it will assign in order of dat
+\item input vector of labels - ref_line = c("msy", "target")
+}
 
 Default: "msy"
 
@@ -61,29 +63,29 @@ Default: "time"
 
 Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
-\item{module}{Character vector. (Optional) Module name found in `dat$module_name`.
+\item{module}{Character vector. (Optional) Module name found in \code{dat$module_name}.
 If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
 
 If the interactive and >1 module_name is found, user will select the
-module_name in the console. @seealso [filter_data()]}
+module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 
 \item{make_rda}{Logical. TRUE/FALSE; indicate whether to save the object and
-make an automated caption and alternative text in the form of an `rda` object. If TRUE,
+make an automated caption and alternative text in the form of an \code{rda} object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
 
-Default: `FALSE`.}
+Default: \code{FALSE}.}
 
 \item{figures_dir}{Path. Path to the "figures" folder.
 
-Default: `getwd()`
+Default: \code{getwd()}
 
 The folder is created within the path if it does not exist.}
 
 \item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
-Default: `FALSE`}
+Default: \code{FALSE}}
 
 \item{...}{Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}
 }
@@ -96,7 +98,7 @@ Plot fishing mortality timeseries
 \details{
 The input is from an assessment model output file
 translated to a standardized output (\link[stockplotr]{convert_output}).
-There are options to return a `ggplot2` object or export an .rda object
+There are options to return a \code{ggplot2} object or export an .rda object
 containing associated caption and alternative text for the figure.
 }
 \examples{
@@ -116,5 +118,5 @@ plot_fishing_mortality(
 )
 }
 \seealso{
-[convert_output()], [filter_data()], [process_data()], [plot_timeseries()], [reference_line()], [export_kqs()], [insert_kqs()], [create_rda()]
+\code{\link[=convert_output]{convert_output()}}, \code{\link[=filter_data]{filter_data()}}, \code{\link[=process_data]{process_data()}}, \code{\link[=plot_timeseries]{plot_timeseries()}}, \code{\link[=reference_line]{reference_line()}}, \code{\link[=export_kqs]{export_kqs()}}, \code{\link[=insert_kqs]{insert_kqs()}}, \code{\link[=create_rda]{create_rda()}}
 }
