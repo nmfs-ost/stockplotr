@@ -13,7 +13,7 @@ ASSESSMENT_ID,Unique numeric identifier assigned to all stock assessment records
 ENTITY_ID,Entity unique identifier value. Assigned automatically by SIS.,NO,None,
 AS_YEAR,Year the assessment was completed. Assigned automatically by SIS.,NO,None,
 AS_MONTH,Month the assessment was completed. Assigned automatically by SIS.,NO,None,
-AS_LAST_DATA_YEAR,Year of the 'latest' data used in the assessment.,NO,Extracted as landings.end.year from key_quantities.csv,
+AS_LAST_DATA_YEAR,Year of the 'latest' data used in the assessment.,NO,Extracted as F.end.year from key_quantities.csv,
 AS_B_BASIS,"The basis of the biomass unit. Options: Spawning Stock Biomass, Total Stock Biomass, Survey-Estimated Biomass, Escapement, Stock Reproductive Output, Survey Index, Total Stock Abundance.",NO,None,
 AS_F_BASIS,"The basis of the Fishing Mortality unit. Options: 1 (Max F at Age), 2 (F for Fully-Selected Fish), 3 (Catch / Biomass), 4 (Catch / Exploitable Biomass), 5 (Catch), 6 (Fishing Intensity), 7 (True F).",NO,None,
 AS_FMSY,Estimated and/or calculated value of Fishing Mortality at MSY.,NO,Extracted as F.MSY.terminal from key_quantities.csv,
