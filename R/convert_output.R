@@ -58,8 +58,6 @@ convert_output <- function(
         i = "File will be compatible until Oct. 1, 2027"
       )
     )
-    
-    custom_params <- setNames(param_values, param_names)
   }
   
   # check if entered save_dir exists so doesn't waste user time finding this out at the end
