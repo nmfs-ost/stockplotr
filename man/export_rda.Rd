@@ -76,5 +76,5 @@ export_rda(
 }
 }
 \seealso{
-[create_rda()], [extract_caps_alttext()]
+\code{\link[=create_rda]{create_rda()}}, \code{\link[=extract_caps_alttext]{extract_caps_alttext()}}
 }

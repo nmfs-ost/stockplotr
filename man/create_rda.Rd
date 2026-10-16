@@ -27,7 +27,7 @@ alternative text for the object}
 
 \item{dir}{Path. Directory to where the rda will be saved
 
-Default: the working directory (`getwd()`)}
+Default: the working directory (\code{getwd()})}
 
 \item{ref_line}{String. Reference line value
 
@@ -67,5 +67,5 @@ create_rda(
 }
 }
 \seealso{
-[export_rda()], [extract_caps_alttext()]
+\code{\link[=export_rda]{export_rda()}}, \code{\link[=extract_caps_alttext]{extract_caps_alttext()}}
 }
