@@ -1,8 +1,12 @@
 BAM
+BMSY
 Birthseason
 CPUE
 FIMS
-FIMSdiags
+FLIMIT
+FMSY
+FTARGET
+Fmort
 Hennen
 Lifecycle
 MSY
@@ -12,13 +16,17 @@ ORCID
 Petrale
 Pre
 Preformatted
+Rceattle
 Rda
 Rmarkdown
 Rmd
+Spawners
+StockSmart
 Subseason
 aa
 alttext
 asar
+assmt
 bam
 birthseas
 cha
@@ -40,7 +48,6 @@ gp
 hline
 href
 is’
-kable
 kableExtra
 kobe
 kqs
@@ -52,7 +59,6 @@ nsim
 obsvpred
 pkgdown
 preformatted
-qmd
 rceattle
 rda
 rda's

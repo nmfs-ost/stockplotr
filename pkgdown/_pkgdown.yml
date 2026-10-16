@@ -27,6 +27,8 @@ navbar:
         href: articles/how-caps-alttext-are-made.html
       - text: Standardizing Assessment Model Output
         href: articles/convert_output_details.html
+      - text: Automating data extraction for SIS
+        href: articles/extract-sis-data.html
         
     cheatsheet:
       text: Cheatsheet
