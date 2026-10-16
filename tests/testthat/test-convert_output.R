@@ -173,6 +173,81 @@ test_that("convert_output works for Rceattle", {
   expect_true(all(is.finite(as.numeric(biomass[["estimate"]]))))
 })
 
+test_that("convert_output places Rceattle selectivity and M at age", {
+  fit <- readRDS(test_path("fixtures", "rceattle_goa_atf.rds"))
+  out <- convert_output(file = fit, model = "rceattle")
+
+  # One row per fleet, sex, age and year of sel_at_age, and each cell lands
+  # on its own fleet, sex, age and year.
+  selectivity <- out[out[["label"]] == "selectivity_age", ]
+  expect_equal(nrow(selectivity), length(fit[["quantities"]][["sel_at_age"]]))
+  fishery_age_5 <- selectivity |>
+    dplyr::filter(
+      fleet == "GOA_atf_fishery",
+      sex == "male",
+      age == "5",
+      year == 2018
+    )
+  expect_equal(
+    fishery_age_5[["estimate"]],
+    unname(fit[["quantities"]][["sel_at_age"]]["GOA_atf_fishery", 2, 5, "2018"])
+  )
+
+  # GOAatf fixes M at 0.2 for females and 0.35 for males at every age and year.
+  natural_mortality <- out[out[["label"]] == "natural_mortality", ]
+  expect_equal(nrow(natural_mortality), 2 * 21 * 90)
+  expect_equal(
+    unique(natural_mortality[natural_mortality[["sex"]] == "female", ][["estimate"]]),
+    0.2
+  )
+  expect_equal(
+    unique(natural_mortality[natural_mortality[["sex"]] == "male", ][["estimate"]]),
+    0.35
+  )
+
+  # The age dimension is the bin index, so the ages start at minage.
+  fit[["data_list"]][["minage"]] <- 3
+  shifted <- convert_output(file = fit, model = "rceattle")
+  expect_equal(
+    range(as.numeric(shifted[shifted[["label"]] == "natural_mortality", ][["age"]])),
+    c(3, 23)
+  )
+
+  expect_no_error(plot_selectivity(out, interactive = FALSE))
+  expect_no_error(plot_natural_mortality(out, interactive = FALSE))
+})
+
+test_that("convert_output gives Rceattle recruitment deviations a standard error", {
+  fit <- readRDS(test_path("fixtures", "rceattle_goa_atf.rds"))
+  out <- convert_output(file = fit, model = "rceattle")
+
+  # The standard error of a fixed effect is the square root of its diagonal
+  # entry in cov.fixed.
+  rec_dev_sd <- sqrt(diag(fit[["sdrep"]][["cov.fixed"]]))[
+    names(fit[["sdrep"]][["par.fixed"]]) == "rec_dev"
+  ]
+  rec_devs <- out[out[["label"]] == "recruitment_deviations", ]
+  expect_equal(rec_devs[["uncertainty"]], rec_dev_sd)
+  expect_true(all(rec_devs[["uncertainty_label"]] == "sd"))
+
+  expect_no_error(plot_recruitment_deviations(out, interactive = FALSE))
+
+  # Under random_rec = TRUE the deviations are random effects, held in
+  # par.random with their variances in diag.cov.random.
+  is_rec_dev <- names(fit[["sdrep"]][["par.fixed"]]) == "rec_dev"
+  random_rec <- fit
+  random_rec[["sdrep"]][["par.random"]] <- fit[["sdrep"]][["par.fixed"]][is_rec_dev]
+  random_rec[["sdrep"]][["diag.cov.random"]] <- rec_dev_sd^2
+  random_rec[["sdrep"]][["par.fixed"]] <- fit[["sdrep"]][["par.fixed"]][!is_rec_dev]
+  random_rec[["sdrep"]][["cov.fixed"]] <-
+    fit[["sdrep"]][["cov.fixed"]][!is_rec_dev, !is_rec_dev]
+  random_out <- convert_output(file = random_rec, model = "rceattle")
+  random_rec_devs <- random_out[random_out[["label"]] == "recruitment_deviations", ]
+  expect_equal(random_rec_devs[["estimate"]], rec_devs[["estimate"]])
+  expect_equal(random_rec_devs[["uncertainty"]], rec_dev_sd)
+  expect_equal(random_rec_devs[["year"]], rec_devs[["year"]])
+})
+
 test_that("convert_output accepts .RDS as well as .rds for Rceattle", {
   # saveRDS() output is conventionally named either way, and real Rceattle
   # assessment files use the upper-case form.

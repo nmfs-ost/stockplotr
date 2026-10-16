@@ -2054,7 +2054,7 @@ convert_output <- function(
         i = "Refit with {.code fit_control(getsd = TRUE)} to standardize the derived time series."
       ))
     }
-    for (module_name in intersect(c("sdrep", "data_list"), names(dat))) {
+    for (module_name in intersect(c("sdrep", "data_list", "quantities"), names(dat))) {
       extract <- dat[module_name]
       cli::cli_alert_info("Processing {module_name}")
       if (module_name == "sdrep") {
@@ -2101,10 +2101,30 @@ convert_output <- function(
           rbind(df2)
 
         # Extract parameter values ts
+        # The standard errors of the fixed effects are the square root of the
+        # diagonal of cov.fixed, in the same order as par.fixed.
+        has_cov_fixed <- !is.null(extract[[1]]$cov.fixed)
         par_fixes <- data.frame(
           label = names(extract[[1]]$par.fixed),
-          estimate = extract[[1]]$par.fixed
+          estimate = extract[[1]]$par.fixed,
+          uncertainty = if (has_cov_fixed) sqrt(diag(extract[[1]]$cov.fixed)) else NA_real_,
+          uncertainty_label = if (has_cov_fixed) "sd" else NA_character_
         )
+        # Random effects, such as rec_dev under random_rec = TRUE, are in
+        # par.random rather than par.fixed. Their variances are in
+        # diag.cov.random.
+        if (length(extract[[1]]$par.random) > 0) {
+          has_cov_random <- !is.null(extract[[1]]$diag.cov.random)
+          par_fixes <- rbind(
+            par_fixes,
+            data.frame(
+              label = names(extract[[1]]$par.random),
+              estimate = extract[[1]]$par.random,
+              uncertainty = if (has_cov_random) sqrt(extract[[1]]$diag.cov.random) else NA_real_,
+              uncertainty_label = if (has_cov_random) "sd" else NA_character_
+            )
+          )
+        }
         par_fixes_count <- par_fixes |>
           dplyr::group_by(label) |>
           dplyr::count()
@@ -2130,11 +2150,7 @@ convert_output <- function(
             n != length(dat[["data_list"]]$styr:dat[["data_list"]]$endyr)
           ) |>
           dplyr::mutate(year = NA) |>
-          rbind(df3) |>
-          dplyr::mutate(
-            uncertainty = NA,
-            uncertainty_label = NA
-          )
+          rbind(df3)
         # not sure how pop_scalar is indexed
         # not sure how log_index_hat is indexes
         # Did not use r_sd for the error in rec bc used it from the other element in the list
@@ -2315,6 +2331,58 @@ convert_output <- function(
         # where bind_rows() would silently widen the output.
         new_df <- Reduce(rbind, data_list_list)
         out_list[[names(extract)]] <- new_df
+      } else if (module_name == "quantities") {
+        ###### quantities ####
+        # Only selectivity and natural mortality at age for now. Both are
+        # [fleet or species, sex, age, year] arrays. The age dimension is the
+        # bin index, so the age itself is offset by minage.
+        ages <- dat[["data_list"]][["minage"]] - 1 +
+          seq_len(dat[["data_list"]][["nages"]])
+        nsex <- dat[["data_list"]][["nsex"]]
+        # Rceattle stores sex 1 as females, or both sexes when nsex = 1.
+        sex_names <- if (nsex == 1) NA_character_ else c("female", "male")
+        quantities_list <- list()
+
+        if ("sel_at_age" %in% names(extract[[1]])) {
+          sel <- extract[[1]][["sel_at_age"]][, seq_len(nsex), seq_along(ages), , drop = FALSE]
+          df_sel <- expand.grid(
+            fleet = dimnames(sel)[[1]],
+            sex = sex_names,
+            age = ages,
+            year = as.numeric(dimnames(sel)[[4]]),
+            stringsAsFactors = FALSE
+          ) |>
+            dplyr::mutate(
+              estimate = as.vector(sel),
+              label = "sel_at_age"
+            )
+          df_sel[setdiff(tolower(names(out_new)), tolower(names(df_sel)))] <- NA
+          quantities_list[["sel_at_age"]] <- df_sel
+        }
+
+        if ("M_at_age" %in% names(extract[[1]])) {
+          m_at_age <- extract[[1]][["M_at_age"]][1, seq_len(nsex), seq_along(ages), , drop = FALSE]
+          df_m <- expand.grid(
+            sex = sex_names,
+            age = ages,
+            year = as.numeric(dimnames(m_at_age)[[4]]),
+            stringsAsFactors = FALSE
+          ) |>
+            dplyr::mutate(
+              estimate = as.vector(m_at_age),
+              label = "m_at_age"
+            )
+          df_m[setdiff(tolower(names(out_new)), tolower(names(df_m)))] <- NA
+          quantities_list[["m_at_age"]] <- df_m
+        }
+
+        if (length(quantities_list) > 0) {
+          out_list[[names(extract)]] <- Reduce(rbind, quantities_list) |>
+            dplyr::mutate(
+              module_name = names(extract),
+              age = as.character(age)
+            )
+        }
       } else if (is.list(extract[[1]])) { # indicates vector and list
         ##### remaining lmnts ####
         if (any(vapply(extract[[1]], is.matrix, FUN.VALUE = logical(1)))) {
