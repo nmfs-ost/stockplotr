@@ -83,7 +83,7 @@ As the main purpose of this function is to automate the extraction of data into 
 * **Recruitment at Age 1**: `stockplotr::plot_abundance_at_age()`
 * **Fishing Mortality**: `stockplotr::plot_fishing_mortality()`
 * **Index of Abundance**: `stockplotr::plot_index()`
-* **Catch**: `stockplotr::plot_total_catch()`
+* **Catch**: `stockplotr::table_total_catch()`
 
 ## Provide the path to the `key_quantities.csv` file
 
