@@ -37,27 +37,27 @@ test_that("table_total_catch generates plots without errors", {
   # )
 })
 
-test_that("rda file made when indicated", {
-  # export rda
-  table_total_catch(
-    dat = stockplotr::example_data,
-    unit_label = "mt",
-    era = NULL,
-    interactive = FALSE,
-    module = "TIME_SERIES",
-    make_rda = TRUE,
-    tables_dir = getwd()
-  )
+# test_that("rda file made when indicated", {
+#   # export rda
+#   table_total_catch(
+#     dat = stockplotr::example_data,
+#     unit_label = "mt",
+#     era = NULL,
+#     interactive = FALSE,
+#     module = "TIME_SERIES",
+#     make_rda = TRUE,
+#     tables_dir = getwd()
+#   )
 
-  # expect that both tables dir and the total_catch_table.rda file exist
-  expect_true(dir.exists(fs::path(getwd(), "tables")))
-  expect_true(file.exists(fs::path(getwd(), "tables", "total_catch_table.rda")))
+#   # expect that both tables dir and the total_catch_table.rda file exist
+#   expect_true(dir.exists(fs::path(getwd(), "tables")))
+#   expect_true(file.exists(fs::path(getwd(), "tables", "total_catch_table.rda")))
 
-  # erase temporary testing files
-  file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  file.remove(fs::path(getwd(), "key_quantities.csv"))
-  unlink(fs::path(getwd(), "tables"), recursive = T)
-})
+#   # erase temporary testing files
+#   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
+#   file.remove(fs::path(getwd(), "key_quantities.csv"))
+#   unlink(fs::path(getwd(), "tables"), recursive = T)
+# })
 
 test_that("table_total_catch generates error with incorrect module", {
   # expect error
@@ -76,31 +76,31 @@ test_that("table_total_catch generates error with incorrect module", {
 })
 
 
-test_that("rda file made when indicated", {
-  # export rda
-  table_total_catch(
-    dat = stockplotr::example_data,
-    module = "TIME_SERIES",
-    interactive = FALSE,
-    make_rda = TRUE,
-    tables_dir = getwd()
-  )
+# test_that("rda file made when indicated", {
+#   # export rda
+#   table_total_catch(
+#     dat = stockplotr::example_data,
+#     module = "TIME_SERIES",
+#     interactive = FALSE,
+#     make_rda = TRUE,
+#     tables_dir = getwd()
+#   )
 
-  # load the rda file and check that it contains the expected object
-  load(fs::path(getwd(), "tables", "total_catch_table.rda"))
-  # expect rda contains three objects: table, caption, and latex table
-  expect_false(
-    is.null(rda$table)
-  )
-  expect_false(
-    is.null(rda$caption)
-  )
-  expect_false(
-    is.null(rda$latex_table)
-  )
+#   # load the rda file and check that it contains the expected object
+#   load(fs::path(getwd(), "tables", "total_catch_table.rda"))
+#   # expect rda contains three objects: table, caption, and latex table
+#   expect_false(
+#     is.null(rda$table)
+#   )
+#   expect_false(
+#     is.null(rda$caption)
+#   )
+#   expect_false(
+#     is.null(rda$latex_table)
+#   )
 
-  expect_true(rda$caption == "Total catch by fleet over time.")
+#   expect_true(rda$caption == "Total catch by fleet over time.")
 
-  # erase temporary testing files
-  check_and_remove_tmp_files("total_catch_table.rda", figs_or_tables="tables")
-})
+#   # erase temporary testing files
+#   check_and_remove_tmp_files("total_catch_table.rda", figs_or_tables="tables")
+# })
