@@ -47,9 +47,9 @@
 #' Length compositions and fits from the 2019 Big Skate stock assessment for
 #' the U.S. West Coast (`BigSkate_2019` in the Stock Synthesis test models),
 #' the model used for the r4ss example plots at
-#' <https://r4ss.github.io/r4ss/BigSkate/>. The data are the `lendbase`
-#' element of `r4ss::SS_output()` with columns renamed to stockplotr's
-#' conventions. See `data-raw/bigskate_comps.R`.
+#' \url{https://r4ss.github.io/r4ss/BigSkate/}. The data are the `lendbase`
+#' element of `r4ss::SS_output()` with columns renamed to follow
+#' stockplotr conventions. See `data-raw/bigskate_comps.R`.
 #'
 #' Compositions are sex-specific, with female and male proportions summing to
 #' one within each year, fleet, and partition. `Fishery_current` has separate
@@ -79,7 +79,7 @@
 #'
 #' Conditional age-at-length data and fits from the 2019 Big Skate stock
 #' assessment (see [bigskate_lencomp]). The data are the `condbase` element
-#' of `r4ss::SS_output()` with columns renamed to stockplotr's conventions.
+#' of `r4ss::SS_output()` with columns renamed to follow stockplotr conventions.
 #' Each age composition is for one sex and one length bin, and sums to one.
 #' See `data-raw/bigskate_comps.R`.
 #'

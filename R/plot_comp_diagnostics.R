@@ -360,8 +360,8 @@ plot_comp_residual_pattern <- function(
 #' Length bins with no observations or no sample size are omitted. Plot one
 #' fleet at a time with `fleet`, and subset years by filtering `dat`.
 #'
-#' @section r4ss equivalent: `r4ss::SSplotComps()` subplot 12 ("Andre's mean age
-#' and std. dev. in conditional AAL").
+#' @section r4ss equivalent: `r4ss::SSplotComps()` subplot 12 (Andre's plots of
+#' mean age and standard deviation for conditional age-at-length data).
 #'
 #' @seealso [prepare_comp_data()], [plot_comp_bubble()]
 #' @export

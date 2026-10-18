@@ -68,7 +68,7 @@ West Coast, the same model used for the
 below can be compared directly with the r4ss versions. `bigskate_lencomp`
 holds the length compositions (`lendbase` from `r4ss::SS_output()`) and
 `bigskate_caal` the conditional age-at-length data (`condbase`), with columns
-renamed to stockplotr's conventions.
+renamed to follow stockplotr conventions.
 
 ```{r}
 head(bigskate_lencomp)

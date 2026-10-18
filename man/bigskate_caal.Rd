@@ -32,7 +32,7 @@ bigskate_caal
 \description{
 Conditional age-at-length data and fits from the 2019 Big Skate stock
 assessment (see [bigskate_lencomp]). The data are the `condbase` element
-of `r4ss::SS_output()` with columns renamed to stockplotr's conventions.
+of `r4ss::SS_output()` with columns renamed to follow stockplotr conventions.
 Each age composition is for one sex and one length bin, and sums to one.
 See `data-raw/bigskate_comps.R`.
 }

@@ -52,8 +52,8 @@ Length bins with no observations or no sample size are omitted. Plot one
 fleet at a time with `fleet`, and subset years by filtering `dat`.
 }
 \section{r4ss equivalent}{
- `r4ss::SSplotComps()` subplot 12 ("Andre's mean age
-and std. dev. in conditional AAL").
+ `r4ss::SSplotComps()` subplot 12 (Andre's plots of
+mean age and standard deviation for conditional age-at-length data).
 }
 
 \examples{
