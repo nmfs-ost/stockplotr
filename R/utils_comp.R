@@ -3,14 +3,15 @@
 #' Reshape age or length composition data (observed and, optionally,
 #' expected proportions) into the tidy format used by the composition
 #' plotting functions ([plot_comp()], [plot_comp_bubble()],
-#' [plot_comp_residuals()], [plot_comp_sex_ratio()], and [plot_comp_mean()]).
+#' [plot_comp_residuals()], [plot_comp_sex_ratio()], and [plot_comp_francis()]).
 #'
 #' @param dat A data frame of composition data. The following formats are
 #' recognized automatically:
 #' \describe{
 #'   \item{Tidy composition data}{Columns `year`, `bin`, and `observed`, with
-#'   optional columns `fleet`, `sex`, `expected`, `n` (input or adjusted
-#'   sample size), `pearson`, and `comp_type`. See [example_comp_data].}
+#'   optional columns `fleet`, `sex`, `part` (partition: 0 = whole catch,
+#'   1 = discard, 2 = retained), `expected`, `n` (input or adjusted sample
+#'   size), `pearson`, and `comp_type`. See [bigskate_lencomp].}
 #'   \item{FIMS output}{Output from FIMS (e.g., `FIMS::get_estimates()` or
 #'   [convert_output()] with `model = "fims"`) that contains `observed` and
 #'   `expected` columns. Rows whose `label` contains "comp" are kept and the
@@ -26,28 +27,42 @@
 #'   `lendbase` or `agedbase` elements (columns `Yr`, `Fleet`, `Sex`, `Bin`,
 #'   `Obs`, `Exp`, `Pearson`, `Nsamp_adj`, ...). Conditional
 #'   age-at-length rows are dropped from `agedbase` so that only marginal age
-#'   compositions remain.}
+#'   compositions remain, unless `conditional = TRUE`.}
 #' }
+#' For conditional age-at-length data (`conditional = TRUE`), tidy data also
+#' need a `length_bin` column giving the length bin that each age
+#' composition is conditioned on (see [bigskate_caal]).
 #' @param comp_type String. Type of composition to keep when `dat` contains
 #' more than one. Options: "age", "length", or NULL (keep all).
 #'
 #' Default: NULL
 #'
-#' @param fleet Character or numeric vector. Fleet(s) to keep. NULL keeps all
-#' fleets.
+#' @param fleet Character or numeric vector. Fleet(s) to keep, matching
+#' either the fleet name (e.g., "Fishery_current") or the fleet name with its
+#' partition (e.g., "Fishery_current (retained)"). NULL keeps all fleets.
 #'
 #' Default: NULL
 #'
 #' @param normalize Logical. TRUE/FALSE; rescale observed and expected values
 #' so that they sum to one within each year, fleet, and composition type
-#' (summing across sexes so that sex-specific compositions remain jointly
-#' normalized). Use TRUE when `dat` contains counts rather than proportions.
+#' (and length bin for conditional data). Sex-specific compositions are
+#' normalized jointly across sexes, unless each sex already sums to one on
+#' its own (single-sex compositions). Use TRUE when `dat` contains counts
+#' rather than proportions.
 #'
 #' Default: TRUE
 #'
+#' @param conditional Logical. TRUE/FALSE; keep conditional age-at-length
+#' data instead of marginal compositions. Conditional compositions are
+#' normalized within each length bin. Used by [plot_comp_andre()] and
+#' [plot_comp_bubble()].
+#'
+#' Default: FALSE
+#'
 #' @returns A tibble with one row per year, fleet, sex, and bin and columns
 #' `comp_type`, `fleet`, `year`, `sex`, `bin`, `observed`, `expected`, `n`,
-#' and `pearson`. Columns that cannot be determined from `dat` are `NA`.
+#' and `pearson` (plus `length_bin` when `conditional = TRUE`). Columns that
+#' cannot be determined from `dat` are `NA`.
 #'
 #' @details When Pearson residuals are not supplied, they are calculated
 #' assuming a multinomial distribution as
@@ -57,11 +72,11 @@
 #' residuals are left as `NA`.
 #'
 #' @seealso [plot_comp()], [plot_comp_bubble()], [plot_comp_residuals()],
-#' [plot_comp_sex_ratio()], [plot_comp_mean()]
+#' [plot_comp_sex_ratio()], [plot_comp_francis()]
 #' @export
 #'
 #' @examples
-#' comps <- prepare_comp_data(example_comp_data, fleet = "Survey")
+#' comps <- prepare_comp_data(bigskate_lencomp, fleet = "WCGBTS")
 #' head(comps)
 #'
 #' # Data in the stockplotr long format are reshaped automatically
@@ -77,12 +92,21 @@ prepare_comp_data <- function(
   dat,
   comp_type = NULL,
   fleet = NULL,
-  normalize = TRUE
+  normalize = TRUE,
+  conditional = FALSE
 ) {
-  # Full r4ss::SS_output() list: combine length and marginal age comps
+  # Full r4ss::SS_output() list: combine length and marginal age comps, or
+  # use the conditional age-at-length data
   if (!is.data.frame(dat) && is.list(dat) &&
-    any(c("lendbase", "agedbase") %in% names(dat))) {
-    dbase <- dplyr::bind_rows(dat[["lendbase"]], dat[["agedbase"]])
+    any(c("lendbase", "agedbase", "condbase") %in% names(dat))) {
+    dbase <- if (conditional) {
+      dat[["condbase"]]
+    } else {
+      dplyr::bind_rows(dat[["lendbase"]], dat[["agedbase"]])
+    }
+    if (is.null(dbase) || nrow(dbase) == 0) {
+      cli::cli_abort("No {if (conditional) 'conditional age-at-length' else 'composition'} data found in the r4ss output.")
+    }
     if (!is.null(dat[["FleetNames"]]) && nrow(dbase) > 0) {
       dbase$Fleet_Name <- dat[["FleetNames"]][dbase$Fleet]
     }
@@ -92,11 +116,15 @@ prepare_comp_data <- function(
     cli::cli_abort("{.arg dat} must be a data frame or an {.code r4ss::SS_output()} list.")
   }
   # Return early if the data are already prepared
-  if (inherits(dat, "stockplotr_comp")) {
+  prepared <- inherits(dat, "stockplotr_comp")
+  if (prepared) {
     out <- dat
+    if (conditional != ("length_bin" %in% names(out))) {
+      cli::cli_abort("{.arg dat} was prepared with {.code conditional = {!conditional}}.")
+    }
   } else {
     out <- switch(detect_comp_format(dat),
-      "r4ss" = comp_from_r4ss(dat),
+      "r4ss" = comp_from_r4ss(dat, conditional = conditional),
       "obs_exp_cols" = comp_from_obs_exp_cols(dat),
       "long" = comp_from_long(dat),
       "tidy" = comp_from_tidy(dat),
@@ -105,6 +133,20 @@ prepare_comp_data <- function(
         "i" = "Supply a data frame with columns {.field year}, {.field bin}, and {.field observed} (see {.code ?prepare_comp_data})."
       ))
     )
+    has_lbin <- any(!is.na(out$length_bin))
+    if (conditional && !has_lbin) {
+      cli::cli_abort(c(
+        "No conditional age-at-length data found in {.arg dat}.",
+        "i" = "Tidy data need a {.field length_bin} column."
+      ))
+    }
+    if (!conditional && has_lbin && length(unique(stats::na.omit(out$length_bin))) > 1) {
+      cli::cli_abort(c(
+        "{.arg dat} contains conditional age-at-length data ({.field length_bin}).",
+        "i" = "Use {.code conditional = TRUE}, e.g., with {.fn plot_comp_andre}."
+      ))
+    }
+    if (!conditional) out$length_bin <- NULL
   }
 
   # Filter to comp type and fleet
@@ -118,20 +160,39 @@ prepare_comp_data <- function(
     )
   }
   if (!is.null(fleet)) {
-    out <- out[out$fleet %in% as.character(fleet), , drop = FALSE]
+    # Match either the fleet name or the fleet name with its partition,
+    # e.g., "Fishery_current" or "Fishery_current (retained)"
+    fleet_base <- base_fleet(out$fleet)
+    keep <- out$fleet %in% as.character(fleet) | fleet_base %in% as.character(fleet)
+    out <- out[keep, , drop = FALSE]
   }
   if (nrow(out) == 0) {
     cli::cli_abort("No composition data remain after filtering by {.arg comp_type} and {.arg fleet}.")
   }
 
-  if (normalize && !inherits(dat, "stockplotr_comp")) {
+  if (normalize && !prepared) {
+    # Compositions are normalized jointly across sexes unless each sex
+    # already sums to one on its own (single-sex compositions, as is common
+    # for conditional age-at-length data)
     out <- out |>
-      dplyr::group_by(.data$comp_type, .data$fleet, .data$year) |>
+      dplyr::group_by(dplyr::across(dplyr::any_of(
+        c("comp_type", "fleet", "year", "length_bin")
+      ))) |>
+      dplyr::mutate(
+        sex_group = if (length(unique(.data$sex)) > 1 &&
+          all(abs(tapply(.data$observed, .data$sex, sum, na.rm = TRUE) - 1) < 1e-3)) {
+          .data$sex
+        } else {
+          "joint"
+        }
+      ) |>
+      dplyr::group_by(.data$sex_group, .add = TRUE) |>
       dplyr::mutate(
         observed = .data$observed / sum(.data$observed, na.rm = TRUE),
         expected = .data$expected / sum(.data$expected, na.rm = TRUE)
       ) |>
       dplyr::ungroup() |>
+      dplyr::select(-"sex_group") |>
       # 0/0 when a year has no observations
       dplyr::mutate(
         observed = dplyr::if_else(is.nan(.data$observed), NA_real_, .data$observed),
@@ -150,7 +211,9 @@ prepare_comp_data <- function(
   }
 
   out <- out |>
-    dplyr::arrange(.data$comp_type, .data$fleet, .data$year, .data$sex, .data$bin)
+    dplyr::arrange(dplyr::across(dplyr::any_of(
+      c("comp_type", "fleet", "year", "length_bin", "sex", "bin")
+    )))
   class(out) <- unique(c("stockplotr_comp", class(tibble::as_tibble(out))))
   out
 }
@@ -235,25 +298,30 @@ finish_comp <- function(out) {
   out <- tibble::as_tibble(out)
   out$fleet <- as.character(out$fleet)
   out$sex <- standardize_sex(out$sex)
-  for (col in c("year", "bin", "observed", "expected", "n", "pearson")) {
+  if (!"length_bin" %in% names(out)) out$length_bin <- NA_real_
+  for (col in c("year", "bin", "observed", "expected", "n", "pearson", "length_bin")) {
     out[[col]] <- suppressWarnings(as.numeric(out[[col]]))
   }
   out$fleet[is.na(out$fleet)] <- "All"
   out <- dplyr::filter(out, !is.na(.data$bin), !is.na(.data$year))
-  out[, comp_cols]
+  out[, c(comp_cols, "length_bin")]
 }
 
 comp_from_tidy <- function(dat) {
   finish_comp(data.frame(
     comp_type = pull_col(dat, "comp_type", NA_character_),
-    fleet = pull_col(dat, c("fleet", "fleet_name"), "All"),
+    fleet = label_partition(
+      as.character(pull_col(dat, c("fleet", "fleet_name"), "All")),
+      pull_col(dat, "part")
+    ),
     year = pull_col(dat, "year"),
     sex = pull_col(dat, "sex"),
     bin = pull_col(dat, c("bin", "age", "length", "length_bins")),
     observed = pull_col(dat, "observed"),
     expected = pull_col(dat, c("expected", "predicted")),
     n = pull_col(dat, c("n", "sample_size", "nsamp", "nsamp_adj")),
-    pearson = pull_col(dat, c("pearson", "pearson_residual", "residual"))
+    pearson = pull_col(dat, c("pearson", "pearson_residual", "residual")),
+    length_bin = pull_col(dat, c("length_bin", "lbin", "lbin_lo"))
   ))
 }
 
@@ -322,7 +390,7 @@ comp_from_long <- function(dat) {
   finish_comp(wide)
 }
 
-comp_from_r4ss <- function(dat) {
+comp_from_r4ss <- function(dat, conditional = FALSE) {
   dat <- as.data.frame(dat)
   # Drop conditional age-at-length data, keeping marginal age comps
   lo <- find_col(dat, "Lbin_lo")
@@ -331,7 +399,13 @@ comp_from_r4ss <- function(dat) {
   if (!is.null(lo) && !is.null(hi)) {
     is_age <- if (all(is.na(kind))) rep(TRUE, nrow(dat)) else toupper(kind) %in% "AGE"
     range <- dat[[hi]] - dat[[lo]]
-    if (any(is_age) && length(unique(range[is_age])) > 1) {
+    multiple_ranges <- any(is_age) && length(unique(range[is_age])) > 1
+    if (conditional) {
+      # Keep age rows conditioned on a length bin narrower than the full range
+      keep <- is_age & (if (multiple_ranges) range < max(range[is_age], na.rm = TRUE) else TRUE)
+      dat <- dat[keep, , drop = FALSE]
+      kind <- kind[keep]
+    } else if (multiple_ranges) {
       cli::cli_alert_info("Conditional age-at-length data removed; only marginal age compositions are kept.")
       keep <- !is_age | range == max(range[is_age], na.rm = TRUE)
       dat <- dat[keep, , drop = FALSE]
@@ -346,17 +420,12 @@ comp_from_r4ss <- function(dat) {
   )
   fleet <- as.character(pull_col(dat, c("Fleet_Name", "Fleet_name", "Fleet"), "All"))
   # Add partition to fleet name when a fleet has more than one partition
-  part <- pull_col(dat, "Part")
-  if (!all(is.na(part))) {
-    multi_part <- tapply(part, fleet, function(x) length(unique(x)) > 1)
-    part_name <- c("0" = "whole", "1" = "discard", "2" = "retained")[as.character(part)]
-    fleet <- ifelse(multi_part[fleet], paste0(fleet, " (", part_name, ")"), fleet)
-  }
-  finish_comp(data.frame(
+  fleet <- label_partition(fleet, pull_col(dat, "Part"))
+  out <- finish_comp(data.frame(
     comp_type = type,
     fleet = fleet,
     year = pull_col(dat, "Yr"),
-    sex = pull_col(dat, "Sex"),
+    sex = r4ss_sex(dat),
     bin = pull_col(dat, "Bin"),
     observed = pull_col(dat, "Obs"),
     expected = pull_col(dat, "Exp"),
@@ -365,8 +434,56 @@ comp_from_r4ss <- function(dat) {
       suppressWarnings(as.numeric(pull_col(dat, "Nsamp_DM"))),
       suppressWarnings(as.numeric(pull_col(dat, c("Nsamp_adj", "N"))))
     ),
-    pearson = pull_col(dat, "Pearson")
+    pearson = pull_col(dat, "Pearson"),
+    length_bin = if (conditional && !is.null(lo)) dat[[lo]] else NA_real_
   ))
+  # Single-sex male compositions are reported twice in the Stock Synthesis
+  # composition database (once for each internal sex code), with identical
+  # values, so keep one copy
+  dplyr::distinct(out)
+}
+
+# Add the partition to fleet names, as in r4ss, when a fleet has data from
+# more than one partition (0 = whole catch, 1 = discard, 2 = retained)
+label_partition <- function(fleet, part) {
+  fleet <- as.character(fleet)
+  if (all(is.na(part))) {
+    return(fleet)
+  }
+  part_name <- c("0" = "whole catch", "1" = "discard", "2" = "retained")[as.character(part)]
+  multi_part <- tapply(part, fleet, function(x) length(unique(stats::na.omit(x))) > 1)
+  ifelse(
+    !is.na(part_name) & multi_part[fleet] %in% TRUE,
+    paste0(fleet, " (", part_name, ")"),
+    fleet
+  )
+}
+
+# Fleet name without the partition added by label_partition()
+base_fleet <- function(fleet) {
+  sub(" \\((whole catch|discard|retained)\\)$", "", fleet)
+}
+
+# Partition name added by label_partition(), or NA
+fleet_partition <- function(fleet) {
+  pattern <- "^.* \\((whole catch|discard|retained)\\)$"
+  ifelse(grepl(pattern, fleet), sub(pattern, "\\1", fleet), NA_character_)
+}
+
+# Sex from an r4ss composition database. r4ss adds a lowercase "sex"
+# column (0 = unknown, 1 = female, 2 = male); the uppercase "Sex" column is
+# an internal Stock Synthesis code where 1 means female or unknown, so
+# single-sex male compositions (Sexes = 2) can have Sex = 1.
+r4ss_sex <- function(dat) {
+  if ("sex" %in% names(dat)) {
+    return(dat[["sex"]])
+  }
+  sexes <- pull_col(dat, "Sexes")
+  sex <- pull_col(dat, "Sex")
+  if (all(is.na(sexes))) {
+    return(sex)
+  }
+  dplyr::if_else(sexes == 3, sex, sexes)
 }
 
 # Axis label for the bin variable
@@ -418,10 +535,14 @@ comp_facet <- function(vars, ncol = NULL, scales = "fixed") {
   if (length(vars) == 0) {
     return(NULL)
   }
-  ggplot2::facet_wrap(
-    ggplot2::vars(!!!rlang::syms(vars)),
-    ncol = ncol,
-    scales = scales,
-    labeller = ggplot2::labeller(.multi_line = FALSE)
+  list(
+    ggplot2::facet_wrap(
+      ggplot2::vars(!!!rlang::syms(vars)),
+      ncol = ncol,
+      scales = scales,
+      labeller = ggplot2::labeller(.multi_line = FALSE)
+    ),
+    # Fleet names with partitions and weights make long panel labels
+    ggplot2::theme(strip.text = ggplot2::element_text(size = 10))
   )
 }

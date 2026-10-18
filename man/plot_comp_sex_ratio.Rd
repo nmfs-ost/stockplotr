@@ -16,7 +16,7 @@ plot_comp_sex_ratio(
 \arguments{
 \item{dat}{A data frame of composition data in any format accepted by
 [prepare_comp_data()], such as FIMS output, an r4ss `lendbase`/`agedbase`
-table, or a tidy data frame like [example_comp_data].}
+table, or a tidy data frame like [bigskate_lencomp].}
 
 \item{aggregate}{Logical. TRUE/FALSE; aggregate compositions across years
 within each fleet. Years are weighted by their sample size when sample
@@ -37,8 +37,9 @@ more than one. Options: "age", "length", or NULL (keep all).
 
 Default: NULL}
 
-\item{fleet}{Character or numeric vector. Fleet(s) to keep. NULL keeps all
-fleets.
+\item{fleet}{Character or numeric vector. Fleet(s) to keep, matching
+either the fleet name (e.g., "Fishery_current") or the fleet name with its
+partition (e.g., "Fishery_current (retained)"). NULL keeps all fleets.
 
 Default: NULL}
 
@@ -58,13 +59,21 @@ small proportions.
 \details{
 Requires sex-specific compositions with both "female" and
 "male" values in the `sex` column of `dat`. Points show observed ratios
-and lines show expected ratios. When `aggregate = TRUE`, female and male
+and lines show expected ratios. As in r4ss, the smallest observed
+proportion in each composition (such as the small constant Stock Synthesis
+adds to every bin) is subtracted from the observed and expected values
+first, so bins with no fish observed are omitted. When `aggregate = TRUE`, female and male
 compositions are summed across years (weighted by sample size when
 available) before calculating ratios.
 }
+\section{r4ss equivalent}{
+ `r4ss::SSplotSexRatio()` with
+`sexratio.option = 2` (female:total).
+}
+
 \examples{
-plot_comp_sex_ratio(example_comp_data, fleet = "Survey")
-plot_comp_sex_ratio(example_comp_data, aggregate = TRUE)
+plot_comp_sex_ratio(bigskate_lencomp, fleet = "WCGBTS")
+plot_comp_sex_ratio(bigskate_lencomp, aggregate = TRUE)
 }
 \seealso{
 [prepare_comp_data()], [plot_comp()]

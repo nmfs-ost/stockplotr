@@ -9,7 +9,7 @@ plot_comp_residuals(dat, ...)
 \arguments{
 \item{dat}{A data frame of composition data in any format accepted by
 [prepare_comp_data()], such as FIMS output, an r4ss `lendbase`/`agedbase`
-table, or a tidy data frame like [example_comp_data].}
+table, or a tidy data frame like [bigskate_lencomp].}
 
 \item{...}{Additional arguments passed to [plot_comp_bubble()].}
 }
@@ -21,12 +21,17 @@ A convenience wrapper around [plot_comp_bubble()] with
 `value = "pearson"`. Residuals are taken from `dat` when supplied or
 calculated by [prepare_comp_data()] assuming a multinomial distribution.
 }
-\examples{
-plot_comp_residuals(example_comp_data)
+\section{r4ss equivalent}{
+ `r4ss::SSplotComps()` subplot 2 for residuals by
+fleet and subplot 24 (residuals compared across fleets).
+}
 
-# Compare residuals across fleets for one sex
+\examples{
+plot_comp_residuals(bigskate_lencomp)
+
+# Compare residuals across fleets for females
 plot_comp_residuals(
-  dplyr::filter(example_comp_data, sex == "female"),
+  dplyr::filter(bigskate_lencomp, sex == "female"),
   ncol = 1
 )
 }

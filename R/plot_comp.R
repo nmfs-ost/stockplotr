@@ -7,7 +7,7 @@
 #'
 #' @param dat A data frame of composition data in any format accepted by
 #' [prepare_comp_data()], such as FIMS output, an r4ss `lendbase`/`agedbase`
-#' table, or a tidy data frame like [example_comp_data].
+#' table, or a tidy data frame like [bigskate_lencomp].
 #' @param show_expected Logical. TRUE/FALSE; overlay the expected values as
 #' lines. Ignored if `dat` contains no expected values.
 #'
@@ -19,8 +19,10 @@
 #'
 #' Default: FALSE
 #'
-#' @param show_n Logical. TRUE/FALSE; label each panel with its sample size
-#' when sample sizes are available (not used when `aggregate = TRUE`).
+#' @param show_n Logical. TRUE/FALSE; label each panel with its adjusted
+#' input sample size ("N adj.") and, when expected values are shown, its
+#' effective sample size ("N eff."), as in r4ss. Not used when
+#' `aggregate = TRUE`.
 #'
 #' Default: TRUE
 #'
@@ -41,19 +43,22 @@
 #' created for every fleet and year combination; use `fleet` to focus on one
 #' fleet at a time.
 #'
+#' @section r4ss equivalent: `r4ss::SSplotComps()` subplot 1 (by year) and
+#' subplot 21 (aggregated across years).
+#'
 #' @seealso [prepare_comp_data()], [plot_comp_bubble()],
-#' [plot_comp_residuals()], [plot_comp_sex_ratio()], [plot_comp_mean()]
+#' [plot_comp_residuals()], [plot_comp_sex_ratio()], [plot_comp_francis()]
 #' @export
 #'
 #' @examples
 #' # Observations only
-#' plot_comp(example_comp_data, fleet = "Survey", show_expected = FALSE)
+#' plot_comp(bigskate_lencomp, fleet = "WCGBTS", show_expected = FALSE)
 #'
 #' # Observed and expected
-#' plot_comp(example_comp_data, fleet = "Fishery")
+#' plot_comp(bigskate_lencomp, fleet = "Triennial")
 #'
 #' # All fleets aggregated across years
-#' plot_comp(example_comp_data, aggregate = TRUE)
+#' plot_comp(bigskate_lencomp, aggregate = TRUE)
 plot_comp <- function(
   dat,
   show_expected = TRUE,
@@ -124,12 +129,21 @@ plot_comp <- function(
     plt <- plt + ggplot2::geom_hline(yintercept = 0, linewidth = 0.3)
   }
 
-  # Sample size labels
+  # Sample size labels, as in r4ss: adjusted input (N adj.) and effective
+  # (N eff.) sample sizes
   if (show_n && !aggregate && any(!is.na(comps$n))) {
     n_lab <- comps |>
       dplyr::filter(!is.na(.data$n)) |>
       dplyr::distinct(.data$comp_type, .data$fleet, .data$year, .data$n) |>
-      dplyr::mutate(label = paste0("N=", round(.data$n, 1)))
+      dplyr::mutate(label = paste0("N adj.=", signif(.data$n, 3)))
+    if (show_expected) {
+      n_lab <- n_lab |>
+        dplyr::left_join(
+          dplyr::select(comp_effn_table(comps), "comp_type", "fleet", "year", "effn"),
+          by = c("comp_type", "fleet", "year")
+        ) |>
+        dplyr::mutate(label = paste0(.data$label, "\nN eff.=", signif(.data$effn, 3)))
+    }
     plt <- plt +
       ggplot2::geom_text(
         data = n_lab,
@@ -190,6 +204,12 @@ plot_comp <- function(
 #'
 #' Default: 6
 #'
+#' @param conditional Logical. TRUE/FALSE; plot conditional age-at-length
+#' data (see [prepare_comp_data()]), with age on the y-axis, length bin on
+#' the x-axis, and one panel per year.
+#'
+#' Default: FALSE
+#'
 #' @returns A `ggplot2` object.
 #'
 #' @details Panels are created for each fleet, and for each sex when
@@ -199,26 +219,45 @@ plot_comp <- function(
 #' absolute value of the residual. The maximum absolute residual for each
 #' panel is included in the panel label.
 #'
+#' @section r4ss equivalent: `r4ss::SSplotComps()` subplot 2 (bubble plot of
+#' observations or residuals) and subplot 3 (conditional age-at-length).
+#'
 #' @seealso [prepare_comp_data()], [plot_comp_residuals()], [plot_comp()]
 #' @export
 #'
 #' @examples
-#' # Observed proportions; strong year classes appear as diagonals
-#' plot_comp_bubble(example_comp_data)
+#' # Observed proportions
+#' plot_comp_bubble(bigskate_lencomp)
 #'
 #' # Pearson residuals
-#' plot_comp_bubble(example_comp_data, value = "pearson")
+#' plot_comp_bubble(bigskate_lencomp, value = "pearson")
+#'
+#' # Residuals for conditional age-at-length data
+#' plot_comp_bubble(
+#'   dplyr::filter(bigskate_caal, year %in% 2016:2018),
+#'   value = "pearson",
+#'   fleet = "WCGBTS",
+#'   conditional = TRUE
+#' )
 plot_comp_bubble <- function(
   dat,
   value = c("observed", "pearson", "expected"),
   comp_type = NULL,
   fleet = NULL,
   max_size = 6,
-  ncol = NULL
+  ncol = NULL,
+  conditional = FALSE
 ) {
   value <- match.arg(value)
-  comps <- prepare_comp_data(dat, comp_type = comp_type, fleet = fleet)
+  comps <- prepare_comp_data(
+    dat,
+    comp_type = if (conditional) "age" else comp_type,
+    fleet = fleet,
+    conditional = conditional
+  )
   bin_label <- comp_bin_label(comps)
+  # Conditional age-at-length: age by length bin, one panel per year
+  x_var <- if (conditional) "length_bin" else "year"
   comps$value <- comps[[value]]
   comps <- dplyr::filter(comps, !is.na(.data$value))
   if (nrow(comps) == 0) {
@@ -233,19 +272,20 @@ plot_comp_bubble <- function(
 
   facet_vars <- c(
     if (length(unique(comps$comp_type)) > 1) "comp_type",
-    "fleet",
-    if (length(unique(comps$sex)) > 1) "sex"
+    if (!conditional || length(unique(comps$fleet)) > 1) "fleet",
+    if (length(unique(comps$sex)) > 1) "sex",
+    if (conditional) "year"
   )
   if (value == "pearson") {
     # Add the max absolute residual to a single panel label, ordered by
     # comp type, fleet, and sex
     comps <- comps |>
-      dplyr::arrange(.data$comp_type, .data$fleet, .data$sex) |>
+      dplyr::arrange(.data$comp_type, .data$fleet, .data$sex, .data$year) |>
       dplyr::group_by(dplyr::across(dplyr::all_of(facet_vars))) |>
       dplyr::mutate(
         panel = paste0(
           paste(unlist(dplyr::cur_group()), collapse = ", "),
-          " (max = ", format(round(max(abs(.data$value)), 2), nsmall = 2), ")"
+          "\n(max = ", format(round(max(abs(.data$value)), 2), nsmall = 2), ")"
         )
       ) |>
       dplyr::ungroup() |>
@@ -258,7 +298,7 @@ plot_comp_bubble <- function(
       )
     plt <- ggplot2::ggplot(
       comps,
-      ggplot2::aes(x = .data$year, y = .data$bin, size = abs(.data$value), fill = .data$sign)
+      ggplot2::aes(x = .data[[x_var]], y = .data$bin, size = abs(.data$value), fill = .data$sign)
     ) +
       ggplot2::geom_point(shape = 21, color = "black", alpha = 0.8) +
       ggplot2::scale_fill_manual(
@@ -271,7 +311,7 @@ plot_comp_bubble <- function(
   } else {
     plt <- ggplot2::ggplot(
       comps,
-      ggplot2::aes(x = .data$year, y = .data$bin, size = .data$value)
+      ggplot2::aes(x = .data[[x_var]], y = .data$bin, size = .data$value)
     ) +
       ggplot2::geom_point(shape = 21, color = "black", fill = "gray40", alpha = 0.5) +
       ggplot2::labs(size = cap_first_letter(paste(value, "proportion")))
@@ -280,10 +320,10 @@ plot_comp_bubble <- function(
   plt +
     ggplot2::scale_size_area(max_size = max_size) +
     ggplot2::scale_x_continuous(
-      breaks = axis_breaks(comps$year),
+      breaks = if (conditional) ggplot2::waiver() else axis_breaks(comps$year),
       guide = ggplot2::guide_axis(minor.ticks = TRUE)
     ) +
-    ggplot2::labs(x = "Year", y = bin_label) +
+    ggplot2::labs(x = if (conditional) "Length bin" else "Year", y = bin_label) +
     theme_noaa() +
     comp_facet(facet_vars, ncol = ncol)
 }
@@ -300,15 +340,18 @@ plot_comp_bubble <- function(
 #' @param ... Additional arguments passed to [plot_comp_bubble()].
 #'
 #' @returns A `ggplot2` object.
+#' @section r4ss equivalent: `r4ss::SSplotComps()` subplot 2 for residuals by
+#' fleet and subplot 24 (residuals compared across fleets).
+#'
 #' @seealso [plot_comp_bubble()], [prepare_comp_data()]
 #' @export
 #'
 #' @examples
-#' plot_comp_residuals(example_comp_data)
+#' plot_comp_residuals(bigskate_lencomp)
 #'
-#' # Compare residuals across fleets for one sex
+#' # Compare residuals across fleets for females
 #' plot_comp_residuals(
-#'   dplyr::filter(example_comp_data, sex == "female"),
+#'   dplyr::filter(bigskate_lencomp, sex == "female"),
 #'   ncol = 1
 #' )
 plot_comp_residuals <- function(dat, ...) {
@@ -337,16 +380,22 @@ plot_comp_residuals <- function(dat, ...) {
 #'
 #' @details Requires sex-specific compositions with both "female" and
 #' "male" values in the `sex` column of `dat`. Points show observed ratios
-#' and lines show expected ratios. When `aggregate = TRUE`, female and male
+#' and lines show expected ratios. As in r4ss, the smallest observed
+#' proportion in each composition (such as the small constant Stock Synthesis
+#' adds to every bin) is subtracted from the observed and expected values
+#' first, so bins with no fish observed are omitted. When `aggregate = TRUE`, female and male
 #' compositions are summed across years (weighted by sample size when
 #' available) before calculating ratios.
+#'
+#' @section r4ss equivalent: `r4ss::SSplotSexRatio()` with
+#' `sexratio.option = 2` (female:total).
 #'
 #' @seealso [prepare_comp_data()], [plot_comp()]
 #' @export
 #'
 #' @examples
-#' plot_comp_sex_ratio(example_comp_data, fleet = "Survey")
-#' plot_comp_sex_ratio(example_comp_data, aggregate = TRUE)
+#' plot_comp_sex_ratio(bigskate_lencomp, fleet = "WCGBTS")
+#' plot_comp_sex_ratio(bigskate_lencomp, aggregate = TRUE)
 plot_comp_sex_ratio <- function(
   dat,
   aggregate = FALSE,
@@ -361,9 +410,19 @@ plot_comp_sex_ratio <- function(
     cli::cli_abort("Sex ratios require compositions with both {.val female} and {.val male} values in the {.field sex} column.")
   }
 
-  # Females and males side by side, weighted by sample size when available
+  # Females and males side by side, weighted by sample size when available.
+  # As in r4ss, the smallest observation in each composition (e.g., the
+  # constant Stock Synthesis adds to every bin) is subtracted first, so that
+  # bins without fish do not appear as 50:50 sex ratios.
   wide <- comps |>
     dplyr::filter(.data$sex %in% c("female", "male")) |>
+    dplyr::group_by(.data$comp_type, .data$fleet, .data$year) |>
+    dplyr::mutate(
+      min_obs = min(.data$observed, na.rm = TRUE),
+      observed = pmax(.data$observed - .data$min_obs, 0),
+      expected = pmax(.data$expected - .data$min_obs, 0)
+    ) |>
+    dplyr::ungroup() |>
     dplyr::mutate(w = dplyr::if_else(is.na(.data$n), 1, .data$n)) |>
     dplyr::select("comp_type", "fleet", "year", "sex", "bin", "observed", "expected", "n", "w") |>
     tidyr::pivot_wider(names_from = "sex", values_from = c("observed", "expected"))
@@ -385,7 +444,11 @@ plot_comp_sex_ratio <- function(
       ratio_exp = dplyr::if_else(.data$has_exp, .data$f_exp / (.data$f_exp + .data$m_exp), NA_real_),
       # weighted sums equal the number of fish in the bin when w is the sample size
       # (at least 1, as in r4ss)
-      n_bin = dplyr::if_else(.data$has_n, pmax(.data$f_obs + .data$m_obs, 1), NA_real_)
+      n_bin = dplyr::if_else(
+        .data$has_n & .data$f_obs + .data$m_obs > 0,
+        pmax(.data$f_obs + .data$m_obs, 1),
+        NA_real_
+      )
     )
   ratios$ratio_obs[!is.finite(ratios$ratio_obs)] <- NA_real_
   ratios$ratio_exp[!is.finite(ratios$ratio_exp)] <- NA_real_
@@ -432,7 +495,7 @@ plot_comp_sex_ratio <- function(
     ggplot2::scale_y_continuous(limits = c(0, 1), breaks = c(0, 0.5, 1)) +
     ggplot2::labs(
       x = bin_label,
-      y = "Proportion female",
+      y = "Fraction female",
       shape = NULL,
       linetype = NULL,
       caption = if (!is.null(interval) && any(!is.na(ratios$n_bin))) {
@@ -452,7 +515,7 @@ plot_comp_sex_ratio <- function(
 
 #------------------------------------------------------------------------------
 
-#' Plot mean age or length of compositions over time
+#' Plot mean age or length with Francis (TA1.8) data weights
 #'
 #' Time series of the mean age or length in the observed and expected
 #' compositions. Developed as a diagnostic for the Francis (2011) data
@@ -483,10 +546,11 @@ plot_comp_sex_ratio <- function(
 #'
 #' The Francis weight is \eqn{1 / \mathrm{var}(r)} where
 #' \eqn{r = (\bar{x}_o - \bar{x}_e) / SE} are the standardized residuals of
-#' the mean across years (fleets need at least three years). As in
-#' `r4ss::SSMethod.TA1.8()`, its 95% interval is calculated by bootstrapping
-#' the standardized residuals (1000 resamples), so use [set.seed()] for
-#' reproducible intervals. The weight assumes a multinomial likelihood and has not been
+#' the mean across years. As in Stock Synthesis and
+#' `r4ss::SSMethod.TA1.8()`, all partitions of a fleet (e.g., retained and
+#' discarded) share one weight, and its 95% interval is calculated by
+#' bootstrapping the standardized residuals (1000 resamples), so use
+#' [set.seed()] for reproducible intervals. The weight assumes a multinomial likelihood and has not been
 #' adapted for Dirichlet-multinomial or other likelihoods.
 #'
 #' Without expected values, only the observed means are plotted. Without
@@ -496,12 +560,15 @@ plot_comp_sex_ratio <- function(
 #' fisheries stock assessment models. Canadian Journal of Fisheries and
 #' Aquatic Sciences 68: 1124-1138.
 #'
+#' @section r4ss equivalent: `r4ss::SSplotComps()` subplots 8 and 9, which
+#' use `r4ss::SSMethod.TA1.8()`.
+#'
 #' @seealso [prepare_comp_data()], [plot_comp()]
 #' @export
 #'
 #' @examples
-#' plot_comp_mean(example_comp_data)
-plot_comp_mean <- function(
+#' plot_comp_francis(bigskate_lencomp)
+plot_comp_francis <- function(
   dat,
   interval = 0.95,
   show_francis = TRUE,
@@ -516,33 +583,40 @@ plot_comp_mean <- function(
   has_exp <- any(!is.na(means$mean_exp))
   has_se <- any(!is.na(means$se))
 
-  # Francis weights by fleet
+  # Francis weights by fleet. As in Stock Synthesis and
+  # r4ss::SSMethod.TA1.8(), partitions of a fleet share one weight.
   weights <- NULL
   if (show_francis && has_exp && has_se) {
+    means$base_fleet <- base_fleet(means$fleet)
     weights <- means |>
       dplyr::filter(!is.na(.data$std_resid)) |>
-      dplyr::group_by(.data$comp_type, .data$fleet) |>
-      dplyr::filter(dplyr::n() > 2) |>
+      dplyr::group_by(.data$comp_type, .data$base_fleet) |>
+      dplyr::filter(dplyr::n() > 1) |>
       dplyr::summarise(
-        n_years = dplyr::n(),
+        n_parts = length(unique(.data$fleet)),
         weight = 1 / stats::var(.data$std_resid),
-        weight_lower = francis_boot_ci(.data$std_resid)[1],
-        weight_upper = francis_boot_ci(.data$std_resid)[2],
+        weight_ci = list(francis_boot_ci(.data$std_resid)),
         .groups = "drop"
       ) |>
       dplyr::mutate(
-        fleet_label = paste0(
-          .data$fleet, "\nFrancis weight = ", signif(.data$weight, 3),
-          " (", signif(.data$weight_lower, 3), "-", signif(.data$weight_upper, 3), ")"
+        weight_label = paste0(
+          "TA1.8 weight", dplyr::if_else(.data$n_parts > 1, " (all partitions)", ""),
+          " = ", signif(.data$weight, 3), " (",
+          signif(purrr::map_dbl(.data$weight_ci, 1), 3), "-",
+          signif(purrr::map_dbl(.data$weight_ci, 2), 3), ")"
         )
       )
     means <- means |>
       dplyr::left_join(
-        dplyr::select(weights, "comp_type", "fleet", "weight", "fleet_label"),
-        by = c("comp_type", "fleet")
+        dplyr::select(weights, "comp_type", "base_fleet", "weight", "weight_label"),
+        by = c("comp_type", "base_fleet")
       ) |>
       dplyr::mutate(
-        fleet = dplyr::if_else(is.na(.data$fleet_label), .data$fleet, .data$fleet_label),
+        fleet = dplyr::if_else(
+          is.na(.data$weight_label),
+          .data$fleet,
+          paste0(.data$fleet, "\n", .data$weight_label)
+        ),
         se_adj = .data$se / sqrt(.data$weight)
       )
   }
@@ -585,11 +659,11 @@ plot_comp_mean <- function(
 
   caption <- NULL
   if (has_se) {
-    caption <- paste0(round(interval * 100), "% intervals based on input sample sizes")
+    caption <- paste0(round(interval * 100), "% intervals based on current sample sizes")
     if (!is.null(weights) && nrow(weights) > 0) {
       caption <- paste0(
         caption,
-        "; thinner capped intervals after Francis (2011) TA1.8 weighting"
+        "; thinner intervals (with capped ends) show result of further adjusting sample sizes (Francis TA1.8)"
       )
     }
   }
@@ -619,17 +693,32 @@ francis_boot_ci <- function(std_resid, n_boot = 1000) {
     nrow = length(std_resid)
   )
   w <- apply(boot, 2, function(x) 1 / stats::var(x))
-  as.vector(stats::quantile(w[is.finite(w)], c(0.025, 0.975), na.rm = TRUE))
+  as.vector(stats::quantile(w, c(0.025, 0.975), na.rm = TRUE))
 }
 
-# Mean bin of observed and expected compositions by year and fleet
+# Mean bin of observed and expected compositions by year and fleet. As in
+# r4ss::SSMethod.TA1.8(), sexes and partitions of a fleet in the same year
+# are combined into one composition, with the mean sample size.
 comp_mean_table <- function(comps) {
+  comps <- comps |>
+    dplyr::mutate(
+      part_name = fleet_partition(.data$fleet),
+      fleet = base_fleet(.data$fleet)
+    )
   comps |>
+    dplyr::group_by(.data$comp_type, .data$fleet) |>
+    dplyr::mutate(
+      fleet = if (length(unique(stats::na.omit(.data$part_name))) > 1) {
+        paste0(.data$fleet, " (", paste(sort(unique(stats::na.omit(.data$part_name))), collapse = " & "), ")")
+      } else {
+        .data$fleet
+      }
+    ) |>
     dplyr::group_by(.data$comp_type, .data$fleet, .data$year, .data$bin) |>
     dplyr::summarise(
       observed = sum(.data$observed, na.rm = TRUE),
       expected = if (all(is.na(.data$expected))) NA_real_ else sum(.data$expected, na.rm = TRUE),
-      n = dplyr::first(.data$n),
+      n = mean(.data$n),
       .groups = "drop"
     ) |>
     dplyr::group_by(.data$comp_type, .data$fleet, .data$year) |>
@@ -642,7 +731,7 @@ comp_mean_table <- function(comps) {
       } else {
         sum(.data$bin^2 * .data$expected) / sum(.data$expected) - .data$mean_exp[1]^2
       },
-      n = dplyr::first(.data$n),
+      n = mean(.data$n),
       .groups = "drop"
     ) |>
     dplyr::filter(is.finite(.data$mean_obs)) |>

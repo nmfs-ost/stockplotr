@@ -42,25 +42,64 @@
 #'
 "example_data"
 
-#' Example composition data
+#' Big Skate length composition data
 #'
-#' Simulated sex-specific age compositions for a fishery (2001-2020) and a
-#' survey (2005-2020), used to demonstrate the composition plotting
-#' functions. Observed fishery compositions were generated with dome-shaped
-#' selectivity while the expected values assume asymptotic selectivity, so
-#' the fishery shows a pattern of misfit at older ages. See
-#' `data-raw/example_comp_data.R` for the simulation code.
+#' Length compositions and fits from the 2019 Big Skate stock assessment for
+#' the U.S. West Coast (`BigSkate_2019` in the Stock Synthesis test models),
+#' the model used for the r4ss example plots at
+#' <https://r4ss.github.io/r4ss/BigSkate/>. The data are the `lendbase`
+#' element of `r4ss::SS_output()` with columns renamed to stockplotr's
+#' conventions. See `data-raw/bigskate_comps.R`.
 #'
-#' @format A tibble with 1080 rows and 8 variables:
+#' Compositions are sex-specific, with female and male proportions summing to
+#' one within each year, fleet, and partition. `Fishery_current` has separate
+#' retained and discarded compositions.
+#'
+#' @format A tibble with 3626 rows and 11 variables:
+#' \describe{
+#'   \item{comp_type}{Type of composition ("length")}
+#'   \item{fleet}{Fleet name: "Fishery_current", "WCGBTS", or "Triennial"}
+#'   \item{year}{Year of the observation (`Yr` in r4ss)}
+#'   \item{month}{Month of the observation}
+#'   \item{sex}{"female" or "male"}
+#'   \item{part}{Partition: 0 = whole catch, 1 = discard, 2 = retained}
+#'   \item{bin}{Lower edge of the length bin (cm)}
+#'   \item{observed}{Observed proportion (`Obs` in r4ss)}
+#'   \item{expected}{Expected proportion (`Exp` in r4ss)}
+#'   \item{pearson}{Pearson residual reported by Stock Synthesis}
+#'   \item{n}{Adjusted input sample size (`Nsamp_adj` in r4ss)}
+#' }
+#' @source Taylor, I.G., Gertseva, V., Stephens, A., and Bizzarro, J. (2019). Status of
+#' Big Skate (Beringraja binoculata) off the U.S. Pacific Coast in 2019.
+#' Pacific Fishery Management Council, Portland, OR.
+#' @seealso [bigskate_caal], [prepare_comp_data()], [plot_comp()]
+"bigskate_lencomp"
+
+#' Big Skate conditional age-at-length data
+#'
+#' Conditional age-at-length data and fits from the 2019 Big Skate stock
+#' assessment (see [bigskate_lencomp]). The data are the `condbase` element
+#' of `r4ss::SS_output()` with columns renamed to stockplotr's conventions.
+#' Each age composition is for one sex and one length bin, and sums to one.
+#' See `data-raw/bigskate_comps.R`.
+#'
+#' @format A tibble with 6560 rows and 12 variables:
 #' \describe{
 #'   \item{comp_type}{Type of composition ("age")}
-#'   \item{fleet}{Fleet or survey name}
-#'   \item{year}{Year of the observation}
-#'   \item{sex}{"female" or "male"; proportions sum to one across both sexes within a year and fleet}
-#'   \item{bin}{Age bin}
-#'   \item{observed}{Observed proportion}
-#'   \item{expected}{Model-expected proportion}
-#'   \item{n}{Input sample size}
+#'   \item{fleet}{Fleet name: "Fishery_current" or "WCGBTS"}
+#'   \item{year}{Year of the observation (`Yr` in r4ss)}
+#'   \item{month}{Month of the observation}
+#'   \item{sex}{"female" or "male"}
+#'   \item{part}{Partition: 0 = whole catch, 1 = discard, 2 = retained}
+#'   \item{length_bin}{Length bin the ages are conditioned on (`Lbin_lo` in r4ss)}
+#'   \item{bin}{Age}
+#'   \item{observed}{Observed proportion at age within the length bin}
+#'   \item{expected}{Expected proportion at age within the length bin}
+#'   \item{pearson}{Pearson residual reported by Stock Synthesis}
+#'   \item{n}{Adjusted input sample size (`Nsamp_adj` in r4ss)}
 #' }
-#' @seealso [prepare_comp_data()], [plot_comp()]
-"example_comp_data"
+#' @source Taylor, I.G., Gertseva, V., Stephens, A., and Bizzarro, J. (2019). Status of
+#' Big Skate (Beringraja binoculata) off the U.S. Pacific Coast in 2019.
+#' Pacific Fishery Management Council, Portland, OR.
+#' @seealso [bigskate_lencomp], [prepare_comp_data()], [plot_comp_andre()]
+"bigskate_caal"

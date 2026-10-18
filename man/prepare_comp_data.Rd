@@ -4,15 +4,22 @@
 \alias{prepare_comp_data}
 \title{Prepare composition data for plotting}
 \usage{
-prepare_comp_data(dat, comp_type = NULL, fleet = NULL, normalize = TRUE)
+prepare_comp_data(
+  dat,
+  comp_type = NULL,
+  fleet = NULL,
+  normalize = TRUE,
+  conditional = FALSE
+)
 }
 \arguments{
 \item{dat}{A data frame of composition data. The following formats are
 recognized automatically:
 \describe{
   \item{Tidy composition data}{Columns `year`, `bin`, and `observed`, with
-  optional columns `fleet`, `sex`, `expected`, `n` (input or adjusted
-  sample size), `pearson`, and `comp_type`. See [example_comp_data].}
+  optional columns `fleet`, `sex`, `part` (partition: 0 = whole catch,
+  1 = discard, 2 = retained), `expected`, `n` (input or adjusted sample
+  size), `pearson`, and `comp_type`. See [bigskate_lencomp].}
   \item{FIMS output}{Output from FIMS (e.g., `FIMS::get_estimates()` or
   [convert_output()] with `model = "fims"`) that contains `observed` and
   `expected` columns. Rows whose `label` contains "comp" are kept and the
@@ -28,36 +35,50 @@ recognized automatically:
   `lendbase` or `agedbase` elements (columns `Yr`, `Fleet`, `Sex`, `Bin`,
   `Obs`, `Exp`, `Pearson`, `Nsamp_adj`, ...). Conditional
   age-at-length rows are dropped from `agedbase` so that only marginal age
-  compositions remain.}
-}}
+  compositions remain, unless `conditional = TRUE`.}
+}
+For conditional age-at-length data (`conditional = TRUE`), tidy data also
+need a `length_bin` column giving the length bin that each age
+composition is conditioned on (see [bigskate_caal]).}
 
 \item{comp_type}{String. Type of composition to keep when `dat` contains
 more than one. Options: "age", "length", or NULL (keep all).
 
 Default: NULL}
 
-\item{fleet}{Character or numeric vector. Fleet(s) to keep. NULL keeps all
-fleets.
+\item{fleet}{Character or numeric vector. Fleet(s) to keep, matching
+either the fleet name (e.g., "Fishery_current") or the fleet name with its
+partition (e.g., "Fishery_current (retained)"). NULL keeps all fleets.
 
 Default: NULL}
 
 \item{normalize}{Logical. TRUE/FALSE; rescale observed and expected values
 so that they sum to one within each year, fleet, and composition type
-(summing across sexes so that sex-specific compositions remain jointly
-normalized). Use TRUE when `dat` contains counts rather than proportions.
+(and length bin for conditional data). Sex-specific compositions are
+normalized jointly across sexes, unless each sex already sums to one on
+its own (single-sex compositions). Use TRUE when `dat` contains counts
+rather than proportions.
 
 Default: TRUE}
+
+\item{conditional}{Logical. TRUE/FALSE; keep conditional age-at-length
+data instead of marginal compositions. Conditional compositions are
+normalized within each length bin. Used by [plot_comp_andre()] and
+[plot_comp_bubble()].
+
+Default: FALSE}
 }
 \value{
 A tibble with one row per year, fleet, sex, and bin and columns
 `comp_type`, `fleet`, `year`, `sex`, `bin`, `observed`, `expected`, `n`,
-and `pearson`. Columns that cannot be determined from `dat` are `NA`.
+and `pearson` (plus `length_bin` when `conditional = TRUE`). Columns that
+cannot be determined from `dat` are `NA`.
 }
 \description{
 Reshape age or length composition data (observed and, optionally,
 expected proportions) into the tidy format used by the composition
 plotting functions ([plot_comp()], [plot_comp_bubble()],
-[plot_comp_residuals()], [plot_comp_sex_ratio()], and [plot_comp_mean()]).
+[plot_comp_residuals()], [plot_comp_sex_ratio()], and [plot_comp_francis()]).
 }
 \details{
 When Pearson residuals are not supplied, they are calculated
@@ -68,7 +89,7 @@ where \eqn{o} and \eqn{e} are the observed and expected proportions and
 residuals are left as `NA`.
 }
 \examples{
-comps <- prepare_comp_data(example_comp_data, fleet = "Survey")
+comps <- prepare_comp_data(bigskate_lencomp, fleet = "WCGBTS")
 head(comps)
 
 # Data in the stockplotr long format are reshaped automatically
@@ -83,5 +104,5 @@ prepare_comp_data(long)
 }
 \seealso{
 [plot_comp()], [plot_comp_bubble()], [plot_comp_residuals()],
-[plot_comp_sex_ratio()], [plot_comp_mean()]
+[plot_comp_sex_ratio()], [plot_comp_francis()]
 }

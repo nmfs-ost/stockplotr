@@ -10,13 +10,14 @@ plot_comp_bubble(
   comp_type = NULL,
   fleet = NULL,
   max_size = 6,
-  ncol = NULL
+  ncol = NULL,
+  conditional = FALSE
 )
 }
 \arguments{
 \item{dat}{A data frame of composition data in any format accepted by
 [prepare_comp_data()], such as FIMS output, an r4ss `lendbase`/`agedbase`
-table, or a tidy data frame like [example_comp_data].}
+table, or a tidy data frame like [bigskate_lencomp].}
 
 \item{value}{String. Value to plot. Options: "observed", "expected", or
 "pearson".
@@ -28,8 +29,9 @@ more than one. Options: "age", "length", or NULL (keep all).
 
 Default: NULL}
 
-\item{fleet}{Character or numeric vector. Fleet(s) to keep. NULL keeps all
-fleets.
+\item{fleet}{Character or numeric vector. Fleet(s) to keep, matching
+either the fleet name (e.g., "Fishery_current") or the fleet name with its
+partition (e.g., "Fishery_current (retained)"). NULL keeps all fleets.
 
 Default: NULL}
 
@@ -40,6 +42,12 @@ Default: 6}
 \item{ncol}{Number. Number of facet columns. NULL lets `ggplot2` choose.
 
 Default: NULL}
+
+\item{conditional}{Logical. TRUE/FALSE; plot conditional age-at-length
+data (see [prepare_comp_data()]), with age on the y-axis, length bin on
+the x-axis, and one panel per year.
+
+Default: FALSE}
 }
 \value{
 A `ggplot2` object.
@@ -58,12 +66,25 @@ residuals (observed < expected), with bubble area proportional to the
 absolute value of the residual. The maximum absolute residual for each
 panel is included in the panel label.
 }
+\section{r4ss equivalent}{
+ `r4ss::SSplotComps()` subplot 2 (bubble plot of
+observations or residuals) and subplot 3 (conditional age-at-length).
+}
+
 \examples{
-# Observed proportions; strong year classes appear as diagonals
-plot_comp_bubble(example_comp_data)
+# Observed proportions
+plot_comp_bubble(bigskate_lencomp)
 
 # Pearson residuals
-plot_comp_bubble(example_comp_data, value = "pearson")
+plot_comp_bubble(bigskate_lencomp, value = "pearson")
+
+# Residuals for conditional age-at-length data
+plot_comp_bubble(
+  dplyr::filter(bigskate_caal, year \%in\% 2016:2018),
+  value = "pearson",
+  fleet = "WCGBTS",
+  conditional = TRUE
+)
 }
 \seealso{
 [prepare_comp_data()], [plot_comp_residuals()], [plot_comp()]

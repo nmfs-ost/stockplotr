@@ -17,7 +17,7 @@ plot_comp(
 \arguments{
 \item{dat}{A data frame of composition data in any format accepted by
 [prepare_comp_data()], such as FIMS output, an r4ss `lendbase`/`agedbase`
-table, or a tidy data frame like [example_comp_data].}
+table, or a tidy data frame like [bigskate_lencomp].}
 
 \item{show_expected}{Logical. TRUE/FALSE; overlay the expected values as
 lines. Ignored if `dat` contains no expected values.
@@ -35,13 +35,16 @@ more than one. Options: "age", "length", or NULL (keep all).
 
 Default: NULL}
 
-\item{fleet}{Character or numeric vector. Fleet(s) to keep. NULL keeps all
-fleets.
+\item{fleet}{Character or numeric vector. Fleet(s) to keep, matching
+either the fleet name (e.g., "Fishery_current") or the fleet name with its
+partition (e.g., "Fishery_current (retained)"). NULL keeps all fleets.
 
 Default: NULL}
 
-\item{show_n}{Logical. TRUE/FALSE; label each panel with its sample size
-when sample sizes are available (not used when `aggregate = TRUE`).
+\item{show_n}{Logical. TRUE/FALSE; label each panel with its adjusted
+input sample size ("N adj.") and, when expected values are shown, its
+effective sample size ("N eff."), as in r4ss. Not used when
+`aggregate = TRUE`.
 
 Default: TRUE}
 
@@ -68,17 +71,22 @@ If more than one fleet is plotted without aggregating, panels are
 created for every fleet and year combination; use `fleet` to focus on one
 fleet at a time.
 }
+\section{r4ss equivalent}{
+ `r4ss::SSplotComps()` subplot 1 (by year) and
+subplot 21 (aggregated across years).
+}
+
 \examples{
 # Observations only
-plot_comp(example_comp_data, fleet = "Survey", show_expected = FALSE)
+plot_comp(bigskate_lencomp, fleet = "WCGBTS", show_expected = FALSE)
 
 # Observed and expected
-plot_comp(example_comp_data, fleet = "Fishery")
+plot_comp(bigskate_lencomp, fleet = "Triennial")
 
 # All fleets aggregated across years
-plot_comp(example_comp_data, aggregate = TRUE)
+plot_comp(bigskate_lencomp, aggregate = TRUE)
 }
 \seealso{
 [prepare_comp_data()], [plot_comp_bubble()],
-[plot_comp_residuals()], [plot_comp_sex_ratio()], [plot_comp_mean()]
+[plot_comp_residuals()], [plot_comp_sex_ratio()], [plot_comp_francis()]
 }
