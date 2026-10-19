@@ -18,6 +18,7 @@ pollock_model <- Rceattle::fit_mod(
 # Install stockplotr
 pak::local_install(".")
 # Convert output
+# OK not to subset bc small
 pollock <- stockplotr::convert_output(pollock_model)
 # Save object as rda into raw_data
 usethis::use_data(pollock, overwrite = TRUE)
