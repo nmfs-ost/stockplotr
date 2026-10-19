@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - 'R/convert_output.R'
+      - 'R/conout_rceattle.R'
       - 'inst/resources/rceattle_var_names.csv'
   workflow_dispatch:
 jobs:
