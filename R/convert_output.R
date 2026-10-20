@@ -3,7 +3,7 @@
 #' Format stock assessment output file to a standardized tibble.
 #'
 #' @param file Path. Assessment model output file path. Currently accepts SS3
-#' Report.sso file, BAM .rda file, Rceattle model object, and FIMS model object.
+#' `r4ss::ss_output()` or Report.sso file (being deprecated), BAM .rda file, Rceattle model object, and FIMS model object.
 #' @param model String. Assessment model used in evaluation
 #'
 #' Default: NULL
@@ -48,6 +48,18 @@ convert_output <- function(
   fleet_names = NULL,
   save_dir = NULL
 ) {
+  
+  if (is.character(file) && grepl("Report.sso", file)) {
+    lifecycle::deprecate_warn(
+      when = "2.8.0", 
+      what = I("convert_output(file = 'Report.sso')"), 
+      details = c(
+        i = "Please use the returned object from `r4ss::ss_output()`",
+        i = "File will be compatible until Oct. 1, 2027"
+      )
+    )
+  }
+  
   # check if entered save_dir exists so doesn't waste user time finding this out at the end
   if (!is.null(save_dir)) {
     if (!grepl(".rda", save_dir)) {

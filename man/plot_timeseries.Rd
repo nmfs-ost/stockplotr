@@ -40,7 +40,7 @@ Options: "point" and "area"}
 Default: "Year"}
 
 \item{ylab}{String. Y-axis label. If NULL, it will be set to the name
- of `y`.
+of \code{y}.
 
 Default: NULL}
 

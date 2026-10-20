@@ -17,22 +17,22 @@ filter_data(
 )
 }
 \arguments{
-\item{dat}{Data frame or list. A tibble or named list of tibbles (input as `list()`)
+\item{dat}{Data frame or list. A tibble or named list of tibbles (input as \code{list()})
 returned from \link[stockplotr]{convert_output}.
 
 If inputting a list of tibbles, the first tibble's reference point defined
-in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
+in \code{ref_line} is used to plot a reference line or calculate relative spawning biomass.}
 
 \item{label_name}{String. Name of the label used to filter
 the data.}
 
-\item{module}{Character vector. (Optional) Module name found in `dat$module_name`.
+\item{module}{Character vector. (Optional) Module name found in \code{dat$module_name}.
 If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
 
 If the interactive and >1 module_name is found, user will select the
-module_name in the console. @seealso [filter_data()]}
+module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 
 \item{era}{String. Era of data.
 
@@ -63,7 +63,7 @@ Default: 1}
 
 \item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
-Default: `FALSE`}
+Default: \code{FALSE}}
 }
 \value{
 a data frame that is preformatted for plotting with ggplot2.
