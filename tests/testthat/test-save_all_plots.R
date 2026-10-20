@@ -16,16 +16,17 @@ test_that("save_all_plots works when all figures/tables are plotted", {
 
   # expect that the figures are all created with expected names
   fig_base_temp_files <- c(
+    "abundance_at_age_figure.rda",
     "biomass_figure.rda",
-    "index_figure.rda",
     "fishing_mortality_figure.rda",
+    "index_figure.rda",
     "landings_figure.rda",
     "natural_mortality_figure.rda",
     "biomass_at_age_figure.rda",
     "catch_comp_figure.rda",
-    "abundance_at_age_figure.rda",
-    "recruitment_figure.rda",
     "recruitment_deviations_figure.rda",
+    "recruitment_figure.rda",
+    "selectivity_figure.rda",
     "spawning_biomass_figure.rda",
     "stock_recruitment_figure.rda"
   )
@@ -36,9 +37,11 @@ test_that("save_all_plots works when all figures/tables are plotted", {
 
   # expect that the tables are all created with expected names
   tab_base_temp_files <- c(
-    # "bnc_table.rda",
+    "biomass_abundance_catch_table.rda",
+    # "total_catch_table.rda", # comment out bc as is this needs to be interactive to select correct module
     "index_table.rda",
-    "landings_table.rda"
+    "landings_table.rda",
+    "projections_table.rda"
   )
   expect_equal(
     list.files(fs::path(getwd(), "tables")),

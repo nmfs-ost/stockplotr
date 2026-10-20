@@ -1,9 +1,9 @@
 Type: Package
 Package: stockplotr
 Title: Tables and Figures for Stock Assessments
-Version: 0.13.0
+Version: 0.15.0.9000
 Authors@R: c(
-    person("Samantha", "Schiano", , "samantha.schiano@noaa.gov", role = c("aut", "cre"),
+    person("Samantha", "Bredeck", , "samantha.bredeck@noaa.gov", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0003-3744-6428")),
     person("Sophie", "Breitbart", , "sophie.breitbart@noaa.gov", role = c("aut", "ctb"),
            comment = c(ORCID = "0000-0001-9641-9786")),
@@ -13,7 +13,7 @@ Authors@R: c(
     person("Megumi", "Oshima", , "megumi.oshima@noaa.gov", role = "ctb",
            comment = c(ORCID = "0000-0002-8249-1442"))
   )
-Maintainer: Samantha Schiano <samantha.schiano@noaa.gov>
+Maintainer: Samantha Bredeck <samantha.bredeck@noaa.gov>
 Description: Creates exploratory and finished tables and figures for stock
     assessment documents from U.S. stock assessment model outputs. This
     packages addresses parts of the stock assessment workflow that
@@ -42,7 +42,6 @@ Imports:
     ggplot2 (>= 4.0.0),
     glue,
     gt,
-    kableExtra,
     purrr,
     rlang,
     scales,
@@ -51,21 +50,21 @@ Imports:
     tibble,
     tidyr,
     tidyselect,
-    utils,
-    withr
+    utils
 Suggests:
     flextable,
     here,
+    kableExtra,
     knitr,
     quarto,
     rmarkdown,
     testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0
 Config/testthat/edition: 3
-Config/testthat/parallel: false
+Config/testthat/parallel: true
+Config/testthat/start-first: save_all_plots*, convert_output*
 Encoding: UTF-8
 Language: en-US
 LazyData: true
-RoxygenNote: 7.3.3

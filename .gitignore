@@ -2,12 +2,10 @@
 .Rhistory
 .RData
 .Ruserdata
-petrale_convert_output.csv
 captions_alt_text.csv
-converted_file_1126.csv
+key_quantities.csv
 figures
 tables
-petrale_sole_std_output.csv
 inst/doc
 docs
 stockplotr.Rproj

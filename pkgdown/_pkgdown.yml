@@ -27,6 +27,8 @@ navbar:
         href: articles/how-caps-alttext-are-made.html
       - text: Standardizing Assessment Model Output
         href: articles/convert_output_details.html
+      - text: Automating data extraction for SIS
+        href: articles/extract-sis-data.html
         
     cheatsheet:
       text: Cheatsheet
@@ -34,7 +36,13 @@ navbar:
       icon: fa-solid fa-key
       # Make the link open in a new tab
       target: "_blank"
+      
+    tutorials:
+      text: Workshop
+      icon: fa-regular fa-map
+      href: https://nmfs-ost.github.io/workflows-workshop/
+      target: "_blank"
 
   structure:
-    left: [home, reference, cheatsheet, sourcecode, articles, news]
+    left: [home, reference, cheatsheet, tutorials, sourcecode, articles, news]
     right: [search, issue, github]

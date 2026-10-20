@@ -99,15 +99,15 @@ plot_stock_recruitment <- function(
 
   # Extract spawning biomass
   sb <- filter_data(
-    dat = dat,
+    dat = dat |>
+    dplyr::filter(!is.na(year)),
     label_name = "spawning biomass",
     geom = "point",
     era = era,
     scale_amount = scale_amount,
     interactive = interactive,
     module = module
-  ) |>
-    dplyr::filter(!is.na(year))
+  )
 
   process_sb <- process_data(
     sb
@@ -178,8 +178,10 @@ plot_stock_recruitment <- function(
   # Make RDA
   if (make_rda) {
     # Obtain relevant key quantities for captions/alt text
-    sr.age.min <- calc_kqs(returned_kq = "sr.age.min",
-                           dat = dat)
+    sr.age.min <- calc_kqs(
+      returned_kq = "sr.age.min",
+      dat = dat
+    )
     sr.ssb.units <- spawning_biomass_label
     sr.ssb.min <- min(sr$spawning_biomass, na.rm = TRUE) |> round(digits = 3)
     sr.ssb.max <- max(sr$spawning_biomass, na.rm = TRUE) |> round(digits = 3)
@@ -215,8 +217,7 @@ plot_stock_recruitment <- function(
       topic_label = gsub("plot_", "", utils::tail(as.character(sys.call()[[1]]), n = 1)),
       fig_or_table = "figure",
       dat = dat,
-      dir = figures_dir # ,
-      # unit_label = unit_label
+      dir = figures_dir
     )
   }
   final +

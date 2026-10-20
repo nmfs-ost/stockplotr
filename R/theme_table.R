@@ -1,11 +1,12 @@
 #' Add NOAA formatting to a table
 #'
-#' @param x Object. Table from gt, flextable, or kableExtra
+#' @param x Object. Table from \pkg{gt}, \pkg{flextable}, or \pkg{kableExtra}
 #'
 #' @returns Add the standard formatting for stock assessment reports for any table.
 #' @details Currently, the function can format table objects from:
-#' flextable ({flextable} package, when installed), gt ({gt}), and
-#' kable ({kableExtra}).
+#' \href{https://ardata-fr.github.io/flextable-book/}{flextable} (\pkg{flextable} package, when installed),
+#' \href{https://cran.r-project.org/web/packages/gt/index.html}{gt} (\pkg{gt}), and
+#' \href{https://cran.r-project.org/web/packages/kableExtra/index.html}{kableExtra} (\pkg{kableExtra}).
 #' @export
 #'
 #' @examples

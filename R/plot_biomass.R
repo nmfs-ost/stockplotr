@@ -84,10 +84,10 @@ plot_biomass <- function(
     cli::cli_alert_warning("Scale amount is not applicable when relative = TRUE. Resetting scale_amount to 1.")
     scale_amount <- 1
   }
-  
+
   orig_group <- group
   orig_facet <- facet
-  
+
   # Filter data for biomass
   # TODO: determine method to ID that first point in the timeseries is actually Bunfished ref pt
   prepared_data <- filter_data(
@@ -141,46 +141,45 @@ plot_biomass <- function(
     ...
   )
   # Add reference line
-  # getting data set - an ifelse statement in the fxn wasn't working
   if (relative) {
     # don't add any reference line here and just add theme for final plot
     final <- plt + theme_noaa()
   } else {
-    if ("unfished" %in% c(names(ref_line), ref_line)) {
-      # find the minimum x axis value from the plot
-      min_year <- min <- ggplot2::ggplot_build(plt)[["data"]][[2]] |>
-        as.data.frame() |>
-        dplyr::pull(x) |>
-        min() |>
-        round(digits = 2)
-      # find the reference point value for unfished
-      ref_point <- calculate_reference_point(
-        dat = stockplotr::example_data,
-        reference_name = "biomass_unfished"
-      ) / scale_amount
-      # add point to plot and add theme
-      final <- plt +
-        ggplot2::geom_point(ggplot2::aes(x = min_year - 1, y = ref_point)) + # should I keep -1 or set as first year?
-        theme_noaa()
-    } else {
-      final <- reference_line(
-        plot = plt,
-        dat = rp_dat,
-        label_name = "biomass",
-        reference = ref_line,
+    final <- plt +
+      add_reference_line(
+        dat = dat,
+        ref_line = ref_line,
+        label = "biomass",
         scale_amount = scale_amount
       ) +
-        theme_noaa()
+      theme_noaa()
+  }
+
+  if (!is.data.frame(dat)) {
+    if (!is.null(names(ref_line))) {
+      if (any(
+        grepl(
+          glue::glue("^biomass_{ref_line}"),
+          # TODO: make this check more efficient
+          ifelse(is.data.frame(dat), dat[["label"]], sapply(dat, `[[`, "label"))
+        )
+      )) {
+        final <- final + ggplot2::scale_color_discrete(breaks = names(dat))
+      }
     }
   }
 
   ### Make RDA ----
   if (make_rda) {
     if (relative) {
-      rel.B.min <- calc_kqs(returned_kq = "rel.B.min",
-                            final = final)
-      rel.B.max <- calc_kqs(returned_kq = "rel.B.max",
-                            final = final)
+      rel.B.min <- calc_kqs(
+        returned_kq = "rel.B.min",
+        final = final
+      )
+      rel.B.max <- calc_kqs(
+        returned_kq = "rel.B.max",
+        final = final
+      )
 
       # calculate & export key quantities
       export_kqs(rel.B.min, rel.B.max)
@@ -188,10 +187,14 @@ plot_biomass <- function(
       # Add key quantities to captions/alt text
       insert_kqs(rel.B.min, rel.B.max)
     } else {
-      B.min <- calc_kqs(returned_kq = "B.min",
-                        prepared_data = prepared_data)
-      B.max <- calc_kqs(returned_kq = "B.max",
-                        prepared_data = prepared_data)
+      B.min <- calc_kqs(
+        returned_kq = "B.min",
+        prepared_data = prepared_data
+      )
+      B.max <- calc_kqs(
+        returned_kq = "B.max",
+        prepared_data = prepared_data
+      )
 
       export_kqs(B.min, B.max)
       insert_kqs(B.min, B.max)
@@ -199,41 +202,77 @@ plot_biomass <- function(
 
     B.ref.pt <- as.character(ref_line)
     B.units <- as.character(unit_label)
-    B.start.year <- calc_kqs(returned_kq = "B.start.year",
-                             prepared_data = prepared_data)
-    B.end.year <- calc_kqs(returned_kq = "B.end.year", 
-                           prepared_data = prepared_data)
-    B.terminal.year <- calc_kqs(returned_kq = "B.terminal.year",
-                                dat = dat,
-                                relative = relative)
+
+    B.start.year <- calc_kqs(
+      returned_kq = "B.start.year",
+      prepared_data = prepared_data
+    )
+    B.end.year <- calc_kqs(
+      returned_kq = "B.end.year",
+      prepared_data = prepared_data
+    )
+    B.terminal.year <- calc_kqs(
+      returned_kq = "B.terminal.year",
+      dat = dat,
+      relative = relative,
+      module = selected_module
+    )
+    B.terminal.est <- calc_kqs(
+      returned_kq = "B.terminal.est",
+      dat = dat,
+      relative = relative,
+      module = selected_module
+    )
+    B.terminal.min <- calc_kqs(
+      returned_kq = "B.terminal.min",
+      dat = dat,
+      relative = relative,
+      module = selected_module
+    )
+    B.terminal.max <- calc_kqs(
+      returned_kq = "B.terminal.max",
+      dat = dat,
+      relative = relative,
+      module = selected_module
+    )
 
     # SS3, FIMS
     if ("spawning_biomass_msy" %in% dat$label) {
-      sb_msy <- calc_kqs(returned_kq = "sb_msy",
-                         dat = dat)
-      b_sb_msy <- calc_kqs(returned_kq = "b_sb_msy",
-                           dat = dat)
-      B.msy <- calc_kqs(returned_kq = "B.msy",
-                        dat = dat)
+      sb_msy <- calc_kqs(
+        returned_kq = "sb_msy",
+        dat = dat
+      )
+      b_sb_msy <- calc_kqs(
+        returned_kq = "b_sb_msy",
+        dat = dat
+      )
+      B.msy <- calc_kqs(
+        returned_kq = "B.msy",
+        dat = dat
+      )
       B.msy.min <- NA
       B.msy.max <- NA
-    # BAM
+      # BAM
     } else if ("bmsy" %in% dat$label) {
-      B.msy <- calc_kqs(returned_kq = "B.msy", 
-                        dat = dat)
-      B.msy.min_uncert <- calc_kqs(returned_kq = "B.msy.min_uncert",
-                                   dat = dat)
-      B.msy.min <- calc_kqs(returned_kq = "B.msy.min", 
-                            dat = dat)
-      B.msy.max <- calc_kqs(returned_kq = "B.msy.max",
-                            dat = dat)
-    # Rceattle
+      B.msy <- calc_kqs(
+        returned_kq = "B.msy",
+        dat = dat
+      )
+      B.msy.min <- calc_kqs(
+        returned_kq = "B.msy.min",
+        dat = dat
+      )
+      B.msy.max <- calc_kqs(
+        returned_kq = "B.msy.max",
+        dat = dat
+      )
+      # Rceattle
     } else {
       B.msy <- NA
       B.msy.min <- NA
       B.msy.max <- NA
     }
-    
+
     export_kqs(
       B.ref.pt,
       B.units,
@@ -242,7 +281,10 @@ plot_biomass <- function(
       B.terminal.year,
       B.msy.min,
       B.msy.max,
-      B.msy
+      B.msy,
+      B.terminal.est,
+      B.terminal.min,
+      B.terminal.max
     )
 
     insert_kqs(
@@ -253,7 +295,10 @@ plot_biomass <- function(
       B.terminal.year,
       B.msy.min,
       B.msy.max,
-      B.msy
+      B.msy,
+      B.terminal.est,
+      B.terminal.min,
+      B.terminal.max
     )
 
     insert_kqs(
@@ -264,7 +309,10 @@ plot_biomass <- function(
       B.terminal.year,
       B.msy.min,
       B.msy.max,
-      B.msy
+      B.msy,
+      B.terminal.est,
+      B.terminal.min,
+      B.terminal.max
     )
 
     create_rda(
@@ -274,8 +322,7 @@ plot_biomass <- function(
       dat = rp_dat,
       dir = figures_dir,
       ref_line = ifelse(!is.null(names(ref_line)), names(ref_line), ref_line),
-      scale_amount = scale_amount,
-      unit_label = unit_label
+      scale_amount = scale_amount
     )
   }
   # Output final plot

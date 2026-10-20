@@ -59,8 +59,7 @@ plot_fishing_mortality <- function(
   processed_data <- process_data(
     dat = prepared_data,
     group = group,
-    facet = facet,
-    method = "mean"
+    facet = facet
   )
   prepared_data <- processed_data[[1]]
   group <- processed_data[[2]]
@@ -76,21 +75,39 @@ plot_fishing_mortality <- function(
     facet = facet,
     ...
   )
-  # Add reference line and theme
-  final <- reference_line(
-    plot = plt,
-    dat = dat,
-    label_name = "fishing_mortality",
-    reference = ref_line,
-    scale_amount = 1
-  ) + theme_noaa()
+  # Add reference line
+  final <- plt +
+    add_reference_line(
+      dat = dat,
+      ref_line = ref_line,
+      label = "fishing_mortality"
+    ) +
+    theme_noaa()
+
+  if (!is.data.frame(dat)) {
+    if (!is.null(names(ref_line))) {
+      if (any(
+        grepl(
+          glue::glue("^fishing_mortality_{ref_line}"),
+          # TODO: make this check more efficient
+          ifelse(is.data.frame(dat), dat[["label"]], sapply(dat, `[[`, "label"))
+        )
+      )) {
+        final <- final + ggplot2::scale_color_discrete(breaks = names(dat))
+      }
+    }
+  }
 
   ### Make RDA ----
   if (make_rda) {
-    F.min <- calc_kqs(returned_kq = "F.min",
-                      prepared_data = prepared_data)
-    F.max <- calc_kqs(returned_kq = "F.max",
-                      prepared_data = prepared_data)
+    F.min <- calc_kqs(
+      returned_kq = "F.min",
+      prepared_data = prepared_data
+    )
+    F.max <- calc_kqs(
+      returned_kq = "F.max",
+      prepared_data = prepared_data
+    )
 
     export_kqs(F.min, F.max)
     insert_kqs(F.min, F.max)
@@ -98,22 +115,62 @@ plot_fishing_mortality <- function(
     F.ref.pt <- as.character(ref_line)
     F.start.year <- min(prepared_data$year)
     F.end.year <- max(prepared_data$year)
-    F.terminal.year <- calc_kqs(returned_kq = "F.terminal.year",
+
+    F.terminal.year <- calc_kqs(
+      returned_kq = "F.terminal.year",
+      dat = dat,
+      module = selected_module
+    )
+
+    F.target <- calc_kqs(
+      returned_kq = "F.target",
       dat = dat
     )
-    
-    F.target <- calc_kqs(returned_kq = "F.target",
-                         dat = dat)
-    f.limit <- calc_kqs(returned_kq = "f.limit",
-                        dat = dat)
-    
+    F.limit <- calc_kqs(
+      returned_kq = "F.limit",
+      dat = dat
+    )
+    F.terminal.est <- calc_kqs(
+      returned_kq = "F.terminal.est",
+      dat = dat,
+      module = selected_module
+    )
+    F.terminal.min <- calc_kqs(
+      returned_kq = "F.terminal.min",
+      dat = dat,
+      module = selected_module
+    )
+    F.terminal.max <- calc_kqs(
+      returned_kq = "F.terminal.max",
+      dat = dat,
+      module = selected_module
+    )
+    F.MSY.terminal <- calc_kqs(
+      returned_kq = "F.MSY.terminal",
+      dat = dat
+    )
+    F.MSY.terminal.max <- calc_kqs(
+      returned_kq = "F.MSY.terminal.max",
+      dat = dat
+    )
+    F.MSY.terminal.min <- calc_kqs(
+      returned_kq = "F.MSY.terminal.min",
+      dat = dat
+    )
+
     export_kqs(
       F.ref.pt,
       F.start.year,
       F.end.year,
       F.terminal.year,
       F.target,
-      f.limit
+      F.limit,
+      F.terminal.est,
+      F.terminal.min,
+      F.terminal.max,
+      F.MSY.terminal.max,
+      F.MSY.terminal.min,
+      F.MSY.terminal
     )
 
     insert_kqs(
@@ -122,7 +179,13 @@ plot_fishing_mortality <- function(
       F.end.year,
       F.terminal.year,
       F.target,
-      f.limit
+      F.limit,
+      F.terminal.est,
+      F.terminal.min,
+      F.terminal.max,
+      F.MSY.terminal.max,
+      F.MSY.terminal.min,
+      F.MSY.terminal
     )
 
     create_rda(
@@ -132,8 +195,7 @@ plot_fishing_mortality <- function(
       dat = dat,
       dir = figures_dir,
       ref_line = ifelse(!is.null(names(ref_line)), names(ref_line), ref_line),
-      scale_amount = 1,
-      unit_label = "" # no unit for F
+      scale_amount = 1
     )
   }
   # Output final plot

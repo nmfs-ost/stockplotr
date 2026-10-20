@@ -22,12 +22,6 @@
 #' unit_label argument - 'metric tons'.
 #'
 #' Default: `FALSE`
-#' @param method String. Method for summarizing data when group
-#' is set to "none".
-#'
-#' Default: "sum"
-#'
-#' Options: "sum" or "mean"
 #'
 #' @returns List of 3 objects:
 #' \item{data}{A data frame of the processed data ready for plotting.}
@@ -52,14 +46,13 @@
 #'     geom = "line",
 #'     module = "TIME_SERIES"
 #'   )
-#'   process_data(dat = filtered, method = "sum")
+#'   process_data(dat = filtered)
 #' }
 process_data <- function(
   dat,
   group = NULL,
   facet = NULL,
-  lbs = FALSE,
-  method = "sum"
+  lbs = FALSE
 ) {
   # check if >1 model
   if (length(unique(dat$model)) > 1) {
@@ -89,39 +82,7 @@ process_data <- function(
 
   # check for additional indexed variables
   index_variables <- check_grouping(dat)
-  # If user input "none" to group this makes the plot remove any facetting or summarize?
-  # Removing this bc this logic has a lot of flaws
-  # if (!is.null(group) && group == "none") {
-  #   # group <- NULL
-  #   id_group <- index_variables[-grepl("year|age", index_variables)]
-  #   index_variables <- intersect(c("year", "age"), index_variables)
-  #   if (length(id_group) > 0) {
-  #     dat <- switch(method,
-  #       "mean" = dat |>
-  #         dplyr::group_by(dplyr::across(tidyselect::all_of(c("label", "model", "group_var", index_variables)))) |>
-  #         dplyr::summarize(
-  #           estimate = mean(estimate),
-  #           estimate_lower = mean(estimate_lower),
-  #           estimate_upper = mean(estimate_upper)
-  #         ),
-  #       "sum" = dat |>
-  #         dplyr::group_by(dplyr::across(tidyselect::all_of(c("label", "model", "group_var", index_variables)))) |>
-  #         dplyr::summarize(
-  #           estimate = sum(estimate),
-  #           estimate_lower = sum(estimate_lower),
-  #           estimate_upper = sum(estimate_upper)
-  #         )
-  #     )
-  #   }
-  # }
-  # Warn  user when group not indexed in data
-  # if (!is.null(group) && group %notin% index_variables) {
-  #   if (group != "none") {
-  #     cli::cli_alert_warning("{group} not an index of data.")
-  #     # reset group to NULL so it's not added to grouping incorrectly
-  #     group <- NULL
-  #   }
-  # }
+
   # Set group_var to identified grouping
   if (!is.null(group) && group != "none") {
     data <- dplyr::mutate(
@@ -158,7 +119,7 @@ process_data <- function(
     if (!is.null(group) && group == "age") {
       if ("age" %in% index_variables) index_variables <- index_variables[-grep("age", index_variables)]
     }
-    if (!is.null(facet) && facet == "age") {
+    if (!is.null(facet) && length(facet) == 1 && facet == "age") {
       if ("age" %in% index_variables) index_variables <- index_variables[-grep("age", index_variables)]
     }
   }
@@ -298,6 +259,7 @@ process_data <- function(
           values_from = estimate
         ) |>
         suppressWarnings()
+      # if (ncol(pivot_data) > 1) column_data <- pivot_data[-1] else column_data <- pivot_data
       column_data <- pivot_data[-1]
     }
     # compare grouping columns to see if all the same
@@ -358,6 +320,11 @@ process_data <- function(
       )
   }
 
+  if (is.null(group) && length(facet) > 0) {
+    group <- facet[1]
+    facet <- facet[-1]
+  }
+
   # Export list of objects
   list(
     # variable,
@@ -378,6 +345,12 @@ process_data <- function(
 #' @param digits Number. Numeric value indicating the number of rounding digits.
 #'
 #' Default: 2
+#' @param method String. Method for summarizing data when group
+#' is set to "none".
+#'
+#' Default: "sum"
+#'
+#' Options: "sum" or "mean"
 #' @returns A dataframe of processed data ready for formatting into a table.
 #' @details Input is an object created with \link[stockplotr]{filter_data}.
 #'
@@ -409,8 +382,31 @@ process_table <- function(
     index_variables <- c(index_variables, mod_index)
   }
 
-  id_group <- index_variables[-grep("year|age|length_bin", index_variables)]
+  if (!is.null(group)) {
+    id_group <- group
+  } else {
+    id_group <- index_variables[-grep("year|age|length_bin", index_variables)]
+    if (length(id_group) == 0) {
+      id_group <- NULL
+    }
+  }
   cols <- index_variables[grep("year|age|length_bin", index_variables)]
+
+  if (!is.null(group)) {
+    if (any(is.na(dat[[group]]))) {
+      dat <- dat |>
+        dplyr::filter(!is.na(.data[[group]]))
+    }
+  } else if (!is.null(id_group)) {
+    if (length(id_group) > 1) {
+      cli::cli_alert_warning("Data contains >1 indexing variable. Selecting {id_group[1]}.")
+      id_group <- id_group[1]
+    }
+    if (length(id_group) > 0 && any(is.na(dat[[id_group]]))) {
+      dat <- dat |>
+        dplyr::filter(!is.na(.data[[id_group]]))
+    }
+  }
 
   # Add check for length label >1
   # below method will only work when unqiue(label) == 2
@@ -512,6 +508,12 @@ process_table <- function(
     mod_dat <- dplyr::filter(dat, model == mod)
     mod_index_variables <- check_grouping(mod_dat)
     mod_id_group <- mod_index_variables[-grep("year|age|length_bin", mod_index_variables)]
+
+    # overriding mod_id_group when user inputs `group` argument
+    if (!is.null(group) && (group %in% mod_id_group)) {
+      mod_id_group <- group
+    }
+
     mod_cols <- mod_index_variables[grep("year|age|length_bin", mod_index_variables)]
     mod_uncert_lab <- unique(mod_dat$uncertainty_label)
     if (length(mod_uncert_lab) == 1 && is.na(mod_uncert_lab)) {
@@ -533,7 +535,7 @@ process_table <- function(
       dplyr::rename(
         !!mod_uncert_lab := uncertainty
       ) |>
-    # set values to strings to include trailing zeros from rounding and     # format large estimate values with commas
+      # set values to strings to include trailing zeros from rounding and     # format large estimate values with commas
       dplyr::mutate(estimate = formatC(estimate, format = "f", digits = digits, big.mark = ",")) |>
       tidyr::pivot_wider(
         id_cols = dplyr::all_of(c(stringr::str_to_title(mod_cols))),
@@ -544,7 +546,7 @@ process_table <- function(
 
     # group indexing data together (i.e. fleet)
     if (length(mod_id_group) > 0) {
-      for (f in unique(mod_dat$fleet)) { # TODO: change dat$fleet to indexing col(s)
+      for (f in unique(mod_dat[[mod_id_group]])) {
         table_data <- table_data |>
           dplyr::relocate(dplyr::contains(f), .after = dplyr::last_col())
       }

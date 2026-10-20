@@ -1,31 +1,28 @@
-# Automatically adds a comment containing a reviewer checklist
-# when a new pull request *from dev to main* is opened.
+# create a new issue on the 28th day of each month with
+# a checklist of tasks to complete before the new version is
+# released
 name: new-version-checklist
 on:
-  pull_request:
-    branches: [main]
-    types: [opened]
+  schedule:
+    - cron: '0 0 28 * *'
   workflow_dispatch:
+
 jobs:
-  new-version-checklist:
+  create-issue:
     runs-on: ubuntu-latest
-    name: new-version-checklist
+    permissions:
+      issues: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: 'Comment PR'
-        uses: actions/github-script@0.3.0
-        if: github.event_name == 'pull_request'
+      - name: Create Release Checklist Issue
+        uses: imjohnbo/issue-bot@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            var msg = `# New version checklist
+          assignees: "${{ github.actor }}"
+          title: "Release Checklist - Monthly Update"
+          body: |
+            # New (monthly) version checklist
 
             - [ ] Package version in DESCRIPTION has been updated
             - [ ] Release notes have been drafted/published
             - [ ] Cheatsheet content has been updated (if applicable)
-            - [ ] Cheatsheet version has been updated
-            
-            `
-            const { issue: { number: issue_number }, repo: { owner, repo }  } = context;
-            github.issues.createComment({ issue_number, owner, repo, body: msg });
+            - [ ] Cheatsheet version has been updated (if applicable)
+          token: ${{ secrets.GITHUB_TOKEN }}

@@ -14,8 +14,7 @@ plot_recruitment(
   interactive = TRUE,
   module = NULL,
   make_rda = FALSE,
-  figures_dir = getwd(),
-  ...
+  figures_dir = getwd()
 )
 }
 \arguments{
@@ -54,7 +53,7 @@ Default: NULL}
 
 Default: `FALSE`}
 
-\item{module}{Character vector. (Optional) Module name found in `dat`.
+\item{module}{Character vector. (Optional) Module name found in `dat$module_name`.
 If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
@@ -73,8 +72,6 @@ Default: `FALSE`.}
 Default: `getwd()`
 
 The folder is created within the path if it does not exist.}
-
-\item{...}{Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}
 }
 \value{
 A plot showing recruitment over time.

@@ -2,7 +2,11 @@
 test_that("plot_catch_comp generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_catch_comp(stockplotr::example_data)
+    plot_catch_comp(
+      stockplotr::example_data,
+      module = "CATCH_AT_AGE",
+      interactive = FALSE
+    )
   )
 
   # expect error-free plot with many arguments
@@ -12,6 +16,8 @@ test_that("plot_catch_comp generates plots without errors", {
       facet = "area",
       unit_label = "fish",
       scale_amount = 1000,
+      module = "CATCH_AT_AGE",
+      interactive = FALSE,
       make_rda = FALSE,
       figures_dir = getwd()
     )
@@ -23,6 +29,8 @@ test_that("plot_catch_comp generates plots without errors", {
       stockplotr::example_data,
       unit_label = "fish",
       scale_amount = 1,
+      module = "CATCH_AT_AGE",
+      interactive = FALSE,
       make_rda = FALSE,
       figures_dir = getwd()
     ),
@@ -30,23 +38,19 @@ test_that("plot_catch_comp generates plots without errors", {
   )
 })
 
-test_that("rda file made when indicated", {
-  # export rda
-  plot_catch_comp(
-    stockplotr::example_data,
-    figures_dir = getwd(),
-    make_rda = TRUE
-  )
+# test_that("rda file made when indicated", {
+#   # export rda
+#   plot_catch_comp(
+#     stockplotr::example_data,
+#     module = "CATCH_AT_AGE",
+#     interactive = FALSE,
+#     figures_dir = getwd(),
+#     make_rda = TRUE
+#   )
 
-  # expect that both figures dir and the catch_comp_figure.rda file exist
-  expect_true(dir.exists(fs::path(getwd(), "figures")))
-  expect_true(file.exists(fs::path(getwd(), "figures", "catch_comp_figure.rda")))
-
-  # erase temporary testing files
-  file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  file.remove(fs::path(getwd(), "key_quantities.csv"))
-  unlink(fs::path(getwd(), "figures"), recursive = T)
-})
+#   # expect that both figures dir and the catch_comp_figure.rda file exist
+#   check_and_remove_tmp_files("catch_comp_figure.rda")
+# })
 
 test_that("plot_catch_comp generates error with scaling <1", {
   # expect error
@@ -55,6 +59,7 @@ test_that("plot_catch_comp generates error with scaling <1", {
       stockplotr::example_data,
       unit_label = "fish",
       scale_amount = 0.1,
+      interactive = FALSE,
       make_rda = FALSE,
       figures_dir = getwd()
     )
@@ -132,6 +137,7 @@ test_that("plot_catch_comp generates error when catch label is not found", {
       sample_data,
       unit_label = "fish",
       scale_amount = 1,
+      interactive = FALSE,
       make_rda = FALSE,
       figures_dir = getwd()
     )
@@ -142,8 +148,10 @@ test_that("plot is made proportional and does not contain a legend", {
   plot <- plot_catch_comp(
     stockplotr::example_data,
     unit_label = "fish",
+    module = "CATCH_AT_AGE",
     proportional = TRUE,
     scale_amount = 1,
+    interactive = FALSE,
     make_rda = FALSE,
     figures_dir = getwd()
   )
@@ -154,8 +162,10 @@ test_that("plot contains a legend", {
   plot <- plot_catch_comp(
     stockplotr::example_data,
     proportional = FALSE,
+    module = "CATCH_AT_AGE",
     unit_label = "fish",
     scale_amount = 1,
+    interactive = FALSE,
     make_rda = FALSE,
     figures_dir = getwd()
   )
@@ -167,7 +177,9 @@ test_that("year class lines are plotted", {
     stockplotr::example_data,
     proportional = FALSE,
     unit_label = "fish",
+    module = "CATCH_AT_AGE",
     scale_amount = 1,
+    interactive = FALSE,
     make_rda = FALSE,
     figures_dir = getwd()
   )

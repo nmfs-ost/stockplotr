@@ -10,20 +10,11 @@
 
 ***Previously named 'satf'***
 
-The goal of {stockplotr} is to create a centralized package that contains all of
-the figures and tables for a stock assessment report used to inform management. 
-There are multiple current packages that perform a 
-similar function, but they are typically region and/or model dependent. Across 
-the US, there are multiple packages that create plots that are directly used in 
-a stock assessment report used for management. For example, an analyst that uses 
-Stock Synthesis (SS3) to assess a stock will utilize [`r4ss`](https://github.com/r4ss/r4ss/), 
-a package that reads outputs, plots key parameters, and more to increase 
-throughput and reduce tedious tasks for an analyst.
+The goal of {stockplotr} is to create a centralized package that contains all of the figures and tables for a stock assessment report used to inform management. 
+There are multiple current packages that perform a similar function, but they are typically region and/or model dependent. Across the US, there are multiple packages that create plots that are directly used in 
+a stock assessment report used for management. For example, an analyst that uses Stock Synthesis (SS3) to assess a stock will utilize [`r4ss`](https://github.com/r4ss/r4ss/), a package that reads outputs, plots key parameters, and more to increase throughput and reduce tedious tasks for an analyst.
 
-Please note that this package is still in development. As such, some functions 
-are unstable and might not perform as intended. We encourage anyone who tests 
-out this package to leave an [issue](https://github.com/nmfs-ost/stockplotr/issues)
-for any errors you find or for a feature request.
+Please note that this package is still in development. As such, some functions are unstable and might not perform as intended. We encourage anyone who tests out this package to leave an [issue](https://github.com/nmfs-ost/stockplotr/issues) for any errors you find or for a feature request.
 
 ## Installation
 
@@ -56,7 +47,7 @@ Please refer to the [{asar} tutorial](https://connect.fisheries.noaa.gov/asar_tu
 Then, once your converted model results are saved as an object in your R environment, you can use {stockplotr} functions to create plots from the object.
 
 > [!TIP]
-> {stockplotr} plots or tables are exported as `ggplot2` or `flextable` objects 
+> {stockplotr} plots or tables are exported as `ggplot2` or `gt` objects 
 > meaning that users can use the same process to add new data, formatting, or 
 > other customizations to the plot beyond the baseline made by this package
 
@@ -65,9 +56,11 @@ Then, once your converted model results are saved as an object in your R environ
 ```r
 data <- stockplotr::example_data
 
-# create a landings figure from your object
+# create a landings figure and table from your object
 plot_spawning_biomass(data)
-```
+table_landings(data)
+
+ ```
 
 Example Plot | Example Table |
 :------------|---------------:
@@ -81,7 +74,7 @@ Thank you for helping us improve this package!
 
 ## Progress, Goals, & Timeline
 
-What are we working on? When do we aim to complete it? What have we accomplished? Check out our [GitHub Project Board](https://github.com/orgs/nmfs-ost/projects/45/) and [Milestones](https://github.com/nmfs-ost/stockplotr/milestones) to see the package development status and our goals for the next few months.
+What are we working on? When do we aim to complete it? What have we accomplished? Check out our [GitHub Project Board](https://github.com/orgs/nmfs-ost/projects/57/) and [Milestones](https://github.com/nmfs-ost/stockplotr/milestones) to see the package development status and our goals for the next few months.
 
 ## Code of Conduct
 
@@ -91,16 +84,12 @@ All contributors participating and contributing to the asar project are expected
 
 ## User Community
 
-We hope that this package will be able to be a one stop shop for plots regarding 
-interpreting assessment models and presenting the results to managers and relevant 
-stakeholders. We encourage interested users to contribute to this package using 
-their custom code when they find it may be useful across the nation.
+We hope that this package will be able to be a one stop shop for plots regarding interpreting assessment models and presenting the results to managers and relevant stakeholders. We encourage interested users to contribute to this package using their custom code when they find it may be useful across the nation.
 
 > [!NOTE]
-> An additional package to plot model diagnostics called [{FIMSdiags}](https://github.com/NOAA-FIMS/FIMSdiags) 
-> is being worked on for the Fisheries Integrated Modelling System [FIMS] that 
-> will natively work with the output used for {stockplotr} since the model output 
-> for FIMS works together with {stockplotr}.
+> Model diagnostic plots within the [{Fisheries Integrated Modelling System (FIMS)}] (https://github.com/NOAA-FIMS/FIMS) are in development.
+> These plots will work natively with {stockplotr} since the FIMS model output virtually matches the {stockplotr} standardized output format.   
+
 
 ## Disclaimer
 

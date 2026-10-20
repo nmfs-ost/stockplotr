@@ -118,7 +118,12 @@ plot_index <- function(
   if ("fleet" %in% colnames(prepared_data)) {
     facet <- paste("~", paste(facet, collapse = " + "))
     facet_formula <- stats::reformulate(facet)
-    plt <- plt + ggplot2::facet_wrap(facet_formula, scales = "free")
+    plt <- plt + ggplot2::facet_wrap(facet_formula, scales = "free", labeller = function(labels) {
+      # Clean column names (e.g., "growth_pattern" -> "Growth Pattern")
+      names(labels) <- tools::toTitleCase(gsub("_", " ", names(labels)))
+      # Combine into "Variable: Value" format
+      lapply(names(labels), function(var) paste0(var, ": ", labels[[var]]))
+    })
   }
 
   ### Make RDA ----
@@ -157,8 +162,7 @@ plot_index <- function(
       topic_label = gsub("plot_", "", utils::tail(as.character(sys.call()[[1]]), n = 1)),
       fig_or_table = "figure",
       dat = dat,
-      dir = figures_dir,
-      unit_label = unit_label
+      dir = figures_dir
     )
   }
   # Output final plot

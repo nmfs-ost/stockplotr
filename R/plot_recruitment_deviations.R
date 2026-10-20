@@ -53,8 +53,7 @@ plot_recruitment_deviations <- function(
   processed_data <- process_data(
     dat = filter_data,
     group = "none",
-    facet = NULL,
-    method = "mean"
+    facet = NULL
   )
   filter_data <- processed_data[[1]]
   group <- processed_data[[2]]
@@ -113,8 +112,7 @@ plot_recruitment_deviations <- function(
       topic_label = gsub("plot_", "", utils::tail(as.character(sys.call()[[1]]), n = 1)),
       fig_or_table = "figure",
       dat = selected_dat,
-      dir = figures_dir,
-      unit_label = ""
+      dir = figures_dir
     )
   }
   final

@@ -84,9 +84,9 @@
 #'
 #' Default: ""
 #'
-#' @param biomass_unit_label String. Abbreviated biomass units
+#' @param bnc_unit_label String. Abbreviated biomass, abundance, and catch units
 #'
-#' Default: "mt"
+#' Default: c("biomass" = "mt", "abundance" = "fish", "catch" = "mt")
 #'
 #' @param catch_unit_label String. Abbreviated catch units
 #'
@@ -100,6 +100,17 @@
 #' @param landings_unit_label String. Landings units
 #'
 #' Default: "mt"
+#'
+#' @param projections_unit_label Units for projections quantities
+#'
+#' Default: c("catch" = "mt", "spawning_biomass" = "mt",
+#' "fishing_mortality" = "")
+#'
+#' @param projections_uncert_label Abbreviated uncertainty label for
+#' each quantity
+#'
+#' Default: c("catch" = "stddev", "spawning_biomass" = "stddev",
+#' "fishing_mortality" = "stddev")
 #'
 #' @param proportional Logical. TRUE/FALSE; scale size of bubble plots
 #'
@@ -135,6 +146,7 @@ save_all_plots <- function(
   figures_tables_dir = getwd(),
   # imported from plot_biomass
   ref_line = "msy",
+  biomass_unit_label = "mt",
   biomass_scale_amount = 1,
   # imported from plot_landings
   landings_unit_label = "mt",
@@ -152,14 +164,16 @@ save_all_plots <- function(
   biomass_at_age_unit_label = "mt",
   # imported from plot_index
   index_unit_label = "",
-  # imported from table_afsc_tier- add potential unique arguments after dev
-  # imported from table_bnc
-  biomass_unit_label = "mt",
+  # imported from table_biomass_abundance_catch
+  bnc_unit_label = c("biomass" = "mt", "abundance" = "fish", "catch" = "mt"),
+  # imported from plot_catch_comp
   catch_unit_label = "mt",
-  catch_scale_amount = 1
-  # imported from table_harvest_projection- add potential unique arguments after dev
+  catch_scale_amount = 1,
   # imported from table_index- zero unique arguments
   # imported from table_landings- zero unique arguments
+  # imported from table_projections
+  projections_unit_label = c("catch" = "mt", "spawning_biomass" = "mt", "fishing_mortality" = "")
+  # projections_uncert_label = c("catch" = "stddev", "spawning_biomass" = "stddev", "fishing_mortality" = "stddev")
 ) {
   make_rda <- TRUE
 
@@ -174,7 +188,7 @@ save_all_plots <- function(
         dat,
         unit_label = recruitment_unit_label,
         scale_amount = recruitment_scale_amount,
-        interactive = FALSE,
+        interactive = interactive,
         module = "TIME_SERIES",
         make_rda = TRUE,
         figures_dir = figures_tables_dir
@@ -228,7 +242,7 @@ save_all_plots <- function(
         unit_label = landings_unit_label,
         make_rda = TRUE,
         figures_dir = figures_tables_dir,
-        interactive = FALSE
+        interactive = interactive
       ) # |>
       # suppressWarnings() |>
       # invisible()
@@ -247,7 +261,7 @@ save_all_plots <- function(
       plot_fishing_mortality(dat,
         make_rda = TRUE,
         figures_dir = figures_tables_dir,
-        interactive = FALSE
+        interactive = interactive
       ) # |>
       # suppressWarnings() |>
       # invisible()
@@ -267,7 +281,7 @@ save_all_plots <- function(
         module = "Natural_Mortality",
         make_rda = TRUE,
         figures_dir = figures_tables_dir,
-        interactive = FALSE
+        interactive = interactive
       ) # |>
       # suppressWarnings() |>
       # invisible()
@@ -284,7 +298,7 @@ save_all_plots <- function(
       cli::cli_h2("plot_recruitment_deviations")
       plot_recruitment_deviations(
         dat,
-        interactive = FALSE,
+        interactive = interactive,
         make_rda = TRUE,
         figures_dir = figures_tables_dir
       ) #|>
@@ -305,7 +319,7 @@ save_all_plots <- function(
         spawning_biomass_label,
         recruitment_label = recruitment_unit_label,
         make_rda = TRUE,
-        interactive = FALSE,
+        interactive = interactive,
         module = "SPAWN_RECRUIT",
         figures_dir = figures_tables_dir
       )
@@ -355,6 +369,7 @@ save_all_plots <- function(
         unit_label = abundance_at_age_unit_label,
         scale_amount = abundance_at_age_scale_amount,
         proportional = proportional,
+        interactive = interactive,
         make_rda = TRUE,
         figures_dir = figures_tables_dir
       ) # |>
@@ -377,7 +392,7 @@ save_all_plots <- function(
         unit_label = catch_unit_label,
         scale_amount = catch_scale_amount,
         proportional = proportional,
-        interactive = FALSE,
+        interactive = interactive,
         make_rda = TRUE,
         figures_dir = figures_tables_dir
       ) # |>
@@ -402,7 +417,7 @@ save_all_plots <- function(
         unit_label = biomass_at_age_unit_label,
         scale_amount = biomass_at_age_scale_amount,
         proportional = proportional,
-        interactive = FALSE,
+        interactive = interactive,
         make_rda = TRUE,
         figures_dir = figures_tables_dir
       ) # |>
@@ -424,7 +439,7 @@ save_all_plots <- function(
       plot_index(dat,
         unit_label = index_unit_label,
         make_rda = TRUE,
-        interactive = FALSE,
+        interactive = interactive,
         figures_dir = figures_tables_dir
       ) # |> suppressWarnings() |> invisible()
     },
@@ -436,37 +451,71 @@ save_all_plots <- function(
     }
   )
 
+
+  tryCatch(
+    {
+      cli::cli_h2("plot_selectivity")
+      plot_selectivity(dat,
+        # unit_label = selectivity_unit_label, # commenting this out because if interactive = FALSE, unit_label is not used as age is selected (over length), which doesn't require a unit label
+        make_rda = TRUE,
+        interactive = FALSE,
+        figures_dir = figures_tables_dir
+      ) # |> suppressWarnings() |> invisible()
+    },
+    error = function(e) {
+      cli::cli_alert_danger("plot_selectivity failed to run.")
+      print(e)
+    }
+  )
+
   # tables
-  # tryCatch(
-  #   {
-  #     cli::cli_h2("table_bnc")
-  #     table_bnc(
-  #       dat,
-  #       biomass_unit_label,
-  #       catch_unit_label,
-  #       spawning_biomass_label,
-  #       make_rda = TRUE,
-  #       tables_dir = figures_tables_dir
-  #     ) # |>
-  #     # suppressWarnings() |>
-  #     # invisible()
-  #   },
-  #   error = function(e) {
-  #     cli::cli_alert_danger("table_bnc failed to run.")
-  #     cli::cli_alert("Tip: check that your arguments are correct.")
-  #     cli::cli_li("biomass_unit_label = {biomass_unit_label}")
-  #     cli::cli_li("catch_unit_label = {catch_unit_label}")
-  #     cli::cli_li("spawning_biomass_label = {spawning_biomass_label}")
-  #     print(e)
-  #   }
-  # )
+  tryCatch(
+    {
+      cli::cli_h2("table_biomass_abundance_catch")
+      table_biomass_abundance_catch(
+        dat,
+        unit_label = bnc_unit_label,
+        interactive = interactive,
+        make_rda = TRUE,
+        tables_dir = figures_tables_dir
+      ) # |>
+      # suppressWarnings() |>
+      # invisible()
+    },
+    error = function(e) {
+      cli::cli_alert_danger("table_biomass_abundance_catch failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      cli::cli_li("unit_label = {bnc_unit_label}")
+      print(e)
+    }
+  )
+
+  tryCatch(
+    {
+      cli::cli_h2("table_total_catch")
+      table_total_catch(
+        dat,
+        unit_label = catch_unit_label,
+        interactive = interactive,
+        make_rda = TRUE,
+        tables_dir = figures_tables_dir
+      ) # |>
+      # suppressWarnings() |>
+      # invisible()
+    },
+    error = function(e) {
+      cli::cli_alert_danger("table_total_catch failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      print(e)
+    }
+  )
 
   tryCatch(
     {
       cli::cli_h2("table_index")
       table_index(
         dat,
-        interactive = FALSE,
+        interactive = interactive,
         make_rda = TRUE,
         tables_dir = figures_tables_dir
       ) # |>
@@ -485,7 +534,7 @@ save_all_plots <- function(
       cli::cli_h2("table_landings")
       table_landings(dat,
         unit_label = landings_unit_label,
-        interactive = FALSE,
+        interactive = interactive,
         make_rda = TRUE,
         tables_dir = figures_tables_dir
       ) # |>
@@ -496,6 +545,28 @@ save_all_plots <- function(
       cli::cli_alert_danger("table_landings failed to run.")
       cli::cli_alert("Tip: check that your arguments are correct.")
       cli::cli_li("landings_unit_label = {landings_unit_label}")
+      print(e)
+    }
+  )
+
+  tryCatch(
+    {
+      cli::cli_h2("table_projections")
+      table_projections(dat,
+        unit_label = projections_unit_label,
+        # uncertainty_label = projections_uncert_label,
+        interactive = FALSE,
+        make_rda = TRUE,
+        tables_dir = figures_tables_dir
+      ) # |>
+      # suppressWarnings() |>
+      # invisible()
+    },
+    error = function(e) {
+      cli::cli_alert_danger("table_projections failed to run.")
+      cli::cli_alert("Tip: check that your arguments are correct.")
+      cli::cli_li("projections_unit_label = {projections_unit_label}")
+      # cli::cli_li("projections_uncert_label = {projections_uncert_label}")
       print(e)
     }
   )

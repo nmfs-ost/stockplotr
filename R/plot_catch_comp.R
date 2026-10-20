@@ -24,7 +24,7 @@
 #'
 #' Default: `FALSE`
 #'
-#' @param module Character vector. (Optional) Module name found in `dat`.
+#' @param module Character vector. (Optional) Module name found in `dat$module_name`.
 #' If selecting >1 module, place them in a vector like c("module1", "module2").
 #'
 #' Default: NULL
@@ -86,7 +86,8 @@ plot_catch_comp <- function(
   )
   # Filter data
   catch <- filter_data(
-    dat = dat,
+    dat = dat |>
+      dplyr::filter(!is.na(age)),
     label_name = "catch|landings",
     era = era,
     geom = "point",
@@ -170,8 +171,7 @@ plot_catch_comp <- function(
       # get name of function and remove "plot_" from it
       topic_label = gsub("plot_", "", utils::tail(as.character(sys.call()[[1]]), n = 1)),
       fig_or_table = "figure",
-      dat,
-      unit_label = "mt"
+      dat
     )
   }
   plot

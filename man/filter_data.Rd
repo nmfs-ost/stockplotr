@@ -26,7 +26,7 @@ in `ref_line` is used to plot a reference line or calculate relative spawning bi
 \item{label_name}{String. Name of the label used to filter
 the data.}
 
-\item{module}{Character vector. (Optional) Module name found in `dat`.
+\item{module}{Character vector. (Optional) Module name found in `dat$module_name`.
 If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL

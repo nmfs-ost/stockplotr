@@ -28,7 +28,7 @@
 #'
 #' Default: `TRUE`
 #'
-#' @param module (Optional) A string indicating the module_name found in `dat`.
+#' @param module (Optional) A string indicating the module_name found in `dat$module_name`.
 #' If selecting >1 module, place them in a vector like c("module1", "module2").
 #'
 #' Default: NULL
@@ -182,8 +182,7 @@ plot_abundance_at_age <- function(
       # get name of function and remove "plot_" from it
       topic_label = gsub("plot_", "", utils::tail(as.character(sys.call()[[1]]), n = 1)),
       fig_or_table = "figure",
-      dat,
-      unit_label = "mt"
+      dat
     )
   }
   plot

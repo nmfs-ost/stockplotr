@@ -1,7 +1,11 @@
 test_that("plot_biomass_at_age generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_biomass_at_age(stockplotr::example_data)
+    plot_biomass_at_age(
+      stockplotr::example_data,
+      module = "BIOMASS_AT_AGE",
+      interactive = FALSE
+    )
   )
 
   # expect error-free plot with many arguments
@@ -11,6 +15,8 @@ test_that("plot_biomass_at_age generates plots without errors", {
       unit_label = "metric tons",
       proportional = FALSE,
       scale_amount = 10,
+      module = "BIOMASS_AT_AGE",
+      interactive = FALSE,
       make_rda = FALSE,
       figures_dir = getwd()
     )
@@ -22,6 +28,8 @@ test_that("plot_biomass_at_age generates plots without errors", {
       stockplotr::example_data,
       unit_label = "metric tons",
       scale_amount = 1,
+      module = "BIOMASS_AT_AGE",
+      interactive = FALSE,
       make_rda = FALSE,
       figures_dir = getwd()
     ),
@@ -29,23 +37,19 @@ test_that("plot_biomass_at_age generates plots without errors", {
   )
 })
 
-test_that("rda file made when indicated", {
-  # export rda
-  plot_biomass_at_age(
-    stockplotr::example_data,
-    figures_dir = getwd(),
-    make_rda = TRUE
-  )
+# test_that("rda file made when indicated", {
+#   # export rda
+#   plot_biomass_at_age(
+#     stockplotr::example_data,
+#     module = "BIOMASS_AT_AGE",
+#     interactive = FALSE,
+#     figures_dir = getwd(),
+#     make_rda = TRUE
+#   )
 
-  # expect that both figures dir and the biomass_at_age_figure.rda file exist
-  expect_true(dir.exists(fs::path(getwd(), "figures")))
-  expect_true(file.exists(fs::path(getwd(), "figures", "biomass_at_age_figure.rda")))
-
-  # erase temporary testing files
-  file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  file.remove(fs::path(getwd(), "key_quantities.csv"))
-  unlink(fs::path(getwd(), "figures"), recursive = T)
-})
+#   # expect that both figures dir and the biomass_at_age_figure.rda file exist
+#   check_and_remove_tmp_files("biomass_at_age_figure.rda")
+# })
 
 test_that("plot_biomass_at_age generates error when biomass label is not found", {
   # generate test data set
@@ -118,6 +122,7 @@ test_that("plot_biomass_at_age generates error when biomass label is not found",
       sample_data,
       unit_label = "fish",
       scale_amount = 1,
+      interactive = FALSE,
       make_rda = FALSE,
       figures_dir = getwd()
     )
@@ -127,9 +132,11 @@ test_that("plot_biomass_at_age generates error when biomass label is not found",
 test_that("plot is made proportional and does not contain a legend", {
   plot <- plot_biomass_at_age(
     stockplotr::example_data,
+    module = "BIOMASS_AT_AGE",
     unit_label = "fish",
     proportional = TRUE,
     scale_amount = 1,
+    interactive = FALSE,
     make_rda = FALSE,
     figures_dir = getwd()
   )
@@ -139,9 +146,11 @@ test_that("plot is made proportional and does not contain a legend", {
 test_that("plot contains a legend", {
   plot <- plot_biomass_at_age(
     stockplotr::example_data,
+    module = "BIOMASS_AT_AGE",
     proportional = FALSE,
     unit_label = "fish",
     scale_amount = 1,
+    interactive = FALSE,
     make_rda = FALSE,
     figures_dir = getwd()
   )

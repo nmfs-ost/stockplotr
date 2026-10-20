@@ -19,6 +19,7 @@ globvar <- c(
   "like", "match_key", "morph", "nsim", "output", "output_order", "parm_stdev", "seas",
   "sexes", "subseas", "unique_count", "value", "yr", "fleet_names", "across",
   "everything", "fleet_name", "name", "value_new", "y", ".", "x",
+  "Fleet", "length_bins", "month", "na.omit", "rp_dat", "selected_module",
   # Rceattle conout terms
   "n", "observation", "selectivity_block", "log_sd", "fleet_code",
   "q_block", "species", "indices_observed", "indices_predicted",
