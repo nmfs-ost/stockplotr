@@ -49,7 +49,7 @@ convert_output <- function(
   save_dir = NULL
 ) {
   
-  if (grepl("Report.sso", file)) {
+  if (is.character(file) && grepl("Report.sso", file)) {
     lifecycle::deprecate_warn(
       when = "2.8.0", 
       what = I("convert_output(file = 'Report.sso')"), 
