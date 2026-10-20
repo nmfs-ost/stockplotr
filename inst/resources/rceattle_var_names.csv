@@ -170,7 +170,7 @@ quantities,sb0,spawning_biomass_0,mt
 quantities,sbf,spawning_biomass_target,mt
 quantities,sel,selectivity,
 quantities,sel_at_age,selectivity_age,
-quantities,spr0,,
+quantities,spr0,spr_0,
 quantities,sprfinit,spr_initial,
 quantities,sprlimit,spr_limit,
 quantities,sprtarget,spr_target,

@@ -19,7 +19,7 @@ DERIVED_QUANTITIES,SPR_Btgt,spr_biomass_target,
 DERIVED_QUANTITIES,annF_Btgt,annual_fishing_mortality_biomass_target,
 DERIVED_QUANTITIES,Dead_Catch_Btgt,dead_catch_biomass_target,kg
 DERIVED_QUANTITIES,SSB_SPR,spawning_biomass_spr,
-DERIVED_QUANTITIES,annF_SPR,annual_fishing_mortality_spr,
+DERIVED_QUANTITIES,annF_SPR,fishing_mortality_spr,
 DERIVED_QUANTITIES,Dead_Catch_SPR,dead_catch_spr,
 DERIVED_QUANTITIES,SSB_MSY,spawning_biomass_msy,kg
 DERIVED_QUANTITIES,SPR_MSY,spr_msy,
