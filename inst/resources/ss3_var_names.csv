@@ -5,7 +5,7 @@ DERIVED_QUANTITIES,SSB,spawning_biomass
 DERIVED_QUANTITIES,Recr_Virgin,spawning_biomass
 DERIVED_QUANTITIES,Recr_Initial,recruitment_initial
 DERIVED_QUANTITIES,Recr,recruitment
-DERIVED_QUANTITIES,SPRratio,spawning_potential_ratio_ratio
+DERIVED_QUANTITIES,SPRratio,spr_ratio
 AGE_SELEX,F,fishing_mortality
 DERIVED_QUANTITIES,F,fishing_mortality
 F_AT_AGE,F,fishing_mortality
@@ -21,14 +21,14 @@ DERIVED_QUANTITIES,Totbio_unfished,biomass_unfished
 DERIVED_QUANTITIES,SmryBio_unfished,biomass_unfished_midyear
 DERIVED_QUANTITIES,Recr_unfished,recruitment_unfished
 DERIVED_QUANTITIES,SSB_Btgt,spawning_biomass_at_biomass_target
-DERIVED_QUANTITIES,SPR_Btgt,spawning_potential_ratio_biomass_target
+DERIVED_QUANTITIES,SPR_Btgt,spr_biomass_target
 DERIVED_QUANTITIES,annF_Btgt,annual_F_biomass_target
 DERIVED_QUANTITIES,Dead_Catch_Btgt,dead_catch_biomass_target
-DERIVED_QUANTITIES,SSB_SPR,spawning_biomass_spawning_potential_ratio
-DERIVED_QUANTITIES,annF_SPR,fishing_mortality_spawning_potential_ratio
-DERIVED_QUANTITIES,Dead_Catch_SPR,dead_catch_spawning_potential_ratio
+DERIVED_QUANTITIES,SSB_SPR,spawning_biomass_spr
+DERIVED_QUANTITIES,annF_SPR,fishing_mortality_spr
+DERIVED_QUANTITIES,Dead_Catch_SPR,dead_catch_spr
 DERIVED_QUANTITIES,SSB_MSY,spawning_biomass_msy
-DERIVED_QUANTITIES,SPR_MSY,spawning_potential_ratio_msy
+DERIVED_QUANTITIES,SPR_MSY,spr_msy
 DERIVED_QUANTITIES,annF_MSY,f_msy
 DERIVED_QUANTITIES,Dead_Catch_MSY,dead_catch_msy
 DERIVED_QUANTITIES,Ret_Catch_MSY,catch_msy
@@ -258,7 +258,7 @@ Growth_Parameters,fec1,
 Growth_Parameters,fec2,
 MEAN_BODY_WT(Begin),mean_body_wt,
 Dynamic_Bzero,Dynamic_Bzero,dynamic_biomass_zero
-,sprtarg,spawning_potential_ratio_target
+,sprtarg,spr_target
 ,btarg,biomass_target
 ,SBzero,spawning_biomass_zero
 ,seas_dur,season_duration
