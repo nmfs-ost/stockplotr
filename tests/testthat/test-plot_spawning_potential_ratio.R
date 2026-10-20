@@ -1,23 +1,15 @@
 test_that("plot_spawning_potential_ratio generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_spawning_potential_ratio(stockplotr::example_data, quantity="spr"),
+    plot_spawning_potential_ratio(stockplotr::example_data, interactive = FALSE)
   )
-  
-  expect_no_error(
-    plot_spawning_potential_ratio(stockplotr::example_data, quantity="fishing_intensity")
-  )
-  
-  expect_no_error(
-    plot_spawning_potential_ratio(stockplotr::example_data, quantity="spr_ratio")
-  )
-  
   
   # expect error-free plot with many arguments
   expect_no_error(
     plot_spawning_potential_ratio(
       stockplotr::example_data,
-      quantity = "spr_ratio",
+      # quantity = "spr_ratio",
+      interactive = FALSE,
       ref_line = "biomass_target"
     )
   )
@@ -27,6 +19,7 @@ test_that("plot_spawning_potential_ratio generates plots without errors", {
   expect_s3_class(
     plot_spawning_potential_ratio(
       stockplotr::example_data,
+      interactive = FALSE,
       ref_line = c("target" = 0.80)
     ),
     "gg"

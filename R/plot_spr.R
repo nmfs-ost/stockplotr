@@ -75,8 +75,8 @@ plot_spawning_potential_ratio <- function(
   processed_data <- process_data(
     dat = prepared_data,
     group = group,
-    facet = facet,
-    method = "sum"
+    facet = facet#
+    # method = "sum"
   )
   prepared_data <- processed_data[[1]]
   group <- processed_data[2]
@@ -103,22 +103,18 @@ plot_spawning_potential_ratio <- function(
     group = group,
     facet = facet,
     ...
-    # ...
   ) +
     ggplot2::geom_hline(yintercept = 1,
                         color = "grey") +
     ggplot2::geom_hline(yintercept = 0,
                         color = "grey") +
-    theme_noaa()
-  
-    plt <- reference_line(
-      plot = plt,
+    add_reference_line(
       dat = dat,
-      lbs = FALSE,
-      label_name = "spawning_potential_ratio",
-      reference = ref_line,
+      ref_line = ref_line,
+      label = "spr",
       scale_amount = 1
-    ) + theme_noaa()
+    ) +
+    theme_noaa()
   
 
   if (length(unique(prepared_data$group_var)) == 1) {
