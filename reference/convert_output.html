@@ -111,7 +111,7 @@
 
 <dl><dt id="arg-file">file<a class="anchor" aria-label="anchor" href="#arg-file"></a></dt>
 <dd><p>Path. Assessment model output file path. Currently accepts SS3
-Report.sso file, BAM .rda file, Rceattle model object, and FIMS model object.</p></dd>
+<code>r4ss::ss_output()</code> or Report.sso file (being deprecated), BAM .rda file, Rceattle model object, and FIMS model object.</p></dd>
 
 
 <dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
@@ -122,9 +122,9 @@ Report.sso file, BAM .rda file, Rceattle model object, and FIMS model object.</p
 
 <dt id="arg-fleet-names">fleet_names<a class="anchor" aria-label="anchor" href="#arg-fleet-names"></a></dt>
 <dd><p>Character vector. Names of fleets in the assessment model as
- shortened in the output file or names of fleets to replace the native fleet
- names in the output. For example, if fleet names in the model are 1, 2, 3
- then fleet_names = c("fleet1" = 1, "fleet2" = 2, "fleet3" = 3).</p>
+shortened in the output file or names of fleets to replace the native fleet
+names in the output. For example, if fleet names in the model are 1, 2, 3
+then fleet_names = c("fleet1" = 1, "fleet2" = 2, "fleet3" = 3).</p>
 <p>Default: NULL</p></dd>
 
 
@@ -138,8 +138,8 @@ in the file path provided.</p>
     <div id="value">
     <h2>Value</h2>
     <p>A reformatted and standardized tibble of assessment model results
-        for application in building stock assessment reports and to easily
-        adapt results among regional assessments.</p>
+for application in building stock assessment reports and to easily
+adapt results among regional assessments.</p>
     </div>
     <div id="details">
     <h2>Details</h2>

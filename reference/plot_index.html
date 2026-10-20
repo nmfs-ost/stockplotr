@@ -121,10 +121,10 @@
 
 
 <dl><dt id="arg-dat">dat<a class="anchor" aria-label="anchor" href="#arg-dat"></a></dt>
-<dd><p>Data frame or list. A tibble or named list of tibbles (input as `list()`)
+<dd><p>Data frame or list. A tibble or named list of tibbles (input as <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code>)
 returned from <a href="convert_output.html">convert_output</a>.</p>
 <p>If inputting a list of tibbles, the first tibble's reference point defined
-in `ref_line` is used to plot a reference line or calculate relative spawning biomass.</p></dd>
+in <code>ref_line</code> is used to plot a reference line or calculate relative spawning biomass.</p></dd>
 
 
 <dt id="arg-unit-label">unit_label<a class="anchor" aria-label="anchor" href="#arg-unit-label"></a></dt>
@@ -147,15 +147,15 @@ Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", 
 
 <dt id="arg-interactive">interactive<a class="anchor" aria-label="anchor" href="#arg-interactive"></a></dt>
 <dd><p>Logical. TRUE/FALSE; indicate whether the environment is interactive.</p>
-<p>Default: `FALSE`</p></dd>
+<p>Default: <code>FALSE</code></p></dd>
 
 
 <dt id="arg-module">module<a class="anchor" aria-label="anchor" href="#arg-module"></a></dt>
-<dd><p>Character vector. (Optional) Module name found in `dat$module_name`.
+<dd><p>Character vector. (Optional) Module name found in <code>dat$module_name</code>.
 If selecting &gt;1 module, place them in a vector like c("module1", "module2").</p>
 <p>Default: NULL</p>
 <p>If the interactive and &gt;1 module_name is found, user will select the
-module_name in the console. @seealso [filter_data()]</p></dd>
+module_name in the console. @seealso <code><a href="filter_data.html">filter_data()</a></code></p></dd>
 
 
 <dt id="arg-focus">focus<a class="anchor" aria-label="anchor" href="#arg-focus"></a></dt>
@@ -166,14 +166,14 @@ module_name in the console. @seealso [filter_data()]</p></dd>
 
 <dt id="arg-make-rda">make_rda<a class="anchor" aria-label="anchor" href="#arg-make-rda"></a></dt>
 <dd><p>Logical. TRUE/FALSE; indicate whether to save the object and
-make an automated caption and alternative text in the form of an `rda` object. If TRUE,
+make an automated caption and alternative text in the form of an <code>rda</code> object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".</p>
-<p>Default: `FALSE`.</p></dd>
+<p>Default: <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-figures-dir">figures_dir<a class="anchor" aria-label="anchor" href="#arg-figures-dir"></a></dt>
 <dd><p>Path. Path to the "figures" folder.</p>
-<p>Default: `getwd()`</p>
+<p>Default: <code><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd()</a></code></p>
 <p>The folder is created within the path if it does not exist.</p></dd>
 
 
@@ -189,12 +189,12 @@ the rda will be exported to the folder indicated in the argument "figures_dir".<
     <h2>Details</h2>
     <p>The input is from an assessment model output file
 translated to a standardized output (<a href="convert_output.html">convert_output</a>).
-There are options to return a `ggplot2` object or export an .rda object
+There are options to return a <code>ggplot2</code> object or export an .rda object
 containing associated caption and alternative text for the figure.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p>[convert_output()], [filter_data()], [process_data()], [plot_obsvpred()], [export_kqs()], [insert_kqs()], [create_rda()]</p></div>
+    <div class="dont-index"><p><code><a href="convert_output.html">convert_output()</a></code>, <code><a href="filter_data.html">filter_data()</a></code>, <code><a href="process_data.html">process_data()</a></code>, <code><a href="plot_obsvpred.html">plot_obsvpred()</a></code>, <code><a href="export_kqs.html">export_kqs()</a></code>, <code><a href="insert_kqs.html">insert_kqs()</a></code>, <code><a href="create_rda.html">create_rda()</a></code></p></div>
     </div>
 
     <div id="ref-examples">

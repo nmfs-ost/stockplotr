@@ -135,10 +135,10 @@
 
 
 <dl><dt id="arg-dat">dat<a class="anchor" aria-label="anchor" href="#arg-dat"></a></dt>
-<dd><p>Data frame or list. A tibble or named list of tibbles (input as `list()`)
+<dd><p>Data frame or list. A tibble or named list of tibbles (input as <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code>)
 returned from <a href="convert_output.html">convert_output</a>.</p>
 <p>If inputting a list of tibbles, the first tibble's reference point defined
-in `ref_line` is used to plot a reference line or calculate relative spawning biomass.</p></dd>
+in <code>ref_line</code> is used to plot a reference line or calculate relative spawning biomass.</p></dd>
 
 
 <dt id="arg-recruitment-unit-label">recruitment_unit_label<a class="anchor" aria-label="anchor" href="#arg-recruitment-unit-label"></a></dt>
@@ -157,33 +157,33 @@ recruitment_scale_amount = 100 would scale down a value from 500,000 –&gt;
 <dt id="arg-relative">relative<a class="anchor" aria-label="anchor" href="#arg-relative"></a></dt>
 <dd><p>Logical. TRUE/FALSE; specify whether to set y-axis values relative to
 the ref_line value.</p>
-<p>Default: `FALSE`</p></dd>
+<p>Default: <code>FALSE</code></p></dd>
 
 
 <dt id="arg-proportional">proportional<a class="anchor" aria-label="anchor" href="#arg-proportional"></a></dt>
 <dd><p>Logical. TRUE/FALSE; scale size of bubble plots</p>
-<p>Default: `TRUE`</p></dd>
+<p>Default: <code>TRUE</code></p></dd>
 
 
 <dt id="arg-interactive">interactive<a class="anchor" aria-label="anchor" href="#arg-interactive"></a></dt>
 <dd><p>Logical. TRUE/FALSE; indicate whether the environment is interactive.</p>
-<p>Default: `FALSE`</p></dd>
+<p>Default: <code>FALSE</code></p></dd>
 
 
 <dt id="arg-figures-tables-dir">figures_tables_dir<a class="anchor" aria-label="anchor" href="#arg-figures-tables-dir"></a></dt>
 <dd><p>Path. The location of the folder containing
 figures and tables ("figures" and "tables").</p>
-<p>Default: the working directory (`getwd()`)</p></dd>
+<p>Default: the working directory (<code><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd()</a></code>)</p></dd>
 
 
 <dt id="arg-ref-line">ref_line<a class="anchor" aria-label="anchor" href="#arg-ref-line"></a></dt>
 <dd><p>String. Type of reference point to
-compare biomass to. The default is `"msy"`, which looks for
-`"biomass_msy"` in the `"label"` column of `dat`. The actual
-searching in `dat` is case agnostic and will work with either upper- or
+compare biomass to. The default is <code>"msy"</code>, which looks for
+<code>"biomass_msy"</code> in the <code>"label"</code> column of <code>dat</code>. The actual
+searching in <code>dat</code> is case agnostic and will work with either upper- or
 lower-case letters but you must use one of the options specified in the
 default list to ensure that the label on the figure looks correct
-regardless of how it is specified in `dat`. Other possibilities may include
+regardless of how it is specified in <code>dat</code>. Other possibilities may include
 "target", "MSY", and "unfished". When the reference cannot be found,
 indicate the reference line in the form c("label" = value).</p>
 <p>Default: "msy"</p>
@@ -197,7 +197,7 @@ indicate the reference line in the form c("label" = value).</p>
 
 <dt id="arg-biomass-scale-amount">biomass_scale_amount<a class="anchor" aria-label="anchor" href="#arg-biomass-scale-amount"></a></dt>
 <dd><p>Number. A number describing how much to scale down the
-biomass quantities shown on the y axis. See `recruitment_scale_amount`.</p>
+biomass quantities shown on the y axis. See <code>recruitment_scale_amount</code>.</p>
 <p>Default: 1</p></dd>
 
 
@@ -213,12 +213,12 @@ biomass quantities shown on the y axis. See `recruitment_scale_amount`.</p>
 
 <dt id="arg-spawning-biomass-scale-amount">spawning_biomass_scale_amount<a class="anchor" aria-label="anchor" href="#arg-spawning-biomass-scale-amount"></a></dt>
 <dd><p>Number.  A number describing how much to scale down the
-spawning biomass quantities shown on the y axis. See `recruitment_scale_amount`.</p>
+spawning biomass quantities shown on the y axis. See <code>recruitment_scale_amount</code>.</p>
 <p>Default: 1</p></dd>
 
 
 <dt id="arg-ref-line-sb">ref_line_sb<a class="anchor" aria-label="anchor" href="#arg-ref-line-sb"></a></dt>
-<dd><p>String. Same as `ref_line`, but this argument is
+<dd><p>String. Same as <code>ref_line</code>, but this argument is
 applied to plot_spawning_biomass.</p>
 <p>Default: "msy"</p>
 <p>Options: Including, but not limited to: "target", "MSY", "unfished"</p></dd>
@@ -226,7 +226,7 @@ applied to plot_spawning_biomass.</p>
 
 <dt id="arg-abundance-at-age-scale-amount">abundance_at_age_scale_amount<a class="anchor" aria-label="anchor" href="#arg-abundance-at-age-scale-amount"></a></dt>
 <dd><p>Number.  A number describing how much to scale down the
-abundance quantities shown via bubble size. See `recruitment_scale_amount`.</p>
+abundance quantities shown via bubble size. See <code>recruitment_scale_amount</code>.</p>
 <p>Default: 1</p></dd>
 
 
@@ -237,7 +237,7 @@ abundance quantities shown via bubble size. See `recruitment_scale_amount`.</p>
 
 <dt id="arg-biomass-at-age-scale-amount">biomass_at_age_scale_amount<a class="anchor" aria-label="anchor" href="#arg-biomass-at-age-scale-amount"></a></dt>
 <dd><p>Number.  A number describing how much to scale down the
-biomass quantities shown via bubble size. See `recruitment_scale_amount`.</p>
+biomass quantities shown via bubble size. See <code>recruitment_scale_amount</code>.</p>
 <p>Default: 1</p></dd>
 
 
@@ -263,7 +263,7 @@ biomass quantities shown via bubble size. See `recruitment_scale_amount`.</p>
 
 <dt id="arg-catch-scale-amount">catch_scale_amount<a class="anchor" aria-label="anchor" href="#arg-catch-scale-amount"></a></dt>
 <dd><p>Number. A number describing how much to scale down the
-catch quantities shown via bubble size. See `recruitment_scale_amount`.</p>
+catch quantities shown via bubble size. See <code>recruitment_scale_amount</code>.</p>
 <p>Default: 1</p></dd>
 
 
@@ -291,7 +291,7 @@ translated to a standardized output (<a href="convert_output.html">convert_outpu
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p>[convert_output()], [create_rda()]</p></div>
+    <div class="dont-index"><p><code><a href="convert_output.html">convert_output()</a></code>, <code><a href="create_rda.html">create_rda()</a></code></p></div>
     </div>
 
     <div id="ref-examples">

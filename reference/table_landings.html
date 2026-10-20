@@ -123,10 +123,10 @@
 
 
 <dl><dt id="arg-dat">dat<a class="anchor" aria-label="anchor" href="#arg-dat"></a></dt>
-<dd><p>Data frame or list. A tibble or named list of tibbles (input as `list()`)
+<dd><p>Data frame or list. A tibble or named list of tibbles (input as <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code>)
 returned from <a href="convert_output.html">convert_output</a>.</p>
 <p>If inputting a list of tibbles, the first tibble's reference point defined
-in `ref_line` is used to plot a reference line or calculate relative spawning biomass.</p></dd>
+in <code>ref_line</code> is used to plot a reference line or calculate relative spawning biomass.</p></dd>
 
 
 <dt id="arg-unit-label">unit_label<a class="anchor" aria-label="anchor" href="#arg-unit-label"></a></dt>
@@ -142,7 +142,7 @@ in `ref_line` is used to plot a reference line or calculate relative spawning bi
 
 <dt id="arg-interactive">interactive<a class="anchor" aria-label="anchor" href="#arg-interactive"></a></dt>
 <dd><p>Logical. TRUE/FALSE; indicate whether the environment is interactive.</p>
-<p>Default: `FALSE`</p></dd>
+<p>Default: <code>FALSE</code></p></dd>
 
 
 <dt id="arg-group">group<a class="anchor" aria-label="anchor" href="#arg-group"></a></dt>
@@ -160,11 +160,11 @@ is set to "none".</p>
 
 
 <dt id="arg-module">module<a class="anchor" aria-label="anchor" href="#arg-module"></a></dt>
-<dd><p>Character vector. (Optional) Module name found in `dat$module_name`.
+<dd><p>Character vector. (Optional) Module name found in <code>dat$module_name</code>.
 If selecting &gt;1 module, place them in a vector like c("module1", "module2").</p>
 <p>Default: NULL</p>
 <p>If the interactive and &gt;1 module_name is found, user will select the
-module_name in the console. @seealso [filter_data()]</p></dd>
+module_name in the console. @seealso <code><a href="filter_data.html">filter_data()</a></code></p></dd>
 
 
 <dt id="arg-label">label<a class="anchor" aria-label="anchor" href="#arg-label"></a></dt>
@@ -188,15 +188,15 @@ table will be rounded to.</p>
 
 <dt id="arg-make-rda">make_rda<a class="anchor" aria-label="anchor" href="#arg-make-rda"></a></dt>
 <dd><p>Logical. TRUE/FALSE; indicate whether to save the object and
-make an automated caption and alternative text in the form of an `rda` object. If TRUE,
+make an automated caption and alternative text in the form of an <code>rda</code> object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".</p>
-<p>Default: `FALSE`.</p></dd>
+<p>Default: <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-tables-dir">tables_dir<a class="anchor" aria-label="anchor" href="#arg-tables-dir"></a></dt>
 <dd><p>Path. The location of the folder containing the generated table
-rda files ("tables") that will be created if the argument `make_rda` = TRUE.</p>
-<p>Default: the working directory (`getwd()`)</p></dd>
+rda files ("tables") that will be created if the argument <code>make_rda</code> = TRUE.</p>
+<p>Default: the working directory (<code><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd()</a></code>)</p></dd>
 
 </dl></div>
     <div id="value">
@@ -207,12 +207,12 @@ rda files ("tables") that will be created if the argument `make_rda` = TRUE.</p>
     <h2>Details</h2>
     <p>The input is from an assessment model output file
 translated to a standardized output (<a href="convert_output.html">convert_output</a>).
-There are options to return a [gt::gt()] object or export an rda object
+There are options to return a <code><a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt::gt()</a></code> object or export an rda object
 containing a gt-based table, caption, and LaTeX-based table.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p>[convert_output()], [filter_data()], [process_table()], [export_kqs()], [insert_kqs()], [create_rda()]</p></div>
+    <div class="dont-index"><p><code><a href="convert_output.html">convert_output()</a></code>, <code><a href="filter_data.html">filter_data()</a></code>, <code><a href="process_table.html">process_table()</a></code>, <code><a href="export_kqs.html">export_kqs()</a></code>, <code><a href="insert_kqs.html">insert_kqs()</a></code>, <code><a href="create_rda.html">create_rda()</a></code></p></div>
     </div>
 
     <div id="ref-examples">
