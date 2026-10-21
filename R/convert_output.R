@@ -174,8 +174,13 @@ convert_output <- function(
         "rceattle"
       },
       "list" = {
-        cli::cli_alert_info("Processing SS3 r4ss output file...")
-        "ss3"
+        if (any(grepl("wham_version", names(file)))) {
+          cli::cli_alert_info("Processing WHAM output file...")
+          "wham"
+        } else {
+          cli::cli_alert_info("Processing SS3 r4ss output file...")
+          "ss3"
+        }
       },
       cli::cli_abort("Unknown file type. Please indicate model.")
     )
