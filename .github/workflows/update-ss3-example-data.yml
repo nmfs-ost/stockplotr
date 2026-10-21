@@ -1,4 +1,4 @@
-# Update example data when convert_output.R or variable-name resources change
+# Update ss3 example data from r4ss object when convert_output.R or variable-name resources change
 name: update-ss3-example-data
 on:
   pull_request:
