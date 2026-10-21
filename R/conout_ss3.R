@@ -1,3 +1,11 @@
+#' Code to convert SS3 output to standard framework.
+#' 
+#' Does not change naming conventions. Contains code to work with SS3 Report.sso 
+#' file or returned object from `r4ss::ss_output()`.
+#'
+#' @inheritParams convert_output
+#'
+#' @returns Reshaped data frame.
 conout_ss3 <- function(
     file,
     out_new,
