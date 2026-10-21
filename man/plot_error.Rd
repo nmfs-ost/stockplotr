@@ -52,13 +52,13 @@ Default: NULL}
 Default: "Year"}
 
 \item{ylab}{String. Y-axis label. If NULL, it will be set to the name
- of `y`.
+of \code{y}.
 
 Default: NULL}
 
 \item{hline}{Logical. TRUE/FALSE; indicate whether to place a horizontal line at 1
 
-Default: `TRUE`}
+Default: \code{TRUE}}
 
 \item{...}{Inherited arguments from internal functions from ggplot2::geom_xx}
 }

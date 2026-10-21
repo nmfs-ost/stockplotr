@@ -27,7 +27,7 @@ Default: NULL}
 kilograms to pounds. The default units match the default in the
 unit_label argument - 'metric tons'.
 
-Default: `FALSE`}
+Default: \code{FALSE}}
 }
 \value{
 List of 3 objects:

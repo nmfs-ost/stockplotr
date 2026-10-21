@@ -14,11 +14,11 @@ table_projections(
 )
 }
 \arguments{
-\item{dat}{Data frame or list. A tibble or named list of tibbles (input as `list()`)
+\item{dat}{Data frame or list. A tibble or named list of tibbles (input as \code{list()})
 returned from \link[stockplotr]{convert_output}.
 
 If inputting a list of tibbles, the first tibble's reference point defined
-in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
+in \code{ref_line} is used to plot a reference line or calculate relative spawning biomass.}
 
 \item{unit_label}{Character vector. Abbreviated unit label for each quantity
 
@@ -27,26 +27,26 @@ Default: c("catch" = "mt", "spawning_biomass" = "mt",
 
 \item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
-Default: `FALSE`}
+Default: \code{FALSE}}
 
-\item{module}{Character vector. (Optional) Module name found in `dat$module_name`.
+\item{module}{Character vector. (Optional) Module name found in \code{dat$module_name}.
 If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
 
 If the interactive and >1 module_name is found, user will select the
-module_name in the console. @seealso [filter_data()]}
+module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 
 \item{make_rda}{Logical. TRUE/FALSE; indicate whether to save the object and
-make an automated caption and alternative text in the form of an `rda` object. If TRUE,
+make an automated caption and alternative text in the form of an \code{rda} object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
 
-Default: `FALSE`.}
+Default: \code{FALSE}.}
 
 \item{tables_dir}{Path. The location of the folder containing the generated table
-rda files ("tables") that will be created if the argument `make_rda` = TRUE.
+rda files ("tables") that will be created if the argument \code{make_rda} = TRUE.
 
-Default: the working directory (`getwd()`)}
+Default: the working directory (\code{getwd()})}
 }
 \value{
 A formatted gt table object.
