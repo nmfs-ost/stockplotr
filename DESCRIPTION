@@ -54,6 +54,7 @@ Imports:
     utils
 Suggests:
     flextable,
+    ggridges,
     here,
     kableExtra,
     knitr,
