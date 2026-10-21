@@ -138,6 +138,9 @@ convert_output <- function(
   }
 
   # Recognize model through file extension
+  if (is.character(file) && tolower(stringr::str_extract(file, "\\.([^.]+)$")) == ".rds") {
+    file <- readRDS(file)
+  }
   if (is.character(file)) {
     if (is.null(model)) {
       model <- switch(stringr::str_extract(file, "\\.([^.]+)$"),
@@ -149,14 +152,14 @@ convert_output <- function(
           cli::cli_alert_info("Processing BAM output file...")
           "bam"
         },
-        ".rds" = {
-          cli::cli_alert_info("Processing WHAM output file...")
-          "wham"
-        },
-        ".RDS" = {
-          cli::cli_alert_info("Processing FIMS output file...")
-          "fims"
-        },
+        # ".rds" = {
+        #   cli::cli_alert_info("Processing WHAM output file...")
+        #   "wham"
+        # },
+        # ".RDS" = {
+        #   cli::cli_alert_info("Processing FIMS output file...")
+        #   "fims"
+        # },
         cli::cli_abort("Unknown file type. Please indicate model.")
       )
     }
