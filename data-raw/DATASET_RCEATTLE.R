@@ -20,6 +20,7 @@ pak::local_install(".")
 # Convert output
 # OK not to subset bc small
 pollock <- stockplotr::convert_output(pollock_model)
-# Save object as rda into raw_data
-# usethis::use_data(pollock, overwrite = TRUE)
+# Save object as rda into raw_data -- and document
+usethis::use_data(pollock, overwrite = TRUE)
+# Overwrite compressed version
 save(pollock, file = "data/pollock.rda", compress = "xz", compression_level = 9)

@@ -93,7 +93,7 @@
 #' @keywords datasets
 #'
 #' @references Adams, G. D., Holsman, K. K., Barbeaux, S. J., Dorn, M. W., Ianelli, J. N., Spies, I., … Punt, A. E. (2022)
-#' (\href{https://doi.org/10.1016/j.fishres.2022.106303)
+#' (\href{https://doi.org/10.1016/j.fishres.2022.106303})
 #'
 #' @source \href{https://github.com/afsc-assessments/Rceattle/blob/main/examples/Fit_2018_GOA_single-species_models.R}{Rceattle Example}
 #'
@@ -152,13 +152,13 @@
 #' @keywords datasets
 #' 
 #' @references SEDAR (2018)
-#' (\href{https://sedarweb.org/documents/sedar-55-stock-assessment-report-south-atlantic-vermilion-snapper/)
+#' (\href{https://sedarweb.org/documents/sedar-55-stock-assessment-report-south-atlantic-vermilion-snapper/})
 #'
 #' @examples
 #' data(vermilion_snapper)
 #' head(vermilion_snapper)
 #' unique(vermilion_snapper$label)
-vermilion_snapper
+"vermilion_snapper"
 
 #' SS3 Simple stock assessment output
 #'
