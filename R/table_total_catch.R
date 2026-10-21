@@ -116,7 +116,7 @@ table_total_catch <- function(
   }
 
   catch <- catch |>
-    dplyr::select(-cols_to_remove)
+    dplyr::select(-dplyr::all_of(cols_to_remove))
 
   if ("uncertainty" %in% colnames(catch)) {
     catch <- catch |>

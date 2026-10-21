@@ -3,7 +3,7 @@
 #' Format stock assessment output file to a standardized tibble.
 #'
 #' @param file Path. Assessment model output file path. Currently accepts SS3
-#' Report.sso file, BAM .rda file, Rceattle model object, and FIMS model object.
+#' `r4ss::ss_output()` or Report.sso file (being deprecated), BAM .rda file, Rceattle model object, and FIMS model object.
 #' @param model String. Assessment model used in evaluation
 #'
 #' Default: NULL
@@ -48,6 +48,18 @@ convert_output <- function(
   fleet_names = NULL,
   save_dir = NULL
 ) {
+  
+  if (is.character(file) && grepl("Report.sso", file)) {
+    lifecycle::deprecate_warn(
+      when = "2.8.0", 
+      what = I("convert_output(file = 'Report.sso')"), 
+      details = c(
+        i = "Please use the returned object from `r4ss::ss_output()`",
+        i = "File will be compatible until Oct. 1, 2027"
+      )
+    )
+  }
+  
   # check if entered save_dir exists so doesn't waste user time finding this out at the end
   if (!is.null(save_dir)) {
     if (!grepl(".rda", save_dir)) {
@@ -439,7 +451,7 @@ convert_output <- function(
                 for (i in intersect(tolower(fleet_names), colnames(df3))) {
                   col_name <- glue::glue("exploitation_{i}")
                   df3 <- df3 |>
-                    dplyr::rename(!!col_name := i)
+                    dplyr::rename(!!col_name := dplyr::all_of(i))
                 }
               }
             }
@@ -488,7 +500,7 @@ convert_output <- function(
               if (length(err_col_id) > 0) {
                 uncert_name <- stringr::str_extract(err_col_id, paste0(errors, collapse = "|"))
                 df3 <- df3 |>
-                  dplyr::rename(!!uncert_name := err_col_id)
+                  dplyr::rename(!!uncert_name := dplyr::all_of(err_col_id))
               }
               df4 <- df3 |>
                 tidyr::pivot_longer(
@@ -1981,7 +1993,10 @@ convert_output <- function(
     # can late take approach like BAM?
     # TODO: Do we want users to input the saved file or already loaded into the R environment?
     if (is.character(file)) {
-      if (!grepl(".rds", file)) {
+      # Anchored and case-insensitive: saveRDS() output is conventionally named
+      # either .rds or .RDS, and the real assessment files this targets use the
+      # latter. The unanchored, case-sensitive form rejected them.
+      if (!grepl("\\.rds$", file, ignore.case = TRUE)) {
         cli::cli_abort("File must be in an .rds format otherwise load data into your environment and run `convert_output()` using the loaded data.")
       }
       dat <- readRDS(file)
@@ -1989,9 +2004,38 @@ convert_output <- function(
       dat <- file
     }
 
+    # The standardized output describes one stock and has no species dimension,
+    # but CEATTLE is a multispecies model. A multispecies fit's `sdrep` holds
+    # nspp * nyrs values per label, which fails the `n == length(styr:projyr)`
+    # test used to attach years below, so every biomass / spawning biomass /
+    # recruitment value would silently come back with `year = NA`. Refuse
+    # instead: a converted file that quietly merges two stocks is worse than no
+    # converted file.
+    # `[[` rather than `$`: `$` partial-matches, so a renamed element would
+    # return something else and skip the refusal.
+    if (!"data_list" %in% names(dat)) {
+      cli::cli_abort(c(
+        "Rceattle fit has no {.field data_list} element.",
+        i = "The catch, index and composition data are read from it."
+      ))
+    }
+    nspp <- dat[["data_list"]][["nspp"]]
+    if (is.null(nspp)) {
+      cli::cli_abort(c(
+        "Rceattle fit does not report {.field nspp}, so its species count is unknown.",
+        i = "The standardized output has no species dimension and must not merge stocks."
+      ))
+    }
+    if (nspp > 1) {
+      cli::cli_abort(c(
+        "Rceattle model has {nspp} species, and the standardized output has no species dimension.",
+        i = "Subset the fit to a single species before converting."
+      ))
+    }
+
     # Extract or use fleet names
     if (is.null(fleet_names)) {
-      fleet_names <- names(dat$estimated_params$index_ln_q)
+      fleet_names <- names(dat$estimated_params$index_log_q)
     }
 
     # Output fleet names in console
@@ -2005,9 +2049,25 @@ convert_output <- function(
     # units <- c("mt", "lbs", "eggs")
 
     ##### Loop ####
-    for (p in (2:length(dat))[-c(6, 9, 10)]) {
-      extract <- dat[p]
-      module_name <- names(extract)
+    # Select the modules by name rather than by position. An Rceattle fit's
+    # element list depends on how it was fitted -- `phase = TRUE` adds
+    # `.conv_phase` and `phase_params`, and `getsd = FALSE` drops `sdrep` -- so a
+    # fixed offset selects different modules for different fits of the same
+    # model. Under `phase = TRUE` the positional form dropped `data_list` and
+    # passed `obj` to the generic vector handler below, which aborts with
+    # "attempt to select less than one element in OneIndex".
+    #
+    # `sdrep` carries every derived time series, so without it the output holds
+    # only the input data. Say so rather than returning a table whose biomass
+    # and recruitment are simply absent.
+    if (!"sdrep" %in% names(dat)) {
+      cli::cli_warn(c(
+        "Rceattle fit has no {.field sdrep}, so the converted output has no biomass, spawning biomass or recruitment.",
+        i = "Refit with {.code fit_control(getsd = TRUE)} to standardize the derived time series."
+      ))
+    }
+    for (module_name in intersect(c("sdrep", "data_list", "quantities"), names(dat))) {
+      extract <- dat[module_name]
       cli::cli_alert_info("Processing {module_name}")
       if (module_name == "sdrep") {
         ##### sdrep ####
@@ -2034,29 +2094,49 @@ convert_output <- function(
           )
         # make year column
         year_col <- rep(
-          file[["data_list"]]$styr:file[["data_list"]]$projyr,
+          dat[["data_list"]]$styr:dat[["data_list"]]$projyr,
           length(unique(
-            dplyr::filter(values_count, n == length(file[["data_list"]]$styr:file[["data_list"]]$projyr)) |>
+            dplyr::filter(values_count, n == length(dat[["data_list"]]$styr:dat[["data_list"]]$projyr)) |>
               dplyr::pull(label)
           ))
         )
 
         df2 <- values |>
-          dplyr::filter(n == length(file[["data_list"]]$styr:file[["data_list"]]$projyr)) |>
+          dplyr::filter(n == length(dat[["data_list"]]$styr:dat[["data_list"]]$projyr)) |>
           dplyr::mutate(year = year_col)
 
         df2 <- values |>
           dplyr::filter(
-            n != length(file[["data_list"]]$styr:file[["data_list"]]$projyr)
+            n != length(dat[["data_list"]]$styr:dat[["data_list"]]$projyr)
           ) |>
           dplyr::mutate(year = NA) |>
           rbind(df2)
 
         # Extract parameter values ts
+        # The standard errors of the fixed effects are the square root of the
+        # diagonal of cov.fixed, in the same order as par.fixed.
+        has_cov_fixed <- !is.null(extract[[1]]$cov.fixed)
         par_fixes <- data.frame(
           label = names(extract[[1]]$par.fixed),
-          estimate = extract[[1]]$par.fixed
+          estimate = extract[[1]]$par.fixed,
+          uncertainty = if (has_cov_fixed) sqrt(diag(extract[[1]]$cov.fixed)) else NA_real_,
+          uncertainty_label = if (has_cov_fixed) "sd" else NA_character_
         )
+        # Random effects, such as rec_dev under random_rec = TRUE, are in
+        # par.random rather than par.fixed. Their variances are in
+        # diag.cov.random.
+        if (length(extract[[1]]$par.random) > 0) {
+          has_cov_random <- !is.null(extract[[1]]$diag.cov.random)
+          par_fixes <- rbind(
+            par_fixes,
+            data.frame(
+              label = names(extract[[1]]$par.random),
+              estimate = extract[[1]]$par.random,
+              uncertainty = if (has_cov_random) sqrt(extract[[1]]$diag.cov.random) else NA_real_,
+              uncertainty_label = if (has_cov_random) "sd" else NA_character_
+            )
+          )
+        }
         par_fixes_count <- par_fixes |>
           dplyr::group_by(label) |>
           dplyr::count()
@@ -2067,26 +2147,22 @@ convert_output <- function(
           )
 
         year_col_par_fix <- rep(
-          file[["data_list"]]$styr:file[["data_list"]]$endyr,
+          dat[["data_list"]]$styr:dat[["data_list"]]$endyr,
           length(unique(
-            dplyr::filter(par_fixes_count, n == length(file[["data_list"]]$styr:file[["data_list"]]$endyr)) |>
+            dplyr::filter(par_fixes_count, n == length(dat[["data_list"]]$styr:dat[["data_list"]]$endyr)) |>
               dplyr::pull(label)
           ))
         )
 
         df3 <- par_fixes |>
-          dplyr::filter(n == length(file[["data_list"]]$styr:file[["data_list"]]$endyr)) |>
+          dplyr::filter(n == length(dat[["data_list"]]$styr:dat[["data_list"]]$endyr)) |>
           dplyr::mutate(year = year_col_par_fix)
         df3 <- par_fixes |>
           dplyr::filter(
-            n != length(file[["data_list"]]$styr:file[["data_list"]]$endyr)
+            n != length(dat[["data_list"]]$styr:dat[["data_list"]]$endyr)
           ) |>
           dplyr::mutate(year = NA) |>
-          rbind(df3) |>
-          dplyr::mutate(
-            uncertainty = NA,
-            uncertainty_label = NA
-          )
+          rbind(df3)
         # not sure how pop_scalar is indexed
         # not sure how log_index_hat is indexes
         # Did not use r_sd for the error in rec bc used it from the other element in the list
@@ -2121,7 +2197,10 @@ convert_output <- function(
             uncertainty_label = "log_sd",
             indices_predicted = dat$quantities$index_hat
           ) |>
-          dplyr::select(-c(fleet_code, q_block))
+          # any_of(): `Q_block` is deprecated in Rceattle and no longer written
+          # to `index_data`, so naming it directly fails on a current fit while
+          # still needing to be dropped from an older one.
+          dplyr::select(-dplyr::any_of(c("fleet_code", "q_block")))
         cli::cli_alert_info("'Selectivity_block' values located in 'block' columns.")
 
         # check if species > 1
@@ -2159,12 +2238,16 @@ convert_output <- function(
           # dplyr::filter(!is.na(Catch)) |>
           dplyr::rename_with(tolower) |>
           dplyr::mutate(
+            module_name = names(extract),
+            # Set the era here from the year, as the index and composition
+            # frames do, so the frame is complete where it is built. The mutate
+            # at the end of the branch recomputes it the same way.
             era = dplyr::if_else(
               year > dat$data_list$endyr,
               "fore",
-              NA_character_
+              "time"
             ),
-            catch_h = dat$quantities$catch_h,
+            catch_h = dat$quantities$catch_hat,
             # TODO: follow up on this quantity
             # log_index_hat = dat$quantities$log_index_hat
             uncertainty_label = "log_sd"
@@ -2203,8 +2286,15 @@ convert_output <- function(
 
         indexing_vars_cols <- colnames(df_comp_obs)[!grepl("comp", colnames(df_comp_obs))]
 
+        # `age_hat` holds one row per row of `comp_data`, in the same order, so
+        # it binds column-wise. cross_join() paired every observation with the
+        # whole prediction matrix instead, which is a Cartesian product: on the
+        # GOAatf fixture it returned the 2,478 correct predictions 59 times
+        # over, once per row of comp_data, for 146,202 in all.
+        age_hat <- as.data.frame(dat$quantities$age_hat)
+        names(age_hat) <- paste0("agehat_", seq_len(ncol(age_hat)))
         df_comp_pred <- dplyr::select(df_comp_obs, dplyr::all_of(indexing_vars_cols)) |>
-          dplyr::cross_join(as.data.frame(dat$quantities$age_hat)) |>
+          cbind(age_hat) |>
           tidyr::pivot_longer(
             cols = -dplyr::all_of(indexing_vars_cols),
             names_to = "age",
@@ -2215,7 +2305,7 @@ convert_output <- function(
           dplyr::mutate(
             label = "composition_predicted",
             # NOTE: the below age mutate slows down code
-            age = stringr::str_replace(age, "V", "")
+            age = stringr::str_replace(age, "agehat_", "")
           )
 
         # Finish adjusting comp_obs
@@ -2234,15 +2324,77 @@ convert_output <- function(
           )
 
         df_comp <- rbind(df_comp_obs, df_comp_pred) |>
+          # Match the index and catch frames: the standard names the fleet
+          # `fleet`, carries no `fleet_name` or `species`, and every row states
+          # which module it came from.
+          dplyr::rename(fleet = fleet_name) |>
+          dplyr::mutate(module_name = names(extract)) |>
+          dplyr::select(-dplyr::any_of("species")) |>
           # TODO: do I need to filter sample size by <3 for confidentiality or does this not apply?
           dplyr::select(-c(age0_length1, fleet_code, sample_size))
 
-        df_catch[setdiff(tolower(names(out_new)), tolower(names(df_catch)))] <- NA
-        data_list_list[["comp_data"]] <- df_catch
+        df_comp[setdiff(tolower(names(out_new)), tolower(names(df_comp)))] <- NA
+        data_list_list[["comp_data"]] <- df_comp
 
         # final df for data_list module
+        # rbind() rather than bind_rows(): every frame has already been padded
+        # to the standard column set above, so rbind() succeeds and keeps the
+        # column contract -- it aborts on a frame carrying an extra column,
+        # where bind_rows() would silently widen the output.
         new_df <- Reduce(rbind, data_list_list)
         out_list[[names(extract)]] <- new_df
+      } else if (module_name == "quantities") {
+        ###### quantities ####
+        # Only selectivity and natural mortality at age for now. Both are
+        # [fleet or species, sex, age, year] arrays. The age dimension is the
+        # bin index, so the age itself is offset by minage.
+        ages <- dat[["data_list"]][["minage"]] - 1 +
+          seq_len(dat[["data_list"]][["nages"]])
+        nsex <- dat[["data_list"]][["nsex"]]
+        # Rceattle stores sex 1 as females, or both sexes when nsex = 1.
+        sex_names <- if (nsex == 1) NA_character_ else c("female", "male")
+        quantities_list <- list()
+
+        if ("sel_at_age" %in% names(extract[[1]])) {
+          sel <- extract[[1]][["sel_at_age"]][, seq_len(nsex), seq_along(ages), , drop = FALSE]
+          df_sel <- expand.grid(
+            fleet = dimnames(sel)[[1]],
+            sex = sex_names,
+            age = ages,
+            year = as.numeric(dimnames(sel)[[4]]),
+            stringsAsFactors = FALSE
+          ) |>
+            dplyr::mutate(
+              estimate = as.vector(sel),
+              label = "sel_at_age"
+            )
+          df_sel[setdiff(tolower(names(out_new)), tolower(names(df_sel)))] <- NA
+          quantities_list[["sel_at_age"]] <- df_sel
+        }
+
+        if ("M_at_age" %in% names(extract[[1]])) {
+          m_at_age <- extract[[1]][["M_at_age"]][1, seq_len(nsex), seq_along(ages), , drop = FALSE]
+          df_m <- expand.grid(
+            sex = sex_names,
+            age = ages,
+            year = as.numeric(dimnames(m_at_age)[[4]]),
+            stringsAsFactors = FALSE
+          ) |>
+            dplyr::mutate(
+              estimate = as.vector(m_at_age),
+              label = "m_at_age"
+            )
+          df_m[setdiff(tolower(names(out_new)), tolower(names(df_m)))] <- NA
+          quantities_list[["m_at_age"]] <- df_m
+        }
+
+        if (length(quantities_list) > 0) {
+          out_list[[names(extract)]] <- Reduce(rbind, quantities_list) |>
+            dplyr::mutate(
+              module_name = names(extract),
+              age = as.character(age)
+            )
+        }
       } else if (is.list(extract[[1]])) { # indicates vector and list
         ##### remaining lmnts ####
         if (any(vapply(extract[[1]], is.matrix, FUN.VALUE = logical(1)))) {
@@ -2301,6 +2453,8 @@ convert_output <- function(
       # } # close if statement
     } # close loop over objects listed in dat file
     # Finish out df
+    # rbind() as above, so a module that has drifted from the standard column
+    # set aborts here rather than widening the output.
     out_new <- Reduce(rbind, out_list) |>
       # Add era as factor into BAM conout
       dplyr::mutate(

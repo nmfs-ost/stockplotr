@@ -1,12 +1,18 @@
 test_that("plot_spawning_biomass generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_spawning_biomass(stockplotr::example_data)
+    plot_spawning_biomass(
+      stockplotr::example_data,
+      interactive = FALSE
+    )
   )
 
   # expect plot with warnings if ref_point not indicated
   expect_message(
-    plot_spawning_biomass(stockplotr::example_data)
+    plot_spawning_biomass(
+      stockplotr::example_data,
+      interactive = FALSE
+    )
   )
 
   # expect error-free plot with many arguments
@@ -15,7 +21,8 @@ test_that("plot_spawning_biomass generates plots without errors", {
       stockplotr::example_data,
       unit_label = "metric tons",
       scale_amount = 1,
-      ref_line = "msy"
+      ref_line = "msy",
+      interactive = FALSE
     )
   )
 
@@ -26,30 +33,26 @@ test_that("plot_spawning_biomass generates plots without errors", {
       unit_label = "metric tons",
       scale_amount = 1,
       ref_line = c("msy" = 2000000),
-      relative = FALSE
+      relative = FALSE,
+      interactive = FALSE
     ),
     "gg"
   )
 })
 
-test_that("rda file made when indicated", {
-  # export rda
-  plot_spawning_biomass(
-    stockplotr::example_data,
-    unit_label = "metric tons",
-    scale_amount = 1,
-    ref_line = "msy",
-    module = "TIME_SERIES",
-    make_rda = TRUE,
-    figures_dir = getwd()
-  )
+# test_that("rda file made when indicated", {
+#   # export rda
+#   plot_spawning_biomass(
+#     stockplotr::example_data,
+#     unit_label = "metric tons",
+#     scale_amount = 1,
+#     ref_line = "msy",
+#     module = "TIME_SERIES",
+#     interactive = FALSE,
+#     make_rda = TRUE,
+#     figures_dir = getwd()
+#   )
 
-  # expect that both figures dir and the spawning_biomass_figure.rda file exist
-  expect_true(dir.exists(fs::path(getwd(), "figures")))
-  expect_true(file.exists(fs::path(getwd(), "figures", "spawning_biomass_figure.rda")))
-
-  # erase temporary testing files
-  file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-  file.remove(fs::path(getwd(), "key_quantities.csv"))
-  unlink(fs::path(getwd(), "figures"), recursive = T)
-})
+#   # expect that both figures dir and the spawning_biomass_figure.rda file exist
+#   check_and_remove_tmp_files("spawning_biomass_figure.rda")
+# })

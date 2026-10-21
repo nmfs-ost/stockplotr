@@ -27,5 +27,5 @@ export_kqs(
 }
 }
 \seealso{
-[fill_in_kqs()], [insert_kqs()]
+\code{\link[=fill_in_kqs]{fill_in_kqs()}}, \code{\link[=insert_kqs]{insert_kqs()}}
 }

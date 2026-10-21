@@ -32,11 +32,11 @@ save_all_plots(
 )
 }
 \arguments{
-\item{dat}{Data frame or list. A tibble or named list of tibbles (input as `list()`)
+\item{dat}{Data frame or list. A tibble or named list of tibbles (input as \code{list()})
 returned from \link[stockplotr]{convert_output}.
 
 If inputting a list of tibbles, the first tibble's reference point defined
-in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
+in \code{ref_line} is used to plot a reference line or calculate relative spawning biomass.}
 
 \item{recruitment_unit_label}{String. Recruitment units
 
@@ -52,28 +52,28 @@ Default: 1}
 \item{relative}{Logical. TRUE/FALSE; specify whether to set y-axis values relative to
 the ref_line value.
 
-Default: `FALSE`}
+Default: \code{FALSE}}
 
 \item{proportional}{Logical. TRUE/FALSE; scale size of bubble plots
 
-Default: `TRUE`}
+Default: \code{TRUE}}
 
 \item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
-Default: `FALSE`}
+Default: \code{FALSE}}
 
 \item{figures_tables_dir}{Path. The location of the folder containing
 figures and tables ("figures" and "tables").
 
-Default: the working directory (`getwd()`)}
+Default: the working directory (\code{getwd()})}
 
 \item{ref_line}{String. Type of reference point to
-compare biomass to. The default is `"msy"`, which looks for
-`"biomass_msy"` in the `"label"` column of `dat`. The actual
-searching in `dat` is case agnostic and will work with either upper- or
+compare biomass to. The default is \code{"msy"}, which looks for
+\code{"biomass_msy"} in the \code{"label"} column of \code{dat}. The actual
+searching in \code{dat} is case agnostic and will work with either upper- or
 lower-case letters but you must use one of the options specified in the
 default list to ensure that the label on the figure looks correct
-regardless of how it is specified in `dat`. Other possibilities may include
+regardless of how it is specified in \code{dat}. Other possibilities may include
 "target", "MSY", and "unfished". When the reference cannot be found,
 indicate the reference line in the form c("label" = value).
 
@@ -86,7 +86,7 @@ Options: Including, but not limited to: "target", "MSY", "unfished"}
 Default: "mt"}
 
 \item{biomass_scale_amount}{Number. A number describing how much to scale down the
-biomass quantities shown on the y axis. See `recruitment_scale_amount`.
+biomass quantities shown on the y axis. See \code{recruitment_scale_amount}.
 
 Default: 1}
 
@@ -99,11 +99,11 @@ Default: "mt"}
 Default: "mt"}
 
 \item{spawning_biomass_scale_amount}{Number.  A number describing how much to scale down the
-spawning biomass quantities shown on the y axis. See `recruitment_scale_amount`.
+spawning biomass quantities shown on the y axis. See \code{recruitment_scale_amount}.
 
 Default: 1}
 
-\item{ref_line_sb}{String. Same as `ref_line`, but this argument is
+\item{ref_line_sb}{String. Same as \code{ref_line}, but this argument is
 applied to plot_spawning_biomass.
 
 Default: "msy"
@@ -111,7 +111,7 @@ Default: "msy"
 Options: Including, but not limited to: "target", "MSY", "unfished"}
 
 \item{abundance_at_age_scale_amount}{Number.  A number describing how much to scale down the
-abundance quantities shown via bubble size. See `recruitment_scale_amount`.
+abundance quantities shown via bubble size. See \code{recruitment_scale_amount}.
 
 Default: 1}
 
@@ -120,7 +120,7 @@ Default: 1}
 Default: "fish"}
 
 \item{biomass_at_age_scale_amount}{Number.  A number describing how much to scale down the
-biomass quantities shown via bubble size. See `recruitment_scale_amount`.
+biomass quantities shown via bubble size. See \code{recruitment_scale_amount}.
 
 Default: 1}
 
@@ -141,7 +141,7 @@ Default: c("biomass" = "mt", "abundance" = "fish", "catch" = "mt")}
 Default: "mt"}
 
 \item{catch_scale_amount}{Number. A number describing how much to scale down the
-catch quantities shown via bubble size. See `recruitment_scale_amount`.
+catch quantities shown via bubble size. See \code{recruitment_scale_amount}.
 
 Default: 1}
 
@@ -178,5 +178,5 @@ save_all_plots(dat,
 }
 }
 \seealso{
-[convert_output()], [create_rda()]
+\code{\link[=convert_output]{convert_output()}}, \code{\link[=create_rda]{create_rda()}}
 }

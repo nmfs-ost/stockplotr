@@ -8,7 +8,7 @@ convert_output(file, model = NULL, fleet_names = NULL, save_dir = NULL)
 }
 \arguments{
 \item{file}{Path. Assessment model output file path. Currently accepts SS3
-Report.sso file, BAM .rda file, Rceattle model object, and FIMS model object.}
+\code{r4ss::ss_output()} or Report.sso file (being deprecated), BAM .rda file, Rceattle model object, and FIMS model object.}
 
 \item{model}{String. Assessment model used in evaluation
 
@@ -17,11 +17,11 @@ Default: NULL
 Options: "ss3", "bam", "fims", "rceattle"}
 
 \item{fleet_names}{Character vector. Names of fleets in the assessment model as
- shortened in the output file or names of fleets to replace the native fleet
- names in the output. For example, if fleet names in the model are 1, 2, 3
- then fleet_names = c("fleet1" = 1, "fleet2" = 2, "fleet3" = 3).
+shortened in the output file or names of fleets to replace the native fleet
+names in the output. For example, if fleet names in the model are 1, 2, 3
+then fleet_names = c("fleet1" = 1, "fleet2" = 2, "fleet3" = 3).
 
- Default: NULL}
+Default: NULL}
 
 \item{save_dir}{Path. Full file path to save the converted output file. If
 saved file name is not indicated, the file will be saved as "std_output.rda"
@@ -31,8 +31,8 @@ Default: NULL}
 }
 \value{
 A reformatted and standardized tibble of assessment model results
-        for application in building stock assessment reports and to easily
-        adapt results among regional assessments.
+for application in building stock assessment reports and to easily
+adapt results among regional assessments.
 }
 \description{
 Format stock assessment output file to a standardized tibble.

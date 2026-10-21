@@ -19,7 +19,7 @@ Default: NULL}
 
 \item{dir}{Path. The directory containing the "captions_alt_text.csv" file.
 
-Default: the working directory (`getwd()`)}
+Default: the working directory (\code{getwd()})}
 }
 \value{
 A figure's caption and alternative text, in a list, or a table's caption.
@@ -44,5 +44,5 @@ extract_caps_alttext(
 }
 }
 \seealso{
-[export_rda()], [create_rda()]
+\code{\link[=export_rda]{export_rda()}}, \code{\link[=create_rda]{create_rda()}}
 }

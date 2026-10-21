@@ -22,11 +22,11 @@ plot_biomass(
 )
 }
 \arguments{
-\item{dat}{Data frame or list. A tibble or named list of tibbles (input as `list()`)
+\item{dat}{Data frame or list. A tibble or named list of tibbles (input as \code{list()})
 returned from \link[stockplotr]{convert_output}.
 
 If inputting a list of tibbles, the first tibble's reference point defined
-in `ref_line` is used to plot a reference line or calculate relative spawning biomass.}
+in \code{ref_line} is used to plot a reference line or calculate relative spawning biomass.}
 
 \item{geom}{String. Geom used for the plot.
 
@@ -46,12 +46,12 @@ Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", 
 Default: NULL}
 
 \item{ref_line}{String. Type of reference point to
-  compare biomass to. The default `"msy"` looks for
-  `"biomass_msy"` in the `"label"` column of `dat`. The actual
-  searching in `dat` is case-agnostic and will work with either upper- or
-  lower-case letters. However, you must use one of the options specified in the
-  default list to ensure that the label on the figure looks correct
-  regardless of how it is specified in `dat`.
+compare biomass to. The default \code{"msy"} looks for
+\code{"biomass_msy"} in the \code{"label"} column of \code{dat}. The actual
+searching in \code{dat} is case-agnostic and will work with either upper- or
+lower-case letters. However, you must use one of the options specified in the
+default list to ensure that the label on the figure looks correct
+regardless of how it is specified in \code{dat}.
 
 Default: "msy"
 
@@ -67,13 +67,13 @@ Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
 Default: "mt"}
 
-\item{module}{Character vector. (Optional) Module name found in `dat$module_name`.
+\item{module}{Character vector. (Optional) Module name found in \code{dat$module_name}.
 If selecting >1 module, place them in a vector like c("module1", "module2").
 
 Default: NULL
 
 If the interactive and >1 module_name is found, user will select the
-module_name in the console. @seealso [filter_data()]}
+module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 
 \item{scale_amount}{Number. A number to scale the y-axis values.
 
@@ -82,23 +82,23 @@ Default: 1}
 \item{relative}{Logical. TRUE/FALSE; specify whether to set y-axis values relative to
 the ref_line value.
 
-Default: `FALSE`}
+Default: \code{FALSE}}
 
 \item{make_rda}{Logical. TRUE/FALSE; indicate whether to save the object and
-make an automated caption and alternative text in the form of an `rda` object. If TRUE,
+make an automated caption and alternative text in the form of an \code{rda} object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
 
-Default: `FALSE`.}
+Default: \code{FALSE}.}
 
 \item{figures_dir}{Path. Path to the "figures" folder.
 
-Default: `getwd()`
+Default: \code{getwd()}
 
 The folder is created within the path if it does not exist.}
 
 \item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
-Default: `FALSE`}
+Default: \code{FALSE}}
 
 \item{...}{Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}
 }
@@ -111,7 +111,7 @@ Plot Total Biomass
 \details{
 The input is from an assessment model output file
 translated to a standardized output (\link[stockplotr]{convert_output}).
-There are options to return a `ggplot2` object or export an .rda object
+There are options to return a \code{ggplot2} object or export an .rda object
 containing associated caption and alternative text for the figure.
 }
 \examples{
@@ -131,5 +131,5 @@ plot_biomass(
 )
 }
 \seealso{
-[convert_output()], [plot_timeseries()], [calculate_reference_point()], [reference_line()], [filter_data()], [process_data()], [export_kqs()], [insert_kqs()], [create_rda()]
+\code{\link[=convert_output]{convert_output()}}, \code{\link[=plot_timeseries]{plot_timeseries()}}, \code{\link[=calculate_reference_point]{calculate_reference_point()}}, \code{\link[=reference_line]{reference_line()}}, \code{\link[=filter_data]{filter_data()}}, \code{\link[=process_data]{process_data()}}, \code{\link[=export_kqs]{export_kqs()}}, \code{\link[=insert_kqs]{insert_kqs()}}, \code{\link[=create_rda]{create_rda()}}
 }

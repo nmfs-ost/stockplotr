@@ -1,7 +1,7 @@
 Type: Package
 Package: stockplotr
 Title: Tables and Figures for Stock Assessments
-Version: 0.15.0
+Version: 0.15.0.9000
 Authors@R: c(
     person("Samantha", "Bredeck", , "samantha.bredeck@noaa.gov", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0003-3744-6428")),
@@ -42,6 +42,7 @@ Imports:
     ggplot2 (>= 4.0.0),
     glue,
     gt,
+    lifecycle,
     purrr,
     rlang,
     scales,
@@ -61,9 +62,11 @@ Suggests:
     testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr
-Config/roxygen2/version: 8.1.0
+Config/roxygen2/version: 8.1.1
 Config/testthat/edition: 3
-Config/testthat/parallel: false
+Config/testthat/parallel: true
+Config/testthat/start-first: save_all_plots*, convert_output*
 Encoding: UTF-8
 Language: en-US
 LazyData: true
+Roxygen: list(markdown = TRUE)
