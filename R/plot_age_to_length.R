@@ -12,7 +12,16 @@
 #' @return A ggplot object.
 #'
 #' @export
-plot_age_to_length_conversion <- function(data, fleet = NULL) {
+plot_age_to_length_conversion <- function(
+  dat,
+  group = NULL,
+  facet = NULL,
+  module = NULL,
+  make_rda = FALSE,
+  figures_dir = getwd(),
+  interactive = TRUE,
+  ...
+) {
   # if (!requireNamespace("ggridges", quietly = TRUE)) {
   #   cli::cli_abort(
   #     "Package {.pkg ggridges} is required to plot age-to-length conversion."
@@ -137,9 +146,73 @@ plot_age_to_length_conversion <- function(data, fleet = NULL) {
   #   )
   # }
 
+  # Filter data for spawning biomass
+  prepared_data <- filter_data(
+    dat = dat,
+    label_name = ifelse(relative, glue::glue("age_to_length_conversion"), "^age_to_length_conversion$"), #Not sure if this is correct
+    group = group,
+    facet = facet,
+    module = module,
+    interactive = interactive
+  )
+
+    if (nrow(prepared_data) == 0) {
+      cli::cli_abort("No data found for relative age-to-length conversion. Please check that your data contains a label for 'age_to_length_conversion'.")
+      stop()
+    }
+
+  # process the data for grouping
+  processing <- process_data(
+    dat = prepared_data,
+    group = group,
+    facet = facet
+  )
+  # variable <- processing[[1]]
+  plot_data <- processing[[1]]
+  group <- processing[[2]]
+  if (!is.null(processing[[3]])) facet <- processing[[3]]
+
+  # Override grouping variable when there is only NA's
+  if (!is.null(group)) {
+    if (group %notin% colnames(plot_data)) group <- NULL
+  }
+
+#Add plot_density()
+
   length_bins <- unique(plot_data[["length"]])
   n_length_bins <- dplyr::n_distinct(plot_data[["length"]])
 
+  plt <- plot_density(
+    dat = plot_data,
+    y = "len_bin", #length bin, not sure what its called yet
+    ylab = "Length bin",
+    group = group,
+    # add check in case facet is returned as character(0)
+    facet = if (length(facet) > 0) facet else NULL,
+    ...
+  )
+
+ ### Make RDA ----
+  if (make_rda) {
+
+    #add any additional key quantities or processing needed before creating the RDA
+
+    create_rda(
+      object = final,
+      topic_label = "age_to_length_conversion",
+      fig_or_table = "figure",
+      dat = rp_dat,
+      dir = figures_dir
+    )
+  } #end make_rda
+  # Output final plot
+  final
+}
+
+
+plot_density <- function(){
+
+    # Move this to plot_density function
   plot_data |>
     ggplot2::ggplot(
       ggplot2::aes(
