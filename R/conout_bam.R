@@ -505,7 +505,7 @@ conout_bam <- function(
       # TODO: replace all periods with underscore if naming convention is different
       label = tolower(label)
     )
-  if (model == "bam") {
+  # if (model == "bam") {
     out_new <- dplyr::mutate(
       out_new,
       era = dplyr::case_when(
@@ -515,6 +515,6 @@ conout_bam <- function(
         TRUE ~ NA
       )
     )
-  }
+  # }
   return(out_new)
 }
