@@ -7,4 +7,5 @@ pak::local_install(".")
 VermilionSnapper <- stockplotr::convert_output(EX_REPORT_PATH)
 VermilionSnapper <- subset(VermilionSnapper, year > 1980)
 # Save object as rda into raw_data
-usethis::use_data(VermilionSnapper, overwrite = TRUE)
+# usethis::use_data(VermilionSnapper, overwrite = TRUE)
+save(VermilionSnapper, file = "data/vermilion_snapper.rda", compress = "xz", compression_level = 9)
