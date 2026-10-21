@@ -45,8 +45,8 @@ test_that("save_all_plots works when all figures/tables are plotted", {
     "projections_table.rda"
   )
   expect_equal(
-    list.files(fs::path(getwd(), "tables")),
-    tab_base_temp_files
+    sort(list.files(fs::path(getwd(), "tables"))),
+    sort(tab_base_temp_files)
   )
 
   # erase temporary testing files
