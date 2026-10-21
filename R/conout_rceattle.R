@@ -1,3 +1,10 @@
+#' Code to convert Rceattle output to standard framework.
+#' 
+#' Does not change naming conventions.
+#'
+#' @inheritParams convert_output
+#'
+#' @returns Reshaped data frame.
 conout_rceattle <- function(
     file,
     out_new,

@@ -1,3 +1,10 @@
+#' Code to convert BAM output to standard framework.
+#' 
+#' Does not change naming conventions.
+#'
+#' @inheritParams convert_output
+#'
+#' @returns Reshaped data frame.
 conout_bam <- function(
     file,
     out_new,
