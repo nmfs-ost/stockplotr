@@ -1,11 +1,11 @@
 test_that("save_all_plots works when all figures/tables are plotted", {
   save_all_plots(
     stockplotr::example_data,
-    recruitment_unit_label = "mt",
-    recruitment_scale_amount = 1,
-    ref_line = c("unfished" = 1000),
-    ref_line_sb = c("msy"),
-    # index_unit_label = "CPUE",
+    # recruitment_unit_label = "mt",
+    # recruitment_scale_amount = 1,
+    # ref_line = c("unfished" = 1000),
+    # ref_line_sb = c("msy"),
+    # # index_unit_label = "CPUE",
     figures_tables_dir = getwd(),
     interactive = FALSE
   )
@@ -28,7 +28,8 @@ test_that("save_all_plots works when all figures/tables are plotted", {
     "recruitment_figure.rda",
     "selectivity_figure.rda",
     "spawning_biomass_figure.rda",
-    "stock_recruitment_figure.rda"
+    "stock_recruitment_figure.rda",
+    "mod.fit.discards_figure.rda"
   )
   expect_equal(
     sort(list.files(fs::path(getwd(), "figures"))),
@@ -38,7 +39,7 @@ test_that("save_all_plots works when all figures/tables are plotted", {
   # expect that the tables are all created with expected names
   tab_base_temp_files <- c(
     "biomass_abundance_catch_table.rda",
-    # "total_catch_table.rda", # comment out bc as is this needs to be interactive to select correct module
+    "total_catch_table.rda", # comment out bc as is this needs to be interactive to select correct module
     "index_table.rda",
     "landings_table.rda",
     "projections_table.rda"
