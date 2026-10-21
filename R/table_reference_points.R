@@ -47,82 +47,90 @@ table_reference_points <- function(
     "Overfished", #Y/N or calc'd?
     "Overfishing" #Y/N or calc'd?
   )
-  
-  # Below are ones specifically for NW -- need R&D for other regions
-  labels <- c(
-    "Unfished Spawning Output (units)" = "spawning_biomass_unfished",
-    "Unfished Age 4+ Biomass (units)" = "biomass_unfished", # is this value for the fully selected ages + (aka varies by stock) ?
-    "{year} Spawning Ouput (units)" = "spawning_biomass", # @assessment year
-    "Unfished Recruitment (R0)" = "r0",
-    # "{year} Spawning Output (units)" = "spawning_biomass",
-    "{year} Fraction Unfished" = "", # ? not sure of name in output
-    "Reference Points Based SO40%", # ?
-    "Proxy Spawning Output (units) SO40%",
-    "SPR Resulting in SO40%",
-    "Exploitation Rate Resulting in SO40%",
-    "Yield with SPR Based On SO40% (units)",
-    "Reference Points Based on SPR Proxy for MSY",
-    "Proxy Spawning output (units) (SPR50)",
-    "SPR50",
-    "Exploitation Rate Corresponding to SPR50",
-    "Yield with SPR50 at SO SPR (units)",
-    "Reference Points Based on Estimated MSY Values",
-    "Spawning Output (units) at MSY (SO MSY)",
-    "SPR MSY",
-    "Exploitation Rate Corresponding to SPR MSY",
-    "MSY (units)"
-  )
-  values <- c()
-  upper <- c()
-  lower <- c()
-  
-  # NEFSC ref pts table
-  labels <- c(
-    "F_{msy proxy}",
-    "SSB_{msy} (units)",
-    "MSY (units)",
-    "Median recruits (age-0) (units)",
-    "Overfishing", # calc'd quantity
-    "Overfished" # calc'd quantity
-  )
-  
-  # SEFSC similar table
-  labels <- c(
-    "MSST",
-    "MFMT",
-    "F_{MSY}",
-    "MSY",
-    "B_{MSY}",
-    "R_{MSY}",
-    "OY",
-    "F_{OY}",
-    "F_{target}",
-    "Yield at F_{target} (equlibrium)",
-    "M",
-    "Terminal F",
-    "Terminal Biomass",
-    "Exploitation Status (F/MFMT)",
-    "Biomass Status (F/MSST)"
-  )
-  
-  # AFSC
-  labels <- c(
-    "M",
-    # "Tier",
-    # "Projected total (3+) biomass (units)",
-    "Female spawning biomass (units)",
-    "F_{OFL}",
-    "maxF_{ABC}",
-    "F_{ABC}",
-    "OFL (units)",
-    "maxABC (units)",
-    "ABC (units)",
-    "Overfished",
-    "Overfishing"
-  )
+  df_values <- c()
   for (i in seq_along(labels)) {
     kq <- labels[i]
-    calc_kqs()
+    df_values <- c(df_values, kq = calc_kqs(
+      returned_kq,
+      prepared_data = dat,
+      dat = dat,
+      final = NULL,
+      relative = ifelse(grepl("relative", kq), TRUE, FALSE),
+      module = NULL # is there a way I can set this up?
+    ))
   }
- 
+  
 }
+
+# Below are ones specifically for NW -- need R&D for other regions
+# labels <- c(
+#   "Unfished Spawning Output (units)" = "spawning_biomass_unfished",
+#   "Unfished Age 4+ Biomass (units)" = "biomass_unfished", # is this value for the fully selected ages + (aka varies by stock) ?
+#   "{year} Spawning Ouput (units)" = "spawning_biomass", # @assessment year
+#   "Unfished Recruitment (R0)" = "r0",
+#   # "{year} Spawning Output (units)" = "spawning_biomass",
+#   "{year} Fraction Unfished" = "", # ? not sure of name in output
+#   "Reference Points Based SO40%", # ?
+#   "Proxy Spawning Output (units) SO40%",
+#   "SPR Resulting in SO40%",
+#   "Exploitation Rate Resulting in SO40%",
+#   "Yield with SPR Based On SO40% (units)",
+#   "Reference Points Based on SPR Proxy for MSY",
+#   "Proxy Spawning output (units) (SPR50)",
+#   "SPR50",
+#   "Exploitation Rate Corresponding to SPR50",
+#   "Yield with SPR50 at SO SPR (units)",
+#   "Reference Points Based on Estimated MSY Values",
+#   "Spawning Output (units) at MSY (SO MSY)",
+#   "SPR MSY",
+#   "Exploitation Rate Corresponding to SPR MSY",
+#   "MSY (units)"
+# )
+# values <- c()
+# upper <- c()
+# lower <- c()
+# 
+# # NEFSC ref pts table
+# labels <- c(
+#   "F_{msy proxy}",
+#   "SSB_{msy} (units)",
+#   "MSY (units)",
+#   "Median recruits (age-0) (units)",
+#   "Overfishing", # calc'd quantity
+#   "Overfished" # calc'd quantity
+# )
+# 
+# # SEFSC similar table
+# labels <- c(
+#   "MSST",
+#   "MFMT",
+#   "F_{MSY}",
+#   "MSY",
+#   "B_{MSY}",
+#   "R_{MSY}",
+#   "OY",
+#   "F_{OY}",
+#   "F_{target}",
+#   "Yield at F_{target} (equlibrium)",
+#   "M",
+#   "Terminal F",
+#   "Terminal Biomass",
+#   "Exploitation Status (F/MFMT)",
+#   "Biomass Status (F/MSST)"
+# )
+# 
+# # AFSC
+# labels <- c(
+#   "M",
+#   # "Tier",
+#   # "Projected total (3+) biomass (units)",
+#   "Female spawning biomass (units)",
+#   "F_{OFL}",
+#   "maxF_{ABC}",
+#   "F_{ABC}",
+#   "OFL (units)",
+#   "maxABC (units)",
+#   "ABC (units)",
+#   "Overfished",
+#   "Overfishing"
+# )
