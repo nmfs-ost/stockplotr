@@ -72,7 +72,7 @@
 #' @source Taylor, I.G., Gertseva, V., Stephens, A., and Bizzarro, J. (2019). Status of
 #' Big Skate (Beringraja binoculata) off the U.S. Pacific Coast in 2019.
 #' Pacific Fishery Management Council, Portland, OR.
-#' @seealso [bigskate_caal], [prepare_comp_data()], [plot_comp()]
+#' @seealso [bigskate_caal], [prepare_composition_data()], [plot_composition_distribution()]
 "bigskate_lencomp"
 
 #' Big Skate conditional age-at-length data
@@ -101,5 +101,5 @@
 #' @source Taylor, I.G., Gertseva, V., Stephens, A., and Bizzarro, J. (2019). Status of
 #' Big Skate (Beringraja binoculata) off the U.S. Pacific Coast in 2019.
 #' Pacific Fishery Management Council, Portland, OR.
-#' @seealso [bigskate_lencomp], [prepare_comp_data()], [plot_comp_andre()]
+#' @seealso [bigskate_lencomp], [prepare_composition_data()], [plot_composition_andre()]
 "bigskate_caal"

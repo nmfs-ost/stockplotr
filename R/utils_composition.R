@@ -2,8 +2,8 @@
 #'
 #' Reshape age or length composition data (observed and, optionally,
 #' expected proportions) into the tidy format used by the composition
-#' plotting functions ([plot_comp()], [plot_comp_bubble()],
-#' [plot_comp_residuals()], [plot_comp_sex_ratio()], and [plot_comp_francis()]).
+#' plotting functions ([plot_composition_distribution()], [plot_composition_bubble()],
+#' [plot_composition_residuals()], [plot_composition_sexratio()], and [plot_composition_francis()]).
 #'
 #' @param dat A data frame of composition data. The following formats are
 #' recognized automatically:
@@ -54,8 +54,8 @@
 #'
 #' @param conditional Logical. TRUE/FALSE; keep conditional age-at-length
 #' data instead of marginal compositions. Conditional compositions are
-#' normalized within each length bin. Used by [plot_comp_andre()] and
-#' [plot_comp_bubble()].
+#' normalized within each length bin. Used by [plot_composition_andre()] and
+#' [plot_composition_bubble()].
 #'
 #' Default: FALSE
 #'
@@ -71,12 +71,12 @@
 #' \eqn{N} is the sample size in the `n` column. If `n` is not available,
 #' residuals are left as `NA`.
 #'
-#' @seealso [plot_comp()], [plot_comp_bubble()], [plot_comp_residuals()],
-#' [plot_comp_sex_ratio()], [plot_comp_francis()]
+#' @seealso [plot_composition_distribution()], [plot_composition_bubble()], [plot_composition_residuals()],
+#' [plot_composition_sexratio()], [plot_composition_francis()]
 #' @export
 #'
 #' @examples
-#' comps <- prepare_comp_data(bigskate_lencomp, fleet = "WCGBTS")
+#' comps <- prepare_composition_data(bigskate_lencomp, fleet = "WCGBTS")
 #' head(comps)
 #'
 #' # Data in the stockplotr long format are reshaped automatically
@@ -87,8 +87,8 @@
 #'   age = rep(1:3, 2),
 #'   estimate = c(0.2, 0.5, 0.3, 0.25, 0.45, 0.3)
 #' )
-#' prepare_comp_data(long)
-prepare_comp_data <- function(
+#' prepare_composition_data(long)
+prepare_composition_data <- function(
   dat,
   comp_type = NULL,
   fleet = NULL,
@@ -130,7 +130,7 @@ prepare_comp_data <- function(
       "tidy" = comp_from_tidy(dat),
       cli::cli_abort(c(
         "Could not find composition data in {.arg dat}.",
-        "i" = "Supply a data frame with columns {.field year}, {.field bin}, and {.field observed} (see {.code ?prepare_comp_data})."
+        "i" = "Supply a data frame with columns {.field year}, {.field bin}, and {.field observed} (see {.code ?prepare_composition_data})."
       ))
     )
     has_lbin <- any(!is.na(out$length_bin))
@@ -143,7 +143,7 @@ prepare_comp_data <- function(
     if (!conditional && has_lbin && length(unique(stats::na.omit(out$length_bin))) > 1) {
       cli::cli_abort(c(
         "{.arg dat} contains conditional age-at-length data ({.field length_bin}).",
-        "i" = "Use {.code conditional = TRUE}, e.g., with {.fn plot_comp_andre}."
+        "i" = "Use {.code conditional = TRUE}, e.g., with {.fn plot_composition_andre}."
       ))
     }
     if (!conditional) out$length_bin <- NULL
@@ -222,7 +222,7 @@ prepare_comp_data <- function(
 # Internal helpers for composition data
 #------------------------------------------------------------------------------
 
-# Columns returned by prepare_comp_data()
+# Columns returned by prepare_composition_data()
 comp_cols <- c(
   "comp_type", "fleet", "year", "sex", "bin",
   "observed", "expected", "n", "pearson"

@@ -5,9 +5,9 @@
 #' fits the composition. This is the diagnostic behind the McAllister and
 #' Ianelli (1997) data weighting method.
 #'
-#' @inheritParams plot_comp
+#' @inheritParams plot_composition_distribution
 #' @param dat Composition data in any format accepted by
-#' [prepare_comp_data()], or [convert_output()] output from Stock Synthesis
+#' [prepare_composition_data()], or [convert_output()] output from Stock Synthesis
 #' that contains the `FIT_LEN_COMPS` or `FIT_AGE_COMPS` tables (as in
 #' `stockplotr::example_data`), from which the adjusted input (`nsamp_adj`)
 #' and effective (`effn`) sample sizes are taken.
@@ -45,15 +45,15 @@
 #' @section r4ss equivalent: `r4ss::SSplotComps()` subplot 7 ("N-EffN
 #' comparison").
 #'
-#' @seealso [prepare_comp_data()], [plot_comp_francis()]
+#' @seealso [prepare_composition_data()], [plot_composition_francis()]
 #' @export
 #'
 #' @examples
-#' plot_comp_sample_size(bigskate_lencomp)
+#' plot_composition_samples(bigskate_lencomp)
 #'
 #' # Stock Synthesis output converted with convert_output()
-#' plot_comp_sample_size(stockplotr::example_data, comp_type = "length")
-plot_comp_sample_size <- function(
+#' plot_composition_samples(stockplotr::example_data, comp_type = "length")
+plot_composition_samples <- function(
   dat,
   comp_type = NULL,
   fleet = NULL,
@@ -70,7 +70,7 @@ plot_comp_sample_size <- function(
       cli::cli_abort("No sample sizes remain after filtering by {.arg comp_type} and {.arg fleet}.")
     }
   } else {
-    comps <- prepare_comp_data(dat, comp_type = comp_type, fleet = fleet)
+    comps <- prepare_composition_data(dat, comp_type = comp_type, fleet = fleet)
     sizes <- comp_effn_table(comps)
   }
   sizes <- dplyr::filter(sizes, is.finite(.data$n), is.finite(.data$effn))
@@ -172,7 +172,7 @@ plot_comp_sample_size <- function(
 #' Quantile-quantile plot or histogram of Pearson residuals for each fleet,
 #' to check for heavy tails, skewness, and outliers.
 #'
-#' @inheritParams plot_comp
+#' @inheritParams plot_composition_distribution
 #' @param type String. Type of plot. Options: "qq" (normal quantile-quantile
 #' plot) or "histogram" (with a standard normal density overlaid).
 #'
@@ -188,14 +188,14 @@ plot_comp_sample_size <- function(
 #' proportions or small sample sizes, so treat departures in the tails with
 #' some caution.
 #'
-#' @seealso [plot_comp_residuals()], [plot_comp_residual_pattern()],
-#' [prepare_comp_data()]
+#' @seealso [plot_composition_residuals()], [plot_composition_residual_pattern()],
+#' [prepare_composition_data()]
 #' @export
 #'
 #' @examples
-#' plot_comp_residual_dist(bigskate_lencomp)
-#' plot_comp_residual_dist(bigskate_lencomp, type = "histogram")
-plot_comp_residual_dist <- function(
+#' plot_composition_residual_distribution(bigskate_lencomp)
+#' plot_composition_residual_distribution(bigskate_lencomp, type = "histogram")
+plot_composition_residual_distribution <- function(
   dat,
   type = c("qq", "histogram"),
   comp_type = NULL,
@@ -243,7 +243,7 @@ plot_comp_residual_dist <- function(
 #' residual bubble plots, for example, consistently negative residuals at
 #' older ages caused by mis-specified selectivity.
 #'
-#' @inheritParams plot_comp
+#' @inheritParams plot_composition_distribution
 #' @param by String. Summarize residuals by "bin" (age or length) or by
 #' "year".
 #'
@@ -260,14 +260,14 @@ plot_comp_residual_dist <- function(
 #' that happening by chance, \eqn{2 \times 0.5^n}.
 #' Residuals are summarized separately for each fleet and sex.
 #'
-#' @seealso [plot_comp_residuals()], [plot_comp_residual_dist()],
-#' [prepare_comp_data()]
+#' @seealso [plot_composition_residuals()], [plot_composition_residual_distribution()],
+#' [prepare_composition_data()]
 #' @export
 #'
 #' @examples
-#' plot_comp_residual_pattern(bigskate_lencomp)
-#' plot_comp_residual_pattern(bigskate_lencomp, by = "year")
-plot_comp_residual_pattern <- function(
+#' plot_composition_residual_pattern(bigskate_lencomp)
+#' plot_composition_residual_pattern(bigskate_lencomp, by = "year")
+plot_composition_residual_pattern <- function(
   dat,
   by = c("bin", "year"),
   comp_type = NULL,
@@ -333,9 +333,9 @@ plot_comp_residual_pattern <- function(
 #' age in each length bin, and the standard error of the mean age, for each
 #' year. These are "Andre's plots" from `r4ss::SSplotComps()` (subplot 12).
 #'
-#' @inheritParams plot_comp
+#' @inheritParams plot_composition_distribution
 #' @param dat Conditional age-at-length data in any format accepted by
-#' [prepare_comp_data()] with `conditional = TRUE`: a tidy data frame with a
+#' [prepare_composition_data()] with `conditional = TRUE`: a tidy data frame with a
 #' `length_bin` column (see [bigskate_caal]), or an
 #' `r4ss::SS_output()` list (its `condbase` element is used).
 #' @param interval Number. Coverage of the intervals around the observed
@@ -363,21 +363,21 @@ plot_comp_residual_pattern <- function(
 #' @section r4ss equivalent: `r4ss::SSplotComps()` subplot 12 (Andre's plots of
 #' mean age and standard deviation for conditional age-at-length data).
 #'
-#' @seealso [prepare_comp_data()], [plot_comp_bubble()]
+#' @seealso [prepare_composition_data()], [plot_composition_bubble()]
 #' @export
 #'
 #' @examples
-#' plot_comp_andre(
+#' plot_composition_andre(
 #'   dplyr::filter(bigskate_caal, year %in% 2016:2018),
 #'   fleet = "WCGBTS"
 #' )
-plot_comp_andre <- function(
+plot_composition_andre <- function(
   dat,
   interval = 0.90,
   fleet = NULL,
   ncol = NULL
 ) {
-  comps <- prepare_comp_data(dat, comp_type = "age", fleet = fleet, conditional = TRUE)
+  comps <- prepare_composition_data(dat, comp_type = "age", fleet = fleet, conditional = TRUE)
   if (length(unique(comps$fleet)) > 1) {
     cli::cli_alert_info(
       "Plotting {length(unique(comps$fleet))} fleets; use {.arg fleet} to plot one fleet at a time."
@@ -489,7 +489,7 @@ plot_comp_andre <- function(
 
 # Prepare comps and keep rows with residuals, or abort with a hint
 comp_residuals_or_abort <- function(dat, comp_type = NULL, fleet = NULL) {
-  comps <- prepare_comp_data(dat, comp_type = comp_type, fleet = fleet)
+  comps <- prepare_composition_data(dat, comp_type = comp_type, fleet = fleet)
   comps <- dplyr::filter(comps, is.finite(.data$pearson))
   if (nrow(comps) == 0) {
     cli::cli_abort(c(

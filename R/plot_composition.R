@@ -6,7 +6,7 @@
 #' fleet is summarized in a single panel.
 #'
 #' @param dat A data frame of composition data in any format accepted by
-#' [prepare_comp_data()], such as FIMS output, an r4ss `lendbase`/`agedbase`
+#' [prepare_composition_data()], such as FIMS output, an r4ss `lendbase`/`agedbase`
 #' table, or a tidy data frame like [bigskate_lencomp].
 #' @param show_expected Logical. TRUE/FALSE; overlay the expected values as
 #' lines. Ignored if `dat` contains no expected values.
@@ -30,7 +30,7 @@
 #'
 #' Default: NULL
 #'
-#' @inheritParams prepare_comp_data
+#' @inheritParams prepare_composition_data
 #'
 #' @returns A `ggplot2` object.
 #'
@@ -46,20 +46,20 @@
 #' @section r4ss equivalent: `r4ss::SSplotComps()` subplot 1 (by year) and
 #' subplot 21 (aggregated across years).
 #'
-#' @seealso [prepare_comp_data()], [plot_comp_bubble()],
-#' [plot_comp_residuals()], [plot_comp_sex_ratio()], [plot_comp_francis()]
+#' @seealso [prepare_composition_data()], [plot_composition_bubble()],
+#' [plot_composition_residuals()], [plot_composition_sexratio()], [plot_composition_francis()]
 #' @export
 #'
 #' @examples
 #' # Observations only
-#' plot_comp(bigskate_lencomp, fleet = "WCGBTS", show_expected = FALSE)
+#' plot_composition_distribution(bigskate_lencomp, fleet = "WCGBTS", show_expected = FALSE)
 #'
 #' # Observed and expected
-#' plot_comp(bigskate_lencomp, fleet = "Triennial")
+#' plot_composition_distribution(bigskate_lencomp, fleet = "Triennial")
 #'
 #' # All fleets aggregated across years
-#' plot_comp(bigskate_lencomp, aggregate = TRUE)
-plot_comp <- function(
+#' plot_composition_distribution(bigskate_lencomp, aggregate = TRUE)
+plot_composition_distribution <- function(
   dat,
   show_expected = TRUE,
   aggregate = FALSE,
@@ -68,7 +68,7 @@ plot_comp <- function(
   show_n = TRUE,
   ncol = NULL
 ) {
-  comps <- prepare_comp_data(dat, comp_type = comp_type, fleet = fleet)
+  comps <- prepare_composition_data(dat, comp_type = comp_type, fleet = fleet)
   bin_label <- comp_bin_label(comps)
 
   if (aggregate) {
@@ -194,7 +194,7 @@ plot_comp <- function(
 #' cohorts easy to follow through time, or the Pearson residuals, which show
 #' blocks or stripes of misfit among years or bins.
 #'
-#' @inheritParams plot_comp
+#' @inheritParams plot_composition_distribution
 #' @param value String. Value to plot. Options: "observed", "expected", or
 #' "pearson".
 #'
@@ -205,7 +205,7 @@ plot_comp <- function(
 #' Default: 6
 #'
 #' @param conditional Logical. TRUE/FALSE; plot conditional age-at-length
-#' data (see [prepare_comp_data()]), with age on the y-axis, length bin on
+#' data (see [prepare_composition_data()]), with age on the y-axis, length bin on
 #' the x-axis, and one panel per year.
 #'
 #' Default: FALSE
@@ -222,24 +222,24 @@ plot_comp <- function(
 #' @section r4ss equivalent: `r4ss::SSplotComps()` subplot 2 (bubble plot of
 #' observations or residuals) and subplot 3 (conditional age-at-length).
 #'
-#' @seealso [prepare_comp_data()], [plot_comp_residuals()], [plot_comp()]
+#' @seealso [prepare_composition_data()], [plot_composition_residuals()], [plot_composition_distribution()]
 #' @export
 #'
 #' @examples
 #' # Observed proportions
-#' plot_comp_bubble(bigskate_lencomp)
+#' plot_composition_bubble(bigskate_lencomp)
 #'
 #' # Pearson residuals
-#' plot_comp_bubble(bigskate_lencomp, value = "pearson")
+#' plot_composition_bubble(bigskate_lencomp, value = "pearson")
 #'
 #' # Residuals for conditional age-at-length data
-#' plot_comp_bubble(
+#' plot_composition_bubble(
 #'   dplyr::filter(bigskate_caal, year %in% 2016:2018),
 #'   value = "pearson",
 #'   fleet = "WCGBTS",
 #'   conditional = TRUE
 #' )
-plot_comp_bubble <- function(
+plot_composition_bubble <- function(
   dat,
   value = c("observed", "pearson", "expected"),
   comp_type = NULL,
@@ -249,7 +249,7 @@ plot_comp_bubble <- function(
   conditional = FALSE
 ) {
   value <- match.arg(value)
-  comps <- prepare_comp_data(
+  comps <- prepare_composition_data(
     dat,
     comp_type = if (conditional) "age" else comp_type,
     fleet = fleet,
@@ -332,30 +332,30 @@ plot_comp_bubble <- function(
 
 #' Plot composition Pearson residuals
 #'
-#' A convenience wrapper around [plot_comp_bubble()] with
+#' A convenience wrapper around [plot_composition_bubble()] with
 #' `value = "pearson"`. Residuals are taken from `dat` when supplied or
-#' calculated by [prepare_comp_data()] assuming a multinomial distribution.
+#' calculated by [prepare_composition_data()] assuming a multinomial distribution.
 #'
-#' @inheritParams plot_comp_bubble
-#' @param ... Additional arguments passed to [plot_comp_bubble()].
+#' @inheritParams plot_composition_bubble
+#' @param ... Additional arguments passed to [plot_composition_bubble()].
 #'
 #' @returns A `ggplot2` object.
 #' @section r4ss equivalent: `r4ss::SSplotComps()` subplot 2 for residuals by
 #' fleet and subplot 24 (residuals compared across fleets).
 #'
-#' @seealso [plot_comp_bubble()], [prepare_comp_data()]
+#' @seealso [plot_composition_bubble()], [prepare_composition_data()]
 #' @export
 #'
 #' @examples
-#' plot_comp_residuals(bigskate_lencomp)
+#' plot_composition_residuals(bigskate_lencomp)
 #'
 #' # Compare residuals across fleets for females
-#' plot_comp_residuals(
+#' plot_composition_residuals(
 #'   dplyr::filter(bigskate_lencomp, sex == "female"),
 #'   ncol = 1
 #' )
-plot_comp_residuals <- function(dat, ...) {
-  plot_comp_bubble(dat, value = "pearson", ...)
+plot_composition_residuals <- function(dat, ...) {
+  plot_composition_bubble(dat, value = "pearson", ...)
 }
 
 #------------------------------------------------------------------------------
@@ -367,7 +367,7 @@ plot_comp_residuals <- function(dat, ...) {
 #' can be easier to see here than in residuals, especially for bins with
 #' small proportions.
 #'
-#' @inheritParams plot_comp
+#' @inheritParams plot_composition_distribution
 #' @param interval Number. Coverage of the interval around the observed sex
 #' ratio, calculated as a Jeffreys interval using the sample size in each bin
 #' (the sample size multiplied by the proportion of the composition in the
@@ -390,13 +390,13 @@ plot_comp_residuals <- function(dat, ...) {
 #' @section r4ss equivalent: `r4ss::SSplotSexRatio()` with
 #' `sexratio.option = 2` (female:total).
 #'
-#' @seealso [prepare_comp_data()], [plot_comp()]
+#' @seealso [prepare_composition_data()], [plot_composition_distribution()]
 #' @export
 #'
 #' @examples
-#' plot_comp_sex_ratio(bigskate_lencomp, fleet = "WCGBTS")
-#' plot_comp_sex_ratio(bigskate_lencomp, aggregate = TRUE)
-plot_comp_sex_ratio <- function(
+#' plot_composition_sexratio(bigskate_lencomp, fleet = "WCGBTS")
+#' plot_composition_sexratio(bigskate_lencomp, aggregate = TRUE)
+plot_composition_sexratio <- function(
   dat,
   aggregate = FALSE,
   interval = 0.75,
@@ -404,7 +404,7 @@ plot_comp_sex_ratio <- function(
   fleet = NULL,
   ncol = NULL
 ) {
-  comps <- prepare_comp_data(dat, comp_type = comp_type, fleet = fleet)
+  comps <- prepare_composition_data(dat, comp_type = comp_type, fleet = fleet)
   bin_label <- comp_bin_label(comps)
   if (!all(c("female", "male") %in% comps$sex)) {
     cli::cli_abort("Sex ratios require compositions with both {.val female} and {.val male} values in the {.field sex} column.")
@@ -522,7 +522,7 @@ plot_comp_sex_ratio <- function(
 #' weighting method (TA1.8), the plot is also a useful summary of trends in
 #' compositions and lack of fit among years.
 #'
-#' @inheritParams plot_comp
+#' @inheritParams plot_composition_distribution
 #' @param interval Number. Coverage of the interval around the observed mean.
 #'
 #' Default: 0.95
@@ -563,12 +563,12 @@ plot_comp_sex_ratio <- function(
 #' @section r4ss equivalent: `r4ss::SSplotComps()` subplots 8 and 9, which
 #' use `r4ss::SSMethod.TA1.8()`.
 #'
-#' @seealso [prepare_comp_data()], [plot_comp()]
+#' @seealso [prepare_composition_data()], [plot_composition_distribution()]
 #' @export
 #'
 #' @examples
-#' plot_comp_francis(bigskate_lencomp)
-plot_comp_francis <- function(
+#' plot_composition_francis(bigskate_lencomp)
+plot_composition_francis <- function(
   dat,
   interval = 0.95,
   show_francis = TRUE,
@@ -576,7 +576,7 @@ plot_comp_francis <- function(
   fleet = NULL,
   ncol = NULL
 ) {
-  comps <- prepare_comp_data(dat, comp_type = comp_type, fleet = fleet)
+  comps <- prepare_composition_data(dat, comp_type = comp_type, fleet = fleet)
   bin_label <- comp_bin_label(comps)
   means <- comp_mean_table(comps)
   z <- stats::qnorm(1 - (1 - interval) / 2)

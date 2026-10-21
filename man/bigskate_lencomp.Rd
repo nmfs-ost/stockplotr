@@ -7,17 +7,17 @@
 \format{
 A tibble with 3626 rows and 11 variables:
 \describe{
-  \item{comp_type}{Type of composition ("length")}
-  \item{fleet}{Fleet name: "Fishery_current", "WCGBTS", or "Triennial"}
-  \item{year}{Year of the observation (`Yr` in r4ss)}
-  \item{month}{Month of the observation}
-  \item{sex}{"female" or "male"}
-  \item{part}{Partition: 0 = whole catch, 1 = discard, 2 = retained}
-  \item{bin}{Lower edge of the length bin (cm)}
-  \item{observed}{Observed proportion (`Obs` in r4ss)}
-  \item{expected}{Expected proportion (`Exp` in r4ss)}
-  \item{pearson}{Pearson residual reported by Stock Synthesis}
-  \item{n}{Adjusted input sample size (`Nsamp_adj` in r4ss)}
+\item{comp_type}{Type of composition ("length")}
+\item{fleet}{Fleet name: "Fishery_current", "WCGBTS", or "Triennial"}
+\item{year}{Year of the observation (\code{Yr} in r4ss)}
+\item{month}{Month of the observation}
+\item{sex}{"female" or "male"}
+\item{part}{Partition: 0 = whole catch, 1 = discard, 2 = retained}
+\item{bin}{Lower edge of the length bin (cm)}
+\item{observed}{Observed proportion (\code{Obs} in r4ss)}
+\item{expected}{Expected proportion (\code{Exp} in r4ss)}
+\item{pearson}{Pearson residual reported by Stock Synthesis}
+\item{n}{Adjusted input sample size (\code{Nsamp_adj} in r4ss)}
 }
 }
 \source{
@@ -30,18 +30,18 @@ bigskate_lencomp
 }
 \description{
 Length compositions and fits from the 2019 Big Skate stock assessment for
-the U.S. West Coast (`BigSkate_2019` in the Stock Synthesis test models),
+the U.S. West Coast (\code{BigSkate_2019} in the Stock Synthesis test models),
 the model used for the r4ss example plots at
-\url{https://r4ss.github.io/r4ss/BigSkate/}. The data are the `lendbase`
-element of `r4ss::SS_output()` with columns renamed to follow
-stockplotr conventions. See `data-raw/bigskate_comps.R`.
+\url{https://r4ss.github.io/r4ss/BigSkate/}. The data are the \code{lendbase}
+element of \code{r4ss::SS_output()} with columns renamed to follow
+stockplotr conventions. See \code{data-raw/bigskate_comps.R}.
 }
 \details{
 Compositions are sex-specific, with female and male proportions summing to
-one within each year, fleet, and partition. `Fishery_current` has separate
+one within each year, fleet, and partition. \code{Fishery_current} has separate
 retained and discarded compositions.
 }
 \seealso{
-[bigskate_caal], [prepare_comp_data()], [plot_comp()]
+\link{bigskate_caal}, \code{\link[=prepare_composition_data]{prepare_composition_data()}}, \code{\link[=plot_composition_distribution]{plot_composition_distribution()}}
 }
 \keyword{datasets}

@@ -31,26 +31,26 @@ plot shows the data in a different way, and each has an r4ss equivalent:
 
 | Plot | Function | What it shows | r4ss equivalent |
 |------|----------|---------------|-----------------|
-| Distributions of observations | `plot_comp(show_expected = FALSE)` | The most intuitive way to look at compositions | `SSplotComps()` subplot 1, `datonly = TRUE` |
-| Bubble plot of observations | `plot_comp_bubble()` | Cohort strength over time | `SSplotComps()` subplot 2, `datonly = TRUE` |
-| Distributions of observed and expected values | `plot_comp()` | An intuitive way to look at fit | `SSplotComps()` subplots 1 and 21 |
-| Pearson residuals | `plot_comp_residuals()` | Blocks or stripes of misfit among years or bins | `SSplotComps()` subplots 2 and 24 |
-| Sex ratios | `plot_comp_sex_ratio()` | Trends in misfit for bins with small proportions, which have small residuals | `SSplotSexRatio()` |
-| Mean age or length (Francis) | `plot_comp_francis()` | Trends among years; Francis (2011) TA1.8 data weights | `SSplotComps()` subplots 8 and 9, `SSMethod.TA1.8()` |
-| N-EffN comparison | `plot_comp_sample_size()` | McAllister-Ianelli data weights | `SSplotComps()` subplot 7 |
-| Residual distribution | `plot_comp_residual_dist()` | Heavy tails, skewness, and outliers; SDNR | |
-| Residual patterns | `plot_comp_residual_pattern()` | Bias by bin or year, with a runs test | |
-| Andre's plots | `plot_comp_andre()` | Mean age at length for conditional age-at-length data | `SSplotComps()` subplot 12 |
-| Conditional age-at-length residuals | `plot_comp_residuals(conditional = TRUE)` | Misfit by length and age within years | `SSplotComps()` subplot 3 |
+| Distributions of observations | `plot_composition_distribution(show_expected = FALSE)` | The most intuitive way to look at compositions | `SSplotComps()` subplot 1, `datonly = TRUE` |
+| Bubble plot of observations | `plot_composition_bubble()` | Cohort strength over time | `SSplotComps()` subplot 2, `datonly = TRUE` |
+| Distributions of observed and expected values | `plot_composition_distribution()` | An intuitive way to look at fit | `SSplotComps()` subplots 1 and 21 |
+| Pearson residuals | `plot_composition_residuals()` | Blocks or stripes of misfit among years or bins | `SSplotComps()` subplots 2 and 24 |
+| Sex ratios | `plot_composition_sexratio()` | Trends in misfit for bins with small proportions, which have small residuals | `SSplotSexRatio()` |
+| Mean age or length (Francis) | `plot_composition_francis()` | Trends among years; Francis (2011) TA1.8 data weights | `SSplotComps()` subplots 8 and 9, `SSMethod.TA1.8()` |
+| N-EffN comparison | `plot_composition_samples()` | McAllister-Ianelli data weights | `SSplotComps()` subplot 7 |
+| Residual distribution | `plot_composition_residual_distribution()` | Heavy tails, skewness, and outliers; SDNR | |
+| Residual patterns | `plot_composition_residual_pattern()` | Bias by bin or year, with a runs test | |
+| Andre's plots | `plot_composition_andre()` | Mean age at length for conditional age-at-length data | `SSplotComps()` subplot 12 |
+| Conditional age-at-length residuals | `plot_composition_residuals(conditional = TRUE)` | Misfit by length and age within years | `SSplotComps()` subplot 3 |
 
 Each function can plot fleets separately or summarize all fleets. Use `fleet`
-to choose fleets, and `aggregate = TRUE` in `plot_comp()` and
-`plot_comp_sex_ratio()` to combine all years.
+to choose fleets, and `aggregate = TRUE` in `plot_composition_distribution()` and
+`plot_composition_sexratio()` to combine all years.
 
 ## Composition data
 
 The plotting functions take composition data in one of several formats and
-standardize it with `prepare_comp_data()`:
+standardize it with `prepare_composition_data()`:
 
 * A tidy data frame with columns `year`, `bin`, and `observed`, and,
   optionally, `fleet`, `sex`, `part` (partition), `expected`, `n` (sample
@@ -79,7 +79,7 @@ retained (`part` = 2) and discarded (`part` = 1) compositions, which are
 labeled "Fishery_current (retained)" and "Fishery_current (discard)", as in
 r4ss. Use `fleet = "Fishery_current"` to select both.
 
-If Pearson residuals are not supplied, `prepare_comp_data()` calculates them
+If Pearson residuals are not supplied, `prepare_composition_data()` calculates them
 assuming a multinomial distribution,
 $r = (o - e) / \sqrt{e (1 - e) / N}$, using the sample size `n`. The Big
 Skate data include the residuals reported by Stock Synthesis.
@@ -90,14 +90,14 @@ Distributions are the most intuitive way to look at compositions. For
 sex-specific data, females are shown above zero and males below.
 
 ```{r obs-dist, fig.height = 9}
-plot_comp(bigskate_lencomp, fleet = "WCGBTS", show_expected = FALSE)
+plot_composition_distribution(bigskate_lencomp, fleet = "WCGBTS", show_expected = FALSE)
 ```
 
 Bubble plots make it easier to see patterns across years, such as strong
 cohorts moving through the population.
 
 ```{r obs-bubble}
-plot_comp_bubble(bigskate_lencomp)
+plot_composition_bubble(bigskate_lencomp)
 ```
 
 ## Fits to the data
@@ -107,14 +107,14 @@ year. As in r4ss, each panel shows the adjusted input sample size (N adj.)
 and the effective sample size (N eff.).
 
 ```{r fit-dist, fig.height = 4}
-plot_comp(bigskate_lencomp, fleet = "Triennial")
+plot_composition_distribution(bigskate_lencomp, fleet = "Triennial")
 ```
 
 Aggregating across years gives an overview of each fleet. Years are weighted
 by their adjusted input sample sizes.
 
 ```{r fit-agg, fig.height = 6}
-plot_comp(bigskate_lencomp, aggregate = TRUE)
+plot_composition_distribution(bigskate_lencomp, aggregate = TRUE)
 ```
 
 ### Pearson residuals
@@ -125,7 +125,7 @@ bubbles where fewer were observed. The largest residual in each panel is
 included in the label.
 
 ```{r resid, fig.height = 8}
-plot_comp_residuals(bigskate_lencomp)
+plot_composition_residuals(bigskate_lencomp)
 ```
 
 ### Sex ratios
@@ -136,11 +136,11 @@ residuals. Vertical lines are Jeffreys intervals based on the sample size in
 each bin. For Big Skate, the largest fish are almost all female.
 
 ```{r sex-ratio, fig.height = 9}
-plot_comp_sex_ratio(bigskate_lencomp, fleet = "WCGBTS")
+plot_composition_sexratio(bigskate_lencomp, fleet = "WCGBTS")
 ```
 
 ```{r sex-ratio-agg, fig.height = 6}
-plot_comp_sex_ratio(bigskate_lencomp, aggregate = TRUE)
+plot_composition_sexratio(bigskate_lencomp, aggregate = TRUE)
 ```
 
 ### Mean length and Francis weights
@@ -156,7 +156,7 @@ tuned with the Francis method.
 
 ```{r francis, fig.height = 5}
 set.seed(1) # the interval for the Francis weight is bootstrapped
-plot_comp_francis(bigskate_lencomp)
+plot_composition_francis(bigskate_lencomp)
 ```
 
 ### N-EffN comparison
@@ -171,7 +171,7 @@ current variance adjustment gives the `Recommend_var_adj` that Stock
 Synthesis reports.
 
 ```{r sample-size, fig.height = 6}
-plot_comp_sample_size(bigskate_lencomp)
+plot_composition_samples(bigskate_lencomp)
 ```
 
 For Stock Synthesis models, the same plot can be made directly from
@@ -179,7 +179,7 @@ For Stock Synthesis models, the same plot can be made directly from
 sizes that Stock Synthesis reports:
 
 ```{r sample-size-ss3}
-plot_comp_sample_size(stockplotr::example_data, comp_type = "length")
+plot_composition_samples(stockplotr::example_data, comp_type = "length")
 ```
 
 ### Residual distribution and patterns
@@ -190,7 +190,7 @@ in each panel label; values well above one suggest the data are given more
 weight than the fit supports.
 
 ```{r resid-qq, fig.height = 6}
-plot_comp_residual_dist(bigskate_lencomp)
+plot_composition_residual_distribution(bigskate_lencomp)
 ```
 
 Averaging residuals by bin or year turns stripes in the bubble plot into a
@@ -198,31 +198,31 @@ single line. Filled points fail a runs test, meaning the residual signs in
 that bin are not randomly ordered across years.
 
 ```{r resid-pattern, fig.height = 8}
-plot_comp_residual_pattern(bigskate_lencomp)
+plot_composition_residual_pattern(bigskate_lencomp)
 ```
 
 ## Conditional age-at-length data
 
 Conditional age-at-length data are age compositions for each length bin.
-Use `conditional = TRUE` in `prepare_comp_data()` and `plot_comp_bubble()`,
+Use `conditional = TRUE` in `prepare_composition_data()` and `plot_composition_bubble()`,
 and supply a `length_bin` column in tidy data, as in `bigskate_caal`. The Big
 Skate conditional data are single-sex compositions, which are normalized
 separately for each sex.
 
-`plot_comp_andre()` makes "Andre's plots" from r4ss: the observed and
+`plot_composition_andre()` makes "Andre's plots" from r4ss: the observed and
 expected mean age in each length bin (left), and the standard error of the
 mean age (right), one row per year and sex.
 
 ```{r caal-andre, fig.height = 10}
 caal_recent <- dplyr::filter(bigskate_caal, year %in% 2016:2018)
-plot_comp_andre(caal_recent, fleet = "WCGBTS")
+plot_composition_andre(caal_recent, fleet = "WCGBTS")
 ```
 
 Pearson residuals for conditional data are plotted by length bin and age for
 each year:
 
 ```{r caal-resid, fig.height = 6}
-plot_comp_residuals(caal_recent, fleet = "WCGBTS", conditional = TRUE)
+plot_composition_residuals(caal_recent, fleet = "WCGBTS", conditional = TRUE)
 ```
 
 ## Using model output
@@ -231,8 +231,8 @@ With FIMS, pass the estimates directly:
 
 ```{r fims, eval = FALSE}
 estimates <- FIMS::get_estimates(fit)
-plot_comp_residuals(estimates, comp_type = "age")
-plot_comp_francis(estimates, comp_type = "length")
+plot_composition_residuals(estimates, comp_type = "age")
+plot_composition_francis(estimates, comp_type = "length")
 ```
 
 FIMS reports years as indices (`year_i`); add a `year` column to plot
@@ -248,9 +248,9 @@ Conditional age-at-length data come from the `condbase` element:
 
 ```{r ss3, eval = FALSE}
 replist <- r4ss::SS_output("path/to/BigSkate_2019")
-plot_comp(replist, comp_type = "length", fleet = "WCGBTS")
-plot_comp_francis(replist, comp_type = "length")
-plot_comp_andre(replist, fleet = "WCGBTS")
+plot_composition_distribution(replist, comp_type = "length", fleet = "WCGBTS")
+plot_composition_francis(replist, comp_type = "length")
+plot_composition_andre(replist, fleet = "WCGBTS")
 ```
 
 ## References

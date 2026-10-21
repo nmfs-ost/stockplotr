@@ -6,9 +6,9 @@ has_layer <- function(p, geom_class) {
   any(vapply(p$layers, function(l) inherits(l$geom, geom_class), logical(1)))
 }
 
-# plot_comp_sample_size -------------------------------------------------------
+# plot_composition_samples -------------------------------------------------------
 test_that("effective sample sizes match Stock Synthesis", {
-  comps <- prepare_comp_data(r4ss_output, comp_type = "length")
+  comps <- prepare_composition_data(r4ss_output, comp_type = "length")
   effn <- comp_effn_table(comps)
   ss3 <- r4ss_output$lendbase |>
     dplyr::distinct(Yr, Fleet, effN) |>
@@ -18,8 +18,8 @@ test_that("effective sample sizes match Stock Synthesis", {
   expect_equal(joined$effn, joined$effN, tolerance = 1e-3)
 })
 
-test_that("plot_comp_sample_size works with composition data", {
-  p <- plot_comp_sample_size(stockplotr::bigskate_lencomp)
+test_that("plot_composition_samples works with composition data", {
+  p <- plot_composition_samples(stockplotr::bigskate_lencomp)
   expect_s3_class(p, "ggplot")
   expect_true(has_layer(p, "GeomAbline"))
   expect_true(all(grepl("McAllister-Ianelli weight", p$data$panel)))
@@ -35,11 +35,11 @@ test_that("plot_comp_sample_size works with composition data", {
   expect_equal(nrow(joined), 3)
   # (tolerance allows for the precision of values printed by Stock Synthesis)
   expect_equal(joined$mi_weight * joined$curr_var_adj, joined$recommend_var_adj, tolerance = 1e-3)
-  expect_no_error(plot_comp_sample_size(r4ss_output, comp_type = "age", show_years = TRUE))
+  expect_no_error(plot_composition_samples(r4ss_output, comp_type = "age", show_years = TRUE))
 })
 
-test_that("plot_comp_sample_size works with converted SS3 output", {
-  p <- plot_comp_sample_size(stockplotr::example_data, comp_type = "length")
+test_that("plot_composition_samples works with converted SS3 output", {
+  p <- plot_composition_samples(stockplotr::example_data, comp_type = "length")
   expect_s3_class(p, "ggplot")
   expect_true(all(p$data$comp_type == "length"))
   # retained and discard compositions are separate panels
@@ -47,29 +47,29 @@ test_that("plot_comp_sample_size works with converted SS3 output", {
   expect_true(any(grepl("discard", p$data$fleet)))
   # conditional age-at-length comps are dropped from age comps
   expect_message(
-    plot_comp_sample_size(stockplotr::example_data, comp_type = "age"),
+    plot_composition_samples(stockplotr::example_data, comp_type = "age"),
     "conditional age-at-length"
   )
 })
 
-test_that("plot_comp_sample_size errors without expected values", {
+test_that("plot_composition_samples errors without expected values", {
   obs_only <- dplyr::select(stockplotr::bigskate_lencomp, -expected)
-  expect_error(plot_comp_sample_size(obs_only), "could not be calculated")
+  expect_error(plot_composition_samples(obs_only), "could not be calculated")
 })
 
 # residual distribution and patterns -----------------------------------------
-test_that("plot_comp_residual_dist makes qq plots and histograms", {
-  qq <- plot_comp_residual_dist(stockplotr::bigskate_lencomp)
+test_that("plot_composition_residual_distribution makes qq plots and histograms", {
+  qq <- plot_composition_residual_distribution(stockplotr::bigskate_lencomp)
   expect_s3_class(qq, "ggplot")
   expect_true(has_layer(qq, "GeomPoint"))
   expect_true(all(grepl("SDNR", qq$data$panel)))
 
-  hist <- plot_comp_residual_dist(stockplotr::bigskate_lencomp, type = "histogram")
+  hist <- plot_composition_residual_distribution(stockplotr::bigskate_lencomp, type = "histogram")
   expect_true(has_layer(hist, "GeomBar"))
 })
 
-test_that("plot_comp_residual_pattern summarizes by bin and year", {
-  p_bin <- plot_comp_residual_pattern(stockplotr::bigskate_lencomp)
+test_that("plot_composition_residual_pattern summarizes by bin and year", {
+  p_bin <- plot_composition_residual_pattern(stockplotr::bigskate_lencomp)
   expect_s3_class(p_bin, "ggplot")
   expect_true("bin" %in% names(p_bin$data))
   # mean residual by bin matches a direct calculation
@@ -78,14 +78,14 @@ test_that("plot_comp_residual_pattern summarizes by bin and year", {
   check <- dplyr::filter(p_bin$data, fleet == "WCGBTS", sex == "female", bin == 50)
   expect_equal(check$mean_resid, mean(direct$pearson))
 
-  p_year <- plot_comp_residual_pattern(stockplotr::bigskate_lencomp, by = "year")
+  p_year <- plot_composition_residual_pattern(stockplotr::bigskate_lencomp, by = "year")
   expect_true("year" %in% names(p_year$data))
 })
 
 test_that("residual plots error without residuals", {
   obs_only <- dplyr::select(stockplotr::bigskate_lencomp, -expected, -n, -pearson)
-  expect_error(plot_comp_residual_dist(obs_only), "No Pearson residuals")
-  expect_error(plot_comp_residual_pattern(obs_only), "No Pearson residuals")
+  expect_error(plot_composition_residual_distribution(obs_only), "No Pearson residuals")
+  expect_error(plot_composition_residual_pattern(obs_only), "No Pearson residuals")
 })
 
 test_that("runs_test detects patterns", {
@@ -96,8 +96,8 @@ test_that("runs_test detects patterns", {
 })
 
 # conditional age-at-length --------------------------------------------------
-test_that("prepare_comp_data handles conditional age-at-length data", {
-  caal <- prepare_comp_data(stockplotr::bigskate_caal, conditional = TRUE)
+test_that("prepare_composition_data handles conditional age-at-length data", {
+  caal <- prepare_composition_data(stockplotr::bigskate_caal, conditional = TRUE)
   expect_true("length_bin" %in% names(caal))
   # single-sex compositions stay normalized within each sex and length bin
   sums <- caal |>
@@ -109,30 +109,30 @@ test_that("prepare_comp_data handles conditional age-at-length data", {
       stockplotr::bigskate_caal$bin)
   ], tolerance = 1e-6)
   # marginal plots refuse conditional data
-  expect_error(prepare_comp_data(stockplotr::bigskate_caal), "conditional = TRUE")
-  expect_error(plot_comp(stockplotr::bigskate_caal), "conditional = TRUE")
+  expect_error(prepare_composition_data(stockplotr::bigskate_caal), "conditional = TRUE")
+  expect_error(plot_composition_distribution(stockplotr::bigskate_caal), "conditional = TRUE")
   # and conditional plots need a length bin
   expect_error(
-    prepare_comp_data(stockplotr::bigskate_lencomp, conditional = TRUE),
+    prepare_composition_data(stockplotr::bigskate_lencomp, conditional = TRUE),
     "length_bin"
   )
 })
 
-test_that("prepare_comp_data reads conditional data from r4ss dbase", {
+test_that("prepare_composition_data reads conditional data from r4ss dbase", {
   dbase <- r4ss_output$agedbase
   # make half of the age comps conditional on a narrow length bin
   dbase$Lbin_hi[seq_len(nrow(dbase) / 2)] <- dbase$Lbin_lo[seq_len(nrow(dbase) / 2)]
-  caal <- prepare_comp_data(dbase, conditional = TRUE)
+  caal <- prepare_composition_data(dbase, conditional = TRUE)
   expect_equal(nrow(caal), nrow(dbase) / 2)
-  marginal <- suppressMessages(prepare_comp_data(dbase))
+  marginal <- suppressMessages(prepare_composition_data(dbase))
   expect_equal(nrow(marginal), nrow(dbase) / 2)
   # r4ss output without conditional data
-  expect_error(prepare_comp_data(r4ss_output, conditional = TRUE), "No conditional")
+  expect_error(prepare_composition_data(r4ss_output, conditional = TRUE), "No conditional")
 })
 
-test_that("plot_comp_andre shows mean and SE of age at length", {
+test_that("plot_composition_andre shows mean and SE of age at length", {
   dat <- dplyr::filter(stockplotr::bigskate_caal, year %in% 2017:2018)
-  p <- plot_comp_andre(dat, fleet = "WCGBTS")
+  p <- plot_composition_andre(dat, fleet = "WCGBTS")
   expect_s3_class(p, "ggplot")
   expect_setequal(as.character(unique(p$data$statistic)), c("Mean age", "SE of mean age"))
   expect_true(has_layer(p, "GeomRibbon"))
@@ -156,10 +156,10 @@ test_that("plot_comp_andre shows mean and SE of age at length", {
 
 test_that("conditional bubble plots use length bins on the x-axis", {
   dat <- dplyr::filter(stockplotr::bigskate_caal, year %in% 2017:2018)
-  p <- plot_comp_residuals(dat, fleet = "WCGBTS", conditional = TRUE)
+  p <- plot_composition_residuals(dat, fleet = "WCGBTS", conditional = TRUE)
   expect_s3_class(p, "ggplot")
   expect_true(any(grepl("^female, 2017\n\\(max", levels(p$data$panel))))
-  expect_no_error(plot_comp_bubble(dat, fleet = "WCGBTS", conditional = TRUE))
+  expect_no_error(plot_composition_bubble(dat, fleet = "WCGBTS", conditional = TRUE))
 })
 
 test_that("r4ss sex codes are read correctly", {
@@ -172,11 +172,11 @@ test_that("r4ss sex codes are read correctly", {
     Obs = c(0.4, 0.6, 0.4, 0.6), Exp = c(0.5, 0.5, 0.5, 0.5),
     Pearson = c(-0.2, 0.2, -0.2, 0.2), Nsamp_adj = 10
   )
-  comps <- prepare_comp_data(dbase, conditional = TRUE)
+  comps <- prepare_composition_data(dbase, conditional = TRUE)
   expect_equal(nrow(comps), 2)
   expect_equal(unique(comps$sex), "male")
   expect_equal(comps$observed, c(0.4, 0.6))
   # without the r4ss sex column, sex is derived from Sexes and Sex
-  comps <- prepare_comp_data(dplyr::select(dbase, -sex), conditional = TRUE)
+  comps <- prepare_composition_data(dplyr::select(dbase, -sex), conditional = TRUE)
   expect_equal(unique(comps$sex), "male")
 })

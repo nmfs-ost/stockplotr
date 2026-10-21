@@ -7,18 +7,18 @@
 \format{
 A tibble with 6560 rows and 12 variables:
 \describe{
-  \item{comp_type}{Type of composition ("age")}
-  \item{fleet}{Fleet name: "Fishery_current" or "WCGBTS"}
-  \item{year}{Year of the observation (`Yr` in r4ss)}
-  \item{month}{Month of the observation}
-  \item{sex}{"female" or "male"}
-  \item{part}{Partition: 0 = whole catch, 1 = discard, 2 = retained}
-  \item{length_bin}{Length bin the ages are conditioned on (`Lbin_lo` in r4ss)}
-  \item{bin}{Age}
-  \item{observed}{Observed proportion at age within the length bin}
-  \item{expected}{Expected proportion at age within the length bin}
-  \item{pearson}{Pearson residual reported by Stock Synthesis}
-  \item{n}{Adjusted input sample size (`Nsamp_adj` in r4ss)}
+\item{comp_type}{Type of composition ("age")}
+\item{fleet}{Fleet name: "Fishery_current" or "WCGBTS"}
+\item{year}{Year of the observation (\code{Yr} in r4ss)}
+\item{month}{Month of the observation}
+\item{sex}{"female" or "male"}
+\item{part}{Partition: 0 = whole catch, 1 = discard, 2 = retained}
+\item{length_bin}{Length bin the ages are conditioned on (\code{Lbin_lo} in r4ss)}
+\item{bin}{Age}
+\item{observed}{Observed proportion at age within the length bin}
+\item{expected}{Expected proportion at age within the length bin}
+\item{pearson}{Pearson residual reported by Stock Synthesis}
+\item{n}{Adjusted input sample size (\code{Nsamp_adj} in r4ss)}
 }
 }
 \source{
@@ -31,12 +31,12 @@ bigskate_caal
 }
 \description{
 Conditional age-at-length data and fits from the 2019 Big Skate stock
-assessment (see [bigskate_lencomp]). The data are the `condbase` element
-of `r4ss::SS_output()` with columns renamed to follow stockplotr conventions.
+assessment (see \link{bigskate_lencomp}). The data are the \code{condbase} element
+of \code{r4ss::SS_output()} with columns renamed to follow stockplotr conventions.
 Each age composition is for one sex and one length bin, and sums to one.
-See `data-raw/bigskate_comps.R`.
+See \code{data-raw/bigskate_comps.R}.
 }
 \seealso{
-[bigskate_lencomp], [prepare_comp_data()], [plot_comp_andre()]
+\link{bigskate_lencomp}, \code{\link[=prepare_composition_data]{prepare_composition_data()}}, \code{\link[=plot_composition_andre]{plot_composition_andre()}}
 }
 \keyword{datasets}
