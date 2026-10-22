@@ -46,31 +46,23 @@
 #' For conditional age-at-length data (`conditional = TRUE`), see
 #' [bigskate_caal].
 #' @param comp_type String. Type of composition to keep when `dat` contains
-#' more than one. Options: "age", "length", or NULL (keep all).
-#'
-#' Default: NULL
+#' more than one. Options: "age", "length", or NULL (keep all). Default: NULL
 #'
 #' @param fleet Character or numeric vector. Fleet(s) to keep, matching
 #' either the fleet name (e.g., "Fishery_current") or the fleet name with its
-#' partition (e.g., "Fishery_current (retained)"). NULL keeps all fleets.
-#'
-#' Default: NULL
+#' partition (e.g., "Fishery_current (retained)"). NULL keeps all fleets. Default: NULL
 #'
 #' @param normalize Logical. TRUE/FALSE; rescale observed and expected values
 #' so that they sum to one within each year, fleet, and composition type
 #' (and length bin for conditional data). Sex-specific compositions are
 #' normalized jointly across sexes, unless each sex already sums to one on
 #' its own (single-sex compositions). Use TRUE when `dat` contains counts
-#' rather than proportions.
-#'
-#' Default: TRUE
+#' rather than proportions. Default: TRUE
 #'
 #' @param conditional Logical. TRUE/FALSE; keep conditional age-at-length
 #' data instead of marginal compositions. Conditional compositions are
 #' normalized within each length bin. Used by [plot_composition_andre()] and
-#' [plot_composition_bubble()].
-#'
-#' Default: FALSE
+#' [plot_composition_bubble()]. Default: FALSE
 #'
 #' @returns A tibble with one row per year, fleet, sex, and bin and columns
 #' `comp_type`, `fleet`, `year`, `sex`, `bin`, `observed`, `expected`, `n`,
@@ -233,10 +225,6 @@ prepare_composition_data <- function(
   class(out) <- unique(c("stockplotr_comp", class(tibble::as_tibble(out))))
   out
 }
-
-#------------------------------------------------------------------------------
-# Internal helpers for composition data
-#------------------------------------------------------------------------------
 
 # Columns returned by prepare_composition_data()
 comp_cols <- c(

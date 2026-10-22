@@ -9,26 +9,18 @@
 #' composition data (see [bigskate_lencomp]), or composition data in any other
 #' format accepted by [prepare_composition_data()].
 #' @param show_expected Logical. TRUE/FALSE; overlay the expected values as
-#' lines. Ignored if `dat` contains no expected values.
-#'
-#' Default: TRUE
+#' lines. Ignored if `dat` contains no expected values. Default: TRUE
 #'
 #' @param aggregate Logical. TRUE/FALSE; aggregate compositions across years
 #' within each fleet. Years are weighted by their sample size when sample
-#' sizes are available.
-#'
-#' Default: FALSE
+#' sizes are available. Default: FALSE
 #'
 #' @param show_n Logical. TRUE/FALSE; label each panel with its adjusted
 #' input sample size ("N adj.") and, when expected values are shown, its
 #' effective sample size ("N eff."), as in r4ss. Not used when
-#' `aggregate = TRUE`.
+#' `aggregate = TRUE`. Default: TRUE
 #'
-#' Default: TRUE
-#'
-#' @param ncol Number. Number of facet columns. NULL lets `ggplot2` choose.
-#'
-#' Default: NULL
+#' @param ncol Number. Number of facet columns. NULL lets `ggplot2` choose. Default: NULL
 #'
 #' @inheritParams prepare_composition_data
 #'
@@ -186,8 +178,6 @@ plot_composition_distribution <- function(
   plt
 }
 
-#------------------------------------------------------------------------------
-
 #' Plot composition bubble plots
 #'
 #' Bubble plot of compositions by year (x-axis) and bin (y-axis). Bubbles can
@@ -197,19 +187,13 @@ plot_composition_distribution <- function(
 #'
 #' @inheritParams plot_composition_distribution
 #' @param value String. Value to plot. Options: "observed", "expected", or
-#' "pearson".
+#' "pearson". Default: "observed"
 #'
-#' Default: "observed"
-#'
-#' @param max_size Number. Size of the largest bubble.
-#'
-#' Default: 6
+#' @param max_size Number. Size of the largest bubble. Default: 6
 #'
 #' @param conditional Logical. TRUE/FALSE; plot conditional age-at-length
 #' data (see [prepare_composition_data()]), with age on the y-axis, length bin on
-#' the x-axis, and one panel per year.
-#'
-#' Default: FALSE
+#' the x-axis, and one panel per year. Default: FALSE
 #'
 #' @returns A `ggplot2` object.
 #'
@@ -330,8 +314,6 @@ plot_composition_bubble <- function(
     comp_facet(facet_vars, ncol = ncol)
 }
 
-#------------------------------------------------------------------------------
-
 #' Plot composition Pearson residuals
 #'
 #' A convenience wrapper around [plot_composition_bubble()] with
@@ -361,8 +343,6 @@ plot_composition_residuals <- function(dat, ...) {
   plot_composition_bubble(dat, value = "pearson", ...)
 }
 
-#------------------------------------------------------------------------------
-
 #' Plot sex ratios implied by composition data
 #'
 #' Plot the proportion female, female / (female + male), by bin for the
@@ -375,9 +355,7 @@ plot_composition_residuals <- function(dat, ...) {
 #' ratio, calculated as a Jeffreys interval using the sample size in each bin
 #' (the sample size multiplied by the proportion of the composition in the
 #' bin). Set to NULL to omit intervals. Intervals are only shown when sample
-#' sizes are available.
-#'
-#' Default: 0.75
+#' sizes are available. Default: 0.75
 #'
 #' @returns A `ggplot2` object.
 #'
@@ -517,9 +495,7 @@ plot_composition_sexratio <- function(
   plt
 }
 
-#------------------------------------------------------------------------------
-
-#' Plot mean age or length with Francis (TA1.8) data weights
+#' Plot mean age or length with Francis (method 8 in Table A1, TA1.8) data weights
 #'
 #' Time series of the mean age or length in the observed and expected
 #' compositions. Developed as a diagnostic for the Francis (2011) data
@@ -527,15 +503,11 @@ plot_composition_sexratio <- function(
 #' compositions and lack of fit among years.
 #'
 #' @inheritParams plot_composition_distribution
-#' @param interval Number. Coverage of the interval around the observed mean.
-#'
-#' Default: 0.95
+#' @param interval Number. Coverage of the interval around the observed mean. Default: 0.95
 #'
 #' @param show_francis Logical. TRUE/FALSE; add the Francis TA1.8 weight for
 #' each fleet to the panel label and show thinner, capped intervals
-#' representing sample sizes after applying that weight.
-#'
-#' Default: TRUE
+#' representing sample sizes after applying that weight. Default: TRUE
 #'
 #' @returns A `ggplot2` object.
 #'

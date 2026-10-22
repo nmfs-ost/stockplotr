@@ -20,34 +20,22 @@ composition data (see \link{bigskate_lencomp}), or composition data in any other
 format accepted by \code{\link[=prepare_composition_data]{prepare_composition_data()}}.}
 
 \item{value}{String. Value to plot. Options: "observed", "expected", or
-"pearson".
-
-Default: "observed"}
+"pearson". Default: "observed"}
 
 \item{comp_type}{String. Type of composition to keep when \code{dat} contains
-more than one. Options: "age", "length", or NULL (keep all).
-
-Default: NULL}
+more than one. Options: "age", "length", or NULL (keep all). Default: NULL}
 
 \item{fleet}{Character or numeric vector. Fleet(s) to keep, matching
 either the fleet name (e.g., "Fishery_current") or the fleet name with its
-partition (e.g., "Fishery_current (retained)"). NULL keeps all fleets.
+partition (e.g., "Fishery_current (retained)"). NULL keeps all fleets. Default: NULL}
 
-Default: NULL}
+\item{max_size}{Number. Size of the largest bubble. Default: 6}
 
-\item{max_size}{Number. Size of the largest bubble.
-
-Default: 6}
-
-\item{ncol}{Number. Number of facet columns. NULL lets \code{ggplot2} choose.
-
-Default: NULL}
+\item{ncol}{Number. Number of facet columns. NULL lets \code{ggplot2} choose. Default: NULL}
 
 \item{conditional}{Logical. TRUE/FALSE; plot conditional age-at-length
 data (see \code{\link[=prepare_composition_data]{prepare_composition_data()}}), with age on the y-axis, length bin on
-the x-axis, and one panel per year.
-
-Default: FALSE}
+the x-axis, and one panel per year. Default: FALSE}
 }
 \value{
 A \code{ggplot2} object.

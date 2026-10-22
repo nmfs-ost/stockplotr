@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_composition.R
 \name{plot_composition_francis}
 \alias{plot_composition_francis}
-\title{Plot mean age or length with Francis (TA1.8) data weights}
+\title{Plot mean age or length with Francis (method 8 in Table A1, TA1.8) data weights}
 \usage{
 plot_composition_francis(
   dat,
@@ -18,30 +18,20 @@ plot_composition_francis(
 composition data (see \link{bigskate_lencomp}), or composition data in any other
 format accepted by \code{\link[=prepare_composition_data]{prepare_composition_data()}}.}
 
-\item{interval}{Number. Coverage of the interval around the observed mean.
-
-Default: 0.95}
+\item{interval}{Number. Coverage of the interval around the observed mean. Default: 0.95}
 
 \item{show_francis}{Logical. TRUE/FALSE; add the Francis TA1.8 weight for
 each fleet to the panel label and show thinner, capped intervals
-representing sample sizes after applying that weight.
-
-Default: TRUE}
+representing sample sizes after applying that weight. Default: TRUE}
 
 \item{comp_type}{String. Type of composition to keep when \code{dat} contains
-more than one. Options: "age", "length", or NULL (keep all).
-
-Default: NULL}
+more than one. Options: "age", "length", or NULL (keep all). Default: NULL}
 
 \item{fleet}{Character or numeric vector. Fleet(s) to keep, matching
 either the fleet name (e.g., "Fishery_current") or the fleet name with its
-partition (e.g., "Fishery_current (retained)"). NULL keeps all fleets.
+partition (e.g., "Fishery_current (retained)"). NULL keeps all fleets. Default: NULL}
 
-Default: NULL}
-
-\item{ncol}{Number. Number of facet columns. NULL lets \code{ggplot2} choose.
-
-Default: NULL}
+\item{ncol}{Number. Number of facet columns. NULL lets \code{ggplot2} choose. Default: NULL}
 }
 \value{
 A \code{ggplot2} object.

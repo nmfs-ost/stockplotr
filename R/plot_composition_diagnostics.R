@@ -13,9 +13,7 @@
 #' adjusted input (`nsamp_adj`) and effective (`effn`) sample sizes in the
 #' `FIT_LEN_COMPS` and `FIT_AGE_COMPS` tables are used instead (as in
 #' `stockplotr::example_data`).
-#' @param show_years Logical. TRUE/FALSE; label each point with its year.
-#'
-#' Default: FALSE
+#' @param show_years Logical. TRUE/FALSE; label each point with its year. Default: FALSE
 #'
 #' @returns A `ggplot2` object.
 #'
@@ -179,9 +177,7 @@ plot_composition_samples <- function(
 #'
 #' @inheritParams plot_composition_distribution
 #' @param type String. Type of plot. Options: "qq" (normal quantile-quantile
-#' plot) or "histogram" (with a standard normal density overlaid).
-#'
-#' Default: "qq"
+#' plot) or "histogram" (with a standard normal density overlaid). Default: "qq"
 #'
 #' @returns A `ggplot2` object.
 #'
@@ -250,9 +246,7 @@ plot_composition_residual_distribution <- function(
 #'
 #' @inheritParams plot_composition_distribution
 #' @param by String. Summarize residuals by "bin" (age or length) or by
-#' "year".
-#'
-#' Default: "bin"
+#' "year". Default: "bin"
 #'
 #' @returns A `ggplot2` object.
 #'
@@ -332,7 +326,7 @@ plot_composition_residual_pattern <- function(
 
 #------------------------------------------------------------------------------
 
-#' Plot Andre's mean age at length for conditional age-at-length data
+#' Plot Andre Punt's mean age at length for conditional age-at-length data
 #'
 #' For conditional age-at-length data, plot the observed and expected mean
 #' age in each length bin, and the standard error of the mean age, for each
@@ -344,9 +338,7 @@ plot_composition_residual_pattern <- function(
 #' in any other format accepted by [prepare_composition_data()] with
 #' `conditional = TRUE`.
 #' @param interval Number. Coverage of the intervals around the observed
-#' values.
-#'
-#' Default: 0.90
+#' values. Default: 0.90, corresponding to 90% intervals
 #'
 #' @returns A `ggplot2` object with one row of panels per year: mean age at
 #' length on the left and standard error of the mean age on the right.

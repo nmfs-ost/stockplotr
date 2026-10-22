@@ -20,32 +20,22 @@ format accepted by \code{\link[=prepare_composition_data]{prepare_composition_da
 
 \item{aggregate}{Logical. TRUE/FALSE; aggregate compositions across years
 within each fleet. Years are weighted by their sample size when sample
-sizes are available.
-
-Default: FALSE}
+sizes are available. Default: FALSE}
 
 \item{interval}{Number. Coverage of the interval around the observed sex
 ratio, calculated as a Jeffreys interval using the sample size in each bin
 (the sample size multiplied by the proportion of the composition in the
 bin). Set to NULL to omit intervals. Intervals are only shown when sample
-sizes are available.
-
-Default: 0.75}
+sizes are available. Default: 0.75}
 
 \item{comp_type}{String. Type of composition to keep when \code{dat} contains
-more than one. Options: "age", "length", or NULL (keep all).
-
-Default: NULL}
+more than one. Options: "age", "length", or NULL (keep all). Default: NULL}
 
 \item{fleet}{Character or numeric vector. Fleet(s) to keep, matching
 either the fleet name (e.g., "Fishery_current") or the fleet name with its
-partition (e.g., "Fishery_current (retained)"). NULL keeps all fleets.
+partition (e.g., "Fishery_current (retained)"). NULL keeps all fleets. Default: NULL}
 
-Default: NULL}
-
-\item{ncol}{Number. Number of facet columns. NULL lets \code{ggplot2} choose.
-
-Default: NULL}
+\item{ncol}{Number. Number of facet columns. NULL lets \code{ggplot2} choose. Default: NULL}
 }
 \value{
 A \code{ggplot2} object.

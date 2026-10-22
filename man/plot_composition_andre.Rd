@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_composition_diagnostics.R
 \name{plot_composition_andre}
 \alias{plot_composition_andre}
-\title{Plot Andre's mean age at length for conditional age-at-length data}
+\title{Plot Andre Punt's mean age at length for conditional age-at-length data}
 \usage{
 plot_composition_andre(dat, interval = 0.9, fleet = NULL, ncol = NULL)
 }
@@ -13,19 +13,13 @@ in any other format accepted by \code{\link[=prepare_composition_data]{prepare_c
 \code{conditional = TRUE}.}
 
 \item{interval}{Number. Coverage of the intervals around the observed
-values.
-
-Default: 0.90}
+values. Default: 0.90, corresponding to 90\% intervals}
 
 \item{fleet}{Character or numeric vector. Fleet(s) to keep, matching
 either the fleet name (e.g., "Fishery_current") or the fleet name with its
-partition (e.g., "Fishery_current (retained)"). NULL keeps all fleets.
+partition (e.g., "Fishery_current (retained)"). NULL keeps all fleets. Default: NULL}
 
-Default: NULL}
-
-\item{ncol}{Number. Number of facet columns. NULL lets \code{ggplot2} choose.
-
-Default: NULL}
+\item{ncol}{Number. Number of facet columns. NULL lets \code{ggplot2} choose. Default: NULL}
 }
 \value{
 A \code{ggplot2} object with one row of panels per year: mean age at
