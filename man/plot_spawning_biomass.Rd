@@ -61,19 +61,11 @@ Default: "msy"
 Options: (including, but not limited to) "target", "msy", and "unfished"
 If the reference point is not found in the data, set ref_line = c("name" = value).}
 
-<<<<<<< HEAD
 \item{unit_label}{String. Spawning biomass unit as indicated from the data.
 When setting a unit of pounds please use one of the following keywords:
 "lbs", "pounds", "lb". For example "1000s of lbs" would still be recognized
 as pounds. Do not set unit_label to the desired order of magnitude, rather the
 unit label reflected in the data. Please refer to the argument \code{scale_amount}.
-=======
-\item{unit_label}{String. Spawning biomass unit as indicated from the data. 
-When setting a unit of pounds please use one of the following keywords: 
-"lbs", "pounds", "lb". For example "1000s of lbs" would still be recognized 
-as pounds. Do not set unit label to the desired order of magnitude rather the
-unit label reflected in the data. Please refer to the argument `scale_amount`.
->>>>>>> ccdf8a1 (update documentation)
 
 Default: NULL}
 
@@ -83,11 +75,7 @@ Default: "time"
 
 Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
-<<<<<<< HEAD
 \item{lbs}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Logical. TRUE/FALSE; indicate whether to convert the y-axis values from
-=======
-\item{lbs}{`r lifecycle::badge('deprecated')` Logical. TRUE/FALSE; indicate whether to convert the y-axis values from
->>>>>>> ccdf8a1 (update documentation)
 kilograms to pounds. The default units match the default in the
 unit_label argument - 'mt'. -- Deprecate
 
