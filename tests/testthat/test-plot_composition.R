@@ -7,7 +7,12 @@ has_layer <- function(p, geom_class) {
 }
 
 # prepare_composition_data ----------------------------------------------------------
-test_that("prepare_composition_data returns standard columns from tidy data", {
+# Big Skate values for one label from convert_output() output
+bigskate_values <- function(dat, value) {
+  dat$estimate[grepl(paste0("_composition_", value, "$"), dat$label)]
+}
+
+test_that("prepare_composition_data reads convert_output() output", {
   comps <- prepare_composition_data(stockplotr::bigskate_lencomp)
   expect_s3_class(comps, "stockplotr_comp")
   expect_named(
@@ -18,13 +23,20 @@ test_that("prepare_composition_data returns standard columns from tidy data", {
   sums <- comps |>
     dplyr::summarise(total = sum(observed), .by = c(fleet, year))
   expect_true(all(abs(sums$total - 1) < 1e-6))
-  # Stock Synthesis Pearson residuals are kept
-  expect_equal(sort(comps$pearson), sort(stockplotr::bigskate_lencomp$pearson))
+  # Stock Synthesis Pearson residuals and sample sizes are kept
+  expect_equal(
+    sort(comps$pearson),
+    sort(bigskate_values(stockplotr::bigskate_lencomp, "pearson_residual"))
+  )
+  expect_setequal(
+    unique(comps$n),
+    unique(bigskate_values(stockplotr::bigskate_lencomp, "sample_size"))
+  )
 })
 
 test_that("prepare_composition_data calculates multinomial Pearson residuals", {
   comps <- prepare_composition_data(
-    dplyr::select(stockplotr::bigskate_lencomp, -pearson)
+    dplyr::filter(stockplotr::bigskate_lencomp, label != "length_composition_pearson_residual")
   )
   i <- 10
   expect_equal(
@@ -171,7 +183,7 @@ test_that("bubble plots show observations and residuals", {
 })
 
 test_that("residual plot errors without expected values or sample sizes", {
-  obs_only <- dplyr::select(stockplotr::bigskate_lencomp, -expected, -n, -pearson)
+  obs_only <- dplyr::filter(stockplotr::bigskate_lencomp, label == "length_composition_observed")
   expect_error(plot_composition_residuals(obs_only), "No Pearson residuals")
 })
 

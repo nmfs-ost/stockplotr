@@ -14,9 +14,9 @@ plot_composition_francis(
 )
 }
 \arguments{
-\item{dat}{A data frame of composition data in any format accepted by
-\code{\link[=prepare_composition_data]{prepare_composition_data()}}, such as FIMS output, an r4ss \code{lendbase}/\code{agedbase}
-table, or a tidy data frame like \link{bigskate_lencomp}.}
+\item{dat}{A tibble returned from \code{\link[=convert_output]{convert_output()}} that contains
+composition data (see \link{bigskate_lencomp}), or composition data in any other
+format accepted by \code{\link[=prepare_composition_data]{prepare_composition_data()}}.}
 
 \item{interval}{Number. Coverage of the interval around the observed mean.
 
@@ -74,8 +74,9 @@ adapted for Dirichlet-multinomial or other likelihoods.
 Without expected values, only the observed means are plotted. Without
 sample sizes, no intervals or weights are shown.
 }
-\section{r4ss equivalent}{
- \code{r4ss::SSplotComps()} subplots 8 and 9, which
+\section{Equivalent plots in other packages}{
+
+r4ss: \code{r4ss::SSplotComps()} subplots 8 and 9, which
 use \code{r4ss::SSMethod.TA1.8()}.
 }
 

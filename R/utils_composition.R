@@ -1,27 +1,41 @@
 #' Prepare composition data for plotting
 #'
 #' Reshape age or length composition data (observed and, optionally,
-#' expected proportions) into the tidy format used by the composition
-#' plotting functions ([plot_composition_distribution()], [plot_composition_bubble()],
-#' [plot_composition_residuals()], [plot_composition_sexratio()], and [plot_composition_francis()]).
+#' expected proportions) from [convert_output()] into the tidy format used by
+#' the composition plotting functions ([plot_composition_distribution()],
+#' [plot_composition_bubble()], [plot_composition_residuals()],
+#' [plot_composition_sexratio()], [plot_composition_francis()],
+#' [plot_composition_samples()], [plot_composition_residual_distribution()],
+#' [plot_composition_residual_pattern()], and [plot_composition_andre()]).
+#' Each of these functions calls `prepare_composition_data()` itself, so it
+#' only needs to be called directly to inspect or modify the data.
 #'
-#' @param dat A data frame of composition data. The following formats are
-#' recognized automatically:
+#' @param dat A tibble returned from [convert_output()] (see
+#' [bigskate_lencomp]). Compositions are the rows whose `label` contains
+#' "composition", for example:
+#' \describe{
+#'   \item{Stock Synthesis (from an `r4ss::SS_output()` list)}{
+#'   "length_composition_observed", "length_composition_predicted",
+#'   "length_composition_pearson_residual", and
+#'   "length_composition_sample_size" (and the "age_" equivalents), with
+#'   conditional age-at-length data labeled "conditional_age_composition_*".}
+#'   \item{FIMS}{"age_composition_proportion" and "age_composition_expected"
+#'   (and the "length_" equivalents).}
+#'   \item{BAM and Rceattle}{"age_composition_observed" and
+#'   "age_composition_predicted", or "composition_observed" and
+#'   "composition_predicted".}
+#' }
+#' Bins are taken from the `age` or `length_bins` column, and partitions from
+#' the `part` column. Other formats are also recognized:
 #' \describe{
 #'   \item{Tidy composition data}{Columns `year`, `bin`, and `observed`, with
 #'   optional columns `fleet`, `sex`, `part` (partition: 0 = whole catch,
 #'   1 = discard, 2 = retained), `expected`, `n` (input or adjusted sample
-#'   size), `pearson`, and `comp_type`. See [bigskate_lencomp].}
-#'   \item{FIMS output}{Output from FIMS (e.g., `FIMS::get_estimates()` or
-#'   [convert_output()] with `model = "fims"`) that contains `observed` and
-#'   `expected` columns. Rows whose `label` contains "comp" are kept and the
-#'   bin is taken from the `age` or `length` column.}
-#'   \item{stockplotr standard output}{Long-format output from
-#'   [convert_output()] where observed and expected compositions are stored in
-#'   the `estimate` column with labels such as
-#'   "age_composition_proportion"/"age_composition_observed" and
-#'   "age_composition_expected"/"age_composition_predicted" (and the
-#'   corresponding "length_" labels).}
+#'   size), `pearson`, `comp_type`, and `length_bin` (for conditional
+#'   age-at-length data).}
+#'   \item{FIMS estimates}{Output from `FIMS::get_estimates()` that contains
+#'   `observed` and `expected` columns. Rows whose `label` contains "comp" are
+#'   kept and the bin is taken from the `age` or `length` column.}
 #'   \item{r4ss output}{A list returned by `r4ss::SS_output()` (length and
 #'   age compositions are combined and fleet names are added) or its
 #'   `lendbase` or `agedbase` elements (columns `Yr`, `Fleet`, `Sex`, `Bin`,
@@ -29,9 +43,8 @@
 #'   age-at-length rows are dropped from `agedbase` so that only marginal age
 #'   compositions remain, unless `conditional = TRUE`.}
 #' }
-#' For conditional age-at-length data (`conditional = TRUE`), tidy data also
-#' need a `length_bin` column giving the length bin that each age
-#' composition is conditioned on (see [bigskate_caal]).
+#' For conditional age-at-length data (`conditional = TRUE`), see
+#' [bigskate_caal].
 #' @param comp_type String. Type of composition to keep when `dat` contains
 #' more than one. Options: "age", "length", or NULL (keep all).
 #'
@@ -78,6 +91,9 @@
 #' @examples
 #' comps <- prepare_composition_data(bigskate_lencomp, fleet = "WCGBTS")
 #' head(comps)
+#'
+#' # Conditional age-at-length data
+#' prepare_composition_data(bigskate_caal, conditional = TRUE)
 #'
 #' # Data in the stockplotr long format are reshaped automatically
 #' long <- data.frame(
@@ -126,7 +142,7 @@ prepare_composition_data <- function(
     out <- switch(detect_comp_format(dat),
       "r4ss" = comp_from_r4ss(dat, conditional = conditional),
       "obs_exp_cols" = comp_from_obs_exp_cols(dat),
-      "long" = comp_from_long(dat),
+      "long" = comp_from_long(dat, conditional = conditional),
       "tidy" = comp_from_tidy(dat),
       cli::cli_abort(c(
         "Could not find composition data in {.arg dat}.",
@@ -350,43 +366,73 @@ comp_from_obs_exp_cols <- function(dat) {
   ))
 }
 
-comp_from_long <- function(dat) {
+comp_from_long <- function(dat, conditional = FALSE) {
   label_col <- find_col(dat, "label")
-  dat <- dat[grepl("comp", dat[[label_col]], ignore.case = TRUE), , drop = FALSE]
+  lab <- dat[[label_col]]
+  # Conditional age-at-length rows are labeled "conditional_age_composition_*"
+  is_comp <- grepl("comp", lab, ignore.case = TRUE)
+  is_conditional <- grepl("^conditional_", lab)
+  if (!conditional && !any(is_comp & !is_conditional) && any(is_conditional)) {
+    cli::cli_abort(c(
+      "{.arg dat} contains only conditional age-at-length data.",
+      "i" = "Use {.code conditional = TRUE}, e.g., with {.fn plot_composition_andre}."
+    ))
+  }
+  keep <- is_comp & is_conditional == conditional
+  dat <- dat[keep, , drop = FALSE]
   lab <- dat[[label_col]]
   value_type <- dplyr::case_when(
+    grepl("pearson", lab, ignore.case = TRUE) ~ "pearson",
+    grepl("sample_size", lab, ignore.case = TRUE) ~ "n",
     grepl("expected|predicted", lab, ignore.case = TRUE) ~ "expected",
     grepl("observed|proportion", lab, ignore.case = TRUE) ~ "observed",
     TRUE ~ NA_character_
   )
-  type <- comp_type_from_label(lab)
+  type <- if (conditional) rep("age", length(lab)) else comp_type_from_label(lab)
   bin <- dplyr::if_else(
-    type == "length",
-    suppressWarnings(as.numeric(pull_col(dat, c("length_bins", "length", "bin")))),
+    type %in% "length",
+    suppressWarnings(as.numeric(pull_col(dat, c("length_bins", "len_bins", "length", "bin")))),
     suppressWarnings(as.numeric(pull_col(dat, c("age", "bin"))))
   )
   long <- data.frame(
     comp_type = type,
-    fleet = as.character(pull_col(dat, c("fleet", "fleet_name"), "All")),
+    fleet = label_partition(
+      as.character(pull_col(dat, c("fleet", "fleet_name"), "All")),
+      pull_col(dat, "part")
+    ),
     year = suppressWarnings(as.numeric(pull_col(dat, "year"))),
     sex = as.character(pull_col(dat, "sex")),
+    length_bin = if (conditional) {
+      suppressWarnings(as.numeric(pull_col(dat, c("length_bins", "len_bins"))))
+    } else {
+      NA_real_
+    },
     bin = bin,
     value_type = value_type,
     value = suppressWarnings(as.numeric(dat[[find_col(dat, "estimate")]]))
   ) |>
     dplyr::filter(!is.na(.data$value_type))
+  if (nrow(long) == 0) {
+    cli::cli_abort("No {if (conditional) 'conditional age-at-length' else 'composition'} data found in {.arg dat}.")
+  }
+  # Proportions in repeated rows (e.g., seasons) are summed; sample sizes
+  # and residuals are averaged
   wide <- long |>
-    tidyr::pivot_wider(
-      names_from = "value_type",
-      values_from = "value",
-      values_fn = function(x) sum(x, na.rm = TRUE)
-    )
+    dplyr::summarise(
+      value = if (dplyr::first(.data$value_type) %in% c("observed", "expected")) {
+        sum(.data$value, na.rm = TRUE)
+      } else {
+        mean(.data$value, na.rm = TRUE)
+      },
+      .by = c("comp_type", "fleet", "year", "sex", "length_bin", "bin", "value_type")
+    ) |>
+    tidyr::pivot_wider(names_from = "value_type", values_from = "value")
   if (!"observed" %in% names(wide)) {
     cli::cli_abort("No observed compositions found in {.arg dat}.")
   }
-  if (!"expected" %in% names(wide)) wide$expected <- NA_real_
-  wide$n <- NA_real_
-  wide$pearson <- NA_real_
+  for (col in c("expected", "n", "pearson")) {
+    if (!col %in% names(wide)) wide[[col]] <- NA_real_
+  }
   finish_comp(wide)
 }
 
@@ -600,6 +646,13 @@ comp_effn_table <- function(comps) {
     )
 }
 
+# Does dat contain observed and expected compositions by bin in the
+# standard output format?
+has_bin_comps <- function(dat) {
+  is.data.frame(dat) && "label" %in% names(dat) &&
+    any(grepl("^(length|age)_composition_(predicted|expected)$", dat$label))
+}
+
 # Does dat contain Stock Synthesis FIT_*_COMPS tables from convert_output()?
 is_ss3_fit_summary <- function(dat) {
   is.data.frame(dat) &&
@@ -662,3 +715,72 @@ comp_sample_size_from_ss3 <- function(dat, comp_type = NULL) {
     dplyr::select("comp_type", "fleet", "year", "n", "effn")
 }
 
+
+# Composition data by bin from an r4ss::SS_output() list, as rows of
+# convert_output()'s standard output. Each composition database becomes one
+# module ("lendbase", "agedbase", "condbase") with labels
+# "<type>_composition_<value>", where <type> is "length", "age", or
+# "conditional_age" and <value> is "observed", "predicted",
+# "pearson_residual", or "sample_size" (adjusted input sample size, or the
+# Dirichlet-multinomial sample size when available).
+ss3_composition_rows <- function(replist, fleet_names, start_year, end_year, columns) {
+  dbases <- c(lendbase = "length", agedbase = "age", condbase = "conditional_age")
+  out <- list()
+  for (db in names(dbases)) {
+    d <- replist[[db]]
+    if (!is.data.frame(d) || nrow(d) == 0) next
+    prefix <- dbases[[db]]
+    sex <- standardize_sex(r4ss_sex(d))
+    bin <- as.character(d[["Bin"]])
+    base <- data.frame(
+      module_name = db,
+      year = as.character(d[["Yr"]]),
+      month = as.character(pull_col(d, "Month")),
+      season = as.character(pull_col(d, "Seas")),
+      fleet = fleet_names[d[["Fleet"]]],
+      sex = sex,
+      part = as.character(pull_col(d, "Part")),
+      kind = as.character(pull_col(d, "Kind")),
+      age = if (prefix == "length") NA_character_ else bin,
+      len_bins = if (prefix == "length") {
+        bin
+      } else if (prefix == "conditional_age") {
+        as.character(d[["Lbin_lo"]])
+      } else {
+        NA_character_
+      }
+    )
+    n <- dplyr::coalesce(
+      suppressWarnings(as.numeric(pull_col(d, "Nsamp_DM"))),
+      suppressWarnings(as.numeric(pull_col(d, "Nsamp_adj")))
+    )
+    values <- list(
+      observed = d[["Obs"]],
+      predicted = d[["Exp"]],
+      pearson_residual = suppressWarnings(as.numeric(d[["Pearson"]])),
+      sample_size = n
+    )
+    for (v in names(values)) {
+      rows <- base
+      rows$label <- paste0(prefix, "_composition_", v)
+      rows$estimate <- as.numeric(values[[v]])
+      out[[paste(db, v)]] <- rows
+    }
+  }
+  if (length(out) == 0) {
+    return(NULL)
+  }
+  out <- dplyr::bind_rows(out) |>
+    # Single-sex male compositions are reported twice in the composition
+    # database (once for each internal sex code) with identical values
+    dplyr::distinct() |>
+    dplyr::mutate(
+      era = dplyr::case_when(
+        as.numeric(.data$year) < start_year ~ "init",
+        as.numeric(.data$year) <= end_year ~ "time",
+        TRUE ~ "fore"
+      )
+    )
+  out[setdiff(columns, names(out))] <- NA
+  as.data.frame(out[, columns])
+}

@@ -48,26 +48,27 @@
 #' the U.S. West Coast (`BigSkate_2019` in the Stock Synthesis test models),
 #' the model used for the r4ss example plots at
 #' \url{https://r4ss.github.io/r4ss/BigSkate/}. The data are the `lendbase`
-#' element of `r4ss::SS_output()` with columns renamed to follow
-#' stockplotr conventions. See `data-raw/bigskate_comps.R`.
+#' rows of [convert_output()] applied to the output of `r4ss::SS_output()`.
+#' See `data-raw/bigskate_comps.R`.
 #'
 #' Compositions are sex-specific, with female and male proportions summing to
 #' one within each year, fleet, and partition. `Fishery_current` has separate
 #' retained and discarded compositions.
 #'
-#' @format A tibble with 3626 rows and 11 variables:
+#' @format A tibble in the standard [convert_output()] format with 14504 rows
+#' and 35 columns. The columns used for compositions are:
 #' \describe{
-#'   \item{comp_type}{Type of composition ("length")}
+#'   \item{label}{"length_composition_observed", "length_composition_predicted",
+#'   "length_composition_pearson_residual" (as reported by Stock Synthesis),
+#'   or "length_composition_sample_size" (adjusted input sample size,
+#'   `Nsamp_adj` in r4ss)}
+#'   \item{estimate}{Value of the label}
+#'   \item{module_name}{`"lendbase"`}
+#'   \item{year}{Year of the observation}
 #'   \item{fleet}{Fleet name: "Fishery_current", "WCGBTS", or "Triennial"}
-#'   \item{year}{Year of the observation (`Yr` in r4ss)}
-#'   \item{month}{Month of the observation}
 #'   \item{sex}{"female" or "male"}
 #'   \item{part}{Partition: 0 = whole catch, 1 = discard, 2 = retained}
-#'   \item{bin}{Lower edge of the length bin (cm)}
-#'   \item{observed}{Observed proportion (`Obs` in r4ss)}
-#'   \item{expected}{Expected proportion (`Exp` in r4ss)}
-#'   \item{pearson}{Pearson residual reported by Stock Synthesis}
-#'   \item{n}{Adjusted input sample size (`Nsamp_adj` in r4ss)}
+#'   \item{length_bins}{Lower edge of the length bin (cm)}
 #' }
 #' @source Taylor, I.G., Gertseva, V., Stephens, A., and Bizzarro, J. (2019). Status of
 #' Big Skate (Beringraja binoculata) off the U.S. Pacific Coast in 2019.
@@ -78,25 +79,26 @@
 #' Big Skate conditional age-at-length data
 #'
 #' Conditional age-at-length data and fits from the 2019 Big Skate stock
-#' assessment (see [bigskate_lencomp]). The data are the `condbase` element
-#' of `r4ss::SS_output()` with columns renamed to follow stockplotr conventions.
-#' Each age composition is for one sex and one length bin, and sums to one.
-#' See `data-raw/bigskate_comps.R`.
+#' assessment (see [bigskate_lencomp]). The data are the `condbase` rows of
+#' [convert_output()] applied to the output of `r4ss::SS_output()`. Each age
+#' composition is for one sex and one length bin, and sums to one. See
+#' `data-raw/bigskate_comps.R`.
 #'
-#' @format A tibble with 6560 rows and 12 variables:
+#' @format A tibble in the standard [convert_output()] format with 26240 rows
+#' and 35 columns. The columns used for compositions are:
 #' \describe{
-#'   \item{comp_type}{Type of composition ("age")}
+#'   \item{label}{"conditional_age_composition_observed",
+#'   "conditional_age_composition_predicted",
+#'   "conditional_age_composition_pearson_residual", or
+#'   "conditional_age_composition_sample_size"}
+#'   \item{estimate}{Value of the label}
+#'   \item{module_name}{`"condbase"`}
+#'   \item{year}{Year of the observation}
 #'   \item{fleet}{Fleet name: "Fishery_current" or "WCGBTS"}
-#'   \item{year}{Year of the observation (`Yr` in r4ss)}
-#'   \item{month}{Month of the observation}
 #'   \item{sex}{"female" or "male"}
 #'   \item{part}{Partition: 0 = whole catch, 1 = discard, 2 = retained}
-#'   \item{length_bin}{Length bin the ages are conditioned on (`Lbin_lo` in r4ss)}
-#'   \item{bin}{Age}
-#'   \item{observed}{Observed proportion at age within the length bin}
-#'   \item{expected}{Expected proportion at age within the length bin}
-#'   \item{pearson}{Pearson residual reported by Stock Synthesis}
-#'   \item{n}{Adjusted input sample size (`Nsamp_adj` in r4ss)}
+#'   \item{length_bins}{Length bin the ages are conditioned on (`Lbin_lo` in r4ss)}
+#'   \item{age}{Age}
 #' }
 #' @source Taylor, I.G., Gertseva, V., Stephens, A., and Bizzarro, J. (2019). Status of
 #' Big Skate (Beringraja binoculata) off the U.S. Pacific Coast in 2019.

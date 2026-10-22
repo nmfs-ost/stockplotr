@@ -6,11 +6,13 @@
 #' Ianelli (1997) data weighting method.
 #'
 #' @inheritParams plot_composition_distribution
-#' @param dat Composition data in any format accepted by
-#' [prepare_composition_data()], or [convert_output()] output from Stock Synthesis
-#' that contains the `FIT_LEN_COMPS` or `FIT_AGE_COMPS` tables (as in
-#' `stockplotr::example_data`), from which the adjusted input (`nsamp_adj`)
-#' and effective (`effn`) sample sizes are taken.
+#' @param dat A tibble returned from [convert_output()] that contains
+#' composition data (see [bigskate_lencomp]), or composition data in any other
+#' format accepted by [prepare_composition_data()]. For Stock Synthesis
+#' output converted from a Report.sso file without compositions by bin, the
+#' adjusted input (`nsamp_adj`) and effective (`effn`) sample sizes in the
+#' `FIT_LEN_COMPS` and `FIT_AGE_COMPS` tables are used instead (as in
+#' `stockplotr::example_data`).
 #' @param show_years Logical. TRUE/FALSE; label each point with its year.
 #'
 #' Default: FALSE
@@ -42,7 +44,8 @@
 #' assessment using catch-age data and the sampling-importance resampling
 #' algorithm. Canadian Journal of Fisheries and Aquatic Sciences 54: 284-300.
 #'
-#' @section r4ss equivalent: `r4ss::SSplotComps()` subplot 7 ("N-EffN
+#' @section Equivalent plots in other packages:
+#' r4ss: `r4ss::SSplotComps()` subplot 7 ("N-EffN
 #' comparison").
 #'
 #' @seealso [prepare_composition_data()], [plot_composition_francis()]
@@ -60,7 +63,9 @@ plot_composition_samples <- function(
   show_years = FALSE,
   ncol = NULL
 ) {
-  if (is_ss3_fit_summary(dat)) {
+  # Older converted Stock Synthesis output has only the per-composition fit
+  # tables, not compositions by bin
+  if (is_ss3_fit_summary(dat) && !has_bin_comps(dat)) {
     if (!is.null(comp_type)) comp_type <- match.arg(comp_type, c("age", "length"))
     sizes <- comp_sample_size_from_ss3(dat, comp_type = comp_type)
     if (!is.null(fleet)) {
@@ -334,10 +339,10 @@ plot_composition_residual_pattern <- function(
 #' year. These are "Andre's plots" from `r4ss::SSplotComps()` (subplot 12).
 #'
 #' @inheritParams plot_composition_distribution
-#' @param dat Conditional age-at-length data in any format accepted by
-#' [prepare_composition_data()] with `conditional = TRUE`: a tidy data frame with a
-#' `length_bin` column (see [bigskate_caal]), or an
-#' `r4ss::SS_output()` list (its `condbase` element is used).
+#' @param dat A tibble returned from [convert_output()] that contains
+#' conditional age-at-length data (see [bigskate_caal]), or conditional data
+#' in any other format accepted by [prepare_composition_data()] with
+#' `conditional = TRUE`.
 #' @param interval Number. Coverage of the intervals around the observed
 #' values.
 #'
@@ -360,7 +365,8 @@ plot_composition_residual_pattern <- function(
 #' Length bins with no observations or no sample size are omitted. Plot one
 #' fleet at a time with `fleet`, and subset years by filtering `dat`.
 #'
-#' @section r4ss equivalent: `r4ss::SSplotComps()` subplot 12 (Andre's plots of
+#' @section Equivalent plots in other packages:
+#' r4ss: `r4ss::SSplotComps()` subplot 12 (Andre's plots of
 #' mean age and standard deviation for conditional age-at-length data).
 #'
 #' @seealso [prepare_composition_data()], [plot_composition_bubble()]

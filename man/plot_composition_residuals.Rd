@@ -7,9 +7,9 @@
 plot_composition_residuals(dat, ...)
 }
 \arguments{
-\item{dat}{A data frame of composition data in any format accepted by
-\code{\link[=prepare_composition_data]{prepare_composition_data()}}, such as FIMS output, an r4ss \code{lendbase}/\code{agedbase}
-table, or a tidy data frame like \link{bigskate_lencomp}.}
+\item{dat}{A tibble returned from \code{\link[=convert_output]{convert_output()}} that contains
+composition data (see \link{bigskate_lencomp}), or composition data in any other
+format accepted by \code{\link[=prepare_composition_data]{prepare_composition_data()}}.}
 
 \item{...}{Additional arguments passed to \code{\link[=plot_composition_bubble]{plot_composition_bubble()}}.}
 }
@@ -21,8 +21,9 @@ A convenience wrapper around \code{\link[=plot_composition_bubble]{plot_composit
 \code{value = "pearson"}. Residuals are taken from \code{dat} when supplied or
 calculated by \code{\link[=prepare_composition_data]{prepare_composition_data()}} assuming a multinomial distribution.
 }
-\section{r4ss equivalent}{
- \code{r4ss::SSplotComps()} subplot 2 for residuals by
+\section{Equivalent plots in other packages}{
+
+r4ss: \code{r4ss::SSplotComps()} subplot 2 for residuals by
 fleet and subplot 24 (residuals compared across fleets).
 }
 

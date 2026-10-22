@@ -53,7 +53,7 @@ test_that("plot_composition_samples works with converted SS3 output", {
 })
 
 test_that("plot_composition_samples errors without expected values", {
-  obs_only <- dplyr::select(stockplotr::bigskate_lencomp, -expected)
+  obs_only <- dplyr::filter(stockplotr::bigskate_lencomp, label != "length_composition_predicted")
   expect_error(plot_composition_samples(obs_only), "could not be calculated")
 })
 
@@ -74,16 +74,19 @@ test_that("plot_composition_residual_pattern summarizes by bin and year", {
   expect_true("bin" %in% names(p_bin$data))
   # mean residual by bin matches a direct calculation
   direct <- stockplotr::bigskate_lencomp |>
-    dplyr::filter(fleet == "WCGBTS", sex == "female", bin == 50)
+    dplyr::filter(
+      label == "length_composition_pearson_residual",
+      fleet == "WCGBTS", sex == "female", length_bins == 50
+    )
   check <- dplyr::filter(p_bin$data, fleet == "WCGBTS", sex == "female", bin == 50)
-  expect_equal(check$mean_resid, mean(direct$pearson))
+  expect_equal(check$mean_resid, mean(direct$estimate))
 
   p_year <- plot_composition_residual_pattern(stockplotr::bigskate_lencomp, by = "year")
   expect_true("year" %in% names(p_year$data))
 })
 
 test_that("residual plots error without residuals", {
-  obs_only <- dplyr::select(stockplotr::bigskate_lencomp, -expected, -n, -pearson)
+  obs_only <- dplyr::filter(stockplotr::bigskate_lencomp, label == "length_composition_observed")
   expect_error(plot_composition_residual_distribution(obs_only), "No Pearson residuals")
   expect_error(plot_composition_residual_pattern(obs_only), "No Pearson residuals")
 })
@@ -103,17 +106,24 @@ test_that("prepare_composition_data handles conditional age-at-length data", {
   sums <- caal |>
     dplyr::summarise(total = sum(observed), .by = c(fleet, year, sex, length_bin))
   expect_true(all(abs(sums$total - 1) < 1e-6))
-  expect_equal(caal$observed, stockplotr::bigskate_caal$observed[
-    order(stockplotr::bigskate_caal$fleet, stockplotr::bigskate_caal$year,
-      stockplotr::bigskate_caal$length_bin, stockplotr::bigskate_caal$sex,
-      stockplotr::bigskate_caal$bin)
-  ], tolerance = 1e-6)
+  observed <- stockplotr::bigskate_caal$estimate[
+    stockplotr::bigskate_caal$label == "conditional_age_composition_observed"
+  ]
+  expect_equal(sort(caal$observed), sort(observed), tolerance = 1e-6)
   # marginal plots refuse conditional data
   expect_error(prepare_composition_data(stockplotr::bigskate_caal), "conditional = TRUE")
   expect_error(plot_composition_distribution(stockplotr::bigskate_caal), "conditional = TRUE")
-  # and conditional plots need a length bin
+  # and conditional plots need conditional data
   expect_error(
     prepare_composition_data(stockplotr::bigskate_lencomp, conditional = TRUE),
+    "No conditional"
+  )
+  # tidy data need a length_bin column
+  expect_error(
+    prepare_composition_data(
+      data.frame(year = 2000, bin = 1:3, observed = 1:3),
+      conditional = TRUE
+    ),
     "length_bin"
   )
 })
@@ -140,10 +150,16 @@ test_that("plot_composition_andre shows mean and SE of age at length", {
   means <- dplyr::filter(p$data, statistic == "Mean age", year == 2018, sex == "female")
   expect_gt(stats::cor(means$length_bin, means$observed), 0.8)
   # one value per year, sex, and length bin, calculated as in r4ss
-  z <- dplyr::filter(
-    stockplotr::bigskate_caal,
-    fleet == "WCGBTS", year == 2018, sex == "female", length_bin == 60
-  )
+  z <- stockplotr::bigskate_caal |>
+    dplyr::filter(fleet == "WCGBTS", year == 2018, sex == "female", length_bins == 60) |>
+    dplyr::select(label, estimate, age) |>
+    tidyr::pivot_wider(names_from = label, values_from = estimate) |>
+    dplyr::transmute(
+      bin = as.numeric(age),
+      observed = conditional_age_composition_observed,
+      expected = conditional_age_composition_predicted,
+      n = conditional_age_composition_sample_size
+    )
   check <- dplyr::filter(p$data, year == 2018, sex == "female", length_bin == 60)
   obs_mean <- sum(z$bin * z$observed) / sum(z$observed)
   expect_equal(check$observed[check$statistic == "Mean age"], obs_mean)

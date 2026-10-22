@@ -15,9 +15,9 @@ plot_composition_bubble(
 )
 }
 \arguments{
-\item{dat}{A data frame of composition data in any format accepted by
-\code{\link[=prepare_composition_data]{prepare_composition_data()}}, such as FIMS output, an r4ss \code{lendbase}/\code{agedbase}
-table, or a tidy data frame like \link{bigskate_lencomp}.}
+\item{dat}{A tibble returned from \code{\link[=convert_output]{convert_output()}} that contains
+composition data (see \link{bigskate_lencomp}), or composition data in any other
+format accepted by \code{\link[=prepare_composition_data]{prepare_composition_data()}}.}
 
 \item{value}{String. Value to plot. Options: "observed", "expected", or
 "pearson".
@@ -66,8 +66,9 @@ residuals (observed < expected), with bubble area proportional to the
 absolute value of the residual. The maximum absolute residual for each
 panel is included in the panel label.
 }
-\section{r4ss equivalent}{
- \code{r4ss::SSplotComps()} subplot 2 (bubble plot of
+\section{Equivalent plots in other packages}{
+
+r4ss: \code{r4ss::SSplotComps()} subplot 2 (bubble plot of
 observations or residuals) and subplot 3 (conditional age-at-length).
 }
 

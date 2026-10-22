@@ -6,7 +6,7 @@
 # The test model includes Report.sso but not CompReport.sso, so the model is
 # rerun at its maximum likelihood estimates (from ss3.par, without
 # estimation) to write the composition database, then read with
-# r4ss::SS_output().
+# r4ss::SS_output() and converted with convert_output().
 
 model_dir <- file.path(tempdir(), "bigskate")
 dir.create(model_dir, showWarnings = FALSE)
@@ -27,31 +27,10 @@ replist <- r4ss::SS_output(
   verbose = FALSE, printstats = FALSE, covar = FALSE, forecast = FALSE
 )
 
-# Reshape r4ss composition databases to stockplotr's snake_case columns
-tidy_dbase <- function(dbase, comp_type, fleet_names) {
-  out <- tibble::tibble(
-    comp_type = comp_type,
-    fleet = fleet_names[dbase[["Fleet"]]],
-    year = dbase[["Yr"]],
-    month = dbase[["Month"]],
-    # r4ss's lowercase "sex" (0 = unknown, 1 = female, 2 = male), not the
-    # Stock Synthesis "Sex" code, which is 1 for male-only compositions
-    sex = c("1" = "female", "2" = "male", "0" = "combined")[as.character(dbase[["sex"]])],
-    part = dbase[["Part"]],
-    length_bin = dbase[["Lbin_lo"]],
-    bin = dbase[["Bin"]],
-    observed = dbase[["Obs"]],
-    expected = dbase[["Exp"]],
-    pearson = dbase[["Pearson"]],
-    n = dbase[["Nsamp_adj"]]
-  )
-  if (comp_type == "length") out[["length_bin"]] <- NULL
-  # Single-sex male compositions are reported twice in the composition
-  # database (once for each internal sex code) with identical values
-  dplyr::distinct(out)
-}
-
-bigskate_lencomp <- tidy_dbase(replist[["lendbase"]], "length", replist[["FleetNames"]])
-bigskate_caal <- tidy_dbase(replist[["condbase"]], "age", replist[["FleetNames"]])
+# Convert to stockplotr's standard output and keep the composition data:
+# length compositions (lendbase) and conditional age-at-length data (condbase)
+std_output <- stockplotr::convert_output(replist, model = "ss3")
+bigskate_lencomp <- dplyr::filter(std_output, module_name == "lendbase")
+bigskate_caal <- dplyr::filter(std_output, module_name == "condbase")
 
 usethis::use_data(bigskate_lencomp, bigskate_caal, overwrite = TRUE)

@@ -13,11 +13,13 @@ plot_composition_samples(
 )
 }
 \arguments{
-\item{dat}{Composition data in any format accepted by
-\code{\link[=prepare_composition_data]{prepare_composition_data()}}, or \code{\link[=convert_output]{convert_output()}} output from Stock Synthesis
-that contains the \code{FIT_LEN_COMPS} or \code{FIT_AGE_COMPS} tables (as in
-\code{stockplotr::example_data}), from which the adjusted input (\code{nsamp_adj})
-and effective (\code{effn}) sample sizes are taken.}
+\item{dat}{A tibble returned from \code{\link[=convert_output]{convert_output()}} that contains
+composition data (see \link{bigskate_lencomp}), or composition data in any other
+format accepted by \code{\link[=prepare_composition_data]{prepare_composition_data()}}. For Stock Synthesis
+output converted from a Report.sso file without compositions by bin, the
+adjusted input (\code{nsamp_adj}) and effective (\code{effn}) sample sizes in the
+\code{FIT_LEN_COMPS} and \code{FIT_AGE_COMPS} tables are used instead (as in
+\code{stockplotr::example_data}).}
 
 \item{comp_type}{String. Type of composition to keep when \code{dat} contains
 more than one. Options: "age", "length", or NULL (keep all).
@@ -69,8 +71,9 @@ fleet; multiplying it by the current variance adjustment gives the
 Effective sample sizes from this formula are not appropriate for
 compositions fit with a Dirichlet-multinomial likelihood.
 }
-\section{r4ss equivalent}{
- \code{r4ss::SSplotComps()} subplot 7 ("N-EffN
+\section{Equivalent plots in other packages}{
+
+r4ss: \code{r4ss::SSplotComps()} subplot 7 ("N-EffN
 comparison").
 }
 

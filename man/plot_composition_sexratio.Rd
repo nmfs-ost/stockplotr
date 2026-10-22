@@ -14,9 +14,9 @@ plot_composition_sexratio(
 )
 }
 \arguments{
-\item{dat}{A data frame of composition data in any format accepted by
-\code{\link[=prepare_composition_data]{prepare_composition_data()}}, such as FIMS output, an r4ss \code{lendbase}/\code{agedbase}
-table, or a tidy data frame like \link{bigskate_lencomp}.}
+\item{dat}{A tibble returned from \code{\link[=convert_output]{convert_output()}} that contains
+composition data (see \link{bigskate_lencomp}), or composition data in any other
+format accepted by \code{\link[=prepare_composition_data]{prepare_composition_data()}}.}
 
 \item{aggregate}{Logical. TRUE/FALSE; aggregate compositions across years
 within each fleet. Years are weighted by their sample size when sample
@@ -66,8 +66,9 @@ first, so bins with no fish observed are omitted. When \code{aggregate = TRUE}, 
 compositions are summed across years (weighted by sample size when
 available) before calculating ratios.
 }
-\section{r4ss equivalent}{
- \code{r4ss::SSplotSexRatio()} with
+\section{Equivalent plots in other packages}{
+
+r4ss: \code{r4ss::SSplotSexRatio()} with
 \code{sexratio.option = 2} (female:total).
 }
 

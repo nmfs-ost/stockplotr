@@ -5,9 +5,9 @@
 #' `aggregate = TRUE` instead sums the compositions across years so that each
 #' fleet is summarized in a single panel.
 #'
-#' @param dat A data frame of composition data in any format accepted by
-#' [prepare_composition_data()], such as FIMS output, an r4ss `lendbase`/`agedbase`
-#' table, or a tidy data frame like [bigskate_lencomp].
+#' @param dat A tibble returned from [convert_output()] that contains
+#' composition data (see [bigskate_lencomp]), or composition data in any other
+#' format accepted by [prepare_composition_data()].
 #' @param show_expected Logical. TRUE/FALSE; overlay the expected values as
 #' lines. Ignored if `dat` contains no expected values.
 #'
@@ -43,7 +43,8 @@
 #' created for every fleet and year combination; use `fleet` to focus on one
 #' fleet at a time.
 #'
-#' @section r4ss equivalent: `r4ss::SSplotComps()` subplot 1 (by year) and
+#' @section Equivalent plots in other packages:
+#' r4ss: `r4ss::SSplotComps()` subplot 1 (by year) and
 #' subplot 21 (aggregated across years).
 #'
 #' @seealso [prepare_composition_data()], [plot_composition_bubble()],
@@ -219,7 +220,8 @@ plot_composition_distribution <- function(
 #' absolute value of the residual. The maximum absolute residual for each
 #' panel is included in the panel label.
 #'
-#' @section r4ss equivalent: `r4ss::SSplotComps()` subplot 2 (bubble plot of
+#' @section Equivalent plots in other packages:
+#' r4ss: `r4ss::SSplotComps()` subplot 2 (bubble plot of
 #' observations or residuals) and subplot 3 (conditional age-at-length).
 #'
 #' @seealso [prepare_composition_data()], [plot_composition_residuals()], [plot_composition_distribution()]
@@ -340,7 +342,8 @@ plot_composition_bubble <- function(
 #' @param ... Additional arguments passed to [plot_composition_bubble()].
 #'
 #' @returns A `ggplot2` object.
-#' @section r4ss equivalent: `r4ss::SSplotComps()` subplot 2 for residuals by
+#' @section Equivalent plots in other packages:
+#' r4ss: `r4ss::SSplotComps()` subplot 2 for residuals by
 #' fleet and subplot 24 (residuals compared across fleets).
 #'
 #' @seealso [plot_composition_bubble()], [prepare_composition_data()]
@@ -387,7 +390,8 @@ plot_composition_residuals <- function(dat, ...) {
 #' compositions are summed across years (weighted by sample size when
 #' available) before calculating ratios.
 #'
-#' @section r4ss equivalent: `r4ss::SSplotSexRatio()` with
+#' @section Equivalent plots in other packages:
+#' r4ss: `r4ss::SSplotSexRatio()` with
 #' `sexratio.option = 2` (female:total).
 #'
 #' @seealso [prepare_composition_data()], [plot_composition_distribution()]
@@ -560,7 +564,8 @@ plot_composition_sexratio <- function(
 #' fisheries stock assessment models. Canadian Journal of Fisheries and
 #' Aquatic Sciences 68: 1124-1138.
 #'
-#' @section r4ss equivalent: `r4ss::SSplotComps()` subplots 8 and 9, which
+#' @section Equivalent plots in other packages:
+#' r4ss: `r4ss::SSplotComps()` subplots 8 and 9, which
 #' use `r4ss::SSMethod.TA1.8()`.
 #'
 #' @seealso [prepare_composition_data()], [plot_composition_distribution()]

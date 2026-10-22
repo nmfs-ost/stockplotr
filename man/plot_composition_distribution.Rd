@@ -15,9 +15,9 @@ plot_composition_distribution(
 )
 }
 \arguments{
-\item{dat}{A data frame of composition data in any format accepted by
-\code{\link[=prepare_composition_data]{prepare_composition_data()}}, such as FIMS output, an r4ss \code{lendbase}/\code{agedbase}
-table, or a tidy data frame like \link{bigskate_lencomp}.}
+\item{dat}{A tibble returned from \code{\link[=convert_output]{convert_output()}} that contains
+composition data (see \link{bigskate_lencomp}), or composition data in any other
+format accepted by \code{\link[=prepare_composition_data]{prepare_composition_data()}}.}
 
 \item{show_expected}{Logical. TRUE/FALSE; overlay the expected values as
 lines. Ignored if \code{dat} contains no expected values.
@@ -71,8 +71,9 @@ If more than one fleet is plotted without aggregating, panels are
 created for every fleet and year combination; use \code{fleet} to focus on one
 fleet at a time.
 }
-\section{r4ss equivalent}{
- \code{r4ss::SSplotComps()} subplot 1 (by year) and
+\section{Equivalent plots in other packages}{
+
+r4ss: \code{r4ss::SSplotComps()} subplot 1 (by year) and
 subplot 21 (aggregated across years).
 }
 

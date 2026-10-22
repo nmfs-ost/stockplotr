@@ -5,19 +5,20 @@
 \alias{bigskate_lencomp}
 \title{Big Skate length composition data}
 \format{
-A tibble with 3626 rows and 11 variables:
+A tibble in the standard \code{\link[=convert_output]{convert_output()}} format with 14504 rows
+and 35 columns. The columns used for compositions are:
 \describe{
-\item{comp_type}{Type of composition ("length")}
+\item{label}{"length_composition_observed", "length_composition_predicted",
+"length_composition_pearson_residual" (as reported by Stock Synthesis),
+or "length_composition_sample_size" (adjusted input sample size,
+\code{Nsamp_adj} in r4ss)}
+\item{estimate}{Value of the label}
+\item{module_name}{\code{"lendbase"}}
+\item{year}{Year of the observation}
 \item{fleet}{Fleet name: "Fishery_current", "WCGBTS", or "Triennial"}
-\item{year}{Year of the observation (\code{Yr} in r4ss)}
-\item{month}{Month of the observation}
 \item{sex}{"female" or "male"}
 \item{part}{Partition: 0 = whole catch, 1 = discard, 2 = retained}
-\item{bin}{Lower edge of the length bin (cm)}
-\item{observed}{Observed proportion (\code{Obs} in r4ss)}
-\item{expected}{Expected proportion (\code{Exp} in r4ss)}
-\item{pearson}{Pearson residual reported by Stock Synthesis}
-\item{n}{Adjusted input sample size (\code{Nsamp_adj} in r4ss)}
+\item{length_bins}{Lower edge of the length bin (cm)}
 }
 }
 \source{
@@ -33,8 +34,8 @@ Length compositions and fits from the 2019 Big Skate stock assessment for
 the U.S. West Coast (\code{BigSkate_2019} in the Stock Synthesis test models),
 the model used for the r4ss example plots at
 \url{https://r4ss.github.io/r4ss/BigSkate/}. The data are the \code{lendbase}
-element of \code{r4ss::SS_output()} with columns renamed to follow
-stockplotr conventions. See \code{data-raw/bigskate_comps.R}.
+rows of \code{\link[=convert_output]{convert_output()}} applied to the output of \code{r4ss::SS_output()}.
+See \code{data-raw/bigskate_comps.R}.
 }
 \details{
 Compositions are sex-specific, with female and male proportions summing to

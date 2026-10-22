@@ -13,23 +13,32 @@ prepare_composition_data(
 )
 }
 \arguments{
-\item{dat}{A data frame of composition data. The following formats are
-recognized automatically:
+\item{dat}{A tibble returned from \code{\link[=convert_output]{convert_output()}} (see
+\link{bigskate_lencomp}). Compositions are the rows whose \code{label} contains
+"composition", for example:
+\describe{
+\item{Stock Synthesis (from an \code{r4ss::SS_output()} list)}{
+"length_composition_observed", "length_composition_predicted",
+"length_composition_pearson_residual", and
+"length_composition_sample_size" (and the "age_" equivalents), with
+conditional age-at-length data labeled "conditional_age_composition_*".}
+\item{FIMS}{"age_composition_proportion" and "age_composition_expected"
+(and the "length_" equivalents).}
+\item{BAM and Rceattle}{"age_composition_observed" and
+"age_composition_predicted", or "composition_observed" and
+"composition_predicted".}
+}
+Bins are taken from the \code{age} or \code{length_bins} column, and partitions from
+the \code{part} column. Other formats are also recognized:
 \describe{
 \item{Tidy composition data}{Columns \code{year}, \code{bin}, and \code{observed}, with
 optional columns \code{fleet}, \code{sex}, \code{part} (partition: 0 = whole catch,
 1 = discard, 2 = retained), \code{expected}, \code{n} (input or adjusted sample
-size), \code{pearson}, and \code{comp_type}. See \link{bigskate_lencomp}.}
-\item{FIMS output}{Output from FIMS (e.g., \code{FIMS::get_estimates()} or
-\code{\link[=convert_output]{convert_output()}} with \code{model = "fims"}) that contains \code{observed} and
-\code{expected} columns. Rows whose \code{label} contains "comp" are kept and the
-bin is taken from the \code{age} or \code{length} column.}
-\item{stockplotr standard output}{Long-format output from
-\code{\link[=convert_output]{convert_output()}} where observed and expected compositions are stored in
-the \code{estimate} column with labels such as
-"age_composition_proportion"/"age_composition_observed" and
-"age_composition_expected"/"age_composition_predicted" (and the
-corresponding "length_" labels).}
+size), \code{pearson}, \code{comp_type}, and \code{length_bin} (for conditional
+age-at-length data).}
+\item{FIMS estimates}{Output from \code{FIMS::get_estimates()} that contains
+\code{observed} and \code{expected} columns. Rows whose \code{label} contains "comp" are
+kept and the bin is taken from the \code{age} or \code{length} column.}
 \item{r4ss output}{A list returned by \code{r4ss::SS_output()} (length and
 age compositions are combined and fleet names are added) or its
 \code{lendbase} or \code{agedbase} elements (columns \code{Yr}, \code{Fleet}, \code{Sex}, \code{Bin},
@@ -37,9 +46,8 @@ age compositions are combined and fleet names are added) or its
 age-at-length rows are dropped from \code{agedbase} so that only marginal age
 compositions remain, unless \code{conditional = TRUE}.}
 }
-For conditional age-at-length data (\code{conditional = TRUE}), tidy data also
-need a \code{length_bin} column giving the length bin that each age
-composition is conditioned on (see \link{bigskate_caal}).}
+For conditional age-at-length data (\code{conditional = TRUE}), see
+\link{bigskate_caal}.}
 
 \item{comp_type}{String. Type of composition to keep when \code{dat} contains
 more than one. Options: "age", "length", or NULL (keep all).
@@ -76,9 +84,14 @@ cannot be determined from \code{dat} are \code{NA}.
 }
 \description{
 Reshape age or length composition data (observed and, optionally,
-expected proportions) into the tidy format used by the composition
-plotting functions (\code{\link[=plot_composition_distribution]{plot_composition_distribution()}}, \code{\link[=plot_composition_bubble]{plot_composition_bubble()}},
-\code{\link[=plot_composition_residuals]{plot_composition_residuals()}}, \code{\link[=plot_composition_sexratio]{plot_composition_sexratio()}}, and \code{\link[=plot_composition_francis]{plot_composition_francis()}}).
+expected proportions) from \code{\link[=convert_output]{convert_output()}} into the tidy format used by
+the composition plotting functions (\code{\link[=plot_composition_distribution]{plot_composition_distribution()}},
+\code{\link[=plot_composition_bubble]{plot_composition_bubble()}}, \code{\link[=plot_composition_residuals]{plot_composition_residuals()}},
+\code{\link[=plot_composition_sexratio]{plot_composition_sexratio()}}, \code{\link[=plot_composition_francis]{plot_composition_francis()}},
+\code{\link[=plot_composition_samples]{plot_composition_samples()}}, \code{\link[=plot_composition_residual_distribution]{plot_composition_residual_distribution()}},
+\code{\link[=plot_composition_residual_pattern]{plot_composition_residual_pattern()}}, and \code{\link[=plot_composition_andre]{plot_composition_andre()}}).
+Each of these functions calls \code{prepare_composition_data()} itself, so it
+only needs to be called directly to inspect or modify the data.
 }
 \details{
 When Pearson residuals are not supplied, they are calculated
@@ -91,6 +104,9 @@ residuals are left as \code{NA}.
 \examples{
 comps <- prepare_composition_data(bigskate_lencomp, fleet = "WCGBTS")
 head(comps)
+
+# Conditional age-at-length data
+prepare_composition_data(bigskate_caal, conditional = TRUE)
 
 # Data in the stockplotr long format are reshaped automatically
 long <- data.frame(

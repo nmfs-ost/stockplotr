@@ -27,21 +27,21 @@ Age and length compositions are often the most informative, and the hardest
 to fit, data in a stock assessment. {stockplotr} has a set of plots for
 composition data based on the figures that
 [r4ss](https://github.com/r4ss/r4ss) makes for Stock Synthesis models. Each
-plot shows the data in a different way, and each has an r4ss equivalent:
+plot shows the data in a different way, and most have an equivalent in r4ss:
 
-| Plot | Function | What it shows | r4ss equivalent |
+| Plot | Function | What it shows | Equivalent in other packages |
 |------|----------|---------------|-----------------|
-| Distributions of observations | `plot_composition_distribution(show_expected = FALSE)` | The most intuitive way to look at compositions | `SSplotComps()` subplot 1, `datonly = TRUE` |
-| Bubble plot of observations | `plot_composition_bubble()` | Cohort strength over time | `SSplotComps()` subplot 2, `datonly = TRUE` |
-| Distributions of observed and expected values | `plot_composition_distribution()` | An intuitive way to look at fit | `SSplotComps()` subplots 1 and 21 |
-| Pearson residuals | `plot_composition_residuals()` | Blocks or stripes of misfit among years or bins | `SSplotComps()` subplots 2 and 24 |
-| Sex ratios | `plot_composition_sexratio()` | Trends in misfit for bins with small proportions, which have small residuals | `SSplotSexRatio()` |
-| Mean age or length (Francis) | `plot_composition_francis()` | Trends among years; Francis (2011) TA1.8 data weights | `SSplotComps()` subplots 8 and 9, `SSMethod.TA1.8()` |
-| N-EffN comparison | `plot_composition_samples()` | McAllister-Ianelli data weights | `SSplotComps()` subplot 7 |
+| Distributions of observations | `plot_composition_distribution(show_expected = FALSE)` | The most intuitive way to look at compositions | r4ss: `SSplotComps()` subplot 1, `datonly = TRUE` |
+| Bubble plot of observations | `plot_composition_bubble()` | Cohort strength over time | r4ss: `SSplotComps()` subplot 2, `datonly = TRUE` |
+| Distributions of observed and expected values | `plot_composition_distribution()` | An intuitive way to look at fit | r4ss: `SSplotComps()` subplots 1 and 21 |
+| Pearson residuals | `plot_composition_residuals()` | Blocks or stripes of misfit among years or bins | r4ss: `SSplotComps()` subplots 2 and 24 |
+| Sex ratios | `plot_composition_sexratio()` | Trends in misfit for bins with small proportions, which have small residuals | r4ss: `SSplotSexRatio()` |
+| Mean age or length (Francis) | `plot_composition_francis()` | Trends among years; Francis (2011) TA1.8 data weights | r4ss: `SSplotComps()` subplots 8 and 9, `SSMethod.TA1.8()` |
+| N-EffN comparison | `plot_composition_samples()` | McAllister-Ianelli data weights | r4ss: `SSplotComps()` subplot 7 |
 | Residual distribution | `plot_composition_residual_distribution()` | Heavy tails, skewness, and outliers; SDNR | |
 | Residual patterns | `plot_composition_residual_pattern()` | Bias by bin or year, with a runs test | |
-| Andre's plots | `plot_composition_andre()` | Mean age at length for conditional age-at-length data | `SSplotComps()` subplot 12 |
-| Conditional age-at-length residuals | `plot_composition_residuals(conditional = TRUE)` | Misfit by length and age within years | `SSplotComps()` subplot 3 |
+| Andre's plots | `plot_composition_andre()` | Mean age at length for conditional age-at-length data | r4ss: `SSplotComps()` subplot 12 |
+| Conditional age-at-length residuals | `plot_composition_residuals(conditional = TRUE)` | Misfit by length and age within years | r4ss: `SSplotComps()` subplot 3 |
 
 Each function can plot fleets separately or summarize all fleets. Use `fleet`
 to choose fleets, and `aggregate = TRUE` in `plot_composition_distribution()` and
@@ -49,29 +49,28 @@ to choose fleets, and `aggregate = TRUE` in `plot_composition_distribution()` an
 
 ## Composition data
 
-The plotting functions take composition data in one of several formats and
-standardize it with `prepare_composition_data()`:
-
-* A tidy data frame with columns `year`, `bin`, and `observed`, and,
-  optionally, `fleet`, `sex`, `part` (partition), `expected`, `n` (sample
-  size), `pearson`, and `comp_type` ("age" or "length").
-* FIMS output with `observed` and `expected` columns, such as the output of
-  `FIMS::get_estimates()`.
-* {stockplotr} standard output from `convert_output()` with labels such as
-  `age_composition_proportion` and `age_composition_expected`.
-* Output from `r4ss::SS_output()`, either the whole list or its `lendbase`,
-  `agedbase`, or `condbase` data frames.
+Like the other {stockplotr} plotting functions, the composition plots take
+the standard output from `convert_output()`. Each function calls
+`prepare_composition_data()` to pull out the composition data, so the plots
+work with any assessment model whose compositions `convert_output()`
+supports. Compositions are the rows whose `label` contains "composition",
+such as `length_composition_observed` and `length_composition_predicted`.
 
 This vignette uses data from the 2019 Big Skate stock assessment for the U.S.
 West Coast, the same model used for the
 [r4ss example plots](https://r4ss.github.io/r4ss/BigSkate/), so the figures
 below can be compared directly with the r4ss versions. `bigskate_lencomp`
-holds the length compositions (`lendbase` from `r4ss::SS_output()`) and
-`bigskate_caal` the conditional age-at-length data (`condbase`), with columns
-renamed to follow stockplotr conventions.
+holds the length compositions and `bigskate_caal` the conditional
+age-at-length data, both from `convert_output()` applied to the output of
+`r4ss::SS_output()`:
 
 ```{r}
-head(bigskate_lencomp)
+bigskate_lencomp |>
+  dplyr::count(module_name, label)
+
+bigskate_lencomp |>
+  dplyr::select(label, estimate, year, fleet, sex, part, length_bins) |>
+  head()
 ```
 
 The length compositions are sex-specific. `Fishery_current` has separate
@@ -81,8 +80,9 @@ r4ss. Use `fleet = "Fishery_current"` to select both.
 
 If Pearson residuals are not supplied, `prepare_composition_data()` calculates them
 assuming a multinomial distribution,
-$r = (o - e) / \sqrt{e (1 - e) / N}$, using the sample size `n`. The Big
-Skate data include the residuals reported by Stock Synthesis.
+$r = (o - e) / \sqrt{e (1 - e) / N}$, using the sample size. The Big
+Skate data include the residuals and adjusted sample sizes reported by Stock
+Synthesis.
 
 ## Observations
 
@@ -203,11 +203,12 @@ plot_composition_residual_pattern(bigskate_lencomp)
 
 ## Conditional age-at-length data
 
-Conditional age-at-length data are age compositions for each length bin.
-Use `conditional = TRUE` in `prepare_composition_data()` and `plot_composition_bubble()`,
-and supply a `length_bin` column in tidy data, as in `bigskate_caal`. The Big
-Skate conditional data are single-sex compositions, which are normalized
-separately for each sex.
+Conditional age-at-length data are age compositions for each length bin. In
+`convert_output()` output they are labeled
+`conditional_age_composition_*`, with the length bin in `length_bins`, as in
+`bigskate_caal`. Use `conditional = TRUE` in `prepare_composition_data()` and
+`plot_composition_bubble()`. The Big Skate conditional data are single-sex
+compositions, which are normalized separately for each sex.
 
 `plot_composition_andre()` makes "Andre's plots" from r4ss: the observed and
 expected mean age in each length bin (left), and the standard error of the
@@ -227,7 +228,24 @@ plot_composition_residuals(caal_recent, fleet = "WCGBTS", conditional = TRUE)
 
 ## Using model output
 
-With FIMS, pass the estimates directly:
+With Stock Synthesis, convert the output of `r4ss::SS_output()` with
+`convert_output()`. The composition data come from the `lendbase`,
+`agedbase`, and `condbase` elements, including the Pearson residuals and
+adjusted sample sizes reported by Stock Synthesis. The Francis weights match
+`r4ss::SSMethod.TA1.8()`, and the effective sample sizes and
+McAllister-Ianelli weights match those reported by Stock Synthesis.
+
+```{r ss3, eval = FALSE}
+replist <- r4ss::SS_output("path/to/BigSkate_2019")
+std_output <- convert_output(replist)
+plot_composition_distribution(std_output, comp_type = "length", fleet = "WCGBTS")
+plot_composition_francis(std_output, comp_type = "length")
+plot_composition_andre(std_output, fleet = "WCGBTS")
+```
+
+The same functions work with output from the other models that
+`convert_output()` supports. With FIMS, the estimates can also be passed
+directly:
 
 ```{r fims, eval = FALSE}
 estimates <- FIMS::get_estimates(fit)
@@ -239,19 +257,6 @@ FIMS reports years as indices (`year_i`); add a `year` column to plot
 calendar years. FIMS estimates do not currently include composition sample
 sizes. Add an `n` column, or supply Pearson residuals in a `pearson` column,
 to get residuals and intervals.
-
-With Stock Synthesis, use the output of `r4ss::SS_output()`. Pearson residuals
-and adjusted sample sizes are taken from the model output, the Francis
-weights match `r4ss::SSMethod.TA1.8()`, and the effective sample sizes and
-McAllister-Ianelli weights match those reported by Stock Synthesis.
-Conditional age-at-length data come from the `condbase` element:
-
-```{r ss3, eval = FALSE}
-replist <- r4ss::SS_output("path/to/BigSkate_2019")
-plot_composition_distribution(replist, comp_type = "length", fleet = "WCGBTS")
-plot_composition_francis(replist, comp_type = "length")
-plot_composition_andre(replist, fleet = "WCGBTS")
-```
 
 ## References
 

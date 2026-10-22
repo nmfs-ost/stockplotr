@@ -7,10 +7,10 @@
 plot_composition_andre(dat, interval = 0.9, fleet = NULL, ncol = NULL)
 }
 \arguments{
-\item{dat}{Conditional age-at-length data in any format accepted by
-\code{\link[=prepare_composition_data]{prepare_composition_data()}} with \code{conditional = TRUE}: a tidy data frame with a
-\code{length_bin} column (see \link{bigskate_caal}), or an
-\code{r4ss::SS_output()} list (its \code{condbase} element is used).}
+\item{dat}{A tibble returned from \code{\link[=convert_output]{convert_output()}} that contains
+conditional age-at-length data (see \link{bigskate_caal}), or conditional data
+in any other format accepted by \code{\link[=prepare_composition_data]{prepare_composition_data()}} with
+\code{conditional = TRUE}.}
 
 \item{interval}{Number. Coverage of the intervals around the observed
 values.
@@ -51,8 +51,9 @@ or variability in length at age.
 Length bins with no observations or no sample size are omitted. Plot one
 fleet at a time with \code{fleet}, and subset years by filtering \code{dat}.
 }
-\section{r4ss equivalent}{
- \code{r4ss::SSplotComps()} subplot 12 (Andre's plots of
+\section{Equivalent plots in other packages}{
+
+r4ss: \code{r4ss::SSplotComps()} subplot 12 (Andre's plots of
 mean age and standard deviation for conditional age-at-length data).
 }
 
