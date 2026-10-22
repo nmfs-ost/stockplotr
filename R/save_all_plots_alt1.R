@@ -54,7 +54,7 @@ save_all_plots <- function(
   figures_tables_dir = getwd(),
   # These three functions require having default parameters because of
   # no standard default modules
-  plot_recruitment_options =list( module = "TIME_SERIES"),
+  plot_recruitment_options = list( module = "TIME_SERIES"),
   plot_natural_mortality_options = list(module = "Natural_Mortality"),
   table_total_catch_options = list( module = "TIME_SERIES"),
   # All other functions can be modified with appropiate *_options
@@ -79,7 +79,9 @@ save_all_plots <- function(
       file.path(here::here(), "R"),
   )
   plottab_function_files <- all_R_files[grepl("plot_|table_", all_R_files)]
+  # Remove table_afsc_tier function for now
   plottab_function_files <- plottab_function_files[!grepl("afsc", plottab_function_files)]
+  
   plottab_functions <- sub("\\.[^\\.]*$", "", plottab_function_files)
 
   for(i in seq_along(plottab_functions)){
@@ -90,7 +92,7 @@ save_all_plots <- function(
       if(!is.null(func_specific_args))
         func_pars <- c(default_args, func_specific_args)
 
-      # switch from "figures_dir" to "table_dir" dynamically
+      # switch from "figures_dir" to "tables_dir" dynamically
       if(grepl("table",func_name)){
         names(func_pars)[which(names(func_pars)=="figures_dir")] <- "tables_dir"
       }
