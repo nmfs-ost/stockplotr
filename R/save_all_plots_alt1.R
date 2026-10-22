@@ -76,7 +76,7 @@ save_all_plots <- function(
   )
 
   all_R_files <- list.files(
-      file.path("R"),
+      file.path(here::here(), "R"),
   )
   plottab_function_files <- all_R_files[grepl("plot_|table_", all_R_files)]
   plottab_function_files <- plottab_function_files[!grepl("afsc", plottab_function_files)]
