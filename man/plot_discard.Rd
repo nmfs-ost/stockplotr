@@ -8,7 +8,7 @@ plot_discard(
   dat,
   group = NULL,
   facet = NULL,
-  unit_label = "mt",
+  unit_label = NULL,
   era = NULL,
   lbs = FALSE,
   scale_amount = 1,
@@ -105,7 +105,8 @@ use them in groupings and/or facetting. @seealso \code{\link[=process_data]{proc
 }
 \examples{
 plot_discard(
-  dat = stockplotr:::example_data,
+  dat = stockplotr::example_data,
+  unit_label = "fish",
   module = "DISCARD_OUTPUT"
 )
 }

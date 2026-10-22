@@ -11,7 +11,7 @@ plot_biomass(
   facet = NULL,
   ref_line = "msy",
   era = NULL,
-  unit_label = "mt",
+  unit_label = NULL,
   module = NULL,
   scale_amount = 1,
   relative = FALSE,
@@ -119,7 +119,7 @@ containing associated caption and alternative text for the figure.
 }
 \examples{
 plot_biomass(
-  dat = stockplotr:::example_data,
+  dat = stockplotr::example_data,
   unit_label = "mt",
   ref_line = c("target" = 20000),
   scale_amount = 100,
@@ -127,7 +127,7 @@ plot_biomass(
   figures_dir = getwd()
 )
 plot_biomass(
-  dat = stockplotr:::example_data,
+  dat = stockplotr::example_data,
   ref_line = NULL,
   module = "TIME_SERIES",
   figures_dir = getwd()
