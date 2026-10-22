@@ -18,12 +18,12 @@ fig_base_temp_files <- c(
 )
 
 tab_base_temp_files <- c(
-    "biomass_abundance_catch_table.rda",
-    "total_catch_table.rda", # comment out bc as is this needs to be interactive to select correct module
-    "index_table.rda",
-    "landings_table.rda",
-    "projections_table.rda"
-  )
+  "biomass_abundance_catch_table.rda",
+  "total_catch_table.rda", # comment out bc as is this needs to be interactive to select correct module
+  "index_table.rda",
+  "landings_table.rda",
+  "projections_table.rda"
+)
 
 test_that("save_all_plots works when all figures/tables are plotted", {
   save_all_plots(
