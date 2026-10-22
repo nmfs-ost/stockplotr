@@ -30,7 +30,7 @@
 #' )
 plot_landings <- function(
   dat,
-  unit_label = "mt",
+  unit_label = NULL,
   geom = "line",
   group = NULL,
   facet = NULL,
@@ -43,20 +43,6 @@ plot_landings <- function(
   figures_dir = getwd(),
   ...
 ) {
-  # this assumes that the previous units were metric tons
-  if (lbs && unit_label %notin% c("lbs", "pounds", "lb")) {
-    cli::cli_alert_info("Unit label was not changed. Setting unit_label to 'lbs'.")
-    unit_label <- "lbs"
-  }
-
-  # Units
-  landings_label <- label_magnitude(
-    label = "Landings",
-    unit_label = unit_label,
-    scale_amount = dplyr::if_else(lbs, 1000 * scale_amount, scale_amount),
-    legend = FALSE
-  )
-
   # Filter data for landings
   prepared_data <- filter_data(
     dat = dat,
@@ -71,6 +57,24 @@ plot_landings <- function(
   ) # |>
   # filter NA from year
   # dplyr::filter(!is.na(year))
+  
+  # extract unit if unit_label is null and set lbs to F by default
+  lbs <- FALSE
+  if (is.null(unit_label)) {
+    unit_label <- unique(prepared_data$unit)
+    if (is.na(unit_label)) cli::cli_abort("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+  } else {
+    if (grepl("lbs|pounds|lb", unit_label, ignore.case = TRUE)) lbs <- TRUE
+  }
+  
+  # Units
+  landings_label <- label_magnitude(
+    label = "Landings",
+    unit_label = unit_label,
+    scale_amount = dplyr::if_else(lbs, 1000 * scale_amount, scale_amount),
+    legend = FALSE
+  )
+  
   # Process data
   processed_data <- process_data(
     dat = prepared_data,
