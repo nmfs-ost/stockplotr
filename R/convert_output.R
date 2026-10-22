@@ -186,7 +186,6 @@ convert_output <- function(
     )
   }
 
-
   #### SS3 ####
   # SS3 groupings: https://docs.google.com/spreadsheets/d/11-k0xOo3Bit1MbJf2ZjmymzsUNCRhgGkVfXV1jNEdbM/edit?gid=0#gid=0
   # Convert SS3 output Report.sso file
@@ -195,7 +194,6 @@ convert_output <- function(
   } else if (model %in% c("bam", "BAM")) {
     #### BAM ####
     out_new <- conout_bam(file = file, out_new = out_new, fleet_names = fleet_names)
-
     #### WHAM ----
   } else if (model == "wham") {
     # This is how Bai read the ASAP output
@@ -265,24 +263,8 @@ convert_output <- function(
       )
     ) |>
     suppressWarnings()
-  # if (tolower(model) == "ss3") {
-  #   con_file <- system.file("resources", "ss3_var_names.csv", package = "stockplotr", mustWork = TRUE)
-  #   var_names_sheet <- utils::read.csv(con_file, na.strings = "")
-  # } else if (tolower(model) == "bam") {
-  #   con_file <- system.file("resources", "bam_var_names.csv", package = "stockplotr", mustWork = TRUE)
-  #   var_names_sheet <- utils::read.csv(con_file, na.strings = "") |>
-  #     dplyr::mutate(
-  #       label = tolower(label)
-  #     )
-  # } else if (tolower(model) == "fims") {
-  #   con_file <- system.file("resources", "fims_var_names.csv", package = "stockplotr", mustWork = TRUE)
-  #   var_names_sheet <- utils::read.csv(con_file, na.strings = "")
-  # } else if (tolower(model) == "rceattle") {
-  #   con_file <- system.file("resources", "rceattle_var_names.csv", package = "stockplotr", mustWork = TRUE)
-  #   var_names_sheet <- utils::read.csv(con_file, na.strings = "")
-  # }
 
-  # edit: here is a different way of loading in the csv sheets
+  # Call in csv for model
   con_file <- system.file("resources", glue::glue("{tolower(model)}_var_names.csv"), package = "stockplotr", mustWork = TRUE)
   # temporarily add call to local csv so I can test
   # con_file <- glue::glue("~/GitHub/stockplotr/inst/resources/{model}_var_names.csv")
