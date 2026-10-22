@@ -61,11 +61,11 @@ Default: "msy"
 Options: (including, but not limited to) "target", "msy", and "unfished"
 If the reference point is not found in the data, set ref_line = c("name" = value).}
 
-\item{unit_label}{String. Spawning biomass unit as indicated from the data. 
-When setting a unit of pounds please use one of the following keywords: 
-"lbs", "pounds", "lb". For example "1000s of lbs" would still be recognized 
+\item{unit_label}{String. Spawning biomass unit as indicated from the data.
+When setting a unit of pounds please use one of the following keywords:
+"lbs", "pounds", "lb". For example "1000s of lbs" would still be recognized
 as pounds. Do not set unit label to the desired order of magnitude rather the
-unit label reflected in the data. Please refer to the argument `scale_amount`.
+unit label reflected in the data. Please refer to the argument \code{scale_amount}.
 
 Default: NULL}
 
@@ -75,7 +75,7 @@ Default: "time"
 
 Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
-\item{lbs}{`r lifecycle::badge('deprecated')` Logical. TRUE/FALSE; indicate whether to convert the y-axis values from
+\item{lbs}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Logical. TRUE/FALSE; indicate whether to convert the y-axis values from
 kilograms to pounds. The default units match the default in the
 unit_label argument - 'mt'. -- Deprecate
 
@@ -90,9 +90,9 @@ If the interactive and >1 module_name is found, user will select the
 module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 
 \item{scale_amount}{Number. A number to scale the y-axis values. If > 1, the
- magnitude of the scale amount will be added to the unit label 
- (e.g. scale_amount = 1000 with a unit label of "1000s of lbs" will result
-  in "thousands of 1000s of lbs")
+magnitude of the scale amount will be added to the unit label
+(e.g. scale_amount = 1000 with a unit label of "1000s of lbs" will result
+in "thousands of 1000s of lbs")
 
 Default: 1}
 
