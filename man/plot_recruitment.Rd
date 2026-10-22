@@ -29,9 +29,9 @@ in \code{ref_line} is used to plot a reference line or calculate relative spawni
 Default: "mt"}
 
 \item{scale_amount}{Number. A number to scale the y-axis values. If > 1, the
- magnitude of the scale amount will be added to the unit label 
- (e.g. scale_amount = 1000 with a unit label of "1000s of lbs" will result
-  in "thousands of 1000s of lbs")
+magnitude of the scale amount will be added to the unit label
+(e.g. scale_amount = 1000 with a unit label of "1000s of lbs" will result
+in "thousands of 1000s of lbs")
 
 Default: 1}
 

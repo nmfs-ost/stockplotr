@@ -13,11 +13,11 @@ returned from \link[stockplotr]{convert_output}.
 If inputting a list of tibbles, the first tibble's reference point defined
 in \code{ref_line} is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{reference_name}{a string of the name of the reference point (e.g. "spawning biomass msy")}
+\item{reference_name}{String. Name of the reference point (e.g. "spawning biomass msy")}
 
-\item{lbs}{Logical. TRUE/FALSE; indicate whether to convert the y-axis values from
+\item{lbs}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Logical. TRUE/FALSE; indicate whether to convert the y-axis values from
 kilograms to pounds. The default units match the default in the
-unit_label argument - 'mt'.
+unit_label argument - 'mt'. -- Deprecate
 
 Default: \code{FALSE}}
 }
