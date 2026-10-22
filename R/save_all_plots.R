@@ -135,7 +135,7 @@
 #'   biomass_at_age_unit_label = "metric tons"
 #' )
 #' }
-save_all_plots <- function(
+save_all_plots_old <- function(
   # imported from plot_recruitment
   dat,
   recruitment_unit_label = "mt", # changed from unit_label to recruitment_unit_label for specificity
