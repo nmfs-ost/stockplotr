@@ -105,7 +105,7 @@ save_all_plots <- function(
         error = function(e) {
             cli::cli_alert_danger("{func_name} failed to run.")
             cli::cli_alert("Tip: check that your arguments are correct.")
-            for(a in func_specific_args){
+            for(a in seq_along(func_specific_args)){
               arg_name = names(func_specific_args)[a]
               arg_value = as.character(func_specific_args[a])
               cli::cli_li("{arg_name} = {arg_value}")
