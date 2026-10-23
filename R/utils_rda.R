@@ -10,6 +10,7 @@
 #' @param final ggplot2 object. The final figure.
 #' @param relative Logical. TRUE/FALSE; specify whether to set y-axis values relative to the ref_line value.
 #' @param module Character vector. Module name found in `dat$module_name`.
+# @param terminal Logical. Indicate if the key quantity is a terminal value.
 #' @param ... Additional arguments to be passed to the function.
 #'
 #' @return The value of the specified key quantity.
@@ -26,6 +27,7 @@ calc_kqs <- function(returned_kq,
                      final = NULL,
                      relative = NULL,
                      module = NULL,
+                     # terminal = FALSE,
                      ...) {
   # plot_stock_recruitment()-----
   if (returned_kq == "sr.age.min") {
@@ -82,7 +84,7 @@ calc_kqs <- function(returned_kq,
     return(max(prepared_data$year) |> round(digits = 3))
   }
 
-  if (returned_kq %in% c("B.terminal.min", "B.terminal.max", "B.terminal.year", "B.terminal.est")) {
+  if (returned_kq %in% c("B.terminal.min", "B.terminal.max", "B.terminal.year", "B.terminal.est", "overfished")) {
     B.terminal.df <- filter_data(
       dat = dat,
       label_name = ifelse(relative, "biomass_biomass_unfished|biomass_ratio", "^biomass$"),
@@ -170,7 +172,7 @@ calc_kqs <- function(returned_kq,
     )
   }
 
-  if (returned_kq == "B.msy") {
+  if (returned_kq == "B.msy" || returned_kq == "overfished") {
     if ("spawning_biomass_msy" %in% dat$label) {
       sb_msy <- dat |>
         dplyr::filter(label == "spawning_biomass_msy") |>
@@ -181,15 +183,18 @@ calc_kqs <- function(returned_kq,
         dplyr::select(estimate) |>
         as.numeric()
       B.msy <- round(sb_msy * b_sb_msy, digits = 3)
-      return(B.msy)
+      # return(B.msy)
     } else if ("bmsy" %in% dat$label) {
-      return(
-        dat |>
+      # return(
+      B.msy <- dat |>
           dplyr::filter(label == "bmsy") |>
           dplyr::select(estimate) |>
           as.numeric() |>
           round(digits = 3)
-      )
+      # )
+    }
+    if (returned_kq != "overfished") {
+      return(B.msy)
     }
   }
 
@@ -245,7 +250,7 @@ calc_kqs <- function(returned_kq,
     }
   }
 
-  if (returned_kq %in% c("F.terminal.min", "F.terminal.max", "F.terminal.year", "F.terminal.est")) {
+  if (returned_kq %in% c("F.terminal.min", "F.terminal.max", "F.terminal.year", "F.terminal.est", "overfishing")) {
     F.terminal.df <- filter_data(
       dat = dat,
       label_name = "^fishing_mortality$",
@@ -295,7 +300,7 @@ calc_kqs <- function(returned_kq,
     }
   }
 
-  if (returned_kq %in% c("F.MSY.terminal", "F.MSY.terminal.min", "F.MSY.terminal.max")) {
+  if (returned_kq %in% c("F.MSY.terminal", "F.MSY.terminal.min", "F.MSY.terminal.max", "overfishing")) {
     if (!"f_msy" %in% unique(dat$label)) {
       F.msy.est <- NA
       F.msy.terminal.min <- NA
@@ -325,36 +330,76 @@ calc_kqs <- function(returned_kq,
     }
   }
   
+  if (returned_kq == "overfished") {
+    if (B.terminal.est/B.msy > 1) {
+      return("Yes")
+    } else {
+      return("No")
+    }
+  }
+  
+  if (returned_kq == "overfishing") {
+    if (F.terminal.est/F.msy.terminal > 1) {
+      return("Yes")
+    } else {
+      return("No")
+    }
+  }
+  
   extract_value <- function(
     returned_kq,
     dat = NULL,
-    final = NULL,
-    relative = NULL,
-    module = NULL
+    # relative = NULL,
+    module = NULL,
+    terminal = FALSE,
+    average = "mean",
+    ...
   ) {
-    search <- dat |>
-      dplyr::filter(grepl(glue::glue("^{value}"), returned_kq), module_name = module_name)
-    search_no_yr <- search |> dplyr::filter(is.na(year)) |> dplyr::pull(estimate)
-    if (length(search_no_yr) > 1) {
+    search <- filter_data(
+      dat = dat,
+      label_name = returned_kq,
+      geom = "line",
+      module = module
+    )
+    search_no_yr <- search |> dplyr::filter(is.na(year))
+    if (length(search_no_yr) == 0 && terminal) {
+      val <- search |> dplyr::filter(year == max(year, na.rm = T))
+    } else {
+      val <- search_no_yr
+    }
+    # extract val
+    val <- val |> dplyr::pull(estimate)
+    if (length(val) > 1) {
       # check if values are equivalent
-      if (length(unique(search_no_yr)) == 1) {
-        return(search_no_yr[1])
+      if (length(unique(val)) == 1) {
+        return(val[1])
       } else {
         # check if it can be summarized ?
-        search_sum <- search |>
-          dplyr::group_by(factors) |>
-          dplyr::summarise(est = mean(estimate)) 
+        val <- switch(
+          average,
+          "mean" = mean(val),
+          "sum" = sum(val),
+          "median" = median(val),
+          cli::cli_abort("No averaging method selected. No value returned.")
+        )
+        cli::cli_alert_info("Multiple values were found. The returned value is the mean of all values.")
+        return(val)
       }
-    } else if (length(search_no_yr) == 0) {
+    } else if (length(val) == 0) {
       return("-")
     } else {
       # return value
-      search_no_yr
+      return(val)
     }
   }
-  value <- extract_value()
-  # TODO: add if/else for warning if value was found or not
-  
+  return(
+    extract_value(
+      returned_kq = returned_kq,
+      dat = dat,
+      module = module,
+      ...
+    )
+  )
   rm(selected_module)
 }
 
