@@ -1,16 +1,20 @@
 test_that("extract_sis_data() runs with all possible rdas present", {
   save_all_plots(stockplotr::example_data)
   table_total_catch(stockplotr::example_data,
-                    module = "TIME_SERIES",
-                    interactive = FALSE,
-                    make_rda = TRUE)
+    module = "TIME_SERIES",
+    interactive = FALSE,
+    make_rda = TRUE
+  )
 
   files <- c(
-    fs::path("figures",
-             c("biomass_figure.rda", "spawning_biomass_figure.rda", "abundance_at_age_figure.rda", "fishing_mortality_figure.rda",  "index_figure.rda")
-             ),
-    fs::path("tables",
-             "total_catch_table.rda")
+    fs::path(
+      "figures",
+      c("biomass_figure.rda", "spawning_biomass_figure.rda", "abundance_at_age_figure.rda", "fishing_mortality_figure.rda", "index_figure.rda")
+    ),
+    fs::path(
+      "tables",
+      "total_catch_table.rda"
+    )
   )
 
   expect_true(all(file.exists(files)))
