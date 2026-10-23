@@ -5,7 +5,7 @@
 \alias{example_data}
 \title{SS3 Example data}
 \format{
-A tibble with 591109 rows and 33 variables:
+A tibble (\code{tbl_df}, \code{tbl}, \code{data.frame}) with 591109 rows and 33 variables:
 \describe{
 \item{label}{Standard name for estimate or value name}
 \item{estimate}{Actual value of the label}
