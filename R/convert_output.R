@@ -490,8 +490,6 @@ convert_output <- function(
                   # add in case if sexes is present and add sex as na if so
                   dplyr::mutate(sex = if (any(grepl("^sexes$", colnames(df3)))) sexes else NA) |>
                   dplyr::select(-sexes)
-              } else {
-                df3 <- dplyr::mutate(df3, sex = NA)
               }
 
               # Identify which errors were identified in a column & rename
