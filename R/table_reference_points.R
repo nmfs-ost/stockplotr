@@ -1,6 +1,6 @@
 table_reference_points <- function(
     dat,
-    unit_label = "mt",
+    unit_label = NULL,
     module = NULL,
     digits = 2,
     reference = "msy",
@@ -26,38 +26,43 @@ table_reference_points <- function(
   
   # First draft labels
   # reference points used for projections and management positions
-  labels <- c(
-    "M" = "natural_mortality", # maybe not
-    "Unfished Recruitment (R0)" = "R0",
-    "Unfished spawning biomass (units)" = "spawning_biomass_unfished",
-    "F_{MSY}" = "fishing_mortality_msy", #indicate what the proxy is through user input?
-    "MSY (units)" = "msy",
-    "SB_{MSY} (units)" = "", # in kq
-    "SPR_{MSY}",
+  labels <- list(
+    # Table name = df name, terminal, average type
+    "M" = c("natural_mortality", FALSE, "mean"), # maybe not
+    "Unfished Recruitment (R0)" = c("R0|recruitment_unfished", FALSE, "median"),
+    "Unfished spawning biomass (units)" = c("spawning_biomass_unfished", FALSE, "mean"),
+    "F_{MSY}" = c("F.MSY.terminal", FALSE, "mean"), #indicate what the proxy is through user input?
+    "MSY (units)" = c("msy", FALSE, "mean"),
+    "SB_{MSY} (units)" = c("sb_msy", FALSE, "mean"), # in kq
+    "SPR_{MSY}" = c("spr_msy", FALSE, "mean"),
     # AK does not report MSY -- uses proxy same with NW
     # or a proxy for MSY
-    "F_{target}", # in kq
-    "Terminal F", # in kq
-    "Terminal Biomass", # spawning biomass better?; in kq
-    "OFL (units)",
-    "ABC (units)",
-    "Average Recruitment", # mean or medium over timeseries or over last x # of years
-    "Exploitation rate", # potentially in addition to F -- sometimes completely different consider
-    "Depletion", # fraction unfished terminal SB/unfished SB, potentially SBratio in SS3 
-    "Overfished", #Y/N or calc'd?
-    "Overfishing" #Y/N or calc'd?
+    "F_{target}" = c("F.target", FALSE, "mean"), # in kq
+    "Terminal F" = c("F.terminal.est", TRUE, "mean"), # in kq
+    "Terminal Biomass" = c("B.terminal.est", TRUE, "mean"), # spawning biomass better?; in kq
+    "OFL (units)" = c("ofl", FALSE, "mean"),
+    "ABC (units)" = c("abc", FALSE, "mean"),
+    "Average Recruitment" = c("recruitment", FALSE, "mean"), # mean or medium over timeseries or over last x # of years
+    "Exploitation rate" = c("exploitation_rate", TRUE, "mean"), # potentially in addition to F -- sometimes completely different consider
+    # "Depletion" = "spawning_biomass", # fraction unfished terminal SB/unfished SB, potentially SBratio in SS3 
+    "Overfished" = c("B.terminal.est|B.msy", FALSE, NULL), #Y/N or calc'd?
+    "Overfishing" = c("F.terminal.est|F.MSY.terminal", FALSE, NULL) #Y/N or calc'd?
   )
   df_values <- c()
   for (i in seq_along(labels)) {
     kq <- labels[i]
-    df_values <- c(df_values, kq = calc_kqs(
-      returned_kq,
+    kq_val <- calc_kqs(
+      returned_kq = kq[[1]],
       prepared_data = dat,
       dat = dat,
       final = NULL,
-      relative = ifelse(grepl("relative", kq), TRUE, FALSE),
-      module = NULL # is there a way I can set this up?
-    ))
+      relative = ifelse(grepl("relative|rel", kq), TRUE, FALSE),
+      module = NULL, # is there a way I can set this up?
+      terminal = kq[[2]],
+      average = kq[[3]]
+    )
+    kq_val <- setNames(kq_val, kq)
+    df_values <- c(df_values, kq_val)
   }
   
 }
