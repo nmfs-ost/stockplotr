@@ -16,7 +16,7 @@
 #' @export
 #'
 #' @examples
-#' plot_spawning_potential_ratio(
+#' plot_spr(
 #'   dat = stockplotr:::example_data,
 #'   unit_label = "metric tons",
 #'   group = "fleet",
@@ -24,7 +24,7 @@
 #'   make_rda = FALSE,
 #'   ylab = "SPR"
 #' )
-#' plot_spawning_potential_ratio(
+#' plot_spr(
 #'   dat = stockplotr:::example_data,
 #'   unit_label = "metric tons",
 #'   facet = "fleet",
@@ -33,7 +33,7 @@
 #'   make_rda = FALSE,
 #'   ylab = "(1-SPR)/(1-SPR_ref)"
 #' )
-plot_spawning_potential_ratio <- function(
+plot_spr <- function(
   dat,
   geom = "line",
   group = NULL,
