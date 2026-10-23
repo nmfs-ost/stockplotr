@@ -48,18 +48,17 @@ convert_output <- function(
   fleet_names = NULL,
   save_dir = NULL
 ) {
-  
   if (is.character(file) && grepl("Report.sso", file)) {
     lifecycle::deprecate_warn(
-      when = "2.8.0", 
-      what = I("convert_output(file = 'Report.sso')"), 
+      when = "2.8.0",
+      what = I("convert_output(file = 'Report.sso')"),
       details = c(
         i = "Please use the returned object from `r4ss::ss_output()`",
         i = "File will be compatible until Oct. 1, 2027"
       )
     )
   }
-  
+
   # check if entered save_dir exists so doesn't waste user time finding this out at the end
   if (!is.null(save_dir)) {
     if (!grepl(".rda", save_dir)) {
