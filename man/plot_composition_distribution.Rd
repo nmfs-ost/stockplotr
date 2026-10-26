@@ -10,7 +10,6 @@ plot_composition_distribution(
   aggregate = FALSE,
   comp_type = NULL,
   fleet = NULL,
-  show_n = TRUE,
   ncol = NULL,
   direction = "v"
 )
@@ -33,11 +32,6 @@ more than one. Options: "age", "length", or NULL (keep all). Default: NULL}
 \item{fleet}{Character or numeric vector. Fleet(s) to keep, matching
 either the fleet name (e.g., "Fishery_current") or the fleet name with its
 partition (e.g., "Fishery_current (retained)"). NULL keeps all fleets. Default: NULL}
-
-\item{show_n}{Logical. TRUE/FALSE; label each panel with its adjusted
-input sample size ("N adj.") and, when expected values are shown, its
-effective sample size ("N eff."), as in r4ss. Not used when
-\code{aggregate = TRUE}. Default: TRUE}
 
 \item{ncol}{Number. Number of facet columns. NULL lets \code{ggplot2} choose. Default: NULL}
 

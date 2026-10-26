@@ -152,9 +152,8 @@ test_that("plot_composition_distribution makes observation-only and fit plots", 
   expect_true(has_layer(p_fit, "GeomLine"))
   # males are mirrored below zero
   expect_true(any(p_fit$data$obs_plot < 0))
-  # r4ss-style sample size labels
-  text_layer <- p_fit$layers[vapply(p_fit$layers, function(l) inherits(l$geom, "GeomText"), logical(1))][[1]]
-  expect_true(all(grepl("^N adj\\.=.*N eff\\.=", text_layer$data$label)))
+  # no sample size labels in the panels
+  expect_false(has_layer(p_fit, "GeomText"))
 })
 
 test_that("plot_composition_distribution aggregates across years", {

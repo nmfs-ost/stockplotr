@@ -15,11 +15,6 @@
 #' within each fleet. Years are weighted by their sample size when sample
 #' sizes are available. Default: FALSE
 #'
-#' @param show_n Logical. TRUE/FALSE; label each panel with its adjusted
-#' input sample size ("N adj.") and, when expected values are shown, its
-#' effective sample size ("N eff."), as in r4ss. Not used when
-#' `aggregate = TRUE`. Default: TRUE
-#'
 #' @param ncol Number. Number of facet columns. NULL lets `ggplot2` choose. Default: NULL
 #'
 #' @param direction String. Order of the panels: "v" fills panels down each column
@@ -67,7 +62,6 @@ plot_composition_distribution <- function(
   aggregate = FALSE,
   comp_type = NULL,
   fleet = NULL,
-  show_n = TRUE,
   ncol = NULL,
   direction = "v"
 ) {
@@ -130,32 +124,6 @@ plot_composition_distribution <- function(
   }
   if (two_sex) {
     plt <- plt + ggplot2::geom_hline(yintercept = 0, linewidth = 0.3)
-  }
-
-  # Sample size labels, as in r4ss: adjusted input (N adj.) and effective
-  # (N eff.) sample sizes
-  if (show_n && !aggregate && any(!is.na(comps$n))) {
-    n_lab <- comps |>
-      dplyr::filter(!is.na(.data$n)) |>
-      dplyr::distinct(.data$comp_type, .data$fleet, .data$year, .data$n) |>
-      dplyr::mutate(label = paste0("N adj.=", signif(.data$n, 3)))
-    if (show_expected) {
-      n_lab <- n_lab |>
-        dplyr::left_join(
-          dplyr::select(comp_effn_table(comps), "comp_type", "fleet", "year", "effn"),
-          by = c("comp_type", "fleet", "year")
-        ) |>
-        dplyr::mutate(label = paste0(.data$label, "\nN eff.=", signif(.data$effn, 3)))
-    }
-    plt <- plt +
-      ggplot2::geom_text(
-        data = n_lab,
-        ggplot2::aes(x = Inf, y = Inf, label = .data$label),
-        hjust = 1.1,
-        vjust = 1.5,
-        size = 2.8,
-        inherit.aes = FALSE
-      )
   }
 
   if (length(unique(comps$sex)) > 1) {

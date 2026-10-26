@@ -105,8 +105,7 @@ plot_composition_bubble(bigskate_lencomp)
 ## Fits to the data
 
 Adding the expected values to the distribution plot shows the fit to each
-year. As in r4ss, each panel shows the adjusted input sample size (N adj.)
-and the effective sample size (N eff.).
+year.
 
 ```{r fit-dist, fig.height = 4}
 plot_composition_distribution(bigskate_lencomp, fleet = "Triennial")
