@@ -4,7 +4,13 @@
 \alias{plot_composition_andre}
 \title{Plot Andre Punt's mean age at length for conditional age-at-length data}
 \usage{
-plot_composition_andre(dat, interval = 0.9, fleet = NULL, ncol = NULL)
+plot_composition_andre(
+  dat,
+  interval = 0.9,
+  flip = FALSE,
+  fleet = NULL,
+  ncol = NULL
+)
 }
 \arguments{
 \item{dat}{A tibble returned from \code{\link[=convert_output]{convert_output()}} that contains
@@ -15,6 +21,11 @@ in any other format accepted by \code{\link[=prepare_composition_data]{prepare_c
 \item{interval}{Number. Coverage of the intervals around the observed
 values. Default: 0.90, corresponding to 90\% intervals}
 
+\item{flip}{Logical. TRUE/FALSE; put age (the mean age or its standard
+error) on the horizontal axis and length on the vertical axis, as in a
+growth curve. The default (FALSE) puts length on the horizontal axis,
+as in r4ss.}
+
 \item{fleet}{Character or numeric vector. Fleet(s) to keep, matching
 either the fleet name (e.g., "Fishery_current") or the fleet name with its
 partition (e.g., "Fishery_current (retained)"). NULL keeps all fleets. Default: NULL}
@@ -22,8 +33,9 @@ partition (e.g., "Fishery_current (retained)"). NULL keeps all fleets. Default: 
 \item{ncol}{Number. Number of facet columns. NULL lets \code{ggplot2} choose. Default: NULL}
 }
 \value{
-A \code{ggplot2} object with one row of panels per year: mean age at
-length on the left and standard error of the mean age on the right.
+A \code{ggplot2} object with one row of panels per year (and per sex
+and fleet when there is more than one): mean age at length on the left and
+standard error of the mean age on the right.
 }
 \description{
 For conditional age-at-length data, plot the observed and expected mean
@@ -42,8 +54,11 @@ Observed values outside the intervals, or expected values that
 consistently differ from the observed values, suggest mis-specified growth
 or variability in length at age.
 
-Length bins with no observations or no sample size are omitted. Plot one
-fleet at a time with \code{fleet}, and subset years by filtering \code{dat}.
+The statistics are calculated separately for each sex. Unlike r4ss, which
+combines sexes, this avoids jumps in the expected values when the ratio of
+sample sizes varies between sexes. Length bins with no observations or no
+sample size are omitted. Plot one fleet at a time with \code{fleet}, and subset
+years by filtering \code{dat}.
 }
 \section{Equivalent plots in other packages}{
 
@@ -55,6 +70,13 @@ mean age and standard deviation for conditional age-at-length data).
 plot_composition_andre(
   dplyr::filter(bigskate_caal, year \%in\% 2016:2018),
   fleet = "WCGBTS"
+)
+
+# Age on the horizontal axis
+plot_composition_andre(
+  dplyr::filter(bigskate_caal, year \%in\% 2016:2018),
+  fleet = "WCGBTS",
+  flip = TRUE
 )
 }
 \seealso{

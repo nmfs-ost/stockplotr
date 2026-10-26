@@ -168,8 +168,6 @@ plot_composition_samples <- function(
     comp_facet(c(if ("comp_type" %in% facet_vars) "comp_type", "panel"), ncol = ncol, scales = "free")
 }
 
-#------------------------------------------------------------------------------
-
 #' Plot the distribution of composition residuals
 #'
 #' Quantile-quantile plot or histogram of Pearson residuals for each fleet,
@@ -233,8 +231,6 @@ plot_composition_residual_distribution <- function(
     theme_noaa() +
     comp_facet(c(if ("comp_type" %in% facet_vars) "comp_type", "panel"), ncol = ncol, scales = "free")
 }
-
-#------------------------------------------------------------------------------
 
 #' Plot patterns in composition residuals by bin or year
 #'
@@ -324,8 +320,6 @@ plot_composition_residual_pattern <- function(
     comp_facet(facet_vars, ncol = ncol)
 }
 
-#------------------------------------------------------------------------------
-
 #' Plot Andre Punt's mean age at length for conditional age-at-length data
 #'
 #' For conditional age-at-length data, plot the observed and expected mean
@@ -340,8 +334,14 @@ plot_composition_residual_pattern <- function(
 #' @param interval Number. Coverage of the intervals around the observed
 #' values. Default: 0.90, corresponding to 90% intervals
 #'
-#' @returns A `ggplot2` object with one row of panels per year: mean age at
-#' length on the left and standard error of the mean age on the right.
+#' @param flip Logical. TRUE/FALSE; put age (the mean age or its standard
+#' error) on the horizontal axis and length on the vertical axis, as in a
+#' growth curve. The default (FALSE) puts length on the horizontal axis,
+#' as in r4ss.
+#'
+#' @returns A `ggplot2` object with one row of panels per year (and per sex
+#' and fleet when there is more than one): mean age at length on the left and
+#' standard error of the mean age on the right.
 #'
 #' @details Within each year and length bin, the observed and expected mean
 #' ages are \eqn{\sum_a a\, o_a} and \eqn{\sum_a a\, e_a}, and the standard
@@ -354,8 +354,11 @@ plot_composition_residual_pattern <- function(
 #' consistently differ from the observed values, suggest mis-specified growth
 #' or variability in length at age.
 #'
-#' Length bins with no observations or no sample size are omitted. Plot one
-#' fleet at a time with `fleet`, and subset years by filtering `dat`.
+#' The statistics are calculated separately for each sex. Unlike r4ss, which
+#' combines sexes, this avoids jumps in the expected values when the ratio of
+#' sample sizes varies between sexes. Length bins with no observations or no
+#' sample size are omitted. Plot one fleet at a time with `fleet`, and subset
+#' years by filtering `dat`.
 #'
 #' @section Equivalent plots in other packages:
 #' r4ss: `r4ss::SSplotComps()` subplot 12 (Andre's plots of
@@ -369,9 +372,17 @@ plot_composition_residual_pattern <- function(
 #'   dplyr::filter(bigskate_caal, year %in% 2016:2018),
 #'   fleet = "WCGBTS"
 #' )
+#'
+#' # Age on the horizontal axis
+#' plot_composition_andre(
+#'   dplyr::filter(bigskate_caal, year %in% 2016:2018),
+#'   fleet = "WCGBTS",
+#'   flip = TRUE
+#' )
 plot_composition_andre <- function(
   dat,
   interval = 0.90,
+  flip = FALSE,
   fleet = NULL,
   ncol = NULL
 ) {
@@ -432,7 +443,8 @@ plot_composition_andre <- function(
       )
     )
   plot_df <- dplyr::bind_rows(mean_df, se_df) |>
-    dplyr::mutate(statistic = factor(.data$statistic, levels = c("Mean age", "SE of mean age")))
+    dplyr::mutate(statistic = factor(.data$statistic, levels = c("Mean age", "SE of mean age"))) |>
+    dplyr::arrange(.data$fleet, .data$sex, .data$year, .data$statistic, .data$length_bin)
 
   row_vars <- c(
     if (length(unique(plot_df$fleet)) > 1) "fleet",
@@ -440,44 +452,69 @@ plot_composition_andre <- function(
     "year"
   )
 
-  ggplot2::ggplot(plot_df, ggplot2::aes(x = .data$length_bin)) +
-    ggplot2::geom_ribbon(
-      ggplot2::aes(ymin = .data$lower, ymax = .data$upper),
-      fill = "gray90",
-      na.rm = TRUE
-    ) +
-    ggplot2::geom_line(ggplot2::aes(y = .data$lower), linetype = "dotted", na.rm = TRUE) +
-    ggplot2::geom_line(ggplot2::aes(y = .data$upper), linetype = "dotted", na.rm = TRUE) +
-    ggplot2::geom_line(
-      ggplot2::aes(y = .data$expected, linetype = "Expected"),
-      color = "#0085CA",
-      linewidth = 0.8,
-      na.rm = TRUE
-    ) +
-    ggplot2::geom_point(ggplot2::aes(y = .data$observed, shape = "Observed"), size = 1.5) +
+  caption <- paste0(
+    "Left: mean age at length (obs. and exp.) with ", round(interval * 100),
+    "% intervals based on adding ", round(z, 2), " SE of mean to the data.\n",
+    "Right: SE of mean age at length (obs. and exp.) with ", round(interval * 100),
+    "% intervals based on the chi-square distribution."
+  )
+
+  if (flip) {
+    # Age (mean or SE) on the horizontal axis and length on the vertical axis;
+    # intervals and lines run along the length axis
+    plt <- ggplot2::ggplot(plot_df, ggplot2::aes(y = .data$length_bin)) +
+      ggplot2::geom_ribbon(
+        ggplot2::aes(xmin = .data$lower, xmax = .data$upper),
+        fill = "gray90",
+        orientation = "y",
+        na.rm = TRUE
+      ) +
+      ggplot2::geom_path(ggplot2::aes(x = .data$lower), linetype = "dotted", na.rm = TRUE) +
+      ggplot2::geom_path(ggplot2::aes(x = .data$upper), linetype = "dotted", na.rm = TRUE) +
+      ggplot2::geom_path(
+        ggplot2::aes(x = .data$expected, linetype = "Expected"),
+        color = "#0085CA",
+        linewidth = 0.8,
+        na.rm = TRUE
+      ) +
+      ggplot2::geom_point(ggplot2::aes(x = .data$observed, shape = "Observed"), size = 1.5) +
+      ggplot2::expand_limits(x = 0) +
+      ggplot2::labs(x = NULL, y = "Length bin")
+    free <- "free_x"
+  } else {
+    plt <- ggplot2::ggplot(plot_df, ggplot2::aes(x = .data$length_bin)) +
+      ggplot2::geom_ribbon(
+        ggplot2::aes(ymin = .data$lower, ymax = .data$upper),
+        fill = "gray90",
+        na.rm = TRUE
+      ) +
+      ggplot2::geom_line(ggplot2::aes(y = .data$lower), linetype = "dotted", na.rm = TRUE) +
+      ggplot2::geom_line(ggplot2::aes(y = .data$upper), linetype = "dotted", na.rm = TRUE) +
+      ggplot2::geom_line(
+        ggplot2::aes(y = .data$expected, linetype = "Expected"),
+        color = "#0085CA",
+        linewidth = 0.8,
+        na.rm = TRUE
+      ) +
+      ggplot2::geom_point(ggplot2::aes(y = .data$observed, shape = "Observed"), size = 1.5) +
+      ggplot2::expand_limits(y = 0) +
+      ggplot2::labs(x = "Length bin", y = NULL)
+    free <- "free_y"
+  }
+
+  plt +
     ggplot2::facet_grid(
       rows = ggplot2::vars(!!!rlang::syms(row_vars)),
       cols = ggplot2::vars(.data$statistic),
-      scales = "free_y",
+      scales = free,
       labeller = ggplot2::labeller(.multi_line = FALSE)
     ) +
-    ggplot2::expand_limits(y = 0) +
-    ggplot2::labs(
-      x = "Length bin",
-      y = NULL,
-      shape = NULL,
-      linetype = NULL,
-      caption = paste0(
-        "Left: mean age at length (obs. and exp.) with ", round(interval * 100),
-        "% intervals based on adding ", round(z, 2), " SE of mean to the data.\n",
-        "Right: SE of mean age at length (obs. and exp.) with ", round(interval * 100),
-        "% intervals based on the chi-square distribution."
-      )
-    ) +
+    ggplot2::labs(shape = NULL, linetype = NULL, caption = caption) +
     theme_noaa() +
     ggplot2::theme(
       strip.text = ggplot2::element_text(size = 9),
-      axis.text = ggplot2::element_text(size = 8)
+      axis.text = ggplot2::element_text(size = 8),
+      plot.caption = ggplot2::element_text(hjust = 0, size = 9)
     )
 }
 

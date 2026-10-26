@@ -30,8 +30,8 @@
 #' values in the `sex` column), females are plotted above zero and males
 #' below zero. Bars show observed proportions and lines show expected
 #' proportions. Females and males are colored with the two ends of
-#' `viridis::viridis(2, option = "viridis", end = 0.75)` ("#440154" and
-#' "#5DC863"); add `ggplot2::scale_fill_manual()` and
+#' `viridis::viridis(2, option = "viridis", end = 0.75)` (`"#440154"` and
+#' `"#5DC863"`); add `ggplot2::scale_fill_manual()` and
 #' `ggplot2::scale_color_manual()` to the returned plot to use other colors.
 #'
 #' If more than one fleet is plotted without aggregating, panels are
