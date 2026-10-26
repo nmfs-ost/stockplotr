@@ -575,7 +575,7 @@ aggregate_comp_years <- function(comps) {
 }
 
 # Facet a composition plot by the variables that vary in the data
-comp_facet <- function(vars, ncol = NULL, scales = "fixed") {
+comp_facet <- function(vars, ncol = NULL, scales = "fixed", direction = "v") {
   if (length(vars) == 0) {
     return(NULL)
   }
@@ -583,6 +583,7 @@ comp_facet <- function(vars, ncol = NULL, scales = "fixed") {
     ggplot2::facet_wrap(
       ggplot2::vars(!!!rlang::syms(vars)),
       ncol = ncol,
+      dir = match.arg(direction, c("v", "h")),
       scales = scales,
       labeller = ggplot2::labeller(.multi_line = FALSE)
     ),

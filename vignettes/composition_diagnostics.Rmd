@@ -45,7 +45,9 @@ plot shows the data in a different way, and most have an equivalent in r4ss:
 
 Each function can plot fleets separately or summarize all fleets. Use `fleet`
 to choose fleets, and `aggregate = TRUE` in `plot_composition_distribution()` and
-`plot_composition_sexratio()` to combine all years.
+`plot_composition_sexratio()` to combine all years. Panels are ordered down
+each column by default, so consecutive years are stacked vertically and
+cohorts are easier to follow; use `direction = "h"` to order them across rows.
 
 ## Composition data
 

@@ -59,7 +59,8 @@ plot_composition_samples <- function(
   comp_type = NULL,
   fleet = NULL,
   show_years = FALSE,
-  ncol = NULL
+  ncol = NULL,
+  direction = "v"
 ) {
   # Older converted Stock Synthesis output has only the per-composition fit
   # tables, not compositions by bin
@@ -165,7 +166,7 @@ plot_composition_samples <- function(
       caption = "Solid line: 1:1. Dashed blue lines: arithmetic mean N adj. and harmonic mean N eff."
     ) +
     theme_noaa() +
-    comp_facet(c(if ("comp_type" %in% facet_vars) "comp_type", "panel"), ncol = ncol, scales = "free")
+    comp_facet(c(if ("comp_type" %in% facet_vars) "comp_type", "panel"), ncol = ncol, direction = direction, scales = "free")
 }
 
 #' Plot the distribution of composition residuals
@@ -199,7 +200,8 @@ plot_composition_residual_distribution <- function(
   type = c("qq", "histogram"),
   comp_type = NULL,
   fleet = NULL,
-  ncol = NULL
+  ncol = NULL,
+  direction = "v"
 ) {
   type <- match.arg(type)
   comps <- comp_residuals_or_abort(dat, comp_type = comp_type, fleet = fleet)
@@ -229,7 +231,7 @@ plot_composition_residual_distribution <- function(
   }
   plt +
     theme_noaa() +
-    comp_facet(c(if ("comp_type" %in% facet_vars) "comp_type", "panel"), ncol = ncol, scales = "free")
+    comp_facet(c(if ("comp_type" %in% facet_vars) "comp_type", "panel"), ncol = ncol, direction = direction, scales = "free")
 }
 
 #' Plot patterns in composition residuals by bin or year
@@ -267,7 +269,8 @@ plot_composition_residual_pattern <- function(
   by = c("bin", "year"),
   comp_type = NULL,
   fleet = NULL,
-  ncol = NULL
+  ncol = NULL,
+  direction = "v"
 ) {
   by <- match.arg(by)
   comps <- comp_residuals_or_abort(dat, comp_type = comp_type, fleet = fleet)
@@ -317,7 +320,7 @@ plot_composition_residual_pattern <- function(
       fill = paste("Runs test across", if (by == "bin") "years" else "bins")
     ) +
     theme_noaa() +
-    comp_facet(facet_vars, ncol = ncol)
+    comp_facet(facet_vars, ncol = ncol, direction = direction)
 }
 
 #' Plot Andre Punt's mean age at length for conditional age-at-length data

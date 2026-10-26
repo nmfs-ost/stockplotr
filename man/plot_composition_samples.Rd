@@ -9,7 +9,8 @@ plot_composition_samples(
   comp_type = NULL,
   fleet = NULL,
   show_years = FALSE,
-  ncol = NULL
+  ncol = NULL,
+  direction = "v"
 )
 }
 \arguments{
@@ -31,6 +32,12 @@ partition (e.g., "Fishery_current (retained)"). NULL keeps all fleets. Default: 
 \item{show_years}{Logical. TRUE/FALSE; label each point with its year. Default: FALSE}
 
 \item{ncol}{Number. Number of facet columns. NULL lets \code{ggplot2} choose. Default: NULL}
+
+\item{direction}{String. Order of the panels: "v" fills panels down each column
+and then across, so consecutive years are stacked vertically and cohorts
+are easier to follow from panel to panel; "h" fills panels across each row.
+
+Default: "v"}
 }
 \value{
 A \code{ggplot2} object.

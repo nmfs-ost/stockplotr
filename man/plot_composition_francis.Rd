@@ -10,7 +10,8 @@ plot_composition_francis(
   show_francis = TRUE,
   comp_type = NULL,
   fleet = NULL,
-  ncol = NULL
+  ncol = NULL,
+  direction = "v"
 )
 }
 \arguments{
@@ -32,6 +33,12 @@ either the fleet name (e.g., "Fishery_current") or the fleet name with its
 partition (e.g., "Fishery_current (retained)"). NULL keeps all fleets. Default: NULL}
 
 \item{ncol}{Number. Number of facet columns. NULL lets \code{ggplot2} choose. Default: NULL}
+
+\item{direction}{String. Order of the panels: "v" fills panels down each column
+and then across, so consecutive years are stacked vertically and cohorts
+are easier to follow from panel to panel; "h" fills panels across each row.
+
+Default: "v"}
 }
 \value{
 A \code{ggplot2} object.

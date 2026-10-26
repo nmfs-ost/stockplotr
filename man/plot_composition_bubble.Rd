@@ -11,6 +11,7 @@ plot_composition_bubble(
   fleet = NULL,
   max_size = 6,
   ncol = NULL,
+  direction = "v",
   conditional = FALSE
 )
 }
@@ -32,6 +33,12 @@ partition (e.g., "Fishery_current (retained)"). NULL keeps all fleets. Default: 
 \item{max_size}{Number. Size of the largest bubble. Default: 6}
 
 \item{ncol}{Number. Number of facet columns. NULL lets \code{ggplot2} choose. Default: NULL}
+
+\item{direction}{String. Order of the panels: "v" fills panels down each column
+and then across, so consecutive years are stacked vertically and cohorts
+are easier to follow from panel to panel; "h" fills panels across each row.
+
+Default: "v"}
 
 \item{conditional}{Logical. TRUE/FALSE; plot conditional age-at-length
 data (see \code{\link[=prepare_composition_data]{prepare_composition_data()}}), with age on the y-axis, length bin on

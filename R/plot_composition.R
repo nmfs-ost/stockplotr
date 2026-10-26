@@ -22,6 +22,12 @@
 #'
 #' @param ncol Number. Number of facet columns. NULL lets `ggplot2` choose. Default: NULL
 #'
+#' @param direction String. Order of the panels: "v" fills panels down each column
+#' and then across, so consecutive years are stacked vertically and cohorts
+#' are easier to follow from panel to panel; "h" fills panels across each row.
+#'
+#' Default: "v"
+#'
 #' @inheritParams prepare_composition_data
 #'
 #' @returns A `ggplot2` object.
@@ -62,7 +68,8 @@ plot_composition_distribution <- function(
   comp_type = NULL,
   fleet = NULL,
   show_n = TRUE,
-  ncol = NULL
+  ncol = NULL,
+  direction = "v"
 ) {
   comps <- prepare_composition_data(dat, comp_type = comp_type, fleet = fleet)
   bin_label <- comp_bin_label(comps)
@@ -176,7 +183,7 @@ plot_composition_distribution <- function(
       "Plotting {length(unique(comps$fleet))} fleets by year; use {.arg fleet} to plot one fleet at a time."
     )
   }
-  plt <- plt + comp_facet(facet_vars, ncol = ncol)
+  plt <- plt + comp_facet(facet_vars, ncol = ncol, direction = direction)
   if (!aggregate) {
     plt <- plt + ggplot2::theme(
       strip.text = ggplot2::element_text(size = 9),
@@ -240,6 +247,7 @@ plot_composition_bubble <- function(
   fleet = NULL,
   max_size = 6,
   ncol = NULL,
+  direction = "v",
   conditional = FALSE
 ) {
   value <- match.arg(value)
@@ -319,7 +327,7 @@ plot_composition_bubble <- function(
     ) +
     ggplot2::labs(x = if (conditional) "Length bin" else "Year", y = bin_label) +
     theme_noaa() +
-    comp_facet(facet_vars, ncol = ncol)
+    comp_facet(facet_vars, ncol = ncol, direction = direction)
 }
 
 #' Plot composition Pearson residuals
@@ -392,7 +400,8 @@ plot_composition_sexratio <- function(
   interval = 0.75,
   comp_type = NULL,
   fleet = NULL,
-  ncol = NULL
+  ncol = NULL,
+  direction = "v"
 ) {
   comps <- prepare_composition_data(dat, comp_type = comp_type, fleet = fleet)
   bin_label <- comp_bin_label(comps)
@@ -493,7 +502,7 @@ plot_composition_sexratio <- function(
       }
     ) +
     theme_noaa() +
-    comp_facet(facet_vars, ncol = ncol)
+    comp_facet(facet_vars, ncol = ncol, direction = direction)
   if (!aggregate) {
     plt <- plt + ggplot2::theme(
       strip.text = ggplot2::element_text(size = 9),
@@ -559,7 +568,8 @@ plot_composition_francis <- function(
   show_francis = TRUE,
   comp_type = NULL,
   fleet = NULL,
-  ncol = NULL
+  ncol = NULL,
+  direction = "v"
 ) {
   comps <- prepare_composition_data(dat, comp_type = comp_type, fleet = fleet)
   bin_label <- comp_bin_label(comps)
@@ -667,7 +677,7 @@ plot_composition_francis <- function(
       caption = caption
     ) +
     theme_noaa() +
-    comp_facet(facet_vars, ncol = ncol, scales = "free_y")
+    comp_facet(facet_vars, ncol = ncol, direction = direction, scales = "free_y")
 }
 
 # Bootstrap 95% interval for the Francis weight, following
