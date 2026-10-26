@@ -53,7 +53,10 @@ fleet is summarized in a single panel.
 When compositions are sex-specific (both "female" and "male"
 values in the \code{sex} column), females are plotted above zero and males
 below zero. Bars show observed proportions and lines show expected
-proportions.
+proportions. Females and males are colored with the two ends of
+\code{viridis::viridis(2, option = "viridis", end = 0.75)} ("#440154" and
+"#5DC863"); add \code{ggplot2::scale_fill_manual()} and
+\code{ggplot2::scale_color_manual()} to the returned plot to use other colors.
 
 If more than one fleet is plotted without aggregating, panels are
 created for every fleet and year combination; use \code{fleet} to focus on one

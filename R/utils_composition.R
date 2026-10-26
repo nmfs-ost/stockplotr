@@ -520,6 +520,16 @@ r4ss_sex <- function(dat) {
   dplyr::if_else(sexes == 3, sex, sexes)
 }
 
+# Default colors for sex-specific compositions: the two ends of
+# viridis::viridis(2, option = "viridis", end = 0.75), i.e., "#440154" for
+# females and "#5DC863" for males, with gray for other values (e.g.,
+# "combined"). Use with ggplot2::scale_fill_manual() and
+# ggplot2::scale_color_manual().
+comp_sex_colors <- function() {
+  sex_pal <- scales::pal_viridis(option = "viridis", end = 0.75)(2)
+  c(female = sex_pal[1], male = sex_pal[2], combined = "gray50", unknown = "gray50")
+}
+
 # Axis label for the bin variable
 comp_bin_label <- function(comps) {
   types <- unique(stats::na.omit(comps$comp_type))
