@@ -95,6 +95,26 @@ test_that("r4ss::ss_output object is compatible.", {
   expect_equal(dim(result)[2], 35)
 })
 
+test_that("r4ss composition data are converted by bin", {
+  simple_r4ss <- readRDS(fs::path("fixtures", "r4ss_output", "simple_small", "simple_r4ss.rds"))
+  result <- suppressMessages(convert_output(simple_r4ss))
+
+  comps <- dplyr::filter(result, module_name %in% c("lendbase", "agedbase"))
+  expect_setequal(
+    unique(comps$label),
+    c(
+      paste0("length_composition_", c("observed", "predicted", "pearson_residual", "sample_size")),
+      paste0("age_composition_", c("observed", "predicted", "pearson_residual", "sample_size"))
+    )
+  )
+  # one row per composition bin, with values from r4ss
+  len_obs <- dplyr::filter(comps, label == "length_composition_observed")
+  expect_equal(nrow(len_obs), nrow(simple_r4ss$lendbase))
+  expect_equal(sort(len_obs$estimate), sort(simple_r4ss$lendbase$Obs))
+  expect_true(all(len_obs$fleet %in% simple_r4ss$FleetNames))
+  expect_setequal(unique(len_obs$sex), c("female", "male"))
+})
+
 test_that("URL input is compatible", {
   expect_no_error(result <- convert_output(
     file = "https://raw.githubusercontent.com/pfmc-assessments/petrale/main/models/2023.a050.003_FIMS_case-study_wtatage/Report.sso"
