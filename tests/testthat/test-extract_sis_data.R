@@ -7,7 +7,7 @@ test_that("extract_sis_data() runs with all possible rdas present", {
 
   files <- c(
     fs::path("figures",
-             c("biomass_figure.rda", "spawning_biomass_figure.rda", "abundance_at_age_figure.rda", "fishing_mortality_figure.rda",  "index_figure.rda")
+             c("biomass_figure.rda", "spawning_biomass_figure.rda", "recruitment_figure.rda", "fishing_mortality_figure.rda",  "index_figure.rda")
              ),
     fs::path("tables",
              "total_catch_table.rda")
