@@ -37,7 +37,7 @@ This process fits within the following workflow:
       * `index_figure.rda`
       * `recruitment_figure.rda`
       * `total_catch_table.rda`  
-      Ideally, the `key_quantities.csv` file will also be present (in the `key_quantities_dir`).
+      The exported figures and tables can only contain one model per plot (i.e., an exported figure compare multiple models on the same plot). Ideally, the `key_quantities.csv` file will also be present (in the `key_quantities_dir`).
 
    b. Generate blank template files by running `asar::create_blank_sis()`.
 
