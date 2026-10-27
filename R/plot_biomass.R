@@ -325,6 +325,11 @@ plot_biomass <- function(
       scale_amount = scale_amount
     )
   }
+  
+  # remove global variable "selected_module"
+  if (exists("selected_module", envir = .GlobalEnv)) rm("selected_module", envir = .GlobalEnv)  
+  
   # Output final plot
   final
+
 }
