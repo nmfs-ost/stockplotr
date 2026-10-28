@@ -33,7 +33,7 @@
 #'
 plot_index <- function(
   dat,
-  unit_label = "",
+  unit_label = NULL,
   group = NULL,
   # facet always assigned to fleet since that is how indices are calc'd -- unless replaced with NULL
   facet = NULL,
