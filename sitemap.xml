@@ -12,6 +12,7 @@
 <url><loc>nmfs-ost.github.io/stockplotr/articles/index.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/authors.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/index.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/add_caption_alt_text.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/calc_kqs.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/calculate_reference_point.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/check_label_differences.html</loc></url>
@@ -44,6 +45,7 @@
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_recruitment_deviations.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_selectivity.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_spawning_biomass.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/plot_spawning_potential_ratio.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_stock_recruitment.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_timeseries.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/process_data.html</loc></url>
