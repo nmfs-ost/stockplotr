@@ -86,16 +86,21 @@ plot_biomass <- function(
     interactive = interactive
   )
   
-  # TODO: Fix the unit label if scaling. Maybe this is up to the user to do if
-  #       they want something scaled then they have to supply a better unit name
-  #       or we create a helper function to do this.
+  if (is.null(unit_label)) {
+    unit_label <- unique(prepared_data$unit)
+    if (is.na(unit_label)) {
+      cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+      unit_label <- ""
+    }
+  }
+  
   biomass_label <- ifelse(
     relative,
     yes = "Relative biomass",
     no = {
       label_magnitude(
         label = "Biomass",
-        unit_label = ifelse(is.null(unit_label), unique(prepared_data$unit), unit_label),
+        unit_label = unit_label,
         scale_amount = scale_amount,
         legend = FALSE
       )
