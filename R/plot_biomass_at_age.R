@@ -42,7 +42,7 @@
 plot_biomass_at_age <- function(
   dat,
   facet = NULL,
-  unit_label = "mt",
+  unit_label = NULL,
   scale_amount = 1,
   proportional = TRUE,
   module = NULL,
@@ -63,10 +63,18 @@ plot_biomass_at_age <- function(
     interactive = interactive
   )
   
+  if (is.null(unit_label)) {
+    unit_label <- unique(b$unit)
+    if (is.na(unit_label)) {
+      cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+      unit_label <- ""
+    }
+  }
+  
   # Create label for abundance units in legend
   biomass_label <- label_magnitude(
     label = "Biomass",
-    unit_label = ifelse(is.null(unit_label), unique(b$unit), unit_label),
+    unit_label = unit_label,
     scale_amount = scale_amount
   )
   

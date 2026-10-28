@@ -88,11 +88,17 @@ plot_catch_comp <- function(
     interactive = interactive,
     module = module
   )
-  
+  if (is.null(unit_label)) {
+    unit_label <- unique(catch$unit)
+    if (is.na(unit_label)) {
+      cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+      unit_label <- ""
+    }
+  }
   # Create label for abundance units in legend
   catch_label <- label_magnitude(
     label = "catch",
-    unit_label = ifelse(is.null(unit_label), unique(catch$unit), unit_label),
+    unit_label = unit_label,
     scale_amount = scale_amount,
     legend = TRUE
   )

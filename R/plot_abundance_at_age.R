@@ -100,6 +100,10 @@ plot_abundance_at_age <- function(
   if (is.null(unit_label)) {
     unit_label <- unique(b$unit)
     if (grepl("number", unit_label)) unit_label <- "fish"
+    if (is.na(unit_label)) {
+      cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+      unit_label <- ""
+    }
   }
   abundance_label <- label_magnitude(
     label = "Abundance",
