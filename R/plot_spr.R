@@ -19,7 +19,7 @@
 #' plot_spr(
 #'   dat = stockplotr:::example_data,
 #'   unit_label = "metric tons",
-#'   group = "fleet",
+#'   group = NULL,
 #'   interactive = FALSE,
 #'   make_rda = FALSE,
 #'   ylab = "SPR"
@@ -27,7 +27,7 @@
 #' plot_spr(
 #'   dat = stockplotr:::example_data,
 #'   unit_label = "metric tons",
-#'   facet = "fleet",
+#'   facet = NULL,
 #'   module = "DERIVED_QUANTITIES",
 #'   interactive = FALSE,
 #'   make_rda = FALSE,
