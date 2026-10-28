@@ -394,4 +394,8 @@ extract_sis_data <- function(sis_data_dir = getwd(),
     write.csv(ts_dat_filled, ts_dat_path, row.names = FALSE)
     cli::cli_alert_success("Files saved successfully in {sis_data_dir}.")
   }
+  
+  # remove global variables
+  c("biomass", "spawning_biomass", "recruitment", "fishing_mortality", "index", "catch") |>
+    purrr::walk(~ if (exists(.x, envir = .GlobalEnv)) rm(list = .x, envir = .GlobalEnv))
 }
