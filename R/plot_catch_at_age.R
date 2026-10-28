@@ -50,6 +50,7 @@
 #'   dat = stockplotr::example_data,
 #'   facet = "fleet",
 #'   unit_label = "fish",
+#'   facet = "fleet",
 #'   scale_amount = 100,
 #'   interactive = FALSE,
 #'   make_rda = FALSE,
