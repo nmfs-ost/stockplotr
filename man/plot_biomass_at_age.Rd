@@ -8,7 +8,7 @@ plot_biomass_at_age(
   dat,
   facet = NULL,
   unit_label = "mt",
-  scale_amount = 1000,
+  scale_amount = 1,
   proportional = TRUE,
   module = NULL,
   interactive = TRUE,
@@ -83,14 +83,14 @@ containing associated caption and alternative text for the figure.
 }
 \examples{
 plot_biomass_at_age(
-  dat = stockplotr:::example_data,
+  dat = stockplotr::example_data,
   unit_label = "mt",
   scale_amount = 100,
   proportional = FALSE, # displays legend
   make_rda = FALSE
 )
 plot_biomass_at_age(
-  dat = stockplotr:::example_data,
+  dat = stockplotr::example_data,
   unit_label = "mt",
   facet = "none",
   proportional = FALSE

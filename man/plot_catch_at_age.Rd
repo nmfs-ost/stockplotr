@@ -8,7 +8,7 @@ plot_catch_at_age(
   dat,
   facet = NULL,
   era = "time",
-  unit_label = "mt",
+  unit_label = NULL,
   scale_amount = 1,
   proportional = TRUE,
   interactive = TRUE,
@@ -95,7 +95,6 @@ containing associated caption and alternative text for the figure.
 plot_catch_at_age(
   dat = stockplotr:::example_data,
   facet = "fleet",
-  unit_label = "mt",
   scale_amount = 100,
   interactive = FALSE,
   make_rda = FALSE,
