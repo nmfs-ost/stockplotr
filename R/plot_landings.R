@@ -62,7 +62,10 @@ plot_landings <- function(
   lbs <- FALSE
   if (is.null(unit_label)) {
     unit_label <- unique(prepared_data$unit)
-    if (is.na(unit_label)) cli::cli_abort("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+    if (is.na(unit_label)) {
+      cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+      unit_label <- ""
+    }
   } else {
     if (grepl("lbs|pounds|lb", unit_label, ignore.case = TRUE)) lbs <- TRUE
   }
