@@ -46,18 +46,27 @@
 #'
 #' @export
 #' @examples
+<<<<<<< HEAD:R/plot_catch_at_age.R
 #' plot_catch_at_age(
 #'   dat = stockplotr:::example_data,
+=======
+#' plot_catch_comp(
+#'   dat = stockplotr::example_data,
+>>>>>>> f26dd4f ([refactor]: add units into "at-age" plots (#434)):R/plot_catch_comp.R
 #'   facet = "fleet",
-#'   unit_label = "mt",
 #'   scale_amount = 100,
 #'   interactive = FALSE,
 #'   make_rda = FALSE,
 #'   figures_dir = getwd()
 #' )
 #'
+<<<<<<< HEAD:R/plot_catch_at_age.R
 #' plot_catch_at_age(
 #'   dat = stockplotr:::example_data,
+=======
+#' plot_catch_comp(
+#'   dat = stockplotr::example_data,
+>>>>>>> f26dd4f ([refactor]: add units into "at-age" plots (#434)):R/plot_catch_comp.R
 #'   facet = "none",
 #'   unit_label = "mt",
 #'   scale_amount = 100,
@@ -69,7 +78,7 @@ plot_catch_at_age <- function(
   dat,
   facet = NULL,
   era = "time",
-  unit_label = "mt",
+  unit_label = NULL,
   scale_amount = 1,
   proportional = TRUE,
   interactive = TRUE,
@@ -79,13 +88,6 @@ plot_catch_at_age <- function(
 ) {
   check_data(dat)
 
-  # Create label for abundance units in legend
-  catch_label <- label_magnitude(
-    label = "catch",
-    unit_label = unit_label,
-    scale_amount = scale_amount,
-    legend = TRUE
-  )
   # Filter data
   catch <- filter_data(
     dat = dat |>
@@ -98,6 +100,21 @@ plot_catch_at_age <- function(
     interactive = interactive,
     module = module
   )
+  if (is.null(unit_label)) {
+    unit_label <- unique(catch$unit)
+    if (is.na(unit_label)) {
+      cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+      unit_label <- ""
+    }
+  }
+  # Create label for abundance units in legend
+  catch_label <- label_magnitude(
+    label = "catch",
+    unit_label = unit_label,
+    scale_amount = scale_amount,
+    legend = TRUE
+  )
+  
   # Check for extracted data, if not return warning and empty plot
   if (nrow(catch) == 0) {
     cli::cli_alert_warning("No data found for catch at age. Please check the input data.")
