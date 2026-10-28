@@ -48,7 +48,7 @@ extract_sis_data <- function(sis_data_dir = getwd(),
     assmt_dat <- utils::read.csv(system.file("resources", "sis_assmt_template.csv", package = "stockplotr"))
     cli::cli_alert_info("No existing sis_assmt_template.csv found in {sis_data_dir}. Using blank template.")
   } else {
-    assmt_dat <- read.csv(fs::path(sis_data_dir, "sis_assmt_template.csv"), stringsAsFactors = FALSE)
+    assmt_dat <- utils::read.csv(fs::path(sis_data_dir, "sis_assmt_template.csv"), stringsAsFactors = FALSE)
         cli::cli_alert_success("Found existing sis_assmt_template.csv in {sis_data_dir}.")
   }
   
@@ -57,7 +57,7 @@ extract_sis_data <- function(sis_data_dir = getwd(),
   # extract key quantities from csv and assign to variables
   kqs_path <- fs::path(key_quantities_dir, "key_quantities.csv")
   if (file.exists(kqs_path)){
-    kqs <- read.csv(fs::path(key_quantities_dir,
+    kqs <- utils::read.csv(fs::path(key_quantities_dir,
                            "key_quantities.csv"), 
                   stringsAsFactors = FALSE)
     cli::cli_alert_success("Found existing key_quantities.csv in {key_quantities_dir}.")

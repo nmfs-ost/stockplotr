@@ -351,7 +351,7 @@ add_caption_alt_text <- function(topic_label,
                                  caption,
                                  alt_text = "",
                                  dir = file.path(getwd(), "captions_alt_text.csv")) {
-  captions_alt_text <- read.csv(dir)
+  captions_alt_text <- utils::read.csv(dir)
   
   if (fig_or_table == tolower("figure") & alt_text == "") {
     cli::cli_alert_warning("No alt text provided for figure {topic_label}.")
@@ -368,7 +368,7 @@ add_caption_alt_text <- function(topic_label,
 
   captions_alt_text <- rbind(captions_alt_text, new_row)
 
-  write.csv(
+  utils::write.csv(
     captions_alt_text,
     file = dir,
     row.names = FALSE
