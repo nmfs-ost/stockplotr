@@ -6,7 +6,7 @@
 \usage{
 plot_landings(
   dat,
-  unit_label = "mt",
+  unit_label = NULL,
   geom = "line",
   group = NULL,
   facet = NULL,
@@ -111,14 +111,14 @@ containing associated caption and alternative text for the figure.
 }
 \examples{
 plot_landings(
-  dat = stockplotr:::example_data,
+  dat = stockplotr::example_data,
   unit_label = "metric tons",
   group = "fleet",
   interactive = FALSE,
   make_rda = FALSE
 )
 plot_landings(
-  dat = stockplotr:::example_data,
+  dat = stockplotr::example_data,
   unit_label = "metric tons",
   facet = "fleet",
   interactive = FALSE,
