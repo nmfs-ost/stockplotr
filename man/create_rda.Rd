@@ -20,7 +20,9 @@ create_rda(
 
 \item{topic_label}{String. Name of the object}
 
-\item{fig_or_table}{String. Indicates whether the object is a "table" or "figure"}
+\item{fig_or_table}{String. Indicates whether the object is a "table" or "figure"
+
+Options: "figure" or "table"}
 
 \item{dat}{Data frame. Data which will fill in captions and
 alternative text for the object}
