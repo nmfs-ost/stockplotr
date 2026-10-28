@@ -48,6 +48,7 @@ table_reference_points <- function(
     "Overfished" = c("B.terminal.est|B.msy", FALSE, NULL), #Y/N or calc'd?
     "Overfishing" = c("F.terminal.est|F.MSY.terminal", FALSE, NULL) #Y/N or calc'd?
   )
+  # TODO: extract error as well in this to calc intervals
   df_values <- c()
   for (i in seq_along(labels)) {
     kq <- labels[i]
