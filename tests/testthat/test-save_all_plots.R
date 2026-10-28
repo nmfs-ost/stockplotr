@@ -125,3 +125,38 @@ test_that("save_all_plots returns error when plot not made", {
     unlink(fs::path(getwd(), "figures"), recursive = T)
     unlink(fs::path(getwd(), "tables"), recursive = T)
 })
+
+test_that("save_all_plots returns error when dat is not valid", {
+    expect_error(
+      save_all_plots(
+        r4ss::SS_output(file.path(test_path("fixtures", "ss3_models"), "models", "Hake_2018", "Report.sso")),
+        figures_tables_dir = getwd(),
+        interactive = FALSE,
+        plot_natural_mortality_options = list(
+          module = NULL
+        )
+      )
+    )
+
+    expect_error(
+      save_all_plots(
+        data.frame(),
+        figures_tables_dir = getwd(),
+        interactive = FALSE,
+        plot_natural_mortality_options = list(
+          module = NULL
+        )
+      )
+    )
+
+    expect_error(
+      save_all_plots(
+        data.frame(label="label"),
+        figures_tables_dir = getwd(),
+        interactive = FALSE,
+        plot_natural_mortality_options = list(
+          module = NULL
+        )
+      )
+    )
+})
