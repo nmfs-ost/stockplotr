@@ -330,8 +330,8 @@ convert_output <- function(
         "sprseries", # RAND
         "parameters", # RAND
         # "equil_yeild", # SKIP FOR NOW - RAND
-        "ALK",
-        "AAK"
+        "ALK"
+        # "AAK"
       )
       aa.al <- c(
         "sizeselex", # AA.AL
@@ -398,7 +398,7 @@ convert_output <- function(
           extract <- file[[parm_sel]]
         }
 
-        if (!is.data.frame(extract)) {
+        if (!is.data.frame(extract) && parm_sel %notin% c("ALK")) {
           if (is.numeric(extract)) {
             df <- data.frame(
               label = parm_sel,
@@ -1157,14 +1157,14 @@ convert_output <- function(
               df4[setdiff(tolower(names(out_new)), tolower(names(df4)))] <- NA
               # Add to out list
               out_list[[parm_sel]] <- df4
-            } else if (parm_sel == "AAK") {
+            } else if (parm_sel == "ALK") {
               # extract matrix into df
               # ID dimensions and assign
-              df <- as.data.frame.table(extract, responseName = "value", stringsAsFactors = FALSE)
-              colnames(df)[1:3] <- c("len_bins", "age", "slice_label")
+              df1 <- as.data.frame.table(extract, responseName = "value", stringsAsFactors = FALSE)
+              colnames(df1)[1:3] <- c("len_bins", "age", "slice_label")
               
               # Dynamically extract all "Key: Value" pairs and pivot
-              df2 <- df %>%
+              df2 <- df1 %>%
                 # Match every 'Word: Number' pair (supporting decimals and negative numbers)
                 dplyr::mutate(pairs = stringr::str_extract_all(slice_label, "([A-Za-z0-9_]+):\\s*([-+]?\\d*\\.?\\d+)")) %>%
                 tidyr::unnest(pairs) %>%
@@ -1187,8 +1187,9 @@ convert_output <- function(
               # rename columns if not std & add module_name + label
               # I believe this is the only ones
               rename_map <- c(
-                seas = "season",
-                sub_seas = "subseason" #,
+                season = "seas",
+                subseason = "sub_seas" ,
+                estimate = "value"
                 # gp = "growth_pattern"
               )
               df3 <- df2 |>
