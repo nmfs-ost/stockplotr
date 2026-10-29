@@ -1302,162 +1302,162 @@ add_reference_line <- function(
 #'   facet = "area"
 #' )
 #' }
-plot_density <- function(
-  dat,
-  x = "year",
-  y = "estimate",
-  geom = "line",
-  xlab = "Year",
-  ylab = NULL,
-  group = NULL,
-  facet = NULL,
-  ...
-) {
-  # Start plot
-  plot <- ggplot2::ggplot()
+# plot_density <- function(
+#   dat,
+#   x = "year",
+#   y = "estimate",
+#   geom = "line",
+#   xlab = "Year",
+#   ylab = NULL,
+#   group = NULL,
+#   facet = NULL,
+#   ...
+# ) {
+#   # Start plot
+#   plot <- ggplot2::ggplot()
 
-  # Add geom
-  plot <- ggridges::geom_density_ridges(
-      aes(x = .data[["length"]],
-        y = as.factor(.data[["age"]]),
-        weight = .data[["value"]],
-        group = .data[["age"]]
-      ),
-      stat = "binline",
-      bins = n_length_bins,
-      scale = 1.5,
-      alpha = 0.8
-    ) +
-        # }
-        ggplot2::geom_line(
-          data = dat,
-          ggplot2::aes(
-            x = .data[[x]],
-            y = .data[[y]],
-            color = {
-              if (length(unique(.data[["model"]])) > 1) {
-                interaction(model, group_var)
-              } else if (length(unique(.data[["group_var"]])) > 1) {
-                group_var
-              } else {
-                NULL # .data[[group]]
-              }
-            }
-          ),
-          # show.legend = FALSE, #ifelse(all(is.na(dat$estimate_lower)), TRUE, FALSE),
-          ...
-        )
-    },
-    "area" = {
-      plot +
-        ggplot2::geom_area(
-          data = dat,
-          ggplot2::aes(
-            x = .data[[x]],
-            y = .data[[y]],
-            fill = interaction(model, group_var) # model
-          ),
-          position = "identity",
-          alpha = 0.5,
-          ...
-        )
-    }
-  )
+#   # Add geom
+#   plot <- ggridges::geom_density_ridges(
+#       aes(x = .data[["length"]],
+#         y = as.factor(.data[["age"]]),
+#         weight = .data[["value"]],
+#         group = .data[["age"]]
+#       ),
+#       stat = "binline",
+#       bins = n_length_bins,
+#       scale = 1.5,
+#       alpha = 0.8
+#     ) +
+#         # }
+#         ggplot2::geom_line(
+#           data = dat,
+#           ggplot2::aes(
+#             x = .data[[x]],
+#             y = .data[[y]],
+#             color = {
+#               if (length(unique(.data[["model"]])) > 1) {
+#                 interaction(model, group_var)
+#               } else if (length(unique(.data[["group_var"]])) > 1) {
+#                 group_var
+#               } else {
+#                 NULL # .data[[group]]
+#               }
+#             }
+#           ),
+#           # show.legend = FALSE, #ifelse(all(is.na(dat$estimate_lower)), TRUE, FALSE),
+#           ...
+#         )
+#     },
+#     "area" = {
+#       plot +
+#         ggplot2::geom_area(
+#           data = dat,
+#           ggplot2::aes(
+#             x = .data[[x]],
+#             y = .data[[y]],
+#             fill = interaction(model, group_var) # model
+#           ),
+#           position = "identity",
+#           alpha = 0.5,
+#           ...
+#         )
+#     }
+#   )
 
-  # Add labels to axis and legend
-  if (length(unique(dat$model)) > 1 & !is.null(group)) {
-    labs <- plot + ggplot2::labs(
-      x = xlab,
-      y = ylab,
-      color = "Model",
-      linetype = cap_first_letter(group),
-      fill = cap_first_letter(group),
-      shape = cap_first_letter(group)
-    ) +
-      ggplot2::theme(legend.title = ggplot2::element_blank())
-  } else {
-    if (length(unique(dat$model)) > 1) {
-      color_lab <- "Model"
-    } else {
-      if (!is.null(group)) {
-        color_lab <- group
-      } else {
-        color_lab <- NULL
-      }
-    }
-    # color_lab <- ifelse(length(unique(dat$model)) > 1, "Model", group)
-    labs <- plot + ggplot2::labs(
-      x = xlab,
-      y = ylab,
-      color = cap_first_letter(color_lab),
-      linetype = cap_first_letter(group),
-      fill = cap_first_letter(group),
-      shape = cap_first_letter(group)
-    )
-  }
+#   # Add labels to axis and legend
+#   if (length(unique(dat$model)) > 1 & !is.null(group)) {
+#     labs <- plot + ggplot2::labs(
+#       x = xlab,
+#       y = ylab,
+#       color = "Model",
+#       linetype = cap_first_letter(group),
+#       fill = cap_first_letter(group),
+#       shape = cap_first_letter(group)
+#     ) +
+#       ggplot2::theme(legend.title = ggplot2::element_blank())
+#   } else {
+#     if (length(unique(dat$model)) > 1) {
+#       color_lab <- "Model"
+#     } else {
+#       if (!is.null(group)) {
+#         color_lab <- group
+#       } else {
+#         color_lab <- NULL
+#       }
+#     }
+#     # color_lab <- ifelse(length(unique(dat$model)) > 1, "Model", group)
+#     labs <- plot + ggplot2::labs(
+#       x = xlab,
+#       y = ylab,
+#       color = cap_first_letter(color_lab),
+#       linetype = cap_first_letter(group),
+#       fill = cap_first_letter(group),
+#       shape = cap_first_letter(group)
+#     )
+#   }
 
-  # Remove linetype or point when there is no grouping
-  if (is.null(group) & length(unique(dat$model)) == 1) {
-    labs <- switch(geom,
-      "line" = labs + ggplot2::guides(linetype = "none"),
-      "point" = labs + ggplot2::guides(shape = "none"),
-      # return plot if option beyond line and point for now
-      labs
-    )
-  }
+#   # Remove linetype or point when there is no grouping
+#   if (is.null(group) & length(unique(dat$model)) == 1) {
+#     labs <- switch(geom,
+#       "line" = labs + ggplot2::guides(linetype = "none"),
+#       "point" = labs + ggplot2::guides(shape = "none"),
+#       # return plot if option beyond line and point for now
+#       labs
+#     )
+#   }
 
-  # Calc axis breaks
-  x_n_breaks <- axis_breaks(dat[[x]])
-  breaks <- ggplot2::scale_x_continuous(
-    breaks = x_n_breaks,
-    guide = ggplot2::guide_axis(
-      minor.ticks = TRUE
-    )
-  )
+#   # Calc axis breaks
+#   x_n_breaks <- axis_breaks(dat[[x]])
+#   breaks <- ggplot2::scale_x_continuous(
+#     breaks = x_n_breaks,
+#     guide = ggplot2::guide_axis(
+#       minor.ticks = TRUE
+#     )
+#   )
 
-  exp_lims <- TRUE
-  # min, max y axis value
-  min_y <- min(dat[[y]], na.rm = TRUE)
-  max_y <- max(dat[[y]], na.rm = TRUE)
+#   exp_lims <- TRUE
+#   # min, max y axis value
+#   min_y <- min(dat[[y]], na.rm = TRUE)
+#   max_y <- max(dat[[y]], na.rm = TRUE)
 
-  # if both min and max y values are negative, check if the distance to zero is greater than 50% of the span of the y-axis values. If so, set exp_lims to FALSE to avoid expanding the limits to include zero.
-  if (min_y < 0 & max_y < 0) {
-    span <- max_y - min_y
-    dist_to_zero <- abs(max_y)
-    perc_of_plot <- -(max_y - span)
-    cli::cli_alert_info("Estimates are negative.")
-    cli::cli_alert_info("If estimates were log-transformed, please update the y axis label for accuracy.")
-    cli::cli_alert_info("Example: log({ylab})")
-    if (perc_of_plot > 50) {
-      exp_lims <- FALSE
-    }
-  }
+#   # if both min and max y values are negative, check if the distance to zero is greater than 50% of the span of the y-axis values. If so, set exp_lims to FALSE to avoid expanding the limits to include zero.
+#   if (min_y < 0 & max_y < 0) {
+#     span <- max_y - min_y
+#     dist_to_zero <- abs(max_y)
+#     perc_of_plot <- -(max_y - span)
+#     cli::cli_alert_info("Estimates are negative.")
+#     cli::cli_alert_info("If estimates were log-transformed, please update the y axis label for accuracy.")
+#     cli::cli_alert_info("Example: log({ylab})")
+#     if (perc_of_plot > 50) {
+#       exp_lims <- FALSE
+#     }
+#   }
 
-  y_limits <- if (exp_lims) ggplot2::expand_limits(y = 0) else NULL
+#   y_limits <- if (exp_lims) ggplot2::expand_limits(y = 0) else NULL
 
-  # Put together final plot
-  final <- labs + breaks + y_limits +
-    ggplot2::scale_y_continuous(
-      labels = scales::label_comma()
-    )
+#   # Put together final plot
+#   final <- labs + breaks + y_limits +
+#     ggplot2::scale_y_continuous(
+#       labels = scales::label_comma()
+#     )
 
-  # Remove legend if no group is selected
-  if (is.null(group) & is.data.frame(dat) & any("label" %in% unique(dat$model)) | length(unique(dat$model)) == 1) {
-    final <- final + ggplot2::theme(legend.position = "none")
-  }
+#   # Remove legend if no group is selected
+#   if (is.null(group) & is.data.frame(dat) & any("label" %in% unique(dat$model)) | length(unique(dat$model)) == 1) {
+#     final <- final + ggplot2::theme(legend.position = "none")
+#   }
 
-  # Check if facet(s) are desired
-  if (!is.null(facet) & length(facet) > 0) {
-    facet <- paste("~", paste(facet, collapse = " + "))
-    facet_formula <- stats::reformulate(facet)
+#   # Check if facet(s) are desired
+#   if (!is.null(facet) & length(facet) > 0) {
+#     facet <- paste("~", paste(facet, collapse = " + "))
+#     facet_formula <- stats::reformulate(facet)
 
-    final <- final + ggplot2::facet_wrap(facet_formula, labeller = function(labels) {
-      # Clean column names (e.g., "growth_pattern" -> "Growth Pattern")
-      names(labels) <- tools::toTitleCase(gsub("_", " ", names(labels)))
+#     final <- final + ggplot2::facet_wrap(facet_formula, labeller = function(labels) {
+#       # Clean column names (e.g., "growth_pattern" -> "Growth Pattern")
+#       names(labels) <- tools::toTitleCase(gsub("_", " ", names(labels)))
 
-      # Combine into "Variable: Value" format
-      lapply(names(labels), function(var) paste0(var, ": ", labels[[var]]))
-    })
-  }
-  final
-}
+#       # Combine into "Variable: Value" format
+#       lapply(names(labels), function(var) paste0(var, ": ", labels[[var]]))
+#     })
+#   }
+#   final
+# }
