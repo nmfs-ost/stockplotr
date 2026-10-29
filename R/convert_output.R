@@ -328,8 +328,10 @@ convert_output <- function(
       rand <- c(
         "SPAWN_RECRUIT_CURVE", # RAND
         "sprseries", # RAND
-        "parameters" # RAND
+        "parameters", # RAND
         # "equil_yeild", # SKIP FOR NOW - RAND
+        "ALK",
+        "AAK"
       )
       aa.al <- c(
         "sizeselex", # AA.AL
@@ -845,6 +847,8 @@ convert_output <- function(
             # "SPAWN_RECR_CURVE"
             # "Biology_at_age_in_endyr"
             # "PARAMETERS"
+            # "ALK"
+            # "AAK"
 
             if (parm_sel %in% c("SPAWN_RECR_CURVE", "SPAWN_RECRUIT_CURVE")) {
               # 32
@@ -1153,6 +1157,50 @@ convert_output <- function(
               df4[setdiff(tolower(names(out_new)), tolower(names(df4)))] <- NA
               # Add to out list
               out_list[[parm_sel]] <- df4
+            } else if (parm_sel == "AAK") {
+              # extract matrix into df
+              # ID dimensions and assign
+              df <- as.data.frame.table(extract, responseName = "value", stringsAsFactors = FALSE)
+              colnames(df)[1:3] <- c("len_bins", "age", "slice_label")
+              
+              # Dynamically extract all "Key: Value" pairs and pivot
+              df2 <- df %>%
+                # Match every 'Word: Number' pair (supporting decimals and negative numbers)
+                dplyr::mutate(pairs = stringr::str_extract_all(slice_label, "([A-Za-z0-9_]+):\\s*([-+]?\\d*\\.?\\d+)")) %>%
+                tidyr::unnest(pairs) %>%
+                tidyr::separate_wider_delim(
+                  cols = pairs,
+                  delim = ":",
+                  names = c("variable", "val")
+                ) %>%
+                dplyr::mutate(
+                  variable = stringr::str_trim(variable),
+                  val = type.convert(stringr::str_trim(val), as.is = TRUE) # Automatically parses numeric types
+                ) %>%
+                tidyr::pivot_wider(
+                  names_from = variable,
+                  values_from = val
+                ) %>%
+                dplyr::select(-slice_label) %>%
+                dplyr::relocate(len_bins, age, tidyselect::where(is.numeric), value)
+              colnames(df2) <- tolower(colnames(df2))
+              # rename columns if not std & add module_name + label
+              # I believe this is the only ones
+              rename_map <- c(
+                seas = "season",
+                sub_seas = "subseason" #,
+                # gp = "growth_pattern"
+              )
+              df3 <- df2 |>
+                dplyr::rename(dplyr::any_of(rename_map)) |>
+                dplyr::mutate(
+                  module_name = parm_sel,
+                  label = "age_to_length_conversion")
+              df3[setdiff(tolower(names(out_new)), tolower(names(df3)))] <- NA
+              # Add to out list
+              out_list[[parm_sel]] <- df3
+            } else if (parm_sel == "AAK") {
+              miss_parms <- c(miss_parms, parm_sel)
             } else {
               miss_parms <- c(miss_parms, parm_sel)
               next
