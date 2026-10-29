@@ -166,9 +166,6 @@ plot_spawning_biomass <- function(
     if (grepl("lbs|pounds|lb", unit_label, ignore.case = TRUE)) lbs <- TRUE
   }
   
-  # TODO: Fix the unit label if scaling. Maybe this is up to the user to do if
-  #       they want something scaled then they have to supply a better unit name
-  #       or we create a helper function to do this.
   spawning_biomass_label <- ifelse(
     relative,
     yes = "Relative spawning biomass",

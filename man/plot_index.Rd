@@ -6,7 +6,7 @@
 \usage{
 plot_index(
   dat,
-  unit_label = "",
+  unit_label = NULL,
   group = NULL,
   facet = NULL,
   interactive = TRUE,
