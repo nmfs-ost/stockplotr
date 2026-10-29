@@ -28,6 +28,8 @@ jobs:
 
       - name: Update example data
         run: Rscript data-raw/DATASET_RCEATTLE.R
+        env:
+          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit and push updated example data
         if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
