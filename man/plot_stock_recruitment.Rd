@@ -6,8 +6,8 @@
 \usage{
 plot_stock_recruitment(
   dat,
-  spawning_biomass_label = "mt",
-  recruitment_label = "mt",
+  spawning_biomass_label = NULL,
+  recruitment_label = NULL,
   interactive = TRUE,
   era = NULL,
   module = NULL,
@@ -25,11 +25,11 @@ in \code{ref_line} is used to plot a reference line or calculate relative spawni
 
 \item{spawning_biomass_label}{String. Units for spawning biomass
 
-Default: "mt"}
+Default: NULL}
 
 \item{recruitment_label}{String. Units for recruitment
 
-Default: "mt"}
+Default: NULL}
 
 \item{interactive}{Logical. TRUE/FALSE; indicate whether the environment the
 plot is being made in is interactive. By default, this
