@@ -149,7 +149,7 @@ plot_age_to_length_conversion <- function(
   # Filter data for spawning biomass
   prepared_data <- filter_data(
     dat = dat,
-    label_name = ifelse(relative, glue::glue("age_to_length_conversion"), "^age_to_length_conversion$"), #Not sure if this is correct
+    label_name = glue::glue("age_to_length_conversion"), 
     group = group,
     facet = facet,
     module = module,
@@ -182,6 +182,7 @@ plot_age_to_length_conversion <- function(
   length_bins <- unique(plot_data[["length"]])
   n_length_bins <- dplyr::n_distinct(plot_data[["length"]])
 
+#TODO: create this function
   plt <- plot_density(
     dat = plot_data,
     y = "len_bin", #length bin, not sure what its called yet
