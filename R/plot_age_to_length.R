@@ -153,7 +153,8 @@ plot_age_to_length_conversion <- function(
     group = group,
     facet = facet,
     module = module,
-    interactive = interactive
+    interactive = interactive,
+    geom = "line"
   )
 
     if (nrow(prepared_data) == 0) {
@@ -171,7 +172,12 @@ plot_age_to_length_conversion <- function(
   plot_data <- processing[[1]]
   group <- processing[[2]]
   if (!is.null(processing[[3]])) facet <- processing[[3]]
-
+  if(group %in% c("age", "length_bins")){
+    group <- NULL
+  }
+  if(facet %in% c("age", "length_bins")) {
+    facet <- facet[-grep("age|length_bins", facet)]
+  }
   # Override grouping variable when there is only NA's
   if (!is.null(group)) {
     if (group %notin% colnames(plot_data)) group <- NULL
@@ -179,15 +185,16 @@ plot_age_to_length_conversion <- function(
 
 #Add plot_density()
 
-  length_bins <- unique(plot_data[["length"]])
-  n_length_bins <- dplyr::n_distinct(plot_data[["length"]])
+  length_bins <- unique(plot_data[["length_bins"]])
+  n_length_bins <- dplyr::n_distinct(plot_data[["length_bins"]])
 
 #TODO: create this function
   plt <- plot_density(
     dat = plot_data,
-    y = "len_bin", #length bin, not sure what its called yet
+    y = "length_bins", #length bin, not sure what its called yet
     ylab = "Length bin",
     group = group,
+    n_length_bins = n_length_bins,
     # add check in case facet is returned as character(0)
     facet = if (length(facet) > 0) facet else NULL,
     ...
