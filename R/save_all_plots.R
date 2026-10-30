@@ -137,7 +137,7 @@ save_all_plots <- function(
         names(func_pars)[which(names(func_pars)=="figures_dir")] <- "tables_dir"
       }
 
-      cli::cli_alert_info("Attempting to execute function: {func_name}")
+      cli::cli_alert_info("Exporting: {func_name} figure")
       tryCatch(
         {
           suppressMessages(
@@ -145,7 +145,7 @@ save_all_plots <- function(
           )
         },
         error = function(e) {
-            cli::cli_alert_danger("{func_name} failed to run.")
+            cli::cli_alert_danger("Failed to execute: {func_name}.")
             cli::cli_alert("Tip: check that your arguments are correct.")
             for(a in seq_along(func_specific_args)){
               arg_name = names(func_specific_args)[a]
