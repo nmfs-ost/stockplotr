@@ -6,29 +6,12 @@
 \usage{
 save_all_plots(
   dat,
-  recruitment_unit_label = "mt",
-  recruitment_scale_amount = 1,
-  relative = FALSE,
-  proportional = TRUE,
   interactive = FALSE,
   figures_tables_dir = getwd(),
-  ref_line = "msy",
-  biomass_unit_label = "mt",
-  biomass_scale_amount = 1,
-  landings_unit_label = "mt",
-  spawning_biomass_label = "mt",
-  spawning_biomass_scale_amount = 1,
-  ref_line_sb = "msy",
-  abundance_at_age_scale_amount = 1,
-  abundance_at_age_unit_label = "fish",
-  biomass_at_age_scale_amount = 1,
-  biomass_at_age_unit_label = "mt",
-  index_unit_label = "",
-  bnc_unit_label = c(biomass = "mt", abundance = "fish", catch = "mt"),
-  catch_unit_label = "mt",
-  catch_scale_amount = 1,
-  projections_unit_label = c(catch = "mt", spawning_biomass = "mt", fishing_mortality =
-    "")
+  plot_recruitment_options = list(module = "TIME_SERIES"),
+  plot_natural_mortality_options = list(module = "Natural_Mortality"),
+  table_total_catch_options = list(module = "TIME_SERIES"),
+  ...
 )
 }
 \arguments{
@@ -38,129 +21,46 @@ returned from \link[stockplotr]{convert_output}.
 If inputting a list of tibbles, the first tibble's reference point defined
 in \code{ref_line} is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{recruitment_unit_label}{String. Recruitment units
-
-Default: "mt"}
-
-\item{recruitment_scale_amount}{Number. A number describing how much to scale down
-the recruitment quantities shown on the y axis. For example,
-recruitment_scale_amount = 100 would scale down a value from 500,000 -->
-5,000. This scale will be reflected in the y axis label.
-
-Default: 1}
-
-\item{relative}{Logical. TRUE/FALSE; specify whether to set y-axis values relative to
-the ref_line value.
-
-Default: \code{FALSE}}
-
-\item{proportional}{Logical. TRUE/FALSE; scale size of bubble plots
-
-Default: \code{TRUE}}
-
 \item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
 Default: \code{FALSE}}
 
-\item{figures_tables_dir}{Path. The location of the folder containing
-figures and tables ("figures" and "tables").
+\item{plot_recruitment_options}{List. List object of parameter values to pass
+directly to the \code{plot_recruitment} function. All default parameters for the
+\code{plot_recruitment} function, except for \code{dat}, can be overriden with this list
+object.
 
-Default: the working directory (\code{getwd()})}
+Default: list(module = "TIME_SERIES")}
 
-\item{ref_line}{String. Type of reference point to
-compare biomass to. The default is \code{"msy"}, which looks for
-\code{"biomass_msy"} in the \code{"label"} column of \code{dat}. The actual
-searching in \code{dat} is case agnostic and will work with either upper- or
-lower-case letters but you must use one of the options specified in the
-default list to ensure that the label on the figure looks correct
-regardless of how it is specified in \code{dat}. Other possibilities may include
-"target", "MSY", and "unfished". When the reference cannot be found,
-indicate the reference line in the form c("label" = value).
+\item{plot_natural_mortality_options}{List. List object of parameter values to pass
+directly to the \code{plot_natural_mortality_options} function. All default parameters for the
+\code{plot_natural_mortality_options} function, except for \code{dat}, can be overriden with this list
+object.
 
-Default: "msy"
+Default: list(module = "Natural_Mortality")}
 
-Options: Including, but not limited to: "target", "MSY", "unfished"}
+\item{table_total_catch_options}{List. List object of parameter values to pass
+directly to the \code{table_total_catch_options} function. All default parameters for the
+\code{table_total_catch_options} function, except for \code{dat}, can be overriden with this list
+object.
 
-\item{biomass_unit_label}{String. Biomass units
+Default: list(module = "TIME_SERIES")
 
-Default: "mt"}
+... Additional list objects of parameter values to pass directly to corresponding
+plot or table functions. Parameter names should follow the naming convention
+\verb{\{function_name\}_options}. All default parameters, except for \code{dat}, of this function
+can be overriden with this list object. See example.}
 
-\item{biomass_scale_amount}{Number. A number describing how much to scale down the
-biomass quantities shown on the y axis. See \code{recruitment_scale_amount}.
-
-Default: 1}
-
-\item{landings_unit_label}{String. Landings units
-
-Default: "mt"}
-
-\item{spawning_biomass_label}{String. Spawning biomass units
-
-Default: "mt"}
-
-\item{spawning_biomass_scale_amount}{Number.  A number describing how much to scale down the
-spawning biomass quantities shown on the y axis. See \code{recruitment_scale_amount}.
-
-Default: 1}
-
-\item{ref_line_sb}{String. Same as \code{ref_line}, but this argument is
-applied to plot_spawning_biomass.
-
-Default: "msy"
-
-Options: Including, but not limited to: "target", "MSY", "unfished"}
-
-\item{abundance_at_age_scale_amount}{Number.  A number describing how much to scale down the
-abundance quantities shown via bubble size. See \code{recruitment_scale_amount}.
-
-Default: 1}
-
-\item{abundance_at_age_unit_label}{String. Abbreviated abundance at age units
-
-Default: "fish"}
-
-\item{biomass_at_age_scale_amount}{Number.  A number describing how much to scale down the
-biomass quantities shown via bubble size. See \code{recruitment_scale_amount}.
-
-Default: 1}
-
-\item{biomass_at_age_unit_label}{String. Abbreviated biomass at age units
-
-Default: "mt"}
-
-\item{index_unit_label}{String. Index of abundance/CPUE units
-
-Default: ""}
-
-\item{bnc_unit_label}{String. Abbreviated biomass, abundance, and catch units
-
-Default: c("biomass" = "mt", "abundance" = "fish", "catch" = "mt")}
-
-\item{catch_unit_label}{String. Abbreviated catch units
-
-Default: "mt"}
-
-\item{catch_scale_amount}{Number. A number describing how much to scale down the
-catch quantities shown via bubble size. See \code{recruitment_scale_amount}.
-
-Default: 1}
-
-\item{projections_unit_label}{Units for projections quantities
-
-Default: c("catch" = "mt", "spawning_biomass" = "mt",
-"fishing_mortality" = "")}
-
-\item{projections_uncert_label}{Abbreviated uncertainty label for
-each quantity
-
-Default: c("catch" = "stddev", "spawning_biomass" = "stddev",
-"fishing_mortality" = "stddev")}
+\item{...}{Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}
 }
 \value{
 Rda files for each figure/table.
 }
 \description{
 Export all figures and tables to Rda files within one function.
+This primary purpose of this function is to quickly export all
+available figures and tables. We recommend running individual
+plotting functions for greater customization of figures and tables.
 }
 \details{
 The input is from an assessment model output file
@@ -168,12 +68,39 @@ translated to a standardized output (\link[stockplotr]{convert_output}).
 }
 \examples{
 \dontrun{
-save_all_plots(dat,
-  ref_line = "unfished",
-  ref_line_sb = "target",
-  index_unit_label = "CPUE",
-  biomass_at_age_scale_amount = 1,
-  biomass_at_age_unit_label = "metric tons"
+save_all_plots(
+  dat = example_data,
+  plot_spawning_biomass_options = list(
+    ref_line = "unfished"
+  ),
+  plot_abundance_at_age_options = list(
+    scale_amount = 1,
+    proportional = FALSE
+  )
+)
+}
+\dontrun{
+save_all_plots(
+   dat = example_data,
+   figures_tables_dir = fs::path("outputs/figures"),
+   plot_recruitment_options = list(
+     module = "TIME_SERIES",
+     unit_label = "Millions of Recruits" # customize unit label for recruitment plot
+   ),
+   plot_spawning_biomass_options = list(
+     ref_line = "unfished"     # customize reference line for spawning biomass plot
+   ),
+   plot_abundance_at_age_options = list(
+     scale_amount = 1,         # custom scale for abundance-at-age plot
+     proportional = FALSE      # don't proportionalize abundance-at-age 
+   ),
+   plot_spr_options = list(
+     ylab = "Fishing Intensity (1-SPR)/(1-SPR_ref)" # custom Y label for SPR plot
+   ),
+   plot_fishing_mortality_options = list(
+     facet = "fleet",    # facet fishing mortality plot by "fleet"
+     group = "fleet"     # group fishing mortality plot by "fleet"
+   )
 )
 }
 }
