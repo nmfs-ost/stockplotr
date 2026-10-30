@@ -48,18 +48,17 @@ convert_output <- function(
   fleet_names = NULL,
   save_dir = NULL
 ) {
-  
   if (is.character(file) && grepl("Report.sso", file)) {
     lifecycle::deprecate_warn(
-      when = "2.8.0", 
-      what = I("convert_output(file = 'Report.sso')"), 
+      when = "2.8.0",
+      what = I("convert_output(file = 'Report.sso')"),
       details = c(
         i = "Please use the returned object from `r4ss::ss_output()`",
         i = "File will be compatible until Oct. 1, 2027"
       )
     )
   }
-  
+
   # check if entered save_dir exists so doesn't waste user time finding this out at the end
   if (!is.null(save_dir)) {
     if (!grepl(".rda", save_dir)) {
@@ -223,7 +222,7 @@ convert_output <- function(
     out_new <- fims_output
     #### Rceattle ####
   } else if (model == "rceattle") {
-   out_new <- conout_rceattle(file = file, out_new = out_new, fleet_names = fleet_names)
+    out_new <- conout_rceattle(file = file, out_new = out_new, fleet_names = fleet_names)
   } else {
     cli::cli_abort(c(
       message = "Output file not compatible.",

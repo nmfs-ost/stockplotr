@@ -7,39 +7,39 @@
 \format{
 A tibble (\code{tbl_df}, \code{tbl}, \code{data.frame}) with 38,195 rows and 35 variables:
 \describe{
-  \item{label}{Standard name for estimate or value name}
-  \item{estimate}{Actual value of the label}
-  \item{year}{Annual indexing value}
-  \item{fleet}{Names of fleets or surveys indexed by the data}
-  \item{sex}{Native reference to male, female, unknown, or none}
-  \item{area}{Specified areas by the model}
-  \item{growth_pattern}{Indexing column of data}
-  \item{uncertainty}{Value of uncertainty associated with the label column}
-  \item{uncertainty_label}{Uncertainty label or name associated with the label columns}
-  \item{module_name}{Name of keyword (SS3) or list indexing in the original model output for tracking purposes}
-  \item{time}{Time sometimes referenced in decimals to the year and month}
-  \item{era}{"time" for current time series in model; "fore" representing the projected or forecasted years of the model}
-  \item{month}{Month factor}
-  \item{season}{Season usually associated with year}
-  \item{subseason}{Subseason when used}
-  \item{birthseas}{Birthseason found in SS3}
-  \item{initial}{Initial input value in the model when available associated with the label column}
-  \item{likelihood}{Likelihood value for the data point}
-  \item{platoon}{Platoon also an SS3 indexing value}
-  \item{age}{Age of fish}
-  \item{bio_pattern}{Indexing column of data}
-  \item{settlement}{Indexing column of data}
-  \item{morph}{Indexing column of data}
-  \item{type}{Indexing column of data}
-  \item{factor}{Indexing column of data}
-  \item{part}{Indexing column of data}
-  \item{kind}{Indexing column of data}
-  \item{nsim}{Indexing column of data}
-  \item{bin}{Indexing column of data}
-  \item{age_a}{Alternative age column}
-  \item{length_bins}{Length bins for composition or other length based data}
-  \item{count}{Indexing column of data}
-  \item{block}{Indexing column of data}
+\item{label}{Standard name for estimate or value name}
+\item{estimate}{Actual value of the label}
+\item{year}{Annual indexing value}
+\item{fleet}{Names of fleets or surveys indexed by the data}
+\item{sex}{Native reference to male, female, unknown, or none}
+\item{area}{Specified areas by the model}
+\item{growth_pattern}{Indexing column of data}
+\item{uncertainty}{Value of uncertainty associated with the label column}
+\item{uncertainty_label}{Uncertainty label or name associated with the label columns}
+\item{module_name}{Name of keyword (SS3) or list indexing in the original model output for tracking purposes}
+\item{time}{Time sometimes referenced in decimals to the year and month}
+\item{era}{"time" for current time series in model; "fore" representing the projected or forecasted years of the model}
+\item{month}{Month factor}
+\item{season}{Season usually associated with year}
+\item{subseason}{Subseason when used}
+\item{birthseas}{Birthseason found in SS3}
+\item{initial}{Initial input value in the model when available associated with the label column}
+\item{likelihood}{Likelihood value for the data point}
+\item{platoon}{Platoon also an SS3 indexing value}
+\item{age}{Age of fish}
+\item{bio_pattern}{Indexing column of data}
+\item{settlement}{Indexing column of data}
+\item{morph}{Indexing column of data}
+\item{type}{Indexing column of data}
+\item{factor}{Indexing column of data}
+\item{part}{Indexing column of data}
+\item{kind}{Indexing column of data}
+\item{nsim}{Indexing column of data}
+\item{bin}{Indexing column of data}
+\item{age_a}{Alternative age column}
+\item{length_bins}{Length bins for composition or other length based data}
+\item{count}{Indexing column of data}
+\item{block}{Indexing column of data}
 }
 }
 \source{
@@ -49,9 +49,9 @@ A tibble (\code{tbl_df}, \code{tbl}, \code{data.frame}) with 38,195 rows and 35 
 data(ss3_simple)
 }
 \description{
-Standardized output of a generic simple example of SS3 found from the `r4ss` 
-repository examples. The raw output is converted to an R readable object 
-using `r4ss::ss_output` then standardized using `stockplotr::convert_output()`.
+Standardized output of a generic simple example of SS3 found from the \code{r4ss}
+repository examples. The raw output is converted to an R readable object
+using \code{r4ss::ss_output} then standardized using \code{stockplotr::convert_output()}.
 }
 \examples{
 data(ss3_simple)

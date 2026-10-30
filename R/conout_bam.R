@@ -1,18 +1,18 @@
 #' Code to convert BAM output to standard framework.
-#' 
+#'
 #' Does not change naming conventions.
 #'
 #' @inheritParams convert_output
 #'
 #' @returns Reshaped data frame.
 conout_bam <- function(
-    file,
-    out_new,
-    fleet_names = NULL
+  file,
+  out_new,
+  fleet_names = NULL
 ) {
   # Extract values from BAM output - model file after following ADMB2R
   dat <- dget(file)
-  
+
   # Find fleet names
   if (is.null(fleet_names)) {
     # Extract names from indices
@@ -22,13 +22,13 @@ conout_bam <- function(
     # Extract names from landings
     landings <- dat$t.series |>
       dplyr::select(dplyr::contains("L.") & dplyr::contains(".ob") |
-                      dplyr::contains("D.") & dplyr::contains(".ob"))
+        dplyr::contains("D.") & dplyr::contains(".ob"))
     fleets_land <- stringr::str_extract(as.vector(colnames(landings)), "(?<=L\\.)\\w+(?=\\.ob)")
     fleets_disc <- stringr::str_extract(as.vector(colnames(landings)), "(?<=D\\.)\\w+(?=\\.ob)")
     # Extract names from lof F dev
     parm <- dat$parm.tvec |>
       dplyr::select(dplyr::contains("log.F.dev.") |
-                      dplyr::contains("log.F.dev.") & dplyr::contains(".D"))
+        dplyr::contains("log.F.dev.") & dplyr::contains(".D"))
     # fleets_parm_D <- stringr::str_extract(as.vector(colnames(parm)), "(?<=log\\.F\\.dev\\.)\\w+(?=\\.D)")
     fleets_parm <- stringr::str_extract(as.vector(colnames(parm)), "(?<=log\\.F\\.dev\\.)\\w+")
     fleets <- unique(tolower(c(fleets_ind, fleets_land, fleets_disc, fleets_parm)))
@@ -46,13 +46,13 @@ conout_bam <- function(
   cli::cli_alert_info("{fleet_names}")
   # Create list for morphed dfs to go into (for rbind later)
   out_list <- list()
-  
+
   factors <- c("year", "fleet", "fleet_name", "age", "sex", "area", "seas", "season", "time", "era", "subseas", "subseason", "platoon", "platoo", "growth_pattern", "gp", "nsim", "age_a")
   errors <- c("StdDev", "sd", "se", "SE", "cv", "CV", "stddev")
   units <- c("mt", "lbs", "eggs")
   # argument for function when model == BAM
   # fleet_names <- c("cl", "cL","cp","mrip","ct", "hb", "HB", "comm","Mbft","CVID")
-  
+
   ##### BAM loop ----
   # Extract data from list fit to output df
   # Loop over all items to output each object/transform
@@ -95,7 +95,7 @@ conout_bam <- function(
               df <- df |>
                 dplyr::rename_with(
                   ~ ifelse(max(as.numeric(df$year)) < 50,
-                           c("age_a"), c("year")
+                    c("age_a"), c("year")
                   ),
                   year
                 )
@@ -125,7 +125,7 @@ conout_bam <- function(
                     TRUE ~ names(extract[[1]][i])
                   )
                   # label_init = names(extract[[1]][i]),
-                  
+
                   # label = dplyr::case_when(
                   #   is.na(fleet) ~ names(extract[[1]][i]),
                   #   TRUE ~ stringr::str_replace(tolower(label), paste(".", fleet_names, sep = "", collapse = "|"), "")
@@ -503,7 +503,7 @@ conout_bam <- function(
       cli::cli_alert_warning(paste(names(extract), " not compatible.", sep = ""))
     } # close if statement
   } # close loop over objects listed in dat file
-  
+
   # Place out_list into a single data frame
   # VIRG, INIT, TIME, FORE
   out_new <- Reduce(rbind, out_list) |>
@@ -513,15 +513,15 @@ conout_bam <- function(
       label = tolower(label)
     )
   # if (model == "bam") {
-    out_new <- dplyr::mutate(
-      out_new,
-      era = dplyr::case_when(
-        year < dat$parms$styr ~ "init",
-        year >= dat$parms$styr & year <= dat$parms$endyr ~ "time",
-        year > dat$parms$endyr ~ "fore",
-        TRUE ~ NA
-      )
+  out_new <- dplyr::mutate(
+    out_new,
+    era = dplyr::case_when(
+      year < dat$parms$styr ~ "init",
+      year >= dat$parms$styr & year <= dat$parms$endyr ~ "time",
+      year > dat$parms$endyr ~ "fore",
+      TRUE ~ NA
     )
+  )
   # }
   return(out_new)
 }

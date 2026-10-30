@@ -44,9 +44,9 @@
 
 #' 2018 Gulf of Alaska Pollock stock assessment output
 #'
-#' Standardized output of the 2018 Gulf of Alaska Pollock stock assessment 
-#' produced from Rceattle including all of the values needed to create 
-#' plots and tables in {stockplotr}. The example can be found and run from the 
+#' Standardized output of the 2018 Gulf of Alaska Pollock stock assessment
+#' produced from Rceattle including all of the values needed to create
+#' plots and tables in {stockplotr}. The example can be found and run from the
 #' Rceattle repository.
 #'
 #' @docType data
@@ -105,7 +105,7 @@
 
 #' SEDAR 55 South Atlantic Vermilion Snapper
 #'
-#' Standardized output of the 2018 South Atlantic Vermilion Snapper stock assessment 
+#' Standardized output of the 2018 South Atlantic Vermilion Snapper stock assessment
 #' produced from the Beaufort Assessment Model (BAM).
 #'
 #' @docType data
@@ -150,7 +150,7 @@
 #' }
 #'
 #' @keywords datasets
-#' 
+#'
 #' @references SEDAR (2018)
 #' (\href{https://sedarweb.org/documents/sedar-55-stock-assessment-report-south-atlantic-vermilion-snapper/})
 #'
@@ -162,9 +162,9 @@
 
 #' SS3 Simple stock assessment output
 #'
-#' Standardized output of a generic simple example of SS3 found from the `r4ss` 
-#' repository examples. The raw output is converted to an R readable object 
-#' using `r4ss::ss_output` then standardized using `stockplotr::convert_output()`. 
+#' Standardized output of a generic simple example of SS3 found from the `r4ss`
+#' repository examples. The raw output is converted to an R readable object
+#' using `r4ss::ss_output` then standardized using `stockplotr::convert_output()`.
 #'
 #' @docType data
 #'

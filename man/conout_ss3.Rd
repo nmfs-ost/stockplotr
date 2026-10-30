@@ -8,19 +8,19 @@ conout_ss3(file, out_new, fleet_names = NULL)
 }
 \arguments{
 \item{file}{Path. Assessment model output file path. Currently accepts SS3
-Report.sso file, BAM .rda file, Rceattle model object, and FIMS model object.}
+\code{r4ss::ss_output()} or Report.sso file (being deprecated), BAM .rda file, Rceattle model object, and FIMS model object.}
 
 \item{fleet_names}{Character vector. Names of fleets in the assessment model as
- shortened in the output file or names of fleets to replace the native fleet
- names in the output. For example, if fleet names in the model are 1, 2, 3
- then fleet_names = c("fleet1" = 1, "fleet2" = 2, "fleet3" = 3).
+shortened in the output file or names of fleets to replace the native fleet
+names in the output. For example, if fleet names in the model are 1, 2, 3
+then fleet_names = c("fleet1" = 1, "fleet2" = 2, "fleet3" = 3).
 
- Default: NULL}
+Default: NULL}
 }
 \value{
 Reshaped data frame.
 }
 \description{
-Does not change naming conventions. Contains code to work with SS3 Report.sso 
-file or returned object from `r4ss::ss_output()`.
+Does not change naming conventions. Contains code to work with SS3 Report.sso
+file or returned object from \code{r4ss::ss_output()}.
 }
