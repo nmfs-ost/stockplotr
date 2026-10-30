@@ -47,6 +47,7 @@ plot_spawning_potential_ratio <- function(
   ylab = NULL,
   ...
 ) {
+  check_data(dat)
   
   # Filter data for spr
   prepared_data <- filter_data(

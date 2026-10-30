@@ -39,6 +39,8 @@ plot_recruitment_deviations <- function(
   figures_dir = getwd(),
   ...
 ) {
+  check_data(dat)
+
   # Filter data
   filter_data <- filter_data(
     dat = dat,
