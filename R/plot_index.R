@@ -44,6 +44,8 @@ plot_index <- function(
   figures_dir = getwd(),
   ...
 ) {
+  check_data(dat)
+
   # Set cpue unit label for plot
   u_units <- ifelse(
     is.null(unit_label) | unit_label == "",

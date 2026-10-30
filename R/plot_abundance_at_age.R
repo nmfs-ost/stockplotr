@@ -85,6 +85,8 @@ plot_abundance_at_age <- function(
   make_rda = FALSE,
   figures_dir = getwd()
 ) {
+  check_data(dat)
+
   # Create label for abundance units in legend
   abundance_label <- label_magnitude(
     label = "Abundance",

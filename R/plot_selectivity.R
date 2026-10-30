@@ -40,6 +40,8 @@ plot_selectivity <- function(
   figures_dir = getwd(),
   ...
 ) {
+  check_data(dat)
+
   # Extract selectivity
   selectivity <- filter_data(
     dat = dat,

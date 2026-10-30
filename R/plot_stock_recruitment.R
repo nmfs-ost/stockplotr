@@ -47,6 +47,8 @@ plot_stock_recruitment <- function(
   make_rda = FALSE,
   figures_dir = getwd()
 ) {
+  check_data(dat)
+
   # Extract recruitment
   recruitment <- filter_data(
     dat = dat,

@@ -30,6 +30,8 @@ plot_natural_mortality <- function(
   figures_dir = getwd(),
   ...
 ) {
+  check_data(dat)
+
   # Extract natural mortality
   # if (is.null(group)) group <- "age"
 

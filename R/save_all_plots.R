@@ -175,6 +175,8 @@ save_all_plots <- function(
   projections_unit_label = c("catch" = "mt", "spawning_biomass" = "mt", "fishing_mortality" = "")
   # projections_uncert_label = c("catch" = "stddev", "spawning_biomass" = "stddev", "fishing_mortality" = "stddev")
 ) {
+  check_data(dat)
+
   make_rda <- TRUE
 
   cli::cli_h1("Starting export of figures and tables")
