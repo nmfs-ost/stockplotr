@@ -87,7 +87,7 @@ All contributors participating and contributing to the asar project are expected
 We hope that this package will be able to be a one stop shop for plots regarding interpreting assessment models and presenting the results to managers and relevant stakeholders. We encourage interested users to contribute to this package using their custom code when they find it may be useful across the nation.
 
 > [!NOTE]
-> Model diagnostic plots within the [{Fisheries Integrated Modelling System (FIMS)}] (https://github.com/NOAA-FIMS/FIMS) are in development.
+> Model diagnostic plots within the [Fisheries Integrated Modelling System (FIMS)](https://github.com/NOAA-FIMS/FIMS) are in development.
 > These plots will work natively with {stockplotr} since the FIMS model output virtually matches the {stockplotr} standardized output format.   
 
 

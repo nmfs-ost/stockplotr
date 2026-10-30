@@ -198,6 +198,11 @@ plot_fishing_mortality <- function(
       scale_amount = 1
     )
   }
+  
+  # remove global variable "selected_module"
+  if (exists("selected_module", envir = .GlobalEnv)) rm("selected_module", envir = .GlobalEnv) 
+  
   # Output final plot
-  final
+  final  
+
 }

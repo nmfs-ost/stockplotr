@@ -1,14 +1,11 @@
-# Update example data when convert_output.R or variable-name resources change
+# Update ss3 example data from Report.sso when convert_output.R or variable-name resources change
 name: update-example-data
 on:
   pull_request:
     branches: [main]
     paths:
-      - 'R/convert_output.R'
-      - 'inst/resources/bam_var_names.csv'
+      - 'R/conout_ss3.R'
       - 'inst/resources/ss3_var_names.csv'
-      - 'inst/resources/rceattle_var_names.csv'
-      - 'inst/resources/fims_var_names.csv'
   workflow_dispatch:
 jobs:
   update-example-data:
@@ -38,5 +35,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/example_data.rda
-          git diff --cached --quiet || git commit -m "chore: update example_data from converter resource changes (triggered by $(git log -1 --pretty=format:'%h %s' HEAD)) [skip ci]"
+          git diff --cached --quiet || git commit -m "chore: update SS3 example_data from converter resource changes (triggered by $(git log -1 --pretty=format:'%h %s' HEAD)) [skip ci]"
           git push
