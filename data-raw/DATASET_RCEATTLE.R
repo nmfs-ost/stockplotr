@@ -4,7 +4,7 @@ install.packages(c("remotes")) # , "readxl"
 remotes::install_github("afsc-assessments/Rceattle")
 # library(Rceattle)
 # library(readxl)
-data("GOApollock")
+GOApollock <- Rceattle::GOApollock
 GOApollock$styr = 1977 # The SAFE model starts at 1970, so change styr to 1970 to run the full time series model (data is in there). I start them all at 1977 because thats the years with overlap.
 pollock_model <- Rceattle::fit_mod(
   data_list = GOApollock,
