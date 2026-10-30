@@ -16,6 +16,9 @@
 <url><loc>nmfs-ost.github.io/stockplotr/reference/calc_kqs.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/calculate_reference_point.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/check_label_differences.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/conout_bam.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/conout_rceattle.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/conout_ss3.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/convert_output.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/create_latex_table.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/create_rda.html</loc></url>
@@ -48,10 +51,12 @@
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_spawning_potential_ratio.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_stock_recruitment.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_timeseries.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/pollock.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/process_data.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/process_table.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/reference_line.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/save_all_plots.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/ss3_simple.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/stockplotr-package.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/table_biomass_abundance_catch.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/table_index.html</loc></url>
@@ -60,5 +65,6 @@
 <url><loc>nmfs-ost.github.io/stockplotr/reference/table_total_catch.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/theme_noaa.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/theme_table.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/vermilion_snapper.html</loc></url>
 </urlset>
 
