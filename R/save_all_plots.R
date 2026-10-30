@@ -111,18 +111,18 @@ save_all_plots <- function(
     figures_dir = figures_tables_dir
   )
 
+  # all_R_files <- list.files(
+  #     file.path(here::here(), "R"),
+  # )
+  # plottab_function_files <- all_R_files[grepl("plot_|table_", all_R_files)]
+  # # Remove table_afsc_tier function for now
+  # plottab_function_files <- plottab_function_files[!grepl("afsc", plottab_function_files)]
+  helper_functions <- c("plot_timeseries", "plot_aa", "plot_obsvpred", "plot_error", "table_afsc_tier")
 
-  # TODO: should change this so that the plot/table functions are pulled directly
-  # from the stockplotr NAMESPACE, rather than based on the existecnce of an R
-  # file, so that multiple plotting functions can live in the same file.
-  all_R_files <- list.files(
-      file.path(here::here(), "R"),
-  )
-  plottab_function_files <- all_R_files[grepl("plot_|table_", all_R_files)]
-  # Remove table_afsc_tier function for now
-  plottab_function_files <- plottab_function_files[!grepl("afsc", plottab_function_files)]
-  
-  plottab_functions <- sub("\\.[^\\.]*$", "", plottab_function_files)
+  # plottab_functions <- sub("\\.[^\\.]*$", "", plottab_function_files)
+  all_functions <- ls(getNamespace("stockplotr"))
+  all_plottab_functions <- all_functions[grepl("plot_|table_", all_functions)]
+  plottab_functions <- all_plottab_functions[!(grepl(paste0(helper_functions, collapse="|"), all_plottab_functions))]
 
   for(i in seq_along(plottab_functions)){
       func_name <- plottab_functions[i]
