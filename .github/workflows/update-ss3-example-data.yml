@@ -1,0 +1,39 @@
+# Update ss3 example data from r4ss object when convert_output.R or variable-name resources change
+name: update-ss3-example-data
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'R/conout_ss3.R'
+      - 'inst/resources/ss3_var_names.csv'
+  workflow_dispatch:
+jobs:
+  update-example-data:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref_name }}
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::pak, any::usethis, local::.
+
+      - name: Update example data
+        run: Rscript data-raw/DATASET_SS3.R
+
+      - name: Commit and push updated example data
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/ss3_simple.rda
+          git diff --cached --quiet || git commit -m "chore: update SS3 r4ss example_data from converter resource changes (triggered by $(git log -1 --pretty=format:'%h %s' HEAD)) [skip ci]"
+          git push
