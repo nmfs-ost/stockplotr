@@ -1,31 +1,37 @@
 #' Export all figures and tables
 #'
 #' Export all figures and tables to Rda files within one function.
+#' This primary purpose of this function is to quickly export all 
+#' available figures and tables. We recommend running individual 
+#' plotting functions for greater customization of figures and tables.
 #'
 #' @inheritParams plot_spawning_biomass
 #'
 #' @param plot_recruitment_options List. List object of parameter values to pass 
-#' directly to the `plot_recruitment` function. All default parameters, except 
-#' for `dat`, of this function can be overriden with this list object. 
+#' directly to the `plot_recruitment` function. All default parameters for the
+#' `plot_recruitment` function, except for `dat`, can be overriden with this list 
+#' object. 
 #' 
 #' Default: list(module = "TIME_SERIES")
 #'
-#' @param plot_natural_mortality_options List. List object of parameter values to
-#' pass directly to the `plot_natural_mortality` function. All default parameters, except 
-#' for `dat`, of this function can be overriden with this list object.
+#' @param plot_natural_mortality_options List. List object of parameter values to pass 
+#' directly to the `plot_natural_mortality_options` function. All default parameters for the
+#' `plot_natural_mortality_options` function, except for `dat`, can be overriden with this list 
+#' object. 
 #' 
 #' Default: list(module = "Natural_Mortality")
 #' 
-#' @param table_total_catch_options List. List object of parameter values to pass
-#' directly to the `table_total_catch` funciton. All default parameters, except 
-#' for `dat`, of this function can be overriden with this list object.
+#' @param table_total_catch_options List. List object of parameter values to pass 
+#' directly to the `table_total_catch_options` function. All default parameters for the
+#' `table_total_catch_options` function, except for `dat`, can be overriden with this list 
+#' object. 
 #' 
 #' Default: list(module = "TIME_SERIES")
 #' 
 #' ... Additional list objects of parameter values to pass directly to corresponding
 #' plot or table functions. Parameter names should follow the naming convention
 #' `{function_name}_options`. All default parameters, except for `dat`, of this function 
-#' can be overriden with this list object.
+#' can be overriden with this list object. See example.
 #' 
 #' @returns Rda files for each figure/table.
 #'
@@ -38,7 +44,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' save_all_plots(dat,
+#' save_all_plots(
+#'   dat = example_data,
 #'   plot_spawning_biomass_options = list(
 #'     ref_line = "unfished"
 #'   ),
@@ -48,13 +55,38 @@
 #'   )
 #' )
 #' }
+
+#' \dontrun{
+#' save_all_plots(
+#'    dat = example_data,
+#'    figures_tables_dir = fs::path("outputs/figures"),
+#'    plot_recruitment_options = list(
+#'      module = "TIME_SERIES",
+#'      unit_label = "Millions of Recruits" # customize unit label for recruitment plot
+#'    ),
+#'    plot_spawning_biomass_options = list(
+#'      ref_line = "unfished"     # customize reference line for spawning biomass plot
+#'    ),
+#'    plot_abundance_at_age_options = list(
+#'      scale_amount = 1,         # custom scale for abundance-at-age plot
+#'      proportional = FALSE      # don't proportionalize abundance-at-age 
+#'    ),
+#'    plot_spr_options = list(
+#'      ylab = "Fishing Intensity (1-SPR)/(1-SPR_ref)" # custom Y label for SPR plot
+#'    ),
+#'    plot_fishing_mortality_options = list(
+#'      facet = "fleet",    # facet fishing mortality plot by "fleet"
+#'      group = "fleet"     # group fishing mortality plot by "fleet"
+#'    )
+#' )
+#' }
 save_all_plots <- function(
   dat,
   interactive = FALSE,
   figures_tables_dir = getwd(),
   # These three functions require having default parameters because of
   # no standard default modules
-  plot_recruitment_options = list( module = "TIME_SERIES"),
+  plot_recruitment_options = list(module = "TIME_SERIES"),
   plot_natural_mortality_options = list(module = "Natural_Mortality"),
   table_total_catch_options = list( module = "TIME_SERIES"),
   # All other functions can be modified with appropiate *_options
