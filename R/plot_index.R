@@ -33,7 +33,7 @@
 #'
 plot_index <- function(
   dat,
-  unit_label = "",
+  unit_label = NULL,
   group = NULL,
   # facet always assigned to fleet since that is how indices are calc'd -- unless replaced with NULL
   facet = NULL,
@@ -44,13 +44,6 @@ plot_index <- function(
   figures_dir = getwd(),
   ...
 ) {
-  # Set cpue unit label for plot
-  u_units <- ifelse(
-    is.null(unit_label) | unit_label == "",
-    glue::glue("Estimated Index"),
-    glue::glue("Estimated Index ({unit_label})")
-  )
-
   if (is.null(facet) || "fleet" %notin% facet) {
     facet <- c(facet, "fleet")
   }
@@ -67,6 +60,17 @@ plot_index <- function(
     facet = facet,
     interactive = interactive,
     module = module
+  )
+  if (unit_label != "" && !is.na(unique(prepared_data$unit))) unit_label <- unique(prepared_data$unit)
+  if (is.na(unit_label)) {
+    cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+    unit_label <- ""
+  }
+  # Set cpue unit label for plot
+  u_units <- ifelse(
+    is.null(unit_label) | unit_label == "",
+    glue::glue("Estimated Index"),
+    glue::glue("Estimated Index ({unit_label})")
   )
 
   # Subset data if focus
@@ -102,7 +106,7 @@ plot_index <- function(
     predicted_label = "index_predicted",
     geom = "line",
     xlab = "Year",
-    ylab = "Estimated Index",
+    ylab = u_units,
     group = group,
     facet = facet
   ) +

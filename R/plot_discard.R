@@ -21,14 +21,15 @@
 #'
 #' @examples
 #' plot_discard(
-#'   dat = stockplotr:::example_data,
+#'   dat = stockplotr::example_data,
+#'   unit_label = "fish",
 #'   module = "DISCARD_OUTPUT"
 #' )
 plot_discard <- function(
   dat,
   group = NULL,
   facet = NULL,
-  unit_label = "mt",
+  unit_label = NULL,
   era = NULL,
   lbs = FALSE,
   scale_amount = 1,
@@ -43,17 +44,6 @@ plot_discard <- function(
     unit_label <- "lbs"
   }
 
-  discard_label <- label_magnitude(
-    label = "Discard",
-    unit_label = unit_label,
-    scale_amount = dplyr::if_else(
-      lbs,
-      ifelse(unit_label %in% c("mt", "mts", "metric tons", "metric ton"), 1000, 1) * scale_amount,
-      scale_amount
-    ),
-    legend = TRUE
-  )
-
   # Filter data for discards
   prepared_data <- filter_data(
     dat = dat,
@@ -65,6 +55,24 @@ plot_discard <- function(
     module = module,
     scale_amount = scale_amount,
     interactive = interactive
+  )
+  
+  # extract unit if unit_label is null and set lbs to F by default
+  lbs <- FALSE
+  if (is.null(unit_label)) {
+    unit_label <- unique(prepared_data$unit)
+    if (is.na(unit_label)) {
+      cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+      unit_label <- ""
+    }
+  } else {
+    if (grepl("lbs|pounds|lb", unit_label, ignore.case = TRUE)) lbs <- TRUE
+  }
+  discard_label <- label_magnitude(
+    label = "Discard",
+    unit_label = unit_label,
+    scale_amount = scale_amount,
+    legend = TRUE
   )
 
   if (any(grepl("observed|predicted", unique(prepared_data$label)))) {
