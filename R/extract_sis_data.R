@@ -145,29 +145,16 @@ extract_sis_data <- function(sis_data_dir = getwd(),
     
     # RECRUITMENT
     tryCatch({
-      load(fs::path(figures_tables_dir, "figures", "abundance_at_age_figure.rda")) |> suppressWarnings()
-      rec <- rda[["figure"]][["layers"]][["geom_point"]][["data"]]
+      load(fs::path(figures_tables_dir, "figures", "recruitment_figure.rda")) |> suppressWarnings()
+      rec <- rda[["figure"]][["layers"]][["geom_line"]][["data"]]
       recruitment <- rec |>
-        dplyr::filter(age == 1) |>
         dplyr::group_by(year) |>
-        dplyr::summarise(sum = sum(estimate)) |>
+        dplyr::summarise(sum = sum(predicted_recruitment)) |>
         dplyr::rename(Recruitment = sum)
     },
     error = function(e) {
-      cli::cli_alert_warning("Recruitment (age 1) data was not extracted from the 'abundance_at_age_figure.rda' file.")
+      cli::cli_alert_warning("Recruitment data was not extracted from the 'recruitment_figure.rda' file.")
       recruitment <<- NULL
-      
-      # this is for recruitment in mt- not age-1, which is what SIS expects
-    #   load(fs::path(figures_tables_dir, "figures", "recruitment_figure.rda")) |> suppressWarnings()
-    #   rec <- rda[["figure"]][["layers"]][["geom_line"]]$data
-    #   recruitment <- rec |>
-    #     dplyr::group_by(year) |>
-    #     dplyr::summarise(sum = sum(predicted_recruitment)) |>
-    #     dplyr::rename(Recruitment = sum)
-    # },
-    # error = function(e) {
-    #   cli::cli_alert_warning("Recruitment data was not extracted from the 'recruitment_figure.rda' file.")
-    #   recruitment <<- NULL
     })
     
     # FISHING MORTALITY
@@ -348,7 +335,7 @@ extract_sis_data <- function(sis_data_dir = getwd(),
       Category == "Spawners" ~ "SSB",
       Category == "Recruitment" ~ "Recruits - Age 1",
       Category == "Fmort" ~ "F for Fully-Selected Fish",
-      Category == "Index" ~ "Index of Abundance",
+      Category == "Index" ~ "Index",
       Category == "Catch" ~ "Estimated Total Catch",
       TRUE ~ NA
     )) |>
@@ -356,7 +343,7 @@ extract_sis_data <- function(sis_data_dir = getwd(),
       Category == "Biomass" ~ as.character(b_unit),
       Category == "Spawners" ~ as.character(b_unit),
       Category == "Fmort" ~ as.character(f_unit),
-      Category == "Index" ~ "", 
+      Category == "Index" ~ "Index", 
       Category == "Catch" ~ ifelse(kqs$value[kqs$key_quantity == "tot.catch.units"] == " (mt)", "Metric Tons", kqs$value[kqs$key_quantity == "tot.catch.units"]),
       Category == "Recruitment" ~ "Number of Fish",
       TRUE ~ NA
