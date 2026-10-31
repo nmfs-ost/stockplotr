@@ -58,9 +58,11 @@ table_total_catch <- function(
   # Filter data for catch
   prepared_data <- filter_data(
     dat = dat |>
-      dplyr::filter(!is.na(year),
-                    !is.na(estimate),
-                    label %in% c("catch_retained", "catch_dead", "catch_selected", "catch")),
+      dplyr::filter(
+        !is.na(year),
+        !is.na(estimate),
+        label %in% c("catch_retained", "catch_dead", "catch_selected", "catch")
+      ),
     label_name = "^catch",
     geom = "line",
     era = era,

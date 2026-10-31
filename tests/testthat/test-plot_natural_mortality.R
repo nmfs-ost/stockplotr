@@ -2,7 +2,7 @@ test_that("plot_natural_mortality generate without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
     plot_natural_mortality(
-      stockplotr::example_data, 
+      stockplotr::example_data,
       module = "Natural_Mortality",
       interactive = FALSE
     )
