@@ -58,6 +58,8 @@ table_biomass_abundance_catch <- function(
   make_rda = FALSE,
   tables_dir = getwd()
 ) {
+  check_data(dat)
+
   named_vec <- c(
     "^biomass$" = unit_label[[1]],
     "^abundance" = unit_label[[2]],

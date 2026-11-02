@@ -50,6 +50,8 @@ plot_biomass_at_age <- function(
   make_rda = FALSE,
   figures_dir = getwd()
 ) {
+  check_data(dat)
+
   # Create label for abundance units in legend
   biomass_label <- label_magnitude(
     label = "Biomass",

@@ -93,10 +93,7 @@ save_all_plots <- function(
   # parameter lists.
   ...
 ) {
-
-  if(!is.data.frame(dat) || !all(c("label", "estimate") %in% colnames(dat))){
-    stop("dat is not the appropriate format. Have you run `convert_output()`?")
-  }
+  check_data(dat)
 
   all_params <- as.list(environment(), all=TRUE)
   make_rda <- TRUE

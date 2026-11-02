@@ -63,6 +63,8 @@ table_landings <- function(
   make_rda = FALSE,
   tables_dir = getwd()
 ) {
+  check_data(dat)
+
   # set unit label if scaled
   unit_label <- label_magnitude(
     label = "",
