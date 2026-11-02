@@ -9,21 +9,21 @@
 #'
 #' @param plot_recruitment_options List. List object of parameter values to pass 
 #' directly to the `plot_recruitment` function. All default parameters for the
-#' `plot_recruitment` function, except for `dat`, can be overriden with this list 
+#' `plot_recruitment` function, except for `dat`, can be overridden with this list 
 #' object. 
 #' 
 #' Default: list(module = "TIME_SERIES")
 #'
 #' @param plot_natural_mortality_options List. List object of parameter values to pass 
 #' directly to the `plot_natural_mortality_options` function. All default parameters for the
-#' `plot_natural_mortality_options` function, except for `dat`, can be overriden with this list 
+#' `plot_natural_mortality_options` function, except for `dat`, can be overridden with this list 
 #' object. 
 #' 
 #' Default: list(module = "Natural_Mortality")
 #' 
 #' @param table_total_catch_options List. List object of parameter values to pass 
 #' directly to the `table_total_catch_options` function. All default parameters for the
-#' `table_total_catch_options` function, except for `dat`, can be overriden with this list 
+#' `table_total_catch_options` function, except for `dat`, can be overridden with this list 
 #' object. 
 #' 
 #' Default: list(module = "TIME_SERIES")
@@ -31,7 +31,7 @@
 #' ... Additional list objects of parameter values to pass directly to corresponding
 #' plot or table functions. Parameter names should follow the naming convention
 #' `{function_name}_options`. All default parameters, except for `dat`, of this function 
-#' can be overriden with this list object. See example.
+#' can be overridden with this list object. See example.
 #' 
 #' @returns Rda files for each figure/table.
 #'
