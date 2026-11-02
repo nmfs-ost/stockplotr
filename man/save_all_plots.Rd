@@ -27,21 +27,21 @@ Default: \code{FALSE}}
 
 \item{plot_recruitment_options}{List. List object of parameter values to pass
 directly to the \code{plot_recruitment} function. All default parameters for the
-\code{plot_recruitment} function, except for \code{dat}, can be overriden with this list
+\code{plot_recruitment} function, except for \code{dat}, can be overridden with this list
 object.
 
 Default: list(module = "TIME_SERIES")}
 
 \item{plot_natural_mortality_options}{List. List object of parameter values to pass
 directly to the \code{plot_natural_mortality_options} function. All default parameters for the
-\code{plot_natural_mortality_options} function, except for \code{dat}, can be overriden with this list
+\code{plot_natural_mortality_options} function, except for \code{dat}, can be overridden with this list
 object.
 
 Default: list(module = "Natural_Mortality")}
 
 \item{table_total_catch_options}{List. List object of parameter values to pass
 directly to the \code{table_total_catch_options} function. All default parameters for the
-\code{table_total_catch_options} function, except for \code{dat}, can be overriden with this list
+\code{table_total_catch_options} function, except for \code{dat}, can be overridden with this list
 object.
 
 Default: list(module = "TIME_SERIES")
@@ -49,7 +49,7 @@ Default: list(module = "TIME_SERIES")
 ... Additional list objects of parameter values to pass directly to corresponding
 plot or table functions. Parameter names should follow the naming convention
 \verb{\{function_name\}_options}. All default parameters, except for \code{dat}, of this function
-can be overriden with this list object. See example.}
+can be overridden with this list object. See example.}
 
 \item{...}{Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}
 }
