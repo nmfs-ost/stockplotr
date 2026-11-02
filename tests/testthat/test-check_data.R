@@ -14,8 +14,10 @@ test_that("check_data rejects objects without the required structure", {
     1,
     "biomass",
     list(label = "biomass", estimate = 1),
-    matrix(c("biomass", "1"), nrow = 1,
-           dimnames = list(NULL, c("label", "estimate"))),
+    matrix(c("biomass", "1"),
+      nrow = 1,
+      dimnames = list(NULL, c("label", "estimate"))
+    ),
     data.frame(),
     data.frame(label = "biomass"),
     data.frame(estimate = 1)
