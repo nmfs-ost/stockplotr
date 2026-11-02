@@ -51,7 +51,7 @@ test_that("extract_sis_data() runs with some of all possible rdas present", {
   # file.remove(fs::path(savedir, "sis_ts_template.csv"))
   # file.remove(fs::path(savedir, "captions_alt_text.csv"))
   # file.remove(fs::path(savedir, "key_quantities.csv"))
-  unlink(fs::path(savedir), recursive = T)
+  unlink(fs::path(savedir), recursive = TRUE)
 })
 
 test_that("extract_sis_data() fails with no rdas present", {
