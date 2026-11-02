@@ -46,7 +46,7 @@ test_that("plotting and table entry points reject invalid data before other work
     "plot_recruitment_deviations",
     "plot_selectivity",
     "plot_spawning_biomass",
-    "plot_spawning_potential_ratio",
+    "plot_spr",
     "plot_stock_recruitment",
     "table_biomass_abundance_catch",
     "table_index",
