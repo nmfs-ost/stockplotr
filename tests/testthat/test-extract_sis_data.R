@@ -60,5 +60,5 @@ test_that("extract_sis_data() fails with no rdas present", {
     dir.create(savedir)
     
   expect_error(extract_sis_data(sis_data_dir=savedir, key_quantities_dir=savedir, figures_tables_dir=savedir))
-  unlink(fs::path(savedir), recursive = T)
+  unlink(fs::path(savedir), recursive = TRUE)
 })

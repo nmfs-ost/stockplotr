@@ -213,10 +213,14 @@ test_that("save_all_plots returns error when plot not made", {
 })
 
 test_that("save_all_plots returns error when dat is not valid", {
+    savedir <- fs::path(getwd(), "test-save_all_plots")
+    if(!dir.exists(savedir))
+      dir.create(savedir)
+
     expect_error(
       save_all_plots(
         r4ss::SS_output(file.path(test_path("fixtures", "ss3_models"), "models", "Hake_2018", "Report.sso")),
-        figures_tables_dir = getwd(),
+        figures_tables_dir = savedir,
         interactive = FALSE,
         plot_natural_mortality_options = list(
           module = NULL
@@ -227,7 +231,7 @@ test_that("save_all_plots returns error when dat is not valid", {
     expect_error(
       save_all_plots(
         data.frame(),
-        figures_tables_dir = getwd(),
+        figures_tables_dir = savedir,
         interactive = FALSE,
         plot_natural_mortality_options = list(
           module = NULL
@@ -238,7 +242,7 @@ test_that("save_all_plots returns error when dat is not valid", {
     expect_error(
       save_all_plots(
         data.frame(label="label"),
-        figures_tables_dir = getwd(),
+        figures_tables_dir = savedir,
         interactive = FALSE,
         plot_natural_mortality_options = list(
           module = NULL
