@@ -102,6 +102,19 @@ table_biomass_abundance_catch <- function(
             .by = c(year, model, label)
           ) # |>
         # dplyr::ungroup()
+      } else if (x == "^abundance") {
+        extra_grouping <- check_grouping(filtered_data)[-grep("year|sex", check_grouping(filtered_data))]
+
+        filtered_data <- filtered_data |>
+          dplyr::summarise(
+            estimate = sum(as.numeric(estimate), na.rm = TRUE),
+            estimate_upper = mean(as.numeric(estimate_upper), na.rm = TRUE),
+            estimate_lower = mean(as.numeric(estimate_lower), na.rm = TRUE),
+            uncertainty_label = unique(uncertainty_label),
+            uncertainty = mean(uncertainty, na.rm = TRUE),
+            .by = c(year, model, label)
+          ) # |>
+        # dplyr::ungroup()
       } else {
         extra_grouping <- check_grouping(filtered_data)[-grep("year", check_grouping(filtered_data))]
       }
