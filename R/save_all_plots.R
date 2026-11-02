@@ -1,31 +1,37 @@
 #' Export all figures and tables
 #'
 #' Export all figures and tables to Rda files within one function.
+#' This primary purpose of this function is to quickly export all 
+#' available figures and tables. We recommend running individual 
+#' plotting functions for greater customization of figures and tables.
 #'
 #' @inheritParams plot_spawning_biomass
 #'
 #' @param plot_recruitment_options List. List object of parameter values to pass 
-#' directly to the `plot_recruitment` function. All default parameters, except 
-#' for `dat`, of this function can be overriden with this list object. 
+#' directly to the `plot_recruitment` function. All default parameters for the
+#' `plot_recruitment` function, except for `dat`, can be overridden with this list 
+#' object. 
 #' 
 #' Default: list(module = "TIME_SERIES")
 #'
-#' @param plot_natural_mortality_options List. List object of parameter values to
-#' pass directly to the `plot_natural_mortality` function. All default parameters, except 
-#' for `dat`, of this function can be overriden with this list object.
+#' @param plot_natural_mortality_options List. List object of parameter values to pass 
+#' directly to the `plot_natural_mortality_options` function. All default parameters for the
+#' `plot_natural_mortality_options` function, except for `dat`, can be overridden with this list 
+#' object. 
 #' 
 #' Default: list(module = "Natural_Mortality")
 #' 
-#' @param table_total_catch_options List. List object of parameter values to pass
-#' directly to the `table_total_catch` funciton. All default parameters, except 
-#' for `dat`, of this function can be overriden with this list object.
+#' @param table_total_catch_options List. List object of parameter values to pass 
+#' directly to the `table_total_catch_options` function. All default parameters for the
+#' `table_total_catch_options` function, except for `dat`, can be overridden with this list 
+#' object. 
 #' 
 #' Default: list(module = "TIME_SERIES")
 #' 
 #' ... Additional list objects of parameter values to pass directly to corresponding
 #' plot or table functions. Parameter names should follow the naming convention
 #' `{function_name}_options`. All default parameters, except for `dat`, of this function 
-#' can be overriden with this list object.
+#' can be overridden with this list object. See example.
 #' 
 #' @returns Rda files for each figure/table.
 #'
@@ -38,7 +44,8 @@
 #'
 #' @examples
 #' \dontrun{
-#' save_all_plots(dat,
+#' save_all_plots(
+#'   dat = example_data,
 #'   plot_spawning_biomass_options = list(
 #'     ref_line = "unfished"
 #'   ),
@@ -48,19 +55,45 @@
 #'   )
 #' )
 #' }
+
+#' \dontrun{
+#' save_all_plots(
+#'    dat = example_data,
+#'    figures_tables_dir = fs::path("outputs/figures"),
+#'    plot_recruitment_options = list(
+#'      module = "TIME_SERIES",
+#'      unit_label = "Millions of Recruits" # customize unit label for recruitment plot
+#'    ),
+#'    plot_spawning_biomass_options = list(
+#'      ref_line = "unfished"     # customize reference line for spawning biomass plot
+#'    ),
+#'    plot_abundance_at_age_options = list(
+#'      scale_amount = 1,         # custom scale for abundance-at-age plot
+#'      proportional = FALSE      # don't proportionalize abundance-at-age 
+#'    ),
+#'    plot_spr_options = list(
+#'      ylab = "Fishing Intensity (1-SPR)/(1-SPR_ref)" # custom Y label for SPR plot
+#'    ),
+#'    plot_fishing_mortality_options = list(
+#'      facet = "fleet",    # facet fishing mortality plot by "fleet"
+#'      group = "fleet"     # group fishing mortality plot by "fleet"
+#'    )
+#' )
+#' }
 save_all_plots <- function(
   dat,
   interactive = FALSE,
   figures_tables_dir = getwd(),
   # These three functions require having default parameters because of
   # no standard default modules
-  plot_recruitment_options = list( module = "TIME_SERIES"),
+  plot_recruitment_options = list(module = "TIME_SERIES"),
   plot_natural_mortality_options = list(module = "Natural_Mortality"),
   table_total_catch_options = list( module = "TIME_SERIES"),
   # All other functions can be modified with appropiate *_options
   # parameter lists.
   ...
 ) {
+  check_data(dat)
 
   all_params <- as.list(environment(), all=TRUE)
   make_rda <- TRUE
@@ -75,18 +108,18 @@ save_all_plots <- function(
     figures_dir = figures_tables_dir
   )
 
+  # all_R_files <- list.files(
+  #     file.path(here::here(), "R"),
+  # )
+  # plottab_function_files <- all_R_files[grepl("plot_|table_", all_R_files)]
+  # # Remove table_afsc_tier function for now
+  # plottab_function_files <- plottab_function_files[!grepl("afsc", plottab_function_files)]
+  helper_functions <- c("plot_timeseries", "plot_aa", "plot_obsvpred", "plot_error", "table_afsc_tier")
 
-  # TODO: should change this so that the plot/table functions are pulled directly
-  # from the stockplotr NAMESPACE, rather than based on the existecnce of an R
-  # file, so that multiple plotting functions can live in the same file.
-  all_R_files <- list.files(
-      file.path(here::here(), "R"),
-  )
-  plottab_function_files <- all_R_files[grepl("plot_|table_", all_R_files)]
-  # Remove table_afsc_tier function for now
-  plottab_function_files <- plottab_function_files[!grepl("afsc", plottab_function_files)]
-  
-  plottab_functions <- sub("\\.[^\\.]*$", "", plottab_function_files)
+  # plottab_functions <- sub("\\.[^\\.]*$", "", plottab_function_files)
+  all_functions <- ls(getNamespace("stockplotr"))
+  all_plottab_functions <- all_functions[grepl("plot_|table_", all_functions)]
+  plottab_functions <- all_plottab_functions[!(grepl(paste0(helper_functions, collapse="|"), all_plottab_functions))]
 
   for(i in seq_along(plottab_functions)){
       func_name <- plottab_functions[i]
@@ -101,7 +134,7 @@ save_all_plots <- function(
         names(func_pars)[which(names(func_pars)=="figures_dir")] <- "tables_dir"
       }
 
-      cli::cli_alert_info("Attempting to execute function: {func_name}")
+      cli::cli_alert_info("Exporting: {func_name} figure")
       tryCatch(
         {
           suppressMessages(
@@ -109,7 +142,7 @@ save_all_plots <- function(
           )
         },
         error = function(e) {
-            cli::cli_alert_danger("{func_name} failed to run.")
+            cli::cli_alert_danger("Failed to execute: {func_name}.")
             cli::cli_alert("Tip: check that your arguments are correct.")
             for(a in seq_along(func_specific_args)){
               arg_name = names(func_specific_args)[a]

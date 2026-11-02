@@ -77,6 +77,8 @@ plot_catch_comp <- function(
   make_rda = FALSE,
   figures_dir = getwd()
 ) {
+  check_data(dat)
+
   # Create label for abundance units in legend
   catch_label <- label_magnitude(
     label = "catch",

@@ -44,6 +44,8 @@ plot_recruitment <- function(
   make_rda = FALSE,
   figures_dir = getwd()
 ) {
+  check_data(dat)
+
   # TODO: Fix the unit label if scaling
   recruitment_label <- label_magnitude(
     label = "Recruitment",

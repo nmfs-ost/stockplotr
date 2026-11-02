@@ -59,6 +59,8 @@ table_index <- function(
   make_rda = FALSE,
   tables_dir = getwd()
 ) {
+  check_data(dat)
+
   # TODO: do group and facet need to be uncommented and updated?
   # Filter data for landings
   prepared_data <- filter_data(

@@ -57,6 +57,8 @@ plot_biomass <- function(
   interactive = TRUE,
   ...
 ) {
+  check_data(dat)
+
   # TODO: Fix the unit label if scaling. Maybe this is up to the user to do if
   #       they want something scaled then they have to supply a better unit name
   #       or we create a helper function to do this.

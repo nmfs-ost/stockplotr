@@ -142,3 +142,110 @@ test_that("save_all_plots returns error when plot not made", {
     unlink(fs::path(savedir, "figures"), recursive = T)
     unlink(fs::path(savedir, "tables"), recursive = T)
 })
+
+test_that("save_all_plots with custom plot options", {
+    save_all_plots(
+      stockplotr::example_data,
+      figures_tables_dir = getwd(),
+      interactive = FALSE,
+      plot_spawning_biomass_options = list(
+        ref_line = "target"
+      ),
+      plot_abundance_at_age_options = list(
+        scale_amount = 1000
+      )
+    )
+
+    # expect that the figures and tables dirs exist
+    expect_true(dir.exists(fs::path(getwd(), "figures")))
+    expect_true(dir.exists(fs::path(getwd(), "tables")))
+
+    # expect that the figures are all created with expected names
+    
+    expect_equal(
+      sort(list.files(fs::path(getwd(), "figures"))),
+      sort(fig_base_temp_files)
+    )
+
+    # expect that the tables are all created with expected names
+    expect_equal(
+      sort(list.files(fs::path(getwd(), "tables"))),
+      sort(tab_base_temp_files)
+    )
+
+    # erase temporary testing files
+    file.remove(fs::path(getwd(), "captions_alt_text.csv"))
+    file.remove(fs::path(getwd(), "key_quantities.csv"))
+    unlink(fs::path(getwd(), "figures"), recursive = T)
+    unlink(fs::path(getwd(), "tables"), recursive = T)
+})
+
+test_that("save_all_plots returns error when plot not made", {
+    save_all_plots(
+      stockplotr::example_data,
+      figures_tables_dir = getwd(),
+      interactive = FALSE,
+      plot_natural_mortality_options = list(
+        module = NULL
+      )
+    )
+
+    # expect that the figures and tables dirs exist
+    expect_true(dir.exists(fs::path(getwd(), "figures")))
+    expect_true(dir.exists(fs::path(getwd(), "tables")))
+
+    # expect that the figures are all created with expected names
+    # no natural_mortality_figure.rda as that throws and error
+    # and is not generated in this test.
+    expect_equal(
+      sort(list.files(fs::path(getwd(), "figures"))),
+      sort(fig_base_temp_files[which(!grepl("natural_mortality", fig_base_temp_files))])
+    )
+
+    # expect that the tables are all created with expected names
+    expect_equal(
+      sort(list.files(fs::path(getwd(), "tables"))),
+      sort(tab_base_temp_files)
+    )
+
+    # erase temporary testing files
+    file.remove(fs::path(getwd(), "captions_alt_text.csv"))
+    file.remove(fs::path(getwd(), "key_quantities.csv"))
+    unlink(fs::path(getwd(), "figures"), recursive = T)
+    unlink(fs::path(getwd(), "tables"), recursive = T)
+})
+
+test_that("save_all_plots returns error when dat is not valid", {
+    expect_error(
+      save_all_plots(
+        r4ss::SS_output(file.path(test_path("fixtures", "ss3_models"), "models", "Hake_2018", "Report.sso")),
+        figures_tables_dir = getwd(),
+        interactive = FALSE,
+        plot_natural_mortality_options = list(
+          module = NULL
+        )
+      )
+    )
+
+    expect_error(
+      save_all_plots(
+        data.frame(),
+        figures_tables_dir = getwd(),
+        interactive = FALSE,
+        plot_natural_mortality_options = list(
+          module = NULL
+        )
+      )
+    )
+
+    expect_error(
+      save_all_plots(
+        data.frame(label="label"),
+        figures_tables_dir = getwd(),
+        interactive = FALSE,
+        plot_natural_mortality_options = list(
+          module = NULL
+        )
+      )
+    )
+})

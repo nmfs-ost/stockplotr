@@ -29,6 +29,8 @@ table_projections <- function(
   make_rda = FALSE,
   tables_dir = getwd()
 ) {
+  check_data(dat)
+
   # check if catch in data else landings
   catch_lab <- ifelse(
     any(grepl("catch$", dat$label)),

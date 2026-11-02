@@ -41,6 +41,8 @@ plot_fishing_mortality <- function(
   interactive = TRUE,
   ...
 ) {
+  check_data(dat)
+
   orig_group <- group
   orig_facet <- facet
   # Filter out data for fishing mortality
