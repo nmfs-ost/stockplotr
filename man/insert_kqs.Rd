@@ -4,11 +4,15 @@
 \alias{insert_kqs}
 \title{Insert key quantities into the captions and alternative text file}
 \usage{
-insert_kqs(...)
+insert_kqs(..., dir = getwd())
 }
 \arguments{
 \item{...}{Key quantities whose values should be added to the
 exported "captions_alt_text.csv"}
+
+\item{dir}{String directory to write "captions_alt_text.csv" to.
+
+DEFAULT: getwd()}
 }
 \value{
 Exports a file ("captions_alt_text.csv") containing captions

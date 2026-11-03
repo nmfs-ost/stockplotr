@@ -4,16 +4,20 @@
 \alias{export_kqs}
 \title{Export updated key quantities template}
 \usage{
-export_kqs(...)
+export_kqs(..., dir = getwd())
 }
 \arguments{
 \item{...}{Key quantities whose values should be added to the
 exported "key_quantities.csv"}
+
+\item{dir}{String directory to write "key_quantities.csv" to.
+
+DEFAULT: getwd()}
 }
 \value{
 Exports a file based on key quantities template, with values
 added next to the names of the key quantities specified as ellipsis
-arguments. File is saved as "key_quantities.csv" to the working directory.
+arguments. File is saved as "key_quantities.csv" to the specified directory.
 }
 \description{
 Export updated key quantities template
@@ -22,7 +26,13 @@ Export updated key quantities template
 \dontrun{
 export_kqs(
   F.min,
-  F.max
+  F.max,
+)
+
+export_kqs(
+  F.min,
+  F.max,
+  dir = fs::path(getwd(), "plots")
 )
 }
 }
