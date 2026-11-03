@@ -376,10 +376,14 @@ fill_in_kqs <- function(df, ...) {
 #'
 #' @param ... Key quantities whose values should be added to the
 #' exported "key_quantities.csv"
+#' 
+#' @param dir String directory to write "key_quantities.csv" to.
+#' 
+#' DEFAULT: getwd()
 #'
 #' @returns Exports a file based on key quantities template, with values
 #' added next to the names of the key quantities specified as ellipsis
-#' arguments. File is saved as "key_quantities.csv" to the working directory.
+#' arguments. File is saved as "key_quantities.csv" to the specified directory.
 #' @seealso [fill_in_kqs()], [insert_kqs()]
 #'
 #' @examples \dontrun{
@@ -416,6 +420,10 @@ export_kqs <- function(..., dir=getwd()) {
 #'
 #' @param ... Key quantities whose values should be added to the
 #' exported "captions_alt_text.csv"
+#' 
+#' @param dir String directory to write "captions_alt_text.csv" to.
+#' 
+#' DEFAULT: getwd()
 #'
 #' @returns Exports a file ("captions_alt_text.csv") containing captions
 #' and alternative text for figures and tables, with key quantities inserted
