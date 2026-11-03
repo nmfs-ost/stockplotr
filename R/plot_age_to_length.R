@@ -17,6 +17,7 @@ plot_age_to_length_conversion <- function(
   group = NULL,
   facet = NULL,
   module = NULL,
+  unit_label = "cm",
   make_rda = FALSE,
   figures_dir = getwd(),
   interactive = TRUE,
@@ -149,8 +150,7 @@ plot_age_to_length_conversion <- function(
   # Filter data for spawning biomass
   prepared_data <- filter_data(
     dat = dat,
-    label_name = glue::glue("age_to_length_conversion"), 
-    group = group,
+    label_name = glue::glue("age_to_length_conversion"),
     facet = facet,
     module = module,
     interactive = interactive,
@@ -165,7 +165,6 @@ plot_age_to_length_conversion <- function(
   # process the data for grouping
   processing <- process_data(
     dat = prepared_data,
-    group = group,
     facet = facet
   )
   # variable <- processing[[1]]
@@ -174,8 +173,11 @@ plot_age_to_length_conversion <- function(
   if (!is.null(processing[[3]])) facet <- processing[[3]]
   if(group %in% c("age", "length_bins")){
     group <- NULL
+  } else {
+    facet <- c(facet, group)
+    group <- NULL
   }
-  if(facet %in% c("age", "length_bins")) {
+  if(any(facet %in% c("age", "length_bins"))) {
     facet <- facet[-grep("age|length_bins", facet)]
   }
   # Override grouping variable when there is only NA's
@@ -185,34 +187,32 @@ plot_age_to_length_conversion <- function(
 
 #Add plot_density()
 
-  length_bins <- unique(plot_data[["length_bins"]])
+  length_bins <- sort(as.numeric(unique(plot_data[["length_bins"]])))
   n_length_bins <- dplyr::n_distinct(plot_data[["length_bins"]])
 
-#TODO: create this function
   plt <- plot_density(
     dat = plot_data,
-    y = "length_bins", #length bin, not sure what its called yet
-    ylab = "Length bin",
-    group = group,
+    xlab = ifelse(is.null(unit_label), "Length bins", glue::glue("Length bins ({unit_label})")),
     n_length_bins = n_length_bins,
     # add check in case facet is returned as character(0)
-    facet = if (length(facet) > 0) facet else NULL,
-    ...
-  )
+    facet = if (length(facet) > 0) facet else NULL
+    # ...
+  ) 
+ 
 
  ### Make RDA ----
-  if (make_rda) {
+  # if (make_rda) {
 
-    #add any additional key quantities or processing needed before creating the RDA
+  #   #add any additional key quantities or processing needed before creating the RDA
 
-    create_rda(
-      object = final,
-      topic_label = "age_to_length_conversion",
-      fig_or_table = "figure",
-      dat = rp_dat,
-      dir = figures_dir
-    )
-  } #end make_rda
+  #   create_rda(
+  #     object = final,
+  #     topic_label = "age_to_length_conversion",
+  #     fig_or_table = "figure",
+  #     dat = rp_dat,
+  #     dir = figures_dir
+  #   )
+  # } #end make_rda
   # Output final plot
-  final
+  plt
 }
