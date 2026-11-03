@@ -398,6 +398,9 @@ export_kqs <- function(..., dir=getwd()) {
     cli::cli_alert_info("Key quantities text file (key_quantities.csv) exists. Newly calculated key quantities will be added to it.", wrap = TRUE)
     kqs <- utils::read.csv(file.path(dir, "key_quantities.csv"))
   } else {
+    if(!dir.exists(dir))
+      dir.create(dir)
+
     kqs <- utils::read.csv(
       system.file("resources", "key_quantity_template.csv", package = "stockplotr")
     )
@@ -441,6 +444,10 @@ insert_kqs <- function(..., dir=getwd()) {
     cli::cli_alert_info("Captions/alternative text file (captions_alt_text.csv) exists. Newly calculated key quantities will be added to it.", wrap = TRUE)
     caps_alttext <- utils::read.csv(fs::path(dir, "captions_alt_text.csv"))
   } else {
+    
+    if(!dir.exists(dir))
+      dir.create(dir)
+
     caps_alttext <- utils::read.csv(
       system.file("resources", "captions_alt_text_template.csv", package = "stockplotr")
     )
