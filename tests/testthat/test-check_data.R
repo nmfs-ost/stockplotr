@@ -8,9 +8,48 @@ test_that("check_data accepts converted-data structures", {
   expect_identical(dat, data.frame(label = "biomass", estimate = 1))
 })
 
+test_that("check_data accepts lists of converted-data structures", {
+  dat <- data.frame(label = "biomass", estimate = 1)
+  models <- list(first = dat, second = tibble::as_tibble(dat))
+
+  expect_no_error(check_data(list(dat)))
+  expect_no_error(check_data(unname(models)))
+  expect_no_error(check_data(models))
+  expect_no_error(check_data(list(dat, dat[0, ])))
+  expect_identical(withVisible(check_data(models)), list(value = NULL, visible = FALSE))
+  expect_identical(models, list(first = dat, second = tibble::as_tibble(dat)))
+})
+
+test_that("check_data rejects lists containing invalid elements", {
+  dat <- data.frame(label = "biomass", estimate = 1)
+  invalid_data <- list(
+    NULL,
+    1,
+    "biomass",
+    list(label = "biomass", estimate = 1),
+    list(dat),
+    matrix(c("biomass", "1"), nrow = 1,
+           dimnames = list(NULL, c("label", "estimate"))),
+    data.frame(),
+    data.frame(label = "biomass"),
+    data.frame(estimate = 1)
+  )
+
+  for (invalid_dat in invalid_data) {
+    for (models in list(list(dat, invalid_dat), list(invalid_dat, dat))) {
+      expect_error(
+        check_data(models),
+        "dat is not the appropriate format. Have you run `convert_output()`?",
+        fixed = TRUE
+      )
+    }
+  }
+})
+
 test_that("check_data rejects objects without the required structure", {
   invalid_data <- list(
     NULL,
+    list(),
     1,
     "biomass",
     list(label = "biomass", estimate = 1),
