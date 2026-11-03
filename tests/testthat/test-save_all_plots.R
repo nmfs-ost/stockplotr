@@ -54,10 +54,7 @@ test_that("save_all_plots works when all figures/tables are plotted", {
 
   # erase temporary testing files
   unlink(fs::path(savedir), recursive=TRUE)
-  # file.remove(fs::path(savedir, "captions_alt_text.csv"))
-  # file.remove(fs::path(savedir, "key_quantities.csv"))
-  # unlink(fs::path(savedir, "figures"), recursive = T)
-  # unlink(fs::path(savedir, "tables"), recursive = T)
+  
 })
 
 test_that("save_all_plots with custom plot options", {
