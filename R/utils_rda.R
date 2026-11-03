@@ -389,7 +389,13 @@ fill_in_kqs <- function(df, ...) {
 #' @examples \dontrun{
 #' export_kqs(
 #'   F.min,
-#'   F.max
+#'   F.max,
+#' )
+#' 
+#' export_kqs(
+#'   F.min,
+#'   F.max,
+#'   dir = fs::path(getwd(), "plots")
 #' )
 #' }
 export_kqs <- function(..., dir=getwd()) {
