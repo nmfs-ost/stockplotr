@@ -184,10 +184,10 @@ plot_biomass <- function(
       )
 
       # calculate & export key quantities
-      export_kqs(rel.B.min, rel.B.max)
+      export_kqs(rel.B.min, rel.B.max, dir=figures_dir)
 
       # Add key quantities to captions/alt text
-      insert_kqs(rel.B.min, rel.B.max)
+      insert_kqs(rel.B.min, rel.B.max, dir=figures_dir)
     } else {
       B.min <- calc_kqs(
         returned_kq = "B.min",
@@ -198,8 +198,8 @@ plot_biomass <- function(
         prepared_data = prepared_data
       )
 
-      export_kqs(B.min, B.max)
-      insert_kqs(B.min, B.max)
+      export_kqs(B.min, B.max, dir=figures_dir)
+      insert_kqs(B.min, B.max, dir=figures_dir)
     }
 
     B.ref.pt <- as.character(ref_line)
@@ -286,7 +286,8 @@ plot_biomass <- function(
       B.msy,
       B.terminal.est,
       B.terminal.min,
-      B.terminal.max
+      B.terminal.max, 
+      dir=figures_dir
     )
 
     insert_kqs(

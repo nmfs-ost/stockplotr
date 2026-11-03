@@ -257,16 +257,16 @@ plot_spawning_biomass <- function(
       )
 
       # calculate & export key quantities
-      export_kqs(rel.ssb.min, rel.ssb.max)
+      export_kqs(rel.ssb.min, rel.ssb.max, dir=figures_dir)
 
       # Add key quantities to captions/alt text
-      insert_kqs(rel.ssb.min, rel.ssb.max)
+      insert_kqs(rel.ssb.min, rel.ssb.max, dir=figures_dir)
     } else {
       ssb.min <- min(plot_data$estimate) |> round(digits = 3)
       ssb.max <- max(plot_data$estimate) |> round(digits = 3)
 
-      export_kqs(ssb.min, ssb.max)
-      insert_kqs(ssb.min, ssb.max)
+      export_kqs(ssb.min, ssb.max, dir=figures_dir)
+      insert_kqs(ssb.min, ssb.max, dir=figures_dir)
     }
 
     # Obtain relevant key quantities for captions/alt text
