@@ -60,7 +60,8 @@ Suggests:
     quarto,
     rmarkdown,
     testthat (>= 3.0.0),
-    r4ss
+Remotes:
+    r4ss/r4ss
 VignetteBuilder: 
     knitr
 Config/roxygen2/version: 8.1.1
