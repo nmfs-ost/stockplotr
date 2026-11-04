@@ -48,8 +48,9 @@ convert_output <- function(
   fleet_names = NULL,
   save_dir = NULL
 ) {
-  
-  if(any(grepl("Data_File|data_list", names(files)))){
+
+  # Is user inputs a single model file and doesn't wrap it as a list object
+  if(any(grepl("Data_File|data_list", names(files))) || is.character(files)){
     cli::cli_alert("`files` appears to represent a single model. Converting to list object.")
     files <- list(files)
   }
@@ -284,7 +285,13 @@ convert_output <- function(
       }
 
 
-      out_new <- out_new |> dplyr::mutate(model=model_name)
+      out_new <- out_new |> 
+          dplyr::mutate(
+              model=model_name,
+              year=as.character(year),
+              month=as.character(month),
+              block=as.character(block)
+            )
       return(tibble::tibble(out_new))
   })
 
