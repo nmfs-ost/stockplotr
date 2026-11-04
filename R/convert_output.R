@@ -49,6 +49,12 @@ convert_output <- function(
   save_dir = NULL
 ) {
   
+  if(any(grepl("Data_File|data_list", names(files)))){
+    cli::cli_alert("`files` appears to represent a single model. Converting to list object.")
+    files <- list(files)
+  }
+
+  
   processed <- purrr::imap(files, function(file, model_name){
       if (is.character(file) && grepl("Report.sso", file)) {
         lifecycle::deprecate_warn(
