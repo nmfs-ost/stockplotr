@@ -141,14 +141,14 @@ table_index <- function(
   if (make_rda == TRUE) {
     # Caption contains no key quantities for index table
     # So, export captions/alt text csv if absent
-    if (!file.exists(fs::path(getwd(), "captions_alt_text.csv"))) {
+    if (!file.exists(fs::path(tables_dir, "captions_alt_text.csv"))) {
       caps_alttext <- utils::read.csv(
         system.file("resources", "captions_alt_text_template.csv", package = "stockplotr")
       )
       # export df with captions and alt text to csv
       utils::write.csv(
         x = caps_alttext,
-        file = fs::path(getwd(), "captions_alt_text.csv"),
+        file = fs::path(tables_dir, "captions_alt_text.csv"),
         row.names = FALSE
       )
     }

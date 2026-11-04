@@ -155,7 +155,8 @@ plot_catch_comp <- function(
       caa.age.min,
       caa.age.max,
       tot.catch.min,
-      tot.catch.max
+      tot.catch.max,
+      dir=figures_dir
     )
 
     # Add key quantities to captions/alt text
@@ -165,7 +166,8 @@ plot_catch_comp <- function(
       caa.age.min,
       caa.age.max,
       tot.catch.min,
-      tot.catch.max
+      tot.catch.max,
+      dir=figures_dir
     )
 
     create_rda(
@@ -173,6 +175,7 @@ plot_catch_comp <- function(
       # get name of function and remove "plot_" from it
       topic_label = gsub("plot_", "", utils::tail(as.character(sys.call()[[1]]), n = 1)),
       fig_or_table = "figure",
+      dir=figures_dir,
       dat
     )
   }

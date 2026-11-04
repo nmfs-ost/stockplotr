@@ -170,10 +170,10 @@ table_total_catch <- function(
     tot.catch.units <- unit_label
 
     # calculate & export key quantities
-    export_kqs(tot.catch.units)
+    export_kqs(tot.catch.units, dir=tables_dir)
 
     # Add key quantities to captions/alt text
-    insert_kqs(tot.catch.units)
+    insert_kqs(tot.catch.units, dir=tables_dir)
 
     create_rda(
       object = final,

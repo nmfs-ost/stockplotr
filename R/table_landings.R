@@ -151,10 +151,10 @@ table_landings <- function(
       landings.units <- unit_label
 
       # calculate & export key quantities
-      export_kqs(landings.units)
+      export_kqs(landings.units, dir=tables_dir)
 
       # Add key quantities to captions/alt text
-      insert_kqs(landings.units)
+      insert_kqs(landings.units, dir=tables_dir)
 
       create_rda(
         object = final[[1]],

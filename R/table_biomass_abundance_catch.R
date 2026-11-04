@@ -171,14 +171,16 @@ table_biomass_abundance_catch <- function(
     export_kqs(
       biomass_abundance_catch.biomass.units,
       biomass_abundance_catch.abundance.units,
-      biomass_abundance_catch.catch.units
+      biomass_abundance_catch.catch.units,
+      dir=tables_dir
     )
 
     # Add key quantities to captions/alt text
     insert_kqs(
       biomass_abundance_catch.biomass.units,
       biomass_abundance_catch.abundance.units,
-      biomass_abundance_catch.catch.units
+      biomass_abundance_catch.catch.units,
+      dir=tables_dir
     )
 
     create_rda(

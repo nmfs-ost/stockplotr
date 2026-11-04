@@ -138,7 +138,8 @@ plot_spr <- function(
       spr.start.year,
       spr.end.year,
       spr.min,
-      spr.ref.pt
+      spr.ref.pt,
+      dir=figures_dir
     )
 
     # Add key quantities to captions/alt text
@@ -147,7 +148,8 @@ plot_spr <- function(
       spr.end.year,
       spr.min,
       spr.max,
-      spr.ref.pt
+      spr.ref.pt,
+      dir=figures_dir
     )
 
     create_rda(

@@ -46,7 +46,7 @@ After the final plot has been created within the function, key quantities are ca
 
 **NOTE**: The key quantities are exported to a file saved to your working directory ("key_quantities.csv") via `export_kqs()`.
 
-Next, the function `insert_kqs()` imports an empty or partially-filled template with captions and alternative text ("captions_alt_text_template.csv" or "captions_alt_text.csv", respectively), depending on if the user has already created a "captions_alt_text.csv" file in their working directory. The .csv file is imported as a dataframe.
+Next, the function `insert_kqs()` imports an empty or partially-filled template with captions and alternative text ("captions_alt_text_template.csv" or "captions_alt_text.csv", respectively), depending on if the user has already created a "captions_alt_text.csv" file in their figures/tables directory (specified by `figures_dir` (for figures) or `tables_dir` (for tables)). The .csv file is imported as a dataframe.
 
 The key quantities are substituted into the dataframe's appropriate placeholders. For example, "The y axis shows biomass in B.units, which spans from **B.min** to B.max." will changed to "The y axis shows biomass in B.units, which spans from **100** to B.max."
 

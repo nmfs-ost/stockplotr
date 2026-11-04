@@ -165,7 +165,8 @@ plot_recruitment <- function(
       recruitment.start.year,
       recruitment.end.year,
       recruitment.min,
-      recruitment.max
+      recruitment.max,
+      dir=figures_dir
     )
 
     # Add key quantities to captions/alt text
@@ -174,7 +175,8 @@ plot_recruitment <- function(
       recruitment.start.year,
       recruitment.end.year,
       recruitment.min,
-      recruitment.max
+      recruitment.max,
+      dir=figures_dir
     )
 
 

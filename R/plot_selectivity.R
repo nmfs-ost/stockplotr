@@ -160,7 +160,8 @@ plot_selectivity <- function(
       selectivity.x.max,
       selectivity.x,
       selectivity.start.year,
-      selectivity.end.year
+      selectivity.end.year,
+      dir=figures_dir
     )
 
     # Add key quantities to captions/alt text
@@ -171,7 +172,8 @@ plot_selectivity <- function(
       selectivity.x.max,
       selectivity.x,
       selectivity.start.year,
-      selectivity.end.year
+      selectivity.end.year,
+      dir=figures_dir
     )
 
 

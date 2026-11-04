@@ -166,7 +166,8 @@ plot_abundance_at_age <- function(
       pop.naa.age.min,
       pop.naa.age.max,
       pop.naa.fish.min,
-      pop.naa.fish.max
+      pop.naa.fish.max,
+      dir=figures_dir
     )
 
     # Add key quantities to captions/alt text
@@ -176,11 +177,13 @@ plot_abundance_at_age <- function(
       pop.naa.age.min,
       pop.naa.age.max,
       pop.naa.fish.min,
-      pop.naa.fish.max
+      pop.naa.fish.max,
+      dir=figures_dir
     )
 
     create_rda(
       object = plot,
+      dir = figures_dir,
       # get name of function and remove "plot_" from it
       topic_label = gsub("plot_", "", utils::tail(as.character(sys.call()[[1]]), n = 1)),
       fig_or_table = "figure",

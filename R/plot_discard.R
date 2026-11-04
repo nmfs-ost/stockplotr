@@ -130,7 +130,8 @@ plot_discard <- function(
       mod.fit.discards.start.year,
       mod.fit.discards.end.year,
       fleet.or.survey.name,
-      mod.fit.discards.units
+      mod.fit.discards.units,
+      dir=figures_dir
     )
 
     # Add key quantities to captions/alt text
@@ -140,7 +141,8 @@ plot_discard <- function(
       mod.fit.discards.start.year,
       mod.fit.discards.end.year,
       fleet.or.survey.name,
-      mod.fit.discards.units
+      mod.fit.discards.units,
+      dir=figures_dir
     )
 
     create_rda(
