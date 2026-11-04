@@ -20,7 +20,7 @@ test_that("convert_output works for SS3", {
   for (i in seq_along(models_to_test)) {
     # Ensure no errors occur while converting SS3 output
     expect_no_error(result <- convert_output(
-      file = file.path(models_to_test[i], "Report.sso")
+      file = r4ss::SS_output(file.path(models_to_test[i]))#file.path(models_to_test[i], "Report.sso")
     ))
 
     # Check that the result has exactly 35 columns
@@ -29,13 +29,14 @@ test_that("convert_output works for SS3", {
 
   # Test saving the output in a global environment
   output <- convert_output(
-    file = file.path(all_models[1], "Report.sso")
+    file = r4ss::SS_output(file.path(all_models[1]))
   )
 
   expect_equal(dim(output)[2], 35)
 })
 
 test_that("convert_output does not emit scalar case_when deprecation warning", {
+  # NOTE: This does not output warnings when converted through r4ss::SS_output
   expect_no_warning(convert_output(
     file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso")
   ))
@@ -46,7 +47,7 @@ test_that("convert_output saves model ss3 hake output file", {
   dir.create(fs::path("fixtures", "ss3_models_converted", "Hake_2018"), recursive = TRUE)
 
   convert_output(
-    file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
+    file = r4ss::SS_output(fs::path("fixtures", "ss3_models", "models", "Hake_2018")),
     save_dir = fs::path("fixtures", "ss3_models_converted", "Hake_2018", "std_output.rda")
   )
 
