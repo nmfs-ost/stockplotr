@@ -24,7 +24,7 @@ test_that("convert_output works for SS3", {
     ))
 
     # Check that the result has exactly 35 columns
-    expect_equal(dim(result)[2], 35)
+    expect_equal(dim(result)[2], 36)
   }
 
   # Test saving the output in a global environment
@@ -32,7 +32,7 @@ test_that("convert_output works for SS3", {
     file = file.path(all_models[1], "Report.sso")
   )
 
-  expect_equal(dim(output)[2], 35)
+  expect_equal(dim(output)[2], 36)
 })
 
 test_that("convert_output does not emit scalar case_when deprecation warning", {
@@ -92,14 +92,14 @@ test_that("r4ss::ss_output object is compatible.", {
   simple_r4ss <- readRDS(fs::path("fixtures", "r4ss_output", "simple_small", "simple_r4ss.rds"))
 
   expect_no_error(result <- convert_output(simple_r4ss))
-  expect_equal(dim(result)[2], 35)
+  expect_equal(dim(result)[2], 36)
 })
 
 test_that("URL input is compatible", {
   expect_no_error(result <- convert_output(
-    file = "https://raw.githubusercontent.com/pfmc-assessments/petrale/main/models/2023.a050.003_FIMS_case-study_wtatage/Report.sso"
+    files = "https://raw.githubusercontent.com/pfmc-assessments/petrale/main/models/2023.a050.003_FIMS_case-study_wtatage/Report.sso"
   ))
-  expect_equal(dim(result)[2], 35)
+  expect_equal(dim(result)[2], 36)
 })
 
 test_that("invalid URL input triggers an error", {
@@ -153,7 +153,7 @@ test_that("convert_output works for Rceattle", {
     model = "rceattle"
   ))
 
-  expect_equal(dim(from_path)[2], 35)
+  expect_equal(dim(from_path)[2], 36)
   expect_equal(from_path, from_object)
 
   # Every row says which module it came from.
