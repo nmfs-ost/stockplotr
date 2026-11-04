@@ -59,7 +59,8 @@ Suggests:
     knitr,
     quarto,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    r4ss
 VignetteBuilder: 
     knitr
 Config/roxygen2/version: 8.1.1
