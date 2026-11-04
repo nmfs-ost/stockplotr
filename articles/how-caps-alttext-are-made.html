@@ -211,8 +211,10 @@ saved to your working directory (“key_quantities.csv”) via
 partially-filled template with captions and alternative text
 (“captions_alt_text_template.csv” or “captions_alt_text.csv”,
 respectively), depending on if the user has already created a
-“captions_alt_text.csv” file in their working directory. The .csv file
-is imported as a dataframe.</p>
+“captions_alt_text.csv” file in their figures/tables directory
+(specified by <code>figures_dir</code> (for figures) or
+<code>tables_dir</code> (for tables)). The .csv file is imported as a
+dataframe.</p>
 <p>The key quantities are substituted into the dataframe’s appropriate
 placeholders. For example, “The y axis shows biomass in B.units, which
 spans from <strong>B.min</strong> to B.max.” will changed to “The y axis
