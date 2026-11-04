@@ -59,7 +59,7 @@ Suggests:
     knitr,
     quarto,
     rmarkdown,
-    testthat (>= 3.0.0),
+    testthat (>= 3.0.0)
 Remotes:
     r4ss/r4ss
 VignetteBuilder: 
