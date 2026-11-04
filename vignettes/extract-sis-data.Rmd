@@ -33,11 +33,11 @@ This process fits within the following workflow:
    a. Run `stockplotr::extract_sis_data()` to generate, populate, and export the templates with data originating from a converted model results file. At least one of the following `.rda` files must be present in the `figures/` and/or `tables/` folders:
       * `biomass_figure.rda`
       * `spawning_biomass_figure.rda`
-      * `abundance_at_age_figure.rda`
       * `fishing_mortality_figure.rda`
       * `index_figure.rda`
+      * `recruitment_figure.rda`
       * `total_catch_table.rda`  
-      Ideally, the `key_quantities.csv` file will also be present (in the `key_quantities_dir`).
+      The exported figures and tables can only contain one model per plot (i.e., an exported figure compare multiple models on the same plot). Ideally, the `key_quantities.csv` file will also be present (in the `key_quantities_dir`).
 
    b. Generate blank template files by running `asar::create_blank_sis()`.
 
@@ -68,9 +68,9 @@ This file contains metadata and identifiers for the assessment, as well as summa
 This file is formatted to contain time series data for the stock. The columns are as follows:
 
 * **Year**: Observation year.
-* **Category**: Time series category. Options include: "Biomass", "Spawners", "Recruitment (age 1)", "Fmort", "Index of Abundance", and "Catch".
-* **Primary**: Whether the category is a primary time series category ("Y" or "N"). The following categories can be primary: "Fmort", "Recruitment (age 1)", "Catch", and either "Biomass" OR "Spawners". This function will automatically set the Primary column to "Y" for the applicable time series in each of these categories, and ask the user to confirm which time series should be primary if both "Biomass" and "Spawners" are present. More time series can be added to the template after running `extract_sis_data()`; please see the [Provide additional time series data] section below for more information.
-* **Description**: Brief description (e.g., Description for "Fmort" is "F for Fully-Selected Fish").
+* **Category**: Time series category. Options include: "Biomass", "Spawners", "Recruitment", "Fmort", "Index", and "Catch".
+* **Primary**: Whether the category is a primary time series category ("Y" or "N"). The following categories can be primary: "Fmort", "Recruitment", "Catch", and either "Biomass" OR "Spawners". This function will automatically set the Primary column to "Y" for the applicable time series in each of these categories, and ask the user to confirm which time series should be primary if both "Biomass" and "Spawners" are present. More time series can be added to the template after running `extract_sis_data()`; please see the [Provide additional time series data] section below for more information.
+* **Description**: Brief description that should align with the units in sis_assmt_template.csv (e.g., Description for "Fmort" is "F for Fully-Selected Fish"). This field can/should cross-link to the basis field for Fmort (AS_F_BASIS) and Biomass/Spawners (AS_B_BASIS).
 * **Unit**: Unit of measurement.
 * **Value**: Value.
 
@@ -80,9 +80,9 @@ As the main purpose of this function is to automate the extraction of data into 
 
 * **Biomass**: `stockplotr::plot_biomass()`
 * **Spawning Biomass**: `stockplotr::plot_spawning_biomass()`
-* **Recruitment at Age 1**: `stockplotr::plot_abundance_at_age()`
+* **Recruitment**: `stockplotr::plot_recruitment()`
 * **Fishing Mortality**: `stockplotr::plot_fishing_mortality()`
-* **Index of Abundance**: `stockplotr::plot_index()`
+* **Index**: `stockplotr::plot_index()`
 * **Catch**: `stockplotr::table_total_catch()`
 
 ## Provide the path to the `key_quantities.csv` file
@@ -117,7 +117,7 @@ These values are extracted and inserted into the key_quantities.csv by running `
 | F.MSY.terminal.max | AS_FMSY_MAX |
 | F.MSY.terminal.min | AS_FMSY_MIN |
 
-* Units for the **Index of Abundance** and **Recruitment (age 1)** time series categories are set to *blank* and "Number of Fish", respectively.
+* Units for the **Index** and **Recruitment** time series categories are set to "Index" and "Number of Fish", respectively.
 
 ## Provide assessment data before or after running `extract_sis_data()` to populate additional fields
 
