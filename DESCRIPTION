@@ -58,6 +58,7 @@ Suggests:
     kableExtra,
     knitr,
     quarto,
+    r4ss,
     rmarkdown,
     testthat (>= 3.0.0)
 VignetteBuilder: 
