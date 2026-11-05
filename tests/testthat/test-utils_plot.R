@@ -28,8 +28,25 @@ make_utils_plot_multimodule_data <- function() {
   )
 }
 
-test_that("filter_data handles data frames and lists", {
+make_utils_plot_multimodel_data <- function() {
+  tibble::tibble(
+    label = c("biomass", "biomass", "biomass", "biomass_msy", "biomass_unfished"),
+    estimate = c(100, 120, 140, 110, 200),
+    module_name = c("TIME_SERIES", "TIME_SERIES", "TIME_SERIES", "TIME_SERIES", "TIME_SERIES"),
+    year = c(2000, 2001, 2002, NA, NA),
+    fleet = c("fleet_a", "fleet_a", "fleet_b", NA, NA),
+    age = c(1, 2, 3, NA, NA),
+    season = c("spring", "spring", "fall", NA, NA),
+    uncertainty = c(10, 10, 10, NA, NA),
+    uncertainty_label = c("se", "se", "se", NA, NA),
+    era = c("time", "time", "time", "time", "time"),
+    model = c("model_one", "model_one", "model_two", "model_two", "model_two")
+  )
+}
+
+test_that("filter_data handles data frames", {
   dat <- make_utils_plot_data()
+  mm_dat <- make_utils_plot_multimodel_data()
 
   filtered <- filter_data(
     dat = dat,
@@ -42,7 +59,7 @@ test_that("filter_data handles data frames and lists", {
   expect_equal(unique(filtered$model), "1")
 
   filtered_list <- filter_data(
-    dat = list(model_one = dat, model_two = dat),
+    dat = mm_dat,
     label_name = "biomass",
     geom = "point",
     interactive = FALSE
