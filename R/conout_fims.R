@@ -96,21 +96,14 @@ conout_fims <- function(file, out_new, start_year = NULL) {
   is_data <- !is.na(stream) & has_data %in% TRUE
   obs_rows <- base[is_data & !is.na(observed), , drop = FALSE]
   if (nrow(obs_rows) > 0) {
-    is_obs <- is_data & !is.na(observed)
-    sigma <- exp(suppressWarnings(as.numeric(col("log_sd")))[is_obs])
-    # A lognormal sigma is on the log scale; report the CV of the observation
-    lognormal <- grepl("^(d?lnorm|log_?normal)$", col("distribution")[is_obs], ignore.case = TRUE)
-    obs_rows$label <- paste0(stream[is_obs], "_observed")
-    obs_rows$estimate <- observed[is_obs]
-    obs_rows$uncertainty <- ifelse(lognormal, sqrt(exp(sigma^2) - 1), sigma)
-    obs_rows$uncertainty_label <- dplyr::case_when(
-      is.na(sigma) ~ NA_character_,
-      lognormal ~ "cv",
-      TRUE ~ "se"
-    )
+    log_sd <- suppressWarnings(as.numeric(col("log_sd")))[is_data & !is.na(observed)]
+    obs_rows$label <- paste0(stream[is_data & !is.na(observed)], "_observed")
+    obs_rows$estimate <- observed[is_data & !is.na(observed)]
+    obs_rows$uncertainty <- exp(log_sd)
+    obs_rows$uncertainty_label <- ifelse(is.na(log_sd), NA_character_, "se")
     obs_rows$initial <- NA_real_
     # Stock Synthesis reports the negative log-likelihood of each observation
-    obs_rows$likelihood <- -suppressWarnings(as.numeric(col("likelihood")))[is_obs]
+    obs_rows$likelihood <- -suppressWarnings(as.numeric(col("likelihood")))[is_data & !is.na(observed)]
   }
   pred_rows <- base[is_data, , drop = FALSE]
   pred_rows$label <- paste0(stream[is_data], "_predicted")
