@@ -12,7 +12,7 @@ plot_index(
   interactive = TRUE,
   module = NULL,
   focus = NULL,
-  interval = NULL,
+  interval = 0.95,
   log = FALSE,
   relative = FALSE,
   make_rda = FALSE,
@@ -62,8 +62,8 @@ module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 Default: NULL}
 
 \item{interval}{Number. Coverage of intervals around the observed index
-based on its observation error (e.g., 0.95), drawn as vertical lines. NULL
-draws no intervals.
+based on its observation error (e.g., 0.95), drawn as vertical lines.
+Defaults to 0.95; NULL draws no intervals.
 
 Default: NULL}
 
