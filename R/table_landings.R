@@ -148,13 +148,13 @@ table_landings <- function(
   if (make_rda == TRUE) {
     # Obtain relevant key quantities for captions/alt text
     landings.units <- unit_label
-    
+
     # calculate & export key quantities
-    export_kqs(landings.units, dir=tables_dir)
-    
+    export_kqs(landings.units, dir = tables_dir)
+
     # Add key quantities to captions/alt text
-    insert_kqs(landings.units, dir=tables_dir)
-    
+    insert_kqs(landings.units, dir = tables_dir)
+
     create_rda(
       object = final[[1]],
       # get name of function and remove "table_" from it
@@ -166,6 +166,6 @@ table_landings <- function(
       table_df = final
     )
   }
-  
+
   final
 }

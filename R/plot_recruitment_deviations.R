@@ -98,7 +98,7 @@ plot_recruitment_deviations <- function(
       recruit.dev.end.year,
       recruit.dev.min,
       recruit.dev.max,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     # Add key quantities to captions/alt text
@@ -107,7 +107,7 @@ plot_recruitment_deviations <- function(
       recruit.dev.end.year,
       recruit.dev.min,
       recruit.dev.max,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     create_rda(

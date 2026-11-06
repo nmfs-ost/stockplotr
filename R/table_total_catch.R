@@ -60,9 +60,11 @@ table_total_catch <- function(
   # Filter data for catch
   prepared_data <- filter_data(
     dat = dat |>
-      dplyr::filter(!is.na(year),
-                    !is.na(estimate),
-                    label %in% c("catch_retained", "catch_dead", "catch_selected", "catch")),
+      dplyr::filter(
+        !is.na(year),
+        !is.na(estimate),
+        label %in% c("catch_retained", "catch_dead", "catch_selected", "catch")
+      ),
     label_name = "^catch",
     geom = "line",
     era = era,
@@ -170,10 +172,10 @@ table_total_catch <- function(
     tot.catch.units <- unit_label
 
     # calculate & export key quantities
-    export_kqs(tot.catch.units, dir=tables_dir)
+    export_kqs(tot.catch.units, dir = tables_dir)
 
     # Add key quantities to captions/alt text
-    insert_kqs(tot.catch.units, dir=tables_dir)
+    insert_kqs(tot.catch.units, dir = tables_dir)
 
     create_rda(
       object = final,

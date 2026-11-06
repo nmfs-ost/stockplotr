@@ -1,7 +1,7 @@
 #' Plot spawning potential ratio (SPR)
 #'
 #' @inheritParams plot_spawning_biomass
-#' 
+#'
 #' @param ylab String. Y-axis label to show.
 #'
 #' @returns A plot showing spawning potential ratio (SPR).
@@ -48,13 +48,13 @@ plot_spr <- function(
   ...
 ) {
   check_data(dat)
-  
+
   # Filter data for spr
   prepared_data <- filter_data(
     dat = dat,
     label_name = "spr",
     geom = geom,
-    #TODO: change this to era once stockplotr::example_data updated
+    # TODO: change this to era once stockplotr::example_data updated
     era = NULL,
     group = group,
     facet = facet,
@@ -64,19 +64,19 @@ plot_spr <- function(
   ) |>
     # filter NA from year
     dplyr::filter(!is.na(year))
-  
-  if(nrow(prepared_data)==0){
+
+  if (nrow(prepared_data) == 0) {
     # We could potentially make this more informative if we know the model type
     # by reporting the common MODULE used by other packages (e.g., DERIVED_QUANTITIES
     # for SS3 models, or t.series for BAM models).
     cli::cli_alert(glue::glue("There is no data available to be plotted. Try selecting a different module."))
   }
-  
+
   # Process data
   processed_data <- process_data(
     dat = prepared_data,
     group = group,
-    facet = facet#
+    facet = facet #
     # method = "sum"
   )
   prepared_data <- processed_data[[1]]
@@ -94,7 +94,7 @@ plot_spr <- function(
   if (!is.null(group)) {
     if (group %notin% colnames(prepared_data)) group <- NULL
   }
-  
+
   # inital base plot
   plt <- plot_timeseries(
     dat = prepared_data,
@@ -105,10 +105,14 @@ plot_spr <- function(
     facet = facet,
     ...
   ) +
-    ggplot2::geom_hline(yintercept = 1,
-                        color = "grey") +
-    ggplot2::geom_hline(yintercept = 0,
-                        color = "grey") +
+    ggplot2::geom_hline(
+      yintercept = 1,
+      color = "grey"
+    ) +
+    ggplot2::geom_hline(
+      yintercept = 0,
+      color = "grey"
+    ) +
     add_reference_line(
       dat = dat,
       ref_line = ref_line,
@@ -116,7 +120,7 @@ plot_spr <- function(
       scale_amount = 1
     ) +
     theme_noaa()
-  
+
 
   if (length(unique(prepared_data$group_var)) == 1) {
     plt <- plt + ggplot2::theme(legend.position = "none")
@@ -126,20 +130,20 @@ plot_spr <- function(
   if (make_rda) {
     # TODO: Update caption, alt text, and quantities once plot is finalized
     # Obtain relevant key quantities for captions/alt text
-    
+
     spr.start.year <- min(prepared_data$year)
     spr.end.year <- max(prepared_data$year)
     spr.min <- min(prepared_data$estimate) |> round(digits = 3)
     spr.max <- max(prepared_data$estimate) |> round(digits = 3)
     spr.ref.pt <- as.character(ref_line)
-    
+
     # calculate & export key quantities
     export_kqs(
       spr.start.year,
       spr.end.year,
       spr.min,
       spr.ref.pt,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     # Add key quantities to captions/alt text
@@ -149,7 +153,7 @@ plot_spr <- function(
       spr.min,
       spr.max,
       spr.ref.pt,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     create_rda(
