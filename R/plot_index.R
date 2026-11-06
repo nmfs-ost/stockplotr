@@ -63,8 +63,8 @@ plot_index <- function(
     interactive = interactive,
     module = module
   )
-  if (unit_label != "" && !is.na(unique(prepared_data$unit))) unit_label <- unique(prepared_data$unit)
-  if (is.na(unit_label)) {
+  if (!is.null(unit_label) && !is.na(unique(prepared_data$unit))) unit_label <- unique(prepared_data$unit)
+  if (is.na(unit_label) || is.null(unit_label)) {
     cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
     unit_label <- ""
   }

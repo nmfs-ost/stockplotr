@@ -125,14 +125,16 @@ plot_stock_recruitment <- function(
   # Labs
   if (is.null(recruitment_label)) {
     recruitment_label <- unique(recruitment$unit)
-    if (is.na(recruitment_label)) {
+    recruitment_label <- recruitment_label[!is.na(recruitment_label)]
+    if (is.na(recruitment_label) || is.null(recruitment_label))  {
       cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'recruitment_label' argument.")
       recruitment_label <- ""
     }
   }
   if (is.null(spawning_biomass_label)) {
     spawning_biomass_label <- unique(sb$unit)
-    if (is.na(spawning_biomass_label)) {
+    spawning_biomass_label <- spawning_biomass_label[!is.na(spawning_biomass_label)]
+    if (is.na(spawning_biomass_label) || is.null(spawning_biomass_label)) {
       cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'spawning_biomass_label' argument.")
       spawning_biomass_label <- ""
     }
@@ -233,6 +235,11 @@ plot_stock_recruitment <- function(
       dir = figures_dir
     )
   }
+  
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+  
   final +
     ggplot2::scale_x_continuous(
       labels = scales::label_comma()

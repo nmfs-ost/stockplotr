@@ -306,6 +306,11 @@ plot_spawning_biomass <- function(
       scale_amount = scale_amount
     )
   }
+  
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+  
   # Output final plot
   final
 }
