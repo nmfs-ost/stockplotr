@@ -10,7 +10,9 @@ test_that("table_biomass_abundance_catch generates plots without errors", {
   # expect error-free plot with many arguments
   expect_no_error(
     table_biomass_abundance_catch(stockplotr::example_data,
-      unit_label = c("biomass" = "kg", "abundance" = "hundreds of fish", "catch" = "kg"),
+      biomass_label = "kg",
+      abundance_label = "g",
+      catch_label = "t",
       module = c("TIME_SERIES", "CATCH", "TIME_SERIES"),
       era = "fore",
       interactive = FALSE,
@@ -32,20 +34,6 @@ test_that("table_biomass_abundance_catch generates plots without errors", {
     "gt_tbl"
   )
 })
-
-# test_that("rda file made when indicated", {
-#   # export rda
-#   table_biomass_abundance_catch(
-#     dat = stockplotr::example_data,
-#     module = c("TIME_SERIES", "CATCH", "TIME_SERIES"),
-#     interactive = FALSE,
-#     make_rda = TRUE,
-#     tables_dir = getwd()
-#   )
-
-#   # expect that both tables dir and the biomass_abundance_catch_table.rda file exist
-#   check_and_remove_tmp_files("biomass_abundance_catch_table.rda", figs_or_tables="tables")
-# })
 
 test_that("table_biomass_abundance_catch generates error with incorrect module", {
   # expect error
