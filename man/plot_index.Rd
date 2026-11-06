@@ -14,6 +14,7 @@ plot_index(
   focus = NULL,
   interval = NULL,
   log = FALSE,
+  relative = FALSE,
   make_rda = FALSE,
   figures_dir = getwd(),
   ...
@@ -72,6 +73,15 @@ intervals are symmetric.
 
 Default: FALSE}
 
+\item{relative}{Logical. TRUE/FALSE; divide each fleet's observed and
+predicted index (and intervals) by the mean of its observed index, and plot
+all fleets on one panel, colored by fleet. Indices with conflicting trends
+(data conflicts) are a common cause of poor fits and are easiest to see
+this way (\code{r4ss::SSplotIndices()} subplot 9). Any \code{group} other than
+"fleet" is added to \code{facet}.
+
+Default: FALSE}
+
 \item{make_rda}{Logical. TRUE/FALSE; indicate whether to save the object and
 make an automated caption and alternative text in the form of an \code{rda} object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
@@ -118,6 +128,12 @@ plot_index(
   dat = stockplotr::example_data,
   interval = 0.95,
   log = TRUE,
+  interactive = FALSE
+)
+# All indices relative to their means on one panel
+plot_index(
+  dat = stockplotr::example_data,
+  relative = TRUE,
   interactive = FALSE
 )
 

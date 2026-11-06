@@ -89,3 +89,47 @@ test_that("plot_index intervals work for FIMS output", {
   rows <- est[est$label == "index_expected" & !is.na(est$observed), ]
   expect_equal(ints$estimate_lower, rows$observed * exp(-stats::qnorm(0.975) * exp(rows$log_sd)))
 })
+
+test_that("plot_index can plot all indices relative to their means", {
+  p <- plot_index(stockplotr::example_data, relative = TRUE, interval = 0.95, interactive = FALSE)
+  b <- ggplot2::ggplot_build(p)
+  # One panel, with fleets shown by color
+  expect_equal(length(unique(b$layout$layout$PANEL)), 1)
+  expect_equal(p$labels$y, "Index relative to its mean")
+  expect_s3_class(p$layers[[1]]$geom, "GeomHline")
+
+  # Observed values average one for each fleet, and the predicted index and
+  # intervals are scaled by the same mean
+  pts <- p$layers[[3]]$data
+  obs <- pts[pts$label == "index_observed", ]
+  expect_equal(as.vector(tapply(obs$estimate, obs$fleet, mean)), c(1, 1))
+  raw <- stockplotr::example_data[stockplotr::example_data$label %in% c("index_observed", "index_predicted"), ]
+  tri <- raw[raw$fleet == "Triennial", ]
+  tri_mean <- mean(tri$estimate[tri$label == "index_observed"])
+  pred <- p$layers[[4]]$data
+  expect_equal(
+    sort(pred$estimate[pred$fleet == "Triennial"]),
+    sort(tri$estimate[tri$label == "index_predicted"] / tri_mean)
+  )
+  # Intervals keep their width relative to each observation
+  ints <- p$layers[[2]]$data
+  ints0 <- plot_index(stockplotr::example_data, interval = 0.95, interactive = FALSE)$layers[[1]]$data
+  ints <- ints[order(ints$fleet, ints$year), ]
+  ints0 <- ints0[order(ints0$fleet, ints0$year), ]
+  expect_equal(ints$estimate_lower / ints$estimate, ints0$estimate_lower / ints0$estimate)
+  expect_no_error(b)
+
+  # Survey months that are nested within fleets do not split the panel
+  p <- suppressMessages(plot_index(stockplotr::pollock, relative = TRUE, interactive = FALSE))
+  expect_equal(length(unique(ggplot2::ggplot_build(p)$layout$layout$PANEL)), 1)
+
+  # Works on a log scale, with one fleet, and with FIMS output
+  p <- plot_index(stockplotr::example_data, relative = TRUE, log = TRUE, interactive = FALSE)
+  expect_equal(p$labels$y, "Index relative to its mean (log scale)")
+  expect_no_error(ggplot2::ggplot_build(p))
+  expect_no_error(ggplot2::ggplot_build(suppressMessages(plot_index(stockplotr::ss3_simple, relative = TRUE, interactive = FALSE))))
+  est <- readRDS(test_path("fixtures", "fims_output", "fims_estimates.rds"))
+  fims <- suppressMessages(convert_output(est, model = "fims", start_year = 2001))
+  p <- suppressMessages(plot_index(fims, relative = TRUE, interactive = FALSE))
+  expect_equal(mean(p$layers[[2]]$data$estimate[p$layers[[2]]$data$label == "index_observed"]), 1)
+})
