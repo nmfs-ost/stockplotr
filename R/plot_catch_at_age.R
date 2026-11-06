@@ -1,4 +1,4 @@
-#' Plot catch composition
+#' Plot catch-at-age
 #'
 #' @inheritParams plot_abundance_at_age
 #' @param unit_label String. Units of catch used to label the axis
@@ -32,7 +32,7 @@
 #' If the interactive and >1 module_name is found, user will select the
 #' module_name in the console. @seealso [filter_data()]
 #'
-#' @returns A plot showing catch or landings composition.
+#' @returns A plot showing catch or landings at age
 #'
 #' @details This plot is made only when catch or landings are explicitly named
 #' in the output file. The current plot function does not combine all sources of
@@ -46,7 +46,7 @@
 #'
 #' @export
 #' @examples
-#' plot_catch_comp(
+#' plot_catch_at_age(
 #'   dat = stockplotr:::example_data,
 #'   facet = "fleet",
 #'   unit_label = "mt",
@@ -56,7 +56,7 @@
 #'   figures_dir = getwd()
 #' )
 #'
-#' plot_catch_comp(
+#' plot_catch_at_age(
 #'   dat = stockplotr:::example_data,
 #'   facet = "none",
 #'   unit_label = "mt",
@@ -65,7 +65,7 @@
 #'   era = "fore",
 #'   proportional = FALSE
 #' )
-plot_catch_comp <- function(
+plot_catch_at_age <- function(
   dat,
   facet = NULL,
   era = "time",
