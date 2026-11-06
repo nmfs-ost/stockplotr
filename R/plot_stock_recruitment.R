@@ -126,14 +126,14 @@ plot_stock_recruitment <- function(
   if (is.null(recruitment_label)) {
     recruitment_label <- unique(recruitment$unit)
     if (is.na(recruitment_label)) {
-      cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+      cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'recruitment_label' argument.")
       recruitment_label <- ""
     }
   }
   if (is.null(spawning_biomass_label)) {
     spawning_biomass_label <- unique(sb$unit)
     if (is.na(spawning_biomass_label)) {
-      cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+      cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'spawning_biomass_label' argument.")
       spawning_biomass_label <- ""
     }
   }

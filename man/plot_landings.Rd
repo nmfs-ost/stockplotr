@@ -30,7 +30,7 @@ in \code{ref_line} is used to plot a reference line or calculate relative spawni
 \item{unit_label}{String. Spawning biomass unit as indicated from the data.
 When setting a unit of pounds please use one of the following keywords:
 "lbs", "pounds", "lb". For example "1000s of lbs" would still be recognized
-as pounds. Do not set unit label to the desired order of magnitude rather the
+as pounds. Do not set unit_label to the desired order of magnitude, rather the
 unit label reflected in the data. Please refer to the argument \code{scale_amount}.
 
 Default: NULL}

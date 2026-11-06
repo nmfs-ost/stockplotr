@@ -2,9 +2,17 @@
 #'
 #' @inheritParams plot_recruitment
 #'
-#' @param unit_label Character vector. Abbreviated unit label for each quantity
+#' @param biomass_label String. Units for biomass
 #'
-#' Default: c("biomass" = "mt", "abundance" = "fish", "catch" = "mt")
+#' Default: NULL
+#'
+#' @param abundance_label String. Units for abundance
+#'
+#' Default: NULL
+#'
+#' @param catch_label String. Units for catch
+#'
+#' Default: NULL
 #'
 #' @param group A string of a single column that groups the data.
 #'
@@ -42,13 +50,17 @@
 #' table_biomass_abundance_catch(stockplotr::example_data)
 #'
 #' table_biomass_abundance_catch(stockplotr::example_data,
-#'   unit_label = c("biomass" = "kg", "abundance" = "eggs", "catch" = "kg"),
+#'   biomass_label = "kg",
+#'   abundance_label = "eggs",
+#'   catch_label = "kg",
 #'   module = c("TIME_SERIES", "CATCH", "TIME_SERIES"),
 #'   interactive = FALSE
 #' )
 table_biomass_abundance_catch <- function(
   dat,
-  unit_label = c("biomass" = "mt", "abundance" = "fish", "catch" = "mt"),
+  biomass_label = NULL,
+  abundance_label = NULL,
+  catch_label = NULL,
   era = NULL,
   interactive = TRUE,
   group = NULL,
@@ -61,10 +73,14 @@ table_biomass_abundance_catch <- function(
   check_data(dat)
 
   named_vec <- c(
-    "^biomass$" = unit_label[[1]],
-    "^abundance" = unit_label[[2]],
-    "catch$|landings_observed" = unit_label[[3]]
+    "^biomass$" = "biomass",
+    "^abundance" = "abundance",
+    "catch$|landings_observed" = "catch"
   )
+  
+  biomass_abundance_catch.biomass.units <- NA
+  biomass_abundance_catch.abundance.units <- NA
+  biomass_abundance_catch.catch.units <- NA
 
   # Aiming for totals
   # iterate through label_names
@@ -81,9 +97,7 @@ table_biomass_abundance_catch <- function(
         module = module,
         scale_amount = 1,
         interactive = interactive
-      ) #|>
-      # dplyr::mutate(estimate = round(as.numeric(estimate), digits = 0)) |>
-      # dplyr::mutate(uncertainty = round(as.numeric(uncertainty), digits = 2))
+      ) 
 
       uncertainty_label <- ifelse(
         is.na(unique(filtered_data$uncertainty_label)),
@@ -101,6 +115,7 @@ table_biomass_abundance_catch <- function(
             estimate_lower = mean(as.numeric(estimate_lower), na.rm = TRUE),
             uncertainty_label = unique(uncertainty_label),
             uncertainty = mean(uncertainty, na.rm = TRUE),
+            unit = unique(unit),
             .by = c(year, model, label)
           ) # |>
         # dplyr::ungroup()
@@ -140,12 +155,35 @@ table_biomass_abundance_catch <- function(
 
       data <- processed_data[[1]]
       group <- processed_data[[2]]
+      
+      # Labs
+      # get unit label for biomass, abundance, and catch if not NULL
+      unit_name <- named_vec[grep(x, names(named_vec), fixed = TRUE)][[1]]
+      if (is.null(get(paste0(unit_name, "_label")))) {
+        unit_label <- filtered_data |>
+          dplyr::filter(grepl(x, unit_name),
+                        !is.na(unit)) |>
+          dplyr::pull(unit) |>
+          unique()
+        if (is.na(unit_label) | length(unit_label) == 0) {
+          cli::cli_alert_warning("No unit label found in the data for {unit_name}. Please provide a unit label using the '{unit_name}_label' argument.")
+          unit_label <- ""
+        }
+      } else {
+        unit_label <- get(paste0(unit_name, "_label"))
+      }
+      
+      # Obtain relevant key quantities for captions/alt text
+      idx <- match(x, names(named_vec)[1:3])
+      if (identical(idx, 1L)) biomass_abundance_catch.biomass.units <<- unit_label
+      if (identical(idx, 2L)) biomass_abundance_catch.abundance.units <<- unit_label
+      if (identical(idx, 3L)) biomass_abundance_catch.catch.units <<- unit_label
 
       # merge data with uncertainty and unit labels
       merge_error(
         table_data = data,
         id_col_vals = group,
-        unit_label = named_vec[grep(x, names(named_vec), fixed = TRUE)][[1]],
+        unit_label = unit_label,
         uncert_lab = uncertainty_label
       )[[1]]
     }
@@ -159,14 +197,9 @@ table_biomass_abundance_catch <- function(
     gt::gt()
 
   final_table <- theme_table(combine_data)
-
+  
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
-    # Obtain relevant key quantities for captions/alt text
-    biomass_abundance_catch.biomass.units <- unit_label[[1]]
-    biomass_abundance_catch.abundance.units <- unit_label[[2]]
-    biomass_abundance_catch.catch.units <- unit_label[[3]]
-
     # calculate & export key quantities
     export_kqs(
       biomass_abundance_catch.biomass.units,
@@ -195,5 +228,11 @@ table_biomass_abundance_catch <- function(
     )
   }
 
+  rm(biomass_abundance_catch.biomass.units, biomass_abundance_catch.abundance.units, biomass_abundance_catch.catch.units)
+  
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+  
   final_table
 }
