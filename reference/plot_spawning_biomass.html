@@ -18,7 +18,7 @@ also be made relative to this reference line rather than in absolute units."><!-
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">stockplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.16.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.16.0.9000</span>
       </span>
     </div>
 
@@ -94,7 +94,7 @@ also be made relative to this reference line rather than in absolute units."><!-
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Plot spawning biomass (SB)</h1>
-    <small class="dont-index">Source: <a href="https://github.com/nmfs-ost/stockplotr/blob/v0.16.0/R/plot_spawning_biomass.R" class="external-link"><code>R/plot_spawning_biomass.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/nmfs-ost/stockplotr/blob/main/R/plot_spawning_biomass.R" class="external-link"><code>R/plot_spawning_biomass.R</code></a></small>
     <div class="hidden name"><code>plot_spawning_biomass.Rd</code></div>
     </div>
 
@@ -110,9 +110,9 @@ also be made relative to this reference line rather than in absolute units.</p>
 <span>  group <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  facet <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ref_line <span class="op">=</span> <span class="st">"msy"</span>,</span>
-<span>  unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
+<span>  unit_label <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  era <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  lbs <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  lbs <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu">deprecate</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  module <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  scale_amount <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  relative <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -165,8 +165,12 @@ If the reference point is not found in the data, set ref_line = c("name" = value
 
 
 <dt id="arg-unit-label">unit_label<a class="anchor" aria-label="anchor" href="#arg-unit-label"></a></dt>
-<dd><p>String. Spawning biomass unit.</p>
-<p>Default: "mt"</p></dd>
+<dd><p>String. Spawning biomass unit as indicated from the data.
+When setting a unit of pounds please use one of the following keywords:
+"lbs", "pounds", "lb". For example "1000s of lbs" would still be recognized
+as pounds. Do not set unit_label to the desired order of magnitude, rather the
+unit label reflected in the data. Please refer to the argument <code>scale_amount</code>.</p>
+<p>Default: NULL</p></dd>
 
 
 <dt id="arg-era">era<a class="anchor" aria-label="anchor" href="#arg-era"></a></dt>
@@ -176,9 +180,9 @@ If the reference point is not found in the data, set ref_line = c("name" = value
 
 
 <dt id="arg-lbs">lbs<a class="anchor" aria-label="anchor" href="#arg-lbs"></a></dt>
-<dd><p>Logical. TRUE/FALSE; indicate whether to convert the y-axis values from
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Logical. TRUE/FALSE; indicate whether to convert the y-axis values from
 kilograms to pounds. The default units match the default in the
-unit_label argument - 'mt'.</p>
+unit_label argument - 'mt'. – Deprecate</p>
 <p>Default: <code>FALSE</code></p></dd>
 
 
@@ -191,7 +195,10 @@ module_name in the console. @seealso <code><a href="filter_data.html">filter_dat
 
 
 <dt id="arg-scale-amount">scale_amount<a class="anchor" aria-label="anchor" href="#arg-scale-amount"></a></dt>
-<dd><p>Number. A number to scale the y-axis values.</p>
+<dd><p>Number. A number to scale the y-axis values. If &gt; 1, the
+magnitude of the scale amount will be added to the unit label
+(e.g. scale_amount = 1000 with a unit label of "1000s of lbs" will result
+in "thousands of 1000s of lbs")</p>
 <p>Default: 1</p></dd>
 
 
@@ -247,7 +254,7 @@ use them in groupings and/or facetting. @seealso <code><a href="process_data.htm
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">plot_spawning_biomass</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va"><a href="example_data.html">example_data</a></span>,</span></span>
+<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">::</span><span class="va"><a href="example_data.html">example_data</a></span>,</span></span>
 <span class="r-in"><span>  geom <span class="op">=</span> <span class="st">"line"</span>,</span></span>
 <span class="r-in"><span>  ref_line <span class="op">=</span> <span class="st">"msy"</span>,</span></span>
 <span class="r-in"><span>  unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span></span>
@@ -261,7 +268,7 @@ use them in groupings and/or facetting. @seealso <code><a href="process_data.htm
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">shape</span> : <span style="color: #0000BB;">"Growth_pattern"</span></span>
 <span class="r-plt img"><img src="plot_spawning_biomass-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">plot_spawning_biomass</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va"><a href="example_data.html">example_data</a></span>,</span></span>
+<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">::</span><span class="va"><a href="example_data.html">example_data</a></span>,</span></span>
 <span class="r-in"><span>  ref_line <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"target"</span> <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  interactive <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>  module <span class="op">=</span> <span class="st">"TIME_SERIES"</span></span></span>

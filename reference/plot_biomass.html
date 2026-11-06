@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">stockplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.16.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.16.0.9000</span>
       </span>
     </div>
 
@@ -93,7 +93,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Plot Total Biomass</h1>
-    <small class="dont-index">Source: <a href="https://github.com/nmfs-ost/stockplotr/blob/v0.16.0/R/plot_biomass.R" class="external-link"><code>R/plot_biomass.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/nmfs-ost/stockplotr/blob/main/R/plot_biomass.R" class="external-link"><code>R/plot_biomass.R</code></a></small>
     <div class="hidden name"><code>plot_biomass.Rd</code></div>
     </div>
 
@@ -109,7 +109,7 @@
 <span>  facet <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ref_line <span class="op">=</span> <span class="st">"msy"</span>,</span>
 <span>  era <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span>
+<span>  unit_label <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  module <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  scale_amount <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  relative <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -181,7 +181,10 @@ module_name in the console. @seealso <code><a href="filter_data.html">filter_dat
 
 
 <dt id="arg-scale-amount">scale_amount<a class="anchor" aria-label="anchor" href="#arg-scale-amount"></a></dt>
-<dd><p>Number. A number to scale the y-axis values.</p>
+<dd><p>Number. A number to scale the y-axis values. If &gt; 1, the
+magnitude of the scale amount will be added to the unit label
+(e.g. scale_amount = 1000 with a unit label of "1000s of lbs" will result
+in "thousands of 1000s of lbs")</p>
 <p>Default: 1</p></dd>
 
 
@@ -232,26 +235,20 @@ containing associated caption and alternative text for the figure.</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">plot_biomass</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va"><a href="example_data.html">example_data</a></span>,</span></span>
+<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">::</span><span class="va"><a href="example_data.html">example_data</a></span>,</span></span>
 <span class="r-in"><span>  unit_label <span class="op">=</span> <span class="st">"mt"</span>,</span></span>
 <span class="r-in"><span>  ref_line <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"target"</span> <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  scale_amount <span class="op">=</span> <span class="fl">100</span>,</span></span>
 <span class="r-in"><span>  module <span class="op">=</span> <span class="st">"TIME_SERIES"</span>,</span></span>
 <span class="r-in"><span>  figures_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Ignoring unknown labels:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">linetype</span> : <span style="color: #0000BB;">"Fleet"</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">shape</span> : <span style="color: #0000BB;">"Fleet"</span></span>
 <span class="r-plt img"><img src="plot_biomass-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">plot_biomass</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">:::</span><span class="va"><a href="example_data.html">example_data</a></span>,</span></span>
+<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">::</span><span class="va"><a href="example_data.html">example_data</a></span>,</span></span>
 <span class="r-in"><span>  ref_line <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
 <span class="r-in"><span>  module <span class="op">=</span> <span class="st">"TIME_SERIES"</span>,</span></span>
 <span class="r-in"><span>  figures_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Ignoring unknown labels:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">linetype</span> : <span style="color: #0000BB;">"Fleet"</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">shape</span> : <span style="color: #0000BB;">"Fleet"</span></span>
 <span class="r-plt img"><img src="plot_biomass-2.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>

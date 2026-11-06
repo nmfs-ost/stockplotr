@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">stockplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.16.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.16.0.9000</span>
       </span>
     </div>
 
@@ -93,7 +93,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Landed catch by fleet and year table</h1>
-    <small class="dont-index">Source: <a href="https://github.com/nmfs-ost/stockplotr/blob/v0.16.0/R/table_landings.R" class="external-link"><code>R/table_landings.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/nmfs-ost/stockplotr/blob/main/R/table_landings.R" class="external-link"><code>R/table_landings.R</code></a></small>
     <div class="hidden name"><code>table_landings.Rd</code></div>
     </div>
 
@@ -182,7 +182,10 @@ table will be rounded to.</p>
 
 
 <dt id="arg-scale-amount">scale_amount<a class="anchor" aria-label="anchor" href="#arg-scale-amount"></a></dt>
-<dd><p>Number. A number to scale the y-axis values.</p>
+<dd><p>Number. A number to scale the y-axis values. If &gt; 1, the
+magnitude of the scale amount will be added to the unit label
+(e.g. scale_amount = 1000 with a unit label of "1000s of lbs" will result
+in "thousands of 1000s of lbs")</p>
 <p>Default: 1</p></dd>
 
 
