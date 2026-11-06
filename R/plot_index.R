@@ -59,7 +59,9 @@ plot_index <- function(
   # Filter data
   prepared_data <- filter_data(
     dat,
-    label_name = "index",
+    # Only the observed and predicted index are plotted; other labels that
+    # contain "index" (e.g., catchability or index numbers at age) are not
+    label_name = "^index_(observed|predicted)$",
     era = NULL,
     geom = "line",
     # ifelse guarantees the code doesn't miss grouping when label has > 1 value
@@ -90,6 +92,10 @@ plot_index <- function(
   if (!is.null(group)) {
     facet <- c(facet, group)
   }
+  # process_data() drops columns with a single value (e.g., an index from one
+  # fleet), so facet only by the columns that remain
+  facet <- intersect(facet, colnames(prepared_data))
+  if (length(facet) == 0) facet <- NULL
   # transform prep data so group_var = label
   # prepared_data <- prepared_data |>
   #   dplyr::mutate(
@@ -117,7 +123,7 @@ plot_index <- function(
       )
     )
   # Overwrite facets from base plot_timeseries bc scales need to be free
-  if ("fleet" %in% colnames(prepared_data)) {
+  if (!is.null(facet) && "fleet" %in% colnames(prepared_data)) {
     facet <- paste("~", paste(facet, collapse = " + "))
     facet_formula <- stats::reformulate(facet)
     plt <- plt + ggplot2::facet_wrap(facet_formula, scales = "free", labeller = function(labels) {

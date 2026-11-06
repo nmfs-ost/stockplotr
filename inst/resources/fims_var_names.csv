@@ -44,3 +44,12 @@ selectivity,slope,
 ,LengthCompositionProportion,length_composition_proportion
 ,LogRecDev,log_recruitment_deviations
 ,Q,catchability
+Population,expected_recruitment,recruitment
+Population,numbers_at_age,abundance
+Population,unfished_spawning_biomass,spawning_biomass_unfished
+Population,unfished_biomass,biomass_unfished
+Population,mortality_M,natural_mortality
+Recruitment,log_devs,log_recruitment_deviations
+Recruitment,log_rzero,log_recruitment_unfished
+Recruitment,log_sd,log_recruitment_sd
+Recruitment,logit_steep,logit_steepness

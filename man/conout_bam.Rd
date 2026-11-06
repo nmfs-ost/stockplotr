@@ -8,7 +8,8 @@ conout_bam(file, out_new, fleet_names = NULL)
 }
 \arguments{
 \item{file}{Path. Assessment model output file path. Currently accepts SS3
-\code{r4ss::ss_output()} or Report.sso file (being deprecated), BAM .rda file, Rceattle model object, and FIMS model object.}
+\code{r4ss::ss_output()} or Report.sso file (being deprecated), BAM .rda file, Rceattle model object, and FIMS output
+(the tibble returned by \code{FIMS::get_estimates()}, a \code{FIMSFit} object, or an .rds file with either).}
 
 \item{fleet_names}{Character vector. Names of fleets in the assessment model as
 shortened in the output file or names of fleets to replace the native fleet
