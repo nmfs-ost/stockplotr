@@ -1257,6 +1257,22 @@ conout_ss3 <- function(
     )
   }
   out_new <- Reduce(rbind, out_list)
+  
+  # Composition data by bin from r4ss (lendbase, agedbase, condbase)
+  if (!is.character(file)) {
+    comp_rows <- ss3_composition_rows(
+      dat,
+      fleet_names = fleet_names,
+      start_year = start_year,
+      end_year = end_year,
+      columns = names(out_new)
+    )
+    if (!is.null(comp_rows)) {
+      cli::cli_alert("Processing composition data (lendbase, agedbase, condbase)")
+      out_new <- rbind(out_new, comp_rows)
+    }
+  }
+  
   out_new |>
     dplyr::mutate(
       fleet = if (any(unique(out_new$fleet) %in% fleet_names)) fleet else fleet_names[fleet],
