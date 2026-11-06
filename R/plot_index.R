@@ -10,8 +10,8 @@
 #'
 #' Default: ""
 #' @param interval Number. Coverage of intervals around the observed index
-#' based on its observation error (e.g., 0.95), drawn as vertical lines. NULL
-#' draws no intervals.
+#' based on its observation error (e.g., 0.95), drawn as vertical lines.
+#' Defaults to 0.95; NULL draws no intervals.
 #'
 #' Default: NULL
 #' @param log Logical. TRUE/FALSE; plot the index on a log scale. Indices
@@ -66,7 +66,7 @@ plot_index <- function(
   interactive = TRUE,
   module = NULL,
   focus = NULL,
-  interval = NULL,
+  interval = 0.95,
   log = FALSE,
   make_rda = FALSE,
   figures_dir = getwd(),
@@ -211,7 +211,7 @@ plot_index <- function(
       cpue.min,
       cpue.max,
       cpue.units,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     # Add key quantities to captions/alt text
@@ -221,7 +221,7 @@ plot_index <- function(
       cpue.min,
       cpue.max,
       cpue.units,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     create_rda(
