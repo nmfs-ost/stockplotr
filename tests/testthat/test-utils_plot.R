@@ -180,6 +180,25 @@ test_that("reference and scalar utility helpers behave as expected", {
   }
   expect_true(has_hline(ref_plot))
 
+  mm_dat <- make_utils_plot_multimodel_data()
+  mm_dat <- mm_dat |> dplyr::add_row(
+    label = "biomass_msy",
+    estimate = 120, module_name="TIME_SERIES",
+    year=NA, fleet=NA, age=NA, season=NA, uncertainty=NA, uncertainty_label=NA, 
+    era="time", model="model_one"
+  )
+  ts_dat <- filter_data(
+    dat = mm_dat,
+    label_name = "biomass",
+    geom = "line",
+    interactive = FALSE
+  )
+  base_plot <- plot_timeseries(ts_dat, geom = "line")
+
+  ref_plot <- base_plot + add_reference_line(mm_dat, ref_line="msy", label="biomass")
+  expect_true(has_hline(ref_plot)) # make sure it has A line
+  expect_equal(sum(sapply(ref_plot$layers, function(layer) inherits(layer$geom, "GeomHline"))), 2) # make sure it has TWO lines
+
   # missing_ref_plot <- base_plot + reference_line(
   #   label_name = "biomass",
   #   ref_line = 50
