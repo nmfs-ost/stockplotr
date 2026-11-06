@@ -45,14 +45,9 @@
 #' @seealso [convert_output()], [filter_data()], [process_data()], [plot_aa()], [export_kqs()], [insert_kqs()], [create_rda()]
 #'
 #' @export
-#' @examples
-<<<<<<< HEAD:R/plot_catch_at_age.R
+#' @examples=
 #' plot_catch_at_age(
-#'   dat = stockplotr:::example_data,
-=======
-#' plot_catch_comp(
-#'   dat = stockplotr::example_data,
->>>>>>> f26dd4f ([refactor]: add units into "at-age" plots (#434)):R/plot_catch_comp.R
+#'   dat = stockplotr::example_data,=
 #'   facet = "fleet",
 #'   scale_amount = 100,
 #'   interactive = FALSE,
@@ -60,13 +55,8 @@
 #'   figures_dir = getwd()
 #' )
 #'
-<<<<<<< HEAD:R/plot_catch_at_age.R
 #' plot_catch_at_age(
-#'   dat = stockplotr:::example_data,
-=======
-#' plot_catch_comp(
-#'   dat = stockplotr::example_data,
->>>>>>> f26dd4f ([refactor]: add units into "at-age" plots (#434)):R/plot_catch_comp.R
+#'   dat = stockplotr::example_data,=
 #'   facet = "none",
 #'   unit_label = "mt",
 #'   scale_amount = 100,

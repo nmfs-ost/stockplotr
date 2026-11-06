@@ -92,13 +92,9 @@ There are options to return a \code{ggplot2} object or export an .rda object
 containing associated caption and alternative text for the figure.
 }
 \examples{
-<<<<<<< HEAD:man/plot_catch_at_age.Rd
+=
 plot_catch_at_age(
-  dat = stockplotr:::example_data,
-=======
-plot_catch_comp(
-  dat = stockplotr::example_data,
->>>>>>> f26dd4f ([refactor]: add units into "at-age" plots (#434)):man/plot_catch_comp.Rd
+  dat = stockplotr::example_data,=
   facet = "fleet",
   scale_amount = 100,
   interactive = FALSE,
@@ -106,13 +102,8 @@ plot_catch_comp(
   figures_dir = getwd()
 )
 
-<<<<<<< HEAD:man/plot_catch_at_age.Rd
 plot_catch_at_age(
-  dat = stockplotr:::example_data,
-=======
-plot_catch_comp(
-  dat = stockplotr::example_data,
->>>>>>> f26dd4f ([refactor]: add units into "at-age" plots (#434)):man/plot_catch_comp.Rd
+  dat = stockplotr::example_data,=
   facet = "none",
   unit_label = "mt",
   scale_amount = 100,

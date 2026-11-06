@@ -7,7 +7,7 @@
 plot_biomass_at_age(
   dat,
   facet = NULL,
-  unit_label = "mt",
+  unit_label = NULL,
   scale_amount = 1,
   proportional = TRUE,
   module = NULL,
