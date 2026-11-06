@@ -138,7 +138,7 @@ use them in groupings and/or facetting. @seealso \code{\link[=process_data]{proc
 }
 \examples{
 plot_spawning_biomass(
-  dat = stockplotr:::example_data,
+  dat = stockplotr::example_data,
   geom = "line",
   ref_line = "msy",
   unit_label = "mt",
@@ -148,7 +148,7 @@ plot_spawning_biomass(
   linewidth = 1.5
 )
 plot_spawning_biomass(
-  dat = stockplotr:::example_data,
+  dat = stockplotr::example_data,
   ref_line = c("target" = 10),
   interactive = FALSE,
   module = "TIME_SERIES"

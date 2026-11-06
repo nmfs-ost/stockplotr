@@ -101,7 +101,7 @@
 #'
 #' @examples
 #' plot_spawning_biomass(
-#'   dat = stockplotr:::example_data,
+#'   dat = stockplotr::example_data,
 #'   geom = "line",
 #'   ref_line = "msy",
 #'   unit_label = "mt",
@@ -111,7 +111,7 @@
 #'   linewidth = 1.5
 #' )
 #' plot_spawning_biomass(
-#'   dat = stockplotr:::example_data,
+#'   dat = stockplotr::example_data,
 #'   ref_line = c("target" = 10),
 #'   interactive = FALSE,
 #'   module = "TIME_SERIES"
@@ -163,7 +163,7 @@ plot_spawning_biomass <- function(
   lbs <- FALSE
   if (is.null(unit_label)) {
     unit_label <- unique(prepared_data$unit)
-    if (is.na(unit_label)) cli::cli_abort("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+    if (is.na(unit_label) || is.null(unit_label)) cli::cli_abort("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
   } else {
     if (grepl("lbs|pounds|lb", unit_label, ignore.case = TRUE)) lbs <- TRUE
   }
