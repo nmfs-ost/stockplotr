@@ -90,7 +90,7 @@ table_projections <- function(
   combine_data <- purrr::reduce(purrr::compact(lab_list), dplyr::full_join, by = c("Year")) |>
     gt::gt()
 
-  final_table <- theme_table(combine_data)
+  final <- theme_table(combine_data)
 
   # export table to rda if argument = T
   if (make_rda == TRUE) {
@@ -111,17 +111,16 @@ table_projections <- function(
     }
 
     create_rda(
-      object = final_table,
+      object = final,
       # get name of function and remove "table_" from it
       topic_label = "projections",
       fig_or_table = "table",
       dat = dat,
       dir = tables_dir,
       scale_amount = 1,
-      table_df = final_table$`_data`
+      table_df = final$`_data`
     )
   }
 
-  # Send table(s) to viewer
-  return(final_table)
+  final
 }

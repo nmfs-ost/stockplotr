@@ -7,8 +7,8 @@
 plot_abundance_at_age(
   dat,
   facet = NULL,
-  unit_label = "fish",
-  scale_amount = 1000,
+  unit_label = NULL,
+  scale_amount = 1,
   proportional = TRUE,
   module = NULL,
   interactive = TRUE,
@@ -83,14 +83,14 @@ containing associated caption and alternative text for the figure.
 }
 \examples{
 plot_abundance_at_age(
-  dat = stockplotr:::example_data,
+  dat = stockplotr::example_data,
   facet = "growth_pattern",
   unit_label = "fish",
   scale_amount = 1000,
   proportional = TRUE
 )
 plot_abundance_at_age(
-  dat = stockplotr:::example_data,
+  dat = stockplotr::example_data,
   facet = "none",
   proportional = FALSE
 )
