@@ -1,4 +1,4 @@
-#' Plot catch composition
+#' Plot catch-at-age
 #'
 #' @inheritParams plot_abundance_at_age
 #' @param unit_label String. Units of catch used to label the axis
@@ -32,7 +32,7 @@
 #' If the interactive and >1 module_name is found, user will select the
 #' module_name in the console. @seealso [filter_data()]
 #'
-#' @returns A plot showing catch or landings composition.
+#' @returns A plot showing catch or landings at age
 #'
 #' @details This plot is made only when catch or landings are explicitly named
 #' in the output file. The current plot function does not combine all sources of
@@ -46,18 +46,18 @@
 #'
 #' @export
 #' @examples
-#' plot_catch_comp(
-#'   dat = stockplotr:::example_data,
+#' plot_catch_at_age(
+#'   dat = stockplotr::example_data,
 #'   facet = "fleet",
-#'   unit_label = "mt",
+#'   unit_label = "fish",
 #'   scale_amount = 100,
 #'   interactive = FALSE,
 #'   make_rda = FALSE,
 #'   figures_dir = getwd()
 #' )
 #'
-#' plot_catch_comp(
-#'   dat = stockplotr:::example_data,
+#' plot_catch_at_age(
+#'   dat = stockplotr::example_data,
 #'   facet = "none",
 #'   unit_label = "mt",
 #'   scale_amount = 100,
@@ -65,11 +65,11 @@
 #'   era = "fore",
 #'   proportional = FALSE
 #' )
-plot_catch_comp <- function(
+plot_catch_at_age <- function(
   dat,
   facet = NULL,
   era = "time",
-  unit_label = "mt",
+  unit_label = NULL,
   scale_amount = 1,
   proportional = TRUE,
   interactive = TRUE,
@@ -79,13 +79,6 @@ plot_catch_comp <- function(
 ) {
   check_data(dat)
 
-  # Create label for abundance units in legend
-  catch_label <- label_magnitude(
-    label = "catch",
-    unit_label = unit_label,
-    scale_amount = scale_amount,
-    legend = TRUE
-  )
   # Filter data
   catch <- filter_data(
     dat = dat |>
@@ -98,6 +91,21 @@ plot_catch_comp <- function(
     interactive = interactive,
     module = module
   )
+  if (is.null(unit_label)) {
+    unit_label <- unique(catch$unit)
+    if (is.na(unit_label)) {
+      cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+      unit_label <- ""
+    }
+  }
+  # Create label for abundance units in legend
+  catch_label <- label_magnitude(
+    label = "catch",
+    unit_label = unit_label,
+    scale_amount = scale_amount,
+    legend = TRUE
+  )
+  
   # Check for extracted data, if not return warning and empty plot
   if (nrow(catch) == 0) {
     cli::cli_alert_warning("No data found for catch at age. Please check the input data.")
