@@ -24,7 +24,7 @@ After completing the bug fix or feature, please complete the following:
 
 2. If including a feature, please add a test using the 
 [`{testthat}` package structure](https://testthat.r-lib.org/reference/test_that.html).
-If you are unfamiliar with this approach, simply let us know :smile
+If you are unfamiliar with this approach, simply let us know :slightly_smiling_face:
 
 3. If including a feature that is a new function, please add documentation using
 the [`{roxygen2}` package structure](https://roxygen2.r-lib.org/articles/roxygen2.html).
