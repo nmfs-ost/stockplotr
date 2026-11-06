@@ -6,7 +6,7 @@
 \usage{
 plot_recruitment(
   dat,
-  unit_label = "mt",
+  unit_label = NULL,
   scale_amount = 1,
   era = NULL,
   group = NULL,
@@ -26,7 +26,7 @@ in \code{ref_line} is used to plot a reference line or calculate relative spawni
 
 \item{unit_label}{String. Units for recruitment
 
-Default: "mt"}
+Default: NULL}
 
 \item{scale_amount}{Number. A number to scale the y-axis values. If > 1, the
 magnitude of the scale amount will be added to the unit label
@@ -90,7 +90,7 @@ containing associated caption and alternative text for the figure.
 }
 \examples{
 plot_recruitment(
-  dat = stockplotr:::example_data,
+  dat = stockplotr::example_data,
   unit_label = "metric tons",
   scale_amount = 100,
   interactive = TRUE,
@@ -98,8 +98,9 @@ plot_recruitment(
   make_rda = FALSE
 )
 plot_recruitment(
-  dat = stockplotr:::example_data,
+  dat = stockplotr::example_data,
   era = "fore",
+  unit_label = "kg",
   module = "TIME_SERIES",
   make_rda = FALSE
 )

@@ -8,7 +8,7 @@ save_all_plots(
   dat,
   interactive = FALSE,
   figures_tables_dir = getwd(),
-  plot_recruitment_options = list(module = "TIME_SERIES"),
+  plot_recruitment_options = list(module = "TIME_SERIES", unit_label = "mt"),
   plot_natural_mortality_options = list(module = "Natural_Mortality"),
   table_total_catch_options = list(module = "TIME_SERIES"),
   ...
@@ -30,7 +30,7 @@ directly to the \code{plot_recruitment} function. All default parameters for the
 \code{plot_recruitment} function, except for \code{dat}, can be overridden with this list
 object.
 
-Default: list(module = "TIME_SERIES")}
+Default: list(module = "TIME_SERIES", unit_label = "mt")}
 
 \item{plot_natural_mortality_options}{List. List object of parameter values to pass
 directly to the \code{plot_natural_mortality_options} function. All default parameters for the
@@ -85,7 +85,7 @@ save_all_plots(
    figures_tables_dir = fs::path("outputs/figures"),
    plot_recruitment_options = list(
      module = "TIME_SERIES",
-     unit_label = "Millions of Recruits" # customize unit label for recruitment plot
+     unit_label = "mt"
    ),
    plot_spawning_biomass_options = list(
      ref_line = "unfished"     # customize reference line for spawning biomass plot
