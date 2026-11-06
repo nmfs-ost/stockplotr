@@ -10,11 +10,11 @@
 #'
 #' @param spawning_biomass_label String. Units for spawning biomass
 #'
-#' Default: "mt"
+#' Default: NULL
 #'
 #' @param recruitment_label String. Units for recruitment
 #'
-#' Default: "mt"
+#' Default: NULL
 #'
 #' @returns A plot showing the stock recruitment relationship.
 #'
@@ -38,8 +38,8 @@
 #' )
 plot_stock_recruitment <- function(
   dat,
-  spawning_biomass_label = "mt",
-  recruitment_label = "mt",
+  spawning_biomass_label = NULL,
+  recruitment_label = NULL,
   interactive = TRUE,
   era = NULL,
   module = NULL,
@@ -94,11 +94,6 @@ plot_stock_recruitment <- function(
       dplyr::select(-label)
   }
 
-  # if (any(grepl("^recruitment$", colnames(recruitment)))) {
-  #   # TODO: adjust naming to recruitment_predicted in naming convention change PR
-  #   recruitment <- dplyr::rename(recruitment, predicted_recruitment = recruitment)
-  # }
-
   # Extract spawning biomass
   sb <- filter_data(
     dat = dat |>
@@ -128,6 +123,22 @@ plot_stock_recruitment <- function(
   sr <- dplyr::left_join(sb_proc, rec_proc, by = c("year", "model", "group_var"))
 
   # Labs
+  if (is.null(recruitment_label)) {
+    recruitment_label <- unique(recruitment$unit)
+    recruitment_label <- recruitment_label[!is.na(recruitment_label)]
+    if (is.na(recruitment_label) || is.null(recruitment_label))  {
+      cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'recruitment_label' argument.")
+      recruitment_label <- ""
+    }
+  }
+  if (is.null(spawning_biomass_label)) {
+    spawning_biomass_label <- unique(sb$unit)
+    spawning_biomass_label <- spawning_biomass_label[!is.na(spawning_biomass_label)]
+    if (is.na(spawning_biomass_label) || is.null(spawning_biomass_label)) {
+      cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'spawning_biomass_label' argument.")
+      spawning_biomass_label <- ""
+    }
+  }
   recruitment_lab <- label_magnitude(
     label = "Recruitment",
     unit_label = recruitment_label,
@@ -224,6 +235,11 @@ plot_stock_recruitment <- function(
       dir = figures_dir
     )
   }
+  
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+  
   final +
     ggplot2::scale_x_continuous(
       labels = scales::label_comma()
