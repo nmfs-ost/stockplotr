@@ -5,7 +5,7 @@ remotes::install_github("afsc-assessments/Rceattle")
 # library(Rceattle)
 # library(readxl)
 GOApollock <- Rceattle::GOApollock
-GOApollock$styr = 1977 # The SAFE model starts at 1970, so change styr to 1970 to run the full time series model (data is in there). I start them all at 1977 because thats the years with overlap.
+GOApollock$styr <- 1977 # The SAFE model starts at 1970, so change styr to 1970 to run the full time series model (data is in there). I start them all at 1977 because thats the years with overlap.
 pollock_model <- Rceattle::fit_mod(
   data_list = GOApollock,
   inits = NULL, # Initial parameters = 0
@@ -14,7 +14,8 @@ pollock_model <- Rceattle::fit_mod(
   random_rec = FALSE, # No random recruitment
   msmMode = 0, # 0 = Single species mode, 1 = MSVPA multi-species mode
   verbose = 1, # Silence optimization output
-  phase = TRUE) # Use default phasing
+  phase = TRUE
+) # Use default phasing
 # Install stockplotr
 pak::local_install(".")
 # Convert output

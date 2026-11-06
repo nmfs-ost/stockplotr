@@ -121,7 +121,7 @@ plot_natural_mortality <- function(
       M.age.max,
       M.rate.min,
       M.rate.max,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     # Add key quantities to captions/alt text
@@ -130,7 +130,7 @@ plot_natural_mortality <- function(
       M.age.max,
       M.rate.min,
       M.rate.max,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     create_rda(

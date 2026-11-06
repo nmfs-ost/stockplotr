@@ -58,7 +58,7 @@ plot_discard <- function(
     scale_amount = scale_amount,
     interactive = interactive
   )
-  
+
   # extract unit if unit_label is null and set lbs to F by default
   lbs <- FALSE
   if (is.null(unit_label)) {
@@ -139,7 +139,7 @@ plot_discard <- function(
       mod.fit.discards.end.year,
       fleet.or.survey.name,
       mod.fit.discards.units,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     # Add key quantities to captions/alt text
@@ -150,7 +150,7 @@ plot_discard <- function(
       mod.fit.discards.end.year,
       fleet.or.survey.name,
       mod.fit.discards.units,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     create_rda(

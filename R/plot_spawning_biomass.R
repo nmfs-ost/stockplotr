@@ -40,9 +40,9 @@
 #'
 #' Options: (including, but not limited to) "target", "msy", and "unfished"
 #' If the reference point is not found in the data, set ref_line = c("name" = value).
-#' @param unit_label String. Spawning biomass unit as indicated from the data. 
-#' When setting a unit of pounds please use one of the following keywords: 
-#' "lbs", "pounds", "lb". For example "1000s of lbs" would still be recognized 
+#' @param unit_label String. Spawning biomass unit as indicated from the data.
+#' When setting a unit of pounds please use one of the following keywords:
+#' "lbs", "pounds", "lb". For example "1000s of lbs" would still be recognized
 #' as pounds. Do not set unit_label to the desired order of magnitude, rather the
 #' unit label reflected in the data. Please refer to the argument `scale_amount`.
 #'
@@ -60,7 +60,7 @@
 #' If the interactive and >1 module_name is found, user will select the
 #' module_name in the console. @seealso [filter_data()]
 #' @param scale_amount Number. A number to scale the y-axis values. If > 1, the
-#'  magnitude of the scale amount will be added to the unit label 
+#'  magnitude of the scale amount will be added to the unit label
 #'  (e.g. scale_amount = 1000 with a unit label of "1000s of lbs" will result
 #'   in "thousands of 1000s of lbs")
 #'
@@ -167,7 +167,7 @@ plot_spawning_biomass <- function(
   } else {
     if (grepl("lbs|pounds|lb", unit_label, ignore.case = TRUE)) lbs <- TRUE
   }
-  
+
   spawning_biomass_label <- ifelse(
     relative,
     yes = "Relative spawning biomass",
@@ -180,7 +180,7 @@ plot_spawning_biomass <- function(
       )
     }
   )
-  
+
   if (relative) {
     if (nrow(prepared_data) == 0) {
       cli::cli_abort("No data found for relative biomass. Please check that your data contains a label for 'biomass_biomass_unfished'.")
@@ -260,16 +260,16 @@ plot_spawning_biomass <- function(
       )
 
       # calculate & export key quantities
-      export_kqs(rel.ssb.min, rel.ssb.max, dir=figures_dir)
+      export_kqs(rel.ssb.min, rel.ssb.max, dir = figures_dir)
 
       # Add key quantities to captions/alt text
-      insert_kqs(rel.ssb.min, rel.ssb.max, dir=figures_dir)
+      insert_kqs(rel.ssb.min, rel.ssb.max, dir = figures_dir)
     } else {
       ssb.min <- min(plot_data$estimate) |> round(digits = 3)
       ssb.max <- max(plot_data$estimate) |> round(digits = 3)
 
-      export_kqs(ssb.min, ssb.max, dir=figures_dir)
-      insert_kqs(ssb.min, ssb.max, dir=figures_dir)
+      export_kqs(ssb.min, ssb.max, dir = figures_dir)
+      insert_kqs(ssb.min, ssb.max, dir = figures_dir)
     }
 
     # Obtain relevant key quantities for captions/alt text
@@ -284,7 +284,7 @@ plot_spawning_biomass <- function(
       ssb.units,
       ssb.start.year,
       ssb.end.year,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     # Add key quantities to captions/alt text
@@ -293,7 +293,7 @@ plot_spawning_biomass <- function(
       ssb.units,
       ssb.start.year,
       ssb.end.year,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     create_rda(
@@ -306,11 +306,11 @@ plot_spawning_biomass <- function(
       scale_amount = scale_amount
     )
   }
-  
+
   if (exists("selected_module")) {
     rm(selected_module, envir = .GlobalEnv)
   }
-  
+
   # Output final plot
   final
 }

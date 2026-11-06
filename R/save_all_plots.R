@@ -1,38 +1,38 @@
 #' Export all figures and tables
 #'
 #' Export all figures and tables to Rda files within one function.
-#' This primary purpose of this function is to quickly export all 
-#' available figures and tables. We recommend running individual 
+#' This primary purpose of this function is to quickly export all
+#' available figures and tables. We recommend running individual
 #' plotting functions for greater customization of figures and tables.
 #'
 #' @inheritParams plot_spawning_biomass
 #'
-#' @param plot_recruitment_options List. List object of parameter values to pass 
+#' @param plot_recruitment_options List. List object of parameter values to pass
 #' directly to the `plot_recruitment` function. All default parameters for the
-#' `plot_recruitment` function, except for `dat`, can be overridden with this list 
-#' object. 
-#' 
+#' `plot_recruitment` function, except for `dat`, can be overridden with this list
+#' object.
+#'
 #' Default: list(module = "TIME_SERIES")
 #'
-#' @param plot_natural_mortality_options List. List object of parameter values to pass 
+#' @param plot_natural_mortality_options List. List object of parameter values to pass
 #' directly to the `plot_natural_mortality_options` function. All default parameters for the
-#' `plot_natural_mortality_options` function, except for `dat`, can be overridden with this list 
-#' object. 
-#' 
+#' `plot_natural_mortality_options` function, except for `dat`, can be overridden with this list
+#' object.
+#'
 #' Default: list(module = "Natural_Mortality")
-#' 
-#' @param table_total_catch_options List. List object of parameter values to pass 
+#'
+#' @param table_total_catch_options List. List object of parameter values to pass
 #' directly to the `table_total_catch_options` function. All default parameters for the
-#' `table_total_catch_options` function, except for `dat`, can be overridden with this list 
-#' object. 
-#' 
+#' `table_total_catch_options` function, except for `dat`, can be overridden with this list
+#' object.
+#'
 #' Default: list(module = "TIME_SERIES")
-#' 
+#'
 #' ... Additional list objects of parameter values to pass directly to corresponding
 #' plot or table functions. Parameter names should follow the naming convention
-#' `{function_name}_options`. All default parameters, except for `dat`, of this function 
+#' `{function_name}_options`. All default parameters, except for `dat`, of this function
 #' can be overridden with this list object. See example.
-#' 
+#'
 #' @returns Rda files for each figure/table.
 #'
 #' @seealso [convert_output()], [create_rda()]
@@ -69,7 +69,7 @@
 #'    ),
 #'    plot_abundance_at_age_options = list(
 #'      scale_amount = 1,         # custom scale for abundance-at-age plot
-#'      proportional = FALSE      # don't proportionalize abundance-at-age 
+#'      proportional = FALSE      # don't proportionalize abundance-at-age
 #'    ),
 #'    plot_spr_options = list(
 #'      ylab = "Fishing Intensity (1-SPR)/(1-SPR_ref)" # custom Y label for SPR plot
@@ -88,16 +88,16 @@ save_all_plots <- function(
   # no standard default modules
   plot_recruitment_options = list(module = "TIME_SERIES"),
   plot_natural_mortality_options = list(module = "Natural_Mortality"),
-  table_total_catch_options = list( module = "TIME_SERIES"),
+  table_total_catch_options = list(module = "TIME_SERIES"),
   # All other functions can be modified with appropiate *_options
   # parameter lists.
   ...
 ) {
   check_data(dat)
 
-  all_params <- as.list(environment(), all=TRUE)
+  all_params <- as.list(environment(), all = TRUE)
   make_rda <- TRUE
-  
+
   cli::cli_h1("Starting export of figures and tables")
 
   # These arguments are used by every plot and table
@@ -119,38 +119,39 @@ save_all_plots <- function(
   # plottab_functions <- sub("\\.[^\\.]*$", "", plottab_function_files)
   all_functions <- ls(getNamespace("stockplotr"))
   all_plottab_functions <- all_functions[grepl("plot_|table_", all_functions)]
-  plottab_functions <- all_plottab_functions[!(grepl(paste0(helper_functions, collapse="|"), all_plottab_functions))]
+  plottab_functions <- all_plottab_functions[!(grepl(paste0(helper_functions, collapse = "|"), all_plottab_functions))]
 
-  for(i in seq_along(plottab_functions)){
-      func_name <- plottab_functions[i]
-      func_specific_args <- all_params[paste0(func_name,"_options")][[1]]
+  for (i in seq_along(plottab_functions)) {
+    func_name <- plottab_functions[i]
+    func_specific_args <- all_params[paste0(func_name, "_options")][[1]]
 
-      func_pars <- default_args
-      if(!is.null(func_specific_args))
-        func_pars <- c(default_args, func_specific_args)
+    func_pars <- default_args
+    if (!is.null(func_specific_args)) {
+      func_pars <- c(default_args, func_specific_args)
+    }
 
-      # switch from "figures_dir" to "tables_dir" dynamically
-      if(grepl("table",func_name)){
-        names(func_pars)[which(names(func_pars)=="figures_dir")] <- "tables_dir"
-      }
+    # switch from "figures_dir" to "tables_dir" dynamically
+    if (grepl("table", func_name)) {
+      names(func_pars)[which(names(func_pars) == "figures_dir")] <- "tables_dir"
+    }
 
-      cli::cli_alert_info("Exporting: {func_name} figure")
-      tryCatch(
-        {
-          suppressMessages(
-              do.call(func_name, func_pars) # Execute plotting/table function
-          )
-        },
-        error = function(e) {
-            cli::cli_alert_danger("Failed to execute: {func_name}.")
-            cli::cli_alert("Tip: check that your arguments are correct.")
-            for(a in seq_along(func_specific_args)){
-              arg_name = names(func_specific_args)[a]
-              arg_value = as.character(func_specific_args[a])
-              cli::cli_li("{arg_name} = {arg_value}")
-            }
-            print(e)
+    cli::cli_alert_info("Exporting: {func_name} figure")
+    tryCatch(
+      {
+        suppressMessages(
+          do.call(func_name, func_pars) # Execute plotting/table function
+        )
+      },
+      error = function(e) {
+        cli::cli_alert_danger("Failed to execute: {func_name}.")
+        cli::cli_alert("Tip: check that your arguments are correct.")
+        for (a in seq_along(func_specific_args)) {
+          arg_name <- names(func_specific_args)[a]
+          arg_value <- as.character(func_specific_args[a])
+          cli::cli_li("{arg_name} = {arg_value}")
         }
-      )   
+        print(e)
+      }
+    )
   }
 }

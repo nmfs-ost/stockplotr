@@ -105,7 +105,7 @@ plot_catch_at_age <- function(
     scale_amount = scale_amount,
     legend = TRUE
   )
-  
+
   # Check for extracted data, if not return warning and empty plot
   if (nrow(catch) == 0) {
     cli::cli_alert_warning("No data found for catch at age. Please check the input data.")
@@ -164,7 +164,7 @@ plot_catch_at_age <- function(
       caa.age.max,
       tot.catch.min,
       tot.catch.max,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     # Add key quantities to captions/alt text
@@ -175,7 +175,7 @@ plot_catch_at_age <- function(
       caa.age.max,
       tot.catch.min,
       tot.catch.max,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     create_rda(
@@ -183,7 +183,7 @@ plot_catch_at_age <- function(
       # get name of function and remove "plot_" from it
       topic_label = gsub("plot_", "", utils::tail(as.character(sys.call()[[1]]), n = 1)),
       fig_or_table = "figure",
-      dir=figures_dir,
+      dir = figures_dir,
       dat
     )
   }

@@ -87,7 +87,7 @@ plot_biomass <- function(
     scale_amount = scale_amount,
     interactive = interactive
   )
-  
+
   if (is.null(unit_label)) {
     unit_label <- unique(prepared_data$unit)
     if (is.na(unit_label)) {
@@ -95,7 +95,7 @@ plot_biomass <- function(
       unit_label <- ""
     }
   }
-  
+
   biomass_label <- ifelse(
     relative,
     yes = "Relative biomass",
@@ -108,7 +108,7 @@ plot_biomass <- function(
       )
     }
   )
-  
+
   if (relative) {
     if (nrow(prepared_data) == 0) {
       cli::cli_abort("No data found for relative biomass. Please check that your data contains a label for 'biomass_biomass_unfished'.")
@@ -190,10 +190,10 @@ plot_biomass <- function(
       )
 
       # calculate & export key quantities
-      export_kqs(rel.B.min, rel.B.max, dir=figures_dir)
+      export_kqs(rel.B.min, rel.B.max, dir = figures_dir)
 
       # Add key quantities to captions/alt text
-      insert_kqs(rel.B.min, rel.B.max, dir=figures_dir)
+      insert_kqs(rel.B.min, rel.B.max, dir = figures_dir)
     } else {
       B.min <- calc_kqs(
         returned_kq = "B.min",
@@ -204,8 +204,8 @@ plot_biomass <- function(
         prepared_data = prepared_data
       )
 
-      export_kqs(B.min, B.max, dir=figures_dir)
-      insert_kqs(B.min, B.max, dir=figures_dir)
+      export_kqs(B.min, B.max, dir = figures_dir)
+      insert_kqs(B.min, B.max, dir = figures_dir)
     }
 
     B.ref.pt <- as.character(ref_line)
@@ -292,8 +292,8 @@ plot_biomass <- function(
       B.msy,
       B.terminal.est,
       B.terminal.min,
-      B.terminal.max, 
-      dir=figures_dir
+      B.terminal.max,
+      dir = figures_dir
     )
 
     insert_kqs(
@@ -308,7 +308,7 @@ plot_biomass <- function(
       B.terminal.est,
       B.terminal.min,
       B.terminal.max,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     insert_kqs(
@@ -323,7 +323,7 @@ plot_biomass <- function(
       B.terminal.est,
       B.terminal.min,
       B.terminal.max,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     create_rda(
@@ -336,11 +336,10 @@ plot_biomass <- function(
       scale_amount = scale_amount
     )
   }
-  
+
   # remove global variable "selected_module"
-  if (exists("selected_module", envir = .GlobalEnv)) rm("selected_module", envir = .GlobalEnv)  
-  
+  if (exists("selected_module", envir = .GlobalEnv)) rm("selected_module", envir = .GlobalEnv)
+
   # Output final plot
   final
-
 }

@@ -151,7 +151,7 @@ plot_index <- function(
       cpue.min,
       cpue.max,
       cpue.units,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     # Add key quantities to captions/alt text
@@ -161,7 +161,7 @@ plot_index <- function(
       cpue.min,
       cpue.max,
       cpue.units,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     create_rda(

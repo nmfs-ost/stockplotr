@@ -97,7 +97,7 @@ plot_stock_recruitment <- function(
   # Extract spawning biomass
   sb <- filter_data(
     dat = dat |>
-    dplyr::filter(!is.na(year)),
+      dplyr::filter(!is.na(year)),
     label_name = "spawning biomass",
     geom = "point",
     era = era,
@@ -126,7 +126,7 @@ plot_stock_recruitment <- function(
   if (is.null(recruitment_label)) {
     recruitment_label <- unique(recruitment$unit)
     recruitment_label <- recruitment_label[!is.na(recruitment_label)]
-    if (is.na(recruitment_label) || is.null(recruitment_label))  {
+    if (is.na(recruitment_label) || is.null(recruitment_label)) {
       cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'recruitment_label' argument.")
       recruitment_label <- ""
     }
@@ -211,7 +211,7 @@ plot_stock_recruitment <- function(
       recruitment.min,
       recruitment.max,
       recruitment.units,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     # Add key quantities to captions/alt text
@@ -223,7 +223,7 @@ plot_stock_recruitment <- function(
       recruitment.min,
       recruitment.max,
       recruitment.units,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     create_rda(
@@ -235,11 +235,11 @@ plot_stock_recruitment <- function(
       dir = figures_dir
     )
   }
-  
+
   if (exists("selected_module")) {
     rm(selected_module, envir = .GlobalEnv)
   }
-  
+
   final +
     ggplot2::scale_x_continuous(
       labels = scales::label_comma()

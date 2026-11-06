@@ -64,7 +64,7 @@ plot_biomass_at_age <- function(
     scale_amount = scale_amount,
     interactive = interactive
   )
-  
+
   if (is.null(unit_label)) {
     unit_label <- unique(b$unit)
     if (is.na(unit_label)) {
@@ -72,14 +72,14 @@ plot_biomass_at_age <- function(
       unit_label <- ""
     }
   }
-  
+
   # Create label for abundance units in legend
   biomass_label <- label_magnitude(
     label = "Biomass",
     unit_label = unit_label,
     scale_amount = scale_amount
   )
-  
+
   if (!is.null(facet) && facet == "none") {
     data <- b |>
       dplyr::group_by(year, age) |>
@@ -142,7 +142,7 @@ plot_biomass_at_age <- function(
       pop.baa.age.max,
       pop.baa.fish.min,
       pop.baa.fish.max,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     # Add key quantities to captions/alt text
@@ -153,7 +153,7 @@ plot_biomass_at_age <- function(
       pop.baa.age.max,
       pop.baa.fish.min,
       pop.baa.fish.max,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     create_rda(
@@ -161,7 +161,7 @@ plot_biomass_at_age <- function(
       # get name of function and remove "plot_" from it
       topic_label = gsub("plot_", "", utils::tail(as.character(sys.call()[[1]]), n = 1)),
       fig_or_table = "figure",
-      dir=figures_dir,
+      dir = figures_dir,
       dat
     )
   }
