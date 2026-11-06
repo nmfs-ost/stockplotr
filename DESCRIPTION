@@ -1,7 +1,7 @@
 Type: Package
 Package: stockplotr
 Title: Tables and Figures for Stock Assessments
-Version: 0.15.0.9000
+Version: 0.16.0.9000
 Authors@R: c(
     person("Samantha", "Bredeck", , "samantha.bredeck@noaa.gov", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0003-3744-6428")),
@@ -58,8 +58,11 @@ Suggests:
     kableExtra,
     knitr,
     quarto,
+    r4ss,
     rmarkdown,
     testthat (>= 3.0.0)
+Remotes:
+    r4ss/r4ss
 VignetteBuilder: 
     knitr
 Config/roxygen2/version: 8.1.1

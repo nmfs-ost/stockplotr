@@ -24,7 +24,7 @@ After completing the bug fix or feature, please complete the following:
 
 2. If including a feature, please add a test using the 
 [`{testthat}` package structure](https://testthat.r-lib.org/reference/test_that.html).
-If you are unfamiliar with this approach, simply let us know :smile
+If you are unfamiliar with this approach, simply let us know :slightly_smiling_face:
 
 3. If including a feature that is a new function, please add documentation using
 the [`{roxygen2}` package structure](https://roxygen2.r-lib.org/articles/roxygen2.html).
@@ -132,7 +132,7 @@ The figure functions follow the same basic sequence:
 
 - **Time-series plots:** `plot_biomass()`, `plot_spawning_biomass()`, `plot_recruitment()`, `plot_landings()`, `plot_fishing_mortality()`, `plot_natural_mortality()`
 - **Observation/comparison plots:** `plot_index()`, `plot_stock_recruitment()`, `plot_recruitment_deviations()`
-- **Age-composition plots:** `plot_abundance_at_age()`, `plot_biomass_at_age()`, `plot_catch_comp()`
+- **Age-composition plots:** `plot_abundance_at_age()`, `plot_biomass_at_age()`, `plot_catch_at_age()`
 
 ### How the table functions are built
 

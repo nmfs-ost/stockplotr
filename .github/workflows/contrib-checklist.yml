@@ -1,0 +1,47 @@
+# Append an editable checklist to PR descriptions from outside contributors.
+name: pr-contribution-checklist
+on:
+  pull_request_target:
+    types: [opened]
+jobs:
+  add-checklist:
+    # GitHub usernames for the two exempt contributors
+    if: >-
+      github.event.pull_request.user.login != 'Schiano-NOAA' &&
+      github.event.pull_request.user.login != 'sbreitbart-NOAA'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Add PR Contribution Checklist
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const pullRequest = {
+              ...context.repo,
+              pull_number: context.payload.pull_request.number
+            };
+            const { data: pr } = await github.rest.pulls.get(pullRequest);
+            const marker = '<!-- stockplotr-contribution-checklist -->';
+            if ((pr.body ?? '').includes(marker)) {
+              core.info('Contribution checklist already exists; leaving it unchanged.');
+              return;
+            }
+            const checklist = `
+            ${marker}
+            # PR contribution checklist
+            Thank you for contributing to stockplotr! Please check the boxes below to confirm this pull request (PR) is ready for review. Edit this PR description to add the release indicator and any explanations.
+            - [ ] I have read and adhered to the [contributor guide](https://github.com/nmfs-ost/stockplotr/blob/main/CONTRIBUTING.md).
+            - [ ] I have kept this PR focused on one plot where applicable. For multiple features, I have used separate PRs (stacked PRs are welcome if needed).
+            - [ ] I have aimed to keep this PR to no more than 750 lines, excluding tests and example data (for example, up to 750 lines for a new function).
+            - [ ] If I have provided an example dataset, I have explained why the existing sample datasets are not sufficient.
+            - [ ] I have tested that my changes are compatible with all example outputs in the "data" folder (example_data.rda; pollock.rda; ss3_simple.rda; vermilion_snapper.rda).
+            - [ ] If I didn't follow the [development workflow](https://github.com/nmfs-ost/stockplotr/blob/main/CONTRIBUTING.md#overview), I have explained why in this PR.
+            - [ ] If applicable, I've added the plot to save_all_plots() and updated the associated tests in test-save_all_plots.R.
+            - [ ] After opening this PR, I have checked that my own tests and spellcheck pass (spelling::spell_check_package()). If other checks fail, I have flagged them for the package maintainers to help diagnose and remedy.
+            - [ ] I have requested review from one package maintainer (Sam or Sophie).
+            `.trim();
+            await github.rest.pulls.update({
+              ...pullRequest,
+              body: pr.body ? `${pr.body}\n\n${checklist}` : checklist
+            });
