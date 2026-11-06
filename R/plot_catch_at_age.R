@@ -47,8 +47,9 @@
 #' @export
 #' @examples
 #' plot_catch_at_age(
-#'   dat = stockplotr:::example_data,
+#'   dat = stockplotr::example_data,
 #'   facet = "fleet",
+#'   unit_label = "fish",
 #'   scale_amount = 100,
 #'   interactive = FALSE,
 #'   make_rda = FALSE,
@@ -56,7 +57,7 @@
 #' )
 #'
 #' plot_catch_at_age(
-#'   dat = stockplotr:::example_data,
+#'   dat = stockplotr::example_data,
 #'   facet = "none",
 #'   unit_label = "mt",
 #'   scale_amount = 100,
