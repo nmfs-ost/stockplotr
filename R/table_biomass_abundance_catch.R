@@ -197,7 +197,7 @@ table_biomass_abundance_catch <- function(
   ) |>
     gt::gt()
 
-  final_table <- theme_table(combine_data)
+  final <- theme_table(combine_data)
   
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
@@ -218,14 +218,14 @@ table_biomass_abundance_catch <- function(
     )
 
     create_rda(
-      object = final_table,
+      object = final,
       # get name of function and remove "table_" from it
       topic_label = gsub("table_", "", utils::tail(as.character(sys.call()[[1]]), n = 1)),
       fig_or_table = "table",
       dat = dat,
       dir = tables_dir,
       scale_amount = 1,
-      table_df = final_table
+      table_df = final
     )
   }
 
@@ -235,5 +235,5 @@ table_biomass_abundance_catch <- function(
     rm(selected_module, envir = .GlobalEnv)
   }
   
-  final_table
+  final
 }
