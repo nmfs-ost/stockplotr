@@ -6,6 +6,10 @@
 #' plotting functions for greater customization of figures and tables.
 #'
 #' @inheritParams plot_spawning_biomass
+#' @param figures_tables_dir Path. Directory where the rda files are saved,
+#' in "figures" and "tables" folders that are created if needed.
+#'
+#' Default: the working directory (`getwd()`)
 #'
 #' @param plot_recruitment_options List. List object of parameter values to pass 
 #' directly to the `plot_recruitment` function. All default parameters for the

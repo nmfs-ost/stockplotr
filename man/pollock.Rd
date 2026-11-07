@@ -61,6 +61,6 @@ unique(pollock$label)
 }
 \references{
 Adams, G. D., Holsman, K. K., Barbeaux, S. J., Dorn, M. W., Ianelli, J. N., Spies, I., … Punt, A. E. (2022)
-(\href{https://doi.org/10.1016/j.fishres.2022.106303})
+(\doi{10.1016/j.fishres.2022.106303})
 }
 \keyword{datasets}

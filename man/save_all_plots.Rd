@@ -25,6 +25,11 @@ in \code{ref_line} is used to plot a reference line or calculate relative spawni
 
 Default: \code{FALSE}}
 
+\item{figures_tables_dir}{Path. Directory where the rda files are saved,
+in "figures" and "tables" folders that are created if needed.
+
+Default: the working directory (\code{getwd()})}
+
 \item{plot_recruitment_options}{List. List object of parameter values to pass
 directly to the \code{plot_recruitment} function. All default parameters for the
 \code{plot_recruitment} function, except for \code{dat}, can be overridden with this list
