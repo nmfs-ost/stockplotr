@@ -46,8 +46,10 @@ test_that("plot_index draws lognormal intervals around the observed index", {
   expect_equal(ints$estimate_upper, obs$estimate * exp(stats::qnorm(0.975) * obs$uncertainty))
   expect_no_error(ggplot2::ggplot_build(p))
 
-  # No intervals by default
-  p <- plot_index(stockplotr::example_data, interactive = FALSE)
+  # 95% intervals by default, and none with interval = NULL
+  p_default <- plot_index(stockplotr::example_data, interactive = FALSE)
+  expect_equal(p_default$layers[[1]]$data, p$layers[[1]]$data)
+  p <- plot_index(stockplotr::example_data, interval = NULL, interactive = FALSE)
   expect_false(any(sapply(p$layers, function(l) inherits(l$geom, "GeomLinerange"))))
 
   expect_error(plot_index(stockplotr::example_data, interval = 95, interactive = FALSE), "between 0 and 1")

@@ -11,9 +11,9 @@
 #' Default: ""
 #' @param interval Number. Coverage of intervals around the observed index
 #' based on its observation error (e.g., 0.95), drawn as vertical lines.
-#' Defaults to 0.95; NULL draws no intervals.
+#' NULL draws no intervals.
 #'
-#' Default: NULL
+#' Default: 0.95
 #' @param log Logical. TRUE/FALSE; plot the index on a log scale. Indices
 #' with lognormal errors are often easier to judge on a log scale, where the
 #' intervals are symmetric.
