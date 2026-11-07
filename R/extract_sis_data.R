@@ -383,15 +383,15 @@ extract_sis_data <- function(sis_data_dir = getwd(),
     cli::cli_alert_info("Existing sis_assmt_template.csv or sis_ts_template.csv found in {sis_data_dir}.")
     overwrite <- readline("Do you want to overwrite the existing files? (y/n): ")
     if (tolower(overwrite) == "y") {
-      write.csv(assmt_dat, assmt_dat_path, row.names = FALSE)
-      write.csv(ts_dat_filled, ts_dat_path, row.names = FALSE)
+      utils::write.csv(assmt_dat, assmt_dat_path, row.names = FALSE)
+      utils::write.csv(ts_dat_filled, ts_dat_path, row.names = FALSE)
       cli::cli_alert_success("Files overwritten successfully.")
     } else {
       cli::cli_alert_info("Files not overwritten. Please rename the files, then rerun this function to save the data extracted in this function.")
     }
   } else {
-    write.csv(assmt_dat, assmt_dat_path, row.names = FALSE)
-    write.csv(ts_dat_filled, ts_dat_path, row.names = FALSE)
+    utils::write.csv(assmt_dat, assmt_dat_path, row.names = FALSE)
+    utils::write.csv(ts_dat_filled, ts_dat_path, row.names = FALSE)
     cli::cli_alert_success("Files saved successfully in {sis_data_dir}.")
   }
   
