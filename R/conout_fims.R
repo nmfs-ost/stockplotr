@@ -17,14 +17,19 @@
 #' is one row in FIMS, with the observed value in `observed` and the expected
 #' value in `estimated`. These are split into two rows, labeled
 #' "*_observed" and "*_predicted" as for other models (e.g., "index_observed"
-#' and "index_predicted"). Observed rows hold the observation error
-#' (`exp(log_sd)`, a log-scale standard error for lognormal data) in
+#' and "index_predicted"). Observed rows hold the observation error in
 #' `uncertainty` and the negative log-likelihood of the observation in
-#' `likelihood`. Observations coded as missing (-999) are not observations
-#' and are not included. Compositions are kept as counts, as reported by FIMS.
+#' `likelihood`. FIMS reports the observation error as `log_sd`, the log of
+#' its standard deviation. For lognormal data this standard deviation
+#' (\eqn{\sigma}) is on the log scale, so it is converted to the coefficient
+#' of variation of the observation, \eqn{\sqrt{\exp(\sigma^2) - 1}}, and
+#' labeled "cv"; for other data `exp(log_sd)` is labeled "se". Observations
+#' coded as missing (-999) are not observations and are not included.
+#' Compositions are kept as counts, as reported by FIMS.
 #'
 #' All other estimates keep one row each, with the value in `estimate` and
-#' its standard error in `uncertainty`. Rows in years after the last year of
+#' its standard error in `uncertainty`. FIMS codes estimates that could not
+#' be calculated as -999; these are NA. Rows in years after the last year of
 #' data (e.g., spawning biomass at the start of the year after the model
 #' ends) have `era` "fore"; other rows with a year have `era` "time".
 #'
@@ -60,14 +65,14 @@ conout_fims <- function(file, out_new, start_year = NULL) {
     year_i > last_year ~ "fore",
     TRUE ~ "time"
   )
-  uncertainty <- suppressWarnings(as.numeric(col("uncertainty")))
+  uncertainty <- dplyr::na_if(suppressWarnings(as.numeric(col("uncertainty"))), -999)
   base <- data.frame(
     module_name = as.character(col("module_name")),
     label = as.character(dat$label),
     era = era,
     year = year,
     initial = suppressWarnings(as.numeric(col("input"))),
-    estimate = suppressWarnings(as.numeric(dat$estimated)),
+    estimate = dplyr::na_if(suppressWarnings(as.numeric(dat$estimated)), -999),
     uncertainty = uncertainty,
     uncertainty_label = ifelse(is.na(uncertainty), NA_character_, "se"),
     likelihood = NA_real_,
@@ -91,14 +96,21 @@ conout_fims <- function(file, out_new, start_year = NULL) {
   is_data <- !is.na(stream) & has_data %in% TRUE
   obs_rows <- base[is_data & !is.na(observed), , drop = FALSE]
   if (nrow(obs_rows) > 0) {
-    log_sd <- suppressWarnings(as.numeric(col("log_sd")))[is_data & !is.na(observed)]
-    obs_rows$label <- paste0(stream[is_data & !is.na(observed)], "_observed")
-    obs_rows$estimate <- observed[is_data & !is.na(observed)]
-    obs_rows$uncertainty <- exp(log_sd)
-    obs_rows$uncertainty_label <- ifelse(is.na(log_sd), NA_character_, "se")
+    is_obs <- is_data & !is.na(observed)
+    sigma <- exp(suppressWarnings(as.numeric(col("log_sd")))[is_obs])
+    # A lognormal sigma is on the log scale; report the CV of the observation
+    lognormal <- grepl("^(d?lnorm|log_?normal)$", col("distribution")[is_obs], ignore.case = TRUE)
+    obs_rows$label <- paste0(stream[is_obs], "_observed")
+    obs_rows$estimate <- observed[is_obs]
+    obs_rows$uncertainty <- ifelse(lognormal, sqrt(exp(sigma^2) - 1), sigma)
+    obs_rows$uncertainty_label <- dplyr::case_when(
+      is.na(sigma) ~ NA_character_,
+      lognormal ~ "cv",
+      TRUE ~ "se"
+    )
     obs_rows$initial <- NA_real_
     # Stock Synthesis reports the negative log-likelihood of each observation
-    obs_rows$likelihood <- -suppressWarnings(as.numeric(col("likelihood")))[is_data & !is.na(observed)]
+    obs_rows$likelihood <- -suppressWarnings(as.numeric(col("likelihood")))[is_obs]
   }
   pred_rows <- base[is_data, , drop = FALSE]
   pred_rows$label <- paste0(stream[is_data], "_predicted")

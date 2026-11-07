@@ -26,8 +26,9 @@ test_that("FIMS data points are split into observed and predicted rows", {
   expect_equal(obs$estimate, rows$observed)
   expect_equal(pred$estimate, rows$estimated)
   # Observation error and negative log-likelihood of each observation
-  expect_equal(obs$uncertainty, exp(rows$log_sd))
-  expect_equal(unique(obs$uncertainty_label), "se")
+  # Lognormal observation error is reported as a CV
+  expect_equal(obs$uncertainty, sqrt(exp(exp(rows$log_sd)^2) - 1))
+  expect_equal(unique(obs$uncertainty_label), "cv")
   expect_equal(obs$likelihood, -rows$likelihood)
   expect_equal(unique(obs$fleet), "survey1")
   expect_equal(obs$year, rows$year_i + 2000)
@@ -53,6 +54,34 @@ test_that("FIMS observations coded as missing are not observations", {
   out <- convert_fims(est)
   expect_equal(sum(out$label == "index_observed"), length(idx) - 2)
   expect_equal(sum(out$label == "index_predicted"), length(idx))
+})
+
+test_that("FIMS lognormal intervals are on the original scale", {
+  est <- fims_estimates()
+  est <- est[est$label == "landings_expected" | est$label == "catch_expected", ]
+  row <- which(!is.na(est$observed))[1]
+  est$observed[row] <- 100
+  est$log_sd[row] <- log(0.2)
+  out <- convert_fims(est)
+  obs <- out[out$label == "landings_observed", ][1, ]
+  expect_equal(obs$uncertainty_label, "cv")
+  # The CV gives back the lognormal sigma, and so the lognormal interval
+  sigma <- sqrt(log(1 + obs$uncertainty^2))
+  expect_equal(sigma, 0.2)
+  expect_equal(100 * exp(c(-1.96, 1.96) * sigma), c(67.57, 147.99), tolerance = 1e-4)
+})
+
+test_that("FIMS estimates that could not be calculated are NA", {
+  est <- fims_estimates()
+  ssb <- which(est$label == "spawning_biomass")
+  est$estimated[ssb[1]] <- -999
+  est$uncertainty[ssb[1]] <- -999
+  out <- convert_fims(est)
+  out_ssb <- out[out$label == "spawning_biomass", ]
+  # The row is kept, with a missing estimate
+  expect_equal(nrow(out_ssb), length(ssb))
+  expect_true(is.na(out_ssb$estimate[1]) && is.na(out_ssb$uncertainty[1]))
+  expect_false(any(out$estimate %in% -999))
 })
 
 test_that("FIMS estimates are relabeled and get years and eras", {
