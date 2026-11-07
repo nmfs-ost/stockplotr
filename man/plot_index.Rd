@@ -12,6 +12,9 @@ plot_index(
   interactive = TRUE,
   module = NULL,
   focus = NULL,
+  interval = 0.95,
+  log = FALSE,
+  relative = FALSE,
   make_rda = FALSE,
   figures_dir = getwd(),
   ...
@@ -58,6 +61,27 @@ module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 
 Default: NULL}
 
+\item{interval}{Number. Coverage of intervals around the observed index
+based on its observation error (e.g., 0.95), drawn as vertical lines.
+NULL draws no intervals.
+
+Default: 0.95}
+
+\item{log}{Logical. TRUE/FALSE; plot the index on a log scale. Indices
+with lognormal errors are often easier to judge on a log scale, where the
+intervals are symmetric.
+
+Default: FALSE}
+
+\item{relative}{Logical. TRUE/FALSE; divide each fleet's observed and
+predicted index (and intervals) by the mean of its observed index, and plot
+all fleets on one panel, colored by fleet. Indices with conflicting trends
+(data conflicts) are a common cause of poor fits and are easiest to see
+this way (\code{r4ss::SSplotIndices()} subplot 9). Any \code{group} other than
+"fleet" is added to \code{facet}.
+
+Default: FALSE}
+
 \item{make_rda}{Logical. TRUE/FALSE; indicate whether to save the object and
 make an automated caption and alternative text in the form of an \code{rda} object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
@@ -79,6 +103,14 @@ A plot showing the expected and predicted index.
 Plot Index of Abundance
 }
 \details{
+Intervals assume lognormal observation errors, as in Stock
+Synthesis, FIMS, BAM, and Rceattle: \eqn{o \exp(\pm z \cdot \sigma)},
+where \eqn{o} is the observed index and \eqn{\sigma} is its log-scale
+standard error. Uncertainty labeled "se", "sd", or "log_sd" is used as
+\eqn{\sigma}, and a coefficient of variation ("cv") is converted to
+\eqn{\sigma = \sqrt{\log(1 + CV^2)}}. Observations without an
+uncertainty have no interval.
+
 The input is from an assessment model output file
 translated to a standardized output (\link[stockplotr]{convert_output}).
 There are options to return a \code{ggplot2} object or export an .rda object
@@ -88,6 +120,20 @@ containing associated caption and alternative text for the figure.
 plot_index(
   dat = stockplotr::example_data,
   unit_label = "fish/hr",
+  interactive = FALSE
+)
+
+# 95\% intervals around the observed index, on a log scale
+plot_index(
+  dat = stockplotr::example_data,
+  interval = 0.95,
+  log = TRUE,
+  interactive = FALSE
+)
+# All indices relative to their means on one panel
+plot_index(
+  dat = stockplotr::example_data,
+  relative = TRUE,
   interactive = FALSE
 )
 
