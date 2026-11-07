@@ -52,13 +52,13 @@ A \code{ggplot2} object.
 \description{
 Plot the residuals of the fit to each index over time with three-sigma
 control limits and a runs test for non-random residuals (Carvalho et al.
-2017), as in JABBA and ss3diags (\code{SSplotRunstest()}).
+2017), as in \code{JABBA} and \code{ss3diags} (\code{SSplotRunstest()}).
 }
 \details{
 Residuals are \eqn{\log(o) - \log(p)} for observed \eqn{o} and
 predicted \eqn{p}, assuming lognormal errors. The one-sided runs test
 checks whether residual signs are random over time (normal
-approximation, as in ss3diags). The shaded band spans the three-sigma
+approximation, as in \code{ss3diags}). The shaded band spans the three-sigma
 limits, with sigma from the average moving range; it is green when the
 test passes (p >= 0.05) and red when it fails. Residuals outside the
 limits are filled red.
