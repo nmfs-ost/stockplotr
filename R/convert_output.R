@@ -55,8 +55,22 @@ convert_output <- function(
     files <- list(files)
   }
 
+  if(!all(is.null(models)) & length(models) != length(files)){
+    cli::cli_alert_warning("Number of model types entered is different from number of models.")
+    models <- c(models, rep(NA, length(files)-length(models))) # can't store NULL in vector so make a string
+    cli::cli_alert(glue::glue("Model types are: {paste0(\"'\",models,\"'\", collapse=\",\")}"))
+  }
+
+  if(length(fleet_names) != length(files)){
+    cli::cli_alert_warning("Number of fleet_names enetered is different from number of models.")
+    fleet_names <- c(fleet_names, rep(list(NULL), length(files)-length(fleet_names)))
+    names(fleet_names) <- names(files)
+    cli::cli_alert(glue::glue("Fleets names are: {str(fleet_names)}"))
+  }
+
   
   processed <- purrr::imap(files, function(file, model_name){
+      i <- which(names(files)==model_name)
       if (is.character(file) && grepl("Report.sso", file)) {
         lifecycle::deprecate_warn(
           when = "2.8.0", 
@@ -151,7 +165,7 @@ convert_output <- function(
         file <- readRDS(file)
       }
       if (is.character(file)) {
-        if (is.null(model)) {
+        if (is.null(models) || is.na(models[i])) {
           model <- switch(stringr::str_extract(file, "\\.([^.]+)$"),
             ".sso" = {
               cli::cli_alert_info("Processing Stock Synthesis output file...")
