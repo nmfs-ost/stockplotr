@@ -742,7 +742,7 @@ filter_data <- function(
   }
   if (nrow(plot_data) < 1) cli::cli_abort("{label_name} not found.")
   if (is.null(group)) {
-    if (!is.data.frame(dat) || (plot_data %>% dplyr::distinct(model) %>% nrow) > 1) {
+    if (!is.data.frame(dat) || (plot_data |> dplyr::distinct(model) |> nrow()) > 1) {
       plot_data <- plot_data |>
         dplyr::mutate(
           group_var = as.character(.data[["model"]])
@@ -1180,7 +1180,7 @@ add_reference_line <- function(
           dat = if(n_models == 1){
               dat
             } else {
-              dat %>% dplyr::filter(model == model_names[i])
+              dat |> dplyr::filter(model == model_names[i])
             },
           reference_name = glue::glue("{label}_{ref_line[i]}"),
           lbs = lbs
@@ -1195,7 +1195,7 @@ add_reference_line <- function(
       }
 
       if ("unfished" %in% names(ref_line_x)) {
-        sel_dat <- dat %>% dplyr::filter(model == model_names[i])
+        sel_dat <- dat |> dplyr::filter(model == model_names[i])
         plt_lab <- label
         # find the minimum x axis value from the plot
         min_year <- sel_dat |>
