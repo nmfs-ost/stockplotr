@@ -159,7 +159,6 @@ table_total_catch <- function(
     }
   }
 
-  # transform dfs into tables
   final <- catch |>
     gt::gt() |>
     theme_table()
