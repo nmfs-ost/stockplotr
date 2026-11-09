@@ -2,19 +2,30 @@
 #'
 #' Format stock assessment output file to a standardized tibble.
 #'
-#' @param file Path. Assessment model output file path. Currently accepts SS3
-#' `r4ss::ss_output()` or Report.sso file (being deprecated), BAM .rda file, Rceattle model object, and FIMS model object.
-#' @param model String. Assessment model used in evaluation
+#' @param files List of Paths. Assessment model output file paths. Currently accepts SS3
+#' `r4ss::ss_output()` or Report.sso file (being deprecated), BAM .rda file, Rceattle model object, 
+#' and FIMS model object. If multiple elements, all valid models will be read, converted, and 
+#' appended together.
+#' 
+#' `names(files)` will be used as the name of the model in the output.
+#' 
+#' @param models Character vector Assessment model used in evaluation
 #'
 #' Default: NULL
 #'
 #' Options: "ss3", "bam", "fims", "rceattle"
-#' @param fleet_names Character vector. Names of fleets in the assessment model as
+#' 
+#' Should match length of `files`.
+#' 
+#' @param fleet_names List of Character vector. Names of fleets in the assessment model as
 #'  shortened in the output file or names of fleets to replace the native fleet
 #'  names in the output. For example, if fleet names in the model are 1, 2, 3
 #'  then fleet_names = c("fleet1" = 1, "fleet2" = 2, "fleet3" = 3).
 #'
 #'  Default: NULL
+#' 
+#' Should match length of `files`.
+#' 
 #' @param save_dir Path. Full file path to save the converted output file. If
 #' saved file name is not indicated, the file will be saved as "std_output.rda"
 #' in the file path provided.
@@ -39,6 +50,12 @@
 #'   file = here::here("model1", "Report.sso"),
 #'   model = "ss3",
 #'   fleet_names = c("TWL", "NONTWL"),
+#'   save_dir = here::here("standard_output.rda")
+#' )
+#' convert_output(
+#'   file = list("model1"=here::here("model1", "Report.sso", "model2"=here::here("model2", "Report.sso")),
+#'   model = c("ss3", "ss3"),
+#'   fleet_names = list("model1"=c("TWL", "NONTWL"), "model2"=c("Fishery1", "Survey1", "Survey2")),
 #'   save_dir = here::here("standard_output.rda")
 #' )
 #' }

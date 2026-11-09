@@ -4,24 +4,32 @@
 \alias{convert_output}
 \title{Convert Output}
 \usage{
-convert_output(file, model = NULL, fleet_names = NULL, save_dir = NULL)
+convert_output(files, models = NULL, fleet_names = NULL, save_dir = NULL)
 }
 \arguments{
-\item{file}{Path. Assessment model output file path. Currently accepts SS3
-\code{r4ss::ss_output()} or Report.sso file (being deprecated), BAM .rda file, Rceattle model object, and FIMS model object.}
+\item{files}{List of Paths. Assessment model output file paths. Currently accepts SS3
+\code{r4ss::ss_output()} or Report.sso file (being deprecated), BAM .rda file, Rceattle model object,
+and FIMS model object. If multiple elements, all valid models will be read, converted, and
+appended together.
 
-\item{model}{String. Assessment model used in evaluation
+\code{names(files)} will be used as the name of the model in the output.}
+
+\item{models}{Character vector Assessment model used in evaluation
 
 Default: NULL
 
-Options: "ss3", "bam", "fims", "rceattle"}
+Options: "ss3", "bam", "fims", "rceattle"
 
-\item{fleet_names}{Character vector. Names of fleets in the assessment model as
+Should match length of \code{files}.}
+
+\item{fleet_names}{List of Character vector. Names of fleets in the assessment model as
 shortened in the output file or names of fleets to replace the native fleet
 names in the output. For example, if fleet names in the model are 1, 2, 3
 then fleet_names = c("fleet1" = 1, "fleet2" = 2, "fleet3" = 3).
 
-Default: NULL}
+Default: NULL
+
+Should match length of \code{files}.}
 
 \item{save_dir}{Path. Full file path to save the converted output file. If
 saved file name is not indicated, the file will be saved as "std_output.rda"
@@ -48,6 +56,12 @@ convert_output(
   file = here::here("model1", "Report.sso"),
   model = "ss3",
   fleet_names = c("TWL", "NONTWL"),
+  save_dir = here::here("standard_output.rda")
+)
+convert_output(
+  file = list("model1"=here::here("model1", "Report.sso", "model2"=here::here("model2", "Report.sso")),
+  model = c("ss3", "ss3"),
+  fleet_names = list("model1"=c("TWL", "NONTWL"), "model2"=c("Fishery1", "Survey1", "Survey2")),
   save_dir = here::here("standard_output.rda")
 )
 }
