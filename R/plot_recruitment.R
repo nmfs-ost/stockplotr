@@ -71,10 +71,9 @@ plot_recruitment <- function(
 
   if (is.null(unit_label)) {
     unit_label <- unique(prepared_data$unit)
-    if (is.na(unit_label) || is.null(unit_label)) cli::cli_abort("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+    if (is.na(unit_label) || is.null(unit_label)) cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
   }
   
-  # TODO: Fix the unit label if scaling
   recruitment_label <- label_magnitude(
     label = "Recruitment",
     unit_label = unit_label,
