@@ -59,6 +59,7 @@ is’
 kableExtra
 kobe
 len
+loess
 misspecification
 msy
 natively
@@ -74,6 +75,7 @@ rdat
 rowid
 satf
 sd
+SDNR
 se
 seealso
 socio
