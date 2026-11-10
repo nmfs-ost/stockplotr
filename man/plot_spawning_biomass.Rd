@@ -12,7 +12,7 @@ plot_spawning_biomass(
   ref_line = "msy",
   unit_label = NULL,
   era = NULL,
-  lbs = lifecycle::deprecate(),
+  lbs = lifecycle::deprecated(),
   module = NULL,
   scale_amount = 1,
   relative = FALSE,
