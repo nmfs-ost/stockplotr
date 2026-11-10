@@ -54,8 +54,7 @@ plot_spr <- function(
     dat = dat,
     label_name = "spr",
     geom = geom,
-    #TODO: change this to era once stockplotr::example_data updated
-    era = NULL,
+    era = era,
     group = group,
     facet = facet,
     module = module,
@@ -124,9 +123,7 @@ plot_spr <- function(
 
   ### Make RDA ----
   if (make_rda) {
-    # TODO: Update caption, alt text, and quantities once plot is finalized
     # Obtain relevant key quantities for captions/alt text
-    
     spr.start.year <- min(prepared_data$year)
     spr.end.year <- max(prepared_data$year)
     spr.min <- min(prepared_data$estimate) |> round(digits = 3)

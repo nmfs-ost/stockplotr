@@ -635,23 +635,6 @@ axis_breaks <- function(data_col) {
   scales::breaks_pretty()(x_range)
 }
 
-# y_axis_breaks <- function(data){
-#   # TODO: generalize this so we can input any column for the y-axis values
-#   y_n_breaks <- round(length(unique(data[["age"]])))
-#   if (y_n_breaks > 80) {
-#     y_n_breaks <- round(length(unique(data[["age"]])) / 6)
-#   } else if (y_n_breaks > 40) {
-#     y_n_breaks <- round(length(unique(data[["age"]])) / 3)
-#   }
-#   y_n_breaks_minor <- as.vector(unique(data[["age"]]))
-#   if (length(y_n_breaks_minor) > 40) {
-#     y_n_breaks_minor <- NULL
-#   } else if (length(y_n_breaks_minor) > 20) {
-#     y_n_breaks_minor <- y_n_breaks_minor[c(TRUE, FALSE)]
-#   }
-#   list(y_n_breaks_minor, y_n_breaks)
-# }
-
 #------------------------------------------------------------------------------
 
 cap_first_letter <- function(s) {
