@@ -141,7 +141,6 @@ plot_spawning_biomass <- function(
 ) {
   check_data(dat)
 
-  # TODO: start deprecation procedure for argument lbs
   if (relative & scale_amount > 1) {
     cli::cli_alert_warning("Scale amount is not applicable when relative = TRUE. Resetting scale_amount to 1.")
     scale_amount <- 1

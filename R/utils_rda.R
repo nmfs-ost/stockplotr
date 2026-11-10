@@ -327,9 +327,6 @@ calc_kqs <- function(returned_kq,
   rm(selected_module)
 }
 
-# TODO: update key quantities functions to work with a specified 'dir' instead of default 'getwd()'?
-# TODO: update key quantities functions for plots that need to extract values from KQs csv to calculate their own, dependent KQs (none present in current plotting functions)
-
 #' Substitute key quantities' values into template
 #'
 #' @param df Data frame. Dataframe created by importing "key_quantity_template.csv" or
