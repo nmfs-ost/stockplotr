@@ -3,7 +3,7 @@
 #' @inheritParams plot_recruitment
 #' @param unit_label String. Abbreviated catch units
 #'
-#' Default: "mt"
+#' Default: NULL
 #'
 #' @param digits Number. Numeric value indicating the number of digits catch values in the
 #' table will be rounded to.
@@ -26,7 +26,8 @@
 #' @export
 #'
 #' @examples
-#' table_total_catch(stockplotr::example_data,
+#' table_total_catch(
+#'   stockplotr::example_data,
 #'   module = "TIME_SERIES"
 #' )
 #'
@@ -39,7 +40,7 @@
 #' )
 table_total_catch <- function(
   dat,
-  unit_label = "mt",
+  unit_label = NULL,
   era = NULL,
   interactive = TRUE,
   module = NULL,
@@ -49,14 +50,7 @@ table_total_catch <- function(
   tables_dir = getwd()
 ) {
   check_data(dat)
-
-  # set unit label if scaled
-  unit_label <- label_magnitude(
-    label = "",
-    unit_label = unit_label,
-    scale_amount = scale_amount
-  )
-
+  
   # Filter data for catch
   prepared_data <- filter_data(
     dat = dat |>
@@ -75,6 +69,23 @@ table_total_catch <- function(
   if (nrow(prepared_data) == 0 | unique(stringr::str_detect(prepared_data$label, "catchability"))) {
     cli::cli_abort("No catch data found.")
   }
+  
+  # Labs
+  if (is.null(unit_label)) {
+    unit_label <- unique(prepared_data$unit)
+    unit_label <- unit_label[!is.na(unit_label)]
+    if (is.na(unit_label) || is.null(unit_label) || length(unit_label) == 0)  {
+      cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+      unit_label <- ""
+    }
+  }
+  
+  # set unit label if scaled
+  catch_label <- label_magnitude(
+    label = "",
+    unit_label = unit_label,
+    scale_amount = scale_amount
+  )
 
   # get uncertainty label by model
   uncert_lab <- prepared_data |>
@@ -109,7 +120,7 @@ table_total_catch <- function(
         colnames(catch[i])
       )
     }
-    if (names(catch[i]) == "uncertainty" && is.na(unique(catch[[i]]))) {
+    if (names(catch[i]) == "uncertainty" && all(is.na(unique(catch[[i]])))) {
       cols_to_remove <- c(
         cols_to_remove,
         colnames(catch[i])
@@ -138,28 +149,27 @@ table_total_catch <- function(
       catch <- catch |>
         tidyr::pivot_wider(
           names_from = Fleet,
-          names_glue = stringr::str_glue("Fleet {{Fleet}}{unit_label} ({uncert_lab})"),
+          names_glue = stringr::str_glue("Fleet {{Fleet}}{catch_label} ({uncert_lab})"),
           values_from = dplyr::starts_with("Total_catch")
         )
     } else {
       catch <- catch |>
         tidyr::pivot_wider(
           names_from = Fleet,
-          names_glue = stringr::str_glue("Fleet {{Fleet}}{unit_label}"),
+          names_glue = stringr::str_glue("Fleet {{Fleet}}{catch_label}"),
           values_from = dplyr::starts_with("Total_catch")
         )
     }
   } else {
     if (uncert_lab != "") {
       catch <- catch |>
-        dplyr::rename_with(~ paste0("Catch", unit_label, " (", uncert_lab, ")"), .cols = dplyr::starts_with("Total_catch"))
+        dplyr::rename_with(~ paste0("Catch", catch_label, " (", uncert_lab, ")"), .cols = dplyr::starts_with("Total_catch"))
     } else {
       catch <- catch |>
-        dplyr::rename_with(~ paste0("Catch", unit_label), .cols = dplyr::starts_with("Total_catch"))
+        dplyr::rename_with(~ paste0("Catch", catch_label), .cols = dplyr::starts_with("Total_catch"))
     }
   }
 
-  # transform dfs into tables
   final <- catch |>
     gt::gt() |>
     theme_table()
@@ -170,10 +180,10 @@ table_total_catch <- function(
     tot.catch.units <- unit_label
 
     # calculate & export key quantities
-    export_kqs(tot.catch.units, dir=tables_dir)
+    export_kqs(tot.catch.units, dir = tables_dir)
 
     # Add key quantities to captions/alt text
-    insert_kqs(tot.catch.units, dir=tables_dir)
+    insert_kqs(tot.catch.units, dir = tables_dir)
 
     create_rda(
       object = final,
@@ -185,11 +195,11 @@ table_total_catch <- function(
       scale_amount = 1,
       table_df = final
     )
-
-    cli::cli_alert_warning("Multiple tables cannot be exported at this time.")
-    cli::cli_alert_info("We are currently developing this feature.")
   }
-
-  # Send table(s) to viewer
+  
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+  
   final
 }
