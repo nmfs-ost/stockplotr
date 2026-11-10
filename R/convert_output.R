@@ -295,11 +295,8 @@ convert_output <- function(
     out_new <- out_new |>
       dplyr::mutate(label = dplyr::case_when(
         !is.na(alt_label) ~ alt_label,
-        # TODO: add this to ss3_var_names.xlsx
-        label == "dev" & module_name == "SPAWN_RECRUIT" ~ "recruitment_deviation",
-        # TODO: add this to ss3_var_names.xlsx
-        label == "dev" & module_name == "SPAWN_RECRUIT_CURVE" ~ "recruitment_deviation",
-        # TODO: add this to ss3_var_names.xlsx
+        label == "dev" & module_name == "SPAWN_RECRUIT" ~ "recruitment_deviations",
+        label == "dev" & module_name == "SPAWN_RECRUIT_CURVE" ~ "recruitment_deviations",
         label == "dev" & module_name == "DISCARD_OUTPUT" ~ "discard_deviation",
         TRUE ~ label
       )) |>

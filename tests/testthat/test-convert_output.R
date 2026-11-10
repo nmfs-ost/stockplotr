@@ -57,24 +57,23 @@ test_that("convert_output saves model ss3 hake output file", {
 })
 
 test_that("missing arguments trigger warnings or errors", {
-  # TODO: Debug why this doesn't work
-  # expect_error(
-  #   convert_output(
-  #     model = "ss3",
-  #     save_dir = fs::path("fixtures", "ss3_models_converted", "Hake_2018")
-  #   ),
-  #   "Missing `file`"
-  # )
+  expect_error(
+    convert_output(
+      model = "ss3",
+      save_dir = fs::path("fixtures", "ss3_models_converted", "Hake_2018")
+    ),
+    "argument \"file\" is missing, with no default"
+  )
 
-  # TODO: Debug why this doesn't work
-  # expect_error(
-  #   convert_output(
-  #     file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
-  #     model = "fake_model",
-  #     save_dir = fs::path("fixtures", "ss3_models_converted", "Hake_2018")
-  #   ),
-  #   "Missing `model`"
-  # )
+  expect_error(
+    convert_output(
+      file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
+      model = "fake_model",
+      save_dir = fs::path("fixtures", "ss3_models_converted", "Hake_2018")
+    ),
+    "`file` not found."
+  )
+  
   dir.create(fs::path("fixtures", "ss3_models_converted", "Hake_2018"), recursive = TRUE)
 
   expect_error(

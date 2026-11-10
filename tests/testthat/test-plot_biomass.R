@@ -35,12 +35,6 @@ test_that("plot_biomass generates plots without errors", {
     )
   )
 
-  # TODO: Update test
-  # expect plot with warning message if ref_point not indicated
-  # expect_message(
-  #   plot_biomass(stockplotr::example_data)
-  # )
-
   # expect error-free plot with many arguments
   expect_no_error(
     plot_biomass(

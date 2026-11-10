@@ -78,6 +78,7 @@ SPAWN_RECRUIT,bias_adjusted,,
 SPAWN_RECRUIT,pred_recr,predicted_recruitment,
 INDEX_2,dev,,
 SPAWN_RECRUIT,dev,recruitment_deviations,
+SPAWN_RECRUIT_CURVE,dev,recruitment_deviations,
 SPAWN_RECRUIT,biasadjuster,,
 SPAWN_RECRUIT,mature_bio,mature_biomass,kg
 TIME_SERIES,mature_bio,mature_biomass,kg
