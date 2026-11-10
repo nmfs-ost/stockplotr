@@ -3,6 +3,7 @@ test_that("plot_recruitment generates plots without errors", {
   expect_no_error(
     plot_recruitment(
       stockplotr::example_data,
+      unit_label = "kg",
       module = "TIME_SERIES",
       interactive = FALSE
     )
@@ -53,16 +54,3 @@ test_that("plot_recruitment generates plots without errors", {
   )
 })
 
-# test_that("rda file made when indicated", {
-#   # export rda
-#   plot_recruitment(
-#     stockplotr::example_data,
-#     module = "TIME_SERIES",
-#     interactive = FALSE,
-#     figures_dir = getwd(),
-#     make_rda = TRUE
-#   )
-
-#   # expect that both figures dir and the recruitment_figure.rda file exist
-#   check_and_remove_tmp_files("recruitment_figure.rda")
-# })

@@ -66,7 +66,7 @@
 #'    figures_tables_dir = fs::path("outputs/figures"),
 #'    plot_recruitment_options = list(
 #'      module = "TIME_SERIES",
-#'      unit_label = "Millions of Recruits" # customize unit label for recruitment plot
+#'      unit_label = "mt"
 #'    ),
 #'    plot_spawning_biomass_options = list(
 #'      ref_line = "unfished"     # customize reference line for spawning biomass plot
@@ -93,7 +93,7 @@ save_all_plots <- function(
   plot_recruitment_options = list(module = "TIME_SERIES"),
   plot_natural_mortality_options = list(module = "Natural_Mortality"),
   table_total_catch_options = list( module = "TIME_SERIES"),
-  # All other functions can be modified with appropiate *_options
+  # All other functions can be modified with appropriate *_options
   # parameter lists.
   ...
 ) {

@@ -45,7 +45,7 @@
 #' 2018 Gulf of Alaska Pollock stock assessment output
 #'
 #' Output of the 2018 Gulf of Alaska Pollock stock assessment produced from Rceattle, standardized 
-#' using stockplotr::convert_output(). The example can be found and run from the Rceattle repository.
+#' using `stockplotr::convert_output()`. The example can be found and run from the Rceattle repository.
 #'
 #' @docType data
 #'

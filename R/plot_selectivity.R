@@ -3,7 +3,7 @@
 #' @inheritParams plot_spawning_biomass
 #' @param unit_label units for length-based selectivity.
 #'
-#' Default: "cm"
+#' Default: NULL
 #'
 #' @returns A plot showing selectivity by age or length.
 #'
@@ -18,20 +18,21 @@
 #'
 #' @examples
 #' plot_selectivity(
-#'   dat = stockplotr:::example_data,
+#'   dat = stockplotr::example_data,
 #'   interactive = TRUE,
 #'   module = "AGE_SELEX",
 #'   make_rda = FALSE
 #' )
 #' plot_selectivity(
-#'   dat = stockplotr:::example_data,
+#'   dat = stockplotr::example_data,
 #'   module = "LEN_SELEX",
+#'   unit_label = "cm",
 #'   make_rda = FALSE
 #' )
 plot_selectivity <- function(
   dat,
   # type = "age",
-  unit_label = "cm",
+  unit_label = NULL,
   group = NULL,
   facet = NULL,
   interactive = TRUE,
@@ -43,7 +44,7 @@ plot_selectivity <- function(
   check_data(dat)
 
   # Extract selectivity
-  selectivity <- filter_data(
+  prepared_data <- filter_data(
     dat = dat,
     label_name = "selectivity",
     geom = "line",
@@ -53,10 +54,19 @@ plot_selectivity <- function(
     interactive = interactive,
     module = module
   )
+  
+  if (is.null(unit_label)) {
+    if (!any(grepl("length", prepared_data$label))) {
+      unit_label <- "years"
+    } else {
+      unit_label <- unique(prepared_data$unit)
+      if (is.na(unit_label) || is.null(unit_label)) cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+    }
+  }
 
   # process data
   processed_data <- process_data(
-    dat = selectivity,
+    dat = prepared_data,
     group = "year",
     facet = c(group, facet)
   )
@@ -71,7 +81,6 @@ plot_selectivity <- function(
     type <- "age"
   }
 
-  # |> dplyr::mutate(group_var = NA)
   groups <- processed_data[[2]]
   facets <- processed_data[[3]]
 
@@ -129,10 +138,7 @@ plot_selectivity <- function(
 
     selectivity.type.low <- tolower(selectivity.type.cap)
 
-    selectivity.x <- ifelse(type == "age",
-      "years",
-      unit_label
-    )
+    selectivity.x <- unit_label
 
     selectivity.start.year <- min(prepared_data$year)
 
@@ -186,5 +192,10 @@ plot_selectivity <- function(
       dir = figures_dir
     )
   }
+  
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+  
   final
 }

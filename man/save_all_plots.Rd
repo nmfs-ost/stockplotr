@@ -90,7 +90,7 @@ save_all_plots(
    figures_tables_dir = fs::path("outputs/figures"),
    plot_recruitment_options = list(
      module = "TIME_SERIES",
-     unit_label = "Millions of Recruits" # customize unit label for recruitment plot
+     unit_label = "mt"
    ),
    plot_spawning_biomass_options = list(
      ref_line = "unfished"     # customize reference line for spawning biomass plot
