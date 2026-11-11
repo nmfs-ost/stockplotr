@@ -3,7 +3,7 @@
 #' @inheritParams plot_abundance_at_age
 #' @param unit_label String. Units of catch used to label the axis
 #'
-#' Default: "mt"
+#' Default: NULL
 #'
 #' @param scale_amount Number. A number describing how much to scale down the catch at
 #' age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders
@@ -50,7 +50,6 @@
 #'   dat = stockplotr::example_data,
 #'   facet = "fleet",
 #'   unit_label = "fish",
-#'   facet = "fleet",
 #'   scale_amount = 100,
 #'   interactive = FALSE,
 #'   make_rda = FALSE,
