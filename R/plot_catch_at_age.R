@@ -183,9 +183,14 @@ plot_catch_at_age <- function(
       # get name of function and remove "plot_" from it
       topic_label = gsub("plot_", "", utils::tail(as.character(sys.call()[[1]]), n = 1)),
       fig_or_table = "figure",
-      dir=figures_dir,
+      dir = figures_dir,
       dat
     )
   }
+  
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+  
   plot
 }

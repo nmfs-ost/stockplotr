@@ -8,7 +8,7 @@
 #' Options: May include, but is not limited to: "fleet", "year", "area", NULL
 #' @param unit_label String. Index of abundance/CPUE units
 #'
-#' Default: ""
+#' Default: NULL
 #' @param focus Character vector. Column name or names used to filter data.
 #' (i.e. select names of fleets to zoom into the plot)
 #'
@@ -173,6 +173,10 @@ plot_index <- function(
       dir = figures_dir
     )
   }
-  # Output final plot
+  
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+  
   plt
 }

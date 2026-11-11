@@ -3,7 +3,7 @@
 #' @inheritParams plot_spawning_biomass
 #' @param unit_label String. Biomass units
 #'
-#' Default: "mt"
+#' Default: NULL
 #' @param ref_line String. Type of reference point to
 #'   compare biomass to. The default `"msy"` looks for
 #'   `"biomass_msy"` in the `"label"` column of `dat`. The actual
@@ -337,10 +337,10 @@ plot_biomass <- function(
     )
   }
   
-  # remove global variable "selected_module"
-  if (exists("selected_module", envir = .GlobalEnv)) rm("selected_module", envir = .GlobalEnv)  
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
   
-  # Output final plot
   final
 
 }
