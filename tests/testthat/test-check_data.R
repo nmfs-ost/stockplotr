@@ -75,7 +75,7 @@ test_that("plotting and table entry points reject invalid data before other work
     "plot_abundance_at_age",
     "plot_biomass",
     "plot_biomass_at_age",
-    "plot_catch_comp",
+    "plot_catch_at_age",
     "plot_discard",
     "plot_fishing_mortality",
     "plot_index",

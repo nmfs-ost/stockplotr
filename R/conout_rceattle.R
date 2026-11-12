@@ -3,6 +3,8 @@
 #' Does not change naming conventions.
 #'
 #' @inheritParams convert_output
+#' @param out_new The empty standard output data frame from
+#' [convert_output()], which sets the columns of the output.
 #'
 #' @returns Reshaped data frame.
 conout_rceattle <- function(

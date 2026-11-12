@@ -7,7 +7,7 @@ fig_base_temp_files <- c(
   "landings_figure.rda",
   "natural_mortality_figure.rda",
   "biomass_at_age_figure.rda",
-  "catch_comp_figure.rda",
+  "catch_at_age_figure.rda",
   "recruitment_deviations_figure.rda",
   "recruitment_figure.rda",
   "selectivity_figure.rda",
@@ -171,4 +171,7 @@ test_that("save_all_plots returns error when dat is not valid", {
         )
       )
     )
+    
+    # erase temporary testing files
+    unlink(fs::path(savedir), recursive=TRUE)
 })

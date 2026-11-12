@@ -11,25 +11,14 @@ test_that("table_projections generates plots without errors", {
   expect_no_error(
     table_projections(
       dat = stockplotr::example_data,
+      catch_label = "kg",
+      spawning_biomass_label = "kg",
       interactive = FALSE,
       make_rda = FALSE,
       tables_dir = getwd()
     )
   )
 })
-
-# test_that("rda file made when indicated", {
-#   # export rda
-#   table_projections(
-#     dat = stockplotr::example_data,
-#     interactive = FALSE,
-#     make_rda = TRUE,
-#     tables_dir = getwd()
-#   )
-
-#   # expect that both tables dir and the projections_table.rda file exist
-#   check_and_remove_tmp_files("projections_table.rda", figs_or_tables="tables")
-# })
 
 test_that("table_projections generates error with incorrect module", {
   # expect error
@@ -39,6 +28,7 @@ test_that("table_projections generates error with incorrect module", {
       dat = stockplotr::example_data,
       interactive = FALSE,
       module = "INCORRECT",
+      spawning_biomass_label = "kg",
       make_rda = FALSE,
       tables_dir = getwd()
     )

@@ -44,10 +44,8 @@
 
 #' 2018 Gulf of Alaska Pollock stock assessment output
 #'
-#' Standardized output of the 2018 Gulf of Alaska Pollock stock assessment 
-#' produced from Rceattle including all of the values needed to create 
-#' plots and tables in {stockplotr}. The example can be found and run from the 
-#' Rceattle repository.
+#' Output of the 2018 Gulf of Alaska Pollock stock assessment produced from Rceattle, standardized 
+#' using `stockplotr::convert_output()`. The example can be found and run from the Rceattle repository.
 #'
 #' @docType data
 #'
@@ -93,7 +91,7 @@
 #' @keywords datasets
 #'
 #' @references Adams, G. D., Holsman, K. K., Barbeaux, S. J., Dorn, M. W., Ianelli, J. N., Spies, I., … Punt, A. E. (2022)
-#' (\href{https://doi.org/10.1016/j.fishres.2022.106303})
+#' (\doi{10.1016/j.fishres.2022.106303})
 #'
 #' @source \href{https://github.com/afsc-assessments/Rceattle/blob/main/examples/Fit_2018_GOA_single-species_models.R}{Rceattle Example}
 #'
@@ -152,7 +150,7 @@
 #' @keywords datasets
 #' 
 #' @references SEDAR (2018)
-#' (\href{https://sedarweb.org/documents/sedar-55-stock-assessment-report-south-atlantic-vermilion-snapper/})
+#' (\url{https://sedarweb.org/documents/sedar-55-stock-assessment-report-south-atlantic-vermilion-snapper/})
 #'
 #' @examples
 #' data(vermilion_snapper)
