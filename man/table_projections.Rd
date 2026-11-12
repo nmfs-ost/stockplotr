@@ -6,7 +6,8 @@
 \usage{
 table_projections(
   dat,
-  unit_label = c(catch = "mt", spawning_biomass = "mt", fishing_mortality = ""),
+  catch_label = NULL,
+  spawning_biomass_label = NULL,
   interactive = TRUE,
   module = NULL,
   make_rda = FALSE,
@@ -20,10 +21,13 @@ returned from \link[stockplotr]{convert_output}.
 If inputting a list of tibbles, the first tibble's reference point defined
 in \code{ref_line} is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{unit_label}{Character vector. Abbreviated unit label for each quantity
+\item{catch_label}{String. Units for catch
 
-Default: c("catch" = "mt", "spawning_biomass" = "mt",
-"fishing_mortality" = "")}
+Default: NULL}
+
+\item{spawning_biomass_label}{String. Units for spawning biomass
+
+Default: NULL}
 
 \item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
@@ -65,4 +69,11 @@ table_projections(
   module = "DERIVED_QUANTITIES"
 )
 
+table_projections(
+ dat = stockplotr::example_data,
+ interactive = FALSE,
+ catch_label = "kg",
+ spawning_biomass_label = "kg",
+ module = c(NULL, "DERIVED_QUANTITIES", "DERIVED_QUANTITIES")
+ )
 }

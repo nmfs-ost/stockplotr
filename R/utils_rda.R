@@ -549,10 +549,6 @@ insert_kqs <- function(..., dir=getwd()) {
 #'
 #' Default: the working directory (`getwd()`)
 #'
-#' @param year Number. Assessment year
-#'
-#' Default: the current year
-#'
 #' @param ref_line String. Reference line value
 #'
 #' Default: "msy"

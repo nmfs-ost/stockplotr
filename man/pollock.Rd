@@ -49,10 +49,8 @@ A tibble (\code{tbl_df}, \code{tbl}, \code{data.frame}) with 9,983 rows and 35 v
 data(pollock)
 }
 \description{
-Standardized output of the 2018 Gulf of Alaska Pollock stock assessment
-produced from Rceattle including all of the values needed to create
-plots and tables in {stockplotr}. The example can be found and run from the
-Rceattle repository.
+Output of the 2018 Gulf of Alaska Pollock stock assessment produced from Rceattle, standardized
+using \code{stockplotr::convert_output()}. The example can be found and run from the Rceattle repository.
 }
 \examples{
 data(pollock)
@@ -61,6 +59,6 @@ unique(pollock$label)
 }
 \references{
 Adams, G. D., Holsman, K. K., Barbeaux, S. J., Dorn, M. W., Ianelli, J. N., Spies, I., … Punt, A. E. (2022)
-(\href{https://doi.org/10.1016/j.fishres.2022.106303})
+(\doi{10.1016/j.fishres.2022.106303})
 }
 \keyword{datasets}

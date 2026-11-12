@@ -11,6 +11,9 @@ conout_rceattle(file, out_new, fleet_names = NULL)
 \code{r4ss::ss_output()} or Report.sso file (being deprecated), BAM .rda file, Rceattle model object, and FIMS output
 (the tibble returned by \code{FIMS::get_estimates()}, a \code{FIMSFit} object, or an .rds file with either).}
 
+\item{out_new}{The empty standard output data frame from
+\code{\link[=convert_output]{convert_output()}}, which sets the columns of the output.}
+
 \item{fleet_names}{Character vector. Names of fleets in the assessment model as
 shortened in the output file or names of fleets to replace the native fleet
 names in the output. For example, if fleet names in the model are 1, 2, 3

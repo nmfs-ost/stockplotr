@@ -123,19 +123,16 @@ table_index <- function(
   # if (uncert_lab != "") uncert_lab <- glue::glue("({uncert_lab})")
 
   # merge error and index columns and rename
-  df_list <- merge_error(
+  final_tab <- merge_error(
     table_data,
     id_col_vals,
     unit_label = "", # should this be CPUE?
     uncert_lab
   )
 
-  # transform dfs into tables
-  final <- lapply(df_list, function(df) {
-    df |>
-      gt::gt() |>
-      theme_table()
-  })
+  final <- final_tab[[1]] |>
+    gt::gt() |>
+    theme_table()
 
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
