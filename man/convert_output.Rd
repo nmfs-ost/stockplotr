@@ -4,11 +4,18 @@
 \alias{convert_output}
 \title{Convert Output}
 \usage{
-convert_output(file, model = NULL, fleet_names = NULL, save_dir = NULL)
+convert_output(
+  file,
+  model = NULL,
+  fleet_names = NULL,
+  save_dir = NULL,
+  start_year = NULL
+)
 }
 \arguments{
 \item{file}{Path. Assessment model output file path. Currently accepts SS3
-\code{r4ss::ss_output()} or Report.sso file (being deprecated), BAM .rda file, Rceattle model object, and FIMS model object.}
+\code{r4ss::ss_output()} or Report.sso file (being deprecated), BAM .rda file, Rceattle model object, and FIMS output
+(the tibble returned by \code{FIMS::get_estimates()}, a \code{FIMSFit} object, or an .rds file with either).}
 
 \item{model}{String. Assessment model used in evaluation
 
@@ -28,6 +35,12 @@ saved file name is not indicated, the file will be saved as "std_output.rda"
 in the file path provided.
 
 Default: NULL}
+
+\item{start_year}{Number. First year of the model, for FIMS output only.
+FIMS reports years as indices (1 = first model year), which are converted
+to years when \code{start_year} is given.
+
+Default: NULL (years are left as indices)}
 }
 \value{
 A reformatted and standardized tibble of assessment model results
@@ -41,6 +54,14 @@ Format stock assessment output file to a standardized tibble.
 The resulting object is a long-format, transformed and machine readable
 version of a model output file. Converted data frame is always returned.
 It will also be saved if save_dir is not NULL.
+
+For FIMS, each data point (index, landings, and age and length
+compositions) is split into an observed row (e.g., "index_observed") and a
+predicted row (e.g., "index_predicted"), as for the other models. Observed
+rows hold the observation error (a log-scale standard error for lognormal
+data) in \code{uncertainty} and the negative log-likelihood in \code{likelihood}.
+Other estimates are relabeled with \code{fims_var_names.csv} (e.g.,
+"expected_recruitment" becomes "recruitment").
 }
 \examples{
 \dontrun{

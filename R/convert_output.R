@@ -3,7 +3,8 @@
 #' Format stock assessment output file to a standardized tibble.
 #'
 #' @param file Path. Assessment model output file path. Currently accepts SS3
-#' `r4ss::ss_output()` or Report.sso file (being deprecated), BAM .rda file, Rceattle model object, and FIMS model object.
+#' `r4ss::ss_output()` or Report.sso file (being deprecated), BAM .rda file, Rceattle model object, and FIMS output
+#' (the tibble returned by `FIMS::get_estimates()`, a `FIMSFit` object, or an .rds file with either).
 #' @param model String. Assessment model used in evaluation
 #'
 #' Default: NULL
@@ -20,6 +21,11 @@
 #' in the file path provided.
 #'
 #' Default: NULL
+#' @param start_year Number. First year of the model, for FIMS output only.
+#' FIMS reports years as indices (1 = first model year), which are converted
+#' to years when `start_year` is given.
+#'
+#' Default: NULL (years are left as indices)
 #'
 #' @author Samantha Bredeck
 #'
@@ -29,6 +35,14 @@
 #' @details The resulting object is a long-format, transformed and machine readable
 #' version of a model output file. Converted data frame is always returned.
 #' It will also be saved if save_dir is not NULL.
+#'
+#' For FIMS, each data point (index, landings, and age and length
+#' compositions) is split into an observed row (e.g., "index_observed") and a
+#' predicted row (e.g., "index_predicted"), as for the other models. Observed
+#' rows hold the observation error (a log-scale standard error for lognormal
+#' data) in `uncertainty` and the negative log-likelihood in `likelihood`.
+#' Other estimates are relabeled with `fims_var_names.csv` (e.g.,
+#' "expected_recruitment" becomes "recruitment").
 #'
 #'
 #' @export
@@ -46,7 +60,8 @@ convert_output <- function(
   file,
   model = NULL,
   fleet_names = NULL,
-  save_dir = NULL
+  save_dir = NULL,
+  start_year = NULL
 ) {
   
   if (is.character(file) && grepl("Report.sso", file)) {
@@ -163,8 +178,12 @@ convert_output <- function(
         cli::cli_abort("Unknown file type. Please indicate model.")
       )
     }
-  } else {
+  } else if (is.null(model)) {
     model <- switch(class(file)[1],
+      "FIMSFit" = {
+        cli::cli_alert_info("Processing FIMS output file...")
+        "fims"
+      },
       "fims" = {
         cli::cli_alert_info("Processing FIMS output file...")
         "fims"
@@ -210,17 +229,7 @@ convert_output <- function(
     cli::cli_abort("JABBA output not currently compatible.")
     #### FIMS ####
   } else if (model == "fims") {
-    if (is.character(file) && length(file) == 1) {
-      fims_output <- readRDS(file)
-    } else {
-      fims_output <- file
-    }
-    # TEMPORARY -- add in era to df
-    if ("era" %notin% colnames(fims_output)) {
-      fims_output$era <- NA
-    }
-    fims_output[setdiff(tolower(names(out_new)), tolower(names(fims_output)))] <- NA
-    out_new <- fims_output
+    out_new <- conout_fims(file = file, out_new = out_new, start_year = start_year)
     #### Rceattle ####
   } else if (model == "rceattle") {
    out_new <- conout_rceattle(file = file, out_new = out_new, fleet_names = fleet_names)
