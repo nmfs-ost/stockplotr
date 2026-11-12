@@ -102,7 +102,13 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">convert_output</span><span class="op">(</span><span class="va">file</span>, model <span class="op">=</span> <span class="cn">NULL</span>, fleet_names <span class="op">=</span> <span class="cn">NULL</span>, save_dir <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">convert_output</span><span class="op">(</span></span>
+<span>  <span class="va">file</span>,</span>
+<span>  model <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fleet_names <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  save_dir <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  start_year <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -111,7 +117,8 @@
 
 <dl><dt id="arg-file">file<a class="anchor" aria-label="anchor" href="#arg-file"></a></dt>
 <dd><p>Path. Assessment model output file path. Currently accepts SS3
-<code>r4ss::ss_output()</code> or Report.sso file (being deprecated), BAM .rda file, Rceattle model object, and FIMS model object.</p></dd>
+<code>r4ss::ss_output()</code> or Report.sso file (being deprecated), BAM .rda file, Rceattle model object, and FIMS output
+(the tibble returned by <code>FIMS::get_estimates()</code>, a <code>FIMSFit</code> object, or an .rds file with either).</p></dd>
 
 
 <dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
@@ -134,6 +141,13 @@ saved file name is not indicated, the file will be saved as "std_output.rda"
 in the file path provided.</p>
 <p>Default: NULL</p></dd>
 
+
+<dt id="arg-start-year">start_year<a class="anchor" aria-label="anchor" href="#arg-start-year"></a></dt>
+<dd><p>Number. First year of the model, for FIMS output only.
+FIMS reports years as indices (1 = first model year), which are converted
+to years when <code>start_year</code> is given.</p>
+<p>Default: NULL (years are left as indices)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -146,6 +160,13 @@ adapt results among regional assessments.</p>
     <p>The resulting object is a long-format, transformed and machine readable
 version of a model output file. Converted data frame is always returned.
 It will also be saved if save_dir is not NULL.</p>
+<p>For FIMS, each data point (index, landings, and age and length
+compositions) is split into an observed row (e.g., "index_observed") and a
+predicted row (e.g., "index_predicted"), as for the other models. Observed
+rows hold the observation error (a log-scale standard error for lognormal
+data) in <code>uncertainty</code> and the negative log-likelihood in <code>likelihood</code>.
+Other estimates are relabeled with <code>fims_var_names.csv</code> (e.g.,
+"expected_recruitment" becomes "recruitment").</p>
     </div>
     <div id="author">
     <h2>Author</h2>
