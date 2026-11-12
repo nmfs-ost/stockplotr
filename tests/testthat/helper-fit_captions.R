@@ -1,5 +1,7 @@
 # Evaluate plotting code with `make_rda = TRUE` in a temporary directory and
-# return the saved rda (a list with the figure, caption, and alt text).
+# return the saved rda (a list with the figure, caption, and alt text), with
+# the key quantities recorded in key_quantities.csv as `kqs` (a named
+# vector of the filled-in values).
 # `captions` is an optional captions_alt_text.csv to start from, and `dir` the
 # figures_dir the plot was saved to (default: the temporary directory).
 fit_rda <- function(code, topic_label, captions = NULL, dir = NULL) {
@@ -18,7 +20,11 @@ fit_rda <- function(code, topic_label, captions = NULL, dir = NULL) {
   }
   suppressMessages(invisible(utils::capture.output(force(code))))
   rda <- NULL
-  load(file.path(if (is.null(dir)) wd else dir, "figures", paste0(topic_label, "_figure.rda")))
+  out <- if (is.null(dir)) wd else dir
+  load(file.path(out, "figures", paste0(topic_label, "_figure.rda")))
+  kqs <- utils::read.csv(file.path(out, "key_quantities.csv"))
+  kqs <- kqs[!is.na(kqs$value) & kqs$value != "", , drop = FALSE]
+  rda$kqs <- stats::setNames(as.character(kqs$value), kqs$key_quantity)
   rda
 }
 

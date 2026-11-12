@@ -30,3 +30,21 @@ test_that("fit_add_caption_rows adds missing rows to an existing captions file",
   fit_add_caption_rows("runs_test")
   expect_equal(nrow(utils::read.csv("captions_alt_text.csv")), nrow(template))
 })
+
+test_that("fit_add_kq_rows adds missing rows to an existing key quantities file", {
+  dir <- tempfile("kqs")
+  dir.create(dir)
+  on.exit(unlink(dir, recursive = TRUE), add = TRUE)
+  template <- utils::read.csv(
+    system.file("resources", "key_quantity_template.csv", package = "stockplotr")
+  )
+  old <- template[!grepl("^runs[.]test[.]", template$key_quantity), ]
+  utils::write.csv(old, file.path(dir, "key_quantities.csv"), row.names = FALSE)
+  fit_add_kq_rows(c("runs.test.n.passed", "runs.test.failed"), dir = dir)
+  kqs <- utils::read.csv(file.path(dir, "key_quantities.csv"))
+  expect_equal(nrow(kqs), nrow(old) + 2)
+  expect_true(all(c("runs.test.n.passed", "runs.test.failed") %in% kqs$key_quantity))
+  # Rows already present are not duplicated
+  fit_add_kq_rows("runs.test.n.passed", dir = dir)
+  expect_equal(nrow(utils::read.csv(file.path(dir, "key_quantities.csv"))), nrow(old) + 2)
+})

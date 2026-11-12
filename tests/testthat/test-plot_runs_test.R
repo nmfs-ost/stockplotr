@@ -101,6 +101,19 @@ test_that("plot_runs_test saves a caption and alt text that describe the tests",
   expect_tags_filled(rda, "runs.test.")
   expect_match(rda$alt_text, "passed for 2 of 2 indices")
   expect_match(rda$alt_text, "One residual is outside the control limits: Triennial in 2004.")
+  # The results are recorded in key_quantities.csv
+  resid <- index_residuals(stockplotr::example_data, interactive = FALSE)
+  kqs <- rda$kqs[grepl("^runs[.]test[.]", names(rda$kqs))]
+  expect_setequal(
+    names(kqs),
+    paste0("runs.test.", c("start.year", "end.year", "n.indices", "n.passed", "failed", "p.values", "n.outside"))
+  )
+  expect_equal(kqs[["runs.test.start.year"]], as.character(min(resid$year)))
+  expect_equal(kqs[["runs.test.n.indices"]], "2")
+  expect_equal(kqs[["runs.test.n.passed"]], "2")
+  expect_equal(kqs[["runs.test.failed"]], "none")
+  expect_equal(kqs[["runs.test.n.outside"]], "1")
+  expect_match(kqs[["runs.test.p.values"]], "^[^;]+: [0-9.]+; [^;]+: [0-9.]+$")
 
   # save_all_plots() saves to a figures folder other than the working directory
   figs <- tempfile("figs")
