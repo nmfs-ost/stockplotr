@@ -3,7 +3,7 @@
 #' @inheritParams plot_recruitment
 #' @param unit_label String. Abbreviated landings units
 #'
-#' Default: "mt"
+#' Default: NULL
 #' @param group String. Single column that groups the data.
 #'
 #' Set group = "none" to summarize data over all indexing values.
@@ -42,16 +42,17 @@
 #' @export
 #'
 #' @examples
-#' table_landings(stockplotr::example_data)
+#' table_landings(stockplotr::example_data,
+#'   interactive = FALSE)
 #'
 #' table_landings(
 #'   stockplotr::example_data,
-#'   unit_label = "landings label",
+#'   unit_label = "kg",
 #'   group = "fleet"
 #' )
 table_landings <- function(
   dat,
-  unit_label = "mt",
+  unit_label = NULL,
   era = NULL,
   interactive = TRUE,
   group = NULL,
@@ -65,14 +66,6 @@ table_landings <- function(
 ) {
   check_data(dat)
 
-  # set unit label if scaled
-  unit_label <- label_magnitude(
-    label = "",
-    unit_label = unit_label,
-    scale_amount = scale_amount
-  )
-
-  # TODO: do group and facet need to be uncommented and updated?
   # Filter data for landings
   prepared_data <- filter_data(
     dat = dat,
@@ -125,24 +118,42 @@ table_landings <- function(
   table_data <- table_data_info[[1]]
   indexed_vars <- table_data_info[[2]]
   id_col_vals <- table_data_info[[3]]
+  
+  if (is.null(unit_label)) {
+    # remove fleet names from table_data colnames
+    fleet_pattern <- paste0("_(", paste(fleets, collapse = "|"), ")$")
+    cleaned_colnames <- gsub(fleet_pattern, "", colnames(table_data[[1]]))
+    unit_label <- prepared_data |>
+      dplyr::filter(label %in% cleaned_colnames) |>
+      dplyr::select(unit) |>
+      unique() |>
+      dplyr::pull(unit)
+    if (is.na(unit_label)) {
+      cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+      unit_label <- ""
+    }
+  }
+  
+  # set unit label if scaled
+  landings_label <- label_magnitude(
+    label = "",
+    unit_label = unit_label,
+    scale_amount = scale_amount
+  )
 
-  # id_group_vals <- sapply(id_cols, function(x) unique(prepared_data[[x]]), simplify = FALSE)
-  # TODO: add check if there is a landings column for every error column -- if not remove the error (can keep landings)
+    # TODO: add check if there is a landings column for every error column -- if not remove the error (can keep landings)
 
   # merge error and landings columns and rename
-  df_list <- merge_error(
+  final_tab <- merge_error(
     table_data,
     id_col_vals,
-    unit_label,
+    landings_label,
     uncert_lab
   )
 
-  # transform dfs into tables
-  final <- lapply(df_list, function(df) {
-    df |>
-      gt::gt() |>
-      theme_table()
-  })
+  final <- final_tab[[1]] |>
+    gt::gt() |>
+    theme_table()
 
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
@@ -150,10 +161,10 @@ table_landings <- function(
     landings.units <- unit_label
     
     # calculate & export key quantities
-    export_kqs(landings.units, dir=tables_dir)
+    export_kqs(landings.units, dir = tables_dir)
     
     # Add key quantities to captions/alt text
-    insert_kqs(landings.units, dir=tables_dir)
+    insert_kqs(landings.units, dir = tables_dir)
     
     create_rda(
       object = final[[1]],
@@ -165,6 +176,10 @@ table_landings <- function(
       scale_amount = 1,
       table_df = final
     )
+  }
+  
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
   }
   
   final

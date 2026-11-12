@@ -130,7 +130,7 @@ plot_spawning_biomass <- function(
   ref_line = "msy",
   unit_label = NULL,
   era = NULL,
-  lbs = lifecycle::deprecate(),
+  lbs = lifecycle::deprecated(),
   module = NULL,
   scale_amount = 1,
   relative = FALSE,
@@ -163,7 +163,7 @@ plot_spawning_biomass <- function(
   lbs <- FALSE
   if (is.null(unit_label)) {
     unit_label <- unique(prepared_data$unit)
-    if (is.na(unit_label) || is.null(unit_label)) cli::cli_abort("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+    if (is.na(unit_label) || is.null(unit_label)) cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
   } else {
     if (grepl("lbs|pounds|lb", unit_label, ignore.case = TRUE)) lbs <- TRUE
   }

@@ -4,10 +4,13 @@
 #'
 #' @inheritParams table_landings
 #'
-#' @param unit_label Character vector. Abbreviated unit label for each quantity
+#' @param catch_label String. Units for catch
 #'
-#' Default: c("catch" = "mt", "spawning_biomass" = "mt",
-#' "fishing_mortality" = "")
+#' Default: NULL
+#'
+#' @param spawning_biomass_label String. Units for spawning biomass
+#'
+#' Default: NULL
 #'
 #' @return A formatted gt table object.
 #' @details We would like to thank Dan Hennen for sharing his projections table
@@ -20,10 +23,18 @@
 #'   interactive = FALSE,
 #'   module = "DERIVED_QUANTITIES"
 #' )
-#'
+#' 
+#' table_projections(
+#'  dat = stockplotr::example_data,
+#'  interactive = FALSE,
+#'  catch_label = "kg",
+#'  spawning_biomass_label = "kg",
+#'  module = c(NULL, "DERIVED_QUANTITIES", "DERIVED_QUANTITIES")
+#'  )
 table_projections <- function(
   dat,
-  unit_label = c("catch" = "mt", "spawning_biomass" = "mt", "fishing_mortality" = ""),
+  catch_label = NULL,
+  spawning_biomass_label = NULL,
   interactive = TRUE,
   module = NULL,
   make_rda = FALSE,
@@ -37,13 +48,20 @@ table_projections <- function(
     "catch",
     "landings_weight"
   )
-  # change default unit and uncert labs when catch is changed to landings
-  if ("landings" %notin% names(unit_label) | "landings" %notin% names(unit_label)) {
-    unit_label <- c(unit_label, "landings_weight" = unit_label[["catch"]])
-  }
-  # iterate through 3 label_names
+  # # change default unit and uncert labs when catch is changed to landings
+  # if ("landings" %notin% names(catch_lab)) {
+  #   catch_label <- c(catch_label, "landings_weight" = catch_label[["catch"]])
+  # }
+  
+  named_vec <- c(
+    "catch" = catch_lab,
+    "spawning_biomass" = "spawning_biomass",
+    "fishing_mortality" = "fishing_mortality"
+  )
+  
+  # iterate through 3 label names
   lab_list <- purrr::map(
-    c(catch_lab, "spawning_biomass", "fishing_mortality"),
+    names(named_vec),
     function(x) {
       cli::cli_alert_info(paste0("Processing ", x))
       filtered_data <- filter_data(
@@ -77,17 +95,43 @@ table_projections <- function(
       data <- processed_data[[1]]
       group <- processed_data[[2]]
 
+      # Labs
+      # get unit labels if not NULL
+      unit_name <- named_vec[grep(x, names(named_vec), fixed = TRUE)][[1]]
+      
+      if (x == "fishing_mortality") {
+        fishing_mortality_label <- ""
+        unit_label <- fishing_mortality_label
+        unit_name <- "fishing_mortality"
+      } else if (is.null(get(paste0(unit_name, "_label")))) {
+        unit_label <- filtered_data |>
+          dplyr::filter(grepl(x, unit_name),
+                        !is.na(unit)) |>
+          dplyr::pull(unit) |>
+          unique()
+        if (is.na(unit_label) || length(unit_label) == 0) {
+          cli::cli_alert_warning("No unit label found in the data for {unit_name}. Please provide a unit label using the '{unit_name}_label' argument.")
+          unit_label <- ""
+        }
+      } else {
+        unit_label <- get(paste0(unit_name, "_label"))
+      }
+      
       # merge data with uncertainty and unit labels
       merge_error(
         table_data = data,
         id_col_vals = group,
-        unit_label = unit_label[grepl(x, names(unit_label))][[1]],
+        unit_label = unit_label,
         uncert_lab = uncertainty_label
       )[[1]]
     }
   )
 
-  combine_data <- purrr::reduce(purrr::compact(lab_list), dplyr::full_join, by = c("Year")) |>
+  combine_data <- purrr::reduce(
+    purrr::compact(lab_list),
+    dplyr::full_join,
+    by = c("Year")
+    ) |>
     gt::gt()
 
   final <- theme_table(combine_data)
@@ -120,6 +164,10 @@ table_projections <- function(
       scale_amount = 1,
       table_df = final$`_data`
     )
+  }
+  
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
   }
 
   final

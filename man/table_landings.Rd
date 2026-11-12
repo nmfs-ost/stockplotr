@@ -6,7 +6,7 @@
 \usage{
 table_landings(
   dat,
-  unit_label = "mt",
+  unit_label = NULL,
   era = NULL,
   interactive = TRUE,
   group = NULL,
@@ -28,7 +28,7 @@ in \code{ref_line} is used to plot a reference line or calculate relative spawni
 
 \item{unit_label}{String. Abbreviated landings units
 
-Default: "mt"}
+Default: NULL}
 
 \item{era}{String. Era of data.
 
@@ -105,11 +105,12 @@ There are options to return a \code{\link[gt:gt]{gt::gt()}} object or export an 
 containing a gt-based table, caption, and LaTeX-based table.
 }
 \examples{
-table_landings(stockplotr::example_data)
+table_landings(stockplotr::example_data,
+  interactive = FALSE)
 
 table_landings(
   stockplotr::example_data,
-  unit_label = "landings label",
+  unit_label = "kg",
   group = "fleet"
 )
 }

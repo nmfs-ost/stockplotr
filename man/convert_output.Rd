@@ -22,7 +22,7 @@ Options: "ss3", "bam", "fims", "rceattle"
 
 Should match length of \code{files}.}
 
-\item{fleet_names}{List of Character vector. Names of fleets in the assessment model as
+\item{fleet_names}{List of Character vectors. Names of fleets in the assessment model as
 shortened in the output file or names of fleets to replace the native fleet
 names in the output. For example, if fleet names in the model are 1, 2, 3
 then fleet_names = c("fleet1" = 1, "fleet2" = 2, "fleet3" = 3).
