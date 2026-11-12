@@ -11,7 +11,7 @@
 #'
 #' @param unit_label String. Abundance units
 #'
-#' Default: "fish"
+#' Default: NULL
 #'
 #' @param scale_amount Number. A number describing how much to scale down the abundance at
 #' age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders
@@ -199,5 +199,10 @@ plot_abundance_at_age <- function(
       dat
     )
   }
+  
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+  
   plot
 }

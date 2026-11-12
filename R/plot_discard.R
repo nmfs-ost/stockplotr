@@ -162,6 +162,10 @@ plot_discard <- function(
       scale_amount = scale_amount
     )
   }
-  # Output final plot
+  
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+  
   final
 }

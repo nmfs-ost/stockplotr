@@ -26,7 +26,7 @@ in \code{ref_line} is used to plot a reference line or calculate relative spawni
 
 \item{unit_label}{String. Index of abundance/CPUE units
 
-Default: ""}
+Default: NULL}
 
 \item{group}{String. Single column that groups the data.
 

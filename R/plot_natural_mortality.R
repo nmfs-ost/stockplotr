@@ -142,6 +142,10 @@ plot_natural_mortality <- function(
       dir = figures_dir
     )
   }
-  # Output final plot
+  
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+  
   final
 }
