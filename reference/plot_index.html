@@ -110,6 +110,8 @@
 <span>  interactive <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  module <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  focus <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  interval <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  log <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  make_rda <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  figures_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -128,8 +130,7 @@ in <code>ref_line</code> is used to plot a reference line or calculate relative 
 
 
 <dt id="arg-unit-label">unit_label<a class="anchor" aria-label="anchor" href="#arg-unit-label"></a></dt>
-<dd><p>String. Index of abundance/CPUE units</p>
-<p>Default: NULL</p></dd>
+<dd><p>String. Index of abundance/CPUE units. Default: NULL</p></dd>
 
 
 <dt id="arg-group">group<a class="anchor" aria-label="anchor" href="#arg-group"></a></dt>
@@ -140,9 +141,9 @@ Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", 
 
 
 <dt id="arg-facet">facet<a class="anchor" aria-label="anchor" href="#arg-facet"></a></dt>
-<dd><p>Character vector. Column name or names used for faceting. "fleet" is always added on to any faceting selections</p>
-<p>Default: NULL</p>
-<p>Options: May include, but is not limited to: "fleet", "year", "area", NULL</p></dd>
+<dd><p>Character vector. Column name or names used for faceting. "fleet"
+is always added on to any faceting selections. Default: NULL, but may include,
+but is not limited to: "fleet", "year", "area", NULL</p></dd>
 
 
 <dt id="arg-interactive">interactive<a class="anchor" aria-label="anchor" href="#arg-interactive"></a></dt>
@@ -160,8 +161,19 @@ module_name in the console. @seealso <code><a href="filter_data.html">filter_dat
 
 <dt id="arg-focus">focus<a class="anchor" aria-label="anchor" href="#arg-focus"></a></dt>
 <dd><p>Character vector. Column name or names used to filter data.
-(i.e. select names of fleets to zoom into the plot)</p>
-<p>Default: NULL</p></dd>
+(i.e. select names of fleets to zoom into the plot). Default = NULL</p></dd>
+
+
+<dt id="arg-interval">interval<a class="anchor" aria-label="anchor" href="#arg-interval"></a></dt>
+<dd><p>Number. Coverage of intervals around the observed index
+based on its observation error (e.g., 0.95), drawn as vertical lines.
+NULL draws no intervals, default = 0.95</p></dd>
+
+
+<dt id="arg-log">log<a class="anchor" aria-label="anchor" href="#arg-log"></a></dt>
+<dd><p>Logical. TRUE/FALSE; plot the index on a log scale. Indices
+with lognormal errors are often easier to judge on a log scale, where the
+intervals are symmetric. Default = FALSE</p></dd>
 
 
 <dt id="arg-make-rda">make_rda<a class="anchor" aria-label="anchor" href="#arg-make-rda"></a></dt>
@@ -187,7 +199,14 @@ the rda will be exported to the folder indicated in the argument "figures_dir".<
     </div>
     <div id="details">
     <h2>Details</h2>
-    <p>The input is from an assessment model output file
+    <p>Intervals assume lognormal observation errors, as in Stock
+Synthesis, FIMS, BAM, and Rceattle: \(o \exp(\pm z \cdot \sigma)\),
+where \(o\) is the observed index and \(\sigma\) is its log-scale
+standard error. Uncertainty labeled "se", "sd", or "log_sd" is used as
+\(\sigma\), and a coefficient of variation ("cv") is converted to
+\(\sigma = \sqrt{\log(1 + CV^2)}\). Observations without an
+uncertainty have no interval.</p>
+<p>The input is from an assessment model output file
 translated to a standardized output (<a href="convert_output.html">convert_output</a>).
 There are options to return a <code>ggplot2</code> object or export an .rda object
 containing associated caption and alternative text for the figure.</p>
@@ -207,6 +226,18 @@ containing associated caption and alternative text for the figure.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for <span style="color: #00BB00;">x</span> is already present.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding another scale for <span style="color: #00BB00;">x</span>, which will replace the existing scale.</span>
 <span class="r-plt img"><img src="plot_index-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># 95% intervals around the observed index, on a log scale</span></span></span>
+<span class="r-in"><span><span class="fu">plot_index</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">::</span><span class="va"><a href="example_data.html">example_data</a></span>,</span></span>
+<span class="r-in"><span>  interval <span class="op">=</span> <span class="fl">0.95</span>,</span></span>
+<span class="r-in"><span>  log <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  interactive <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> No unit label found in the data. Please provide a unit label using the 'unit_label' argument.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for <span style="color: #00BB00;">x</span> is already present.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding another scale for <span style="color: #00BB00;">x</span>, which will replace the existing scale.</span>
+<span class="r-plt img"><img src="plot_index-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
