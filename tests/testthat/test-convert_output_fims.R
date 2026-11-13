@@ -4,7 +4,7 @@ fims_estimates <- function() {
   readRDS(test_path("fixtures", "fims_output", "fims_estimates.rds"))
 }
 convert_fims <- function(dat = fims_estimates(), ...) {
-  suppressMessages(convert_output(dat, model = "fims", ...))
+  suppressMessages(convert_output(dat, models = "fims", ...))
 }
 
 test_that("FIMS data points are split into observed and predicted rows", {
