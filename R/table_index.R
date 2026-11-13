@@ -151,7 +151,7 @@ table_index <- function(
     }
 
       create_rda(
-        object = final[[1]],
+        object = final,
         # get name of function and remove "table_" from it
         topic_label = gsub("table_", "", utils::tail(as.character(sys.call()[[1]]), n = 1)),
         fig_or_table = "table",
