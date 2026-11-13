@@ -27,7 +27,9 @@ returned from \link[stockplotr]{convert_output}.
 If inputting a list of tibbles, the first tibble's reference point defined
 in \code{ref_line} is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{unit_label}{String. Index of abundance/CPUE units. Default: NULL}
+\item{unit_label}{String. Index of abundance/CPUE units
+
+Default: NULL}
 
 \item{group}{String. Single column that groups the data.
 
@@ -36,9 +38,11 @@ Set group = "none" to summarize data over all indexing values.
 Default: NULL
 Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
-\item{facet}{Character vector. Column name or names used for faceting. "fleet"
-is always added on to any faceting selections. Default: NULL, but may include,
-but is not limited to: "fleet", "year", "area", NULL}
+\item{facet}{Character vector. Column name or names used for faceting. "fleet" is always added on to any faceting selections
+
+Default: NULL
+
+Options: May include, but is not limited to: "fleet", "year", "area", NULL}
 
 \item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
@@ -54,14 +58,6 @@ module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 
 \item{focus}{Character vector. Column name or names used to filter data.
 (i.e. select names of fleets to zoom into the plot). Default = NULL}
-
-\item{interval}{Number. Coverage of intervals around the observed index
-based on its observation error (e.g., 0.95), drawn as vertical lines.
-NULL draws no intervals, default = 0.95}
-
-\item{log}{Logical. TRUE/FALSE; plot the index on a log scale. Indices
-with lognormal errors are often easier to judge on a log scale, where the
-intervals are symmetric. Default = FALSE}
 
 \item{interval}{Number. Coverage of intervals around the observed index
 based on its observation error (e.g., 0.95), drawn as vertical lines.
@@ -105,6 +101,14 @@ A plot showing the expected and predicted index.
 Plot Index of Abundance
 }
 \details{
+Intervals assume lognormal observation errors, as in Stock
+Synthesis, FIMS, BAM, and Rceattle: \eqn{o \exp(\pm z \cdot \sigma)},
+where \eqn{o} is the observed index and \eqn{\sigma} is its log-scale
+standard error. Uncertainty labeled "se", "sd", or "log_sd" is used as
+\eqn{\sigma}, and a coefficient of variation ("cv") is converted to
+\eqn{\sigma = \sqrt{\log(1 + CV^2)}}. Observations without an
+uncertainty have no interval.
+
 Intervals assume lognormal observation errors, as in Stock
 Synthesis, FIMS, BAM, and Rceattle: \eqn{o \exp(\pm z \cdot \sigma)},
 where \eqn{o} is the observed index and \eqn{\sigma} is its log-scale
