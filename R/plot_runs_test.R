@@ -117,6 +117,7 @@ plot_runs_test <- function(
       plt,
       topic_label = "runs_test",
       tags = runs_test_tags(resid, ctl),
+      kqs = runs_test_kqs(resid, ctl),
       dat = dat,
       figures_dir = figures_dir
     )
@@ -328,4 +329,20 @@ runs_test_tags <- function(resid, ctl) {
     )
   )
   stats::setNames(tags, paste0("runs.test.", names(tags)))
+}
+
+# Key quantities recorded in key_quantities.csv (runs.test.*)
+runs_test_kqs <- function(resid, ctl) {
+  tested <- ctl[!is.na(ctl$p), , drop = FALSE]
+  failed <- tested$series[tested$p < 0.05]
+  kqs <- list(
+    start.year = min(resid$year),
+    end.year = max(resid$year),
+    n.indices = nrow(ctl),
+    n.passed = sum(tested$p >= 0.05),
+    failed = if (length(failed) == 0) "none" else paste(failed, collapse = "; "),
+    p.values = paste0(ctl$series, ": ", ifelse(is.na(ctl$p), "NA", format(round(ctl$p, 3), nsmall = 3)), collapse = "; "),
+    n.outside = sum(resid$outside)
+  )
+  stats::setNames(kqs, paste0("runs.test.", names(kqs)))
 }

@@ -185,6 +185,7 @@ plot_joint_residuals <- function(
       plt,
       topic_label = "joint_residuals",
       tags = joint_residuals_tags(resid, stat, smooth, scaled = scaled, overlay = overlay),
+      kqs = joint_residuals_kqs(resid, stat, scaled = scaled),
       dat = dat,
       figures_dir = figures_dir
     )
@@ -308,4 +309,21 @@ joint_residuals_tags <- function(resid, stat, smooth, scaled, overlay) {
     )
   )
   stats::setNames(tags, paste0("joint.residuals.", names(tags)))
+}
+
+# Key quantities recorded in key_quantities.csv (joint.residuals.*)
+joint_residuals_kqs <- function(resid, stat, scaled) {
+  by_index <- stat[stat$series != "All indices", , drop = FALSE]
+  value <- function(rows) {
+    if (scaled) sub("^SDNR = ", "", rows$text) else rows$value
+  }
+  kqs <- list(
+    start.year = min(resid$year),
+    end.year = max(resid$year),
+    n.indices = nrow(by_index),
+    residual.type = if (scaled) "standardized" else "log",
+    stat.all = stat$text[stat$series == "All indices"],
+    stat.by.index = paste0(by_index$series, ": ", value(by_index), collapse = "; ")
+  )
+  stats::setNames(kqs, paste0("joint.residuals.", names(kqs)))
 }

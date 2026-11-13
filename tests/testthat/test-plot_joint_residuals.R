@@ -84,4 +84,12 @@ test_that("plot_joint_residuals saves a caption and alt text", {
   expect_tags_filled(rda, "joint.residuals.")
   expect_match(rda$caption, "Standardized residuals of the fits to Triennial", fixed = TRUE)
   expect_match(rda$alt_text, "(SDNR) of all residuals is", fixed = TRUE)
+  # The results are recorded in key_quantities.csv
+  kqs <- rda$kqs[grepl("^joint[.]residuals[.]", names(rda$kqs))]
+  stat <- residual_stat(rda$figure$data, scaled = TRUE)
+  expect_equal(kqs[["joint.residuals.n.indices"]], "2")
+  expect_equal(kqs[["joint.residuals.residual.type"]], "standardized")
+  expect_equal(kqs[["joint.residuals.stat.all"]], stat$text[3])
+  expect_match(kqs[["joint.residuals.stat.by.index"]], "^[^;]+: [0-9.]+ \\(critical [0-9.]+\\); [^;]+: ")
+  expect_length(kqs, 6)
 })
