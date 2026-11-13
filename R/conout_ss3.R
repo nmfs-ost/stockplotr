@@ -4,6 +4,10 @@
 #' file or returned object from `r4ss::ss_output()`.
 #'
 #' @inheritParams convert_output
+#' 
+#' @param Path. Assessment model output file path. Currently accepts SS3
+#' Report.sso file, BAM .rda file, Rceattle model object, and FIMS model object.
+#' 
 #' @param out_new The empty standard output data frame from
 #' [convert_output()], which sets the columns of the output.
 #'
@@ -281,7 +285,7 @@ conout_ss3 <- function(
               for (i in intersect(tolower(fleet_names), colnames(df3))) {
                 col_name <- glue::glue("exploitation_{i}")
                 df3 <- df3 |>
-                  dplyr::rename(!!col_name := i)
+                  dplyr::rename(!!col_name := dplyr::all_of(i))
               }
             }
           }
@@ -328,7 +332,7 @@ conout_ss3 <- function(
             if (length(err_col_id) > 0) {
               uncert_name <- stringr::str_extract(err_col_id, paste0(errors, collapse = "|"))
               df3 <- df3 |>
-                dplyr::rename(!!uncert_name := err_col_id)
+                dplyr::rename(!!uncert_name := dplyr::all_of(err_col_id))
             }
             df4 <- df3 |>
               tidyr::pivot_longer(

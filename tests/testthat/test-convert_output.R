@@ -24,7 +24,7 @@ test_that("convert_output works for SS3", {
     ))
 
     # Check that the result has exactly 35 columns
-    expect_equal(dim(result)[2], 35)
+    expect_equal(dim(result)[2], 36)
   }
 
   # Test saving the output in a global environment
@@ -32,7 +32,7 @@ test_that("convert_output works for SS3", {
     file = r4ss::SS_output(file.path(all_models[1]))
   )
 
-  expect_equal(dim(output)[2], 35)
+  expect_equal(dim(output)[2], 36)
 })
 
 test_that("convert_output does not emit scalar case_when deprecation warning", {
@@ -80,7 +80,7 @@ test_that("missing arguments trigger warnings or errors", {
   expect_error(
     convert_output(
       file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.rdat"),
-      model = "ss3",
+      models = "ss3",
       save_dir = fs::path("fixtures", "ss3_models_converted", "Hake_2018")
     ),
     "`file` not found"
@@ -93,14 +93,14 @@ test_that("r4ss::ss_output object is compatible.", {
   simple_r4ss <- readRDS(fs::path("fixtures", "r4ss_output", "simple_small", "simple_r4ss.rds"))
 
   expect_no_error(result <- convert_output(simple_r4ss))
-  expect_equal(dim(result)[2], 35)
+  expect_equal(dim(result)[2], 36)
 })
 
 test_that("URL input is compatible", {
   expect_no_error(result <- convert_output(
-    file = "https://raw.githubusercontent.com/pfmc-assessments/petrale/main/models/2023.a050.003_FIMS_case-study_wtatage/Report.sso"
+    files = "https://raw.githubusercontent.com/pfmc-assessments/petrale/main/models/2023.a050.003_FIMS_case-study_wtatage/Report.sso"
   ))
-  expect_equal(dim(result)[2], 35)
+  expect_equal(dim(result)[2], 36)
 })
 
 test_that("invalid URL input triggers an error", {
@@ -147,14 +147,14 @@ test_that("convert_output works for Rceattle", {
   # Both documented input modes: a path, and an already-loaded fit.
   expect_no_error(from_path <- convert_output(
     file = fit_path,
-    model = "rceattle"
+    models = "rceattle"
   ))
   expect_no_error(from_object <- convert_output(
     file = readRDS(fit_path),
-    model = "rceattle"
+    models = "rceattle"
   ))
 
-  expect_equal(dim(from_path)[2], 35)
+  expect_equal(dim(from_path)[2], 36)
   expect_equal(from_path, from_object)
 
   # Every row says which module it came from.
@@ -186,7 +186,7 @@ test_that("convert_output works for Rceattle", {
 
 test_that("convert_output places Rceattle selectivity and M at age", {
   fit <- readRDS(test_path("fixtures", "rceattle_goa_atf.rds"))
-  out <- convert_output(file = fit, model = "rceattle")
+  out <- convert_output(file = fit, models = "rceattle")
 
   # One row per fleet, sex, age and year of sel_at_age, and each cell lands
   # on its own fleet, sex, age and year.
@@ -218,7 +218,7 @@ test_that("convert_output places Rceattle selectivity and M at age", {
 
   # The age dimension is the bin index, so the ages start at minage.
   fit[["data_list"]][["minage"]] <- 3
-  shifted <- convert_output(file = fit, model = "rceattle")
+  shifted <- convert_output(file = fit, models = "rceattle")
   expect_equal(
     range(as.numeric(shifted[shifted[["label"]] == "natural_mortality", ][["age"]])),
     c(3, 23)
@@ -230,7 +230,7 @@ test_that("convert_output places Rceattle selectivity and M at age", {
 
 test_that("convert_output gives Rceattle recruitment deviations a standard error", {
   fit <- readRDS(test_path("fixtures", "rceattle_goa_atf.rds"))
-  out <- convert_output(file = fit, model = "rceattle")
+  out <- convert_output(file = fit, models = "rceattle")
 
   # The standard error of a fixed effect is the square root of its diagonal
   # entry in cov.fixed.
@@ -252,7 +252,7 @@ test_that("convert_output gives Rceattle recruitment deviations a standard error
   random_rec[["sdrep"]][["par.fixed"]] <- fit[["sdrep"]][["par.fixed"]][!is_rec_dev]
   random_rec[["sdrep"]][["cov.fixed"]] <-
     fit[["sdrep"]][["cov.fixed"]][!is_rec_dev, !is_rec_dev]
-  random_out <- convert_output(file = random_rec, model = "rceattle")
+  random_out <- convert_output(file = random_rec, models = "rceattle")
   random_rec_devs <- random_out[random_out[["label"]] == "recruitment_deviations", ]
   expect_equal(random_rec_devs[["estimate"]], rec_devs[["estimate"]])
   expect_equal(random_rec_devs[["uncertainty"]], rec_dev_sd)
@@ -265,7 +265,7 @@ test_that("convert_output accepts .RDS as well as .rds for Rceattle", {
   upper <- tempfile(fileext = ".RDS")
   on.exit(unlink(upper), add = TRUE)
   saveRDS(readRDS(test_path("fixtures", "rceattle_goa_atf.rds")), upper)
-  expect_no_error(convert_output(file = upper, model = "rceattle"))
+  expect_no_error(convert_output(file = upper, models = "rceattle"))
 })
 
 test_that("convert_output says so when an Rceattle fit carries no sdrep", {
@@ -277,7 +277,7 @@ test_that("convert_output says so when an Rceattle fit carries no sdrep", {
   # Matched on a single word, since cli wraps a message and a phrase can be
   # split across a line break.
   expect_warning(
-    out <- convert_output(file = no_sd, model = "rceattle"),
+    out <- convert_output(file = no_sd, models = "rceattle"),
     "sdrep"
   )
   expect_false("biomass" %in% out[["label"]])
@@ -291,7 +291,7 @@ test_that("convert_output refuses an Rceattle fit of unknown species count", {
   no_nspp[["data_list"]][["nspp"]] <- NULL
 
   expect_error(
-    convert_output(file = no_nspp, model = "rceattle"),
+    convert_output(file = no_nspp, models = "rceattle"),
     "species count is unknown"
   )
 })
@@ -305,7 +305,33 @@ test_that("convert_output refuses a multispecies Rceattle fit", {
 
   # Matched on a phrase short enough that cli's wrapping cannot split it.
   expect_error(
-    convert_output(file = multi, model = "rceattle"),
+    convert_output(file = multi, models = "rceattle"),
     "Rceattle model has 3 species"
   )
 })
+
+test_that("convert_output on multiple SS3 models", {
+    model_files <- list(
+      "hake2018"=fs::path("fixtures", "ss3_models", "models", "Hake_2018"),
+      "BigSkate2019"=fs::path("fixtures", "ss3_models", "models", "BigSkate_2019")
+    )
+
+    models_r4ss <- lapply(model_files, \(x) r4ss::SS_output(x))
+
+    expect_no_error(result <- convert_output(models_r4ss))
+    expect_equal(dim(result)[2], 36)
+    expect_equal(result$model %>% unique, c("hake2018", "BigSkate2019"))
+})
+
+test_that("convert_output on SS3 and Rceattle model", {
+
+    ss3_hake2018 <- r4ss::SS_output(fs::path("fixtures", "ss3_models", "models", "Hake_2018"))
+    rceattle_atf <- readRDS(fs::path("fixtures", "rceattle_goa_atf.rds"))
+
+    models <- list("ss3_hake"=ss3_hake2018, "rceattle_atf"=rceattle_atf)
+
+    expect_no_error(result <- convert_output(models))
+    expect_equal(dim(result)[2], 36)
+    expect_equal(result$model %>% unique, c("ss3_hake", "rceattle_atf"))
+})
+

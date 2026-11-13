@@ -699,84 +699,56 @@ filter_data <- function(
   # TODO: add option to scale data
   # Replace all spaces with underscore if not in proper format
   label_name <- gsub(" ", "_", tolower(label_name))
-  list_of_data <- list()
-  length_dat <- ifelse(
-    is.data.frame(dat),
-    1,
-    length(dat)
-  )
-  for (i in 1:length_dat) {
-    # start for loop to bring together each data as their own geom
-    # Add columns to data if grouping is selected
-    # format geoms the way we want
-    # ggplot easier and more consistent to use
-    # defaults are focused for stock assessment
-    # vignette to show how you can filter the data instead of the devs
-    # vignette is the effort to show what to do and has example
-    # would have to use the plus operator
 
-    if (is.data.frame(dat)) {
-      data <- dat
-      model_label <- FALSE
+  model_label <- any(grepl("model", colnames(dat)))
+  if(!model_label){
+    dat <- dat |> dplyr::mutate(model="1")
+  }
+
+  plot_data <- dat |>
+    # make sure all labels are lowercase and spaces are replaced with underscores
+    dplyr::mutate(
+      label = tolower(gsub(" ", "_", label))
+    ) |>
+    dplyr::filter(
+      grepl(glue::glue("{label_name}"), label)
+      # era == era
+    ) |>
+    dplyr::mutate(
+      year = as.numeric(year),
+      # calc uncertainty when se
+      # TODO: calculate other sources of error to upper and lower (cv,)
+      estimate_lower = dplyr::case_when(
+        grepl("se", uncertainty_label) ~ estimate - ((1.96 * uncertainty)) / scale_amount,
+        grepl("sd", tolower(uncertainty_label)) | grepl("std", tolower(uncertainty_label)) ~ (estimate - uncertainty) / scale_amount,
+        grepl("cv", tolower(uncertainty_label)) ~ (estimate - (1.96 * (uncertainty * estimate))) / scale_amount,
+        TRUE ~ NA
+      ),
+      estimate_upper = dplyr::case_when(
+        grepl("se", uncertainty_label) ~ (estimate + (1.96 * uncertainty)) / scale_amount,
+        grepl("sd", tolower(uncertainty_label)) | grepl("std", tolower(uncertainty_label)) ~ (estimate + uncertainty) / scale_amount,
+        grepl("cv", tolower(uncertainty_label)) ~ (estimate + (1.96 * (uncertainty * estimate))) / scale_amount,
+        TRUE ~ NA
+      ),
+      estimate = as.numeric(estimate) / scale_amount
+    )
+  # must rename era arg bc dplyr gets confused
+  era_selection <- era
+  if (!is.null(era)) {
+    plot_data <- dplyr::filter(
+      plot_data,
+      grepl(era_selection, era)
+    )
+  }
+  if (nrow(plot_data) < 1) cli::cli_abort("{label_name} not found.")
+  if (is.null(group)) {
+    if (!is.data.frame(dat) || (plot_data |> dplyr::distinct(model) |> nrow()) > 1) {
+      plot_data <- plot_data |>
+        dplyr::mutate(
+          group_var = as.character(.data[["model"]])
+        )
     } else {
-      data <- dat[[i]]
-      model_label <- TRUE
-    }
-    data <- data |>
-      # make sure all labels are lowercase and spaces are replaced with underscores
-      dplyr::mutate(
-        label = tolower(gsub(" ", "_", label))
-      ) |>
-      dplyr::filter(
-        grepl(glue::glue("{label_name}"), label)
-        # era == era
-      ) |>
-      dplyr::mutate(
-        year = as.numeric(year),
-        model = ifelse(model_label, get_id(dat)[i], "1"), # NA -- changed from NA to 1 for processing reasons, might need to change back if issue
-        # calc uncertainty when se
-        # TODO: calculate other sources of error to upper and lower (cv,)
-        estimate_lower = dplyr::case_when(
-          grepl("se", uncertainty_label) ~ estimate - ((1.96 * uncertainty)) / scale_amount,
-          grepl("sd", tolower(uncertainty_label)) | grepl("std", tolower(uncertainty_label)) ~ (estimate - uncertainty) / scale_amount,
-          grepl("cv", tolower(uncertainty_label)) ~ (estimate - (1.96 * (uncertainty * estimate))) / scale_amount,
-          TRUE ~ NA
-        ),
-        estimate_upper = dplyr::case_when(
-          grepl("se", uncertainty_label) ~ (estimate + (1.96 * uncertainty)) / scale_amount,
-          grepl("sd", tolower(uncertainty_label)) | grepl("std", tolower(uncertainty_label)) ~ (estimate + uncertainty) / scale_amount,
-          grepl("cv", tolower(uncertainty_label)) ~ (estimate + (1.96 * (uncertainty * estimate))) / scale_amount,
-          TRUE ~ NA
-        ),
-        estimate = as.numeric(estimate) / scale_amount
-      )
-    # must rename era arg bc dplyr gets confused
-    era_selection <- era
-    if (!is.null(era)) {
-      data <- dplyr::filter(
-        data,
-        grepl(era_selection, era)
-      )
-    }
-    if (nrow(data) < 1) cli::cli_abort("{label_name} not found.")
-    if (is.null(group)) {
-      if (!is.data.frame(dat)) {
-        data <- data |>
-          dplyr::mutate(
-            group_var = as.character(.data[["model"]])
-          )
-      } else {
-        data <- data |>
-          dplyr::mutate(
-            group_var = switch(geom,
-              "line" = "solid",
-              "point" = "black",
-              1
-            )
-          )
-      }
-    } else if (all(is.na(data[[group]]))) {
-      data <- data |>
+      plot_data <- plot_data |>
         dplyr::mutate(
           group_var = switch(geom,
             "line" = "solid",
@@ -784,18 +756,24 @@ filter_data <- function(
             1
           )
         )
-      # Set group to NULL if second condition is met
-      group <- NULL
-    } else {
-      data <- data |>
-        dplyr::mutate(
-          group_var = .data[[group]]
-        )
     }
-    list_of_data[[ifelse(model_label, get_id(dat)[i], "1")]] <- data
+  } else if (all(is.na(plot_data[[group]]))) {
+    plot_data <- plot_data |>
+      dplyr::mutate(
+        group_var = switch(geom,
+          "line" = "solid",
+          "point" = "black",
+          1
+        )
+      )
+    # Set group to NULL if second condition is met
+    group <- NULL
+  } else {
+    plot_data <- plot_data |>
+      dplyr::mutate(
+        group_var = .data[[group]]
+      )
   }
-  # Put in
-  plot_data <- dplyr::bind_rows(list_of_data, .id = "model")
 
   # Check if there are multiple module_names present
   if (length(unique(plot_data$module_name)) > 1) {
@@ -892,7 +870,8 @@ calculate_reference_point <- function(
   # Remove values with year - want single point
   dat <- dat |>
     dplyr::mutate(label = tolower(label)) |>
-    dplyr::filter(is.na(year))
+    dplyr::filter(is.na(year)) |>
+    dplyr::distinct()
   reference_rows <- grep(
     pattern = glue::glue("^{reference_name}$"),
     x = dat[["label"]]
@@ -1178,20 +1157,31 @@ add_reference_line <- function(
   # 2. custom input vector = c("sable23_msy"=30, "sable25_msy"=40) -- user must indicate which model in label otherwise it will assign in order of dat
   # 3. input vector of labels = c("msy", "target")
   # getting data set - an ifelse statement in the fxn wasn't working
+  if("model" %in% colnames(dat)){
+      model_names <- dat |> dplyr::distinct(model) |> dplyr::pull(model)
+      n_models <- length(model_names)
+  }else{
+    n_models <- 1
+  }
+  
   ref_lines_list <- list()
   if (!is.null(ref_line)) {
     # Check if length of ref_line = dat -- replicate value if not
-    if (!is.data.frame(dat) & length(ref_line) != length(dat)) ref_line <- rep(ref_line, length(dat))
+    # Need to check this
+    # if (!is.data.frame(dat) & length(ref_line) != length(dat)) ref_line <- rep(ref_line, length(dat))
+    
+    if(n_models > 1 & length(ref_line)==1) ref_line <- rep(ref_line, n_models)
+    
     # Put into for loop and add lines sequentially to plt
     for (i in 1:length(ref_line)) {
       # find the reference point value
       if (is.null(names(ref_line[i]))) {
         ref_line_x <- calculate_reference_point(
-          dat = if (is.data.frame(dat)) {
-            dat
-          } else {
-            dat[[i]]
-          },
+          dat = if(n_models == 1){
+              dat
+            } else {
+              dat |> dplyr::filter(model == model_names[i])
+            },
           reference_name = glue::glue("{label}_{ref_line[i]}"),
           lbs = lbs
         ) / scale_amount
@@ -1205,11 +1195,7 @@ add_reference_line <- function(
       }
 
       if ("unfished" %in% names(ref_line_x)) {
-        if (is.data.frame(dat)) {
-          sel_dat <- dat
-        } else {
-          sel_dat <- dat[[i]]
-        }
+        sel_dat <- dat |> dplyr::filter(model == model_names[i])
         plt_lab <- label
         # find the minimum x axis value from the plot
         min_year <- sel_dat |>
@@ -1222,7 +1208,10 @@ add_reference_line <- function(
         # TODO: set color for each point to match that of the line for the model
         ref_lines_list <- append(
           ref_lines_list,
-          ggplot2::geom_point(ggplot2::aes(x = min_year - 1, y = ref_line_x, color = model)) # should I keep -1 or set as first year?
+          ggplot2::geom_point(
+            data = sel_dat,
+            ggplot2::aes(x = min_year - 1, y = ref_line_x, color = model)
+          ) # should I keep -1 or set as first year?
         )
       } else {
         # add apply/purrr/or for loop for reference lines -- not just the first anymore
@@ -1231,10 +1220,10 @@ add_reference_line <- function(
           ref_lines_list,
           reference_line(
             # conditionally add label name
-            label_name = ifelse(length(names(dat)[i]) == 1, label, names(dat)[i]), # "spawning_biomass",
+            label_name = ifelse(n_models == 1, label, model_names[i]), # "spawning_biomass",
             ref_line = ref_line_x,
             scale_amount = scale_amount,
-            model_name = ifelse(is.data.frame(dat), "1", names(dat)[i]),
+            model_name = ifelse(n_models == 1, "1", model_names[i]),
             direction = plot_direction
           )
         )
