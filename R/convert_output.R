@@ -4,7 +4,8 @@
 #'
 #' @param files List of Paths. Assessment model output file paths. Currently accepts SS3
 #' `r4ss::ss_output()` or Report.sso file (being deprecated), BAM .rda file, Rceattle model object, 
-#' and FIMS model object. If multiple elements, all valid models will be read, converted, and 
+#' and FIMS output (the tibble returned by `FIMS::get_estimates()`, a `FIMSFit` object, or an .rds 
+#' file with either). If multiple elements, all valid models will be read, converted, and 
 #' appended together.
 #' 
 #' `names(files)` will be used as the name of the model in the output.
@@ -31,6 +32,11 @@
 #' in the file path provided.
 #'
 #' Default: NULL
+#' @param start_year Number. First year of the model, for FIMS output only.
+#' FIMS reports years as indices (1 = first model year), which are converted
+#' to years when `start_year` is given.
+#'
+#' Default: NULL (years are left as indices)
 #'
 #' @author Samantha Bredeck
 #'
@@ -40,6 +46,14 @@
 #' @details The resulting object is a long-format, transformed and machine readable
 #' version of a model output file. Converted data frame is always returned.
 #' It will also be saved if save_dir is not NULL.
+#'
+#' For FIMS, each data point (index, landings, and age and length
+#' compositions) is split into an observed row (e.g., "index_observed") and a
+#' predicted row (e.g., "index_predicted"), as for the other models. Observed
+#' rows hold the observation error (a log-scale standard error for lognormal
+#' data) in `uncertainty` and the negative log-likelihood in `likelihood`.
+#' Other estimates are relabeled with `fims_var_names.csv` (e.g.,
+#' "expected_recruitment" becomes "recruitment").
 #'
 #'
 #' @export
@@ -63,13 +77,15 @@ convert_output <- function(
   files,
   models = NULL,
   fleet_names = NULL,
-  save_dir = NULL
+  save_dir = NULL,
+  start_year = NULL
 ) {
 
   # Is user inputs a single model file and doesn't wrap it as a list object
-  if(any(grepl("Data_File|data_list", names(files))) || is.character(files)){
+  if(any(grepl("Data_File|data_list", names(files))) || is.character(files) || is.data.frame(files)){
     cli::cli_alert("`files` appears to represent a single model. Converting to list object.")
     files <- list(files)
+    names(files) <- "model_1"
   }
 
   if(!all(is.null(models)) & length(models) != length(files)){
@@ -182,7 +198,7 @@ convert_output <- function(
         file <- readRDS(file)
       }
       if (is.character(file)) {
-        if (is.null(models) || is.na(models[i])) {
+        if (is.null(models)) {
           model <- switch(stringr::str_extract(file, "\\.([^.]+)$"),
             ".sso" = {
               cli::cli_alert_info("Processing Stock Synthesis output file...")
@@ -203,8 +219,12 @@ convert_output <- function(
             cli::cli_abort("Unknown file type. Please indicate model.")
           )
         }
-      } else {
+      } else if (is.null(models)){
         model <- switch(class(file)[1],
+          "FIMSFit" = {
+            cli::cli_alert_info("Processing FIMS output file...")
+            "fims"
+          },
           "fims" = {
             cli::cli_alert_info("Processing FIMS output file...")
             "fims"
@@ -224,16 +244,18 @@ convert_output <- function(
           },
           cli::cli_abort("Unknown file type. Please indicate model.")
         )
+      }else{
+        model <- models[i]
       }
 
       #### SS3 ####
       # SS3 groupings: https://docs.google.com/spreadsheets/d/11-k0xOo3Bit1MbJf2ZjmymzsUNCRhgGkVfXV1jNEdbM/edit?gid=0#gid=0
       # Convert SS3 output Report.sso file
       if (tolower(model) == "ss3") {
-        out_new <- conout_ss3(file = file, out_new = out_new, fleet_names = fleet_names[[model_name]])
+        out_new <- conout_ss3(file = file, out_new = out_new, fleet_names = fleet_names)
       } else if (model %in% c("bam", "BAM")) {
         #### BAM ####
-        out_new <- conout_bam(file = file, out_new = out_new, fleet_names = fleet_names[[model_name]])
+        out_new <- conout_bam(file = file, out_new = out_new, fleet_names = fleet_names)
         #### WHAM ----
       } else if (model == "wham") {
         # This is how Bai read the ASAP output
@@ -250,20 +272,10 @@ convert_output <- function(
         cli::cli_abort("JABBA output not currently compatible.")
         #### FIMS ####
       } else if (model == "fims") {
-        if (is.character(file) && length(file) == 1) {
-          fims_output <- readRDS(file)
-        } else {
-          fims_output <- file
-        }
-        # TEMPORARY -- add in era to df
-        if ("era" %notin% colnames(fims_output)) {
-          fims_output$era <- NA
-        }
-        fims_output[setdiff(tolower(names(out_new)), tolower(names(fims_output)))] <- NA
-        out_new <- fims_output
+        out_new <- conout_fims(file = file, out_new = out_new, start_year = start_year)
         #### Rceattle ####
       } else if (model == "rceattle") {
-        out_new <- conout_rceattle(file = file, out_new = out_new, fleet_names = fleet_names[[model_name]])
+      out_new <- conout_rceattle(file = file, out_new = out_new, fleet_names = fleet_names)
       } else {
         cli::cli_abort(c(
           message = "Output file not compatible.",
@@ -321,7 +333,8 @@ convert_output <- function(
               model=model_name,
               year=as.character(year),
               month=as.character(month),
-              block=as.character(block)
+              block=as.character(block),
+              fleet=as.character(fleet)
             )
       return(tibble::tibble(out_new))
   })

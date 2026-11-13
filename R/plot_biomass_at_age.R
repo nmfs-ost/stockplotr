@@ -165,5 +165,10 @@ plot_biomass_at_age <- function(
       dat
     )
   }
+  
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+  
   plot
 }

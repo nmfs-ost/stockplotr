@@ -60,10 +60,32 @@ plot_landings <- function(
   # filter NA from year
   # dplyr::filter(!is.na(year))
   
+  # Process data
+  processed_data <- process_data(
+    dat = prepared_data,
+    group = group,
+    facet = facet,
+    lbs = lbs
+  )
+  landings_data <- processed_data[[1]]
+  group <- processed_data[[2]]
+  facet <- processed_data[[3]]
+
+  # Check if there is >1 label
+  if (length(landings_data$label) > 1) {
+    landings_data <- landings_data |>
+      # always select the first label if TRUE
+      dplyr::filter(label == unique(label)[1])
+  }
+  
   # extract unit if unit_label is null and set lbs to F by default
   lbs <- FALSE
   if (is.null(unit_label)) {
-    unit_label <- unique(prepared_data$unit)
+    labels <- unique(landings_data$label)
+    unit_label <- prepared_data |>
+      dplyr::filter(label %in% labels) |>
+      dplyr::pull(unit) |>
+      unique()
     if (is.na(unit_label)) {
       cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
       unit_label <- ""
@@ -79,33 +101,15 @@ plot_landings <- function(
     scale_amount = dplyr::if_else(lbs, 1000 * scale_amount, scale_amount),
     legend = FALSE
   )
-  
-  # Process data
-  processed_data <- process_data(
-    dat = prepared_data,
-    group = group,
-    facet = facet,
-    lbs = lbs
-  )
-  prepared_data <- processed_data[[1]]
-  group <- processed_data[[2]]
-  facet <- processed_data[[3]]
-
-  # Check if there is >1 label
-  if (length(prepared_data$label) > 1) {
-    prepared_data <- prepared_data |>
-      # always select the first label if TRUE
-      dplyr::filter(label == unique(label)[1])
-  }
 
   # Override grouping variable when there is only NA's
   if (!is.null(group)) {
-    if (group %notin% colnames(prepared_data)) group <- NULL
+    if (group %notin% colnames(landings_data)) group <- NULL
   }
 
   # inital base plot
   plt <- plot_timeseries(
-    dat = prepared_data,
+    dat = landings_data,
     y = "estimate",
     geom = geom,
     ylab = landings_label,
@@ -114,17 +118,17 @@ plot_landings <- function(
     ...
   ) + theme_noaa()
 
-  if (length(unique(prepared_data$group_var)) == 1) {
+  if (length(unique(landings_data$group_var)) == 1) {
     plt <- plt + ggplot2::theme(legend.position = "none")
   }
 
   ### Make RDA ----
   if (make_rda) {
     # Obtain relevant key quantities for captions/alt text
-    landings.start.year <- min(prepared_data$year)
-    landings.end.year <- max(prepared_data$year)
-    landings.min <- min(prepared_data$estimate) |> round(digits = 3)
-    landings.max <- max(prepared_data$estimate) |> round(digits = 3)
+    landings.start.year <- min(landings_data$year)
+    landings.end.year <- max(landings_data$year)
+    landings.min <- min(landings_data$estimate) |> round(digits = 3)
+    landings.max <- max(landings_data$estimate) |> round(digits = 3)
     landings.units <- unit_label
 
     # calculate & export key quantities
@@ -157,6 +161,10 @@ plot_landings <- function(
       scale_amount = scale_amount
     )
   }
-  # Output final plot
+  
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+  
   plt
 }

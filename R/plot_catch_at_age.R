@@ -3,7 +3,7 @@
 #' @inheritParams plot_abundance_at_age
 #' @param unit_label String. Units of catch used to label the axis
 #'
-#' Default: "mt"
+#' Default: NULL
 #'
 #' @param scale_amount Number. A number describing how much to scale down the catch at
 #' age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders
@@ -183,9 +183,14 @@ plot_catch_at_age <- function(
       # get name of function and remove "plot_" from it
       topic_label = gsub("plot_", "", utils::tail(as.character(sys.call()[[1]]), n = 1)),
       fig_or_table = "figure",
-      dir=figures_dir,
+      dir = figures_dir,
       dat
     )
   }
+  
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+  
   plot
 }

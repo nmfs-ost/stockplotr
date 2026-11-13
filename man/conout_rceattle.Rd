@@ -7,6 +7,10 @@
 conout_rceattle(file, out_new, fleet_names = NULL)
 }
 \arguments{
+\item{file}{Path. Assessment model output file path. Currently accepts SS3
+\code{r4ss::ss_output()} or Report.sso file (being deprecated), BAM .rda file, Rceattle model object, and FIMS output
+(the tibble returned by \code{FIMS::get_estimates()}, a \code{FIMSFit} object, or an .rds file with either).}
+
 \item{out_new}{The empty standard output data frame from
 \code{\link[=convert_output]{convert_output()}}, which sets the columns of the output.}
 
