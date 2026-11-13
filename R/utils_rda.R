@@ -376,9 +376,9 @@ fill_in_kqs <- function(df, ...) {
 #'
 #' @param ... Key quantities whose values should be added to the
 #' exported "key_quantities.csv"
-#' 
+#'
 #' @param dir String directory to write "key_quantities.csv" to.
-#' 
+#'
 #' DEFAULT: getwd()
 #'
 #' @returns Exports a file based on key quantities template, with values
@@ -391,21 +391,22 @@ fill_in_kqs <- function(df, ...) {
 #'   F.min,
 #'   F.max,
 #' )
-#' 
+#'
 #' export_kqs(
 #'   F.min,
 #'   F.max,
 #'   dir = fs::path(getwd(), "plots")
 #' )
 #' }
-export_kqs <- function(..., dir=getwd()) {
+export_kqs <- function(..., dir = getwd()) {
   # Open new or existing key quantities csv
   if (file.exists(fs::path(dir, "key_quantities.csv"))) {
     cli::cli_alert_info("Key quantities text file (key_quantities.csv) exists. Newly calculated key quantities will be added to it.", wrap = TRUE)
     kqs <- utils::read.csv(file.path(dir, "key_quantities.csv"))
   } else {
-    if(!dir.exists(dir))
+    if (!dir.exists(dir)) {
       dir.create(dir)
+    }
 
     kqs <- utils::read.csv(
       system.file("resources", "key_quantity_template.csv", package = "stockplotr")
@@ -429,9 +430,9 @@ export_kqs <- function(..., dir=getwd()) {
 #'
 #' @param ... Key quantities whose values should be added to the
 #' exported "captions_alt_text.csv"
-#' 
+#'
 #' @param dir String directory to write "captions_alt_text.csv" to.
-#' 
+#'
 #' DEFAULT: getwd()
 #'
 #' @returns Exports a file ("captions_alt_text.csv") containing captions
@@ -445,14 +446,14 @@ export_kqs <- function(..., dir=getwd()) {
 #'   F.max
 #' )
 #' }
-insert_kqs <- function(..., dir=getwd()) {
+insert_kqs <- function(..., dir = getwd()) {
   if (file.exists(fs::path(dir, "captions_alt_text.csv"))) {
     cli::cli_alert_info("Captions/alternative text file (captions_alt_text.csv) exists. Newly calculated key quantities will be added to it.", wrap = TRUE)
     caps_alttext <- utils::read.csv(fs::path(dir, "captions_alt_text.csv"))
   } else {
-    
-    if(!dir.exists(dir))
+    if (!dir.exists(dir)) {
       dir.create(dir)
+    }
 
     caps_alttext <- utils::read.csv(
       system.file("resources", "captions_alt_text_template.csv", package = "stockplotr")
@@ -540,9 +541,9 @@ insert_kqs <- function(..., dir=getwd()) {
 #' @param object Object. Table or plot object
 #' @param topic_label String. Name of the object
 #' @param fig_or_table String. Indicates whether the object is a "table" or "figure"
-#' 
+#'
 #' Options: "figure" or "table"
-#' 
+#'
 #' @param dat Data frame. Data which will fill in captions and
 #' alternative text for the object
 #' @param dir Path. Directory to where the rda will be saved

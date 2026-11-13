@@ -106,7 +106,8 @@ containing a gt-based table, caption, and LaTeX-based table.
 }
 \examples{
 table_landings(stockplotr::example_data,
-  interactive = FALSE)
+  interactive = FALSE
+)
 
 table_landings(
   stockplotr::example_data,

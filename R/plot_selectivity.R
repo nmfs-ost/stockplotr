@@ -54,7 +54,7 @@ plot_selectivity <- function(
     interactive = interactive,
     module = module
   )
-  
+
   if (is.null(unit_label)) {
     if (!any(grepl("length", prepared_data$label))) {
       unit_label <- "years"
@@ -167,7 +167,7 @@ plot_selectivity <- function(
       selectivity.x,
       selectivity.start.year,
       selectivity.end.year,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     # Add key quantities to captions/alt text
@@ -179,7 +179,7 @@ plot_selectivity <- function(
       selectivity.x,
       selectivity.start.year,
       selectivity.end.year,
-      dir=figures_dir
+      dir = figures_dir
     )
 
 
@@ -192,10 +192,10 @@ plot_selectivity <- function(
       dir = figures_dir
     )
   }
-  
+
   if (exists("selected_module")) {
     rm(selected_module, envir = .GlobalEnv)
   }
-  
+
   final
 }

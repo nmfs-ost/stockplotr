@@ -3,7 +3,7 @@ test_that("plot_spr generates plots without errors", {
   expect_no_error(
     plot_spr(stockplotr::example_data, interactive = FALSE)
   )
-  
+
   # expect error-free plot with many arguments
   expect_no_error(
     plot_spr(
@@ -14,7 +14,7 @@ test_that("plot_spr generates plots without errors", {
     )
   )
 
-  
+
   # expect ggplot object is returned
   expect_s3_class(
     plot_spr(
