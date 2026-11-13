@@ -8,7 +8,7 @@
 #' Options: May include, but is not limited to: "fleet", "year", "area", NULL
 #' @param unit_label String. Index of abundance/CPUE units
 #'
-#' Default: ""
+#' Default: NULL
 #' @param interval Number. Coverage of intervals around the observed index
 #' based on its observation error (e.g., 0.95), drawn as vertical lines.
 #' NULL draws no intervals.
