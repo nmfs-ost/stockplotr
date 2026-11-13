@@ -8,6 +8,7 @@ fig_base_temp_files <- c(
   "natural_mortality_figure.rda",
   "biomass_at_age_figure.rda",
   "catch_at_age_figure.rda",
+  "data_availability_figure.rda",
   "recruitment_deviations_figure.rda",
   "recruitment_figure.rda",
   "selectivity_figure.rda",
