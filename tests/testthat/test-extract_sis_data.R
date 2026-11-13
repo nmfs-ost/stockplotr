@@ -4,15 +4,13 @@ test_that("extract_sis_data() runs with all possible rdas present", {
   if(!dir.exists(savedir))
     dir.create(savedir)
 
-  save_all_plots(stockplotr::example_data, figures_tables_dir=savedir)
-  # table_total_catch(stockplotr::example_data,
-  #                   module = "TIME_SERIES",
-  #                   interactive = FALSE,
-  #                   make_rda = TRUE)
+  save_all_plots(stockplotr::example_data, 
+                 figures_tables_dir = savedir)
 
   files <- c(
-    fs::path(savedir, "figures",
-             c("biomass_figure.rda", "spawning_biomass_figure.rda", "abundance_at_age_figure.rda", "fishing_mortality_figure.rda",  "index_figure.rda")
+    fs::path(savedir,
+             "figures",
+             c("biomass_figure.rda", "spawning_biomass_figure.rda", "recruitment_figure.rda", "fishing_mortality_figure.rda",  "index_figure.rda")
              ),
     fs::path(savedir, "tables",
              "total_catch_table.rda")
@@ -20,7 +18,13 @@ test_that("extract_sis_data() runs with all possible rdas present", {
 
   expect_true(all(file.exists(files)))
 
-  extract_sis_data(sis_data_dir=savedir, key_quantities_dir=savedir, figures_tables_dir=savedir)
+  # remove biomass file to avoid question asking whether to choose
+  # B or SB as primary
+  file.remove(fs::path(savedir, "figures", "biomass_figure.rda"))
+  
+  extract_sis_data(sis_data_dir = savedir,
+                   key_quantities_dir = savedir,
+                   figures_tables_dir = savedir)
 
   # erase temporary testing files
   unlink(fs::path(savedir), recursive=TRUE)
@@ -32,9 +36,21 @@ test_that("extract_sis_data() runs with some of all possible rdas present", {
   if(!dir.exists(savedir))
     dir.create(savedir)
 
-  plot_biomass(stockplotr::example_data, module = "TIME_SERIES", interactive = FALSE, make_rda = TRUE, figures_dir=savedir)
-  plot_fishing_mortality(stockplotr::example_data, interactive = FALSE, make_rda = TRUE, figures_dir=savedir)
-  expect_no_error(extract_sis_data(sis_data_dir=savedir, key_quantities_dir=savedir, figures_tables_dir=savedir))
+  plot_biomass(stockplotr::example_data,
+               module = "TIME_SERIES", 
+               interactive = FALSE,
+               make_rda = TRUE, 
+               figures_dir = savedir)
+  plot_fishing_mortality(stockplotr::example_data,
+                         interactive = FALSE,
+                         make_rda = TRUE, 
+                         figures_dir = savedir)
+  expect_no_error(
+    extract_sis_data(
+      sis_data_dir = savedir,
+      key_quantities_dir = savedir,
+      figures_tables_dir = savedir)
+    )
 
   # test that extract_sis_data() exports csvs
   expect_true(file.exists(fs::path(savedir, "sis_assmt_template.csv")))
@@ -49,7 +65,11 @@ test_that("extract_sis_data() fails with no rdas present", {
   if(!dir.exists(savedir))
     dir.create(savedir)
     
-  expect_error(extract_sis_data(sis_data_dir=savedir, key_quantities_dir=savedir, figures_tables_dir=savedir))
+  expect_error(
+    extract_sis_data(
+      sis_data_dir = savedir, 
+      key_quantities_dir = savedir,
+      figures_tables_dir = savedir))
 
   # erase temporary testing files
   unlink(fs::path(savedir), recursive = TRUE)
