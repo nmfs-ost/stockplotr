@@ -1,5 +1,5 @@
 #' Code to convert Rceattle output to standard framework.
-#' 
+#'
 #' Does not change naming conventions.
 #'
 #' @inheritParams convert_output
@@ -8,9 +8,9 @@
 #'
 #' @returns Reshaped data frame.
 conout_rceattle <- function(
-    file,
-    out_new,
-    fleet_names = NULL
+  file,
+  out_new,
+  fleet_names = NULL
 ) {
   # Want to extract and set values from:
   # quantities, sdrep, and estimated_params
@@ -28,7 +28,7 @@ conout_rceattle <- function(
   } else {
     dat <- file
   }
-  
+
   # The standardized output describes one stock and has no species dimension,
   # but CEATTLE is a multispecies model. A multispecies fit's `sdrep` holds
   # nspp * nyrs values per label, which fails the `n == length(styr:projyr)`
@@ -57,22 +57,22 @@ conout_rceattle <- function(
       i = "Subset the fit to a single species before converting."
     ))
   }
-  
+
   # Extract or use fleet names
   if (is.null(fleet_names)) {
     fleet_names <- names(dat$estimated_params$index_log_q)
   }
-  
+
   # Output fleet names in console
   cli::cli_alert_info("Identified fleet names:")
   cli::cli_alert_info("{fleet_names}")
   # Create list for morphed dfs to go into (for rbind later)
   out_list <- list()
-  
+
   factors <- c("year", "fleet", "fleet_name", "age", "sex", "area", "seas", "season", "time", "era", "subseas", "subseason", "platoon", "platoo", "growth_pattern", "gp", "nsim", "age_a")
   errors <- c("StdDev", "sd", "se", "SE", "cv", "CV", "stddev")
   # units <- c("mt", "lbs", "eggs")
-  
+
   ##### Loop ####
   # Select the modules by name rather than by position. An Rceattle fit's
   # element list depends on how it was fitted -- `phase = TRUE` adds
@@ -125,18 +125,18 @@ conout_rceattle <- function(
             dplyr::pull(label)
         ))
       )
-      
+
       df2 <- values |>
         dplyr::filter(n == length(dat[["data_list"]]$styr:dat[["data_list"]]$projyr)) |>
         dplyr::mutate(year = year_col)
-      
+
       df2 <- values |>
         dplyr::filter(
           n != length(dat[["data_list"]]$styr:dat[["data_list"]]$projyr)
         ) |>
         dplyr::mutate(year = NA) |>
         rbind(df2)
-      
+
       # Extract parameter values ts
       # The standard errors of the fixed effects are the square root of the
       # diagonal of cov.fixed, in the same order as par.fixed.
@@ -170,7 +170,7 @@ conout_rceattle <- function(
           par_fixes_count,
           by = "label"
         )
-      
+
       year_col_par_fix <- rep(
         dat[["data_list"]]$styr:dat[["data_list"]]$endyr,
         length(unique(
@@ -178,7 +178,7 @@ conout_rceattle <- function(
             dplyr::pull(label)
         ))
       )
-      
+
       df3 <- par_fixes |>
         dplyr::filter(n == length(dat[["data_list"]]$styr:dat[["data_list"]]$endyr)) |>
         dplyr::mutate(year = year_col_par_fix)
@@ -191,13 +191,13 @@ conout_rceattle <- function(
       # not sure how pop_scalar is indexed
       # not sure how log_index_hat is indexes
       # Did not use r_sd for the error in rec bc used it from the other element in the list
-      
+
       df4 <- rbind(df2, df3) |>
         dplyr::select(-n) |>
         dplyr::mutate(
           module_name = module_name
         )
-      
+
       df4[setdiff(tolower(names(out_new)), tolower(names(df4)))] <- NA
       out_list[[names(extract)]] <- df4
     } else if (module_name == "data_list") {
@@ -205,7 +205,7 @@ conout_rceattle <- function(
       # Only extract specific quantity needs
       # comp_data?, index_data, catch_data, weight, Ftarget, Flimit
       data_list_list <- list()
-      
+
       ####### Indices ####
       # Extract index_data
       df_index <- extract[[1]]$index_data |>
@@ -227,7 +227,7 @@ conout_rceattle <- function(
         # still needing to be dropped from an older one.
         dplyr::select(-dplyr::any_of(c("fleet_code", "q_block")))
       cli::cli_alert_info("'Selectivity_block' values located in 'block' columns.")
-      
+
       # check if species > 1
       if (length(unique(df_index$species)) > 1) {
         cli::cli_abort("Not currently compatible for multispecies.")
@@ -235,7 +235,7 @@ conout_rceattle <- function(
         df_index <- df_index |>
           dplyr::select(-species)
       }
-      
+
       # expand df long to have obs and pred in same column with label
       df_index_long <- df_index |>
         tidyr::pivot_longer(
@@ -252,10 +252,10 @@ conout_rceattle <- function(
           # )
           label = stringr::str_replace_all(label, "indices", "index")
         )
-      
+
       df_index_long[setdiff(tolower(names(out_new)), tolower(names(df_index_long)))] <- NA
       data_list_list[["index_data"]] <- df_index_long
-      
+
       ####### Catch indexing ####
       # Extract catch_data and align with log_index_hat and catch_h
       # Modify sdrep in outlist to include index
@@ -289,28 +289,28 @@ conout_rceattle <- function(
           values_to = "estimate"
         ) |>
         dplyr::select(-c(fleet_code, species))
-      
+
       # Remove fleet names if do not match object
       # if (unique(df_catch$fleet) %notin% fleet_names) {
       #   df_catch <- df_catch |>
       #     dplyr::mutate(fleet = NA)
       # }
-      
+
       if (length(unique(df_catch$month)) == 1) {
         df_catch$month <- NA
       }
       df_catch[setdiff(tolower(names(out_new)), tolower(names(df_catch)))] <- NA
       data_list_list[["catch_data"]] <- df_catch
-      
+
       ####### Comp indexing ####
       df_comp_obs <- dat$data_list$comp_data |>
         dplyr::rename_with(tolower) |>
         dplyr::mutate(
           label = "index_observed"
         )
-      
+
       indexing_vars_cols <- colnames(df_comp_obs)[!grepl("comp", colnames(df_comp_obs))]
-      
+
       # `age_hat` holds one row per row of `comp_data`, in the same order, so
       # it binds column-wise. cross_join() paired every observation with the
       # whole prediction matrix instead, which is a Cartesian product: on the
@@ -332,7 +332,7 @@ conout_rceattle <- function(
           # NOTE: the below age mutate slows down code
           age = stringr::str_replace(age, "agehat_", "")
         )
-      
+
       # Finish adjusting comp_obs
       # pivot obs data
       df_comp_obs <- df_comp_obs |>
@@ -347,7 +347,7 @@ conout_rceattle <- function(
           # NOTE: the below age mutate slows down code
           age = stringr::str_replace(age, "comp_", "")
         )
-      
+
       df_comp <- rbind(df_comp_obs, df_comp_pred) |>
         # Match the index and catch frames: the standard names the fleet
         # `fleet`, carries no `fleet_name` or `species`, and every row states
@@ -357,10 +357,10 @@ conout_rceattle <- function(
         dplyr::select(-dplyr::any_of("species")) |>
         # TODO: do I need to filter sample size by <3 for confidentiality or does this not apply?
         dplyr::select(-c(age0_length1, fleet_code, sample_size))
-      
+
       df_comp[setdiff(tolower(names(out_new)), tolower(names(df_comp)))] <- NA
       data_list_list[["comp_data"]] <- df_comp
-      
+
       # final df for data_list module
       # rbind() rather than bind_rows(): every frame has already been padded
       # to the standard column set above, so rbind() succeeds and keeps the
@@ -379,7 +379,7 @@ conout_rceattle <- function(
       # Rceattle stores sex 1 as females, or both sexes when nsex = 1.
       sex_names <- if (nsex == 1) NA_character_ else c("female", "male")
       quantities_list <- list()
-      
+
       if ("sel_at_age" %in% names(extract[[1]])) {
         sel <- extract[[1]][["sel_at_age"]][, seq_len(nsex), seq_along(ages), , drop = FALSE]
         df_sel <- expand.grid(
@@ -396,7 +396,7 @@ conout_rceattle <- function(
         df_sel[setdiff(tolower(names(out_new)), tolower(names(df_sel)))] <- NA
         quantities_list[["sel_at_age"]] <- df_sel
       }
-      
+
       if ("M_at_age" %in% names(extract[[1]])) {
         m_at_age <- extract[[1]][["M_at_age"]][1, seq_len(nsex), seq_along(ages), , drop = FALSE]
         df_m <- expand.grid(
@@ -412,7 +412,7 @@ conout_rceattle <- function(
         df_m[setdiff(tolower(names(out_new)), tolower(names(df_m)))] <- NA
         quantities_list[["m_at_age"]] <- df_m
       }
-      
+
       if (length(quantities_list) > 0) {
         out_list[[names(extract)]] <- Reduce(rbind, quantities_list) |>
           dplyr::mutate(
@@ -441,7 +441,7 @@ conout_rceattle <- function(
             # mod_name2 <- glue::glue("{module_name}_{names(extract[[1]][i])}")
             # comment out message once finished development
             cli::cli_alert_info("Processing {names(extract[[1]][i])}")
-            
+
             df <- extract[[1]][i][[1]] |>
               expand_element(fleet_names = fleet_names) |>
               dplyr::mutate(

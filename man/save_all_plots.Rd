@@ -97,7 +97,7 @@ save_all_plots(
    ),
    plot_abundance_at_age_options = list(
      scale_amount = 1,         # custom scale for abundance-at-age plot
-     proportional = FALSE      # don't proportionalize abundance-at-age 
+     proportional = FALSE      # don't proportionalize abundance-at-age
    ),
    plot_spr_options = list(
      ylab = "Fishing Intensity (1-SPR)/(1-SPR_ref)" # custom Y label for SPR plot

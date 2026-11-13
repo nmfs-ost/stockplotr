@@ -53,4 +53,3 @@ test_that("plot_recruitment generates plots without errors", {
     "gg"
   )
 })
-

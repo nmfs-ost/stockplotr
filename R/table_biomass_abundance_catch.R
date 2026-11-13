@@ -77,7 +77,7 @@ table_biomass_abundance_catch <- function(
     "^abundance" = "abundance",
     "catch$|landings_observed" = "catch"
   )
-  
+
   biomass_abundance_catch.biomass.units <- NA
   biomass_abundance_catch.abundance.units <- NA
   biomass_abundance_catch.catch.units <- NA
@@ -97,7 +97,7 @@ table_biomass_abundance_catch <- function(
         module = module,
         scale_amount = 1,
         interactive = interactive
-      ) 
+      )
 
       uncertainty_label <- ifelse(
         is.na(unique(filtered_data$uncertainty_label)),
@@ -156,14 +156,16 @@ table_biomass_abundance_catch <- function(
 
       data <- processed_data[[1]]
       group <- processed_data[[2]]
-      
+
       # Labs
       # get unit label for biomass, abundance, and catch if not NULL
       unit_name <- named_vec[grep(x, names(named_vec), fixed = TRUE)][[1]]
       if (is.null(get(paste0(unit_name, "_label")))) {
         unit_label <- filtered_data |>
-          dplyr::filter(grepl(x, unit_name),
-                        !is.na(.data$unit)) |>
+          dplyr::filter(
+            grepl(x, unit_name),
+            !is.na(.data$unit)
+          ) |>
           dplyr::pull("unit") |>
           unique()
         if (is.na(unit_label) || length(unit_label) == 0) {
@@ -173,7 +175,7 @@ table_biomass_abundance_catch <- function(
       } else {
         unit_label <- get(paste0(unit_name, "_label"))
       }
-      
+
       # Obtain relevant key quantities for captions/alt text
       idx <- match(x, names(named_vec)[1:3])
       if (identical(idx, 1L)) biomass_abundance_catch.biomass.units <<- unit_label
@@ -198,7 +200,7 @@ table_biomass_abundance_catch <- function(
     gt::gt()
 
   final <- theme_table(combine_data)
-  
+
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
     # calculate & export key quantities
@@ -206,7 +208,7 @@ table_biomass_abundance_catch <- function(
       biomass_abundance_catch.biomass.units,
       biomass_abundance_catch.abundance.units,
       biomass_abundance_catch.catch.units,
-      dir=tables_dir
+      dir = tables_dir
     )
 
     # Add key quantities to captions/alt text
@@ -214,7 +216,7 @@ table_biomass_abundance_catch <- function(
       biomass_abundance_catch.biomass.units,
       biomass_abundance_catch.abundance.units,
       biomass_abundance_catch.catch.units,
-      dir=tables_dir
+      dir = tables_dir
     )
 
     create_rda(
@@ -230,10 +232,10 @@ table_biomass_abundance_catch <- function(
   }
 
   rm(biomass_abundance_catch.biomass.units, biomass_abundance_catch.abundance.units, biomass_abundance_catch.catch.units)
-  
+
   if (exists("selected_module")) {
     rm(selected_module, envir = .GlobalEnv)
   }
-  
+
   final
 }
