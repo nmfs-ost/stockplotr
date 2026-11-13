@@ -28,10 +28,15 @@
 #'
 #' Default: FALSE
 #' @param focus Character vector. Column name or names used to filter data.
-#' (i.e. select names of fleets to zoom into the plot)
-#'
-#' Default: NULL
+#' (i.e. select names of fleets to zoom into the plot). Default = NULL
 #' @returns A plot showing the expected and predicted index.
+#' @details Intervals assume lognormal observation errors, as in Stock
+#' Synthesis, FIMS, BAM, and Rceattle: \eqn{o \exp(\pm z \cdot \sigma)},
+#' where \eqn{o} is the observed index and \eqn{\sigma} is its log-scale
+#' standard error. Uncertainty labeled "se", "sd", or "log_sd" is used as
+#' \eqn{\sigma}, and a coefficient of variation ("cv") is converted to
+#' \eqn{\sigma = \sqrt{\log(1 + CV^2)}}. Observations without an
+#' uncertainty have no interval.
 #'
 #' @details Intervals assume lognormal observation errors, as in Stock
 #' Synthesis, FIMS, BAM, and Rceattle: \eqn{o \exp(\pm z \cdot \sigma)},
@@ -116,11 +121,23 @@ plot_index <- function(
     interactive = interactive,
     module = module
   )
-  if (!is.null(unit_label) && !is.na(unique(prepared_data$unit))) unit_label <- unique(prepared_data$unit)
-  if (is.na(unit_label) || is.null(unit_label)) {
-    cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
-    unit_label <- ""
+
+  # There's 3 cases handled here
+  # plot_index(dat) (unit_label = NULL): Uses prepared_data$unit if present, otherwise warns / falls back to ""
+  # plot_index(dat, unit_label = "fish/hr"): Skips the is.null() block and keeps "fish/hr"
+  # plot_index(dat, unit_label = ""): Skips the is.null() block and intentionally leaves the y-axis without units ("Estimated Index")
+  if (is.null(unit_label)) {
+    data_units <- unique(stats::na.omit(prepared_data$unit))
+    if (length(data_units) == 1 && nzchar(data_units)) {
+      unit_label <- data_units
+    } else {
+      cli::cli_alert_warning(
+        "No unit label found in the data. Please provide a unit label using the 'unit_label' argument."
+      )
+      unit_label <- ""
+    }
   }
+
   # Set cpue unit label for plot
   u_units <- ifelse(
     is.null(unit_label) | unit_label == "",
@@ -284,7 +301,11 @@ plot_index <- function(
       dir = figures_dir
     )
   }
-  # Output final plot
+
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+
   plt
 }
 

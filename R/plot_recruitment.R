@@ -3,7 +3,7 @@
 #' @inheritParams plot_spawning_biomass
 #' @param unit_label String. Units for recruitment
 #'
-#' Default: "mt"
+#' Default: NULL
 #'
 #' @returns A plot showing recruitment over time.
 #'
@@ -18,7 +18,7 @@
 #'
 #' @examples
 #' plot_recruitment(
-#'   dat = stockplotr:::example_data,
+#'   dat = stockplotr::example_data,
 #'   unit_label = "metric tons",
 #'   scale_amount = 100,
 #'   interactive = TRUE,
@@ -26,14 +26,15 @@
 #'   make_rda = FALSE
 #' )
 #' plot_recruitment(
-#'   dat = stockplotr:::example_data,
+#'   dat = stockplotr::example_data,
 #'   era = "fore",
+#'   unit_label = "kg",
 #'   module = "TIME_SERIES",
 #'   make_rda = FALSE
 #' )
 plot_recruitment <- function(
   dat,
-  unit_label = "mt",
+  unit_label = NULL,
   scale_amount = 1,
   era = NULL,
   group = NULL,
@@ -46,16 +47,8 @@ plot_recruitment <- function(
 ) {
   check_data(dat)
 
-  # TODO: Fix the unit label if scaling
-  recruitment_label <- label_magnitude(
-    label = "Recruitment",
-    unit_label = unit_label,
-    scale_amount = scale_amount,
-    legend = FALSE
-  )
-
   # Extract recruitment
-  recruitment <- filter_data(
+  prepared_data <- filter_data(
     dat = dat,
     label_name = "recruitment$", # might need to adjust for expected vs predicted rec
     geom = "line",
@@ -68,7 +61,7 @@ plot_recruitment <- function(
   )
   # process data
   processed_data <- process_data(
-    dat = recruitment,
+    dat = prepared_data,
     group = group,
     facet = facet
   )
@@ -76,6 +69,18 @@ plot_recruitment <- function(
   group <- processed_data[[2]]
   facet <- processed_data[[3]]
 
+  if (is.null(unit_label)) {
+    unit_label <- unique(prepared_data$unit)
+    if (is.na(unit_label) || is.null(unit_label)) cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+  }
+  
+  recruitment_label <- label_magnitude(
+    label = "Recruitment",
+    unit_label = unit_label,
+    scale_amount = scale_amount,
+    legend = FALSE
+  )
+  
   # Check if contains 'rec devs' and filter out
   if (any(grepl("recruitment_deviations", unique(recruitment$label)))) {
     if (length(unique(recruitment$label)) > 1) {
@@ -166,7 +171,7 @@ plot_recruitment <- function(
       recruitment.end.year,
       recruitment.min,
       recruitment.max,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     # Add key quantities to captions/alt text
@@ -176,7 +181,7 @@ plot_recruitment <- function(
       recruitment.end.year,
       recruitment.min,
       recruitment.max,
-      dir=figures_dir
+      dir = figures_dir
     )
 
 
@@ -189,5 +194,10 @@ plot_recruitment <- function(
       dir = figures_dir
     )
   }
+  
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+  
   final
 }

@@ -171,4 +171,7 @@ test_that("save_all_plots returns error when dat is not valid", {
         )
       )
     )
+    
+    # erase temporary testing files
+    unlink(fs::path(savedir), recursive=TRUE)
 })
