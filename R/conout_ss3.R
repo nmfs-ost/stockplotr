@@ -1005,7 +1005,7 @@ conout_ss3 <- function(
               tidyr::pivot_longer(
                 cols = -label,
                 names_to = "type",
-                values_to = "likelihood"
+                values_to = "estimate"
               ) |>
               dplyr::mutate(module_name="likelihoods")
             # match to out_new
@@ -1021,7 +1021,7 @@ conout_ss3 <- function(
               tidyr::pivot_longer(
                 cols = -label,
                 names_to = "fleet",
-                values_to = "likelihood"
+                values_to = "estimate"
               ) |>
               tidyr::separate(col=label, into=c("label", "type"), sep="_(?=lambda|like|N)", remove=FALSE, extra="merge") |>
               dplyr::mutate(module_name="likelihoods")
