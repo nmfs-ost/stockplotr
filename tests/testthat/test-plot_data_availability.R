@@ -36,17 +36,7 @@ test_that("data_availability finds each type of data once per fleet and year", {
   expect_true(all(c("Landings", "Compositions") %in% avail$type))
 })
 
-test_that("data_availability selects fleets and reports problems", {
-  avail <- data_availability(stockplotr::vermilion_snapper, fleet = c("rhb", "chl"))
-  expect_setequal(unique(avail$fleet), c("rhb", "chl"))
-  expect_message(
-    data_availability(stockplotr::vermilion_snapper, fleet = c("rhb", "nope")),
-    "No observed data for fleet"
-  )
-  expect_error(
-    suppressMessages(data_availability(stockplotr::vermilion_snapper, fleet = "nope")),
-    "No observed data for the selected fleets"
-  )
+test_that("data_availability reports problems", {
   dat <- stockplotr::vermilion_snapper
   expect_error(
     data_availability(dat[!grepl("observed", dat$label), ]),
@@ -57,14 +47,6 @@ test_that("data_availability selects fleets and reports problems", {
   dat$fleet[row] <- NA
   expect_message(avail <- data_availability(dat), "without a fleet")
   expect_true("unknown" %in% avail$fleet)
-})
-
-test_that("data_availability orders fleets as given", {
-  fleets <- c("WCGBTS", "Triennial", "South", "North")
-  avail <- data_availability(stockplotr::example_data, fleet = fleets)
-  expect_equal(levels(avail$fleet), fleets)
-  # Alphabetical by default
-  expect_equal(levels(data_availability(stockplotr::example_data)$fleet), sort(fleets))
 })
 
 test_that("plot_data_availability works with FIMS input data", {
@@ -78,8 +60,6 @@ test_that("plot_data_availability works with FIMS input data", {
   avail <- data_availability(input)
   expect_equal(as.character(avail$type), c("Landings", "Landings", "Index", "Age compositions"))
   expect_equal(avail$year, c(2001, 2002, 2001, 2002))
-  # Fleets in the order of the data
-  expect_equal(levels(avail$fleet), c("fleet1", "survey1"))
 
   # A FIMSFrame (an S4 object with the input in its data slot)
   frame_class <- methods::setClass("FIMSFrame", representation(data = "data.frame"), where = environment())

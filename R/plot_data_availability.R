@@ -12,11 +12,6 @@
 #' @param dat A tibble from [convert_output()], a `FIMSFrame`, or a data
 #' frame of FIMS input data (`FIMS::get_data()`), with columns `type`,
 #' `fleet`, `timing`, and `observed`.
-#' @param fleet A string or vector of strings. Fleets to plot, from top to
-#' bottom in the order given.
-#'
-#' Default: NULL (all fleets; alphabetical for output from
-#' [convert_output()], in the order of the data for FIMS input)
 #'
 #' @returns A `ggplot2` object.
 #'
@@ -36,7 +31,9 @@
 #' * Compositions: "composition_observed", when the type of composition is
 #'   not reported.
 #'
-#' A year has data when it has an observation greater than zero.
+#' A year has data when it has an observation greater than zero. Fleets are
+#' in alphabetical order from top to bottom. To plot only some fleets, filter
+#' `dat` first (e.g., `dplyr::filter(dat, fleet %in% c("fleet1", "fleet2"))`).
 #'
 #' FIMS input data are found by their `type`: "landings" or "catch"
 #' (landings), "index", "age_comp", and "length_comp"; `timing` is the year,
@@ -54,12 +51,11 @@
 #' plot_data_availability(stockplotr::example_data)
 plot_data_availability <- function(
   dat,
-  fleet = NULL,
   interactive = TRUE,
   make_rda = FALSE,
   figures_dir = getwd()
 ) {
-  avail <- data_availability(dat, fleet = fleet)
+  avail <- data_availability(dat)
 
   plt <- ggplot2::ggplot(avail, ggplot2::aes(x = .data$year, y = .data$fleet)) +
     ggplot2::geom_point(ggplot2::aes(color = .data$fleet), shape = 15, size = 2.5) +
@@ -120,7 +116,7 @@ plot_data_availability <- function(
 
 # The years in which each fleet has each type of data: one row per type,
 # fleet, and year, with `type` a factor in the order the types are plotted
-data_availability <- function(dat, fleet = NULL) {
+data_availability <- function(dat) {
   if (inherits(dat, "FIMSFrame")) {
     dat <- methods::slot(dat, "data")
   }
@@ -133,24 +129,9 @@ data_availability <- function(dat, fleet = NULL) {
     )
     avail$fleet[is.na(avail$fleet)] <- "unknown"
   }
-  # Fleets from top to bottom: as given, or in the order of FIMS input data,
-  # or alphabetical
-  fleet_order <- if (fims_input) unique(avail$fleet) else sort(unique(avail$fleet))
-  if (!is.null(fleet)) {
-    missing <- setdiff(fleet, avail$fleet)
-    if (length(missing) > 0) {
-      cli::cli_alert_info("No observed data for fleet{?s} {.val {missing}}.")
-    }
-    avail <- avail[avail$fleet %in% fleet, , drop = FALSE]
-    if (nrow(avail) == 0) {
-      cli::cli_abort("No observed data for the selected fleets.")
-    }
-    fleet_order <- unique(fleet[fleet %in% avail$fleet])
-  }
   types <- c("Landings", "Discards", "Index", "Age compositions", "Length compositions", "Compositions")
   avail <- dplyr::distinct(avail)
   avail$type <- factor(avail$type, levels = types[types %in% avail$type])
-  avail$fleet <- factor(avail$fleet, levels = fleet_order)
   dplyr::arrange(avail, .data$type, .data$fleet, .data$year)
 }
 

@@ -6,7 +6,6 @@
 \usage{
 plot_data_availability(
   dat,
-  fleet = NULL,
   interactive = TRUE,
   make_rda = FALSE,
   figures_dir = getwd()
@@ -16,12 +15,6 @@ plot_data_availability(
 \item{dat}{A tibble from \code{\link[=convert_output]{convert_output()}}, a \code{FIMSFrame}, or a data
 frame of FIMS input data (\code{FIMS::get_data()}), with columns \code{type},
 \code{fleet}, \code{timing}, and \code{observed}.}
-
-\item{fleet}{A string or vector of strings. Fleets to plot, from top to
-bottom in the order given.
-
-Default: NULL (all fleets; alphabetical for output from
-\code{\link[=convert_output]{convert_output()}}, in the order of the data for FIMS input)}
 
 \item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
@@ -69,7 +62,9 @@ Synthesis ("all_obs_mean" in the age and length composition modules).
 not reported.
 }
 
-A year has data when it has an observation greater than zero.
+A year has data when it has an observation greater than zero. Fleets are
+in alphabetical order from top to bottom. To plot only some fleets, filter
+\code{dat} first (e.g., \code{dplyr::filter(dat, fleet \%in\% c("fleet1", "fleet2"))}).
 
 FIMS input data are found by their \code{type}: "landings" or "catch"
 (landings), "index", "age_comp", and "length_comp"; \code{timing} is the year,
