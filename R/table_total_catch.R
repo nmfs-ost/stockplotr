@@ -50,13 +50,15 @@ table_total_catch <- function(
   tables_dir = getwd()
 ) {
   check_data(dat)
-  
+
   # Filter data for catch
   prepared_data <- filter_data(
     dat = dat |>
-      dplyr::filter(!is.na(year),
-                    !is.na(estimate),
-                    label %in% c("catch_retained", "catch_dead", "catch_selected", "catch")),
+      dplyr::filter(
+        !is.na(year),
+        !is.na(estimate),
+        label %in% c("catch_retained", "catch_dead", "catch_selected", "catch")
+      ),
     label_name = "^catch",
     geom = "line",
     era = era,
@@ -69,17 +71,17 @@ table_total_catch <- function(
   if (nrow(prepared_data) == 0 | unique(stringr::str_detect(prepared_data$label, "catchability"))) {
     cli::cli_abort("No catch data found.")
   }
-  
+
   # Labs
   if (is.null(unit_label)) {
     unit_label <- unique(prepared_data$unit)
     unit_label <- unit_label[!is.na(unit_label)]
-    if (is.na(unit_label) || is.null(unit_label) || length(unit_label) == 0)  {
+    if (is.na(unit_label) || is.null(unit_label) || length(unit_label) == 0) {
       cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
       unit_label <- ""
     }
   }
-  
+
   # set unit label if scaled
   catch_label <- label_magnitude(
     label = "",
@@ -196,10 +198,10 @@ table_total_catch <- function(
       table_df = final
     )
   }
-  
+
   if (exists("selected_module")) {
     rm(selected_module, envir = .GlobalEnv)
   }
-  
+
   final
 }

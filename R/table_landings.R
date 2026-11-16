@@ -43,7 +43,8 @@
 #'
 #' @examples
 #' table_landings(stockplotr::example_data,
-#'   interactive = FALSE)
+#'   interactive = FALSE
+#' )
 #'
 #' table_landings(
 #'   stockplotr::example_data,
@@ -118,7 +119,7 @@ table_landings <- function(
   table_data <- table_data_info[[1]]
   indexed_vars <- table_data_info[[2]]
   id_col_vals <- table_data_info[[3]]
-  
+
   if (is.null(unit_label)) {
     # remove fleet names from table_data colnames
     fleet_pattern <- paste0("_(", paste(fleets, collapse = "|"), ")$")
@@ -133,7 +134,7 @@ table_landings <- function(
       unit_label <- ""
     }
   }
-  
+
   # set unit label if scaled
   landings_label <- label_magnitude(
     label = "",
@@ -141,7 +142,7 @@ table_landings <- function(
     scale_amount = scale_amount
   )
 
-    # TODO: add check if there is a landings column for every error column -- if not remove the error (can keep landings)
+  # TODO: add check if there is a landings column for every error column -- if not remove the error (can keep landings)
 
   # merge error and landings columns and rename
   final_tab <- merge_error(
@@ -159,13 +160,13 @@ table_landings <- function(
   if (make_rda == TRUE) {
     # Obtain relevant key quantities for captions/alt text
     landings.units <- unit_label
-    
+
     # calculate & export key quantities
     export_kqs(landings.units, dir = tables_dir)
-    
+
     # Add key quantities to captions/alt text
     insert_kqs(landings.units, dir = tables_dir)
-    
+
     create_rda(
       object = final,
       # get name of function and remove "table_" from it
@@ -177,10 +178,10 @@ table_landings <- function(
       table_df = final
     )
   }
-  
+
   if (exists("selected_module")) {
     rm(selected_module, envir = .GlobalEnv)
   }
-  
+
   final
 }
