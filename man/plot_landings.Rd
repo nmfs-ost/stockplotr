@@ -108,6 +108,12 @@ The input is from an assessment model output file
 translated to a standardized output (\link[stockplotr]{convert_output}).
 There are options to return a \code{ggplot2} object or export an .rda object
 containing associated caption and alternative text for the figure.
+
+The landings plotted are the observed landings: "landings_observed",
+"landings_observed_weight", "landings_observed_numbers", or "catch" when
+the output also has "catch_predicted" (the first of these in \code{dat}). When
+\code{dat} has none of these, the first label containing "landings" is
+plotted, with a message.
 }
 \examples{
 plot_landings(
