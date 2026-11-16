@@ -1,4 +1,40 @@
-
+#' Plot likelihood components
+#' 
+#' Plot likelihood components as a horizontal bar chart.
+#' 
+#' @inheritParams plot_spawning_biomass
+#' 
+#' @param by_fleet Logical, whether to plot fleet specific likelihood
+#' components or not
+#' 
+#' Default: FALSE
+#' 
+#' @param summarise_fleets Logical, whether to aggregate fleet specificic 
+#' likelihood components into an additional "total" likelihood wheb plotting
+#' fleet specific likelihoods. Only applied when `by_fleet=TRUE`.
+#' 
+#' Default:FALSE
+#' 
+#' @return A plot showing the value of likelihood components, optionally
+#' across fleets.
+#' 
+#' @export 
+#' 
+#' @examples
+#' \dontrun{
+#' plot_likelhoods(
+#'   dat = stockplotr::example_data,
+#' )
+#' plot_likelhoods(
+#'   dat = stockplotr::example_data,
+#'   by_fleet = TRUE
+#' )
+#' plot_likelhoods(
+#'   dat = stockplotr::example_data,
+#'   by_fleet = TRUE,
+#'   summarise_fleets = TRUE
+#' )
+#' }
 plot_likelihoods <- function(
     dat,
     by_fleet=FALSE,
