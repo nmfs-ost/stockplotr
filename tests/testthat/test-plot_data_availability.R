@@ -59,6 +59,36 @@ test_that("data_availability selects fleets and reports problems", {
   expect_true("unknown" %in% avail$fleet)
 })
 
+test_that("data_availability orders fleets as given", {
+  fleets <- c("WCGBTS", "Triennial", "South", "North")
+  avail <- data_availability(stockplotr::example_data, fleet = fleets)
+  expect_equal(levels(avail$fleet), fleets)
+  # Alphabetical by default
+  expect_equal(levels(data_availability(stockplotr::example_data)$fleet), sort(fleets))
+})
+
+test_that("plot_data_availability works with FIMS input data", {
+  # FIMS input (FIMS::get_data()): one row per observation, -999 = missing
+  input <- data.frame(
+    type = c("landings", "landings", "index", "index", "age_comp", "weight_at_age"),
+    fleet = c("fleet1", "fleet1", "survey1", "survey1", "survey1", "fleet1"),
+    timing = c(2001, 2002, 2001, 2002, 2002, 2001),
+    observed = c(100, 120, 1.5, -999, 0.2, 0.5)
+  )
+  avail <- data_availability(input)
+  expect_equal(as.character(avail$type), c("Landings", "Landings", "Index", "Age compositions"))
+  expect_equal(avail$year, c(2001, 2002, 2001, 2002))
+  # Fleets in the order of the data
+  expect_equal(levels(avail$fleet), c("fleet1", "survey1"))
+
+  # A FIMSFrame (an S4 object with the input in its data slot)
+  frame_class <- methods::setClass("FIMSFrame", representation(data = "data.frame"), where = environment())
+  p <- plot_data_availability(frame_class(data = input))
+  expect_equal(nrow(p$data), 4)
+  expect_no_error(ggplot2::ggplot_build(p))
+  expect_error(data_availability(input[input$type == "weight_at_age", ]), "No observed data")
+})
+
 test_that("plot_data_availability saves a caption, alt text, and key quantities", {
   dir <- tempfile("data_availability")
   dir.create(dir)

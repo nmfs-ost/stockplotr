@@ -4,12 +4,19 @@
 #' discards, indices of abundance, and age and length compositions), as in
 #' `r4ss` (`SSplotData()`), `stockassessment` (`dataplot()`), and `spict`
 #' (`plotspict.data()`). Each type of data is a panel, each fleet a row, and
-#' each year with data a square.
+#' each year with data a square. It works with output from any model
+#' converted with [convert_output()] and with input data for a FIMS model (a
+#' `FIMSFrame` or the data from `FIMS::get_data()`).
 #'
 #' @inheritParams plot_spawning_biomass
-#' @param fleet A string or vector of strings. Fleets to plot.
+#' @param dat A tibble from [convert_output()], a `FIMSFrame`, or a data
+#' frame of FIMS input data (`FIMS::get_data()`), with columns `type`,
+#' `fleet`, `timing`, and `observed`.
+#' @param fleet A string or vector of strings. Fleets to plot, from top to
+#' bottom in the order given.
 #'
-#' Default: NULL (all fleets)
+#' Default: NULL (all fleets; alphabetical for output from
+#' [convert_output()], in the order of the data for FIMS input)
 #'
 #' @returns A `ggplot2` object.
 #'
@@ -29,7 +36,14 @@
 #' * Compositions: "composition_observed", when the type of composition is
 #'   not reported.
 #'
-#' A year has data when it has an observation greater than zero. All
+#' A year has data when it has an observation greater than zero.
+#'
+#' FIMS input data are found by their `type`: "landings" or "catch"
+#' (landings), "index", "age_comp", and "length_comp"; `timing` is the year,
+#' and observations coded as missing (-999) are not data. Other types of
+#' input (e.g., "weight_at_age") are not observations and are not shown.
+#'
+#' All
 #' modules are plotted, so `interactive` is not used; it is accepted for
 #' consistency with the other plotting functions (e.g., in
 #' [save_all_plots()]).
@@ -45,7 +59,6 @@ plot_data_availability <- function(
   make_rda = FALSE,
   figures_dir = getwd()
 ) {
-  check_data(dat)
   avail <- data_availability(dat, fleet = fleet)
 
   plt <- ggplot2::ggplot(avail, ggplot2::aes(x = .data$year, y = .data$fleet)) +
@@ -54,9 +67,12 @@ plot_data_availability <- function(
       rows = ggplot2::vars(.data$type),
       scales = "free_y",
       space = "free_y",
-      switch = "y"
+      switch = "y",
+      # "Age compositions" over two lines, to save space
+      labeller = ggplot2::as_labeller(function(x) sub(" ", "\n", x))
     ) +
-    ggplot2::scale_y_discrete(limits = rev) +
+    # Data types on the left, fleets on the right; the first fleet at the top
+    ggplot2::scale_y_discrete(limits = rev, position = "right") +
     ggplot2::labs(x = "Year", y = NULL) +
     theme_noaa() +
     ggplot2::theme(
@@ -105,6 +121,66 @@ plot_data_availability <- function(
 # The years in which each fleet has each type of data: one row per type,
 # fleet, and year, with `type` a factor in the order the types are plotted
 data_availability <- function(dat, fleet = NULL) {
+  if (inherits(dat, "FIMSFrame")) {
+    dat <- methods::slot(dat, "data")
+  }
+  fims_input <- is.data.frame(dat) && !"label" %in% names(dat) &&
+    all(c("type", "fleet", "timing", "observed") %in% names(dat))
+  avail <- if (fims_input) fims_input_availability(dat) else output_availability(dat)
+  if (any(is.na(avail$fleet))) {
+    cli::cli_alert_info(
+      "{sum(is.na(avail$fleet))} observation{?s} without a fleet {?is/are} shown as fleet {.val unknown}."
+    )
+    avail$fleet[is.na(avail$fleet)] <- "unknown"
+  }
+  # Fleets from top to bottom: as given, or in the order of FIMS input data,
+  # or alphabetical
+  fleet_order <- if (fims_input) unique(avail$fleet) else sort(unique(avail$fleet))
+  if (!is.null(fleet)) {
+    missing <- setdiff(fleet, avail$fleet)
+    if (length(missing) > 0) {
+      cli::cli_alert_info("No observed data for fleet{?s} {.val {missing}}.")
+    }
+    avail <- avail[avail$fleet %in% fleet, , drop = FALSE]
+    if (nrow(avail) == 0) {
+      cli::cli_abort("No observed data for the selected fleets.")
+    }
+    fleet_order <- unique(fleet[fleet %in% avail$fleet])
+  }
+  types <- c("Landings", "Discards", "Index", "Age compositions", "Length compositions", "Compositions")
+  avail <- dplyr::distinct(avail)
+  avail$type <- factor(avail$type, levels = types[types %in% avail$type])
+  avail$fleet <- factor(avail$fleet, levels = fleet_order)
+  dplyr::arrange(avail, .data$type, .data$fleet, .data$year)
+}
+
+# Data in FIMS input (FIMS::get_data()): type, fleet, and year (timing) of
+# each observation that is not missing (-999)
+fims_input_availability <- function(dat) {
+  type <- dplyr::case_when(
+    tolower(dat$type) %in% c("landings", "catch") ~ "Landings",
+    tolower(dat$type) %in% c("discards", "discard") ~ "Discards",
+    tolower(dat$type) %in% "index" ~ "Index",
+    tolower(dat$type) %in% "age_comp" ~ "Age compositions",
+    tolower(dat$type) %in% "length_comp" ~ "Length compositions",
+    TRUE ~ NA_character_
+  )
+  observed <- suppressWarnings(as.numeric(dat$observed))
+  keep <- !is.na(type) & !is.na(dat$timing) & !is.na(observed) & observed != -999
+  if (!any(keep)) {
+    cli::cli_abort("No observed data found in the FIMS input {.arg dat}.")
+  }
+  tibble::tibble(
+    type = type[keep],
+    fleet = as.character(dat$fleet[keep]),
+    year = as.numeric(dat$timing[keep])
+  )
+}
+
+# Data in output from convert_output(): type, fleet, and year of each
+# observation, found by its label
+output_availability <- function(dat) {
+  check_data(dat)
   if ("model" %in% names(dat) && length(unique(stats::na.omit(dat$model))) > 1) {
     cli::cli_abort("{.arg dat} has output from more than one model; plot one model at a time.")
   }
@@ -136,31 +212,11 @@ data_availability <- function(dat, fleet = NULL) {
   if (!any(keep)) {
     cli::cli_abort("No observed data found in {.arg dat}; see {.fn plot_data_availability} for the labels used.")
   }
-  avail <- tibble::tibble(
+  tibble::tibble(
     type = type[keep],
     fleet = as.character(dat$fleet[keep]),
     year = as.numeric(dat$year[keep])
   )
-  if (any(is.na(avail$fleet))) {
-    cli::cli_alert_info(
-      "{sum(is.na(avail$fleet))} observation{?s} without a fleet {?is/are} shown as fleet {.val unknown}."
-    )
-    avail$fleet[is.na(avail$fleet)] <- "unknown"
-  }
-  if (!is.null(fleet)) {
-    missing <- setdiff(fleet, avail$fleet)
-    if (length(missing) > 0) {
-      cli::cli_alert_info("No observed data for fleet{?s} {.val {missing}}.")
-    }
-    avail <- avail[avail$fleet %in% fleet, , drop = FALSE]
-    if (nrow(avail) == 0) {
-      cli::cli_abort("No observed data for the selected fleets.")
-    }
-  }
-  types <- c("Landings", "Discards", "Index", "Age compositions", "Length compositions", "Compositions")
-  avail <- dplyr::distinct(avail)
-  avail$type <- factor(avail$type, levels = types[types %in% avail$type])
-  dplyr::arrange(avail, .data$type, .data$fleet, .data$year)
 }
 
 # "a", "a and b", or "a, b, and c" (lower case), for captions

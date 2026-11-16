@@ -13,15 +13,15 @@ plot_data_availability(
 )
 }
 \arguments{
-\item{dat}{Data frame or list. A tibble or named list of tibbles (input as \code{list()})
-returned from \link[stockplotr]{convert_output}.
+\item{dat}{A tibble from \code{\link[=convert_output]{convert_output()}}, a \code{FIMSFrame}, or a data
+frame of FIMS input data (\code{FIMS::get_data()}), with columns \code{type},
+\code{fleet}, \code{timing}, and \code{observed}.}
 
-If inputting a list of tibbles, the first tibble's reference point defined
-in \code{ref_line} is used to plot a reference line or calculate relative spawning biomass.}
+\item{fleet}{A string or vector of strings. Fleets to plot, from top to
+bottom in the order given.
 
-\item{fleet}{A string or vector of strings. Fleets to plot.
-
-Default: NULL (all fleets)}
+Default: NULL (all fleets; alphabetical for output from
+\code{\link[=convert_output]{convert_output()}}, in the order of the data for FIMS input)}
 
 \item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
@@ -47,7 +47,9 @@ Plot the years in which each fleet has each type of data (landings,
 discards, indices of abundance, and age and length compositions), as in
 \code{r4ss} (\code{SSplotData()}), \code{stockassessment} (\code{dataplot()}), and \code{spict}
 (\code{plotspict.data()}). Each type of data is a panel, each fleet a row, and
-each year with data a square.
+each year with data a square. It works with output from any model
+converted with \code{\link[=convert_output]{convert_output()}} and with input data for a FIMS model (a
+\code{FIMSFrame} or the data from \code{FIMS::get_data()}).
 }
 \details{
 The data are the observations in output from \code{\link[=convert_output]{convert_output()}},
@@ -67,7 +69,14 @@ Synthesis ("all_obs_mean" in the age and length composition modules).
 not reported.
 }
 
-A year has data when it has an observation greater than zero. All
+A year has data when it has an observation greater than zero.
+
+FIMS input data are found by their \code{type}: "landings" or "catch"
+(landings), "index", "age_comp", and "length_comp"; \code{timing} is the year,
+and observations coded as missing (-999) are not data. Other types of
+input (e.g., "weight_at_age") are not observations and are not shown.
+
+All
 modules are plotted, so \code{interactive} is not used; it is accepted for
 consistency with the other plotting functions (e.g., in
 \code{\link[=save_all_plots]{save_all_plots()}}).
