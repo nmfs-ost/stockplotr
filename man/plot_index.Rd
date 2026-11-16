@@ -14,6 +14,7 @@ plot_index(
   focus = NULL,
   interval = 0.95,
   log = FALSE,
+  relative = FALSE,
   make_rda = FALSE,
   figures_dir = getwd(),
   ...
@@ -26,7 +27,9 @@ returned from \link[stockplotr]{convert_output}.
 If inputting a list of tibbles, the first tibble's reference point defined
 in \code{ref_line} is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{unit_label}{String. Index of abundance/CPUE units. Default: NULL}
+\item{unit_label}{String. Index of abundance/CPUE units
+
+Default: NULL}
 
 \item{group}{String. Single column that groups the data.
 
@@ -35,9 +38,11 @@ Set group = "none" to summarize data over all indexing values.
 Default: NULL
 Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
-\item{facet}{Character vector. Column name or names used for faceting. "fleet"
-is always added on to any faceting selections. Default: NULL, but may include,
-but is not limited to: "fleet", "year", "area", NULL}
+\item{facet}{Character vector. Column name or names used for faceting. "fleet" is always added on to any faceting selections
+
+Default: NULL
+
+Options: May include, but is not limited to: "fleet", "year", "area", NULL}
 
 \item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
@@ -56,11 +61,24 @@ module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 
 \item{interval}{Number. Coverage of intervals around the observed index
 based on its observation error (e.g., 0.95), drawn as vertical lines.
-NULL draws no intervals, default = 0.95}
+NULL draws no intervals.
+
+Default: 0.95}
 
 \item{log}{Logical. TRUE/FALSE; plot the index on a log scale. Indices
 with lognormal errors are often easier to judge on a log scale, where the
-intervals are symmetric. Default = FALSE}
+intervals are symmetric.
+
+Default: FALSE}
+
+\item{relative}{Logical. TRUE/FALSE; divide each fleet's observed and
+predicted index (and intervals) by the mean of its observed index, and plot
+all fleets on one panel, colored by fleet. Indices with conflicting trends
+(data conflicts) are a common cause of poor fits and are easiest to see
+this way (\code{r4ss::SSplotIndices()} subplot 9). Any \code{group} other than
+"fleet" is added to \code{facet}.
+
+Default: FALSE}
 
 \item{make_rda}{Logical. TRUE/FALSE; indicate whether to save the object and
 make an automated caption and alternative text in the form of an \code{rda} object. If TRUE,
@@ -91,6 +109,14 @@ standard error. Uncertainty labeled "se", "sd", or "log_sd" is used as
 \eqn{\sigma = \sqrt{\log(1 + CV^2)}}. Observations without an
 uncertainty have no interval.
 
+Intervals assume lognormal observation errors, as in Stock
+Synthesis, FIMS, BAM, and Rceattle: \eqn{o \exp(\pm z \cdot \sigma)},
+where \eqn{o} is the observed index and \eqn{\sigma} is its log-scale
+standard error. Uncertainty labeled "se", "sd", or "log_sd" is used as
+\eqn{\sigma}, and a coefficient of variation ("cv") is converted to
+\eqn{\sigma = \sqrt{\log(1 + CV^2)}}. Observations without an
+uncertainty have no interval.
+
 The input is from an assessment model output file
 translated to a standardized output (\link[stockplotr]{convert_output}).
 There are options to return a \code{ggplot2} object or export an .rda object
@@ -108,6 +134,12 @@ plot_index(
   dat = stockplotr::example_data,
   interval = 0.95,
   log = TRUE,
+  interactive = FALSE
+)
+# All indices relative to their means on one panel
+plot_index(
+  dat = stockplotr::example_data,
+  relative = TRUE,
   interactive = FALSE
 )
 
