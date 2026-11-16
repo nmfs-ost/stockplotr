@@ -85,46 +85,46 @@ test_that("export_rda works for tables", {
 
 
 test_that("export_rda to custom directory location", {
-    topic_label <- "biomass"
-    fig_or_table <- "figure"
+  topic_label <- "biomass"
+  fig_or_table <- "figure"
 
-    B.min <- 100
-    B.max <- 200
+  B.min <- 100
+  B.max <- 200
 
-    custom_dir <- fs::path(getwd(), "tests-export_rda")
+  custom_dir <- fs::path(getwd(), "tests-export_rda")
 
-    # add KQs to caps/alt text csv
-    insert_kqs(B.min, B.max, dir=custom_dir)
+  # add KQs to caps/alt text csv
+  insert_kqs(B.min, B.max, dir = custom_dir)
 
-    # extract this plot's caption and alt text
-    caps_alttext <- extract_caps_alttext(
-      topic_label = topic_label,
-      fig_or_table = fig_or_table,
-      dir = custom_dir
-    )
+  # extract this plot's caption and alt text
+  caps_alttext <- extract_caps_alttext(
+    topic_label = topic_label,
+    fig_or_table = fig_or_table,
+    dir = custom_dir
+  )
 
-    # make a simple plot
-    # library(ggplot2)
-    final <- ggplot2::ggplot(Orange, ggplot2::aes(circumference, age)) +
-      ggplot2::geom_point()
+  # make a simple plot
+  # library(ggplot2)
+  final <- ggplot2::ggplot(Orange, ggplot2::aes(circumference, age)) +
+    ggplot2::geom_point()
 
-    # export rda
-    export_rda(
-      object = final,
-      caps_alttext = caps_alttext,
-      figures_tables_dir = custom_dir,
-      topic_label = topic_label,
-      fig_or_table = fig_or_table
-    )
+  # export rda
+  export_rda(
+    object = final,
+    caps_alttext = caps_alttext,
+    figures_tables_dir = custom_dir,
+    topic_label = topic_label,
+    fig_or_table = fig_or_table
+  )
 
-    # expect that both figures dir and the biomass_figure.rda file exist
-    expect_true(dir.exists(fs::path(custom_dir, "figures")))
-    expect_true(file.exists(fs::path(
-      custom_dir, "figures", "biomass_figure.rda"
-    )))
+  # expect that both figures dir and the biomass_figure.rda file exist
+  expect_true(dir.exists(fs::path(custom_dir, "figures")))
+  expect_true(file.exists(fs::path(
+    custom_dir, "figures", "biomass_figure.rda"
+  )))
 
-    # erase temporary testing files
-    file.remove(fs::path(custom_dir, "captions_alt_text.csv"))
-    # file.remove(fs::path(getwd(), "key_quantities.csv")) # file is not made in this test
-    unlink(fs::path(custom_dir, "figures"), recursive = T)
+  # erase temporary testing files
+  file.remove(fs::path(custom_dir, "captions_alt_text.csv"))
+  # file.remove(fs::path(getwd(), "key_quantities.csv")) # file is not made in this test
+  unlink(fs::path(custom_dir, "figures"), recursive = T)
 })

@@ -59,7 +59,7 @@ plot_landings <- function(
   ) # |>
   # filter NA from year
   # dplyr::filter(!is.na(year))
-  
+
   # Process data
   processed_data <- process_data(
     dat = prepared_data,
@@ -77,7 +77,7 @@ plot_landings <- function(
       # always select the first label if TRUE
       dplyr::filter(label == unique(label)[1])
   }
-  
+
   # extract unit if unit_label is null and set lbs to F by default
   lbs <- FALSE
   if (is.null(unit_label)) {
@@ -93,7 +93,7 @@ plot_landings <- function(
   } else {
     if (grepl("lbs|pounds|lb", unit_label, ignore.case = TRUE)) lbs <- TRUE
   }
-  
+
   # Units
   landings_label <- label_magnitude(
     label = "Landings",
@@ -138,7 +138,7 @@ plot_landings <- function(
       landings.min,
       landings.max,
       landings.units,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     # Add key quantities to captions/alt text
@@ -148,7 +148,7 @@ plot_landings <- function(
       landings.min,
       landings.max,
       landings.units,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     create_rda(
@@ -161,10 +161,10 @@ plot_landings <- function(
       scale_amount = scale_amount
     )
   }
-  
+
   if (exists("selected_module")) {
     rm(selected_module, envir = .GlobalEnv)
   }
-  
+
   plt
 }
