@@ -1,13 +1,12 @@
 #' Plot observed landings
 #'
 #' @inheritParams plot_spawning_biomass
-#' @param predicted Logical. TRUE/FALSE; plot the observed landings of each
-#' fleet as points, with the landings predicted by the model as a line, to
-#' show the fit to the landings. Default: FALSE
+#' @param predicted Logical. TRUE/FALSE; add the landings predicted by the
+#' model as dashed lines, to show the fit to the observed landings.
+#' Default: FALSE
 #' @param interval Number. Coverage of intervals around the observed landings
-#' based on their observation error (e.g., 0.95), drawn as vertical lines.
-#' Setting `interval` also plots the observed landings of each fleet as
-#' points. NULL draws no intervals. Default: NULL
+#' based on their observation error (e.g., 0.95), drawn as a ribbon. NULL
+#' draws no intervals. Default: NULL
 #'
 #' @returns A plot showing cumulative landings over time.
 #'
@@ -22,16 +21,17 @@
 #' `dat` has none of these, the first label containing "landings" is
 #' plotted, with a message.
 #'
-#' When `predicted = TRUE` or `interval` is set, these observed landings are
-#' plotted as points and the matching predicted landings ("landings_predicted",
-#' "landings_predicted_weight", "landings_predicted_numbers", or
-#' "catch_predicted") as a line, with one panel for each fleet, as in
-#' [plot_index()]. Predicted landings are plotted for fleets with observed
-#' landings, within the years of those observations. Intervals are lognormal,
-#' from a log-scale standard error or a coefficient of variation, as in
-#' [plot_index()]; landings are often given a small observation error (e.g.,
-#' a standard error of 0.01 in Stock Synthesis), so their intervals can be
-#' narrow.
+#' When `predicted = TRUE`, the matching predicted landings
+#' ("landings_predicted", "landings_predicted_weight",
+#' "landings_predicted_numbers", or "catch_predicted") are added as dashed
+#' lines in the color of each fleet, for the fleets and years with observed
+#' landings. Use `facet = "fleet"` to plot each fleet in its own panel.
+#'
+#' When `interval` is set, the observed landings are drawn with a ribbon at
+#' that coverage. Intervals are lognormal, from a log-scale standard error or
+#' a coefficient of variation, as in [plot_index()]; landings are often given
+#' a small observation error (e.g., a standard error of 0.01 in Stock
+#' Synthesis), so their intervals can be narrow.
 #'
 #' @seealso [convert_output()], [filter_data()], [process_data()], [plot_timeseries()], [export_kqs()], [insert_kqs()], [create_rda()]
 #'
@@ -52,11 +52,13 @@
 #'   interactive = FALSE,
 #'   make_rda = FALSE
 #' )
-#' # Fit to the landings: observed (points, with 95% intervals) and predicted
+#' # Fit to the landings: observed (solid, with 95% intervals) and
+#' # predicted (dashed), one panel per fleet
 #' plot_landings(
 #'   dat = stockplotr::vermilion_snapper,
 #'   predicted = TRUE,
 #'   interval = 0.95,
+#'   facet = "fleet",
 #'   interactive = FALSE
 #' )
 plot_landings <- function(
@@ -78,101 +80,125 @@ plot_landings <- function(
 ) {
   check_data(dat)
 
-  if (predicted || !is.null(interval)) {
-    fit <- landings_fit_plot(
-      dat = dat,
-      predicted = predicted,
-      interval = interval,
-      unit_label = unit_label,
-      group = group,
-      facet = facet,
-      module = module,
-      scale_amount = scale_amount,
-      interactive = interactive
-    )
-    plt <- fit$plot
-    landings_data <- fit$observed
-    unit_label <- fit$unit_label
-  } else {
-    # Filter data for landings
-    prepared_data <- filter_data(
-      dat = dat,
-      label_name = landings_label_name(dat, module = module),
-      geom = geom,
-      era = NULL,
-      group = group,
-      facet = facet,
-      module = module,
-      scale_amount = scale_amount,
-      interactive = interactive
-    ) # |>
-    # filter NA from year
-    # dplyr::filter(!is.na(year))
-
-    # Process data
-    processed_data <- process_data(
-      dat = prepared_data,
-      group = group,
-      facet = facet,
-      lbs = lbs
-    )
-    # Years without an observed value (e.g., a fleet with no landings) are not
-    # plotted, so the line and ribbon legends show the same fleets
-    landings_data <- processed_data[[1]] |>
-      dplyr::filter(!is.na(.data$estimate))
-    group <- processed_data[[2]]
-    facet <- processed_data[[3]]
-
-    # Check if there is >1 label
-    if (length(landings_data$label) > 1) {
-      landings_data <- landings_data |>
-        # always select the first label if TRUE
-        dplyr::filter(label == unique(label)[1])
-    }
-
-    # extract unit if unit_label is null and set lbs to F by default
-    lbs <- FALSE
-    if (is.null(unit_label)) {
-      labels <- unique(landings_data$label)
-      unit_label <- prepared_data |>
-        dplyr::filter(label %in% labels) |>
-        dplyr::pull(unit) |>
-        unique()
-      if (is.na(unit_label)) {
-        cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
-        unit_label <- ""
-      }
+  # The observed landings and, when `predicted`, the matching predicted landings
+  observed_label <- landings_label_name(dat, module = module)
+  label_name <- observed_label
+  if (predicted) {
+    predicted_label <- landings_predicted_label(dat, observed_label)
+    if (is.null(predicted_label)) {
+      predicted <- FALSE
     } else {
-      if (grepl("lbs|pounds|lb", unit_label, ignore.case = TRUE)) lbs <- TRUE
+      label_name <- paste0(
+        "^(", sub("^\\^(.*)\\$$", "\\1", observed_label), "|", predicted_label, ")$"
+      )
     }
+  }
 
-    # Units
-    landings_label <- label_magnitude(
+  # Filter data for landings
+  prepared_data <- filter_data(
+    dat = dat,
+    label_name = label_name,
+    geom = geom,
+    era = NULL,
+    group = group,
+    facet = facet,
+    module = module,
+    scale_amount = scale_amount,
+    interactive = interactive
+  )
+
+  # Uncertainty around the observed landings is drawn only when `interval`
+  # is given, at that coverage
+  if (is.null(interval)) {
+    prepared_data$estimate_lower <- NA_real_
+    prepared_data$estimate_upper <- NA_real_
+  } else {
+    prepared_data <- index_observed_interval(prepared_data, interval, observed_label = observed_label)
+  }
+
+  # Process data
+  facet_asked <- facet
+  processed_data <- process_data(
+    dat = prepared_data,
+    group = group,
+    facet = facet,
+    lbs = lbs
+  )
+  # Years without a value (e.g., a fleet with no landings) are not plotted,
+  # so the legends show the same fleets
+  landings_data <- processed_data[[1]] |>
+    dplyr::filter(!is.na(.data$estimate))
+  group <- processed_data[[2]]
+  facet <- processed_data[[3]]
+  # process_data() makes the first facet the group when no group is given;
+  # keep it as a facet too, so `facet = "fleet"` plots a panel per fleet
+  if (!is.null(facet_asked) && identical(group, facet_asked[1]) &&
+    facet_asked[1] %notin% facet && facet_asked[1] %in% colnames(landings_data)) {
+    facet <- c(facet_asked[1], facet)
+  }
+
+  is_observed <- grepl(observed_label, landings_data$label)
+  predicted_data <- landings_data[!is_observed, , drop = FALSE]
+  landings_data <- landings_data[is_observed, , drop = FALSE]
+
+  # Check if there is >1 label
+  if (length(unique(landings_data$label)) > 1) {
+    landings_data <- landings_data |>
+      # always select the first label if TRUE
+      dplyr::filter(label == unique(label)[1])
+  }
+
+  # extract unit if unit_label is null and set lbs to F by default
+  lbs <- FALSE
+  if (is.null(unit_label)) {
+    labels <- unique(landings_data$label)
+    unit_label <- prepared_data |>
+      dplyr::filter(label %in% labels) |>
+      dplyr::pull(unit) |>
+      unique()
+    unit_label <- unit_label[!is.na(unit_label)][1]
+    if (is.na(unit_label)) {
+      cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+      unit_label <- ""
+    }
+  } else {
+    if (grepl("lbs|pounds|lb", unit_label, ignore.case = TRUE)) lbs <- TRUE
+  }
+
+  # Units
+  landings_label <- if (unit_label == "" && scale_amount == 1) {
+    "Landings"
+  } else {
+    label_magnitude(
       label = "Landings",
       unit_label = unit_label,
       scale_amount = dplyr::if_else(lbs, 1000 * scale_amount, scale_amount),
       legend = FALSE
     )
+  }
 
-    # Override grouping variable when there is only NA's
-    if (!is.null(group)) {
-      if (group %notin% colnames(landings_data)) group <- NULL
-    }
+  # Override grouping variable when there is only NA's
+  if (!is.null(group)) {
+    if (group %notin% colnames(landings_data)) group <- NULL
+  }
 
-    # inital base plot
-    plt <- plot_timeseries(
-      dat = landings_data,
-      y = "estimate",
-      geom = geom,
-      ylab = landings_label,
-      group = group,
-      facet = facet,
-      ...
-    ) + theme_noaa()
+  # inital base plot
+  plt <- plot_timeseries(
+    dat = landings_data,
+    y = "estimate",
+    geom = geom,
+    ylab = landings_label,
+    group = group,
+    facet = facet,
+    ...
+  ) + theme_noaa()
 
-    if (length(unique(landings_data$group_var)) == 1) {
-      plt <- plt + ggplot2::theme(legend.position = "none")
-    }
+  one_series <- length(unique(landings_data$group_var)) == 1 &&
+    length(unique(landings_data$model)) == 1
+  if (predicted) {
+    plt <- landings_add_predicted(plt, landings_data, predicted_data, one_series)
+  } else if (one_series) {
+    plt <- plt + ggplot2::theme(legend.position = "none")
   }
 
   ### Make RDA ----
@@ -242,133 +268,57 @@ landings_label_name <- function(dat, module = NULL) {
   }
   paste0("^", found, "$")
 }
-# The fit to the landings: observed landings of each fleet as points (with
-# intervals) and, when `predicted`, predicted landings as a line, one panel
-# per fleet. Returns the plot, the observed landings (for key quantities),
-# and the unit label.
-landings_fit_plot <- function(dat, predicted, interval, unit_label, group, facet,
-                              module, scale_amount, interactive) {
-  # The observed landings, as in the default plot, and the matching
-  # predicted landings
-  observed_label <- sub("^\\^(.*)\\$$", "\\1", landings_label_name(dat, module = module))
-  if (observed_label == "landings") {
-    cli::cli_abort("No observed landings found in {.arg dat} to compare with predicted landings.")
-  }
-  predicted_label <- if (observed_label == "catch") {
-    "catch_predicted"
-  } else {
-    sub("observed", "predicted", observed_label)
-  }
-  if (predicted && !predicted_label %in% dat$label) {
-    cli::cli_alert_info("No predicted landings ({.val {predicted_label}}) found; plotting the observed landings only.")
-    predicted <- FALSE
-  }
-  labels <- c(observed_label, if (predicted) predicted_label)
 
-  # One panel per fleet, as in plot_index()
-  if (is.null(facet) || "fleet" %notin% facet) {
-    facet <- c(facet, "fleet")
+# The predicted landings label matching the observed landings label pattern,
+# or NULL (with a message) when `dat` has none
+landings_predicted_label <- function(dat, observed_label) {
+  observed <- sub("^\\^(.*)\\$$", "\\1", observed_label)
+  predicted <- if (observed == "catch") "catch_predicted" else sub("observed", "predicted", observed)
+  if (observed == "landings" || !predicted %in% dat$label) {
+    cli::cli_alert_info("No predicted landings found to match the observed landings; plotting the observed landings only.")
+    return(NULL)
   }
-  prepared_data <- filter_data(
-    dat,
-    label_name = paste0("^(", paste(labels, collapse = "|"), ")$"),
-    era = NULL,
-    geom = "line",
-    group = group,
-    facet = facet,
-    module = module,
-    scale_amount = scale_amount,
-    interactive = interactive
-  )
-  # Years without an observation (e.g., forecast years) are not plotted, and
-  # predicted landings are plotted only for fleets with observations, within
-  # the years of those observations
-  is_observed <- prepared_data$label == observed_label
-  prepared_data <- prepared_data[!(is_observed & is.na(prepared_data$estimate)), , drop = FALSE]
-  is_observed <- prepared_data$label == observed_label
-  keys <- intersect(c("model", "fleet"), names(prepared_data))
-  key <- do.call(paste, c(prepared_data[keys], sep = "\r"))
-  first <- tapply(prepared_data$year[is_observed], key[is_observed], min, na.rm = TRUE)
-  last <- tapply(prepared_data$year[is_observed], key[is_observed], max, na.rm = TRUE)
-  in_range <- key %in% names(first) &
-    prepared_data$year >= first[key] & prepared_data$year <= last[key]
-  prepared_data <- prepared_data[is_observed | in_range %in% TRUE, , drop = FALSE]
-  if (is.null(unit_label)) {
-    data_units <- unique(stats::na.omit(prepared_data$unit))
-    if (length(data_units) == 1 && nzchar(data_units)) {
-      unit_label <- data_units
-    } else {
-      cli::cli_alert_warning(
-        "No unit label found in the data. Please provide a unit label using the 'unit_label' argument."
-      )
-      unit_label <- ""
+  predicted
+}
+
+# Add the predicted landings to the plot of observed landings as dashed
+# lines, in the color of each fleet, for the fleets and years with observed
+# landings
+landings_add_predicted <- function(plt, observed, predicted, one_series) {
+  keys <- intersect(c("model", "group_var", "fleet"), names(observed))
+  key <- function(d) do.call(paste, c(d[keys], sep = "\r"))
+  first <- tapply(observed$year, key(observed), min)
+  last <- tapply(observed$year, key(observed), max)
+  predicted_key <- key(predicted)
+  in_range <- predicted_key %in% names(first) &
+    predicted$year >= first[predicted_key] & predicted$year <= last[predicted_key]
+  predicted <- predicted[in_range %in% TRUE, , drop = FALSE]
+
+  # The observed landings are the solid lines
+  for (i in seq_along(plt$layers)) {
+    if (inherits(plt$layers[[i]]$geom, "GeomLine")) {
+      plt$layers[[i]]$mapping$linetype <- ggplot2::aes(linetype = "Observed")$linetype
     }
   }
-  lbs <- grepl("lbs|pounds|lb", unit_label, ignore.case = TRUE)
-  ylab <- if (unit_label == "" && scale_amount == 1) {
-    "Landings"
-  } else {
-    label_magnitude(
-      label = "Landings",
-      unit_label = unit_label,
-      scale_amount = dplyr::if_else(lbs, 1000 * scale_amount, scale_amount),
-      legend = FALSE
-    )
+  # Color the predicted landings as plot_timeseries() colors the observed ones
+  series <- function(d) {
+    if (length(unique(observed$model)) > 1) {
+      as.character(interaction(d$model, d$group_var))
+    } else {
+      as.character(d$group_var)
+    }
   }
-  if (!is.null(interval)) {
-    prepared_data <- index_observed_interval(prepared_data, interval, observed_label = observed_label)
+  mapping <- ggplot2::aes(x = .data$year, y = .data$estimate, linetype = "Predicted")
+  if (!one_series) {
+    predicted$color_var <- factor(series(predicted), levels = levels(factor(series(observed))))
+    mapping$colour <- ggplot2::aes(colour = .data$color_var)$colour
   }
-  processed_data <- process_data(dat = prepared_data, group = group, facet = facet)
-  prepared_data <- processed_data[[1]]
-  group <- processed_data[[2]]
-  facet <- processed_data[[3]]
-  if (!is.null(group)) {
-    facet <- c(facet, group)
+  plt <- plt +
+    ggplot2::geom_line(data = predicted, mapping = mapping) +
+    ggplot2::scale_linetype_manual(values = c(Observed = "solid", Predicted = "dashed")) +
+    ggplot2::guides(linetype = ggplot2::guide_legend(title = NULL))
+  if (one_series) {
+    plt <- plt + ggplot2::guides(colour = "none", fill = "none")
   }
-  facet <- intersect(facet, colnames(prepared_data))
-  if (length(facet) == 0) facet <- NULL
-
-  plt <- plot_obsvpred(
-    dat = prepared_data,
-    x = "year",
-    y = "estimate",
-    observed_label = paste0("^", observed_label, "$"),
-    predicted_label = paste0("^", predicted_label, "$"),
-    geom = "line",
-    xlab = "Year",
-    ylab = ylab,
-    group = group,
-    facet = facet
-  ) +
-    theme_noaa()
-  if (!predicted) {
-    # Only the observed landings were filtered, so the line layer is empty
-    plt$layers <- Filter(function(l) !inherits(l$geom, "GeomLine"), plt$layers)
-  }
-  observed <- prepared_data[grepl(paste0("^", observed_label, "$"), prepared_data$label), , drop = FALSE]
-  if (!is.null(interval)) {
-    # Draw the intervals beneath the observed and predicted landings
-    intervals <- ggplot2::geom_linerange(
-      data = observed[!is.na(observed$estimate_lower), , drop = FALSE],
-      ggplot2::aes(
-        x = .data$year,
-        ymin = .data$estimate_lower,
-        ymax = .data$estimate_upper,
-        color = .data$group_var
-      ),
-      alpha = 0.6,
-      show.legend = FALSE
-    )
-    plt$layers <- c(list(intervals), plt$layers)
-  }
-  if (!is.null(facet)) {
-    plt <- plt + ggplot2::facet_wrap(stats::reformulate(facet), scales = "free_y")
-  }
-  if (length(unique(prepared_data$model)) <= 1) {
-    plt <- plt + ggplot2::guides(shape = "none")
-  }
-  if (length(unique(prepared_data$group_var)) <= 1) {
-    plt <- plt + ggplot2::theme(legend.position = "none")
-  }
-  list(plot = plt, observed = observed, unit_label = unit_label)
+  plt
 }

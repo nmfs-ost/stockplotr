@@ -85,14 +85,13 @@ module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 
 Default: \code{FALSE}}
 
-\item{predicted}{Logical. TRUE/FALSE; plot the observed landings of each
-fleet as points, with the landings predicted by the model as a line, to
-show the fit to the landings. Default: FALSE}
+\item{predicted}{Logical. TRUE/FALSE; add the landings predicted by the
+model as dashed lines, to show the fit to the observed landings.
+Default: FALSE}
 
 \item{interval}{Number. Coverage of intervals around the observed landings
-based on their observation error (e.g., 0.95), drawn as vertical lines.
-Setting \code{interval} also plots the observed landings of each fleet as
-points. NULL draws no intervals. Default: NULL}
+based on their observation error (e.g., 0.95), drawn as a ribbon. NULL
+draws no intervals. Default: NULL}
 
 \item{make_rda}{Logical. TRUE/FALSE; indicate whether to save the object and
 make an automated caption and alternative text in the form of an \code{rda} object. If TRUE,
@@ -126,16 +125,17 @@ the output also has "catch_predicted" (the first of these in \code{dat}). When
 \code{dat} has none of these, the first label containing "landings" is
 plotted, with a message.
 
-When \code{predicted = TRUE} or \code{interval} is set, these observed landings are
-plotted as points and the matching predicted landings ("landings_predicted",
-"landings_predicted_weight", "landings_predicted_numbers", or
-"catch_predicted") as a line, with one panel for each fleet, as in
-\code{\link[=plot_index]{plot_index()}}. Predicted landings are plotted for fleets with observed
-landings, within the years of those observations. Intervals are lognormal,
-from a log-scale standard error or a coefficient of variation, as in
-\code{\link[=plot_index]{plot_index()}}; landings are often given a small observation error (e.g.,
-a standard error of 0.01 in Stock Synthesis), so their intervals can be
-narrow.
+When \code{predicted = TRUE}, the matching predicted landings
+("landings_predicted", "landings_predicted_weight",
+"landings_predicted_numbers", or "catch_predicted") are added as dashed
+lines in the color of each fleet, for the fleets and years with observed
+landings. Use \code{facet = "fleet"} to plot each fleet in its own panel.
+
+When \code{interval} is set, the observed landings are drawn with a ribbon at
+that coverage. Intervals are lognormal, from a log-scale standard error or
+a coefficient of variation, as in \code{\link[=plot_index]{plot_index()}}; landings are often given
+a small observation error (e.g., a standard error of 0.01 in Stock
+Synthesis), so their intervals can be narrow.
 }
 \examples{
 plot_landings(
@@ -152,11 +152,13 @@ plot_landings(
   interactive = FALSE,
   make_rda = FALSE
 )
-# Fit to the landings: observed (points, with 95\% intervals) and predicted
+# Fit to the landings: observed (solid, with 95\% intervals) and
+# predicted (dashed), one panel per fleet
 plot_landings(
   dat = stockplotr::vermilion_snapper,
   predicted = TRUE,
   interval = 0.95,
+  facet = "fleet",
   interactive = FALSE
 )
 }
