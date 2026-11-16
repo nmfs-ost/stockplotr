@@ -85,19 +85,19 @@ convert_output <- function(
   # First check handles WHAM and Rceattle models, second check handles single model input,
   # final check handles FIMS models
   if(any(grepl("Data_File|data_list", names(files))) || is.character(files) || is.data.frame(files)){
-    cli::cli_alert("`files` if a single model. Converting to list object.")
+    cli::cli_alert("`files` is a single model. Converting to list object.")
     files <- list(files)
     names(files) <- "model_1"
   }
 
-  if(length(models) != length(files)){
+  if(!all(is.null(models)) && length(models) != length(files)){
     cli::cli_alert_warning("Number of model types entered does not equal number of models.")
     models <- c(models, rep(NA, length(files)-length(models))) # can't store NULL in vector so make a string
     cli::cli_alert(glue::glue("Model types are: {paste0(\"'\",models,\"'\", collapse=\",\")}"))
   }
 
-  if(length(fleet_names) != length(files)){
-    cli::cli_alert_warning("Number of fleet_names enetered is not equal to number of models.")
+  if(!all(is.null(fleet_names)) && length(fleet_names) != length(files)){
+    cli::cli_alert_warning("Number of fleet_names entered is not equal to number of models.")
     fleet_names <- c(fleet_names, rep(list(NULL), length(files)-length(fleet_names)))
     names(fleet_names) <- names(files)
     cli::cli_alert(glue::glue("Fleets names are: {str(fleet_names)}"))
