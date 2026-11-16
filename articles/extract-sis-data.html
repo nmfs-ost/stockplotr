@@ -161,11 +161,13 @@ and/or <code>tables/</code> folders:</p>
 <ul>
 <li><code>biomass_figure.rda</code></li>
 <li><code>spawning_biomass_figure.rda</code></li>
-<li><code>abundance_at_age_figure.rda</code></li>
 <li><code>fishing_mortality_figure.rda</code></li>
 <li><code>index_figure.rda</code></li>
+<li><code>recruitment_figure.rda</code></li>
 <li>
 <code>total_catch_table.rda</code><br>
+The exported figures and tables can only contain one model per plot
+(i.e., an exported figure compare multiple models on the same plot).
 Ideally, the <code>key_quantities.csv</code> file will also be present
 (in the <code>key_quantities_dir</code>).</li>
 </ul>
@@ -222,22 +224,24 @@ columns are as follows:</p>
 <strong>Year</strong>: Observation year.</li>
 <li>
 <strong>Category</strong>: Time series category. Options include:
-“Biomass”, “Spawners”, “Recruitment (age 1)”, “Fmort”, “Index of
-Abundance”, and “Catch”.</li>
+“Biomass”, “Spawners”, “Recruitment”, “Fmort”, “Index”, and
+“Catch”.</li>
 <li>
 <strong>Primary</strong>: Whether the category is a primary time
 series category (“Y” or “N”). The following categories can be primary:
-“Fmort”, “Recruitment (age 1)”, “Catch”, and either “Biomass” OR
-“Spawners”. This function will automatically set the Primary column to
-“Y” for the applicable time series in each of these categories, and ask
-the user to confirm which time series should be primary if both
-“Biomass” and “Spawners” are present. More time series can be added to
-the template after running <code><a href="../reference/extract_sis_data.html">extract_sis_data()</a></code>; please see
-the <a href="#provide-additional-time-series-data">Provide additional
-time series data</a> section below for more information.</li>
+“Fmort”, “Recruitment”, “Catch”, and either “Biomass” OR “Spawners”.
+This function will automatically set the Primary column to “Y” for the
+applicable time series in each of these categories, and ask the user to
+confirm which time series should be primary if both “Biomass” and
+“Spawners” are present. More time series can be added to the template
+after running <code><a href="../reference/extract_sis_data.html">extract_sis_data()</a></code>; please see the <a href="#provide-additional-time-series-data">Provide additional time
+series data</a> section below for more information.</li>
 <li>
-<strong>Description</strong>: Brief description (e.g., Description
-for “Fmort” is “F for Fully-Selected Fish”).</li>
+<strong>Description</strong>: Brief description that should align
+with the units in sis_assmt_template.csv (e.g., Description for “Fmort”
+is “F for Fully-Selected Fish”). This field can/should cross-link to the
+basis field for Fmort (AS_F_BASIS) and Biomass/Spawners
+(AS_B_BASIS).</li>
 <li>
 <strong>Unit</strong>: Unit of measurement.</li>
 <li>
@@ -265,16 +269,15 @@ functions:</p>
 <code><a href="../reference/plot_spawning_biomass.html">stockplotr::plot_spawning_biomass()</a></code>
 </li>
 <li>
-<strong>Recruitment at Age 1</strong>:
-<code><a href="../reference/plot_abundance_at_age.html">stockplotr::plot_abundance_at_age()</a></code>
+<strong>Recruitment</strong>:
+<code><a href="../reference/plot_recruitment.html">stockplotr::plot_recruitment()</a></code>
 </li>
 <li>
 <strong>Fishing Mortality</strong>:
 <code><a href="../reference/plot_fishing_mortality.html">stockplotr::plot_fishing_mortality()</a></code>
 </li>
 <li>
-<strong>Index of Abundance</strong>:
-<code><a href="../reference/plot_index.html">stockplotr::plot_index()</a></code>
+<strong>Index</strong>: <code><a href="../reference/plot_index.html">stockplotr::plot_index()</a></code>
 </li>
 <li>
 <strong>Catch</strong>:
@@ -379,9 +382,9 @@ by running <code><a href="../reference/plot_fishing_mortality.html">plot_fishing
 </tbody>
 </table>
 <ul>
-<li>Units for the <strong>Index of Abundance</strong> and
-<strong>Recruitment (age 1)</strong> time series categories are set to
-<em>blank</em> and “Number of Fish”, respectively.</li>
+<li>Units for the <strong>Index</strong> and
+<strong>Recruitment</strong> time series categories are set to “Index”
+and “Number of Fish”, respectively.</li>
 </ul>
 </div>
 </div>
