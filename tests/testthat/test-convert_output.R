@@ -14,13 +14,13 @@ test_that("convert_output works for SS3", {
     "BigSkate_2019"
   )
 
-  models_to_test <- all_models[grepl(paste0(model_names, collapse="|"), all_models)]
+  models_to_test <- all_models[grepl(paste0(model_names, collapse = "|"), all_models)]
 
   # Loop through each model directory and check convert_output function
   for (i in seq_along(models_to_test)) {
     # Ensure no errors occur while converting SS3 output
     expect_no_error(result <- convert_output(
-      file = r4ss::SS_output(file.path(models_to_test[i]))#file.path(models_to_test[i], "Report.sso")
+      file = r4ss::SS_output(file.path(models_to_test[i])) # file.path(models_to_test[i], "Report.sso")
     ))
 
     # Check that the result has exactly 35 columns
