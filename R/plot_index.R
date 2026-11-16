@@ -1,34 +1,25 @@
 #' Plot Index of Abundance
 #'
 #' @inheritParams plot_spawning_biomass
-#' @param facet Character vector. Column name or names used for faceting. "fleet" is always added on to any faceting selections
-#'
-#' Default: NULL
-#'
-#' Options: May include, but is not limited to: "fleet", "year", "area", NULL
-#' @param unit_label String. Index of abundance/CPUE units
-#'
-#' Default: NULL
+#' @param facet Character vector. Column name or names used for faceting.
+#' "fleet" is always added on to any faceting selections. Default: NULL
+#' Options may include, but is not limited to: "fleet", "year", "area", NULL
+#' @param unit_label String. Index of abundance/CPUE units, Default: NULL
 #' @param interval Number. Coverage of intervals around the observed index
 #' based on its observation error (e.g., 0.95), drawn as vertical lines.
-#' NULL draws no intervals.
-#'
-#' Default: 0.95
+#' NULL draws no intervals. Default: 0.95
 #' @param log Logical. TRUE/FALSE; plot the index on a log scale. Indices
 #' with lognormal errors are often easier to judge on a log scale, where the
-#' intervals are symmetric.
-#'
-#' Default: FALSE
+#' intervals are symmetric. Default: FALSE
 #' @param relative Logical. TRUE/FALSE; divide each fleet's observed and
 #' predicted index (and intervals) by the mean of its observed index, and plot
 #' all fleets on one panel, colored by fleet. Indices with conflicting trends
 #' (data conflicts) are a common cause of poor fits and are easiest to see
 #' this way (`r4ss::SSplotIndices()` subplot 9). Any `group` other than
-#' "fleet" is added to `facet`.
-#'
-#' Default: FALSE
+#' "fleet" is added to `facet`. Default: FALSE
 #' @param focus Character vector. Column name or names used to filter data.
 #' (i.e. select names of fleets to zoom into the plot). Default = NULL
+#'
 #' @returns A plot showing the expected and predicted index.
 #' @details Intervals assume lognormal observation errors, as in Stock
 #' Synthesis, FIMS, BAM, and Rceattle: \eqn{o \exp(\pm z \cdot \sigma)},
@@ -309,10 +300,11 @@ plot_index <- function(
   plt
 }
 
-# Lognormal intervals around the observed index from its log-scale standard
-# error (uncertainty labeled "se", "sd", or "log_sd") or its coefficient of
+# Lognormal intervals around the observed index (or other observations,
+# matched by `observed_label`) from its log-scale standard error
+# (uncertainty labeled "se", "sd", or "log_sd") or its coefficient of
 # variation ("cv"); other rows get no interval
-index_observed_interval <- function(dat, interval) {
+index_observed_interval <- function(dat, interval, observed_label = "index_observed") {
   if (!is.numeric(interval) || length(interval) != 1 || interval <= 0 || interval >= 1) {
     cli::cli_abort("{.arg interval} must be a number between 0 and 1 (e.g., 0.95).")
   }
@@ -323,7 +315,7 @@ index_observed_interval <- function(dat, interval) {
     type == "cv" ~ sqrt(log(1 + dat$uncertainty^2)),
     TRUE ~ NA_real_
   )
-  observed <- grepl("index_observed", dat$label) & !is.na(sigma)
+  observed <- grepl(observed_label, dat$label) & !is.na(sigma)
   dat$estimate_lower <- ifelse(observed, dat$estimate * exp(-z * sigma), NA_real_)
   dat$estimate_upper <- ifelse(observed, dat$estimate * exp(z * sigma), NA_real_)
   dat
