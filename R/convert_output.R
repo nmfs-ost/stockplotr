@@ -16,16 +16,16 @@
 #'
 #' Options: "ss3", "bam", "fims", "rceattle"
 #' 
-#' Should match length of `files`.
+#' Should match length of `files` if >1 model.
 #' 
-#' @param fleet_names List of Character vectors. Names of fleets in the assessment model as
+#' @param fleet_names List of named character vectors. Names of fleets in the assessment model as
 #'  shortened in the output file or names of fleets to replace the native fleet
 #'  names in the output. For example, if fleet names in the model are 1, 2, 3
 #'  then fleet_names = c("fleet1" = 1, "fleet2" = 2, "fleet3" = 3).
 #'
 #'  Default: NULL
 #' 
-#' Should match length of `files`.
+#' Should match length of `files` if >1 model.
 #' 
 #' @param save_dir Path. Full file path to save the converted output file. If
 #' saved file name is not indicated, the file will be saved as "std_output.rda"
@@ -67,7 +67,7 @@
 #'   save_dir = here::here("standard_output.rda")
 #' )
 #' convert_output(
-#'   file = list("model1"=here::here("model1", "Report.sso", "model2"=here::here("model2", "Report.sso")),
+#'   file = list("model1"=here::here("model1", "Report.sso"), "model2"=here::here("model2", "Report.sso")),
 #'   model = c("ss3", "ss3"),
 #'   fleet_names = list("model1"=c("TWL", "NONTWL"), "model2"=c("Fishery1", "Survey1", "Survey2")),
 #'   save_dir = here::here("standard_output.rda")
