@@ -24,10 +24,13 @@
 #' rda files ("tables") that will be created if the argument `make_rda` = TRUE.
 #'
 #' Default: the working directory (`getwd()`)
-#' @param label String. The label that will be chosen from the input file. If unspecified,
-#' the function will search the "label" column and use the first matching label
-#' in this ordered list: "landings_weight",  "landings_numbers", "landings_expected",
-#' "landings_predicted", "landings".
+#' @param label String or vector of strings. The labels in the "label" column
+#' of `dat` to tabulate (e.g., "landings_predicted_weight"). If unspecified,
+#' the observed landings are used: the first of "landings_observed",
+#' "landings_observed_weight", "landings_observed_numbers", or "catch" (when
+#' `dat` also has "catch_predicted"), as in [plot_landings()]. When `dat`
+#' has none of these, the first label containing "landings" is used, with a
+#' message.
 #'
 #' Default: NULL
 #'
@@ -67,10 +70,14 @@ table_landings <- function(
 ) {
   check_data(dat)
 
-  # Filter data for landings
+  # Filter data for landings: the labels given, or the observed landings
   prepared_data <- filter_data(
     dat = dat,
-    label_name = "landings",
+    label_name = if (is.null(label)) {
+      landings_label_name(dat, module = module)
+    } else {
+      paste0("^(", paste(label, collapse = "|"), ")$")
+    },
     geom = "line",
     era = era,
     module = module,

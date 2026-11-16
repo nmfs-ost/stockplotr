@@ -54,7 +54,7 @@ plot_landings <- function(
   # Filter data for landings
   prepared_data <- filter_data(
     dat = dat,
-    label_name = landings_label_name(dat),
+    label_name = landings_label_name(dat, module = module),
     geom = geom,
     era = NULL,
     group = group,
@@ -175,10 +175,13 @@ plot_landings <- function(
   plt
 }
 
-# The label pattern of the observed landings in `dat`: the first of the
-# observed landings labels present, or any label containing "landings" (with
-# a message) when there are none
-landings_label_name <- function(dat) {
+# The label pattern of the observed landings in `dat` (in `module`, when
+# given): the first of the observed landings labels present, or any label
+# containing "landings" (with a message) when there are none
+landings_label_name <- function(dat, module = NULL) {
+  if (!is.null(module)) {
+    dat <- dat[dat$module_name %in% module, , drop = FALSE]
+  }
   observed <- c("landings_observed", "landings_observed_weight", "landings_observed_numbers")
   if ("catch_predicted" %in% dat$label) {
     observed <- c(observed, "catch")
@@ -186,7 +189,7 @@ landings_label_name <- function(dat) {
   found <- observed[observed %in% dat$label][1]
   if (is.na(found)) {
     cli::cli_alert_info(
-      "No observed landings ({.val {observed}}) found; plotting the first label containing {.val landings}."
+      "No observed landings ({.val {observed}}) found; using the first label containing {.val landings}."
     )
     return("landings")
   }

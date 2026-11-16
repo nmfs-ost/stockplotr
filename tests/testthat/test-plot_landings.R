@@ -48,4 +48,10 @@ test_that("plot_landings plots the observed landings", {
   no_obs <- dat[!grepl("landings_observed", dat$label), ]
   expect_message(label <- landings_label_name(no_obs), "No observed landings")
   expect_equal(label, "landings")
+  # Only labels in the module asked for
+  expect_message(
+    label <- landings_label_name(stockplotr::example_data, module = "SPR_SERIES"),
+    "No observed landings"
+  )
+  expect_equal(label, "landings")
 })
