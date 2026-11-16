@@ -111,8 +111,8 @@ plot_fishing_mortality <- function(
       prepared_data = prepared_data
     )
 
-    export_kqs(F.min, F.max, dir=figures_dir)
-    insert_kqs(F.min, F.max, dir=figures_dir)
+    export_kqs(F.min, F.max, dir = figures_dir)
+    insert_kqs(F.min, F.max, dir = figures_dir)
 
     F.ref.pt <- as.character(ref_line)
     F.start.year <- min(prepared_data$year)
@@ -173,7 +173,7 @@ plot_fishing_mortality <- function(
       F.MSY.terminal.max,
       F.MSY.terminal.min,
       F.MSY.terminal,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     insert_kqs(
@@ -189,7 +189,7 @@ plot_fishing_mortality <- function(
       F.MSY.terminal.max,
       F.MSY.terminal.min,
       F.MSY.terminal,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     create_rda(
@@ -202,10 +202,10 @@ plot_fishing_mortality <- function(
       scale_amount = 1
     )
   }
-  
+
   if (exists("selected_module")) {
     rm(selected_module, envir = .GlobalEnv)
   }
-  
+
   final
 }

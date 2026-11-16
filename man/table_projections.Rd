@@ -70,10 +70,10 @@ table_projections(
 )
 
 table_projections(
- dat = stockplotr::example_data,
- interactive = FALSE,
- catch_label = "kg",
- spawning_biomass_label = "kg",
- module = c(NULL, "DERIVED_QUANTITIES", "DERIVED_QUANTITIES")
- )
+  dat = stockplotr::example_data,
+  interactive = FALSE,
+  catch_label = "kg",
+  spawning_biomass_label = "kg",
+  module = c(NULL, "DERIVED_QUANTITIES", "DERIVED_QUANTITIES")
+)
 }
