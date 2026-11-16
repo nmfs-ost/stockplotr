@@ -10,6 +10,7 @@ fig_base_temp_files <- c(
   "catch_at_age_figure.rda",
   "recruitment_deviations_figure.rda",
   "recruitment_figure.rda",
+  "runs_test_figure.rda",
   "selectivity_figure.rda",
   "spawning_biomass_figure.rda",
   "spr_figure.rda",

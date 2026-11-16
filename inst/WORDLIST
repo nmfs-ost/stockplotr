@@ -3,6 +3,7 @@ BMSY
 Barbeaux
 Birthseason
 CPUE
+Carvalho
 Dorn
 FIMS
 FLIMIT
@@ -29,6 +30,7 @@ SPR
 Spawners
 StockSmart
 Subseason
+al
 alttext
 asar
 assmt
@@ -44,6 +46,7 @@ dat
 dataframe's
 diagonostic
 dplyr
+et
 facetting
 fims
 flextable
@@ -56,6 +59,7 @@ is’
 kableExtra
 kobe
 len
+misspecification
 msy
 natively
 noaa
