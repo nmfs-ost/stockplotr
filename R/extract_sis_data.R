@@ -219,13 +219,13 @@ extract_sis_data <- function(sis_data_dir = getwd(),
     )
   }
   
+  all_summaries <- c()
   if(exists("fig_ts")){
     summaries <- c("biomass", "spawning_biomass", "recruitment", "fishing_mortality", "index")
     
-    summaries <- summaries[sapply(summaries, function(x) !is.null(get(x)))] 
+    summaries <- summaries[sapply(summaries, function(x) !is.null(get(x)))]
     
     # join all summaries by year
-    all_summaries <- c()
     for (i in seq_along(summaries)) {
       if (i == 1) {
         all_summaries <- get(summaries[i])
