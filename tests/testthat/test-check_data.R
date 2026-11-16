@@ -28,8 +28,10 @@ test_that("check_data rejects lists containing invalid elements", {
     "biomass",
     list(label = "biomass", estimate = 1),
     list(dat),
-    matrix(c("biomass", "1"), nrow = 1,
-           dimnames = list(NULL, c("label", "estimate"))),
+    matrix(c("biomass", "1"),
+      nrow = 1,
+      dimnames = list(NULL, c("label", "estimate"))
+    ),
     data.frame(),
     data.frame(label = "biomass"),
     data.frame(estimate = 1)
@@ -53,8 +55,10 @@ test_that("check_data rejects objects without the required structure", {
     1,
     "biomass",
     list(label = "biomass", estimate = 1),
-    matrix(c("biomass", "1"), nrow = 1,
-           dimnames = list(NULL, c("label", "estimate"))),
+    matrix(c("biomass", "1"),
+      nrow = 1,
+      dimnames = list(NULL, c("label", "estimate"))
+    ),
     data.frame(),
     data.frame(label = "biomass"),
     data.frame(estimate = 1)
@@ -75,7 +79,7 @@ test_that("plotting and table entry points reject invalid data before other work
     "plot_abundance_at_age",
     "plot_biomass",
     "plot_biomass_at_age",
-    "plot_catch_comp",
+    "plot_catch_at_age",
     "plot_discard",
     "plot_fishing_mortality",
     "plot_index",

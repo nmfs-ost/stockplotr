@@ -6,7 +6,7 @@
 \usage{
 plot_selectivity(
   dat,
-  unit_label = "cm",
+  unit_label = NULL,
   group = NULL,
   facet = NULL,
   interactive = TRUE,
@@ -25,7 +25,7 @@ in \code{ref_line} is used to plot a reference line or calculate relative spawni
 
 \item{unit_label}{units for length-based selectivity.
 
-Default: "cm"}
+Default: NULL}
 
 \item{group}{String. Single column that groups the data.
 
@@ -78,14 +78,15 @@ containing associated caption and alternative text for the figure.
 }
 \examples{
 plot_selectivity(
-  dat = stockplotr:::example_data,
+  dat = stockplotr::example_data,
   interactive = TRUE,
   module = "AGE_SELEX",
   make_rda = FALSE
 )
 plot_selectivity(
-  dat = stockplotr:::example_data,
+  dat = stockplotr::example_data,
   module = "LEN_SELEX",
+  unit_label = "cm",
   make_rda = FALSE
 )
 }

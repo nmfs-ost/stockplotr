@@ -6,8 +6,8 @@
 \usage{
 plot_stock_recruitment(
   dat,
-  spawning_biomass_label = "mt",
-  recruitment_label = "mt",
+  spawning_biomass_label = NULL,
+  recruitment_label = NULL,
   interactive = TRUE,
   era = NULL,
   module = NULL,
@@ -25,11 +25,11 @@ in \code{ref_line} is used to plot a reference line or calculate relative spawni
 
 \item{spawning_biomass_label}{String. Units for spawning biomass
 
-Default: "mt"}
+Default: NULL}
 
 \item{recruitment_label}{String. Units for recruitment
 
-Default: "mt"}
+Default: NULL}
 
 \item{interactive}{Logical. TRUE/FALSE; indicate whether the environment the
 plot is being made in is interactive. By default, this
@@ -52,7 +52,10 @@ Default: NULL
 If the interactive and >1 module_name is found, user will select the
 module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 
-\item{scale_amount}{Number. A number to scale the y-axis values.
+\item{scale_amount}{Number. A number to scale the y-axis values. If > 1, the
+magnitude of the scale amount will be added to the unit label
+(e.g. scale_amount = 1000 with a unit label of "1000s of lbs" will result
+in "thousands of 1000s of lbs")
 
 Default: 1}
 

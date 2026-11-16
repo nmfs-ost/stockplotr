@@ -132,7 +132,7 @@ The figure functions follow the same basic sequence:
 
 - **Time-series plots:** `plot_biomass()`, `plot_spawning_biomass()`, `plot_recruitment()`, `plot_landings()`, `plot_fishing_mortality()`, `plot_natural_mortality()`
 - **Observation/comparison plots:** `plot_index()`, `plot_stock_recruitment()`, `plot_recruitment_deviations()`
-- **Age-composition plots:** `plot_abundance_at_age()`, `plot_biomass_at_age()`, `plot_catch_comp()`
+- **Age-composition plots:** `plot_abundance_at_age()`, `plot_biomass_at_age()`, `plot_catch_at_age()`
 
 ### How the table functions are built
 

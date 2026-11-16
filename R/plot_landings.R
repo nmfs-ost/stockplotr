@@ -15,14 +15,14 @@
 #'
 #' @examples
 #' plot_landings(
-#'   dat = stockplotr:::example_data,
+#'   dat = stockplotr::example_data,
 #'   unit_label = "metric tons",
 #'   group = "fleet",
 #'   interactive = FALSE,
 #'   make_rda = FALSE
 #' )
 #' plot_landings(
-#'   dat = stockplotr:::example_data,
+#'   dat = stockplotr::example_data,
 #'   unit_label = "metric tons",
 #'   facet = "fleet",
 #'   interactive = FALSE,
@@ -30,7 +30,7 @@
 #' )
 plot_landings <- function(
   dat,
-  unit_label = "mt",
+  unit_label = NULL,
   geom = "line",
   group = NULL,
   facet = NULL,
@@ -44,20 +44,6 @@ plot_landings <- function(
   ...
 ) {
   check_data(dat)
-
-  # this assumes that the previous units were metric tons
-  if (lbs && unit_label %notin% c("lbs", "pounds", "lb")) {
-    cli::cli_alert_info("Unit label was not changed. Setting unit_label to 'lbs'.")
-    unit_label <- "lbs"
-  }
-
-  # Units
-  landings_label <- label_magnitude(
-    label = "Landings",
-    unit_label = unit_label,
-    scale_amount = dplyr::if_else(lbs, 1000 * scale_amount, scale_amount),
-    legend = FALSE
-  )
 
   # Filter data for landings
   prepared_data <- filter_data(
@@ -73,6 +59,7 @@ plot_landings <- function(
   ) # |>
   # filter NA from year
   # dplyr::filter(!is.na(year))
+
   # Process data
   processed_data <- process_data(
     dat = prepared_data,
@@ -80,25 +67,49 @@ plot_landings <- function(
     facet = facet,
     lbs = lbs
   )
-  prepared_data <- processed_data[[1]]
+  landings_data <- processed_data[[1]]
   group <- processed_data[[2]]
   facet <- processed_data[[3]]
 
   # Check if there is >1 label
-  if (length(prepared_data$label) > 1) {
-    prepared_data <- prepared_data |>
+  if (length(landings_data$label) > 1) {
+    landings_data <- landings_data |>
       # always select the first label if TRUE
       dplyr::filter(label == unique(label)[1])
   }
 
+  # extract unit if unit_label is null and set lbs to F by default
+  lbs <- FALSE
+  if (is.null(unit_label)) {
+    labels <- unique(landings_data$label)
+    unit_label <- prepared_data |>
+      dplyr::filter(label %in% labels) |>
+      dplyr::pull(unit) |>
+      unique()
+    if (is.na(unit_label)) {
+      cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+      unit_label <- ""
+    }
+  } else {
+    if (grepl("lbs|pounds|lb", unit_label, ignore.case = TRUE)) lbs <- TRUE
+  }
+
+  # Units
+  landings_label <- label_magnitude(
+    label = "Landings",
+    unit_label = unit_label,
+    scale_amount = dplyr::if_else(lbs, 1000 * scale_amount, scale_amount),
+    legend = FALSE
+  )
+
   # Override grouping variable when there is only NA's
   if (!is.null(group)) {
-    if (group %notin% colnames(prepared_data)) group <- NULL
+    if (group %notin% colnames(landings_data)) group <- NULL
   }
 
   # inital base plot
   plt <- plot_timeseries(
-    dat = prepared_data,
+    dat = landings_data,
     y = "estimate",
     geom = geom,
     ylab = landings_label,
@@ -107,17 +118,17 @@ plot_landings <- function(
     ...
   ) + theme_noaa()
 
-  if (length(unique(prepared_data$group_var)) == 1) {
+  if (length(unique(landings_data$group_var)) == 1) {
     plt <- plt + ggplot2::theme(legend.position = "none")
   }
 
   ### Make RDA ----
   if (make_rda) {
     # Obtain relevant key quantities for captions/alt text
-    landings.start.year <- min(prepared_data$year)
-    landings.end.year <- max(prepared_data$year)
-    landings.min <- min(prepared_data$estimate) |> round(digits = 3)
-    landings.max <- max(prepared_data$estimate) |> round(digits = 3)
+    landings.start.year <- min(landings_data$year)
+    landings.end.year <- max(landings_data$year)
+    landings.min <- min(landings_data$estimate) |> round(digits = 3)
+    landings.max <- max(landings_data$estimate) |> round(digits = 3)
     landings.units <- unit_label
 
     # calculate & export key quantities
@@ -127,7 +138,7 @@ plot_landings <- function(
       landings.min,
       landings.max,
       landings.units,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     # Add key quantities to captions/alt text
@@ -137,7 +148,7 @@ plot_landings <- function(
       landings.min,
       landings.max,
       landings.units,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     create_rda(
@@ -150,6 +161,10 @@ plot_landings <- function(
       scale_amount = scale_amount
     )
   }
-  # Output final plot
+
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+
   plt
 }

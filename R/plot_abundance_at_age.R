@@ -11,7 +11,7 @@
 #'
 #' @param unit_label String. Abundance units
 #'
-#' Default: "fish"
+#' Default: NULL
 #'
 #' @param scale_amount Number. A number describing how much to scale down the abundance at
 #' age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders
@@ -63,22 +63,22 @@
 #'
 #' @examples
 #' plot_abundance_at_age(
-#'   dat = stockplotr:::example_data,
+#'   dat = stockplotr::example_data,
 #'   facet = "growth_pattern",
 #'   unit_label = "fish",
 #'   scale_amount = 1000,
 #'   proportional = TRUE
 #' )
 #' plot_abundance_at_age(
-#'   dat = stockplotr:::example_data,
+#'   dat = stockplotr::example_data,
 #'   facet = "none",
 #'   proportional = FALSE
 #' )
 plot_abundance_at_age <- function(
   dat,
   facet = NULL,
-  unit_label = "fish",
-  scale_amount = 1000,
+  unit_label = NULL,
+  scale_amount = 1,
   proportional = TRUE,
   module = NULL,
   interactive = TRUE,
@@ -87,12 +87,6 @@ plot_abundance_at_age <- function(
 ) {
   check_data(dat)
 
-  # Create label for abundance units in legend
-  abundance_label <- label_magnitude(
-    label = "Abundance",
-    unit_label = unit_label,
-    scale_amount = scale_amount
-  )
   # Filter data
   b <- filter_data(
     dat = dat,
@@ -102,6 +96,21 @@ plot_abundance_at_age <- function(
     module = module,
     scale_amount = scale_amount,
     interactive = interactive
+  )
+
+  # Create label for abundance units in legend
+  if (is.null(unit_label)) {
+    unit_label <- unique(b$unit)
+    if (grepl("number", unit_label)) unit_label <- "fish"
+    if (is.na(unit_label)) {
+      cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+      unit_label <- ""
+    }
+  }
+  abundance_label <- label_magnitude(
+    label = "Abundance",
+    unit_label = unit_label,
+    scale_amount = scale_amount
   )
 
   if (!is.null(facet) && facet == "none") {
@@ -167,7 +176,7 @@ plot_abundance_at_age <- function(
       pop.naa.age.max,
       pop.naa.fish.min,
       pop.naa.fish.max,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     # Add key quantities to captions/alt text
@@ -178,7 +187,7 @@ plot_abundance_at_age <- function(
       pop.naa.age.max,
       pop.naa.fish.min,
       pop.naa.fish.max,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     create_rda(
@@ -190,5 +199,10 @@ plot_abundance_at_age <- function(
       dat
     )
   }
+
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+
   plot
 }

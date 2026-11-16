@@ -10,3 +10,7 @@
 ^\.claude$
 ^\.octocov\.yml$
 ^\.devcontainer$
+^CITATION\.cff$
+^CODE_OF_CONDUCT\.md$
+^CONTRIBUTING\.md$
+^(R|data|inst|tests|vignettes)/README\.md$

@@ -25,6 +25,11 @@ in \code{ref_line} is used to plot a reference line or calculate relative spawni
 
 Default: \code{FALSE}}
 
+\item{figures_tables_dir}{Path. Directory where the rda files are saved,
+in "figures" and "tables" folders that are created if needed.
+
+Default: the working directory (\code{getwd()})}
+
 \item{plot_recruitment_options}{List. List object of parameter values to pass
 directly to the \code{plot_recruitment} function. All default parameters for the
 \code{plot_recruitment} function, except for \code{dat}, can be overridden with this list
@@ -85,14 +90,14 @@ save_all_plots(
    figures_tables_dir = fs::path("outputs/figures"),
    plot_recruitment_options = list(
      module = "TIME_SERIES",
-     unit_label = "Millions of Recruits" # customize unit label for recruitment plot
+     unit_label = "mt"
    ),
    plot_spawning_biomass_options = list(
      ref_line = "unfished"     # customize reference line for spawning biomass plot
    ),
    plot_abundance_at_age_options = list(
      scale_amount = 1,         # custom scale for abundance-at-age plot
-     proportional = FALSE      # don't proportionalize abundance-at-age 
+     proportional = FALSE      # don't proportionalize abundance-at-age
    ),
    plot_spr_options = list(
      ylab = "Fishing Intensity (1-SPR)/(1-SPR_ref)" # custom Y label for SPR plot

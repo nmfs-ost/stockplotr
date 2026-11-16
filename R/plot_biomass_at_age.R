@@ -27,14 +27,14 @@
 #'
 #' @examples
 #' plot_biomass_at_age(
-#'   dat = stockplotr:::example_data,
+#'   dat = stockplotr::example_data,
 #'   unit_label = "mt",
 #'   scale_amount = 100,
 #'   proportional = FALSE, # displays legend
 #'   make_rda = FALSE
 #' )
 #' plot_biomass_at_age(
-#'   dat = stockplotr:::example_data,
+#'   dat = stockplotr::example_data,
 #'   unit_label = "mt",
 #'   facet = "none",
 #'   proportional = FALSE
@@ -42,8 +42,8 @@
 plot_biomass_at_age <- function(
   dat,
   facet = NULL,
-  unit_label = "mt",
-  scale_amount = 1000,
+  unit_label = NULL,
+  scale_amount = 1,
   proportional = TRUE,
   module = NULL,
   interactive = TRUE,
@@ -52,12 +52,6 @@ plot_biomass_at_age <- function(
 ) {
   check_data(dat)
 
-  # Create label for abundance units in legend
-  biomass_label <- label_magnitude(
-    label = "Biomass",
-    unit_label = unit_label,
-    scale_amount = scale_amount
-  )
   # Filter data
   b <- filter_data(
     dat = dat |>
@@ -70,6 +64,22 @@ plot_biomass_at_age <- function(
     scale_amount = scale_amount,
     interactive = interactive
   )
+
+  if (is.null(unit_label)) {
+    unit_label <- unique(b$unit)
+    if (is.na(unit_label)) {
+      cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+      unit_label <- ""
+    }
+  }
+
+  # Create label for abundance units in legend
+  biomass_label <- label_magnitude(
+    label = "Biomass",
+    unit_label = unit_label,
+    scale_amount = scale_amount
+  )
+
   if (!is.null(facet) && facet == "none") {
     data <- b |>
       dplyr::group_by(year, age) |>
@@ -132,7 +142,7 @@ plot_biomass_at_age <- function(
       pop.baa.age.max,
       pop.baa.fish.min,
       pop.baa.fish.max,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     # Add key quantities to captions/alt text
@@ -143,7 +153,7 @@ plot_biomass_at_age <- function(
       pop.baa.age.max,
       pop.baa.fish.min,
       pop.baa.fish.max,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     create_rda(
@@ -151,9 +161,14 @@ plot_biomass_at_age <- function(
       # get name of function and remove "plot_" from it
       topic_label = gsub("plot_", "", utils::tail(as.character(sys.call()[[1]]), n = 1)),
       fig_or_table = "figure",
-      dir=figures_dir,
+      dir = figures_dir,
       dat
     )
   }
+
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+
   plot
 }

@@ -1,8 +1,8 @@
 # TODO: Fix tests
-test_that("plot_catch_comp generates plots without errors", {
+test_that("plot_catch_at_age generates plots without errors", {
   # expect error-free plot with minimal arguments
   expect_no_error(
-    plot_catch_comp(
+    plot_catch_at_age(
       stockplotr::example_data,
       module = "CATCH_AT_AGE",
       interactive = FALSE
@@ -11,7 +11,7 @@ test_that("plot_catch_comp generates plots without errors", {
 
   # expect error-free plot with many arguments
   expect_no_error(
-    plot_catch_comp(
+    plot_catch_at_age(
       stockplotr::example_data,
       facet = "area",
       unit_label = "fish",
@@ -25,7 +25,7 @@ test_that("plot_catch_comp generates plots without errors", {
 
   # expect ggplot object is returned
   expect_s3_class(
-    plot_catch_comp(
+    plot_catch_at_age(
       stockplotr::example_data,
       unit_label = "fish",
       scale_amount = 1,
@@ -40,7 +40,7 @@ test_that("plot_catch_comp generates plots without errors", {
 
 # test_that("rda file made when indicated", {
 #   # export rda
-#   plot_catch_comp(
+#   plot_catch_at_age(
 #     stockplotr::example_data,
 #     module = "CATCH_AT_AGE",
 #     interactive = FALSE,
@@ -48,14 +48,14 @@ test_that("plot_catch_comp generates plots without errors", {
 #     make_rda = TRUE
 #   )
 
-#   # expect that both figures dir and the catch_comp_figure.rda file exist
-#   check_and_remove_tmp_files("catch_comp_figure.rda")
+#   # expect that both figures dir and the catch_at_age_figure.rda file exist
+#   check_and_remove_tmp_files("catch_at_age_figure.rda")
 # })
 
-test_that("plot_catch_comp generates error with scaling <1", {
+test_that("plot_catch_at_age generates error with scaling <1", {
   # expect error
   expect_error(
-    plot_catch_comp(
+    plot_catch_at_age(
       stockplotr::example_data,
       unit_label = "fish",
       scale_amount = 0.1,
@@ -66,7 +66,7 @@ test_that("plot_catch_comp generates error with scaling <1", {
   )
 })
 
-test_that("plot_catch_comp generates error when catch label is not found", {
+test_that("plot_catch_at_age generates error when catch label is not found", {
   # generate test data set
   years <- 2000:2020
   fleets <- c("fleet_A", "fleet_B")
@@ -133,7 +133,7 @@ test_that("plot_catch_comp generates error when catch label is not found", {
 
   # expect error
   expect_error(
-    plot_catch_comp(
+    plot_catch_at_age(
       sample_data,
       unit_label = "fish",
       scale_amount = 1,
@@ -145,7 +145,7 @@ test_that("plot_catch_comp generates error when catch label is not found", {
 })
 
 test_that("plot is made proportional and does not contain a legend", {
-  plot <- plot_catch_comp(
+  plot <- plot_catch_at_age(
     stockplotr::example_data,
     unit_label = "fish",
     module = "CATCH_AT_AGE",
@@ -159,7 +159,7 @@ test_that("plot is made proportional and does not contain a legend", {
 })
 
 test_that("plot contains a legend", {
-  plot <- plot_catch_comp(
+  plot <- plot_catch_at_age(
     stockplotr::example_data,
     proportional = FALSE,
     module = "CATCH_AT_AGE",
@@ -173,7 +173,7 @@ test_that("plot contains a legend", {
 })
 
 test_that("year class lines are plotted", {
-  plot <- plot_catch_comp(
+  plot <- plot_catch_at_age(
     stockplotr::example_data,
     proportional = FALSE,
     unit_label = "fish",

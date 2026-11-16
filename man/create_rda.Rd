@@ -45,10 +45,6 @@ Default: 1}
 
 \item{table_df}{Data frame. The data frame that the table will be made into for purposes
 of exporting a latex formatted table.}
-
-\item{year}{Number. Assessment year
-
-Default: the current year}
 }
 \value{
 An rda package for a plot or table object. Requires an

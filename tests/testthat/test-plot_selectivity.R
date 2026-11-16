@@ -44,17 +44,3 @@ test_that("plot_selectivity generates plots without errors", {
     "gg"
   )
 })
-
-# test_that("rda file made when indicated", {
-#   # export rda
-#   plot_selectivity(
-#     stockplotr::example_data,
-#     module = "AGE_SELEX",
-#     interactive = FALSE,
-#     figures_dir = getwd(),
-#     make_rda = TRUE
-#   )
-
-#   # expect that both figures dir and the selectivity_figure.rda file exist
-#   check_and_remove_tmp_files("selectivity_figure.rda")
-# })

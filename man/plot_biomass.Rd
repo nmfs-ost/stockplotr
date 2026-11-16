@@ -11,7 +11,7 @@ plot_biomass(
   facet = NULL,
   ref_line = "msy",
   era = NULL,
-  unit_label = "mt",
+  unit_label = NULL,
   module = NULL,
   scale_amount = 1,
   relative = FALSE,
@@ -65,7 +65,7 @@ Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
 \item{unit_label}{String. Biomass units
 
-Default: "mt"}
+Default: NULL}
 
 \item{module}{Character vector. (Optional) Module name found in \code{dat$module_name}.
 If selecting >1 module, place them in a vector like c("module1", "module2").
@@ -75,7 +75,10 @@ Default: NULL
 If the interactive and >1 module_name is found, user will select the
 module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 
-\item{scale_amount}{Number. A number to scale the y-axis values.
+\item{scale_amount}{Number. A number to scale the y-axis values. If > 1, the
+magnitude of the scale amount will be added to the unit label
+(e.g. scale_amount = 1000 with a unit label of "1000s of lbs" will result
+in "thousands of 1000s of lbs")
 
 Default: 1}
 
@@ -116,7 +119,7 @@ containing associated caption and alternative text for the figure.
 }
 \examples{
 plot_biomass(
-  dat = stockplotr:::example_data,
+  dat = stockplotr::example_data,
   unit_label = "mt",
   ref_line = c("target" = 20000),
   scale_amount = 100,
@@ -124,7 +127,7 @@ plot_biomass(
   figures_dir = getwd()
 )
 plot_biomass(
-  dat = stockplotr:::example_data,
+  dat = stockplotr::example_data,
   ref_line = NULL,
   module = "TIME_SERIES",
   figures_dir = getwd()

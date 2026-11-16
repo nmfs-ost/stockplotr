@@ -56,6 +56,6 @@ unique(vermilion_snapper$label)
 }
 \references{
 SEDAR (2018)
-(\href{https://sedarweb.org/documents/sedar-55-stock-assessment-report-south-atlantic-vermilion-snapper/})
+(\url{https://sedarweb.org/documents/sedar-55-stock-assessment-report-south-atlantic-vermilion-snapper/})
 }
 \keyword{datasets}

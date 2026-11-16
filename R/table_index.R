@@ -123,19 +123,16 @@ table_index <- function(
   # if (uncert_lab != "") uncert_lab <- glue::glue("({uncert_lab})")
 
   # merge error and index columns and rename
-  df_list <- merge_error(
+  final_tab <- merge_error(
     table_data,
     id_col_vals,
     unit_label = "", # should this be CPUE?
     uncert_lab
   )
 
-  # transform dfs into tables
-  final <- lapply(df_list, function(df) {
-    df |>
-      gt::gt() |>
-      theme_table()
-  })
+  final <- final_tab[[1]] |>
+    gt::gt() |>
+    theme_table()
 
   # export figure to rda if argument = T
   if (make_rda == TRUE) {
@@ -153,32 +150,17 @@ table_index <- function(
       )
     }
 
-    if (length(df_list) == 1) {
-      create_rda(
-        object = final[[1]],
-        # get name of function and remove "table_" from it
-        topic_label = gsub("table_", "", utils::tail(as.character(sys.call()[[1]]), n = 1)),
-        fig_or_table = "table",
-        dat = dat,
-        dir = tables_dir,
-        scale_amount = 1,
-        table_df = final
-      )
-    }
-  } else {
-    cli::cli_alert_warning("Multiple tables cannot be exported at this time.")
-    cli::cli_alert_info("We are currently developing this feature.")
+    create_rda(
+      object = final,
+      # get name of function and remove "table_" from it
+      topic_label = gsub("table_", "", utils::tail(as.character(sys.call()[[1]]), n = 1)),
+      fig_or_table = "table",
+      dat = dat,
+      dir = tables_dir,
+      scale_amount = 1,
+      table_df = final
+    )
   }
 
-  # Send table(s) to viewer
-  if (!is.data.frame(table_data)) {
-    for (t in final) {
-      print(t)
-    }
-    # Return table list invisibly
-    return(invisible(final))
-  } else {
-    # Return finished table (when only one table)
-    return(final)
-  }
+  final
 }

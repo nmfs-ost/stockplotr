@@ -3,7 +3,7 @@
 #' @inheritParams plot_spawning_biomass
 #' @param unit_label String. Biomass units
 #'
-#' Default: "mt"
+#' Default: NULL
 #' @param ref_line String. Type of reference point to
 #'   compare biomass to. The default `"msy"` looks for
 #'   `"biomass_msy"` in the `"label"` column of `dat`. The actual
@@ -28,7 +28,7 @@
 #'
 #' @examples
 #' plot_biomass(
-#'   dat = stockplotr:::example_data,
+#'   dat = stockplotr::example_data,
 #'   unit_label = "mt",
 #'   ref_line = c("target" = 20000),
 #'   scale_amount = 100,
@@ -36,7 +36,7 @@
 #'   figures_dir = getwd()
 #' )
 #' plot_biomass(
-#'   dat = stockplotr:::example_data,
+#'   dat = stockplotr::example_data,
 #'   ref_line = NULL,
 #'   module = "TIME_SERIES",
 #'   figures_dir = getwd()
@@ -48,7 +48,7 @@ plot_biomass <- function(
   facet = NULL,
   ref_line = "msy",
   era = NULL,
-  unit_label = "mt",
+  unit_label = NULL,
   module = NULL,
   scale_amount = 1,
   relative = FALSE,
@@ -58,22 +58,6 @@ plot_biomass <- function(
   ...
 ) {
   check_data(dat)
-
-  # TODO: Fix the unit label if scaling. Maybe this is up to the user to do if
-  #       they want something scaled then they have to supply a better unit name
-  #       or we create a helper function to do this.
-  biomass_label <- ifelse(
-    relative,
-    yes = "Relative biomass",
-    no = {
-      label_magnitude(
-        label = "Biomass",
-        unit_label = unit_label,
-        scale_amount = scale_amount,
-        legend = FALSE
-      )
-    }
-  )
 
   # Pull first df if in a list to find reference point
   if (!is.data.frame(dat)) {
@@ -103,6 +87,28 @@ plot_biomass <- function(
     scale_amount = scale_amount,
     interactive = interactive
   )
+
+  if (is.null(unit_label)) {
+    unit_label <- unique(prepared_data$unit)
+    if (is.na(unit_label)) {
+      cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
+      unit_label <- ""
+    }
+  }
+
+  biomass_label <- ifelse(
+    relative,
+    yes = "Relative biomass",
+    no = {
+      label_magnitude(
+        label = "Biomass",
+        unit_label = unit_label,
+        scale_amount = scale_amount,
+        legend = FALSE
+      )
+    }
+  )
+
   if (relative) {
     if (nrow(prepared_data) == 0) {
       cli::cli_abort("No data found for relative biomass. Please check that your data contains a label for 'biomass_biomass_unfished'.")
@@ -184,10 +190,10 @@ plot_biomass <- function(
       )
 
       # calculate & export key quantities
-      export_kqs(rel.B.min, rel.B.max, dir=figures_dir)
+      export_kqs(rel.B.min, rel.B.max, dir = figures_dir)
 
       # Add key quantities to captions/alt text
-      insert_kqs(rel.B.min, rel.B.max, dir=figures_dir)
+      insert_kqs(rel.B.min, rel.B.max, dir = figures_dir)
     } else {
       B.min <- calc_kqs(
         returned_kq = "B.min",
@@ -198,8 +204,8 @@ plot_biomass <- function(
         prepared_data = prepared_data
       )
 
-      export_kqs(B.min, B.max, dir=figures_dir)
-      insert_kqs(B.min, B.max, dir=figures_dir)
+      export_kqs(B.min, B.max, dir = figures_dir)
+      insert_kqs(B.min, B.max, dir = figures_dir)
     }
 
     B.ref.pt <- as.character(ref_line)
@@ -286,8 +292,8 @@ plot_biomass <- function(
       B.msy,
       B.terminal.est,
       B.terminal.min,
-      B.terminal.max, 
-      dir=figures_dir
+      B.terminal.max,
+      dir = figures_dir
     )
 
     insert_kqs(
@@ -302,7 +308,7 @@ plot_biomass <- function(
       B.terminal.est,
       B.terminal.min,
       B.terminal.max,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     insert_kqs(
@@ -317,7 +323,7 @@ plot_biomass <- function(
       B.terminal.est,
       B.terminal.min,
       B.terminal.max,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     create_rda(
@@ -330,11 +336,10 @@ plot_biomass <- function(
       scale_amount = scale_amount
     )
   }
-  
-  # remove global variable "selected_module"
-  if (exists("selected_module", envir = .GlobalEnv)) rm("selected_module", envir = .GlobalEnv)  
-  
-  # Output final plot
-  final
 
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+
+  final
 }
