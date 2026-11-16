@@ -198,7 +198,7 @@ convert_output <- function(
         file <- readRDS(file)
       }
       if (is.character(file)) {
-        if (is.null(models)) {
+        if (is.null(models) || is.na(models[i])) {
           model <- switch(stringr::str_extract(file, "\\.([^.]+)$"),
             ".sso" = {
               cli::cli_alert_info("Processing Stock Synthesis output file...")
@@ -219,7 +219,7 @@ convert_output <- function(
             cli::cli_abort("Unknown file type. Please indicate model.")
           )
         }
-      } else if (is.null(models)){
+      } else if (is.null(models) || is.na(models[i])){
         model <- switch(class(file)[1],
           "FIMSFit" = {
             cli::cli_alert_info("Processing FIMS output file...")
