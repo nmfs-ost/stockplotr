@@ -39,8 +39,6 @@ plot_likelihoods <- function(
     dat,
     by_fleet=FALSE,
     summarise_fleets=FALSE,
-    facet = NULL,
-    group = NULL,
     make_rda = FALSE,
     figures_dir = getwd(),
     interactive = TRUE,
@@ -87,7 +85,7 @@ plot_likelihoods <- function(
         plot_data <- plot_data |> 
             dplyr::group_by(model, group_var, label) |>
             dplyr::summarise(
-                fleet="All",
+                fleet="Total",
                 estimate = sum(estimate)
             ) |> dplyr::bind_rows(plot_data)
     }
