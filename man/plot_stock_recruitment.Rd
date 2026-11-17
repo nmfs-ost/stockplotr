@@ -53,6 +53,14 @@ Default: NULL
 If the interactive and >1 module_name is found, user will select the
 module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 
+\item{model}{Character vector. (Optional) Model name found in \code{dat$model}.
+If selecting >1 model, place them in a vector like c("model1", "model2").
+
+Default: NULL
+
+If the interactive and >1 model is found, user will select the
+model in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
+
 \item{scale_amount}{Number. A number to scale the y-axis values. If > 1, the
 magnitude of the scale amount will be added to the unit label
 (e.g. scale_amount = 1000 with a unit label of "1000s of lbs" will result

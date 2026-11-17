@@ -63,6 +63,14 @@ Default: NULL
 If the interactive and >1 module_name is found, user will select the
 module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 
+\item{model}{Character vector. (Optional) Model name found in \code{dat$model}.
+If selecting >1 model, place them in a vector like c("model1", "model2").
+
+Default: NULL
+
+If the interactive and >1 model is found, user will select the
+model in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
+
 \item{label}{String or vector of strings. The labels in the "label" column
 of \code{dat} to tabulate (e.g., "landings_predicted_weight"). If unspecified,
 the observed landings are used: the first of "landings_observed",
