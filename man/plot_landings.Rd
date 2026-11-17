@@ -15,6 +15,8 @@ plot_landings(
   scale_amount = 1,
   module = NULL,
   interactive = TRUE,
+  predicted = FALSE,
+  interval = NULL,
   make_rda = FALSE,
   figures_dir = getwd(),
   ...
@@ -83,6 +85,14 @@ module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 
 Default: \code{FALSE}}
 
+\item{predicted}{Logical. TRUE/FALSE; add the landings predicted by the
+model as dashed lines, to show the fit to the observed landings.
+Default: FALSE}
+
+\item{interval}{Number. Coverage of intervals around the observed landings
+based on their observation error (e.g., 0.95), drawn as a ribbon. NULL
+draws no intervals. Default: NULL}
+
 \item{make_rda}{Logical. TRUE/FALSE; indicate whether to save the object and
 make an automated caption and alternative text in the form of an \code{rda} object. If TRUE,
 the rda will be exported to the folder indicated in the argument "figures_dir".
@@ -114,6 +124,18 @@ The landings plotted are the observed landings: "landings_observed",
 the output also has "catch_predicted" (the first of these in \code{dat}). When
 \code{dat} has none of these, the first label containing "landings" is
 plotted, with a message.
+
+When \code{predicted = TRUE}, the matching predicted landings
+("landings_predicted", "landings_predicted_weight",
+"landings_predicted_numbers", or "catch_predicted") are added as dashed
+lines in the color of each fleet, for the fleets and years with observed
+landings. Use \code{facet = "fleet"} to plot each fleet in its own panel.
+
+When \code{interval} is set, the observed landings are drawn with a ribbon at
+that coverage. Intervals are lognormal, from a log-scale standard error or
+a coefficient of variation, as in \code{\link[=plot_index]{plot_index()}}; landings are often given
+a small observation error (e.g., a standard error of 0.01 in Stock
+Synthesis), so their intervals can be narrow.
 }
 \examples{
 plot_landings(
@@ -129,6 +151,15 @@ plot_landings(
   facet = "fleet",
   interactive = FALSE,
   make_rda = FALSE
+)
+# Fit to the landings: observed (solid, with 95\% intervals) and
+# predicted (dashed), one panel per fleet
+plot_landings(
+  dat = stockplotr::vermilion_snapper,
+  predicted = TRUE,
+  interval = 0.95,
+  facet = "fleet",
+  interactive = FALSE
 )
 }
 \seealso{

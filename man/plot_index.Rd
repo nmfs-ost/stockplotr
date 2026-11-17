@@ -27,9 +27,7 @@ returned from \link[stockplotr]{convert_output}.
 If inputting a list of tibbles, the first tibble's reference point defined
 in \code{ref_line} is used to plot a reference line or calculate relative spawning biomass.}
 
-\item{unit_label}{String. Index of abundance/CPUE units
-
-Default: NULL}
+\item{unit_label}{String. Index of abundance/CPUE units, Default: NULL}
 
 \item{group}{String. Single column that groups the data.
 
@@ -38,11 +36,9 @@ Set group = "none" to summarize data over all indexing values.
 Default: NULL
 Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
 
-\item{facet}{Character vector. Column name or names used for faceting. "fleet" is always added on to any faceting selections
-
-Default: NULL
-
-Options: May include, but is not limited to: "fleet", "year", "area", NULL}
+\item{facet}{Character vector. Column name or names used for faceting.
+"fleet" is always added on to any faceting selections. Default: NULL
+Options may include, but is not limited to: "fleet", "year", "area", NULL}
 
 \item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
@@ -61,24 +57,18 @@ module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 
 \item{interval}{Number. Coverage of intervals around the observed index
 based on its observation error (e.g., 0.95), drawn as vertical lines.
-NULL draws no intervals.
-
-Default: 0.95}
+NULL draws no intervals. Default: 0.95}
 
 \item{log}{Logical. TRUE/FALSE; plot the index on a log scale. Indices
 with lognormal errors are often easier to judge on a log scale, where the
-intervals are symmetric.
-
-Default: FALSE}
+intervals are symmetric. Default: FALSE}
 
 \item{relative}{Logical. TRUE/FALSE; divide each fleet's observed and
 predicted index (and intervals) by the mean of its observed index, and plot
 all fleets on one panel, colored by fleet. Indices with conflicting trends
 (data conflicts) are a common cause of poor fits and are easiest to see
 this way (\code{r4ss::SSplotIndices()} subplot 9). Any \code{group} other than
-"fleet" is added to \code{facet}.
-
-Default: FALSE}
+"fleet" is added to \code{facet}. Default: FALSE}
 
 \item{make_rda}{Logical. TRUE/FALSE; indicate whether to save the object and
 make an automated caption and alternative text in the form of an \code{rda} object. If TRUE,
