@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_landings.R
 \name{plot_landings}
 \alias{plot_landings}
-\title{Plot observed landings}
+\title{Plot observed and predicted landings}
 \usage{
 plot_landings(
   dat,
@@ -15,8 +15,9 @@ plot_landings(
   scale_amount = 1,
   module = NULL,
   interactive = TRUE,
-  predicted = FALSE,
-  interval = NULL,
+  predicted = TRUE,
+  interval = 0.95,
+  tolerance = 0.001,
   make_rda = FALSE,
   figures_dir = getwd(),
   ...
@@ -37,11 +38,13 @@ unit label reflected in the data. Please refer to the argument \code{scale_amoun
 
 Default: NULL}
 
-\item{geom}{String. Geom used for the plot.
-
-Default: "line".
-
-Options: "line", "point", or "area"}
+\item{geom}{String. How the landings are drawn. Default: "line".
+Options: "line" draws the predicted landings as lines (with intervals as
+ribbons) and the observed landings as points, or the observed landings as
+lines when there are no predicted landings to show; "bar" draws the
+observed landings of each fleet as side-by-side bars for each year
+(pass \code{position = "stack"} to stack them, as in
+\code{r4ss::SSplotCatch()}); "point" and "area" draw the observed landings only.}
 
 \item{group}{String. Single column that groups the data.
 
@@ -85,13 +88,21 @@ module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 
 Default: \code{FALSE}}
 
-\item{predicted}{Logical. TRUE/FALSE; add the landings predicted by the
-model as dashed lines, to show the fit to the observed landings.
-Default: FALSE}
+\item{predicted}{Logical. TRUE (Default) or FALSE; show the landings
+predicted by the model as lines, with the observed landings as points, to
+show the fit to the observed landings. The predicted landings are shown
+only when they differ from the observed landings by more than \code{tolerance}.}
 
-\item{interval}{Number. Coverage of intervals around the observed landings
-based on their observation error (e.g., 0.95), drawn as a ribbon. NULL
-draws no intervals. Default: NULL}
+\item{interval}{Number. Coverage of the intervals drawn as ribbons around
+the lines (e.g., 0.95), based on the observation error of the landings.
+NULL draws no intervals. Default: 0.95}
+
+\item{tolerance}{Number. The predicted landings are shown only when the
+range of their differences from the observed landings is more than this
+proportion of the largest observed landings, as in \code{r4ss::SSplotCatch()}.
+Models that fit the landings almost exactly (e.g., Stock Synthesis with a
+small catch standard error) otherwise show two identical series. Use 0 to
+always show the predicted landings. Default: 0.001 (0.1\%)}
 
 \item{make_rda}{Logical. TRUE/FALSE; indicate whether to save the object and
 make an automated caption and alternative text in the form of an \code{rda} object. If TRUE,
@@ -105,13 +116,15 @@ Default: \code{getwd()}
 
 The folder is created within the path if it does not exist.}
 
-\item{...}{Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}
+\item{...}{Arguments passed to the geom that draws the main series
+(\code{\link[ggplot2:geom_line]{ggplot2::geom_line()}} for the predicted landings, \code{\link[ggplot2:geom_col]{ggplot2::geom_col()}}
+for bars, e.g., \code{position = "stack"}).}
 }
 \value{
-A plot showing cumulative landings over time.
+A plot showing the landings over time.
 }
 \description{
-Plot observed landings
+Plot observed and predicted landings
 }
 \details{
 The input is from an assessment model output file
@@ -125,17 +138,22 @@ the output also has "catch_predicted" (the first of these in \code{dat}). When
 \code{dat} has none of these, the first label containing "landings" is
 plotted, with a message.
 
-When \code{predicted = TRUE}, the matching predicted landings
-("landings_predicted", "landings_predicted_weight",
-"landings_predicted_numbers", or "catch_predicted") are added as dashed
-lines in the color of each fleet, for the fleets and years with observed
-landings. Use \code{facet = "fleet"} to plot each fleet in its own panel.
+When \code{predicted = TRUE} and \code{geom = "line"}, the matching predicted
+landings ("landings_predicted", "landings_predicted_weight",
+"landings_predicted_numbers", or "catch_predicted") are drawn as lines in
+the color of each fleet, with the observed landings as points, for the
+fleets and years with observed landings. Use \code{facet = "fleet"} to plot
+each fleet in its own panel. When the observed and predicted landings are
+the same (within \code{tolerance}), only the observed landings are drawn, as
+lines, with a message.
 
-When \code{interval} is set, the observed landings are drawn with a ribbon at
-that coverage. Intervals are lognormal, from a log-scale standard error or
-a coefficient of variation, as in \code{\link[=plot_index]{plot_index()}}; landings are often given
-a small observation error (e.g., a standard error of 0.01 in Stock
-Synthesis), so their intervals can be narrow.
+The intervals are lognormal, from the log-scale standard error or the
+coefficient of variation of the landings, as in \code{\link[=plot_index]{plot_index()}}. Around
+the predicted landings, they show the range in which observations are
+expected given the fit and the observation error; observed landings
+outside the ribbon are poorly fit. Landings are often given a small
+observation error (e.g., a standard error of 0.01 in Stock Synthesis),
+so their intervals can be narrow.
 }
 \examples{
 plot_landings(
@@ -145,20 +163,24 @@ plot_landings(
   interactive = FALSE,
   make_rda = FALSE
 )
-plot_landings(
-  dat = stockplotr::example_data,
-  unit_label = "metric tons",
-  facet = "fleet",
-  interactive = FALSE,
-  make_rda = FALSE
-)
-# Fit to the landings: observed (solid, with 95\% intervals) and
-# predicted (dashed), one panel per fleet
+# Fit to the landings: observed (points) and predicted (lines, with 95\%
+# intervals), one panel per fleet
 plot_landings(
   dat = stockplotr::vermilion_snapper,
-  predicted = TRUE,
-  interval = 0.95,
   facet = "fleet",
+  interactive = FALSE
+)
+# Observed landings of each fleet as side-by-side bars
+plot_landings(
+  dat = stockplotr::vermilion_snapper,
+  geom = "bar",
+  interactive = FALSE
+)
+# ... or stacked, as in r4ss::SSplotCatch()
+plot_landings(
+  dat = stockplotr::vermilion_snapper,
+  geom = "bar",
+  position = "stack",
   interactive = FALSE
 )
 }
