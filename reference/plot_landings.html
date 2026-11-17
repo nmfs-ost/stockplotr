@@ -113,6 +113,8 @@
 <span>  scale_amount <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  module <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  interactive <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  predicted <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  interval <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  make_rda <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  figures_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -191,6 +193,18 @@ module_name in the console. @seealso <code><a href="filter_data.html">filter_dat
 <p>Default: <code>FALSE</code></p></dd>
 
 
+<dt id="arg-predicted">predicted<a class="anchor" aria-label="anchor" href="#arg-predicted"></a></dt>
+<dd><p>Logical. TRUE/FALSE; add the landings predicted by the
+model as dashed lines, to show the fit to the observed landings.
+Default: FALSE</p></dd>
+
+
+<dt id="arg-interval">interval<a class="anchor" aria-label="anchor" href="#arg-interval"></a></dt>
+<dd><p>Number. Coverage of intervals around the observed landings
+based on their observation error (e.g., 0.95), drawn as a ribbon. NULL
+draws no intervals. Default: NULL</p></dd>
+
+
 <dt id="arg-make-rda">make_rda<a class="anchor" aria-label="anchor" href="#arg-make-rda"></a></dt>
 <dd><p>Logical. TRUE/FALSE; indicate whether to save the object and
 make an automated caption and alternative text in the form of an <code>rda</code> object. If TRUE,
@@ -223,6 +237,16 @@ containing associated caption and alternative text for the figure.</p>
 the output also has "catch_predicted" (the first of these in <code>dat</code>). When
 <code>dat</code> has none of these, the first label containing "landings" is
 plotted, with a message.</p>
+<p>When <code>predicted = TRUE</code>, the matching predicted landings
+("landings_predicted", "landings_predicted_weight",
+"landings_predicted_numbers", or "catch_predicted") are added as dashed
+lines in the color of each fleet, for the fleets and years with observed
+landings. Use <code>facet = "fleet"</code> to plot each fleet in its own panel.</p>
+<p>When <code>interval</code> is set, the observed landings are drawn with a ribbon at
+that coverage. Intervals are lognormal, from a log-scale standard error or
+a coefficient of variation, as in <code><a href="plot_index.html">plot_index()</a></code>; landings are often given
+a small observation error (e.g., a standard error of 0.01 in Stock
+Synthesis), so their intervals can be narrow.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -253,6 +277,18 @@ plotted, with a message.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">linetype</span> : <span style="color: #0000BB;">"Fleet"</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">shape</span> : <span style="color: #0000BB;">"Fleet"</span></span>
 <span class="r-plt img"><img src="plot_landings-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="co"># Fit to the landings: observed (solid, with 95% intervals) and</span></span></span>
+<span class="r-in"><span><span class="co"># predicted (dashed), one panel per fleet</span></span></span>
+<span class="r-in"><span><span class="fu">plot_landings</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  dat <span class="op">=</span> <span class="fu">stockplotr</span><span class="fu">::</span><span class="va"><a href="vermilion_snapper.html">vermilion_snapper</a></span>,</span></span>
+<span class="r-in"><span>  predicted <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  interval <span class="op">=</span> <span class="fl">0.95</span>,</span></span>
+<span class="r-in"><span>  facet <span class="op">=</span> <span class="st">"fleet"</span>,</span></span>
+<span class="r-in"><span>  interactive <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Ignoring unknown labels:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">shape</span> : <span style="color: #0000BB;">"Fleet"</span></span>
+<span class="r-plt img"><img src="plot_landings-3.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </div>
