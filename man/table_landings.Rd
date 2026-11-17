@@ -62,10 +62,13 @@ Default: NULL
 If the interactive and >1 module_name is found, user will select the
 module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 
-\item{label}{String. The label that will be chosen from the input file. If unspecified,
-the function will search the "label" column and use the first matching label
-in this ordered list: "landings_weight",  "landings_numbers", "landings_expected",
-"landings_predicted", "landings".
+\item{label}{String or vector of strings. The labels in the "label" column
+of \code{dat} to tabulate (e.g., "landings_predicted_weight"). If unspecified,
+the observed landings are used: the first of "landings_observed",
+"landings_observed_weight", "landings_observed_numbers", or "catch" (when
+\code{dat} also has "catch_predicted"), as in \code{\link[=plot_landings]{plot_landings()}}. When \code{dat}
+has none of these, the first label containing "landings" is used, with a
+message.
 
 Default: NULL}
 

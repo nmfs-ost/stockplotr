@@ -52,3 +52,24 @@ test_that("table_landings generates error with incorrect module", {
     )
   )
 })
+
+test_that("table_landings tabulates the observed landings, or the labels given", {
+  # vermilion_snapper also has predicted landings, whose labels contain
+  # "landings"
+  dat <- stockplotr::vermilion_snapper
+  tbl <- suppressMessages(table_landings(dat, interactive = FALSE))
+  cols <- names(tbl[["_data"]])
+  expect_true(all(grepl("^Year$|Observed", cols)))
+  expect_false(any(grepl("Predicted", cols)))
+  # A label given is used, even when observed landings exist
+  tbl <- suppressMessages(table_landings(
+    stockplotr::example_data,
+    label = "landings_predicted_weight", interactive = FALSE
+  ))
+  cols <- names(tbl[["_data"]])
+  expect_true(any(grepl("Predicted Weight", cols)))
+  expect_false(any(grepl("Observed", cols)))
+  # pollock reports its observed landings as "catch"
+  tbl <- suppressMessages(table_landings(stockplotr::pollock, interactive = FALSE))
+  expect_s3_class(tbl, "gt_tbl")
+})

@@ -9,6 +9,12 @@
 #' There are options to return a `ggplot2` object or export an .rda object
 #' containing associated caption and alternative text for the figure.
 #'
+#' The landings plotted are the observed landings: "landings_observed",
+#' "landings_observed_weight", "landings_observed_numbers", or "catch" when
+#' the output also has "catch_predicted" (the first of these in `dat`). When
+#' `dat` has none of these, the first label containing "landings" is
+#' plotted, with a message.
+#'
 #' @seealso [convert_output()], [filter_data()], [process_data()], [plot_timeseries()], [export_kqs()], [insert_kqs()], [create_rda()]
 #'
 #' @export
@@ -48,7 +54,7 @@ plot_landings <- function(
   # Filter data for landings
   prepared_data <- filter_data(
     dat = dat,
-    label_name = "landings",
+    label_name = landings_label_name(dat, module = module),
     geom = geom,
     era = NULL,
     group = group,
@@ -167,4 +173,25 @@ plot_landings <- function(
   }
 
   plt
+}
+
+# The label pattern of the observed landings in `dat` (in `module`, when
+# given): the first of the observed landings labels present, or any label
+# containing "landings" (with a message) when there are none
+landings_label_name <- function(dat, module = NULL) {
+  if (!is.null(module)) {
+    dat <- dat[dat$module_name %in% module, , drop = FALSE]
+  }
+  observed <- c("landings_observed", "landings_observed_weight", "landings_observed_numbers")
+  if ("catch_predicted" %in% dat$label) {
+    observed <- c(observed, "catch")
+  }
+  found <- observed[observed %in% dat$label][1]
+  if (is.na(found)) {
+    cli::cli_alert_info(
+      "No observed landings ({.val {observed}}) found; using the first label containing {.val landings}."
+    )
+    return("landings")
+  }
+  paste0("^", found, "$")
 }
