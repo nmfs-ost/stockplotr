@@ -28,8 +28,25 @@ make_utils_plot_multimodule_data <- function() {
   )
 }
 
-test_that("filter_data handles data frames and lists", {
+make_utils_plot_multimodel_data <- function() {
+  tibble::tibble(
+    label = c("biomass", "biomass", "biomass", "biomass_msy", "biomass_unfished"),
+    estimate = c(100, 120, 140, 110, 200),
+    module_name = c("TIME_SERIES", "TIME_SERIES", "TIME_SERIES", "TIME_SERIES", "TIME_SERIES"),
+    year = c(2000, 2001, 2002, NA, NA),
+    fleet = c("fleet_a", "fleet_a", "fleet_b", NA, NA),
+    age = c(1, 2, 3, NA, NA),
+    season = c("spring", "spring", "fall", NA, NA),
+    uncertainty = c(10, 10, 10, NA, NA),
+    uncertainty_label = c("se", "se", "se", NA, NA),
+    era = c("time", "time", "time", "time", "time"),
+    model = c("model_one", "model_one", "model_two", "model_two", "model_two")
+  )
+}
+
+test_that("filter_data handles data frames", {
   dat <- make_utils_plot_data()
+  mm_dat <- make_utils_plot_multimodel_data()
 
   filtered <- filter_data(
     dat = dat,
@@ -42,7 +59,7 @@ test_that("filter_data handles data frames and lists", {
   expect_equal(unique(filtered$model), "1")
 
   filtered_list <- filter_data(
-    dat = list(model_one = dat, model_two = dat),
+    dat = mm_dat,
     label_name = "biomass",
     geom = "point",
     interactive = FALSE
@@ -162,6 +179,25 @@ test_that("reference and scalar utility helpers behave as expected", {
     any(vapply(p$layers, function(layer) inherits(layer$geom, "GeomHline"), logical(1)))
   }
   expect_true(has_hline(ref_plot))
+
+  mm_dat <- make_utils_plot_multimodel_data()
+  mm_dat <- mm_dat |> dplyr::add_row(
+    label = "biomass_msy",
+    estimate = 120, module_name="TIME_SERIES",
+    year=NA, fleet=NA, age=NA, season=NA, uncertainty=NA, uncertainty_label=NA, 
+    era="time", model="model_one"
+  )
+  ts_dat <- filter_data(
+    dat = mm_dat,
+    label_name = "biomass",
+    geom = "line",
+    interactive = FALSE
+  )
+  base_plot <- plot_timeseries(ts_dat, geom = "line")
+
+  ref_plot <- base_plot + add_reference_line(mm_dat, ref_line="msy", label="biomass")
+  expect_true(has_hline(ref_plot)) # make sure it has A line
+  expect_equal(sum(sapply(ref_plot$layers, function(layer) inherits(layer$geom, "GeomHline"))), 2) # make sure it has TWO lines
 
   # missing_ref_plot <- base_plot + reference_line(
   #   label_name = "biomass",
