@@ -21,6 +21,13 @@
 #' 
 #' Default: TRUE
 #' 
+#' @param mohns_rho Numeric. Externally calculated value(s) of mohn's rho. Should be
+#' either a single value or of length `end_years-1`. Value of NULL disables
+#' reporting Mohn's rho statsitic on plot. If vector, names of vector entries should
+#' match with model names.
+#' 
+#' Default: NULL
+#' 
 #' @param group String. Single column that groups the data.
 #' 
 #' Default: "model"
@@ -56,11 +63,21 @@
 #'   interactive=FALSE,
 #'   module = "derived_quants"
 #' )
+#' plot_retrospective(
+#'   dat = retro_data,
+#'   end_years = 0:-5,
+#'   quantity = "spr",
+#'   show_end_year_points=TRUE,
+#'   mohns_rho = c(0.023, 0.01, 1.25, 0.845, 0.068)
+#'   interactive=FALSE,
+#'   module = "derived_quants"
+#' )
 plot_retrospective <- function(
   dat,
   end_years=NULL,
   quantity="spawning_biomass",
   show_end_year_points=TRUE,
+  mohns_rho = NULL,
   group="model",
   make_rda=FALSE,
   figures_dir=getwd(),
@@ -82,12 +99,18 @@ plot_retrospective <- function(
     names(end_years) <- dat$model |> unique()
   }
 
+  if(!all(is.null(mohns_rho)) && is.null(names(mohns_rho))){
+    cli::cli_alert("`mohns_rho` values provided without names. names automatically applied.")
+    names(mohns_rho) <- dat$model |> unique()
+  }
+
   retro_dat <- dat |>
     dplyr::filter(!is.na(year), !is.na(estimate)) |>
     dplyr::mutate(term_year=max(year)) |>
     dplyr::rowwise() |>
     dplyr::mutate(
-        max_yr = term_year+end_years[which(model==names(end_years))]
+        max_yr = term_year+end_years[which(model==names(end_years))],
+        peel = abs(end_years[which(model==names(end_years))])
     ) |>
     dplyr::ungroup() |>
     dplyr::filter(year < max_yr-1) |>
@@ -96,9 +119,9 @@ plot_retrospective <- function(
   
   func_pars <- list(
     dat = retro_dat, 
-    group=group,
-    make_rda=FALSE, # don't want to overwrite files from non-retro plots
-    ...
+    group="peel",
+    make_rda=FALSE # don't want to overwrite files from non-retro plots
+    # ...
   )
 
   plt <- do.call(func_name, func_pars)
@@ -128,6 +151,30 @@ plot_retrospective <- function(
         ),
         size=3.5
       )
+  }
+
+  if(!all(is.null(mohns_rho))){
+
+    mohns_df <- data.frame(
+      label = sprintf("%.3f", mohns_rho)
+    )
+    mohns_df$model = names(mohns_rho)
+    mohns_df$vjust = 0.5 + seq_along(mohns_rho-1)*1.5
+    mohns_df$label <- paste0(mohns_df$model, " Mohns Rho:\t", mohns_df$label)
+
+    plt + ggplot2::geom_text(
+      data = mohns_df,
+      ggplot2::aes(
+        x=Inf,
+        y=Inf,
+        label=label,
+        vjust=vjust
+      ),
+      # family = "mono",
+      size=6,
+      hjust=1.1
+    )
+
   }
 
   plt <- plt +
