@@ -73,8 +73,16 @@ table_projections <- function(
         scale_amount = 1,
         interactive = interactive
       ) |>
-        dplyr::mutate(estimate = ifelse(x != "fishing_mortality", round(as.numeric(estimate), digits = 0), round(as.numeric(estimate), digits = 4))) |>
-        dplyr::mutate(uncertainty = round(as.numeric(uncertainty), digits = 2))
+        dplyr::mutate(
+          estimate = if(x != "fishing_mortality"){
+            round(as.numeric(estimate), digits=0)
+          }else{
+            round(as.numeric(estimate), digits = 4)
+          }
+        ) |>
+          # estimate = ifelse(x != "fishing_mortality", round(as.numeric(estimate), digits = 0), round(as.numeric(estimate), digits = 4))) |>
+        dplyr::mutate(uncertainty = round(as.numeric(uncertainty), digits = 2)) |>
+        dplyr::distinct() # only preserve unique rows
       uncertainty_label <- ifelse(
         is.na(unique(filtered_data$uncertainty_label)),
         "Uncertainty",
