@@ -1231,3 +1231,101 @@ add_reference_line <- function(
   } # close if ref_line NULL
   ref_lines_list
 }
+
+
+#' Filter plot data interactively
+#' 
+#' Allows user to interactively select values from those available
+#' to filter their data by.
+#' 
+#' @param dat data.frame. A tibble or named list of tibbles (input as `list()`)
+#' returned from \link[stockplotr]{convert_output}.
+#' 
+#' @param column_name String. Name of the column to allow interactive filtering for.
+#' 
+#' @param column_value String. Value of the column to filter by. If NULL, interactive
+#' selection will be enabled.
+#' 
+#' Default: NULL
+#' 
+#' @param interactive Logical. indicate whether the environment is interactive. 
+#' 
+#' Default: TRUE
+#' 
+#' @param allow_multiple_models Logical. Whether to allow the selection of multiple
+#' models.
+#' 
+#' Default: FALSE
+#' 
+#' @return List. filtered data.frame (`plot_data`) and selected option(`selected)`
+filter_interactive <- function(
+  dat,
+  column_name,
+  column_value = NULL,
+  interactive = TRUE,
+  allow_multiple_selection = TRUE
+){
+
+  kws <- c("module_name"="module", "model"="model")
+  
+  plot_dat <- dat
+  selected <- unique(dat[[column_name]])
+  if(length(unique(dat[[column_name]])) > 1){
+    available_names <- unique(dat[[column_name]])
+    if(!is.null(column_value)){
+      if(length(column_value) > 1 && !allow_multiple_selection){
+        cli::cli_alert_danger("Multiple {kws[column_name]}s provided, but only 1 allowed. Defaulting to first available {kws[column_name]} name: {available_names[1]}.")
+      }
+      plot_dat <- dat |> dplyr::filter(.data[[column_name]] %in% column_value)
+      selected <- column_value
+    }else{
+      cli::cli_alert_warning("Multiple {kws[column_name]}s found in data. \n")
+      options <- c()
+      for (i in seq_along(available_names)) {
+        # options <- paste0(options, " ", i, ") ", unique(plot_data$module_name)[i], "\n")
+        options[i] <- paste0(available_names[i])
+      }
+
+      if(column_name == "model"){
+        options <- c(options, "All")
+      }
+
+      if(interactive()){
+        if(interactive){
+          selection <- utils::select.list(
+            options,
+            multiple=allow_multiple_selection,
+            title = glue::glue("Select one of the following {kws[column_name]} names")
+          )
+          question1 <- if(length(selection)==0 || identical(selection, "")){
+            options[1]
+          }else if(selection=="All"){
+            options[-length(options)]
+          }else{
+            selection
+          }
+
+          selected <- intersect(available_names, question1)
+          if (length(selected) < 1 || (length(selected) > 1 && !allow_multiple_selection)) {
+            selected <- available_names[1]
+          }
+        }else{
+          selected <- available_names[1]
+          cli::cli_alert_info("Selection bypassed. Filtering by {selected}.")
+        }
+      }else{
+        selected <- available_names[1]
+        cli::cli_alert_info(glue::glue("Environment not interactive. Selecting {selected}."))
+      }
+      if (length(selected) > 0) {
+        plot_dat <- dat |>
+          dplyr::filter(
+            .data[[column_name]] %in% selected
+          )
+      }
+    }
+  }
+  out <- list("plot_data"=plot_dat, "selected"=selected)
+
+  return(out)
+}
