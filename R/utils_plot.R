@@ -675,6 +675,9 @@ cap_first_letter <- function(s) {
 #' @inheritParams plot_spawning_biomass
 #' @param label_name String. Name of the label used to filter
 #' the data.
+#' @param allow_multiple_models Logical. Whetehr to allow multiple models.
+#' 
+#' Default: TRUE
 #'
 #' @returns a data frame that is preformatted for plotting with ggplot2.
 #' @export
@@ -687,13 +690,27 @@ filter_data <- function(
   dat,
   label_name,
   module = NULL,
+  model = NULL,
   era = NULL,
   geom,
   group = NULL,
   facet = NULL,
   scale_amount = 1,
-  interactive = TRUE
+  interactive = TRUE,
+  allow_multiple_models = TRUE
 ) {
+
+  # Check if there are multiple module_names present
+  model_select <- filter_interactive(
+    dat,
+    column_name="model",
+    column_value=model,
+    interactive=interactive,
+    allow_multiple_selection = allow_multiple_models
+  )
+  dat <- model_select$plot_data
+  selected_model <<- model_select$selected
+
   # TODO: add method to filter by units once added into the converter
   # TODO: add option to scale data
   # Replace all spaces with underscore if not in proper format
