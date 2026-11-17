@@ -685,6 +685,14 @@ cap_first_letter <- function(s) {
 #' @examples
 #' \dontrun{
 #' filter_data(dat, "biomass", "line", group = "fleet")
+#' filter_data(
+#'    dat, 
+#'    label = "biomass",
+#'    geom = "line",
+#'    module="derived_quants", 
+#'    model=NULL, 
+#'    allow_multiple_models=FALSE # can only select one model to filter by
+#' )
 #' }
 filter_data <- function(
   dat,
@@ -1233,7 +1241,17 @@ add_reference_line <- function(
 #' 
 #' Default: FALSE
 #' 
-#' @return List. filtered data.frame (`plot_data`) and selected option(`selected)`
+#' @return List. filtered data.frame (`plot_data`) and selected option(`selected`).
+#' 
+#' @examples
+#' \dontrun{
+#'  filter_interactive(
+#'    dat = example_dat,
+#'    column_name = "model",
+#'    column_value = NULL,
+#'    allow_multiple_selection = TRUE # allow selecting multiple models
+#'  )
+#' }
 filter_interactive <- function(
   dat,
   column_name,

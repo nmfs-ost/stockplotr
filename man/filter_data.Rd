@@ -91,5 +91,13 @@ Filter data for input into aesthetics for ggplot2
 \examples{
 \dontrun{
 filter_data(dat, "biomass", "line", group = "fleet")
+filter_data(
+   dat, 
+   label = "biomass",
+   geom = "line",
+   module="derived_quants", 
+   model=NULL, 
+   allow_multiple_models=FALSE # can only select one model to filter by
+)
 }
 }

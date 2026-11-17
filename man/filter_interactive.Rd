@@ -33,9 +33,19 @@ models.
 Default: FALSE}
 }
 \value{
-List. filtered data.frame (\code{plot_data}) and selected option(\verb{selected)}
+List. filtered data.frame (\code{plot_data}) and selected option(\code{selected}).
 }
 \description{
 Allows user to interactively select values from those available
 to filter their data by.
+}
+\examples{
+\dontrun{
+ filter_interactive(
+   dat = example_dat,
+   column_name = "model",
+   column_value = NULL,
+   allow_multiple_selection = TRUE # allow selecting multiple models
+ )
+}
 }
