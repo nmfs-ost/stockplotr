@@ -84,6 +84,7 @@ plot_index <- function(
   facet = NULL,
   interactive = TRUE,
   module = NULL,
+  model = NULL,
   focus = NULL,
   interval = 0.95,
   log = FALSE,
@@ -119,7 +120,9 @@ plot_index <- function(
     group = group,
     facet = facet,
     interactive = interactive,
-    module = module
+    module = module,
+    model = model,
+    allow_multiple_models = TRUE
   )
 
   # There's 3 cases handled here

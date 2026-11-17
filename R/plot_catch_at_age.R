@@ -74,6 +74,7 @@ plot_catch_at_age <- function(
   proportional = TRUE,
   interactive = TRUE,
   module = NULL,
+  model = NULL,
   make_rda = FALSE,
   figures_dir = getwd()
 ) {
@@ -89,7 +90,9 @@ plot_catch_at_age <- function(
     group = "age",
     scale_amount = scale_amount,
     interactive = interactive,
-    module = module
+    module = module,
+    model = model,
+    allow_multiple_models = TRUE
   )
   if (is.null(unit_label)) {
     unit_label <- unique(catch$unit)

@@ -36,6 +36,7 @@ plot_fishing_mortality <- function(
   ref_line = "msy",
   era = NULL,
   module = NULL,
+  model = NULL,
   make_rda = FALSE,
   figures_dir = getwd(),
   interactive = TRUE,
@@ -54,8 +55,10 @@ plot_fishing_mortality <- function(
     group = group,
     facet = facet,
     module = module,
+    model = model,
     scale_amount = 1,
-    interactive = interactive
+    interactive = interactive,
+    allow_multiple_models = TRUE
   )
   # Process data
   processed_data <- process_data(

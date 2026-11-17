@@ -43,6 +43,7 @@ plot_stock_recruitment <- function(
   interactive = TRUE,
   era = NULL,
   module = NULL,
+  model = NULL,
   scale_amount = 1,
   make_rda = FALSE,
   figures_dir = getwd()
@@ -58,7 +59,9 @@ plot_stock_recruitment <- function(
     geom = "point",
     scale_amount = scale_amount,
     interactive = interactive,
-    module = module
+    module = module,
+    model = model,
+    allow_multiple_models = TRUE
   ) |>
     # filter for year !na
     dplyr::filter(

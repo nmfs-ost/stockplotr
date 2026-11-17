@@ -35,6 +35,7 @@ plot_discard <- function(
   scale_amount = 1,
   interactive = TRUE,
   module = NULL,
+  model = NULL,
   make_rda = FALSE,
   figures_dir = getwd()
 ) {
@@ -55,8 +56,10 @@ plot_discard <- function(
     group = group,
     facet = facet,
     module = module,
+    model = model,
     scale_amount = scale_amount,
-    interactive = interactive
+    interactive = interactive,
+    allow_multiple_models = TRUE
   )
 
   # extract unit if unit_label is null and set lbs to F by default

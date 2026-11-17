@@ -81,6 +81,7 @@ plot_abundance_at_age <- function(
   scale_amount = 1,
   proportional = TRUE,
   module = NULL,
+  model = NULL,
   interactive = TRUE,
   make_rda = FALSE,
   figures_dir = getwd()
@@ -94,8 +95,10 @@ plot_abundance_at_age <- function(
     geom = "point",
     group = "age",
     module = module,
+    model = model, 
     scale_amount = scale_amount,
-    interactive = interactive
+    interactive = interactive,
+    allow_multiple_models = TRUE
   )
 
   # Create label for abundance units in legend

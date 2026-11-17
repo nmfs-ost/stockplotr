@@ -50,6 +50,7 @@ plot_biomass <- function(
   era = NULL,
   unit_label = NULL,
   module = NULL,
+  model = NULL,
   scale_amount = 1,
   relative = FALSE,
   make_rda = FALSE,
@@ -84,8 +85,10 @@ plot_biomass <- function(
     facet = facet,
     era = era,
     module = module,
+    model = model,
     scale_amount = scale_amount,
-    interactive = interactive
+    interactive = interactive,
+    allow_multiple_models = TRUE
   )
 
   if (is.null(unit_label)) {
