@@ -5,14 +5,16 @@ test_that("export_rda works for figures", {
   B.min <- 100
   B.max <- 200
 
+  custom_dir <- fs::path(getwd(), "tests-export_rda")
+
   # add KQs to caps/alt text csv
-  insert_kqs(B.min, B.max)
+  insert_kqs(B.min, B.max, dir=custom_dir)
 
   # extract this plot's caption and alt text
   caps_alttext <- extract_caps_alttext(
     topic_label = topic_label,
     fig_or_table = fig_or_table,
-    dir = getwd()
+    dir = custom_dir
   )
 
   # make a simple plot
@@ -24,21 +26,21 @@ test_that("export_rda works for figures", {
   export_rda(
     object = final,
     caps_alttext = caps_alttext,
-    figures_tables_dir = getwd(),
+    figures_tables_dir = custom_dir,
     topic_label = topic_label,
     fig_or_table = fig_or_table
   )
 
   # expect that both figures dir and the biomass_figure.rda file exist
-  expect_true(dir.exists(fs::path(getwd(), "figures")))
+  expect_true(dir.exists(fs::path(custom_dir, "figures")))
   expect_true(file.exists(fs::path(
-    getwd(), "figures", "biomass_figure.rda"
+    custom_dir, "figures", "biomass_figure.rda"
   )))
 
   # erase temporary testing files
-  file.remove(fs::path(getwd(), "captions_alt_text.csv"))
+  file.remove(fs::path(custom_dir, "captions_alt_text.csv"))
   # file.remove(fs::path(getwd(), "key_quantities.csv")) # file is not made in this test
-  unlink(fs::path(getwd(), "figures"), recursive = T)
+  unlink(fs::path(custom_dir, "figures"), recursive = T)
 })
 
 test_that("export_rda works for tables", {
@@ -48,14 +50,16 @@ test_that("export_rda works for tables", {
   B.min <- 100
   B.max <- 200
 
+  custom_dir <- fs::path(getwd(), "tests-export_rda")
+
   # add KQs to caps/alt text csv
-  insert_kqs(B.min, B.max)
+  insert_kqs(B.min, B.max, dir=custom_dir)
 
   # extract this plot's caption and alt text
   caps_alttext <- extract_caps_alttext(
     topic_label = topic_label,
     fig_or_table = fig_or_table,
-    dir = getwd()
+    dir = custom_dir
   )
 
   # make a simple table
@@ -68,19 +72,19 @@ test_that("export_rda works for tables", {
   export_rda(
     object = final,
     caps_alttext = caps_alttext,
-    figures_tables_dir = getwd(),
+    figures_tables_dir = custom_dir,
     topic_label = topic_label,
     fig_or_table = fig_or_table
   )
 
   # expect that both tables dir and the biomass_abundance_catch_table.rda file exist
-  expect_true(dir.exists(fs::path(getwd(), "tables")))
-  expect_true(file.exists(fs::path(getwd(), "tables", "biomass_abundance_catch_table.rda")))
+  expect_true(dir.exists(fs::path(custom_dir, "tables")))
+  expect_true(file.exists(fs::path(custom_dir, "tables", "biomass_abundance_catch_table.rda")))
 
   # erase temporary testing files
-  file.remove(fs::path(getwd(), "captions_alt_text.csv"))
+  file.remove(fs::path(custom_dir, "captions_alt_text.csv"))
   # file.remove(fs::path(getwd(), "key_quantities.csv")) # file is not made in this test ?
-  unlink(fs::path(getwd(), "tables"), recursive = T)
+  unlink(fs::path(custom_dir, "tables"), recursive = T)
 })
 
 

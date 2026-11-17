@@ -97,7 +97,7 @@ plot_landings <- function(
   # Filter data for landings
   prepared_data <- filter_data(
     dat = dat,
-    label_name = label_name,
+    label_name = landings_label_name(dat, module = module),
     geom = geom,
     era = NULL,
     group = group,
