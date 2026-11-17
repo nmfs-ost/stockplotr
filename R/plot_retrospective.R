@@ -184,6 +184,22 @@ plot_retrospective <- function(
       color=ggplot2::guide_legend("Peel"), 
       fill=ggplot2::guide_legend("Peel")
     )
+
+
+  if(make_rda){
+    
+    create_rda(
+      object = plt,
+      topic_label = glue::glue("retrospective_{quantity}"),
+      fig_or_table = "figure",
+      dat = NULL,
+      dir = figures_dir,
+      ref_line = ifelse(!is.null(names(ref_line)), names(ref_line), ref_line),
+      scale_amount = scale_amount
+    )
+
+    cli::cli_alert_danger("No captions, alt-text, or key quantities were stored at this time.")
+  }
   
   plt
 
