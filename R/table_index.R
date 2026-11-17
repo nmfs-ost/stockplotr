@@ -54,6 +54,7 @@ table_index <- function(
   group = NULL,
   method = "sum",
   module = NULL,
+  model = NULL,
   label = NULL,
   digits = 2,
   make_rda = FALSE,
@@ -69,6 +70,7 @@ table_index <- function(
     geom = "line",
     era = era,
     module = module,
+    model = model,
     scale_amount = 1,
     interactive = interactive
   ) |>
@@ -160,6 +162,11 @@ table_index <- function(
       scale_amount = 1,
       table_df = final
     )
+  }
+
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+    rm(selected_model,  envir = .GlobalEnv)
   }
 
   final

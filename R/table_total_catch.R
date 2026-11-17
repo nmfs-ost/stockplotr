@@ -44,6 +44,7 @@ table_total_catch <- function(
   era = NULL,
   interactive = TRUE,
   module = NULL,
+  model = NULL,
   scale_amount = 1,
   digits = 2,
   make_rda = FALSE,
@@ -63,8 +64,10 @@ table_total_catch <- function(
     geom = "line",
     era = era,
     module = module,
+    model = NULL,
     scale_amount = scale_amount,
-    interactive = interactive
+    interactive = interactive,
+    allow_multiple_models = FALSE
   )
 
   # Check if there is any data and if all labels contain "catchability", not "catch"
@@ -201,6 +204,7 @@ table_total_catch <- function(
 
   if (exists("selected_module")) {
     rm(selected_module, envir = .GlobalEnv)
+    rm(selected_model,  envir = .GlobalEnv)
   }
 
   final

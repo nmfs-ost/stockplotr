@@ -67,6 +67,7 @@ table_biomass_abundance_catch <- function(
   method = "sum",
   module = NULL,
   label = NULL,
+  model = NULL,
   make_rda = FALSE,
   tables_dir = getwd()
 ) {
@@ -82,6 +83,9 @@ table_biomass_abundance_catch <- function(
   biomass_abundance_catch.abundance.units <- NA
   biomass_abundance_catch.catch.units <- NA
 
+  # Do this so that we don't have to repeatedly choose the same model
+  selected_model <- model
+  
   # Aiming for totals
   # iterate through label_names
   lab_list <- purrr::map(
@@ -95,9 +99,12 @@ table_biomass_abundance_catch <- function(
         geom = "line",
         era = "time",
         module = module,
+        model = selected_model[1],
         scale_amount = 1,
-        interactive = interactive
+        interactive = interactive,
+        allow_multiple_models = FALSE
       )
+      selected_model <<- unique(filtered_data$model)
 
       uncertainty_label <- ifelse(
         is.na(unique(filtered_data$uncertainty_label)),
@@ -235,7 +242,10 @@ table_biomass_abundance_catch <- function(
 
   if (exists("selected_module")) {
     rm(selected_module, envir = .GlobalEnv)
+    rm(selected_model,  envir = .GlobalEnv)
   }
 
   final
 }
+
+# table_biomass_abundance_catch(result)

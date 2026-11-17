@@ -37,6 +37,7 @@ table_projections <- function(
   spawning_biomass_label = NULL,
   interactive = TRUE,
   module = NULL,
+  model = NULL,
   make_rda = FALSE,
   tables_dir = getwd()
 ) {
@@ -59,6 +60,8 @@ table_projections <- function(
     "fishing_mortality" = "fishing_mortality"
   )
 
+  selected_model <- model
+
   # iterate through 3 label names
   lab_list <- purrr::map(
     names(named_vec),
@@ -70,8 +73,10 @@ table_projections <- function(
         geom = "line",
         era = "fore",
         module = module,
+        model = selected_model,
         scale_amount = 1,
-        interactive = interactive
+        interactive = interactive,
+        allow_multiple_models = FALSE
       ) |>
         dplyr::mutate(
           estimate = if(x != "fishing_mortality"){
@@ -83,6 +88,9 @@ table_projections <- function(
           # estimate = ifelse(x != "fishing_mortality", round(as.numeric(estimate), digits = 0), round(as.numeric(estimate), digits = 4))) |>
         dplyr::mutate(uncertainty = round(as.numeric(uncertainty), digits = 2)) |>
         dplyr::distinct() # only preserve unique rows
+
+      selected_model <<- unique(filtered_data$model)
+
       uncertainty_label <- ifelse(
         is.na(unique(filtered_data$uncertainty_label)),
         "Uncertainty",
@@ -178,7 +186,10 @@ table_projections <- function(
 
   if (exists("selected_module")) {
     rm(selected_module, envir = .GlobalEnv)
+    rm(selected_model,  envir = .GlobalEnv)
   }
 
   final
 }
+
+# table_projections(result)
