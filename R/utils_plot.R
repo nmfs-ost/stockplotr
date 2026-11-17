@@ -775,57 +775,16 @@ filter_data <- function(
   }
 
   # Check if there are multiple module_names present
-  if (length(unique(plot_data$module_name)) > 1) {
-    module_names <- unique(plot_data$module_name)
-    if (!is.null(module)) {
-      plot_data <- plot_data |>
-        dplyr::filter(
-          module_name %in% module
-        )
-      # export module to environment for use with key quantity calc
-      selected_module <<- module
-    } else {
-      cli::cli_alert_warning("Multiple module names found in data. \n")
-      options <- c()
-      for (i in seq_along(module_names)) {
-        # options <- paste0(options, " ", i, ") ", unique(plot_data$module_name)[i], "\n")
-        options[i] <- paste0(module_names[i])
-      }
-      if (interactive()) {
-        if (interactive) {
-          selected <- utils::select.list(
-            options,
-            multiple = TRUE,
-            title = "Select one or more of the following module names"
-          )
-          question1 <- if (length(selected) == 0 || identical(selected, "")) {
-            options[1]
-          } else {
-            selected
-          }
-          # use <<- to export module to environment for use with key quantity calc
-          selected_module <<- intersect(module_names, question1)
-          if (length(selected_module) < 1) {
-            selected_module <<- module_names[1]
-          }
-        } else {
-          # use <<- to export module to environment for use with key quantity calc
-          selected_module <<- module_names[1]
-          cli::cli_alert_info("Selection bypassed. Filtering by {selected_module}.")
-        }
-      } else {
-        # use <<- to export module to environment for use with key quantity calc
-        selected_module <<- module_names[1]
-        cli::cli_alert_info(glue::glue("Environment not interactive. Selecting {selected_module}."))
-      }
-      if (length(selected_module) > 0) {
-        plot_data <- plot_data |>
-          dplyr::filter(
-            module_name %in% selected_module
-          )
-      }
-    }
-  }
+  module_select <- filter_interactive(
+    plot_data,
+    column_name="module_name",
+    column_value=module,
+    interactive=interactive,
+    allow_multiple_selection = TRUE
+  )
+  plot_data <- module_select$plot_data
+  selected_module <<- module_select$selected
+
   # TODO: add lines to summarize final data for selected grouping and or facet
   if (geom == "area") {
     plot_data <- dplyr::mutate(
