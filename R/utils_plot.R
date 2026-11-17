@@ -568,32 +568,32 @@ reference_line <- function(
   ref_line_val <- ref_line[[1]]
   reference <- names(ref_line)
 
-  switch(direction, 
+  switch(direction,
     "h" = {
-        list(
-          # Add geom for ref line
-          ggplot2::geom_hline(
-            data = data.frame(yintercept = ref_line_val, model = model_name, group_var = "1"),
-            ggplot2::aes(
-              yintercept = ref_line_val / scale_amount,
-              color = interaction(model, group_var) # model
-            ),
-            linetype = "dashed",
-            show.legend = FALSE
+      list(
+        # Add geom for ref line
+        ggplot2::geom_hline(
+          data = data.frame(yintercept = ref_line_val, model = model_name, group_var = "1"),
+          ggplot2::aes(
+            yintercept = ref_line_val / scale_amount,
+            color = interaction(model, group_var) # model
           ),
-          # add line annotation
-          ggplot2::annotate(
-            geom = "text",
-            # TODO: need to change this for general process
-            x = -Inf,
-            y = ref_line_val / scale_amount,
-            label = glue::glue("{reference}"), # glue::glue("{stringr::str_replace_all(label_name, '_', '~')}[{reference}]"), # list(bquote(label_name[.(reference)])),
-            parse = TRUE,
-            hjust = -0.05, # slight offset so text doesn't hit border
-            vjust = -0.5 # , #slightly above line
-            # size = 5 # this is not foolproof
-          )
+          linetype = "dashed",
+          show.legend = FALSE
+        ),
+        # add line annotation
+        ggplot2::annotate(
+          geom = "text",
+          # TODO: need to change this for general process
+          x = -Inf,
+          y = ref_line_val / scale_amount,
+          label = glue::glue("{reference}"), # glue::glue("{stringr::str_replace_all(label_name, '_', '~')}[{reference}]"), # list(bquote(label_name[.(reference)])),
+          parse = TRUE,
+          hjust = -0.05, # slight offset so text doesn't hit border
+          vjust = -0.5 # , #slightly above line
+          # size = 5 # this is not foolproof
         )
+      )
     },
     "v" = {
       list(
@@ -622,7 +622,6 @@ reference_line <- function(
       )
     }
   )
-  
 }
 
 #------------------------------------------------------------------------------

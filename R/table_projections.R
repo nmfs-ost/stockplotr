@@ -23,14 +23,14 @@
 #'   interactive = FALSE,
 #'   module = "DERIVED_QUANTITIES"
 #' )
-#' 
+#'
 #' table_projections(
-#'  dat = stockplotr::example_data,
-#'  interactive = FALSE,
-#'  catch_label = "kg",
-#'  spawning_biomass_label = "kg",
-#'  module = c(NULL, "DERIVED_QUANTITIES", "DERIVED_QUANTITIES")
-#'  )
+#'   dat = stockplotr::example_data,
+#'   interactive = FALSE,
+#'   catch_label = "kg",
+#'   spawning_biomass_label = "kg",
+#'   module = c(NULL, "DERIVED_QUANTITIES", "DERIVED_QUANTITIES")
+#' )
 table_projections <- function(
   dat,
   catch_label = NULL,
@@ -52,13 +52,13 @@ table_projections <- function(
   # if ("landings" %notin% names(catch_lab)) {
   #   catch_label <- c(catch_label, "landings_weight" = catch_label[["catch"]])
   # }
-  
+
   named_vec <- c(
     "catch" = catch_lab,
     "spawning_biomass" = "spawning_biomass",
     "fishing_mortality" = "fishing_mortality"
   )
-  
+
   # iterate through 3 label names
   lab_list <- purrr::map(
     names(named_vec),
@@ -98,15 +98,17 @@ table_projections <- function(
       # Labs
       # get unit labels if not NULL
       unit_name <- named_vec[grep(x, names(named_vec), fixed = TRUE)][[1]]
-      
+
       if (x == "fishing_mortality") {
         fishing_mortality_label <- ""
         unit_label <- fishing_mortality_label
         unit_name <- "fishing_mortality"
       } else if (is.null(get(paste0(unit_name, "_label")))) {
         unit_label <- filtered_data |>
-          dplyr::filter(grepl(x, unit_name),
-                        !is.na(unit)) |>
+          dplyr::filter(
+            grepl(x, unit_name),
+            !is.na(unit)
+          ) |>
           dplyr::pull(unit) |>
           unique()
         if (is.na(unit_label) || length(unit_label) == 0) {
@@ -116,7 +118,7 @@ table_projections <- function(
       } else {
         unit_label <- get(paste0(unit_name, "_label"))
       }
-      
+
       # merge data with uncertainty and unit labels
       merge_error(
         table_data = data,
@@ -131,7 +133,7 @@ table_projections <- function(
     purrr::compact(lab_list),
     dplyr::full_join,
     by = c("Year")
-    ) |>
+  ) |>
     gt::gt()
 
   final <- theme_table(combine_data)
@@ -165,7 +167,7 @@ table_projections <- function(
       table_df = final$`_data`
     )
   }
-  
+
   if (exists("selected_module")) {
     rm(selected_module, envir = .GlobalEnv)
   }

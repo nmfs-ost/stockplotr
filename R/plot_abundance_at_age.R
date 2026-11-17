@@ -112,7 +112,7 @@ plot_abundance_at_age <- function(
     unit_label = unit_label,
     scale_amount = scale_amount
   )
-  
+
   if (!is.null(facet) && facet == "none") {
     data <- b |>
       dplyr::group_by(year, age) |>
@@ -176,7 +176,7 @@ plot_abundance_at_age <- function(
       pop.naa.age.max,
       pop.naa.fish.min,
       pop.naa.fish.max,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     # Add key quantities to captions/alt text
@@ -187,7 +187,7 @@ plot_abundance_at_age <- function(
       pop.naa.age.max,
       pop.naa.fish.min,
       pop.naa.fish.max,
-      dir=figures_dir
+      dir = figures_dir
     )
 
     create_rda(
@@ -199,10 +199,10 @@ plot_abundance_at_age <- function(
       dat
     )
   }
-  
+
   if (exists("selected_module")) {
     rm(selected_module, envir = .GlobalEnv)
   }
-  
+
   plot
 }

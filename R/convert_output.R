@@ -16,16 +16,16 @@
 #'
 #' Options: "ss3", "bam", "fims", "rceattle"
 #' 
-#' Should match length of `files`.
+#' Should match length of `files` if >1 model.
 #' 
-#' @param fleet_names List of Character vectors. Names of fleets in the assessment model as
+#' @param fleet_names List of named character vectors. Names of fleets in the assessment model as
 #'  shortened in the output file or names of fleets to replace the native fleet
 #'  names in the output. For example, if fleet names in the model are 1, 2, 3
 #'  then fleet_names = c("fleet1" = 1, "fleet2" = 2, "fleet3" = 3).
 #'
 #'  Default: NULL
 #' 
-#' Should match length of `files`.
+#' Should match length of `files` if >1 model.
 #' 
 #' @param save_dir Path. Full file path to save the converted output file. If
 #' saved file name is not indicated, the file will be saved as "std_output.rda"
@@ -67,7 +67,7 @@
 #'   save_dir = here::here("standard_output.rda")
 #' )
 #' convert_output(
-#'   file = list("model1"=here::here("model1", "Report.sso", "model2"=here::here("model2", "Report.sso")),
+#'   file = list("model1"=here::here("model1", "Report.sso"), "model2"=here::here("model2", "Report.sso")),
 #'   model = c("ss3", "ss3"),
 #'   fleet_names = list("model1"=c("TWL", "NONTWL"), "model2"=c("Fishery1", "Survey1", "Survey2")),
 #'   save_dir = here::here("standard_output.rda")
@@ -82,20 +82,22 @@ convert_output <- function(
 ) {
 
   # Is user inputs a single model file and doesn't wrap it as a list object
+  # First check handles WHAM and Rceattle models, second check handles single model input,
+  # final check handles FIMS models
   if(any(grepl("Data_File|data_list", names(files))) || is.character(files) || is.data.frame(files)){
-    cli::cli_alert("`files` appears to represent a single model. Converting to list object.")
+    cli::cli_alert("`files` is a single model. Converting to list object.")
     files <- list(files)
     names(files) <- "model_1"
   }
 
-  if(!all(is.null(models)) & length(models) != length(files)){
-    cli::cli_alert_warning("Number of model types entered is different from number of models.")
+  if(!all(is.null(models)) && length(models) != length(files)){
+    cli::cli_alert_warning("Number of model types entered does not equal number of models.")
     models <- c(models, rep(NA, length(files)-length(models))) # can't store NULL in vector so make a string
     cli::cli_alert(glue::glue("Model types are: {paste0(\"'\",models,\"'\", collapse=\",\")}"))
   }
 
-  if(length(fleet_names) != length(files)){
-    cli::cli_alert_warning("Number of fleet_names enetered is different from number of models.")
+  if(!all(is.null(fleet_names)) && length(fleet_names) != length(files)){
+    cli::cli_alert_warning("Number of fleet_names entered is not equal to number of models.")
     fleet_names <- c(fleet_names, rep(list(NULL), length(files)-length(fleet_names)))
     names(fleet_names) <- names(files)
     cli::cli_alert(glue::glue("Fleets names are: {str(fleet_names)}"))
@@ -198,7 +200,7 @@ convert_output <- function(
         file <- readRDS(file)
       }
       if (is.character(file)) {
-        if (is.null(models)) {
+        if (is.null(models) || is.na(models[i])) {
           model <- switch(stringr::str_extract(file, "\\.([^.]+)$"),
             ".sso" = {
               cli::cli_alert_info("Processing Stock Synthesis output file...")
@@ -219,7 +221,7 @@ convert_output <- function(
             cli::cli_abort("Unknown file type. Please indicate model.")
           )
         }
-      } else if (is.null(models)){
+      } else if (is.null(models) || is.na(models[i])){
         model <- switch(class(file)[1],
           "FIMSFit" = {
             cli::cli_alert_info("Processing FIMS output file...")

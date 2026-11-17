@@ -73,14 +73,14 @@ plot_recruitment <- function(
     unit_label <- unique(prepared_data$unit)
     if (is.na(unit_label) || is.null(unit_label)) cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
   }
-  
+
   recruitment_label <- label_magnitude(
     label = "Recruitment",
     unit_label = unit_label,
     scale_amount = scale_amount,
     legend = FALSE
   )
-  
+
   # Check if contains 'rec devs' and filter out
   if (any(grepl("recruitment_deviations", unique(recruitment$label)))) {
     if (length(unique(recruitment$label)) > 1) {
@@ -194,10 +194,10 @@ plot_recruitment <- function(
       dir = figures_dir
     )
   }
-  
+
   if (exists("selected_module")) {
     rm(selected_module, envir = .GlobalEnv)
   }
-  
+
   final
 }
