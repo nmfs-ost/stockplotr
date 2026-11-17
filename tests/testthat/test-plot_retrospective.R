@@ -1,7 +1,7 @@
 count_geoms <- function(plot, build, geom){
-  sapply(seq_along(retro$layers), function(i) {
-    if (inherits(retro$layers[[i]]$geom, "GeomPoint")) {
-      layer_data <- built$data[[i]]
+  sapply(seq_along(plot$layers), function(i) {
+    if (inherits(plot$layers[[i]]$geom, "GeomPoint")) {
+      layer_data <- build$data[[i]]
       if (nrow(layer_data) == 0) return(0)
       length(unique(layer_data$group))
     } else {
@@ -27,7 +27,7 @@ test_that("plot_retrospective with SS3 models", {
     built <- ggplot2::ggplot_build(retro)
     
     expect_equal(sum(count_geoms(retro, built, "GeomLine")), 6)
-    expect_equal(sum(count_geoms(retro, build, "GeomPoint")), 6)
+    expect_equal(sum(count_geoms(retro, built, "GeomPoint")), 6)
 })
 
 # test_that("plot_retrospective with FIMS models", {
