@@ -11,6 +11,7 @@ plot_index(
   facet = NULL,
   interactive = TRUE,
   module = NULL,
+  model = NULL,
   focus = NULL,
   interval = 0.95,
   log = FALSE,

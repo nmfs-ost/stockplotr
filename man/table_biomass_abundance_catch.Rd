@@ -15,6 +15,7 @@ table_biomass_abundance_catch(
   method = "sum",
   module = NULL,
   label = NULL,
+  model = NULL,
   make_rda = FALSE,
   tables_dir = getwd()
 )

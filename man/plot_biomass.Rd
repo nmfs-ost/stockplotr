@@ -13,6 +13,7 @@ plot_biomass(
   era = NULL,
   unit_label = NULL,
   module = NULL,
+  model = NULL,
   scale_amount = 1,
   relative = FALSE,
   make_rda = FALSE,

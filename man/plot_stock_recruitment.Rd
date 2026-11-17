@@ -11,6 +11,7 @@ plot_stock_recruitment(
   interactive = TRUE,
   era = NULL,
   module = NULL,
+  model = NULL,
   scale_amount = 1,
   make_rda = FALSE,
   figures_dir = getwd()

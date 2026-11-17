@@ -11,6 +11,7 @@ table_index(
   group = NULL,
   method = "sum",
   module = NULL,
+  model = NULL,
   label = NULL,
   digits = 2,
   make_rda = FALSE,

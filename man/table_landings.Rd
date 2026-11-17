@@ -12,6 +12,7 @@ table_landings(
   group = NULL,
   method = "sum",
   module = NULL,
+  model = NULL,
   label = NULL,
   digits = 2,
   scale_amount = 1,

@@ -10,6 +10,7 @@ table_projections(
   spawning_biomass_label = NULL,
   interactive = TRUE,
   module = NULL,
+  model = NULL,
   make_rda = FALSE,
   tables_dir = getwd()
 )

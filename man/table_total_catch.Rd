@@ -10,6 +10,7 @@ table_total_catch(
   era = NULL,
   interactive = TRUE,
   module = NULL,
+  model = NULL,
   scale_amount = 1,
   digits = 2,
   make_rda = FALSE,

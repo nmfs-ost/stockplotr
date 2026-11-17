@@ -11,6 +11,7 @@ plot_natural_mortality(
   era = NULL,
   interactive = TRUE,
   module = NULL,
+  model = NULL,
   make_rda = FALSE,
   figures_dir = getwd(),
   ...

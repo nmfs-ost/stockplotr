@@ -13,6 +13,7 @@ plot_catch_at_age(
   proportional = TRUE,
   interactive = TRUE,
   module = NULL,
+  model = NULL,
   make_rda = FALSE,
   figures_dir = getwd()
 )

@@ -8,12 +8,14 @@ filter_data(
   dat,
   label_name,
   module = NULL,
+  model = NULL,
   era = NULL,
   geom,
   group = NULL,
   facet = NULL,
   scale_amount = 1,
-  interactive = TRUE
+  interactive = TRUE,
+  allow_multiple_models = TRUE
 )
 }
 \arguments{
@@ -67,6 +69,10 @@ Default: 1}
 \item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
 Default: \code{FALSE}}
+
+\item{allow_multiple_models}{Logical. Whetehr to allow multiple models.
+
+Default: TRUE}
 }
 \value{
 a data frame that is preformatted for plotting with ggplot2.

@@ -12,6 +12,7 @@ plot_spr(
   ref_line = "target",
   era = "time",
   module = NULL,
+  model = NULL,
   interactive = TRUE,
   make_rda = FALSE,
   figures_dir = getwd(),

@@ -14,6 +14,7 @@ plot_spawning_biomass(
   era = NULL,
   lbs = lifecycle::deprecated(),
   module = NULL,
+  model = NULL,
   scale_amount = 1,
   relative = FALSE,
   make_rda = FALSE,
@@ -118,6 +119,14 @@ The folder is created within the path if it does not exist.}
 Default: \code{FALSE}}
 
 \item{...}{Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}
+
+\item{mdoel}{Character vector. (Optional) Model name found in \code{dat$model}.
+If selecting >1 model, place them in a vector like c("model1", "model2").
+
+Default: NULL
+
+If the interactive and >1 model is found, user will select the
+model in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 }
 \value{
 A plot showing spawning biomass over time.

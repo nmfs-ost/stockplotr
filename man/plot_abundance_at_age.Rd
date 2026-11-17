@@ -11,6 +11,7 @@ plot_abundance_at_age(
   scale_amount = 1,
   proportional = TRUE,
   module = NULL,
+  model = NULL,
   interactive = TRUE,
   make_rda = FALSE,
   figures_dir = getwd()

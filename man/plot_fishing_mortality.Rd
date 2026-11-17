@@ -12,6 +12,7 @@ plot_fishing_mortality(
   ref_line = "msy",
   era = NULL,
   module = NULL,
+  model = NULL,
   make_rda = FALSE,
   figures_dir = getwd(),
   interactive = TRUE,

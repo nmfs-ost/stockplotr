@@ -14,6 +14,7 @@ plot_discard(
   scale_amount = 1,
   interactive = TRUE,
   module = NULL,
+  model = NULL,
   make_rda = FALSE,
   figures_dir = getwd()
 )

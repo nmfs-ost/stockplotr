@@ -11,6 +11,7 @@ plot_selectivity(
   facet = NULL,
   interactive = TRUE,
   module = NULL,
+  model = NULL,
   make_rda = FALSE,
   figures_dir = getwd(),
   ...
