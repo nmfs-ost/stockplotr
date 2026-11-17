@@ -63,7 +63,7 @@ test_that("plot_spawning_biomass generates plots for multiple models", {
       "model2" = r4ss::SS_output(test_path("fixtures", "ss3_models", "models", "Empirical_Wtatage_Age_Selex"))
     ))
 
-    expect_no_error(plt <- plot_spawning_biomass(dat, module="derived_quants"))
+    expect_no_error(plt <- plot_spawning_biomass(dat, module="derived_quants", model=c("model1", "model2")))
     expect_s3_class(plt, "gg")
 
     p <- ggplot2::ggplot_build(plt)

@@ -62,7 +62,8 @@ test_that("filter_data handles data frames", {
     dat = mm_dat,
     label_name = "biomass",
     geom = "point",
-    interactive = FALSE
+    interactive = FALSE,
+    model = c("model_one", "model_two")
   )
   expect_setequal(unique(filtered_list$model), c("model_one", "model_two"))
   expect_setequal(unique(filtered_list$group_var), c("model_one", "model_two"))
