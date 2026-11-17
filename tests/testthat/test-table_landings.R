@@ -37,28 +37,6 @@ test_that("table_landings generates plots without errors", {
   # )
 })
 
-# test_that("rda file made when indicated", {
-#   # export rda
-#   table_landings(
-#     dat = stockplotr::example_data,
-#     unit_label = "mt",
-#     era = NULL,
-#     interactive = FALSE,
-#     module = "CATCH",
-#     make_rda = TRUE,
-#     tables_dir = getwd()
-#   )
-
-#   # expect that both tables dir and the landings_table.rda file exist
-#   expect_true(dir.exists(fs::path(getwd(), "tables")))
-#   expect_true(file.exists(fs::path(getwd(), "tables", "landings_table.rda")))
-
-#   # erase temporary testing files
-#   file.remove(fs::path(getwd(), "captions_alt_text.csv"))
-#   file.remove(fs::path(getwd(), "key_quantities.csv"))
-#   unlink(fs::path(getwd(), "tables"), recursive = T)
-# })
-
 test_that("table_landings generates error with incorrect module", {
   # expect error
   # Need to test this -- not exactly the right test/result
@@ -75,31 +53,23 @@ test_that("table_landings generates error with incorrect module", {
   )
 })
 
-
-# test_that("rda file made when indicated", {
-#   # export rda
-#   table_landings(
-#     dat = stockplotr::example_data,
-#     interactive = FALSE,
-#     make_rda = TRUE,
-#     tables_dir = getwd()
-#   )
-
-#   # load the rda file and check that it contains the expected object
-#   load(fs::path(getwd(), "tables", "landings_table.rda"))
-#   # expect rda contains three objects: table, caption, and latex table
-#   expect_false(
-#     is.null(rda$table)
-#   )
-#   expect_false(
-#     is.null(rda$caption)
-#   )
-#   expect_false(
-#     is.null(rda$latex_table)
-#   )
-
-#   expect_true(rda$caption == "Landed catch by fleet and year in  (mt).")
-
-#   # erase temporary testing files
-#   check_and_remove_tmp_files("landings_table.rda", figs_or_tables="tables")
-# })
+test_that("table_landings tabulates the observed landings, or the labels given", {
+  # vermilion_snapper also has predicted landings, whose labels contain
+  # "landings"
+  dat <- stockplotr::vermilion_snapper
+  tbl <- suppressMessages(table_landings(dat, interactive = FALSE))
+  cols <- names(tbl[["_data"]])
+  expect_true(all(grepl("^Year$|Observed", cols)))
+  expect_false(any(grepl("Predicted", cols)))
+  # A label given is used, even when observed landings exist
+  tbl <- suppressMessages(table_landings(
+    stockplotr::example_data,
+    label = "landings_predicted_weight", interactive = FALSE
+  ))
+  cols <- names(tbl[["_data"]])
+  expect_true(any(grepl("Predicted Weight", cols)))
+  expect_false(any(grepl("Observed", cols)))
+  # pollock reports its observed landings as "catch"
+  tbl <- suppressMessages(table_landings(stockplotr::pollock, interactive = FALSE))
+  expect_s3_class(tbl, "gt_tbl")
+})

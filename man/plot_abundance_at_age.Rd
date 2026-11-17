@@ -29,7 +29,7 @@ NULL}
 
 \item{unit_label}{String. Abundance units
 
-Default: "fish"}
+Default: NULL}
 
 \item{scale_amount}{Number. A number describing how much to scale down the abundance at
 age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders

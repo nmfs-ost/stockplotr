@@ -3,6 +3,7 @@ BMSY
 Barbeaux
 Birthseason
 CPUE
+Carvalho
 Dorn
 FIMS
 FLIMIT
@@ -31,6 +32,7 @@ StockSmart
 Subseason
 aa
 agedbase
+al
 alttext
 asar
 assmt
@@ -56,6 +58,7 @@ dataframe's
 diagonostic
 dplyr
 EffN
+et
 facetting
 FIMS
 fims
@@ -85,6 +88,7 @@ McAllister
 mis
 Modelling
 MSY
+misspecification
 msy
 natively
 NOAA
@@ -104,6 +108,7 @@ Rceattle
 rceattle
 Rda
 rda
+rds
 rda's
 rdat
 Rmarkdown

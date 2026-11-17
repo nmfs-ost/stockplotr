@@ -65,7 +65,7 @@ Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
 \item{unit_label}{String. Biomass units
 
-Default: "mt"}
+Default: NULL}
 
 \item{module}{Character vector. (Optional) Module name found in \code{dat$module_name}.
 If selecting >1 module, place them in a vector like c("module1", "module2").

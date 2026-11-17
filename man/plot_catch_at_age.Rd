@@ -36,7 +36,7 @@ Options: "early", "time", "fore" (forecast), or NULL (all data)}
 
 \item{unit_label}{String. Units of catch used to label the axis
 
-Default: "mt"}
+Default: NULL}
 
 \item{scale_amount}{Number. A number describing how much to scale down the catch at
 age. Please choose a value ranging from 1-1,000,000,000 (one billion) in orders

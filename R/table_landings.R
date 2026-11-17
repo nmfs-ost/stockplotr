@@ -24,10 +24,13 @@
 #' rda files ("tables") that will be created if the argument `make_rda` = TRUE.
 #'
 #' Default: the working directory (`getwd()`)
-#' @param label String. The label that will be chosen from the input file. If unspecified,
-#' the function will search the "label" column and use the first matching label
-#' in this ordered list: "landings_weight",  "landings_numbers", "landings_expected",
-#' "landings_predicted", "landings".
+#' @param label String or vector of strings. The labels in the "label" column
+#' of `dat` to tabulate (e.g., "landings_predicted_weight"). If unspecified,
+#' the observed landings are used: the first of "landings_observed",
+#' "landings_observed_weight", "landings_observed_numbers", or "catch" (when
+#' `dat` also has "catch_predicted"), as in [plot_landings()]. When `dat`
+#' has none of these, the first label containing "landings" is used, with a
+#' message.
 #'
 #' Default: NULL
 #'
@@ -43,7 +46,8 @@
 #'
 #' @examples
 #' table_landings(stockplotr::example_data,
-#'   interactive = FALSE)
+#'   interactive = FALSE
+#' )
 #'
 #' table_landings(
 #'   stockplotr::example_data,
@@ -66,10 +70,14 @@ table_landings <- function(
 ) {
   check_data(dat)
 
-  # Filter data for landings
+  # Filter data for landings: the labels given, or the observed landings
   prepared_data <- filter_data(
     dat = dat,
-    label_name = "landings",
+    label_name = if (is.null(label)) {
+      landings_label_name(dat, module = module)
+    } else {
+      paste0("^(", paste(label, collapse = "|"), ")$")
+    },
     geom = "line",
     era = era,
     module = module,
@@ -118,7 +126,7 @@ table_landings <- function(
   table_data <- table_data_info[[1]]
   indexed_vars <- table_data_info[[2]]
   id_col_vals <- table_data_info[[3]]
-  
+
   if (is.null(unit_label)) {
     # remove fleet names from table_data colnames
     fleet_pattern <- paste0("_(", paste(fleets, collapse = "|"), ")$")
@@ -133,7 +141,7 @@ table_landings <- function(
       unit_label <- ""
     }
   }
-  
+
   # set unit label if scaled
   landings_label <- label_magnitude(
     label = "",
@@ -141,7 +149,7 @@ table_landings <- function(
     scale_amount = scale_amount
   )
 
-    # TODO: add check if there is a landings column for every error column -- if not remove the error (can keep landings)
+  # TODO: add check if there is a landings column for every error column -- if not remove the error (can keep landings)
 
   # merge error and landings columns and rename
   final_tab <- merge_error(
@@ -159,15 +167,15 @@ table_landings <- function(
   if (make_rda == TRUE) {
     # Obtain relevant key quantities for captions/alt text
     landings.units <- unit_label
-    
+
     # calculate & export key quantities
     export_kqs(landings.units, dir = tables_dir)
-    
+
     # Add key quantities to captions/alt text
     insert_kqs(landings.units, dir = tables_dir)
-    
+
     create_rda(
-      object = final[[1]],
+      object = final,
       # get name of function and remove "table_" from it
       topic_label = gsub("table_", "", utils::tail(as.character(sys.call()[[1]]), n = 1)),
       fig_or_table = "table",
@@ -177,10 +185,10 @@ table_landings <- function(
       table_df = final
     )
   }
-  
+
   if (exists("selected_module")) {
     rm(selected_module, envir = .GlobalEnv)
   }
-  
+
   final
 }

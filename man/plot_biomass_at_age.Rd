@@ -29,7 +29,7 @@ NULL}
 
 \item{unit_label}{String. Abundance units
 
-Default: "fish"}
+Default: NULL}
 
 \item{scale_amount}{Number. A number describing how much to scale down the biomass at
 age. For example, scale_amount = 100 would scale down a value
