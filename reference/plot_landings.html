@@ -218,6 +218,11 @@ the rda will be exported to the folder indicated in the argument "figures_dir".<
 translated to a standardized output (<a href="convert_output.html">convert_output</a>).
 There are options to return a <code>ggplot2</code> object or export an .rda object
 containing associated caption and alternative text for the figure.</p>
+<p>The landings plotted are the observed landings: "landings_observed",
+"landings_observed_weight", "landings_observed_numbers", or "catch" when
+the output also has "catch_predicted" (the first of these in <code>dat</code>). When
+<code>dat</code> has none of these, the first label containing "landings" is
+plotted, with a message.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -233,8 +238,6 @@ containing associated caption and alternative text for the figure.</p>
 <span class="r-in"><span>  interactive <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>  make_rda <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Multiple module names found in data. </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Environment not interactive. Selecting CATCH.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Ignoring unknown labels:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">linetype</span> : <span style="color: #0000BB;">"Fleet"</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">shape</span> : <span style="color: #0000BB;">"Fleet"</span></span>
@@ -246,8 +249,6 @@ containing associated caption and alternative text for the figure.</p>
 <span class="r-in"><span>  interactive <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>  make_rda <span class="op">=</span> <span class="cn">FALSE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Multiple module names found in data. </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Environment not interactive. Selecting CATCH.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Ignoring unknown labels:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">linetype</span> : <span style="color: #0000BB;">"Fleet"</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> <span style="color: #00BB00;">shape</span> : <span style="color: #0000BB;">"Fleet"</span></span>
