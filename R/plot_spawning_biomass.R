@@ -59,7 +59,7 @@
 #'
 #' If the interactive and >1 module_name is found, user will select the
 #' module_name in the console. @seealso [filter_data()]
-#' @param mdoel Character vector. (Optional) Model name found in `dat$model`.
+#' @param model Character vector. (Optional) Model name found in `dat$model`.
 #' If selecting >1 model, place them in a vector like c("model1", "model2").
 #'
 #' Default: NULL
@@ -165,7 +165,8 @@ plot_spawning_biomass <- function(
     module = module,
     model = model,
     scale_amount = scale_amount,
-    interactive = interactive
+    interactive = interactive,
+    allow_multiple_models = TRUE
   )
   # extract unit if unit_label is null and set lbs to F by default
   lbs <- FALSE
@@ -221,7 +222,7 @@ plot_spawning_biomass <- function(
     group = group,
     # add check in case facet is returned as character(0)
     facet = if (length(facet) > 0) facet else NULL,
-    # ...
+    ...
   )
   # Add reference line
   if (relative) {

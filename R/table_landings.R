@@ -196,5 +196,3 @@ table_landings <- function(
   final
 }
 
-# table_landings(result)
-

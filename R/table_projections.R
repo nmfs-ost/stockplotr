@@ -191,5 +191,3 @@ table_projections <- function(
 
   final
 }
-
-# table_projections(result)

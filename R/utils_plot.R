@@ -675,7 +675,7 @@ cap_first_letter <- function(s) {
 #' @inheritParams plot_spawning_biomass
 #' @param label_name String. Name of the label used to filter
 #' the data.
-#' @param allow_multiple_models Logical. Whetehr to allow multiple models.
+#' @param allow_multiple_models Logical. Whether to allow multiple models.
 #' 
 #' Default: TRUE
 #'
