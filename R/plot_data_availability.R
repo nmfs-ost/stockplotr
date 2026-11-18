@@ -118,7 +118,7 @@ plot_data_availability <- function(
 # fleet, and year, with `type` a factor in the order the types are plotted
 data_availability <- function(dat) {
   if (inherits(dat, "FIMSFrame")) {
-    dat <- methods::slot(dat, "data")
+    dat <- dat@data
   }
   fims_input <- is.data.frame(dat) && !"label" %in% names(dat) &&
     all(c("type", "fleet", "timing", "observed") %in% names(dat))

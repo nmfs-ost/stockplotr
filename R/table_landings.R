@@ -133,9 +133,9 @@ table_landings <- function(
     cleaned_colnames <- gsub(fleet_pattern, "", colnames(table_data[[1]]))
     unit_label <- prepared_data |>
       dplyr::filter(label %in% cleaned_colnames) |>
-      dplyr::select(unit) |>
+      dplyr::select("unit") |>
       unique() |>
-      dplyr::pull(unit)
+      dplyr::pull("unit")
     if (is.na(unit_label)) {
       cli::cli_alert_warning("No unit label found in the data. Please provide a unit label using the 'unit_label' argument.")
       unit_label <- ""

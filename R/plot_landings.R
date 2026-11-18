@@ -154,7 +154,7 @@ plot_landings <- function(
     labels <- unique(landings_data$label)
     unit_label <- prepared_data |>
       dplyr::filter(label %in% labels) |>
-      dplyr::pull(unit) |>
+      dplyr::pull("unit") |>
       unique()
     unit_label <- unit_label[!is.na(unit_label)][1]
     if (is.na(unit_label)) {
