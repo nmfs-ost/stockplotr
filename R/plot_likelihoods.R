@@ -13,7 +13,7 @@
 #' likelihood components into an additional "total" likelihood wheb plotting
 #' fleet specific likelihoods. Only applied when `by_fleet=TRUE`.
 #' 
-#' Default:FALSE
+#' Default: FALSE
 #' 
 #' @return A plot showing the value of likelihood components, optionally
 #' across fleets.
@@ -42,6 +42,9 @@ plot_likelihoods <- function(
     make_rda = FALSE,
     figures_dir = getwd(),
     interactive = TRUE,
+    geom="bar",
+    group=NULL,
+    facet=NULL,
     ...
 ){
     check_data(dat)
