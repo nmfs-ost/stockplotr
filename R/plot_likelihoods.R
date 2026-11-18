@@ -90,7 +90,10 @@ plot_likelihoods <- function(
             dplyr::summarise(
                 fleet="Total",
                 estimate = sum(estimate)
-            ) |> dplyr::bind_rows(plot_data)
+            ) |> dplyr::bind_rows(plot_data) |>
+            dplyr::mutate(
+                fleet = factor(fleet, levels=c("Total", unique(dat$fleet)))
+            )
     }
     
     group <- processing[[2]]
