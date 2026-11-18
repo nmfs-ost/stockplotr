@@ -141,9 +141,9 @@ plot_retrospective <- function(
   func_pars <- list(
     dat = retro_dat, 
     group="peel",
-    model = "All", # turn this on to bypass interactive model selection and plot all available models
-    make_rda=FALSE, # don't want to overwrite files from non-retro plots
-    ...
+    model = names(end_years), # turn this on to bypass interactive model selection and plot all available models
+    make_rda=FALSE # don't want to overwrite files from non-retro plots
+    # ...
   )
 
   plt <- do.call(func_name, func_pars)
@@ -226,5 +226,3 @@ plot_retrospective <- function(
   plt
 
 }
-
-# plot_retrospective(dat)
