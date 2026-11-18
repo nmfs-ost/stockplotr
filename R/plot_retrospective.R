@@ -1,4 +1,4 @@
-#' Plot retrospetive peels
+#' Plot retrospective peels
 #' 
 #' Plot a given quantity across multiple models with differing 
 #' end years, so as to plot retrospective peels.
@@ -12,7 +12,7 @@
 #' Default: 0
 #' 
 #' @param quantity String. Assessment quantity to plot (e.g., spawning biomass, 
-#' biomass, reruitment, etc.). Should correspond to an existing `plot_*` function.
+#' biomass, recruitment, etc.). Should correspond to an existing `plot_*` function.
 #' 
 #' Default: "spawning_biomass" 
 #' 
@@ -21,9 +21,9 @@
 #' 
 #' Default: TRUE
 #' 
-#' @param mohns_rho Numeric. Externally calculated value(s) of mohn's rho. Should be
+#' @param mohns_rho Numeric. Externally calculated value(s) of Mohn's rho. Should be
 #' either a single value or of length `end_years-1`. Value of NULL disables
-#' reporting Mohn's rho statsitic on plot. If vector, names of vector entries should
+#' reporting Mohn's rho statistic on plot. If vector, names of vector entries should
 #' match with model names.
 #' 
 #' Default: NULL

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_retrospective.R
 \name{plot_retrospective}
 \alias{plot_retrospective}
-\title{Plot retrospetive peels}
+\title{Plot retrospective peels}
 \usage{
 plot_retrospective(
   dat,
@@ -30,7 +30,7 @@ model. Should be <= 0.
 Default: 0}
 
 \item{quantity}{String. Assessment quantity to plot (e.g., spawning biomass,
-biomass, reruitment, etc.). Should correspond to an existing \verb{plot_*} function.
+biomass, recruitment, etc.). Should correspond to an existing \verb{plot_*} function.
 
 Default: "spawning_biomass"}
 
@@ -39,9 +39,9 @@ for each model peel.
 
 Default: TRUE}
 
-\item{mohns_rho}{Numeric. Externally calculated value(s) of mohn's rho. Should be
+\item{mohns_rho}{Numeric. Externally calculated value(s) of Mohn's rho. Should be
 either a single value or of length \code{end_years-1}. Value of NULL disables
-reporting Mohn's rho statsitic on plot. If vector, names of vector entries should
+reporting Mohn's rho statistic on plot. If vector, names of vector entries should
 match with model names.
 
 Default: NULL}
