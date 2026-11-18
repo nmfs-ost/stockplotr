@@ -1292,7 +1292,7 @@ filter_interactive <- function(
           )
           question1 <- if(length(selection)==0 || identical(selection, "")){
             options[1]
-          }else if(selection=="All"){
+          }else if("All" %in% selection){
             options[-length(options)]
           }else{
             selection
