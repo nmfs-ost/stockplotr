@@ -118,7 +118,7 @@ save_all_plots <- function(
   # plottab_function_files <- all_R_files[grepl("plot_|table_", all_R_files)]
   # # Remove table_afsc_tier function for now
   # plottab_function_files <- plottab_function_files[!grepl("afsc", plottab_function_files)]
-  helper_functions <- c("plot_timeseries", "plot_aa", "plot_obsvpred", "plot_error", "table_afsc_tier")
+  helper_functions <- c("plot_timeseries", "plot_aa", "plot_obsvpred", "plot_error", "plot_retrospective", "table_afsc_tier")
 
   # plottab_functions <- sub("\\.[^\\.]*$", "", plottab_function_files)
   all_functions <- ls(getNamespace("stockplotr"))
