@@ -64,7 +64,7 @@ table_total_catch <- function(
     geom = "line",
     era = era,
     module = module,
-    model = NULL,
+    model = model,
     scale_amount = scale_amount,
     interactive = interactive,
     allow_multiple_models = FALSE
