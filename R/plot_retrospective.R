@@ -135,8 +135,9 @@ plot_retrospective <- function(
   func_pars <- list(
     dat = retro_dat, 
     group="peel",
-    make_rda=FALSE # don't want to overwrite files from non-retro plots
-    # ...
+    model = "All", # turn this on to bypass interactive model selection and plot all available models
+    make_rda=FALSE, # don't want to overwrite files from non-retro plots
+    ...
   )
 
   plt <- do.call(func_name, func_pars)
@@ -177,7 +178,7 @@ plot_retrospective <- function(
     mohns_df$vjust = 0.5 + seq_along(mohns_rho-1)*1.5
     mohns_df$label <- paste0(mohns_df$model, " Mohns Rho:\t", mohns_df$label)
 
-    plt + ggplot2::geom_text(
+    plt <- plt + ggplot2::geom_text(
       data = mohns_df,
       ggplot2::aes(
         x=Inf,
@@ -219,3 +220,5 @@ plot_retrospective <- function(
   plt
 
 }
+
+# plot_retrospective(dat)
