@@ -2,10 +2,11 @@
 % Please edit documentation in R/plot_discard.R
 \name{plot_discard}
 \alias{plot_discard}
-\title{Plot discards}
+\title{Plot observed and predicted discards}
 \usage{
 plot_discard(
   dat,
+  geom = "line",
   group = NULL,
   facet = NULL,
   unit_label = NULL,
@@ -15,8 +16,12 @@ plot_discard(
   interactive = TRUE,
   module = NULL,
   model = NULL,
+  predicted = TRUE,
+  interval = 0.95,
+  tolerance = 0.001,
   make_rda = FALSE,
-  figures_dir = getwd()
+  figures_dir = getwd(),
+  ...
 )
 }
 \arguments{
@@ -25,6 +30,14 @@ returned from \link[stockplotr]{convert_output}.
 
 If inputting a list of tibbles, the first tibble's reference point defined
 in \code{ref_line} is used to plot a reference line or calculate relative spawning biomass.}
+
+\item{geom}{String. How the discards are drawn. Default: "line".
+Options: "line" draws the predicted discards as lines (with intervals as
+ribbons) and the observed discards as points, or the observed discards as
+lines when there are no predicted discards to show; "bar" draws the
+observed discards of each fleet as side-by-side bars for each year (pass
+\code{position = "stack"} to stack them); "point" draws the observed discards
+as points.}
 
 \item{group}{String. Single column that groups the data.
 
@@ -83,6 +96,20 @@ Default: NULL
 
 If the interactive and >1 model is found, user will select the
 model in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
+\item{predicted}{Logical. TRUE (Default) or FALSE; show the discards
+predicted by the model as lines, with the observed discards as points, to
+show the fit to the observed discards. The predicted discards are shown
+only when they differ from the observed discards by more than \code{tolerance}.}
+
+\item{interval}{Number. Coverage of the intervals drawn as ribbons around
+the lines (e.g., 0.95), based on the observation error of the discards.
+NULL draws no intervals. Default: 0.95}
+
+\item{tolerance}{Number. The predicted discards are shown only when the
+range of their differences from the observed discards is more than this
+proportion of the largest observed discards, as in \code{\link[=plot_landings]{plot_landings()}}.
+Models that fit the discards almost exactly otherwise show two identical
+series. Use 0 to always show the predicted discards. Default: 0.001 (0.1\%)}
 
 \item{make_rda}{Logical. TRUE/FALSE; indicate whether to save the object and
 make an automated caption and alternative text in the form of an \code{rda} object. If TRUE,
@@ -95,18 +122,39 @@ Default: \code{FALSE}.}
 Default: \code{getwd()}
 
 The folder is created within the path if it does not exist.}
+
+\item{...}{Arguments passed to the geom that draws the main series
+(\code{\link[ggplot2:geom_line]{ggplot2::geom_line()}} for the predicted discards, \code{\link[ggplot2:geom_col]{ggplot2::geom_col()}}
+for bars, e.g., \code{position = "stack"}).}
 }
 \value{
 A ggplot showing discards over time, usually by fleet.
 }
 \description{
-Plot discards as a line graph.
+Plot observed and predicted discards
 }
 \details{
 The input is from an assessment model output file
 translated to a standardized output (\link[stockplotr]{convert_output}).
 There are options to return a \code{ggplot2} object or export an .rda object
 containing associated caption and alternative text for the figure.
+
+When \code{dat} has observed and predicted discards ("discard_observed" and
+"discard_predicted") and \code{predicted = TRUE}, the predicted discards are
+drawn as lines in the color of each fleet, with the observed discards as
+points, for the fleets and years with observed discards, as in
+\code{\link[=plot_landings]{plot_landings()}}. Use \code{facet = "fleet"} to plot each fleet in its own
+panel. When the observed and predicted discards are the same (within
+\code{tolerance}), only the observed discards are drawn, as lines, with a
+message. Otherwise, the observed discards (or the first label starting with
+"discard") are drawn as lines.
+
+The intervals are lognormal, from the log-scale standard error or the
+coefficient of variation of the discards, as in \code{\link[=plot_index]{plot_index()}}. Around
+the predicted discards, they show the range in which observations are
+expected given the fit and the observation error; observed discards
+outside the ribbon are poorly fit. Discards with another type of
+uncertainty are drawn without intervals.
 }
 \note{
 All plotting functions automatically recognize indexing variables and will
@@ -118,7 +166,21 @@ plot_discard(
   unit_label = "fish",
   module = "DISCARD_OUTPUT"
 )
+# Fit to the discards: observed (points) and predicted (lines, with 95\%
+# intervals), one panel per fleet
+plot_discard(
+  dat = stockplotr::vermilion_snapper,
+  facet = "fleet",
+  interactive = FALSE
+)
+# Observed discards of each fleet as stacked bars
+plot_discard(
+  dat = stockplotr::vermilion_snapper,
+  geom = "bar",
+  position = "stack",
+  interactive = FALSE
+)
 }
 \seealso{
-\code{\link[=convert_output]{convert_output()}}, \code{\link[=plot_timeseries]{plot_timeseries()}}, \code{\link[=calculate_reference_point]{calculate_reference_point()}}, \code{\link[=reference_line]{reference_line()}}, \code{\link[=filter_data]{filter_data()}}, \code{\link[=process_data]{process_data()}}, \code{\link[=export_kqs]{export_kqs()}}, \code{\link[=insert_kqs]{insert_kqs()}}, \code{\link[=create_rda]{create_rda()}}
+\code{\link[=convert_output]{convert_output()}}, \code{\link[=plot_landings]{plot_landings()}}, \code{\link[=plot_timeseries]{plot_timeseries()}}, \code{\link[=filter_data]{filter_data()}}, \code{\link[=process_data]{process_data()}}, \code{\link[=export_kqs]{export_kqs()}}, \code{\link[=insert_kqs]{insert_kqs()}}, \code{\link[=create_rda]{create_rda()}}
 }
