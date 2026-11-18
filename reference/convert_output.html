@@ -105,7 +105,13 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">convert_output</span><span class="op">(</span><span class="va">files</span>, models <span class="op">=</span> <span class="cn">NULL</span>, fleet_names <span class="op">=</span> <span class="cn">NULL</span>, save_dir <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">convert_output</span><span class="op">(</span></span>
+<span>  <span class="va">files</span>,</span>
+<span>  models <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fleet_names <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  save_dir <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  start_year <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -115,8 +121,8 @@
 <dl><dt id="arg-files">files<a class="anchor" aria-label="anchor" href="#arg-files"></a></dt>
 <dd><p>List of Paths. Assessment model output file paths. Currently accepts SS3
 <code>r4ss::ss_output()</code> or Report.sso file (being deprecated), BAM .rda file, Rceattle model object,
-and FIMS output (the tibble returned by <code><a href="https://NOAA-FIMS.github.io/FIMS/reference/get_FIMSFit.html" class="external-link">FIMS::get_estimates()</a></code>, a <code>FIMSFit</code> object, or an
-.rds file with either). If multiple elements, all valid models will be read, converted, and
+and FIMS output (the tibble returned by <code><a href="https://NOAA-FIMS.github.io/FIMS/reference/get_FIMSFit.html" class="external-link">FIMS::get_estimates()</a></code>, a <code>FIMSFit</code> object, or an .rds
+file with either). If multiple elements, all valid models will be read, converted, and
 appended together.</p>
 <p><code>names(files)</code> will be used as the name of the model in the output.</p></dd>
 
@@ -125,16 +131,16 @@ appended together.</p>
 <dd><p>Character vector Assessment model used in evaluation</p>
 <p>Default: NULL</p>
 <p>Options: "ss3", "bam", "fims", "rceattle"</p>
-<p>Should match length of <code>files</code>.</p></dd>
+<p>Should match length of <code>files</code> if &gt;1 model.</p></dd>
 
 
 <dt id="arg-fleet-names">fleet_names<a class="anchor" aria-label="anchor" href="#arg-fleet-names"></a></dt>
-<dd><p>List of Character vectors. Names of fleets in the assessment model as
+<dd><p>List of named character vectors. Names of fleets in the assessment model as
 shortened in the output file or names of fleets to replace the native fleet
 names in the output. For example, if fleet names in the model are 1, 2, 3
 then fleet_names = c("fleet1" = 1, "fleet2" = 2, "fleet3" = 3).</p>
 <p>Default: NULL</p>
-<p>Should match length of <code>files</code>.</p></dd>
+<p>Should match length of <code>files</code> if &gt;1 model.</p></dd>
 
 
 <dt id="arg-save-dir">save_dir<a class="anchor" aria-label="anchor" href="#arg-save-dir"></a></dt>

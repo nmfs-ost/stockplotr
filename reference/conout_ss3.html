@@ -114,27 +114,21 @@ file or returned object from <code>r4ss::ss_output()</code>.</p>
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-file">file<a class="anchor" aria-label="anchor" href="#arg-file"></a></dt>
-<dd><p>Path. Assessment model output file path. Currently accepts SS3
-<code>r4ss::ss_output()</code> or Report.sso file (being deprecated), BAM .rda file, Rceattle model object, and FIMS output
-(the tibble returned by <code><a href="https://NOAA-FIMS.github.io/FIMS/reference/get_FIMSFit.html" class="external-link">FIMS::get_estimates()</a></code>, a <code>FIMSFit</code> object, or an .rds file with either).</p></dd>
-
-
-<dt id="arg-out-new">out_new<a class="anchor" aria-label="anchor" href="#arg-out-new"></a></dt>
+<dl><dt id="arg-out-new">out_new<a class="anchor" aria-label="anchor" href="#arg-out-new"></a></dt>
 <dd><p>The empty standard output data frame from
 <code><a href="convert_output.html">convert_output()</a></code>, which sets the columns of the output.</p></dd>
 
 
 <dt id="arg-fleet-names">fleet_names<a class="anchor" aria-label="anchor" href="#arg-fleet-names"></a></dt>
-<dd><p>List of Character vectors. Names of fleets in the assessment model as
+<dd><p>List of named character vectors. Names of fleets in the assessment model as
 shortened in the output file or names of fleets to replace the native fleet
 names in the output. For example, if fleet names in the model are 1, 2, 3
 then fleet_names = c("fleet1" = 1, "fleet2" = 2, "fleet3" = 3).</p>
 <p>Default: NULL</p>
-<p>Should match length of <code>files</code>.</p></dd>
+<p>Should match length of <code>files</code> if &gt;1 model.</p></dd>
 
 
-<dt id="arg-path-">Path.<a class="anchor" aria-label="anchor" href="#arg-path-"></a></dt>
+<dt id="arg-file-">file.<a class="anchor" aria-label="anchor" href="#arg-file-"></a></dt>
 <dd><p>Assessment model output file path. Currently accepts SS3
 Report.sso file, BAM .rda file, Rceattle model object, and FIMS model object.</p></dd>
 
