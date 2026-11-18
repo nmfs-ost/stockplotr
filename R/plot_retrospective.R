@@ -93,16 +93,30 @@ plot_retrospective <- function(
     cli::cli_abort("`quantity` not valid. Should correspond to one of the available stockplotr plotting functions.")
   }
 
-  if(is.null(end_years)) end_years <- rep(0, length(unique(dat$model)))
+  n_models <- length(unique(dat$model))
+
+  if(is.null(end_years)) end_years <- rep(0, n_models)
+  if(length(end_years) != n_models){
+    cli::cli_alert_info("Different number of end_years and available models.")
+    end_years <- c(end_years, rep(0, n_models-length(end_years)))
+  }
+
+  if(n_models == 1) 
+    cli::cli_alert_info("Only 1 model detected in `dat`. Function expects multiple models corresponding to unique retrospective peels.")
 
   if(is.null(names(end_years))){
     cli::cli_alert("`end_years` provided without names. names automatically applied.")
     names(end_years) <- dat$model |> unique()
   }
 
+  if(!all(is.null(mohns_rho)) && length(mohns_rho) != n_models-1){
+    cli::cli_alert_warning("Invalid number of mohn's rho values provided. Should be number of peels - 1. Mohn's rho values will not be reported.")
+    mohns_rho <- NULL
+  }
+
   if(!all(is.null(mohns_rho)) && is.null(names(mohns_rho))){
     cli::cli_alert("`mohns_rho` values provided without names. names automatically applied.")
-    names(mohns_rho) <- dat$model |> unique()
+    names(mohns_rho) <- unique(dat$model)[-1]
   }
 
   retro_dat <- dat |>
