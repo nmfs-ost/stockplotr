@@ -118,7 +118,7 @@ save_all_plots <- function(
   # plottab_function_files <- all_R_files[grepl("plot_|table_", all_R_files)]
   # # Remove table_afsc_tier function for now
   # plottab_function_files <- plottab_function_files[!grepl("afsc", plottab_function_files)]
-  helper_functions <- c("plot_timeseries", "plot_aa", "plot_obsvpred", "plot_error", "plot_retrospective", "table_afsc_tier")
+  helper_functions <- c("plot_timeseries", "plot_aa", "plot_obsvpred", "plot_error", "plot_retrospective", "table_afsc_tier", "plot_composition")
 
   # plottab_functions <- sub("\\.[^\\.]*$", "", plottab_function_files)
   all_functions <- ls(getNamespace("stockplotr"))
@@ -154,7 +154,8 @@ save_all_plots <- function(
           arg_value <- as.character(func_specific_args[a])
           cli::cli_li("{arg_name} = {arg_value}")
         }
-        print(e)
+        # The message only: printing the condition prints the whole call, data included
+        cli::cli_alert_danger("{conditionMessage(e)}")
       }
     )
   }
