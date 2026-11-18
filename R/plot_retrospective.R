@@ -101,6 +101,12 @@ plot_retrospective <- function(
     end_years <- c(end_years, rep(0, n_models-length(end_years)))
   }
 
+  # Convert end_years to negatives for math
+  if(any(end_years > 0)){
+    end_years[which(end_years > 0)] <- end_years[which(end_years > 0)]*-1
+  }
+
+
   if(n_models == 1) 
     cli::cli_alert_info("Only 1 model detected in `dat`. Function expects multiple models corresponding to unique retrospective peels.")
 
