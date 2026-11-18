@@ -5,6 +5,7 @@
 <url><loc>nmfs-ost.github.io/stockplotr/LICENSE-text.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/LICENSE.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/README-internal.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/articles/composition_diagnostics.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/articles/convert_output_details.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/articles/extract-sis-data.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/articles/faqs.html</loc></url>
@@ -13,6 +14,8 @@
 <url><loc>nmfs-ost.github.io/stockplotr/authors.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/index.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/add_caption_alt_text.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/bigskate_caal.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/bigskate_lencomp.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/calc_kqs.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/calculate_reference_point.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/check_label_differences.html</loc></url>
@@ -37,6 +40,15 @@
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_biomass.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_biomass_at_age.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_catch_at_age.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/plot_composition_andre.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/plot_composition_bubble.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/plot_composition_distribution.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/plot_composition_francis.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/plot_composition_residual_distribution.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/plot_composition_residual_pattern.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/plot_composition_residuals.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/plot_composition_samples.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/plot_composition_sexratio.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_data_availability.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_discard.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_error.html</loc></url>
@@ -55,6 +67,7 @@
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_stock_recruitment.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/plot_timeseries.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/pollock.html</loc></url>
+<url><loc>nmfs-ost.github.io/stockplotr/reference/prepare_composition_data.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/process_data.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/process_table.html</loc></url>
 <url><loc>nmfs-ost.github.io/stockplotr/reference/reference_line.html</loc></url>

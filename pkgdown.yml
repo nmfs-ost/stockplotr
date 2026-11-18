@@ -2,11 +2,12 @@ pandoc: 3.8.3
 pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
+  composition_diagnostics: composition_diagnostics.html
   convert_output_details: convert_output_details.html
   extract-sis-data: extract-sis-data.html
   faqs: faqs.html
   how-caps-alttext-are-made: how-caps-alttext-are-made.html
-last_built: 2026-11-17T15:37Z
+last_built: 2026-11-18T15:06Z
 urls:
   reference: nmfs-ost.github.io/stockplotr/reference
   article: nmfs-ost.github.io/stockplotr/articles
