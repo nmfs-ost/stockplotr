@@ -3,10 +3,11 @@
 #' Does not change naming conventions.
 #'
 #' @inheritParams convert_output
-#' 
-#' @param file Path. Assessment model output file path. Currently accepts SS3
-#' Report.sso file, BAM .rda file, Rceattle model object, and FIMS model object.
-#' 
+#'
+#' @param file Assessment model output file path or object in the user's
+#' environment. Currently accepts SS3 Report.sso file, BAM .rda file,
+#' Rceattle model object, and FIMS model object.
+#'
 #' @param out_new The empty standard output data frame from
 #' [convert_output()], which sets the columns of the output.
 #'
