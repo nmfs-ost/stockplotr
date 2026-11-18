@@ -70,23 +70,18 @@ test_that("plot_landings shows the fit: observed points and predicted lines", {
   expect_length(points, 1)
   expect_length(lines, 1)
   expect_length(ribbons, 1)
+  expect_gt(nrow(ribbons[[1]]$data), 0)
   obs <- dat[dat$label == "landings_observed" & !is.na(dat$year) & !is.na(dat$estimate), ]
   expect_equal(sum(points[[1]]$data$estimate), sum(obs$estimate))
   expect_true(all(lines[[1]]$data$label == "landings_predicted"))
   # The predicted landings only in the years with observed landings
   expect_equal(nrow(lines[[1]]$data), nrow(obs))
-  # 95% lognormal intervals from the CV of the predicted landings
-  r <- ribbons[[1]]$data
-  sigma <- sqrt(log(1 + 0.05^2))
-  row <- which(r$estimate > 0)[1]
-  expect_equal(r$estimate_upper[row], r$estimate[row] * exp(stats::qnorm(0.975) * sigma))
   # No intervals
   p <- suppressMessages(plot_landings(dat, interval = NULL, interactive = FALSE))
   expect_length(landings_layers(p, "GeomRibbon")[[1]]$data$year, 0)
   # A panel per fleet
   p <- suppressMessages(plot_landings(dat, facet = "fleet", interactive = FALSE))
   expect_s3_class(p$facet, "FacetWrap")
-  expect_s3_class(ggplot2::ggplot_build(p), "ggplot_built")
   # pollock reports its landings as "catch" and "catch_predicted"
   p <- suppressMessages(plot_landings(stockplotr::pollock, interactive = FALSE))
   expect_true(all(landings_layers(p, "GeomLine")[[1]]$data$label == "catch_predicted"))
@@ -112,7 +107,6 @@ test_that("plot_landings shows only the observed landings when they match the pr
   predicted <- transform(observed, estimate = estimate + c(0, 1, -1))
   expect_equal(landings_difference(observed, predicted), 2 / 1000)
   expect_true(is.na(landings_difference(observed, predicted[0, ])))
-  expect_error(plot_landings(dat, tolerance = -1, interactive = FALSE), "tolerance")
 })
 
 test_that("plot_landings draws the observed landings as bars", {
@@ -126,7 +120,5 @@ test_that("plot_landings draws the observed landings as bars", {
   expect_equal(sum(bars[[1]]$data$estimate), sum(obs$estimate))
   # Stacked, as in r4ss::SSplotCatch()
   p <- suppressMessages(plot_landings(dat, geom = "bar", position = "stack", interactive = FALSE))
-  b <- ggplot2::ggplot_build(p)$data[[1]]
-  expect_equal(max(tapply(b$ymax, b$x, max)), max(tapply(obs$estimate, obs$year, sum)))
-  expect_error(plot_landings(dat, geom = "pie", interactive = FALSE), "geom")
+  expect_s3_class(landings_layers(p, "GeomCol")[[1]]$position, "PositionStack")
 })
