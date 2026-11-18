@@ -7,9 +7,6 @@
 #' object, or the path to an .rds file containing either.
 #' @param out_new The empty standard output data frame from
 #' [convert_output()].
-#' @param start_year Number. First year of the model. FIMS reports years as
-#' indices (`year_i`, 1 = first model year), which are converted to years as
-#' `year_i + start_year - 1`. NULL keeps the indices.
 #'
 #' @returns A data frame with the columns of `out_new`.
 #'
@@ -34,7 +31,7 @@
 #' ends) have `era` "fore"; other rows with a year have `era` "time".
 #'
 #' @noRd
-conout_fims <- function(file, out_new, start_year = NULL) {
+conout_fims <- function(file, out_new) {
   dat <- read_fims_estimates(file)
   names(dat) <- tolower(names(dat))
   if (!all(c("label", "estimated") %in% names(dat))) {
@@ -46,23 +43,15 @@ conout_fims <- function(file, out_new, start_year = NULL) {
   col <- function(name) {
     if (name %in% names(dat)) dat[[name]] else rep(NA, nrow(dat))
   }
-  year_i <- suppressWarnings(as.numeric(col("year_i")))
-  if (is.null(start_year)) {
-    cli::cli_alert_info(
-      "FIMS reports years as indices (1 = first model year); use {.arg start_year} to convert them to years."
-    )
-    year <- year_i
-  } else {
-    year <- year_i + start_year - 1
-  }
+  year <- suppressWarnings(as.numeric(col("year")))
   observed <- suppressWarnings(as.numeric(col("observed")))
   observed[observed %in% -999] <- NA
   # The last year of data; later years are after the model ends
-  data_years <- year_i[!is.na(observed)]
-  last_year <- if (length(data_years) > 0) max(data_years) else max(year_i, na.rm = TRUE)
+  data_years <- year[!is.na(observed)]
+  last_year <- if (length(data_years) > 0) max(data_years) else max(year, na.rm = TRUE)
   era <- dplyr::case_when(
-    is.na(year_i) ~ NA_character_,
-    year_i > last_year ~ "fore",
+    is.na(year) ~ NA_character_,
+    year > last_year ~ "fore",
     TRUE ~ "time"
   )
   uncertainty <- dplyr::na_if(suppressWarnings(as.numeric(col("uncertainty"))), -999)

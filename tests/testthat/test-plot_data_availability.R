@@ -5,7 +5,7 @@ test_that("plot_data_availability works with each example model output", {
     pollock = stockplotr::pollock,
     ss3_simple = stockplotr::ss3_simple,
     vermilion_snapper = stockplotr::vermilion_snapper,
-    fims = suppressMessages(convert_output(est, model = "fims", start_year = 2001))
+    fims = suppressMessages(convert_output(est, model = "fims"))
   )
   for (name in names(datasets)) {
     p <- plot_data_availability(datasets[[name]])
