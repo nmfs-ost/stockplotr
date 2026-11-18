@@ -105,8 +105,8 @@ test_that("plot_landings shows only the observed landings when they match the pr
   # observed landings, as in r4ss::SSplotCatch()
   observed <- data.frame(model = "m", group_var = "a", year = 1:3, estimate = c(100, 200, 1000))
   predicted <- transform(observed, estimate = estimate + c(0, 1, -1))
-  expect_equal(landings_difference(observed, predicted), 2 / 1000)
-  expect_true(is.na(landings_difference(observed, predicted[0, ])))
+  expect_equal(fit_difference(observed, predicted), 2 / 1000)
+  expect_true(is.na(fit_difference(observed, predicted[0, ])))
 })
 
 test_that("plot_landings draws the observed landings as bars", {
