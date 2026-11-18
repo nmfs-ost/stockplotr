@@ -27,8 +27,7 @@ Default: NULL}
 
 Default: TRUE}
 
-\item{allow_multiple_models}{Logical. Whether to allow the selection of multiple
-models.
+\item{allow_multiple_selection}{Logical. Whether to allow the selection of multiple inputs.
 
 Default: FALSE}
 }

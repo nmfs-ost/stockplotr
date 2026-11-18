@@ -1236,8 +1236,7 @@ add_reference_line <- function(
 #' 
 #' Default: TRUE
 #' 
-#' @param allow_multiple_models Logical. Whether to allow the selection of multiple
-#' models.
+#' @param allow_multiple_selection Logical. Whether to allow the selection of multiple inputs.
 #' 
 #' Default: FALSE
 #' 

@@ -35,6 +35,13 @@
 #'
 #' If the interactive and >1 module_name is found, user will select the
 #' module_name in the console. @seealso [filter_data()]
+#' @param model Character vector. (Optional) Model name found in `dat$model`.
+#' If selecting >1 model, place them in a vector like c("model1", "model2").
+#'
+#' Default: NULL
+#'
+#' If the interactive and >1 model is found, user will select the
+#' model in the console. @seealso [filter_data()] 
 #' @param interactive A logical value indicating if the environment is interactive.
 #'
 #' Default: `FALSE`
