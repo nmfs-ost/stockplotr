@@ -1268,6 +1268,7 @@ filter_interactive <- function(
     if(!is.null(column_value)){
       if(length(column_value) > 1 && !allow_multiple_selection){
         cli::cli_alert_danger("Multiple {pretty_columns[column_name]}s provided, but only 1 allowed. Defaulting to first available {pretty_columns[column_name]} name: {available_names[1]}.")
+        column_value <- available_names[1]
       }
       plot_dat <- dat |> dplyr::filter(.data[[column_name]] %in% column_value)
       selected <- column_value
