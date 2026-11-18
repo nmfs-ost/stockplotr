@@ -158,7 +158,7 @@ plot_biomass <- function(
   } else {
     final <- plt +
       add_reference_line(
-        dat = dat,
+        dat = dat |> dplyr::filter(model %in% selected_model),
         ref_line = ref_line,
         label = "biomass",
         scale_amount = scale_amount
