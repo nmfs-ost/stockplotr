@@ -96,7 +96,7 @@ plot_retrospective <- function(
   n_models <- length(unique(dat$model))
 
   if(is.null(end_years)) end_years <- rep(0, n_models)
-  if(length(end_years) != n_models){
+  if(length(end_years) != n_models && n_models > 1){
     cli::cli_alert_info("Different number of end_years and available models.")
     end_years <- c(end_years, rep(0, n_models-length(end_years)))
   }
