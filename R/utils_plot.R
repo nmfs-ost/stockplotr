@@ -1260,7 +1260,7 @@ filter_interactive <- function(
   allow_multiple_selection = TRUE
 ){
 
-  kws <- c("module_name"="module", "model"="model")
+  pretty_columns <- c("module_name"="module", "model"="model")
   
   plot_dat <- dat
   selected <- unique(dat[[column_name]])
@@ -1268,12 +1268,12 @@ filter_interactive <- function(
     available_names <- unique(dat[[column_name]])
     if(!is.null(column_value)){
       if(length(column_value) > 1 && !allow_multiple_selection){
-        cli::cli_alert_danger("Multiple {kws[column_name]}s provided, but only 1 allowed. Defaulting to first available {kws[column_name]} name: {available_names[1]}.")
+        cli::cli_alert_danger("Multiple {pretty_columns[column_name]}s provided, but only 1 allowed. Defaulting to first available {pretty_columns[column_name]} name: {available_names[1]}.")
       }
       plot_dat <- dat |> dplyr::filter(.data[[column_name]] %in% column_value)
       selected <- column_value
     }else{
-      cli::cli_alert_warning("Multiple {kws[column_name]}s found in data. \n")
+      cli::cli_alert_warning("Multiple {pretty_columns[column_name]}s found in data. \n")
       options <- c()
       for (i in seq_along(available_names)) {
         # options <- paste0(options, " ", i, ") ", unique(plot_data$module_name)[i], "\n")
@@ -1289,7 +1289,7 @@ filter_interactive <- function(
           selection <- utils::select.list(
             options,
             multiple=allow_multiple_selection,
-            title = glue::glue("Select one of the following {kws[column_name]} names")
+            title = glue::glue("Select one of the following {pretty_columns[column_name]} names")
           )
           question1 <- if(length(selection)==0 || identical(selection, "")){
             options[1]
