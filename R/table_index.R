@@ -72,7 +72,8 @@ table_index <- function(
     module = module,
     model = model,
     scale_amount = 1,
-    interactive = interactive
+    interactive = interactive,
+    allow_multiple_models = FALSE
   ) |>
     dplyr::mutate(
       estimate = round(as.numeric(estimate), digits = digits),
