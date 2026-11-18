@@ -32,11 +32,6 @@
 #' in the file path provided.
 #'
 #' Default: NULL
-#' @param start_year Number. First year of the model, for FIMS output only.
-#' FIMS reports years as indices (1 = first model year), which are converted
-#' to years when `start_year` is given.
-#'
-#' Default: NULL (years are left as indices)
 #'
 #' @author Samantha Bredeck
 #'
@@ -77,8 +72,7 @@ convert_output <- function(
   files,
   models = NULL,
   fleet_names = NULL,
-  save_dir = NULL,
-  start_year = NULL
+  save_dir = NULL
 ) {
 
   # Is user inputs a single model file and doesn't wrap it as a list object
@@ -274,7 +268,7 @@ convert_output <- function(
         cli::cli_abort("JABBA output not currently compatible.")
         #### FIMS ####
       } else if (model == "fims") {
-        out_new <- conout_fims(file = file, out_new = out_new, start_year = start_year)
+        out_new <- conout_fims(file = file, out_new = out_new)
         #### Rceattle ####
       } else if (model == "rceattle") {
       out_new <- conout_rceattle(file = file, out_new = out_new, fleet_names = fleet_names)

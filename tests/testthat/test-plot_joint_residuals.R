@@ -5,7 +5,7 @@ test_that("plot_joint_residuals works with each example model output and option"
     pollock = stockplotr::pollock,
     ss3_simple = stockplotr::ss3_simple,
     vermilion_snapper = stockplotr::vermilion_snapper,
-    fims = suppressMessages(convert_output(est, model = "fims", start_year = 2001))
+    fims = suppressMessages(convert_output(est, model = "fims"))
   )
   for (name in names(datasets)) {
     # ss3_simple also has catch labeled as an index in the "catch" module

@@ -9,7 +9,7 @@ convert_fims <- function(dat = fims_estimates(), ...) {
 
 test_that("FIMS data points are split into observed and predicted rows", {
   est <- fims_estimates()
-  out <- convert_fims(est, start_year = 2001)
+  out <- convert_fims(est)
   counts <- table(out$label[grepl("_(observed|predicted)$", out$label)])
   expect_equal(
     as.vector(counts[c("index_observed", "index_predicted", "landings_observed", "landings_predicted")]),
@@ -31,7 +31,7 @@ test_that("FIMS data points are split into observed and predicted rows", {
   expect_equal(unique(obs$uncertainty_label), "cv")
   expect_equal(obs$likelihood, -rows$likelihood)
   expect_equal(unique(obs$fleet), "survey1")
-  expect_equal(obs$year, rows$year_i + 2000)
+  expect_equal(obs$year, 1:30)
 
   # Age compositions keep their bins and counts
   comp <- out[out$label == "age_composition_observed", ]
@@ -86,22 +86,18 @@ test_that("FIMS estimates that could not be calculated are NA", {
 
 test_that("FIMS estimates are relabeled and get years and eras", {
   est <- fims_estimates()
-  out <- convert_fims(est, start_year = 2001)
+  out <- convert_fims(est)
   ssb <- out[out$label == "spawning_biomass", ]
   expect_equal(ssb$estimate, est$estimated[est$label == "spawning_biomass"])
   expect_equal(ssb$uncertainty, est$uncertainty[est$label == "spawning_biomass"])
-  expect_equal(range(ssb$year), c(2001, 2031))
+  expect_equal(range(ssb$year), c(1, 31))
   # Spawning biomass at the start of the year after the model ends
-  expect_equal(ssb$era[ssb$year == 2031], "fore")
-  expect_true(all(ssb$era[ssb$year <= 2030] == "time"))
+  expect_equal(ssb$era[ssb$year == 31], "fore")
+  expect_true(all(ssb$era[ssb$year <= 30] == "time"))
 
   expect_equal(sum(out$label == "recruitment"), sum(est$label == "expected_recruitment"))
   expect_equal(sum(out$label == "log_recruitment_deviations"), sum(est$label == "log_devs"))
   expect_false(any(c("expected_recruitment", "log_devs") %in% out$label))
-
-  # Without start_year, years are the FIMS year indices
-  expect_message(convert_output(est, model = "fims"), "start_year")
-  expect_equal(range(convert_fims(est)$year[convert_fims(est)$label == "spawning_biomass"]), c(1, 31))
 })
 
 test_that("FIMS output is read from an rds file", {
@@ -121,11 +117,11 @@ test_that("a FIMSFit object needs FIMS", {
 })
 
 test_that("plots work with converted FIMS output", {
-  out <- convert_fims(start_year = 2001)
+  out <- convert_fims()
   p <- suppressMessages(plot_index(out, interactive = FALSE))
   b <- ggplot2::ggplot_build(p)
   expect_equal(nrow(b$data[[1]]), 30)
-  expect_equal(range(b$data[[1]]$x), c(2001, 2030))
+  expect_equal(range(b$data[[1]]$x), c(1, 30))
   for (f in list(plot_landings, plot_spawning_biomass, plot_biomass, plot_recruitment, plot_recruitment_deviations)) {
     p <- suppressMessages(suppressWarnings(f(out, interactive = FALSE)))
     expect_s3_class(p, "ggplot")
