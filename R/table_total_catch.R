@@ -204,7 +204,10 @@ table_total_catch <- function(
 
   if (exists("selected_module")) {
     rm(selected_module, envir = .GlobalEnv)
-    rm(selected_model,  envir = .GlobalEnv)
+  }
+
+  if(exists("selected_model")){
+    rm(selected_model, envir = .GlobalEnv)
   }
 
   final

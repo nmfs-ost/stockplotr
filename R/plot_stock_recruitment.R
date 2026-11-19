@@ -243,6 +243,10 @@ plot_stock_recruitment <- function(
     rm(selected_module, envir = .GlobalEnv)
   }
 
+  if(exists("selected_model")){
+    rm(selected_model, envir = .GlobalEnv)
+  }
+
   final +
     ggplot2::scale_x_continuous(
       labels = scales::label_comma()

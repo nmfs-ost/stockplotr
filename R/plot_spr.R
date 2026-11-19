@@ -169,6 +169,15 @@ plot_spr <- function(
       scale_amount = 1
     )
   }
+
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+
+  if(exists("selected_model")){
+    rm(selected_model, envir = .GlobalEnv)
+  }
+
   # Output final plot
   plt
 }

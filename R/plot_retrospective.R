@@ -222,6 +222,14 @@ plot_retrospective <- function(
 
     cli::cli_alert_danger("No captions, alt-text, or key quantities were stored at this time.")
   }
+
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+
+  if(exists("selected_model")){
+    rm(selected_model, envir = .GlobalEnv)
+  }
   
   plt
 

@@ -202,5 +202,9 @@ plot_recruitment <- function(
     rm(selected_module, envir = .GlobalEnv)
   }
 
+  if(exists("selected_model")){
+    rm(selected_model, envir = .GlobalEnv)
+  }
+
   final
 }

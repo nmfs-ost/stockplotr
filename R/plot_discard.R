@@ -270,5 +270,9 @@ plot_discard <- function(
     rm(selected_module, envir = .GlobalEnv)
   }
 
+  if (exists("selected_module")) {
+    rm(selected_model, envir = .GlobalEnv)
+  }
+
   final
 }
