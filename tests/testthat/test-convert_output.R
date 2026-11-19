@@ -62,13 +62,13 @@ test_that("missing arguments trigger warnings or errors", {
       model = "ss3",
       save_dir = fs::path("fixtures", "ss3_models_converted", "Hake_2018")
     ),
-    "argument \"file\" is missing, with no default"
+    "argument \"files\" is missing, with no default"
   )
 
   expect_error(
     convert_output(
-      file = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
-      model = "fake_model",
+      files = fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso"),
+      models = "fake_model",
       save_dir = fs::path("fixtures", "ss3_models_converted", "Hake_2018")
     ),
     "`file` not found."
