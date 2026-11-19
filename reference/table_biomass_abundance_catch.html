@@ -116,6 +116,7 @@
 <span>  method <span class="op">=</span> <span class="st">"sum"</span>,</span>
 <span>  module <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  label <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  model <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  make_rda <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  tables_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -188,6 +189,14 @@ in this ordered list: "landings_weight",  "landings_numbers", "landings_expected
 <p>Default: NULL</p></dd>
 
 
+<dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
+<dd><p>Character vector. (Optional) Model name found in <code>dat$model</code>.
+If selecting &gt;1 model, place them in a vector like c("model1", "model2").</p>
+<p>Default: NULL</p>
+<p>If the interactive and &gt;1 model is found, user will select the
+model in the console. @seealso <code><a href="filter_data.html">filter_data()</a></code></p></dd>
+
+
 <dt id="arg-make-rda">make_rda<a class="anchor" aria-label="anchor" href="#arg-make-rda"></a></dt>
 <dd><p>Logical. TRUE/FALSE; indicate whether to save the object and
 make an automated caption and alternative text in the form of an <code>rda</code> object. If TRUE,
@@ -220,15 +229,15 @@ a gt-based table, caption, and LaTeX-based table.</p>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">table_biomass_abundance_catch</span><span class="op">(</span><span class="fu">stockplotr</span><span class="fu">::</span><span class="va"><a href="example_data.html">example_data</a></span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Processing ^biomass$</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Multiple module names found in data. </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Multiple modules found in data. </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Environment not interactive. Selecting SPR_SERIES.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> No unit label found in the data for biomass. Please provide a unit label using the 'biomass_label' argument.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Processing ^abundance</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Multiple module names found in data. </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Multiple modules found in data. </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Environment not interactive. Selecting SPR_SERIES.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> No unit label found in the data for abundance. Please provide a unit label using the 'abundance_label' argument.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Processing catch$|landings_observed</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Multiple module names found in data. </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> Multiple modules found in data. </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Environment not interactive. Selecting CATCH.</span>
 <div class="gt-table"><div id="thiacknsbq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 

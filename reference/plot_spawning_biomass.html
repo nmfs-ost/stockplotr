@@ -117,6 +117,7 @@ also be made relative to this reference line rather than in absolute units.</p>
 <span>  era <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  lbs <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  module <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  model <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  scale_amount <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  relative <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  make_rda <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -195,6 +196,14 @@ If selecting &gt;1 module, place them in a vector like c("module1", "module2").<
 <p>Default: NULL</p>
 <p>If the interactive and &gt;1 module_name is found, user will select the
 module_name in the console. @seealso <code><a href="filter_data.html">filter_data()</a></code></p></dd>
+
+
+<dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
+<dd><p>Character vector. (Optional) Model name found in <code>dat$model</code>.
+If selecting &gt;1 model, place them in a vector like c("model1", "model2").</p>
+<p>Default: NULL</p>
+<p>If the interactive and &gt;1 model is found, user will select the
+model in the console. @seealso <code><a href="filter_data.html">filter_data()</a></code></p></dd>
 
 
 <dt id="arg-scale-amount">scale_amount<a class="anchor" aria-label="anchor" href="#arg-scale-amount"></a></dt>
