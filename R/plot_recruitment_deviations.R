@@ -33,6 +33,7 @@
 plot_recruitment_deviations <- function(
   dat,
   module = NULL,
+  model = NULL,
   era = NULL,
   interactive = TRUE,
   make_rda = FALSE,
@@ -46,10 +47,12 @@ plot_recruitment_deviations <- function(
     dat = dat,
     label_name = "recruitment_deviations",
     module = module,
+    model = model,
     era = era,
     interactive = interactive,
     geom = "point",
-    group = NULL
+    group = NULL,
+    allow_multiple_models = TRUE
   )
   # Process data
   processed_data <- process_data(
@@ -119,5 +122,14 @@ plot_recruitment_deviations <- function(
       dir = figures_dir
     )
   }
+
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+
+  if (exists("selected_module")) {
+    rm(selected_model, envir = .GlobalEnv)
+  }
+
   final
 }

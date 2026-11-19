@@ -87,6 +87,7 @@ plot_discard <- function(
   scale_amount = 1,
   interactive = TRUE,
   module = NULL,
+  model = NULL,
   predicted = TRUE,
   interval = 0.95,
   tolerance = 0.001,
@@ -115,8 +116,10 @@ plot_discard <- function(
     group = group,
     facet = facet,
     module = module,
+    model = model,
     scale_amount = scale_amount,
-    interactive = interactive
+    interactive = interactive,
+    allow_multiple_models = TRUE
   )
 
   # extract unit if unit_label is null and set lbs to F by default
@@ -265,6 +268,10 @@ plot_discard <- function(
 
   if (exists("selected_module")) {
     rm(selected_module, envir = .GlobalEnv)
+  }
+
+  if (exists("selected_module")) {
+    rm(selected_model, envir = .GlobalEnv)
   }
 
   final

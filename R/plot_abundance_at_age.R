@@ -35,6 +35,13 @@
 #'
 #' If the interactive and >1 module_name is found, user will select the
 #' module_name in the console. @seealso [filter_data()]
+#' @param model Character vector. (Optional) Model name found in `dat$model`.
+#' If selecting >1 model, place them in a vector like c("model1", "model2").
+#'
+#' Default: NULL
+#'
+#' If the interactive and >1 model is found, user will select the
+#' model in the console. @seealso [filter_data()] 
 #' @param interactive A logical value indicating if the environment is interactive.
 #'
 #' Default: `FALSE`
@@ -81,6 +88,7 @@ plot_abundance_at_age <- function(
   scale_amount = 1,
   proportional = TRUE,
   module = NULL,
+  model = NULL,
   interactive = TRUE,
   make_rda = FALSE,
   figures_dir = getwd()
@@ -94,8 +102,10 @@ plot_abundance_at_age <- function(
     geom = "point",
     group = "age",
     module = module,
+    model = model, 
     scale_amount = scale_amount,
-    interactive = interactive
+    interactive = interactive,
+    allow_multiple_models = TRUE
   )
 
   # Create label for abundance units in legend
@@ -202,6 +212,10 @@ plot_abundance_at_age <- function(
 
   if (exists("selected_module")) {
     rm(selected_module, envir = .GlobalEnv)
+  }
+
+  if (exists("selected_module")) {
+    rm(selected_model, envir = .GlobalEnv)
   }
 
   plot

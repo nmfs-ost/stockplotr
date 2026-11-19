@@ -97,6 +97,7 @@ plot_landings <- function(
   era = NULL,
   scale_amount = 1,
   module = NULL,
+  model = NULL,
   interactive = TRUE,
   predicted = TRUE,
   interval = 0.95,
@@ -136,8 +137,10 @@ plot_landings <- function(
     group = group,
     facet = facet,
     module = module,
+    model = model,
     scale_amount = scale_amount,
-    interactive = interactive
+    interactive = interactive,
+    allow_multiple_models = TRUE
   )
 
   # Intervals from the observation error of the observed and predicted
@@ -298,6 +301,10 @@ plot_landings <- function(
 
   if (exists("selected_module")) {
     rm(selected_module, envir = .GlobalEnv)
+  }
+
+  if (exists("selected_module")) {
+    rm(selected_model, envir = .GlobalEnv)
   }
 
   plt

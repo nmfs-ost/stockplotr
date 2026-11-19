@@ -171,7 +171,7 @@ test_that("plot_abundace_at_age generates plots for multiple models", {
       "model2" = r4ss::SS_output(test_path("fixtures", "ss3_models", "models", "Hake_2019_semi-parametric_selex"))
     ))
 
-    expect_no_error(plt <- plot_abundance_at_age(dat, module="natage"))
+    expect_no_error(plt <- plot_abundance_at_age(dat, module="natage", model=c("model1", "model2")))
     expect_s3_class(plt, "gg")
 
     p <- ggplot2::ggplot_build(plt)

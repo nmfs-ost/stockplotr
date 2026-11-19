@@ -13,6 +13,7 @@ plot_catch_at_age(
   proportional = TRUE,
   interactive = TRUE,
   module = NULL,
+  model = NULL,
   make_rda = FALSE,
   figures_dir = getwd()
 )
@@ -64,6 +65,14 @@ Default: NULL
 
 If the interactive and >1 module_name is found, user will select the
 module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
+
+\item{model}{Character vector. (Optional) Model name found in \code{dat$model}.
+If selecting >1 model, place them in a vector like c("model1", "model2").
+
+Default: NULL
+
+If the interactive and >1 model is found, user will select the
+model in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 
 \item{make_rda}{Logical. TRUE/FALSE; indicate whether to produce an .rda file containing
 a list with the figure/table, caption, and alternative text (if figure). If TRUE,

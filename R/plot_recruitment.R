@@ -42,6 +42,7 @@ plot_recruitment <- function(
   # relative = FALSE,
   interactive = TRUE,
   module = NULL,
+  model = NULL,
   make_rda = FALSE,
   figures_dir = getwd()
 ) {
@@ -57,7 +58,9 @@ plot_recruitment <- function(
     facet = facet,
     interactive = interactive,
     module = module,
-    scale_amount = scale_amount
+    model = model,
+    scale_amount = scale_amount,
+    allow_multiple_models = TRUE
   )
   # process data
   processed_data <- process_data(
@@ -197,6 +200,10 @@ plot_recruitment <- function(
 
   if (exists("selected_module")) {
     rm(selected_module, envir = .GlobalEnv)
+  }
+
+  if(exists("selected_model")){
+    rm(selected_model, envir = .GlobalEnv)
   }
 
   final

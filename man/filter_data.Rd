@@ -8,12 +8,14 @@ filter_data(
   dat,
   label_name,
   module = NULL,
+  model = NULL,
   era = NULL,
   geom,
   group = NULL,
   facet = NULL,
   scale_amount = 1,
-  interactive = TRUE
+  interactive = TRUE,
+  allow_multiple_models = TRUE
 )
 }
 \arguments{
@@ -33,6 +35,14 @@ Default: NULL
 
 If the interactive and >1 module_name is found, user will select the
 module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
+
+\item{model}{Character vector. (Optional) Model name found in \code{dat$model}.
+If selecting >1 model, place them in a vector like c("model1", "model2").
+
+Default: NULL
+
+If the interactive and >1 model is found, user will select the
+model in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 
 \item{era}{String. Era of data.
 
@@ -67,6 +77,10 @@ Default: 1}
 \item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
 Default: \code{FALSE}}
+
+\item{allow_multiple_models}{Logical. Whether to allow multiple models.
+
+Default: TRUE}
 }
 \value{
 a data frame that is preformatted for plotting with ggplot2.
@@ -77,5 +91,13 @@ Filter data for input into aesthetics for ggplot2
 \examples{
 \dontrun{
 filter_data(dat, "biomass", "line", group = "fleet")
+filter_data(
+   dat, 
+   label = "biomass",
+   geom = "line",
+   module="derived_quants", 
+   model=NULL, 
+   allow_multiple_models=FALSE # can only select one model to filter by
+)
 }
 }

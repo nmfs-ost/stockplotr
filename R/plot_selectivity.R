@@ -37,6 +37,7 @@ plot_selectivity <- function(
   facet = NULL,
   interactive = TRUE,
   module = NULL,
+  model = NULL,
   make_rda = FALSE,
   figures_dir = getwd(),
   ...
@@ -52,7 +53,9 @@ plot_selectivity <- function(
     group = group,
     facet = facet,
     interactive = interactive,
-    module = module
+    module = module,
+    model = model,
+    allow_multiple_models = TRUE
   )
 
   if (is.null(unit_label)) {
@@ -195,6 +198,10 @@ plot_selectivity <- function(
 
   if (exists("selected_module")) {
     rm(selected_module, envir = .GlobalEnv)
+  }
+
+  if(exists("selected_model")){
+    rm(selected_model, envir = .GlobalEnv)
   }
 
   final

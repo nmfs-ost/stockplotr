@@ -26,6 +26,7 @@ plot_natural_mortality <- function(
   era = NULL,
   interactive = TRUE,
   module = NULL,
+  model = NULL,
   make_rda = FALSE,
   figures_dir = getwd(),
   ...
@@ -43,7 +44,9 @@ plot_natural_mortality <- function(
     facet = facet,
     geom = "line",
     interactive = interactive,
-    module = module
+    module = module,
+    model = model,
+    allow_multiple_models = TRUE
   )
 
   # Set group back to NULL if it is age since this is an at age plot
@@ -145,6 +148,10 @@ plot_natural_mortality <- function(
 
   if (exists("selected_module")) {
     rm(selected_module, envir = .GlobalEnv)
+  }
+
+  if (exists("selected_module")) {
+    rm(selected_model, envir = .GlobalEnv)
   }
 
   final

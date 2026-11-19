@@ -41,6 +41,7 @@ plot_spr <- function(
   ref_line = "target",
   era = "time",
   module = NULL,
+  model = NULL,
   interactive = TRUE,
   make_rda = FALSE,
   figures_dir = getwd(),
@@ -59,8 +60,10 @@ plot_spr <- function(
     group = group,
     facet = facet,
     module = module,
+    model = model,
     scale_amount = 1,
-    interactive = interactive
+    interactive = interactive,
+    allow_multiple_models = TRUE
   ) |>
     # filter NA from year
     dplyr::filter(!is.na(year))
@@ -166,6 +169,15 @@ plot_spr <- function(
       scale_amount = 1
     )
   }
+
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+
+  if(exists("selected_model")){
+    rm(selected_model, envir = .GlobalEnv)
+  }
+
   # Output final plot
   plt
 }

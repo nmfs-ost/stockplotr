@@ -54,6 +54,7 @@ table_index <- function(
   group = NULL,
   method = "sum",
   module = NULL,
+  model = NULL,
   label = NULL,
   digits = 2,
   make_rda = FALSE,
@@ -69,8 +70,10 @@ table_index <- function(
     geom = "line",
     era = era,
     module = module,
+    model = model,
     scale_amount = 1,
-    interactive = interactive
+    interactive = interactive,
+    allow_multiple_models = FALSE
   ) |>
     dplyr::mutate(
       estimate = round(as.numeric(estimate), digits = digits),
@@ -160,6 +163,14 @@ table_index <- function(
       scale_amount = 1,
       table_df = final
     )
+  }
+
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+
+  if(exists("selected_model")){
+    rm(selected_model, envir = .GlobalEnv)
   }
 
   final

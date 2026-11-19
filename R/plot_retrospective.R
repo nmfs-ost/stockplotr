@@ -141,9 +141,9 @@ plot_retrospective <- function(
   func_pars <- list(
     dat = retro_dat, 
     group="peel",
-    model = "All", # turn this on to bypass interactive model selection and plot all available models
-    make_rda=FALSE, # don't want to overwrite files from non-retro plots
-    ...
+    model = names(end_years), # turn this on to bypass interactive model selection and plot all available models
+    make_rda=FALSE # don't want to overwrite files from non-retro plots
+    # ...
   )
 
   plt <- do.call(func_name, func_pars)
@@ -222,9 +222,15 @@ plot_retrospective <- function(
 
     cli::cli_alert_danger("No captions, alt-text, or key quantities were stored at this time.")
   }
+
+  if (exists("selected_module")) {
+    rm(selected_module, envir = .GlobalEnv)
+  }
+
+  if(exists("selected_model")){
+    rm(selected_model, envir = .GlobalEnv)
+  }
   
   plt
 
 }
-
-# plot_retrospective(dat)
