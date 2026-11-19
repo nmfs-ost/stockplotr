@@ -45,6 +45,7 @@ plot_likelihoods <- function(
     geom="bar",
     group=NULL,
     facet=NULL,
+    model=NULL,
     ...
 ){
     check_data(dat)
@@ -63,10 +64,11 @@ plot_likelihoods <- function(
         era=NULL,
         group=group,
         facet=facet,
+        model=model,
         module="likelihoods",
         scale_amount=1,
         interactive=TRUE
-    )
+    ) |> dplyr::filter(!grepl("laplace_obj_fun", label))
 
     if(!by_fleet){
         prepared_data <- prepared_data |> 
@@ -74,6 +76,14 @@ plot_likelihoods <- function(
     }else{
         prepared_data <- prepared_data |>
             dplyr::filter(!is.na(fleet))
+
+        prepared_data <- prepared_data |> dplyr::group_by(fleet, type, model) |>
+            dplyr::summarise(
+                estimate = sum(estimate)
+            ) |>
+            dplyr::mutate(label="total") |>
+            dplyr::bind_rows(prepared_data)
+
     }
 
     processing <- process_data(
@@ -101,14 +111,31 @@ plot_likelihoods <- function(
 
     plt <- ggplot2::ggplot(plot_data)+
         ggplot2::geom_col(
-            ggplot2::aes(y=label, x=estimate, fill=label)
+            ggplot2::aes(
+                y=label, 
+                x=estimate, 
+                fill=if(length(unique(plot_data$model))>1){
+                    .data[["model"]]
+                }else{
+                    .data[["label"]]
+                }
+            ),
+            position="dodge", stat="identity"
         )+
         ggplot2::geom_vline(xintercept=0, linetype="dashed")+
         ggplot2::scale_x_continuous(
             limits= ~ c(-max(abs(.x)), max(abs(.x)))
         )+
-        ggplot2::guides(fill="none")+
-        ggplot2::labs(y="Likelihood Component", x="Likelihood Contribution")+
+        ggplot2::guides()+
+        ggplot2::labs(
+            y="Likelihood Component", 
+            x="Likelihood Contribution",
+            fill = if(length(unique(plot_data$model))>1){
+                    "Model"
+                }else{
+                    "Component"
+                }
+        )+
         theme_noaa()
 
     # Check if facet(s) are desired
@@ -125,5 +152,5 @@ plot_likelihoods <- function(
         })
     }
 
-    return(plt)
+    plt
 }
