@@ -85,7 +85,7 @@ table_biomass_abundance_catch <- function(
 
   # Do this so that we don't have to repeatedly choose the same model
   selected_model <- model
-  
+
   # Aiming for totals
   # iterate through label_names
   lab_list <- purrr::map(
@@ -244,7 +244,7 @@ table_biomass_abundance_catch <- function(
     rm(selected_module, envir = .GlobalEnv)
   }
 
-  if(exists("selected_model")){
+  if (exists("selected_model")) {
     rm(selected_model, envir = .GlobalEnv)
   }
 

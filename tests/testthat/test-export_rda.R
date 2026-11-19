@@ -8,7 +8,7 @@ test_that("export_rda works for figures", {
   custom_dir <- fs::path(getwd(), "tests-export_rda")
 
   # add KQs to caps/alt text csv
-  insert_kqs(B.min, B.max, dir=custom_dir)
+  insert_kqs(B.min, B.max, dir = custom_dir)
 
   # extract this plot's caption and alt text
   caps_alttext <- extract_caps_alttext(
@@ -53,7 +53,7 @@ test_that("export_rda works for tables", {
   custom_dir <- fs::path(getwd(), "tests-export_rda")
 
   # add KQs to caps/alt text csv
-  insert_kqs(B.min, B.max, dir=custom_dir)
+  insert_kqs(B.min, B.max, dir = custom_dir)
 
   # extract this plot's caption and alt text
   caps_alttext <- extract_caps_alttext(

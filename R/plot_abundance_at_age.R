@@ -41,7 +41,7 @@
 #' Default: NULL
 #'
 #' If the interactive and >1 model is found, user will select the
-#' model in the console. @seealso [filter_data()] 
+#' model in the console. @seealso [filter_data()]
 #' @param interactive A logical value indicating if the environment is interactive.
 #'
 #' Default: `FALSE`
@@ -102,7 +102,7 @@ plot_abundance_at_age <- function(
     geom = "point",
     group = "age",
     module = module,
-    model = model, 
+    model = model,
     scale_amount = scale_amount,
     interactive = interactive,
     allow_multiple_models = TRUE

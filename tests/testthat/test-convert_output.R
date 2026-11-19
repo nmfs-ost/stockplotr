@@ -331,27 +331,25 @@ test_that("convert_output refuses a multispecies Rceattle fit", {
 })
 
 test_that("convert_output on multiple SS3 models", {
-    model_files <- list(
-      "hake2018"=fs::path("fixtures", "ss3_models", "models", "Hake_2018"),
-      "BigSkate2019"=fs::path("fixtures", "ss3_models", "models", "BigSkate_2019")
-    )
+  model_files <- list(
+    "hake2018" = fs::path("fixtures", "ss3_models", "models", "Hake_2018"),
+    "BigSkate2019" = fs::path("fixtures", "ss3_models", "models", "BigSkate_2019")
+  )
 
-    models_r4ss <- lapply(model_files, \(x) r4ss::SS_output(x))
+  models_r4ss <- lapply(model_files, \(x) r4ss::SS_output(x))
 
-    expect_no_error(result <- convert_output(models_r4ss))
-    expect_equal(dim(result)[2], 36)
-    expect_equal(result$model %>% unique, c("hake2018", "BigSkate2019"))
+  expect_no_error(result <- convert_output(models_r4ss))
+  expect_equal(dim(result)[2], 36)
+  expect_equal(result$model %>% unique(), c("hake2018", "BigSkate2019"))
 })
 
 test_that("convert_output on SS3 and Rceattle model", {
+  ss3_hake2018 <- r4ss::SS_output(fs::path("fixtures", "ss3_models", "models", "Hake_2018"))
+  rceattle_atf <- readRDS(fs::path("fixtures", "rceattle_goa_atf.rds"))
 
-    ss3_hake2018 <- r4ss::SS_output(fs::path("fixtures", "ss3_models", "models", "Hake_2018"))
-    rceattle_atf <- readRDS(fs::path("fixtures", "rceattle_goa_atf.rds"))
+  models <- list("ss3_hake" = ss3_hake2018, "rceattle_atf" = rceattle_atf)
 
-    models <- list("ss3_hake"=ss3_hake2018, "rceattle_atf"=rceattle_atf)
-
-    expect_no_error(result <- convert_output(models))
-    expect_equal(dim(result)[2], 36)
-    expect_equal(result$model %>% unique, c("ss3_hake", "rceattle_atf"))
+  expect_no_error(result <- convert_output(models))
+  expect_equal(dim(result)[2], 36)
+  expect_equal(result$model %>% unique(), c("ss3_hake", "rceattle_atf"))
 })
-

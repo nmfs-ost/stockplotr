@@ -79,13 +79,13 @@ table_projections <- function(
         allow_multiple_models = FALSE
       ) |>
         dplyr::mutate(
-          estimate = if(x != "fishing_mortality"){
-            round(as.numeric(estimate), digits=0)
-          }else{
+          estimate = if (x != "fishing_mortality") {
+            round(as.numeric(estimate), digits = 0)
+          } else {
             round(as.numeric(estimate), digits = 4)
           }
         ) |>
-          # estimate = ifelse(x != "fishing_mortality", round(as.numeric(estimate), digits = 0), round(as.numeric(estimate), digits = 4))) |>
+        # estimate = ifelse(x != "fishing_mortality", round(as.numeric(estimate), digits = 0), round(as.numeric(estimate), digits = 4))) |>
         dplyr::mutate(uncertainty = round(as.numeric(uncertainty), digits = 2)) |>
         dplyr::distinct() # only preserve unique rows
 
@@ -188,7 +188,7 @@ table_projections <- function(
     rm(selected_module, envir = .GlobalEnv)
   }
 
-  if(exists("selected_model")){
+  if (exists("selected_model")) {
     rm(selected_model, envir = .GlobalEnv)
   }
 

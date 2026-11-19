@@ -88,23 +88,23 @@ plot_retrospective(
   dat = ss3_simple,
   end_years = 0:-5,
   quantity = "spawning_biomass",
-  show_end_year_points=TRUE
+  show_end_year_points = TRUE
 )
 plot_retrospective(
   dat = ss3_simple,
   end_years = 0:-5,
   quantity = "spr",
-  show_end_year_points=TRUE,
-  interactive=FALSE,
+  show_end_year_points = TRUE,
+  interactive = FALSE,
   module = "derived_quants"
 )
 plot_retrospective(
   dat = ss3_simple,
   end_years = 0:-5,
   quantity = "spr",
-  show_end_year_points=TRUE,
+  show_end_year_points = TRUE,
   mohns_rho = c(0.023, 0.01, 1.25, 0.845, 0.068),
-  interactive=FALSE,
+  interactive = FALSE,
   module = "derived_quants"
 )
 }

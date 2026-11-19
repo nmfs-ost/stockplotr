@@ -96,6 +96,7 @@ Default: NULL
 
 If the interactive and >1 model is found, user will select the
 model in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
+
 \item{predicted}{Logical. TRUE (Default) or FALSE; show the discards
 predicted by the model as lines, with the observed discards as points, to
 show the fit to the observed discards. The predicted discards are shown

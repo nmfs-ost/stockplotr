@@ -657,7 +657,7 @@ is_ss3_fit_summary <- function(dat) {
   is.data.frame(dat) &&
     all(c("module_name", "label", "estimate") %in% names(dat)) &&
     any(dat$module_name %in% c("FIT_LEN_COMPS", "FIT_AGE_COMPS", "FIT_SIZE_COMPS") &
-          dat$label %in% "effn")
+      dat$label %in% "effn")
 }
 
 # Sample sizes from the Stock Synthesis FIT_*_COMPS tables in
@@ -671,7 +671,7 @@ comp_sample_size_from_ss3 <- function(dat, comp_type = NULL) {
     names(dat)
   )
   fit <- dat[dat$module_name %in% c("FIT_LEN_COMPS", "FIT_AGE_COMPS", "FIT_SIZE_COMPS") &
-               dat$label %in% c("nsamp_adj", "effn", "part", "ageerr"), c(keys, "label", "estimate")]
+    dat$label %in% c("nsamp_adj", "effn", "part", "ageerr"), c(keys, "label", "estimate")]
   # convert_output() keeps the values from each row of the SS3 table
   # together, in order, so a new composition starts at each "part" (or
   # "nsamp_adj" in output without partitions)

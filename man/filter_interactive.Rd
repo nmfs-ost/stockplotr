@@ -40,11 +40,11 @@ to filter their data by.
 }
 \examples{
 \dontrun{
- filter_interactive(
-   dat = example_dat,
-   column_name = "model",
-   column_value = NULL,
-   allow_multiple_selection = TRUE # allow selecting multiple models
- )
+filter_interactive(
+  dat = example_dat,
+  column_name = "model",
+  column_value = NULL,
+  allow_multiple_selection = TRUE # allow selecting multiple models
+)
 }
 }

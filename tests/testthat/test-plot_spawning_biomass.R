@@ -58,15 +58,14 @@ test_that("plot_spawning_biomass generates plots without errors", {
 # })
 
 test_that("plot_spawning_biomass generates plots for multiple models", {
-    dat <- convert_output(list(
-      "model1" = r4ss::SS_output(test_path("fixtures", "ss3_models", "models", "platoons")),
-      "model2" = r4ss::SS_output(test_path("fixtures", "ss3_models", "models", "Empirical_Wtatage_Age_Selex"))
-    ))
+  dat <- convert_output(list(
+    "model1" = r4ss::SS_output(test_path("fixtures", "ss3_models", "models", "platoons")),
+    "model2" = r4ss::SS_output(test_path("fixtures", "ss3_models", "models", "Empirical_Wtatage_Age_Selex"))
+  ))
 
-    expect_no_error(plt <- plot_spawning_biomass(dat, module="derived_quants", model=c("model1", "model2")))
-    expect_s3_class(plt, "gg")
+  expect_no_error(plt <- plot_spawning_biomass(dat, module = "derived_quants", model = c("model1", "model2")))
+  expect_s3_class(plt, "gg")
 
-    p <- ggplot2::ggplot_build(plt)
-    expect_equal(length(unique(p$data[[1]]$group)), 2)
-
+  p <- ggplot2::ggplot_build(plt)
+  expect_equal(length(unique(p$data[[1]]$group)), 2)
 })
