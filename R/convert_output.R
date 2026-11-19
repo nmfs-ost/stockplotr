@@ -61,15 +61,21 @@
 #' @examples
 #' \dontrun{
 #' convert_output(
-#'   file = here::here("model1", "Report.sso"),
-#'   model = "ss3",
+#'   files = here::here("model1", "Report.sso"),
+#'   models = "ss3",
 #'   fleet_names = c("TWL", "NONTWL"),
 #'   save_dir = here::here("standard_output.rda")
 #' )
 #' convert_output(
-#'   file = list("model1"=here::here("model1", "Report.sso"), "model2"=here::here("model2", "Report.sso")),
-#'   model = c("ss3", "ss3"),
-#'   fleet_names = list("model1"=c("TWL", "NONTWL"), "model2"=c("Fishery1", "Survey1", "Survey2")),
+#'   files = list(
+#'     "model1" = here::here("model1", "Report.sso"),
+#'     "model2" = here::here("model2", "Report.sso")
+#'   ),
+#'   models = c("ss3", "ss3"),
+#'   fleet_names = list(
+#'     "model1" = c("TWL", "NONTWL"),
+#'     "model2" = c("Fishery1", "Survey1", "Survey2")
+#'   ),
 #'   save_dir = here::here("standard_output.rda")
 #' )
 #' }
@@ -335,7 +341,7 @@ convert_output <- function(
               model=model_name,
               year=as.character(year),
               month=as.character(month),
-              block=as.character(block),
+              block=as.character(.data$block),
               fleet=as.character(fleet)
             )
       return(tibble::tibble(out_new))

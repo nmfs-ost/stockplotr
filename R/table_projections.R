@@ -107,9 +107,9 @@ table_projections <- function(
         unit_label <- filtered_data |>
           dplyr::filter(
             grepl(x, unit_name),
-            !is.na(unit)
+            !is.na(.data$unit)
           ) |>
-          dplyr::pull(unit) |>
+          dplyr::pull("unit") |>
           unique()
         if (is.na(unit_label) || length(unit_label) == 0) {
           cli::cli_alert_warning("No unit label found in the data for {unit_name}. Please provide a unit label using the '{unit_name}_label' argument.")

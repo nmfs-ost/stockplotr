@@ -154,7 +154,7 @@ extract_sis_data <- function(sis_data_dir = getwd(),
         rec <- rda[["figure"]][["layers"]][["geom_line"]][["data"]]
         recruitment <- rec |>
           dplyr::group_by(year) |>
-          dplyr::summarise(sum = sum(predicted_recruitment)) |>
+          dplyr::summarise(sum = sum(.data$predicted_recruitment)) |>
           dplyr::rename(Recruitment = sum)
       },
       error = function(e) {

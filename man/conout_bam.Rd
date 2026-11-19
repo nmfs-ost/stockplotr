@@ -7,6 +7,10 @@
 conout_bam(file, out_new, fleet_names = NULL)
 }
 \arguments{
+\item{file}{Assessment model output file path or object in the user's
+environment. Currently accepts SS3 Report.sso file, BAM .rda file,
+Rceattle model object, and FIMS model object.}
+
 \item{out_new}{The empty standard output data frame from
 \code{\link[=convert_output]{convert_output()}}, which sets the columns of the output.}
 
@@ -18,9 +22,6 @@ then fleet_names = c("fleet1" = 1, "fleet2" = 2, "fleet3" = 3).
 Default: NULL
 
 Should match length of \code{files} if >1 model.}
-
-\item{file.}{Assessment model output file path. Currently accepts SS3
-Report.sso file, BAM .rda file, Rceattle model object, and FIMS model object.}
 }
 \value{
 Reshaped data frame.
