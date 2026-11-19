@@ -1264,7 +1264,7 @@ conout_ss3 <- function(
     )
   }
   out_new <- Reduce(rbind, out_list)
-  
+
   # Composition data by bin from r4ss (lendbase, agedbase, condbase)
   if (!is.character(file)) {
     comp_rows <- ss3_composition_rows(
@@ -1279,7 +1279,7 @@ conout_ss3 <- function(
       out_new <- rbind(out_new, comp_rows)
     }
   }
-  
+
   out_new |>
     dplyr::mutate(
       fleet = if (any(unique(out_new$fleet) %in% fleet_names)) fleet else fleet_names[fleet],

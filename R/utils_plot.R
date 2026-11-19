@@ -676,7 +676,7 @@ cap_first_letter <- function(s) {
 #' @param label_name String. Name of the label used to filter
 #' the data.
 #' @param allow_multiple_models Logical. Whether to allow multiple models.
-#' 
+#'
 #' Default: TRUE
 #'
 #' @returns a data frame that is preformatted for plotting with ggplot2.
@@ -686,12 +686,12 @@ cap_first_letter <- function(s) {
 #' \dontrun{
 #' filter_data(dat, "biomass", "line", group = "fleet")
 #' filter_data(
-#'    dat, 
-#'    label = "biomass",
-#'    geom = "line",
-#'    module="derived_quants", 
-#'    model=NULL, 
-#'    allow_multiple_models=FALSE # can only select one model to filter by
+#'   dat,
+#'   label = "biomass",
+#'   geom = "line",
+#'   module = "derived_quants",
+#'   model = NULL,
+#'   allow_multiple_models = FALSE # can only select one model to filter by
 #' )
 #' }
 filter_data <- function(
@@ -707,13 +707,12 @@ filter_data <- function(
   interactive = TRUE,
   allow_multiple_models = TRUE
 ) {
-
   # Check if there are multiple module_names present
   model_select <- filter_interactive(
     dat,
-    column_name="model",
-    column_value=model,
-    interactive=interactive,
+    column_name = "model",
+    column_value = model,
+    interactive = interactive,
     allow_multiple_selection = allow_multiple_models
   )
   dat <- model_select$plot_data
@@ -725,8 +724,8 @@ filter_data <- function(
   label_name <- gsub(" ", "_", tolower(label_name))
 
   model_label <- any(grepl("model", colnames(dat)))
-  if(!model_label){
-    dat <- dat |> dplyr::mutate(model="1")
+  if (!model_label) {
+    dat <- dat |> dplyr::mutate(model = "1")
   }
 
   plot_data <- dat |>
@@ -802,9 +801,9 @@ filter_data <- function(
   # Check if there are multiple module_names present
   module_select <- filter_interactive(
     plot_data,
-    column_name="module_name",
-    column_value=module,
-    interactive=interactive,
+    column_name = "module_name",
+    column_value = module,
+    interactive = interactive,
     allow_multiple_selection = TRUE
   )
   plot_data <- module_select$plot_data
@@ -1140,31 +1139,33 @@ add_reference_line <- function(
   # 2. custom input vector = c("sable23_msy"=30, "sable25_msy"=40) -- user must indicate which model in label otherwise it will assign in order of dat
   # 3. input vector of labels = c("msy", "target")
   # getting data set - an ifelse statement in the fxn wasn't working
-  if("model" %in% colnames(dat)){
-      model_names <- dat |> dplyr::distinct(model) |> dplyr::pull(model)
-      n_models <- length(model_names)
-  }else{
+  if ("model" %in% colnames(dat)) {
+    model_names <- dat |>
+      dplyr::distinct(model) |>
+      dplyr::pull(model)
+    n_models <- length(model_names)
+  } else {
     n_models <- 1
   }
-  
+
   ref_lines_list <- list()
   if (!is.null(ref_line)) {
     # Check if length of ref_line = dat -- replicate value if not
     # Need to check this
     # if (!is.data.frame(dat) & length(ref_line) != length(dat)) ref_line <- rep(ref_line, length(dat))
-    
-    if(n_models > 1 & length(ref_line)==1) ref_line <- rep(ref_line, n_models)
-    
+
+    if (n_models > 1 & length(ref_line) == 1) ref_line <- rep(ref_line, n_models)
+
     # Put into for loop and add lines sequentially to plt
     for (i in 1:length(ref_line)) {
       # find the reference point value
       if (is.null(names(ref_line[i]))) {
         ref_line_x <- calculate_reference_point(
-          dat = if(n_models == 1){
-              dat
-            } else {
-              dat |> dplyr::filter(model == model_names[i])
-            },
+          dat = if (n_models == 1) {
+            dat
+          } else {
+            dat |> dplyr::filter(model == model_names[i])
+          },
           reference_name = glue::glue("{label}_{ref_line[i]}"),
           lbs = lbs
         ) / scale_amount
@@ -1218,38 +1219,38 @@ add_reference_line <- function(
 
 
 #' Filter plot data interactively
-#' 
+#'
 #' Allows user to interactively select values from those available
 #' to filter their data by.
-#' 
+#'
 #' @param dat data.frame. A tibble or named list of tibbles (input as `list()`)
 #' returned from \link[stockplotr]{convert_output}.
-#' 
+#'
 #' @param column_name String. Name of the column to allow interactive filtering for.
-#' 
+#'
 #' @param column_value String. Value of the column to filter by. If NULL, interactive
 #' selection will be enabled.
-#' 
+#'
 #' Default: NULL
-#' 
-#' @param interactive Logical. indicate whether the environment is interactive. 
-#' 
+#'
+#' @param interactive Logical. indicate whether the environment is interactive.
+#'
 #' Default: TRUE
-#' 
+#'
 #' @param allow_multiple_selection Logical. Whether to allow the selection of multiple inputs.
-#' 
+#'
 #' Default: FALSE
-#' 
+#'
 #' @return List. filtered data.frame (`plot_data`) and selected option(`selected`).
-#' 
+#'
 #' @examples
 #' \dontrun{
-#'  filter_interactive(
-#'    dat = example_dat,
-#'    column_name = "model",
-#'    column_value = NULL,
-#'    allow_multiple_selection = TRUE # allow selecting multiple models
-#'  )
+#' filter_interactive(
+#'   dat = example_dat,
+#'   column_name = "model",
+#'   column_value = NULL,
+#'   allow_multiple_selection = TRUE # allow selecting multiple models
+#' )
 #' }
 filter_interactive <- function(
   dat,
@@ -1257,22 +1258,21 @@ filter_interactive <- function(
   column_value = NULL,
   interactive = TRUE,
   allow_multiple_selection = TRUE
-){
+) {
+  pretty_columns <- c("module_name" = "module", "model" = "model")
 
-  pretty_columns <- c("module_name"="module", "model"="model")
-  
   plot_dat <- dat
   selected <- unique(dat[[column_name]])
-  if(length(unique(dat[[column_name]])) > 1){
+  if (length(unique(dat[[column_name]])) > 1) {
     available_names <- unique(dat[[column_name]])
-    if(!is.null(column_value)){
-      if(length(column_value) > 1 && !allow_multiple_selection){
+    if (!is.null(column_value)) {
+      if (length(column_value) > 1 && !allow_multiple_selection) {
         cli::cli_alert_danger("Multiple {pretty_columns[column_name]}s provided, but only 1 allowed. Defaulting to first available {pretty_columns[column_name]} name: {available_names[1]}.")
         column_value <- available_names[1]
       }
       plot_dat <- dat |> dplyr::filter(.data[[column_name]] %in% column_value)
       selected <- column_value
-    }else{
+    } else {
       cli::cli_alert_warning("Multiple {pretty_columns[column_name]}s found in data. \n")
       options <- c()
       for (i in seq_along(available_names)) {
@@ -1280,22 +1280,22 @@ filter_interactive <- function(
         options[i] <- paste0(available_names[i])
       }
 
-      if(column_name == "model"){
+      if (column_name == "model") {
         options <- c(options, "All")
       }
 
-      if(interactive()){
-        if(interactive){
+      if (interactive()) {
+        if (interactive) {
           selection <- utils::select.list(
             options,
-            multiple=allow_multiple_selection,
+            multiple = allow_multiple_selection,
             title = glue::glue("Select one of the following {pretty_columns[column_name]} names")
           )
-          question1 <- if(length(selection)==0 || identical(selection, "")){
+          question1 <- if (length(selection) == 0 || identical(selection, "")) {
             options[1]
-          }else if("All" %in% selection){
+          } else if ("All" %in% selection) {
             options[-length(options)]
-          }else{
+          } else {
             selection
           }
 
@@ -1303,11 +1303,11 @@ filter_interactive <- function(
           if (length(selected) < 1 || (length(selected) > 1 && !allow_multiple_selection)) {
             selected <- available_names[1]
           }
-        }else{
+        } else {
           selected <- available_names[1]
           cli::cli_alert_info("Selection bypassed. Filtering by {selected}.")
         }
-      }else{
+      } else {
         selected <- available_names[1]
         cli::cli_alert_info(glue::glue("Environment not interactive. Selecting {selected}."))
       }
@@ -1319,7 +1319,7 @@ filter_interactive <- function(
       }
     }
   }
-  out <- list("plot_data"=plot_dat, "selected"=selected)
+  out <- list("plot_data" = plot_dat, "selected" = selected)
 
   return(out)
 }

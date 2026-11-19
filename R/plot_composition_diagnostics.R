@@ -520,4 +520,3 @@ plot_composition_andre <- function(
       plot.caption = ggplot2::element_text(hjust = 0, size = 9)
     )
 }
-

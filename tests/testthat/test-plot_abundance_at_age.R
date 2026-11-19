@@ -166,15 +166,14 @@ test_that("plot contains a legend", {
 })
 
 test_that("plot_abundace_at_age generates plots for multiple models", {
-    dat <- convert_output(list(
-      "model1" = r4ss::SS_output(test_path("fixtures", "ss3_models", "models", "Hake_2018")),
-      "model2" = r4ss::SS_output(test_path("fixtures", "ss3_models", "models", "Hake_2019_semi-parametric_selex"))
-    ))
+  dat <- convert_output(list(
+    "model1" = r4ss::SS_output(test_path("fixtures", "ss3_models", "models", "Hake_2018")),
+    "model2" = r4ss::SS_output(test_path("fixtures", "ss3_models", "models", "Hake_2019_semi-parametric_selex"))
+  ))
 
-    expect_no_error(plt <- plot_abundance_at_age(dat, module="natage", model=c("model1", "model2")))
-    expect_s3_class(plt, "gg")
+  expect_no_error(plt <- plot_abundance_at_age(dat, module = "natage", model = c("model1", "model2")))
+  expect_s3_class(plt, "gg")
 
-    p <- ggplot2::ggplot_build(plt)
-    expect_equal(length(unique(p$data[[1]]$PANEL)), 4)
-
+  p <- ggplot2::ggplot_build(plt)
+  expect_equal(length(unique(p$data[[1]]$PANEL)), 4)
 })
