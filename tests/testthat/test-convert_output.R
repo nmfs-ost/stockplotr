@@ -73,7 +73,7 @@ test_that("missing arguments trigger warnings or errors", {
     ),
     "`file` not found."
   )
-  
+
   dir.create(fs::path("fixtures", "ss3_models_converted", "Hake_2018"), recursive = TRUE)
 
   expect_error(
