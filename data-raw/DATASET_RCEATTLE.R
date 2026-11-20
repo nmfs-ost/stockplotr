@@ -4,9 +4,9 @@ install.packages(c("remotes")) # , "readxl"
 remotes::install_github("afsc-assessments/Rceattle")
 # library(Rceattle)
 # library(readxl)
-GOApollock <- Rceattle::GOApollock
-GOApollock$styr <- 1977 # The SAFE model starts at 1970, so change styr to 1970 to run the full time series model (data is in there). I start them all at 1977 because thats the years with overlap.
-pollock_model <- Rceattle::fit_mod(
+GOAcod <- Rceattle::GOAcod
+GOAcod$styr <- 1977 # The SAFE model starts at 1970, so change styr to 1970 to run the full time series model (data is in there). I start them all at 1977 because thats the years with overlap.
+cod_model <- Rceattle::fit_mod(
   data_list = GOApollock,
   inits = NULL, # Initial parameters = 0
   file = NULL, # Don't save
@@ -20,8 +20,8 @@ pollock_model <- Rceattle::fit_mod(
 pak::local_install(".")
 # Convert output
 # OK not to subset bc small
-pollock <- stockplotr::convert_output(pollock_model)
+cod <- stockplotr::convert_output(cod_model)
 # Save object as rda into raw_data -- and document
-usethis::use_data(pollock, overwrite = TRUE)
+usethis::use_data(cod, overwrite = TRUE)
 # Overwrite compressed version
-save(pollock, file = "data/pollock.rda", compress = "xz", compression_level = 9)
+save(pollock, file = "data/cod.rda", compress = "xz", compression_level = 9)
