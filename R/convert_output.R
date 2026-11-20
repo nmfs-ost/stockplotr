@@ -2,21 +2,29 @@
 #'
 #' Format stock assessment output file to a standardized tibble.
 #'
-#' @param files List of Paths. Assessment model output file paths. Currently accepts SS3
+#' @param files List of paths. Assessment model output file paths. Currently accepts SS3
 #' `r4ss::ss_output()` or Report.sso file (being deprecated), BAM .rda file, Rceattle model object,
 #' and FIMS output (the tibble returned by `FIMS::get_estimates()`, a `FIMSFit` object, or an .rds
 #' file with either). If multiple elements, all valid models will be read, converted, and
 #' appended together.
 #'
 #' `names(files)` will be used as the name of the model in the output.
+#' 
+#' @param file `r lifecycle::badge('deprecated')` 
+#' This argument was deprecated in favor of the `files` argument in order
+#' to clarify that multiple files can be processed simultaneously.
 #'
-#' @param models Character vector Assessment model used in evaluation
+#' @param models Character vector. Assessment model used in evaluation
 #'
 #' Default: NULL
 #'
 #' Options: "ss3", "bam", "fims", "rceattle"
 #'
 #' Should match length of `files` if >1 model.
+#' 
+#' @param model `r lifecycle::badge('deprecated')` 
+#' This argument was deprecated in favor of the `models` argument in order
+#' to clarify that multiple models can be processed simultaneously.
 #'
 #' @param fleet_names List of named character vectors. Names of fleets in the assessment model as
 #'  shortened in the output file or names of fleets to replace the native fleet
@@ -84,8 +92,29 @@ convert_output <- function(
   models = NULL,
   fleet_names = NULL,
   save_dir = NULL,
-  start_year = NULL
+  start_year = NULL,
+  file = lifecycle::deprecated(),
+  model = lifecycle::deprecated()
 ) {
+  # check for used deprecated arguments
+  if (lifecycle::is_present(file)) {
+    lifecycle::deprecate_warn(
+      when = "0.16.0", 
+      what = "convert_output(file)", 
+      details = "Please use `files` instead of `file`"
+    )
+    
+    files <- file
+  }
+  if (lifecycle::is_present(model)) {
+    lifecycle::deprecate_warn(
+      when = "0.16.0", 
+      what = "convert_output(model)", 
+      details = "Please use `models` instead of `model`"
+    )
+    
+    models <- model
+  }
   # Is user inputs a single model file and doesn't wrap it as a list object
   # First check handles WHAM and Rceattle models, second check handles single model input,
   # final check handles FIMS models
