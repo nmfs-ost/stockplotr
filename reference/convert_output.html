@@ -110,7 +110,9 @@
 <span>  models <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fleet_names <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  save_dir <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  start_year <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  start_year <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  file <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  model <span class="op">=</span> <span class="fu">lifecycle</span><span class="fu">::</span><span class="fu"><a href="https://lifecycle.r-lib.org/reference/deprecated.html" class="external-link">deprecated</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -119,7 +121,7 @@
 
 
 <dl><dt id="arg-files">files<a class="anchor" aria-label="anchor" href="#arg-files"></a></dt>
-<dd><p>List of Paths. Assessment model output file paths. Currently accepts SS3
+<dd><p>List of paths. Assessment model output file paths. Currently accepts SS3
 <code>r4ss::ss_output()</code> or Report.sso file (being deprecated), BAM .rda file, Rceattle model object,
 and FIMS output (the tibble returned by <code><a href="https://NOAA-FIMS.github.io/FIMS/reference/get_FIMSFit.html" class="external-link">FIMS::get_estimates()</a></code>, a <code>FIMSFit</code> object, or an .rds
 file with either). If multiple elements, all valid models will be read, converted, and
@@ -128,7 +130,7 @@ appended together.</p>
 
 
 <dt id="arg-models">models<a class="anchor" aria-label="anchor" href="#arg-models"></a></dt>
-<dd><p>Character vector Assessment model used in evaluation</p>
+<dd><p>Character vector. Assessment model used in evaluation</p>
 <p>Default: NULL</p>
 <p>Options: "ss3", "bam", "fims", "rceattle"</p>
 <p>Should match length of <code>files</code> if &gt;1 model.</p></dd>
@@ -155,6 +157,18 @@ in the file path provided.</p>
 FIMS reports years as indices (1 = first model year), which are converted
 to years when <code>start_year</code> is given.</p>
 <p>Default: NULL (years are left as indices)</p></dd>
+
+
+<dt id="arg-file">file<a class="anchor" aria-label="anchor" href="#arg-file"></a></dt>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a>
+This argument was deprecated in favor of the <code>files</code> argument in order
+to clarify that multiple files can be processed simultaneously.</p></dd>
+
+
+<dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a>
+This argument was deprecated in favor of the <code>models</code> argument in order
+to clarify that multiple models can be processed simultaneously.</p></dd>
 
 </dl></div>
     <div id="value">
