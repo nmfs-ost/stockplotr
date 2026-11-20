@@ -9,11 +9,13 @@ convert_output(
   models = NULL,
   fleet_names = NULL,
   save_dir = NULL,
-  start_year = NULL
+  start_year = NULL,
+  file = lifecycle::deprecated(),
+  model = lifecycle::deprecated()
 )
 }
 \arguments{
-\item{files}{List of Paths. Assessment model output file paths. Currently accepts SS3
+\item{files}{List of paths. Assessment model output file paths. Currently accepts SS3
 \code{r4ss::ss_output()} or Report.sso file (being deprecated), BAM .rda file, Rceattle model object,
 and FIMS output (the tibble returned by \code{FIMS::get_estimates()}, a \code{FIMSFit} object, or an .rds
 file with either). If multiple elements, all valid models will be read, converted, and
@@ -21,7 +23,7 @@ appended together.
 
 \code{names(files)} will be used as the name of the model in the output.}
 
-\item{models}{Character vector Assessment model used in evaluation
+\item{models}{Character vector. Assessment model used in evaluation
 
 Default: NULL
 
@@ -49,6 +51,14 @@ FIMS reports years as indices (1 = first model year), which are converted
 to years when \code{start_year} is given.
 
 Default: NULL (years are left as indices)}
+
+\item{file}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+This argument was deprecated in favor of the \code{files} argument in order
+to clarify that multiple files can be processed simultaneously.}
+
+\item{model}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+This argument was deprecated in favor of the \code{models} argument in order
+to clarify that multiple models can be processed simultaneously.}
 }
 \value{
 A reformatted and standardized tibble of assessment model results
