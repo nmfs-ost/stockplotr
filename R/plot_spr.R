@@ -39,7 +39,7 @@ plot_spr <- function(
   group = NULL,
   facet = NULL,
   ref_line = "target",
-  era = "time",
+  era = NULL,
   module = NULL,
   model = NULL,
   interactive = TRUE,
