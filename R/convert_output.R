@@ -118,7 +118,7 @@ convert_output <- function(
   # Is user inputs a single model file and doesn't wrap it as a list object
   # First check handles WHAM and Rceattle models, second check handles single model input,
   # final check handles FIMS models
-  if (any(grepl("Data_File|data_list", names(files))) || is.character(files) || is.data.frame(files)) {
+  if(any(grepl("Data_File|data_list|info|TMBfilename", names(files))) || is.character(files) || is.data.frame(files)){
     cli::cli_alert("`files` is a single model. Converting to list object.")
     files <- list(files)
     names(files) <- "model_1"
@@ -136,7 +136,6 @@ convert_output <- function(
     names(fleet_names) <- names(files)
     cli::cli_alert(glue::glue("Fleets names are: {str(fleet_names)}"))
   }
-
 
   processed <- purrr::imap(files, function(file, model_name) {
     i <- which(names(files) == model_name)
@@ -235,7 +234,8 @@ convert_output <- function(
     }
     if (is.character(file)) {
       if (is.null(models) || is.na(models[i])) {
-        model <- switch(stringr::str_extract(file, "\\.([^.]+)$"),
+        model <- switch(
+          stringr::str_extract(file, "\\.([^.]+)$"),
           ".sso" = {
             cli::cli_alert_info("Processing Stock Synthesis output file...")
             "ss3"
@@ -255,8 +255,9 @@ convert_output <- function(
           cli::cli_abort("Unknown file type. Please indicate model.")
         )
       }
-    } else if (is.null(models) || is.na(models[i])) {
-      model <- switch(class(file)[1],
+    } else if (is.null(models) || is.na(models[i])){
+      model <- switch(
+        class(file)[1],
         "FIMSFit" = {
           cli::cli_alert_info("Processing FIMS output file...")
           "fims"
@@ -273,6 +274,9 @@ convert_output <- function(
           if (any(grepl("wham_version", names(file)))) {
             cli::cli_alert_info("Processing WHAM output file...")
             "wham"
+          } else if (any(grepl("SEDAR", file))) {
+            cli::cli_alert_info("Processing BAM output file...")
+            "bam"
           } else {
             cli::cli_alert_info("Processing SS3 r4ss output file...")
             "ss3"
@@ -280,7 +284,7 @@ convert_output <- function(
         },
         cli::cli_abort("Unknown file type. Please indicate model.")
       )
-    } else {
+    } else{
       model <- models[i]
     }
 

@@ -8,10 +8,11 @@
 	"features": {
 		"ghcr.io/rocker-org/devcontainer-features/quarto-cli:1": {},
 		"ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
-            	"packages": "make,gcc,g++,cmake,clang-tidy,clang-format"
+			"packages": "make,gcc,g++,cmake,clang-tidy,clang-format,libuv1-dev"
 		},
-	    	"ghcr.io/rocker-org/devcontainer-features/r-packages:1": {
-			"packages": "cli,rlang,usethis,devtools,ggplot2,remotes,pak",
+		"ghcr.io/rocker-org/devcontainer-features/r-packages:1": {
+			"packages": "cli,rlang,usethis,devtools,ggplot2,gt,remotes,pak",
+			"cranMirror": "https://cloud.r-project.org",
 			"installSystemRequirements": true
 		}
 	},
@@ -42,7 +43,11 @@
 			"requireLocalPort": true,
 			"onAutoForward": "ignore"
 		}
-	  },		  
+	  },
+	"postCreateCommand": [
+	"sudo", "-n", "Rscript", "-e",
+	"write('options(repos = c(CRAN = \"https://cloud.r-project.org\"))', file = file.path(R.home('etc'), 'Rprofile.site'), append = TRUE)"
+	],		  
 	  "postAttachCommand": "sudo rstudio-server start",
 	  "remoteUser": "rstudio"
 	

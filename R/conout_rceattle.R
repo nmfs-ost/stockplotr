@@ -211,7 +211,7 @@ conout_rceattle <- function(
       # comp_data?, index_data, catch_data, weight, Ftarget, Flimit
       data_list_list <- list()
 
-      ####### Indices ####
+      ####### Indices ----
       # Extract index_data
       df_index <- extract[[1]]$index_data |>
         # rename all columns to lower case to match standard
@@ -366,6 +366,26 @@ conout_rceattle <- function(
       df_comp[setdiff(tolower(names(out_new)), tolower(names(df_comp)))] <- NA
       data_list_list[["comp_data"]] <- df_comp
 
+      #### Age length key ----
+      module_name <- "age_trans_matrix"
+      alk_raw <- dat$data_list$age_trans_matrix |>
+        dplyr::rename_with(tolower)
+      df_alk <- alk_raw |>
+        dplyr::select(-c(age_transition_name, age_transition_index, species)) |> # not sure what these are for |>
+        tidyr::pivot_longer(
+          cols = -intersect(colnames(alk_raw), factors),
+          names_to = "len_bins",
+          values_to = "estimate"
+        ) |>
+        dplyr::mutate(
+          label = "age_to_length_conversion",
+          module_name = module_name,
+          len_bins = as.numeric(stringr::str_remove(len_bins, "length_"))
+        )
+      
+      df_alk[setdiff(tolower(names(out_new)), tolower(names(df_alk)))] <- NA
+      data_list_list[[module_name]] <- df_alk
+      
       # final df for data_list module
       # rbind() rather than bind_rows(): every frame has already been padded
       # to the standard column set above, so rbind() succeeds and keeps the
