@@ -55,6 +55,7 @@ Imports:
 Suggests:
     FIMS,
     flextable,
+    ggridges,
     here,
     kableExtra,
     knitr,

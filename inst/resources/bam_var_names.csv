@@ -318,3 +318,4 @@ spr.brps,r.f30,recruitment_f30,
 spr.brps,ssb.f30,spawning_biomass_f30,kg
 spr.brps,ssbend.ssbf30,spawning_biomass_end_spawning_biomass_f30,
 t.series,total.l.mt,landings_weight,mt
+lenprob.mats,lenprob,age_to_length_conversion,
