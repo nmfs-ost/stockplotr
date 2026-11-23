@@ -7,7 +7,7 @@ remotes::install_github("afsc-assessments/Rceattle")
 GOAcod <- Rceattle::GOAcod
 GOAcod$styr <- 1977 # The SAFE model starts at 1970, so change styr to 1970 to run the full time series model (data is in there). I start them all at 1977 because thats the years with overlap.
 cod_model <- Rceattle::fit_mod(
-  data_list = GOApollock,
+  data_list = GOAcod,
   inits = NULL, # Initial parameters = 0
   file = NULL, # Don't save
   estimateMode = 0, # 0 = Estimate, 1 = Dont run estimation
@@ -24,4 +24,4 @@ cod <- stockplotr::convert_output(cod_model)
 # Save object as rda into raw_data -- and document
 usethis::use_data(cod, overwrite = TRUE)
 # Overwrite compressed version
-save(pollock, file = "data/cod.rda", compress = "xz", compression_level = 9)
+save(cod, file = "data/cod.rda", compress = "xz", compression_level = 9)
