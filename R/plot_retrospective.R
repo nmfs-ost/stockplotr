@@ -231,6 +231,57 @@ plot_retrospective <- function(
   plt
 }
 
+#' Plot retrospective recruitment deviations
+#'
+#' Plot estimate recruitment deviations by cohort across retrospective
+#' model peels.
+#'
+#' @inheritParams plot_spawning_biomass
+#'
+#' @param end_years Integer. vector of what year, relative to the maximum
+#' year present in `dat`, should be treated as the final year for each
+#' model. Should be <= 0.
+#'
+#' Default: 0
+#'
+#' @param relative Logical. Whether to plot traditional squid plot, or to plot
+#' recruitment deviations relative to the value for which the most data is 
+#' available. This create a "funnel" plot.
+#' 
+#' Default: FALSE
+#'
+#' @param group String. Single column that groups the data.
+#'
+#' Default: "model"
+#'
+#' @return A plot showing estimates of recruitment for each cohort.
+#'
+#' @details The input is from an assessment model output file
+#' translated to a standardized output (\link[stockplotr]{convert_output}).
+#' There are options to return a `ggplot2` object or export an .rda object
+#' containing associated caption and alternative text for the figure.
+#'
+#' @note
+#' All plotting functions automatically recognize indexing variables and will
+#' use them in groupings and/or facetting, but will prioritize the defined
+#' group or facet by the function arguments. @seealso [process_data()].
+#'
+#' @seealso [convert_output()], [plot_timeseries()], [calculate_reference_point()], [reference_line()], [filter_data()], [process_data()], [export_kqs()], [insert_kqs()], [create_rda()], [plot_retrospective()]
+#'
+#' @export
+#'
+#' @examples
+#' plot_retrospective_squid(
+#'   dat = ss3_simple,
+#'   end_years = 0:-5
+#' )
+#' plot_retrospective_squid(
+#'   dat = ss3_simple,
+#'   end_years = 0:-5,
+#'   relative = TRUE,
+#'   interactive = FALSE,
+#'   module = "derived_quants"
+#' )
 plot_retrospective_squid <- function(
   dat,
   end_years = NULL,
@@ -241,7 +292,6 @@ plot_retrospective_squid <- function(
   ...
 ) {
   
-
   check_data(dat)
 
   prepared_data <- filter_data(
