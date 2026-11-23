@@ -318,29 +318,41 @@ plot_retrospective_squid <- function(
     dplyr::mutate(
       cohort_age = dplyr::row_number()-1
     ) |>
+    dplyr::group_by(cohort_age) |>
+    dplyr::mutate(
+      cohort_year = max(year)-dplyr::row_number()+1
+    ) |>
     dplyr::ungroup() |>
     print(n=20)
 
   # Convert from squid to funnel plot
   if(relative){
     squid_dat <- squid_dat |>
-      dplyr::group_by(year) |>
-      dplyr::mutate(estimate = estimate-estimate[cohort_age==max(cohort_age)])
+      dplyr::group_by(cohort_year) |>
+      dplyr::mutate(
+        estimate = estimate-estimate[cohort_age==max(cohort_age)],
+        estimate_lower = estimate_lower-estimate_lower[cohort_age==max(cohort_age)],
+        estimate_upper = estimate_upper-estimate_upper[cohort_age==max(cohort_age)]
+      )
   }
 
   squid_dat <- squid_dat |>
     dplyr::mutate(
-      year=factor(year),
+      cohort_year=factor(cohort_year),
       cohort_age=factor(cohort_age)
     )
 
   plt <- ggplot2::ggplot(squid_dat)+
-    ggplot2::geom_line(
-      ggplot2::aes(x=cohort_age, y=estimate, color=year, group=year), 
-      linewidth=0.75
+    ggdist::geom_lineribbon(
+      ggplot2::aes(
+        x=cohort_age, 
+        y=estimate, ymin=estimate_lower, ymax=estimate_upper, 
+        color=cohort_year, group=cohort_year, fill=cohort_year
+      ), 
+      linewidth=0.75, alpha=0.3
     )+
     ggplot2::geom_point(
-      ggplot2::aes(x=cohort_age, y=estimate, color=year), 
+      ggplot2::aes(x=cohort_age, y=estimate, color=cohort_year), 
       size=2
     )+
     ggplot2::geom_hline(yintercept=0.0, linetype="solid", color="gray")+
@@ -352,7 +364,8 @@ plot_retrospective_squid <- function(
       )
     )+
     ggplot2::guides(
-      color=ggplot2::guide_legend("Cohort Year")
+      color=ggplot2::guide_legend("Cohort Year"),
+      fill=ggplot2::guide_legend("Cohort Year")
     )+
     ggplot2::labs(x="Cohort Age", y="Recruitment Deviation")+
     theme_noaa()
