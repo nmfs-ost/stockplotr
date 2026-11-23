@@ -308,10 +308,16 @@ plot_retrospective_squid <- function(
 
   squid_dat <- prepared_data |>
     dplyr::distinct() |>
-    dplyr::select(label, estimate, year, era, module_name, uncertainty, model, group_var) |>
-    # These next two filters need to apply sequentially, so can't be combined
+        # These next two filters need to apply sequentially, so can't be combined
     dplyr::filter(era=="time") |>
     dplyr::filter(year > max(year)-length(end_years)) |>
+    split(~model) |>
+    purrr::imap(function(df, index){
+      peel = abs(end_years[which(index == names(end_years))])
+      df |>
+        dplyr::slice_head(n=length(end_years)-peel)
+    }) |>
+    list_rbind() |>
     # This arrange is important for calculating cohort age
     dplyr::arrange(model, desc(year)) |>
     dplyr::group_by(model) |>
