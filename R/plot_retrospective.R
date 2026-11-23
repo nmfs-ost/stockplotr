@@ -286,7 +286,10 @@ plot_retrospective_squid <- function(
   dat,
   end_years = NULL,
   relative = FALSE,
+  module=NULL,
+  model=NULL,
   group = "model",
+  interactive=TRUE,
   make_rda = FALSE,
   figures_dir = getwd(),
   ...
@@ -321,7 +324,7 @@ plot_retrospective_squid <- function(
     dat,
     label_name="recruitment_deviations",
     module = module,
-    model = model,
+    model = names(end_years),
     era = era,
     interactive = interactive,
     geom = "line",
@@ -331,14 +334,14 @@ plot_retrospective_squid <- function(
 
   squid_dat <- prepared_data |>
     dplyr::distinct() |>
-        # These next two filters need to apply sequentially, so can't be combined
+    # These next two filters need to apply sequentially, so can't be combined
     dplyr::filter(era=="time") |>
-    dplyr::filter(year > max(year)-length(end_years)) |>
+    dplyr::filter(year > max(year)-length(end_years)-1) |>
     split(~model) |>
     purrr::imap(function(df, index){
       peel = abs(end_years[which(index == names(end_years))])
       df |>
-        dplyr::slice_head(n=length(end_years)-peel)
+        dplyr::slice_head(n=length(end_years)-peel+1)
     }) |>
     list_rbind() |>
     # This arrange is important for calculating cohort age
@@ -368,7 +371,7 @@ plot_retrospective_squid <- function(
   squid_dat <- squid_dat |>
     dplyr::mutate(
       cohort_year=factor(cohort_year),
-      cohort_age=factor(cohort_age)
+      cohort_age=factor(cohort_age, levels=0:max(squid_dat$cohort_age))
     )
 
   plt <- ggplot2::ggplot(squid_dat)+
