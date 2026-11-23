@@ -142,8 +142,8 @@ plot_retrospective <- function(
     dat = retro_dat,
     group = "peel",
     model = names(end_years), # turn this on to bypass interactive model selection and plot all available models
-    make_rda = FALSE # don't want to overwrite files from non-retro plots
-    # ...
+    make_rda = FALSE, # don't want to overwrite files from non-retro plots
+    ...
   )
 
   plt <- do.call(func_name, func_pars)
@@ -229,4 +229,106 @@ plot_retrospective <- function(
   }
 
   plt
+}
+
+plot_retrospective_squid <- function(
+  dat,
+  end_years = NULL,
+  relative = FALSE,
+  group = "model",
+  make_rda = FALSE,
+  figures_dir = getwd(),
+  ...
+) {
+  
+
+  check_data(dat)
+
+  prepared_data <- filter_data(
+    dat,
+    label_name="recruitment_deviations",
+    module = module,
+    model = model,
+    era = era,
+    interactive = interactive,
+    geom = "line",
+    group = group,
+    allow_multiple_models = TRUE
+  )
+
+  squid_dat <- prepared_data |>
+    dplyr::distinct() |>
+    dplyr::select(label, estimate, year, era, module_name, uncertainty, model, group_var) |>
+    # These next two filters need to apply sequentially, so can't be combined
+    dplyr::filter(era=="time") |>
+    dplyr::filter(year > max(year)-length(end_years)) |>
+    # This arrange is important for calculating cohort age
+    dplyr::arrange(model, desc(year)) |>
+    dplyr::group_by(model) |>
+    dplyr::mutate(
+      cohort_age = dplyr::row_number()-1
+    ) |>
+    dplyr::ungroup() |>
+    print(n=20)
+
+  # Convert from squid to funnel plot
+  if(relative){
+    squid_dat <- squid_dat |>
+      dplyr::group_by(year) |>
+      dplyr::mutate(estimate = estimate-estimate[cohort_age==max(cohort_age)])
+  }
+
+  squid_dat <- squid_dat |>
+    dplyr::mutate(
+      year=factor(year),
+      cohort_age=factor(cohort_age)
+    )
+
+  plt <- ggplot2::ggplot(squid_dat)+
+    ggplot2::geom_line(
+      ggplot2::aes(x=cohort_age, y=estimate, color=year, group=year), 
+      linewidth=0.75
+    )+
+    ggplot2::geom_point(
+      ggplot2::aes(x=cohort_age, y=estimate, color=year), 
+      size=2
+    )+
+    ggplot2::geom_hline(yintercept=0.0, linetype="solid", color="gray")+
+    # geom_hline(yintercept=c(-2, 2), linetype="dashed")+
+    ggplot2::scale_y_continuous(
+      limits=c(
+        min(-1,min(squid_dat$estimate*1.5)), 
+        max(1, max(squid_dat$estimate*1.5))
+      )
+    )+
+    ggplot2::guides(
+      color=ggplot2::guide_legend("Cohort Year")
+    )+
+    ggplot2::labs(x="Cohort Age", y="Recruitment Deviation")+
+    theme_noaa()
+
+    if (make_rda) {
+      create_rda(
+        object = plt,
+        topic_label = glue::glue("squid_retrospective_{quantity}"),
+        fig_or_table = "figure",
+        dat = NULL,
+        dir = figures_dir,
+        ref_line = ifelse(!is.null(names(ref_line)), names(ref_line), ref_line),
+        scale_amount = scale_amount
+      )
+
+      cli::cli_alert_danger("No captions, alt-text, or key quantities were stored at this time.")
+    }
+
+    if (exists("selected_module")) {
+      rm(selected_module, envir = .GlobalEnv)
+    }
+
+    if (exists("selected_model")) {
+      rm(selected_model, envir = .GlobalEnv)
+    }
+
+    plt
+
 }
