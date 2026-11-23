@@ -291,6 +291,29 @@ plot_retrospective_squid <- function(
   figures_dir = getwd(),
   ...
 ) {
+
+  n_models <- length(unique(dat$model))
+
+  if (is.null(end_years)) end_years <- rep(0, n_models)
+  if (length(end_years) != n_models && n_models > 1) {
+    cli::cli_alert_info("Different number of end_years and available models.")
+    end_years <- c(end_years, rep(0, n_models - length(end_years)))
+  }
+
+  # Convert end_years to negatives for math
+  if (any(end_years > 0)) {
+    end_years[which(end_years > 0)] <- end_years[which(end_years > 0)] * -1
+  }
+
+
+  if (n_models == 1) {
+    cli::cli_alert_info("Only 1 model detected in `dat`. Function expects multiple models corresponding to unique retrospective peels.")
+  }
+
+  if (is.null(names(end_years))) {
+    cli::cli_alert("`end_years` provided without names. names automatically applied.")
+    names(end_years) <- dat$model |> unique()
+  }
   
   check_data(dat)
 
