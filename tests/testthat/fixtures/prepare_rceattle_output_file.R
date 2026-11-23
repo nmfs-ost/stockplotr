@@ -34,36 +34,36 @@ stopifnot(
 # A saved Rceattle fit is ~50 MB, nearly all of it the TMB objective-function
 # object and the Hessian. Keep only the elements convert_output() reads, which
 # brings the fixture to ~40 KB.
-data_list_keep <- c(
-  "styr", "endyr", "projyr", "nspp", "nsex", "minage", "nages", "spnames",
-  "index_data", "catch_data", "comp_data", "fleet_control"
-)
-quantities_keep <- c(
-  "index_hat", "catch_hat", "age_hat", "log_index_hat", "sel_at_age",
-  "M_at_age"
-)
-
-fixture <- structure(
-  list(
-    data_list = full$data_list[intersect(data_list_keep, names(full$data_list))],
-    sdrep = list(
-      value = full$sdrep$value,
-      sd = full$sdrep$sd,
-      par.fixed = full$sdrep$par.fixed,
-      # convert_output() reads only the variances. Zeroing the covariances
-      # keeps the fixture small, since the full matrix is ~170 KB.
-      cov.fixed = diag(diag(full$sdrep$cov.fixed))
-    ),
-    quantities = full$quantities[intersect(quantities_keep, names(full$quantities))],
-    estimated_params = full$estimated_params[
-      intersect("index_log_q", names(full$estimated_params))
-    ]
-  ),
-  class = "Rceattle"
-)
+# data_list_keep <- c(
+#   "styr", "endyr", "projyr", "nspp", "nsex", "minage", "nages", "spnames",
+#   "index_data", "catch_data", "comp_data", "fleet_control"
+# )
+# quantities_keep <- c(
+#   "index_hat", "catch_hat", "age_hat", "log_index_hat", "sel_at_age",
+#   "M_at_age"
+# )
+# 
+# fixture <- structure(
+#   list(
+#     data_list = full$data_list[intersect(data_list_keep, names(full$data_list))],
+#     sdrep = list(
+#       value = full$sdrep$value,
+#       sd = full$sdrep$sd,
+#       par.fixed = full$sdrep$par.fixed,
+#       # convert_output() reads only the variances. Zeroing the covariances
+#       # keeps the fixture small, since the full matrix is ~170 KB.
+#       cov.fixed = diag(diag(full$sdrep$cov.fixed))
+#     ),
+#     quantities = full$quantities[intersect(quantities_keep, names(full$quantities))],
+#     estimated_params = full$estimated_params[
+#       intersect("index_log_q", names(full$estimated_params))
+#     ]
+#   ),
+#   class = "Rceattle"
+# )
 
 saveRDS(
-  fixture,
+  full,
   testthat::test_path("fixtures", "rceattle_goa_atf.rds"),
   compress = "xz"
 )

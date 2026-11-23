@@ -156,7 +156,7 @@ plot_joint_residuals <- function(
         data = labels,
         ggplot2::aes(x = Inf, y = Inf, label = .data$text),
         hjust = 1.05, vjust = 1.3,
-        fill = "white", alpha = 0.8, label.size = 0,
+        fill = "white", alpha = 0.8, linewidth = 0,
         inherit.aes = FALSE
       )
   }
