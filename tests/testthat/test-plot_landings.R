@@ -42,8 +42,8 @@ test_that("plot_landings plots the observed landings", {
   expect_equal(sum(line$estimate, na.rm = TRUE), sum(obs$estimate))
   expect_equal(landings_label_name(dat), "^landings_observed$")
   expect_equal(landings_label_name(stockplotr::example_data), "^landings_observed_weight$")
-  # pollock reports its observed landings as "catch"
-  expect_equal(landings_label_name(stockplotr::pollock), "^catch$")
+  # cod reports its observed landings as "catch"
+  expect_equal(landings_label_name(stockplotr::cod), "^catch$")
   # Without observed landings, the first label containing "landings"
   no_obs <- dat[!grepl("landings_observed", dat$label), ]
   expect_message(label <- landings_label_name(no_obs), "No observed landings")
@@ -82,8 +82,8 @@ test_that("plot_landings shows the fit: observed points and predicted lines", {
   # A panel per fleet
   p <- suppressMessages(plot_landings(dat, facet = "fleet", interactive = FALSE))
   expect_s3_class(p$facet, "FacetWrap")
-  # pollock reports its landings as "catch" and "catch_predicted"
-  p <- suppressMessages(plot_landings(stockplotr::pollock, interactive = FALSE))
+  # cod reports its landings as "catch" and "catch_predicted"
+  p <- suppressMessages(plot_landings(stockplotr::cod, interactive = FALSE))
   expect_true(all(landings_layers(p, "GeomLine")[[1]]$data$label == "catch_predicted"))
   expect_true(all(landings_layers(p, "GeomPoint")[[1]]$data$label == "catch"))
 })

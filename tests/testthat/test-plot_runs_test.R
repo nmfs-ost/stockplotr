@@ -23,7 +23,7 @@ test_that("residual_control estimates limits and the runs test", {
 test_that("index residuals match each example model output", {
   datasets <- list(
     example_data = stockplotr::example_data,
-    pollock = stockplotr::pollock,
+    cod = stockplotr::cod,
     ss3_simple = stockplotr::ss3_simple,
     vermilion_snapper = stockplotr::vermilion_snapper,
     fims = fims_converted()
@@ -91,7 +91,7 @@ test_that("plot_runs_test flags outliers and failed runs tests", {
   expect_equal(p$data$year[p$data$outside], 2004)
   expect_equal(p$data$fleet[p$data$outside], "Triennial")
 
-  p <- suppressMessages(plot_runs_test(stockplotr::pollock, interactive = FALSE))
+  p <- suppressMessages(plot_runs_test(stockplotr::cod, interactive = FALSE))
   ctl <- p$layers[[1]]$data
   expect_true(all(c("Passed", "Failed (p < 0.05)") %in% ctl$result))
   # Long fleet names are wrapped, not cut

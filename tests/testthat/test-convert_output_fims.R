@@ -134,9 +134,9 @@ test_that("plots work with converted FIMS output", {
 })
 
 test_that("plot_index plots only observed and predicted indices", {
-  # pollock (Rceattle) has other labels that contain "index", such as
+  # cod (Rceattle) has other labels that contain "index", such as
   # index_log_q, and ss3_simple has a single index fleet
-  for (dat in list(stockplotr::pollock, stockplotr::ss3_simple, stockplotr::example_data)) {
+  for (dat in list(stockplotr::cod, stockplotr::ss3_simple, stockplotr::example_data)) {
     p <- suppressMessages(plot_index(dat, interactive = FALSE))
     expect_no_error(ggplot2::ggplot_build(p))
   }

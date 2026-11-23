@@ -69,7 +69,7 @@ test_that("table_landings tabulates the observed landings, or the labels given",
   cols <- names(tbl[["_data"]])
   expect_true(any(grepl("Predicted Weight", cols)))
   expect_false(any(grepl("Observed", cols)))
-  # pollock reports its observed landings as "catch"
-  tbl <- suppressMessages(table_landings(stockplotr::pollock, interactive = FALSE))
+  # cod reports its observed landings as "catch"
+  tbl <- suppressMessages(table_landings(stockplotr::cod, interactive = FALSE))
   expect_s3_class(tbl, "gt_tbl")
 })
