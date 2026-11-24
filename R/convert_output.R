@@ -9,8 +9,8 @@
 #' appended together.
 #'
 #' `names(files)` will be used as the name of the model in the output.
-#' 
-#' @param file `r lifecycle::badge('deprecated')` 
+#'
+#' @param file `r lifecycle::badge('deprecated')`
 #' This argument was deprecated in favor of the `files` argument in order
 #' to clarify that multiple files can be processed simultaneously.
 #'
@@ -21,8 +21,8 @@
 #' Options: "ss3", "bam", "fims", "rceattle"
 #'
 #' Should match length of `files` if >1 model.
-#' 
-#' @param model `r lifecycle::badge('deprecated')` 
+#'
+#' @param model `r lifecycle::badge('deprecated')`
 #' This argument was deprecated in favor of the `models` argument in order
 #' to clarify that multiple models can be processed simultaneously.
 #'
@@ -99,20 +99,20 @@ convert_output <- function(
   # check for used deprecated arguments
   if (lifecycle::is_present(file)) {
     lifecycle::deprecate_warn(
-      when = "0.16.0", 
-      what = "convert_output(file)", 
+      when = "0.16.0",
+      what = "convert_output(file)",
       details = "Please use `files` instead of `file`"
     )
-    
+
     files <- file
   }
   if (lifecycle::is_present(model)) {
     lifecycle::deprecate_warn(
-      when = "0.16.0", 
-      what = "convert_output(model)", 
+      when = "0.16.0",
+      what = "convert_output(model)",
       details = "Please use `models` instead of `model`"
     )
-    
+
     models <- model
   }
   # Is user inputs a single model file and doesn't wrap it as a list object
