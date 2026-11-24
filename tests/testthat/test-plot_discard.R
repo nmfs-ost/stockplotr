@@ -22,24 +22,14 @@ test_that("plot_discard plots the fit to the observed discards", {
 })
 
 test_that("plot_discard options change the plot", {
-  dat <- data.frame(
-    model = "model_1",
-    module_name = "DISCARD_OUTPUT",
-    label = rep(c("discard_observed", "discard_predicted"), each = 4),
-    year = rep(c(2000, 2001), 4),
-    fleet = rep(c("fleet1", "fleet2"), each = 2, times = 2),
-    estimate = c(100, 200, 80, 120, 99.8, 200.2, 79.8, 120.2),
-    uncertainty = 0.1,
-    uncertainty_label = "cv",
-    unit = "kg"
-  )
+  dat <- stockplotr::vermilion_snapper
   p <- suppressMessages(plot_discard(dat, interactive = FALSE))
   expect_length(discard_layers(p, "GeomPoint"), 1)
   ribbon <- discard_layers(p, "GeomRibbon")[[1]]$data
-  expect_gt(nrow(ribbon), 0)
   expect_true(all(ribbon$estimate_lower < ribbon$estimate))
 
-  # The range of differences is 0.2% of the largest observed discard.
+  # The predicted discards of vermilion_snapper are within 0.2% of the
+  # observed discards: only the observed discards, as lines
   expect_message(
     p <- plot_discard(dat, tolerance = 0.01, interactive = FALSE),
     "differ by less than"

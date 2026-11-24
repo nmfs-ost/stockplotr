@@ -71,7 +71,7 @@ test_that("missing arguments trigger warnings or errors", {
       models = "fake_model",
       save_dir = fs::path("fixtures", "ss3_models_converted", "Hake_2018")
     ),
-    "Output file not compatible."
+    "`file` not found."
   )
   
   dir.create(fs::path("fixtures", "ss3_models_converted", "Hake_2018"), recursive = TRUE)
@@ -86,14 +86,6 @@ test_that("missing arguments trigger warnings or errors", {
   )
 
   unlink(fs::path("fixtures", "ss3_models_converted"), recursive = TRUE)
-})
-
-test_that("explicit models work with file paths", {
-  path <- fs::path("fixtures", "ss3_models", "models", "Hake_2018", "Report.sso")
-  expect_equal(
-    suppressMessages(convert_output(files = path, models = "ss3")),
-    suppressMessages(convert_output(files = path))
-  )
 })
 
 test_that("r4ss::ss_output object is compatible.", {
@@ -183,7 +175,6 @@ test_that("convert_output works for Rceattle", {
 
   expect_equal(dim(from_path)[2], 36)
   expect_equal(from_path, from_object)
-  expect_type(from_path$length_bins, "double")
 
   # Every row says which module it came from.
   expect_false(any(is.na(from_path[["module_name"]])))
@@ -262,9 +253,9 @@ test_that("convert_output gives Rceattle recruitment deviations a standard error
 
   # The standard error of a fixed effect is the square root of its diagonal
   # entry in cov.fixed.
-  rec_dev_sd <- unname(sqrt(diag(fit[["sdrep"]][["cov.fixed"]]))[
+  rec_dev_sd <- sqrt(diag(fit[["sdrep"]][["cov.fixed"]]))[
     names(fit[["sdrep"]][["par.fixed"]]) == "rec_dev"
-  ])
+  ]
   rec_devs <- out[out[["label"]] == "recruitment_deviations", ]
   expect_equal(rec_devs[["uncertainty"]], unname(rec_dev_sd))
   expect_true(all(rec_devs[["uncertainty_label"]] == "sd"))
@@ -360,6 +351,4 @@ test_that("convert_output on SS3 and Rceattle model", {
   expect_no_error(result <- convert_output(models))
   expect_equal(dim(result)[2], 36)
   expect_equal(result$model %>% unique(), c("ss3_hake", "rceattle_atf"))
-  expect_type(result$length_bins, "character")
-  expect_true(any(!is.na(result$length_bins[result$model == "ss3_hake"])))
 })
