@@ -243,6 +243,12 @@ plot_retrospective <- function(
 #' model. Should be <= 0.
 #'
 #' Default: 0
+#' 
+#' @param cohort_years Integer. vector of cohort years (year in which recruitment
+#' occurred), to plot. May include forecast years. May be of different length than
+#' `end_years`.
+#' 
+#' Default: NULL (most recent `length(end_years)` cohorts)
 #'
 #' @param relative Logical. Whether to plot traditional squid plot, or to plot
 #' recruitment deviations relative to the value for which the most data is 
@@ -271,17 +277,30 @@ plot_retrospective <- function(
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#'
 #' plot_retrospective_squid(
 #'   dat = ss3_simple,
 #'   end_years = 0:-5
-#' )
+#' ) 
+#'    
+#' x <- list();
+#' x[[1]] <- r4ss::SS_output(fs::path(getwd(), "model_runs", "base_model"))
+#' for (y in 1:10) { # ten retrospective model runs
+#'   x[[length(x) + 1]] <- r4ss::SS_output(fs::path(getwd(), "model_runs", "base_model_retros", "retro", paste0("retro-", y))
+#' }
+#' names(x) <- paste0("retro-",0:10)
+#' retrospective_dat <- convert_output(x)
+#'
 #' plot_retrospective_squid(
-#'   dat = ss3_simple,
-#'   end_years = 0:-5,
-#'   relative = TRUE,
+#'   dat = retrospective_dat,
+#'   end_years = 0:10, # ten years of retrospective peels
+#'   cohort_years = 2010:2024, # plot these 15 cohorts
+#'   relative = FALSE,
 #'   interactive = FALSE,
-#'   module = "derived_quants"
+#'   module = "recruit"
 #' )
+#' }
 plot_retrospective_squid <- function(
   dat,
   end_years = NULL,
