@@ -111,6 +111,12 @@ test_that("FIMS output is read from an rds file", {
   expect_equal(nrow(convert_fims(path)), nrow(convert_fims()))
 })
 
+test_that("explicit model types work for unnamed lists", {
+  est <- fims_estimates()
+  out <- suppressMessages(convert_output(list(est, est), models = c("fims", "fims")))
+  expect_equal(nrow(out), 2 * nrow(convert_fims(est)))
+})
+
 test_that("a FIMSFit object needs FIMS", {
   skip_if(requireNamespace("FIMS", quietly = TRUE))
   methods::setClass("FIMSFit", representation(x = "numeric"), where = environment())

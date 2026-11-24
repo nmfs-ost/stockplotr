@@ -138,7 +138,7 @@ convert_output <- function(
   }
 
   processed <- purrr::imap(files, function(file, model_name) {
-    i <- which(names(files) == model_name)
+    i <- if (is.null(names(files))) model_name else which(names(files) == model_name)
     if (is.character(file) && grepl("Report.sso", file)) {
       lifecycle::deprecate_warn(
         when = "2.8.0",
@@ -232,30 +232,22 @@ convert_output <- function(
     if (is.character(file) && tolower(stringr::str_extract(file, "\\.([^.]+)$")) == ".rds") {
       file <- readRDS(file)
     }
-    if (is.character(file)) {
-      if (is.null(models) || is.na(models[i])) {
-        model <- switch(
-          stringr::str_extract(file, "\\.([^.]+)$"),
-          ".sso" = {
-            cli::cli_alert_info("Processing Stock Synthesis output file...")
-            "ss3"
-          },
-          ".rdat" = {
-            cli::cli_alert_info("Processing BAM output file...")
-            "bam"
-          },
-          # ".rds" = {
-          #   cli::cli_alert_info("Processing WHAM output file...")
-          #   "wham"
-          # },
-          # ".RDS" = {
-          #   cli::cli_alert_info("Processing FIMS output file...")
-          #   "fims"
-          # },
-          cli::cli_abort("Unknown file type. Please indicate model.")
-        )
-      }
-    } else if (is.null(models) || is.na(models[i])){
+    if (!is.null(models) && !is.na(models[i])) {
+      model <- models[i]
+    } else if (is.character(file)) {
+      model <- switch(
+        stringr::str_extract(file, "\\.([^.]+)$"),
+        ".sso" = {
+          cli::cli_alert_info("Processing Stock Synthesis output file...")
+          "ss3"
+        },
+        ".rdat" = {
+          cli::cli_alert_info("Processing BAM output file...")
+          "bam"
+        },
+        cli::cli_abort("Unknown file type. Please indicate model.")
+      )
+    } else {
       model <- switch(
         class(file)[1],
         "FIMSFit" = {
@@ -284,8 +276,6 @@ convert_output <- function(
         },
         cli::cli_abort("Unknown file type. Please indicate model.")
       )
-    } else{
-      model <- models[i]
     }
 
     #### SS3 ####
@@ -379,6 +369,12 @@ convert_output <- function(
     return(tibble::tibble(out_new))
   })
 
+  if (length(processed) > 1 && any(vapply(processed, function(x) is.character(x$length_bins), logical(1)))) {
+    processed <- lapply(processed, function(x) {
+      x$length_bins <- as.character(x$length_bins)
+      x
+    })
+  }
   out_new <- dplyr::bind_rows(processed) # aggregate all of the models
 
 
