@@ -16,7 +16,7 @@
 #'
 #' @param era String. Era of data.
 #'
-#' Default: "time"
+#' Default: NULL
 #'
 #' Options: "early", "time", "fore" (forecast), or NULL (all data)
 #'
@@ -68,7 +68,7 @@
 plot_catch_at_age <- function(
   dat,
   facet = NULL,
-  era = "time",
+  era = NULL,
   unit_label = NULL,
   scale_amount = 1,
   proportional = TRUE,

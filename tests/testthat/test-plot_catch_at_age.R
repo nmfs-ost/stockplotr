@@ -13,6 +13,7 @@ test_that("plot_catch_at_age generates plots without errors", {
     plot_catch_at_age(
       stockplotr::example_data,
       facet = "area",
+      era = "time",
       unit_label = "fish",
       scale_amount = 1000,
       module = "CATCH_AT_AGE",
@@ -28,6 +29,7 @@ test_that("plot_catch_at_age generates plots without errors", {
       stockplotr::example_data,
       unit_label = "fish",
       scale_amount = 1,
+      era = "fore",
       module = "CATCH_AT_AGE",
       interactive = FALSE,
       make_rda = FALSE,
