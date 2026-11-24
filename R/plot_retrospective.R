@@ -362,6 +362,17 @@ plot_retrospective_squid <- function(
   }
 
   squid_dat <- squid_dat |>
+    dplyr::ungroup() |>
+    dplyr::group_by(year) |>
+    dplyr::mutate(
+      # if relative=TRUE, place labels at the youngest cohort age; otherwise, place them at the oldest cohort age.
+      cohort_label = ifelse(
+        cohort_age == (if (relative) min(cohort_age) else max(cohort_age)) & !duplicated(cohort_age), 
+        as.character(year), 
+        ""
+      )
+    ) |>
+    dplyr::ungroup() |>
     dplyr::mutate(
       cohort_year=factor(year),
       cohort_age=factor(cohort_age, levels=0:max(squid_dat$cohort_age))
@@ -380,8 +391,15 @@ plot_retrospective_squid <- function(
       ggplot2::aes(x=cohort_age, y=estimate, color=cohort_year), 
       size=2
     )+
+    ggrepel::geom_text_repel(
+      ggplot2::aes(x=cohort_age, y=estimate, label=cohort_label, color=cohort_year),
+      nudge_x=ifelse(squid_dat$cohort_label == "", 0, if (relative) -0.25 else 0.25),
+      direction="y", hjust=if (relative) 1 else 0, point.padding=0.25, box.padding=0.3,
+      max.overlaps=Inf, show.legend=FALSE, seed=1
+    )+
     ggplot2::geom_hline(yintercept=0.0, linetype="solid", color="gray")+
     # geom_hline(yintercept=c(-2, 2), linetype="dashed")+
+    ggplot2::scale_x_discrete(expand=ggplot2::expansion(add=if (relative) c(1.5, 0.6) else c(0.6, 1.5)))+
     ggplot2::scale_y_continuous(
       limits=c(
         min(-1,min(squid_dat$estimate*1.5)), 
