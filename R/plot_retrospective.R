@@ -285,6 +285,7 @@ plot_retrospective <- function(
 plot_retrospective_squid <- function(
   dat,
   end_years = NULL,
+  cohort_years = NULL,
   relative = FALSE,
   module=NULL,
   model=NULL,
@@ -325,42 +326,34 @@ plot_retrospective_squid <- function(
     label_name="recruitment_deviations",
     module = module,
     model = names(end_years),
-    era = era,
+    era = NULL,
     interactive = interactive,
     geom = "line",
     group = group,
     allow_multiple_models = TRUE
   )
 
+  if(is.null(cohort_years)){
+    cohort_years <- (max(prepared_data$year)-n_models):max(prepared_data$year)
+  }
+
   squid_dat <- prepared_data |>
     dplyr::distinct() |>
-    # These next two filters need to apply sequentially, so can't be combined
-    dplyr::filter(era=="time") |>
-    dplyr::filter(year > max(year)-length(end_years)-1) |>
-    split(~model) |>
+    dplyr::filter(year %in% cohort_years) |>
+    # dplyr::select(estimate, year, model, era) |>
+    dplyr::mutate(max_year = max(year)) |>
+    split(~year) |>
     purrr::imap(function(df, index){
-      peel = abs(end_years[which(index == names(end_years))])
       df |>
-        dplyr::slice_head(n=length(end_years)-peel+1)
+        dplyr::mutate(cohort_age = max_year - year - dplyr::row_number() + 1) |>
+        dplyr::filter(cohort_age >= 0)
     }) |>
-    list_rbind() |>
-    # This arrange is important for calculating cohort age
-    dplyr::arrange(model, desc(year)) |>
-    dplyr::group_by(model) |>
-    dplyr::mutate(
-      cohort_age = dplyr::row_number()-1
-    ) |>
-    dplyr::group_by(cohort_age) |>
-    dplyr::mutate(
-      cohort_year = max(year)-dplyr::row_number()+1
-    ) |>
-    dplyr::ungroup() |>
-    print(n=20)
+    purrr::list_rbind()
 
   # Convert from squid to funnel plot
   if(relative){
     squid_dat <- squid_dat |>
-      dplyr::group_by(cohort_year) |>
+      dplyr::group_by(year) |>
       dplyr::mutate(
         estimate = estimate-estimate[cohort_age==max(cohort_age)],
         estimate_lower = estimate_lower-estimate_lower[cohort_age==max(cohort_age)],
@@ -370,7 +363,7 @@ plot_retrospective_squid <- function(
 
   squid_dat <- squid_dat |>
     dplyr::mutate(
-      cohort_year=factor(cohort_year),
+      cohort_year=factor(year),
       cohort_age=factor(cohort_age, levels=0:max(squid_dat$cohort_age))
     )
 
