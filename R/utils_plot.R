@@ -1379,8 +1379,8 @@ plot_density <- function(
     ggridges::geom_density_ridges(
        data = dat,
       ggplot2::aes(
-        x = as.numeric(.data[[x]]),
-        y = as.numeric(.data[[y]]),
+        x = as.integer(.data[[x]]),
+        y = as.integer(.data[[y]]),
         weight = .data[["estimate"]], 
         group = .data[[y]],
         color = .data[["model"]],
