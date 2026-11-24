@@ -254,6 +254,8 @@ convert_output <- function(
           # },
           cli::cli_abort("Unknown file type. Please indicate model.")
         )
+      } else {
+        model <- models[i]
       }
     } else if (is.null(models) || is.na(models[i])) {
       model <- switch(class(file)[1],

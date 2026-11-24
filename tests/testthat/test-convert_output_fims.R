@@ -100,7 +100,7 @@ test_that("FIMS estimates are relabeled and get years and eras", {
   expect_false(any(c("expected_recruitment", "log_devs") %in% out$label))
 
   # Without start_year, years are the FIMS year indices
-  expect_message(convert_output(est, model = "fims"), "start_year")
+  expect_message(convert_output(est, models = "fims"), "start_year")
   expect_equal(range(convert_fims(est)$year[convert_fims(est)$label == "spawning_biomass"]), c(1, 31))
 })
 

@@ -1,6 +1,6 @@
 fims_converted <- function() {
   est <- readRDS(test_path("fixtures", "fims_output", "fims_estimates.rds"))
-  suppressMessages(convert_output(est, model = "fims", start_year = 2001))
+  suppressMessages(convert_output(est, models = "fims", start_year = 2001))
 }
 
 test_that("residual_control estimates limits and the runs test", {

@@ -5,7 +5,7 @@ test_that("plot_joint_residuals works with each example model output and option"
     pollock = stockplotr::pollock,
     ss3_simple = stockplotr::ss3_simple,
     vermilion_snapper = stockplotr::vermilion_snapper,
-    fims = suppressMessages(convert_output(est, model = "fims", start_year = 2001))
+    fims = suppressMessages(convert_output(est, models = "fims", start_year = 2001))
   )
   for (name in names(datasets)) {
     # ss3_simple also has catch labeled as an index in the "catch" module
@@ -36,7 +36,7 @@ test_that("residual_stat gives the RMSE and the SDNR with its critical value", {
 test_that("plot_joint_residuals overlays indices with the statistic, boxplots, and smoother", {
   resid <- index_residuals(stockplotr::example_data, interactive = FALSE)
   stat <- residual_stat(resid)
-  p <- plot_joint_residuals(stockplotr::example_data, interactive = FALSE)
+  expect_no_warning(p <- plot_joint_residuals(stockplotr::example_data, interactive = FALSE))
   layer <- function(p, geom) p$layers[[which(sapply(p$layers, function(l) inherits(l$geom, geom)))]]$data
   expect_setequal(levels(p$data$index), paste0(stat$series[1:2], " (", stat$value[1:2], ")"))
   expect_equal(layer(p, "GeomLabel")$text, stat$text[3])
