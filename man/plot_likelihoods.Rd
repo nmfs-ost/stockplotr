@@ -86,17 +86,25 @@ across fleets.
 \description{
 Plot likelihood components as a horizontal bar chart.
 }
+\details{
+The current implementation only supports Stock Synthesis (SS3) models.
+The \code{example_data} dataset is not currently compatible.
+}
 \examples{
 \dontrun{
+
+# `example_data` not presently compatible
+dat <- convert_output(r4ss::SSgetoutput(dir = "path/to/model"))
+
 plot_likelhoods(
-  dat = stockplotr::example_data,
+  dat,
 )
 plot_likelhoods(
-  dat = stockplotr::example_data,
+  dat,
   by_fleet = TRUE
 )
 plot_likelhoods(
-  dat = stockplotr::example_data,
+  dat,
   by_fleet = TRUE,
   summarise_fleets = TRUE
 )
