@@ -141,6 +141,18 @@ Another hurdle to tackle is naming conventions. We have attempted to create a st
 
 We will continue to work with model developers to identify the best approaches for indicating reference points; however, we currently follow the above naming conventions for reference points and the meaning will be up to the analyst to identify/note.
 
+### Exceptions
+
+* f_mort: fishing mortality
+* msy: Maximum Sustaiable Yield
+* comp: composition
+* biomass_spawn[?]: biomass_spawning
+* spr
+* spb?
+
+
+ [Indicators for / (division)?]
+
 ## Final Formatting
 
 [`convert_output()`](https://github.com/nmfs-ost/stockplotr/blob/main/R/convert_output.R) exports data frames as a csv. While this is not necessary to the function of {asar} and {stockplotr} packages as a whole due to their setup, we recommend continuing this practice to remain consistent with the function.
