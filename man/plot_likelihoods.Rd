@@ -11,6 +11,10 @@ plot_likelihoods(
   make_rda = FALSE,
   figures_dir = getwd(),
   interactive = TRUE,
+  geom = "bar",
+  group = NULL,
+  facet = NULL,
+  model = NULL,
   ...
 )
 }
@@ -26,11 +30,11 @@ components or not
 
 Default: FALSE}
 
-\item{summarise_fleets}{Logical, whether to aggregate fleet specificic
-likelihood components into an additional "total" likelihood wheb plotting
+\item{summarise_fleets}{Logical, whether to aggregate fleet specific
+likelihood components into an additional "total" likelihood when plotting
 fleet specific likelihoods. Only applied when \code{by_fleet=TRUE}.
 
-Default:FALSE}
+Default: FALSE}
 
 \item{make_rda}{Logical. TRUE/FALSE; indicate whether to save the object and
 make an automated caption and alternative text in the form of an \code{rda} object. If TRUE,
@@ -47,6 +51,31 @@ The folder is created within the path if it does not exist.}
 \item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 
 Default: \code{FALSE}}
+
+\item{geom}{String. Geom used for the plot.
+
+Default: "line".
+
+Options: "line", "point", or "area"}
+
+\item{group}{String. Single column that groups the data.
+
+Set group = "none" to summarize data over all indexing values.
+
+Default: NULL
+Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL}
+
+\item{facet}{Character vector. Column name or names used for faceting.
+
+Default: NULL}
+
+\item{model}{Character vector. (Optional) Model name found in \code{dat$model}.
+If selecting >1 model, place them in a vector like c("model1", "model2").
+
+Default: NULL
+
+If the interactive and >1 model is found, user will select the
+model in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 
 \item{...}{Arguments called from \link[ggplot2]{geom_line} or \link[ggplot2]{geom_point}}
 }

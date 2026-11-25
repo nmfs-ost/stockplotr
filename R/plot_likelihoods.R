@@ -9,8 +9,8 @@
 #' 
 #' Default: FALSE
 #' 
-#' @param summarise_fleets Logical, whether to aggregate fleet specificic 
-#' likelihood components into an additional "total" likelihood wheb plotting
+#' @param summarise_fleets Logical, whether to aggregate fleet specific 
+#' likelihood components into an additional "total" likelihood when plotting
 #' fleet specific likelihoods. Only applied when `by_fleet=TRUE`.
 #' 
 #' Default: FALSE
