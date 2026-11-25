@@ -2,7 +2,7 @@ test_that("plot_joint_residuals works with each example model output and option"
   est <- readRDS(test_path("fixtures", "fims_output", "fims_estimates.rds"))
   datasets <- list(
     example_data = stockplotr::example_data,
-    pollock = stockplotr::pollock,
+    cod = stockplotr::cod,
     ss3_simple = stockplotr::ss3_simple,
     vermilion_snapper = stockplotr::vermilion_snapper,
     fims = suppressMessages(convert_output(est, model = "fims", start_year = 2001))

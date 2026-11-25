@@ -18,7 +18,11 @@ conout_bam <- function(
   fleet_names = NULL
 ) {
   # Extract values from BAM output - model file after following ADMB2R
-  dat <- dget(file)
+  if (is.character(file)) {
+    dat <- dget(file)
+  } else {
+    dat <- file
+  }
 
   # Find fleet names
   if (is.null(fleet_names)) {
@@ -106,7 +110,7 @@ conout_bam <- function(
                   ),
                   year
                 )
-              if (grepl("lcomp", names(extract[[1]][i]))) {
+              if (grepl("lcomp|len", names(extract[[1]][i]))) {
                 namesto <- "len_bins"
               } else if (grepl("acomp", names(extract[[1]][i]))) {
                 namesto <- "age"
@@ -131,13 +135,28 @@ conout_bam <- function(
                     grepl(paste0(fleet_names, collapse = "|"), tolower(label)) ~ stringr::str_replace(tolower(label), paste0(".", fleet_names, collapse = "|"), ""),
                     TRUE ~ names(extract[[1]][i])
                   )
-                  # label_init = names(extract[[1]][i]),
-
-                  # label = dplyr::case_when(
-                  #   is.na(fleet) ~ names(extract[[1]][i]),
-                  #   TRUE ~ stringr::str_replace(tolower(label), paste(".", fleet_names, sep = "", collapse = "|"), "")
-                  # )
-                ) # stringr::str_replace(module_name, "\\.[^.]+\\.", "."))
+                )
+              # remove age_a and set to just age
+              if ("age_a" %in% colnames(df2)) {
+                if ("age" %in% colnames(df2)) {
+                  if (all(is.na(df2$age))) {
+                    df2 <- df2 |>
+                      dplyr::mutate(age = age_a,
+                                    age_n = NA)
+                  }
+                  # check if age column values are equal to age_a
+                  if (all(df2$age == df2$age_a, na.rm = TRUE)) {
+                    df2 <- df2 |>
+                      dplyr::mutate(age = age_a,
+                                    age_n = NA)
+                  }
+                } else {
+                  df2 <- df2 |>
+                    dplyr::mutate(age = age_a,
+                                  age_a = NA)
+                }
+                if (all(is.na(df2$age_a))) df2 <- dplyr::select(df2, -age_a)
+              }
               df2[setdiff(tolower(names(out_new)), tolower(names(df2)))] <- NA
               extract_list[[names(extract[[1]][i])]] <- df2
             } # close if statement

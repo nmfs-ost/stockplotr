@@ -42,16 +42,16 @@
 #'
 "example_data"
 
-#' 2018 Gulf of Alaska Pollock stock assessment output
+#' 2018 Gulf of Alaska Cod stock assessment output
 #'
-#' Output of the 2018 Gulf of Alaska Pollock stock assessment produced from Rceattle, standardized
+#' Output of the 2018 Gulf of Alaska Cod stock assessment produced from Rceattle, standardized
 #' using `stockplotr::convert_output()`. The example can be found and run from the Rceattle repository.
 #'
 #' @docType data
 #'
-#' @usage data(pollock)
+#' @usage data(cod)
 #'
-#' @format A tibble (\code{tbl_df}, \code{tbl}, \code{data.frame}) with 9,983 rows and 35 variables:
+#' @format A tibble (\code{tbl_df}, \code{tbl}, \code{data.frame}) with 589,809 rows and 36 variables:
 #' \describe{
 #'   \item{label}{Standard name for estimate or value name}
 #'   \item{estimate}{Actual value of the label}
@@ -86,6 +86,7 @@
 #'   \item{length_bins}{Length bins for composition or other length based data}
 #'   \item{count}{Indexing column of data}
 #'   \item{block}{Indexing column of data}
+#'   \item{model}{Indexing column of data}
 #' }
 #'
 #' @keywords datasets
@@ -96,10 +97,10 @@
 #' @source \href{https://github.com/afsc-assessments/Rceattle/blob/main/examples/Fit_2018_GOA_single-species_models.R}{Rceattle Example}
 #'
 #' @examples
-#' data(pollock)
-#' head(pollock)
-#' unique(pollock$label)
-"pollock"
+#' data(cod)
+#' head(cod)
+#' unique(cod$label)
+"cod"
 
 #' SEDAR 55 South Atlantic Vermilion Snapper
 #'

@@ -257,7 +257,7 @@ test_that("convert_output gives Rceattle recruitment deviations a standard error
     names(fit[["sdrep"]][["par.fixed"]]) == "rec_dev"
   ]
   rec_devs <- out[out[["label"]] == "recruitment_deviations", ]
-  expect_equal(rec_devs[["uncertainty"]], rec_dev_sd)
+  expect_equal(rec_devs[["uncertainty"]], unname(rec_dev_sd))
   expect_true(all(rec_devs[["uncertainty_label"]] == "sd"))
 
   expect_no_error(plot_recruitment_deviations(out, interactive = FALSE))
@@ -274,7 +274,7 @@ test_that("convert_output gives Rceattle recruitment deviations a standard error
   random_out <- convert_output(files = random_rec, models = "rceattle")
   random_rec_devs <- random_out[random_out[["label"]] == "recruitment_deviations", ]
   expect_equal(random_rec_devs[["estimate"]], rec_devs[["estimate"]])
-  expect_equal(random_rec_devs[["uncertainty"]], rec_dev_sd)
+  expect_equal(random_rec_devs[["uncertainty"]], unname(rec_dev_sd))
   expect_equal(random_rec_devs[["year"]], rec_devs[["year"]])
 })
 
@@ -343,8 +343,8 @@ test_that("convert_output on multiple SS3 models", {
 })
 
 test_that("convert_output on SS3 and Rceattle model", {
-  ss3_hake2018 <- r4ss::SS_output(fs::path("fixtures", "ss3_models", "models", "Hake_2018"))
-  rceattle_atf <- readRDS(fs::path("fixtures", "rceattle_goa_atf.rds"))
+  ss3_hake2018 <- r4ss::SS_output(test_path("fixtures", "ss3_models", "models", "BigSkate_2019"))
+  rceattle_atf <- readRDS(test_path("fixtures", "rceattle_goa_atf.rds"))
 
   models <- list("ss3_hake" = ss3_hake2018, "rceattle_atf" = rceattle_atf)
 

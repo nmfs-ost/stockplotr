@@ -69,7 +69,7 @@ test_that("plot_index intervals use log-scale SDs and CVs", {
   expect_true(is.na(out$estimate_lower[3]))
 
   # Rceattle (log_sd) and BAM (cv) output
-  for (dat in list(stockplotr::pollock, stockplotr::vermilion_snapper)) {
+  for (dat in list(stockplotr::cod, stockplotr::vermilion_snapper)) {
     p <- suppressMessages(plot_index(dat, interval = 0.95, interactive = FALSE))
     expect_gt(nrow(p$layers[[1]]$data), 0)
     expect_no_error(ggplot2::ggplot_build(p))
@@ -122,7 +122,7 @@ test_that("plot_index can plot all indices relative to their means", {
   expect_no_error(b)
 
   # Survey months that are nested within fleets do not split the panel
-  p <- suppressMessages(plot_index(stockplotr::pollock, relative = TRUE, interactive = FALSE))
+  p <- suppressMessages(plot_index(stockplotr::cod, relative = TRUE, interactive = FALSE))
   expect_equal(length(unique(ggplot2::ggplot_build(p)$layout$layout$PANEL)), 1)
 
   # Works on a log scale, with one fleet, and with FIMS output

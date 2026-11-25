@@ -2,7 +2,7 @@ test_that("plot_data_availability works with each example model output", {
   est <- readRDS(test_path("fixtures", "fims_output", "fims_estimates.rds"))
   datasets <- list(
     example_data = stockplotr::example_data,
-    pollock = stockplotr::pollock,
+    cod = stockplotr::cod,
     ss3_simple = stockplotr::ss3_simple,
     vermilion_snapper = stockplotr::vermilion_snapper,
     fims = suppressMessages(convert_output(est, model = "fims", start_year = 2001))
@@ -30,9 +30,9 @@ test_that("data_availability finds each type of data once per fleet and year", {
   # fleets are numbered)
   expect_setequal(unique(avail$fleet[avail$type == "Landings"]), c("North", "South"))
 
-  # pollock's catch is observed (it has catch_predicted); its compositions
+  # cod's catch is observed (it has catch_predicted); its compositions
   # are of unknown type
-  avail <- data_availability(stockplotr::pollock)
+  avail <- data_availability(stockplotr::cod)
   expect_true(all(c("Landings", "Compositions") %in% avail$type))
 })
 

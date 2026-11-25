@@ -5,7 +5,7 @@ EX_REPORT_PATH <- file.path("inst", "extdata", "VermilionSnapper.rdat")
 pak::local_install(".")
 # Convert output
 vermilion_snapper <- stockplotr::convert_output(EX_REPORT_PATH)
-vermilion_snapper <- subset(vermilion_snapper, year > 1980)
+# vermilion_snapper <- subset(vermilion_snapper, year > 1980)
 # Save object as rda into raw_data
 usethis::use_data(vermilion_snapper, overwrite = TRUE)
 # Overwrite as compressed data

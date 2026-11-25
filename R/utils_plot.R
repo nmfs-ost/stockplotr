@@ -1199,7 +1199,6 @@ add_reference_line <- function(
   ref_lines_list
 }
 
-
 #' Filter plot data interactively
 #'
 #' Allows user to interactively select values from those available
@@ -1301,7 +1300,125 @@ filter_interactive <- function(
       }
     }
   }
-  out <- list("plot_data" = plot_dat, "selected" = selected)
+  list("plot_data" = plot_dat, "selected" = selected)
+}
 
-  return(out)
+#------------------------------------------------------------------------------
+
+#' Plot density distributions
+#'
+#' @param dat Data frame. Filtered data frame from standard output file(s) preformatted for
+#'  the target label from \link[stockplotr]{filter_data}
+#' @param x String. Column name of data used to plot on the x-axis
+#'
+#' Default: "year"
+#' @param y String. Column name of data used to plot on the y-axis
+#'
+#' Default: "estimate"
+#'
+#' @param geom String. Type of geom to use for plotting found in ggplot2 (e.g. "point",
+#' "line", etc.).
+#'
+#' Default: "line"
+#'
+#' Options: "point" and "area"
+#' @param xlab String. X-axis label
+#'
+#' Default: "Year"
+#' @param ylab String. Y-axis label. If NULL, it will be set to the name
+#'  of `y`.
+#'
+#' Default: NULL
+#' @param group String. Single column that groups the data.
+#' Currently can only have one level of grouping.
+#'
+#' Default: NULL
+#' Options: Including, but not limited to: "year", "area", "fleet", "sex", "none", NULL
+#'
+#' @param facet Character vector. Column name or names used for faceting
+#' (e.g. "year", "area", etc.)
+#'
+#' Default: NULL
+#' @param ... Inherited arguments from internal functions from ggplot2::geom_xx
+#'
+#'
+#' @returns Create a time series plot for a stock assessment report.
+#' @details The user can create a line, point, or area plot, where the x-axis is
+#' year and y can vary for any time series quantity. Currently, grouping is
+#' restricted to one group where faceting can be any number of facets.
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' plot_density(dat,
+#'   x = "year",
+#'   y = "estimate",
+#'   geom = "line",
+#'   xlab = "Year",
+#'   ylab = "Biomass",
+#'   group = "fleet",
+#'   facet = "area"
+#' )
+#' }
+plot_density <- function(
+  dat,
+  x = "length_bins",
+  y = "age",
+  xlab = "Length bin",
+  ylab = "Age",
+  facet = NULL,
+  n_length_bins,
+  ...
+) {
+  # Start plot
+  plot <- ggplot2::ggplot()
+
+  # Add geom
+  plot <- plot + 
+    ggridges::geom_density_ridges(
+       data = dat,
+      ggplot2::aes(
+        x = as.integer(.data[[x]]),
+        y = as.integer(.data[[y]]),
+        weight = .data[["estimate"]], 
+        group = .data[[y]],
+        color = .data[["model"]],
+        fill = .data[["model"]]
+      ),
+      stat = "binline",
+      bins = n_length_bins,
+      scale = 1.5,
+      alpha = 0.8,
+      ...
+    ) +
+    ggplot2::coord_flip() 
+    
+  # Add labels to axis and legend
+    final <- plot + ggplot2::labs(
+      x = xlab,
+      y = ylab,
+      color = "Model",
+      fill = "Model"
+    )
+    
+  # Remove legend if no group is selected
+  if (length(unique(dat$model)) == 1) {
+    final <- final + ggplot2::theme(legend.position = "none")
+  }
+
+  # Check if facet(s) are desired
+  if (!is.null(facet) & length(facet) > 0) {
+    facet <- paste("~", paste(facet, collapse = " + "))
+    facet_formula <- stats::reformulate(facet)
+
+    final <- final + ggplot2::facet_wrap(facet_formula, labeller = function(labels) {
+      # Clean column names (e.g., "growth_pattern" -> "Growth Pattern")
+      names(labels) <- tools::toTitleCase(gsub("_", " ", names(labels)))
+
+      # Combine into "Variable: Value" format
+      lapply(names(labels), function(var) paste0(var, ": ", labels[[var]]))
+    })
+  }
+  final
 }
