@@ -374,7 +374,8 @@ convert_output <- function(
         year = as.character(year),
         month = as.character(month),
         block = as.character(.data$block),
-        fleet = as.character(fleet)
+        fleet = as.character(fleet),
+        length_bins = as.numeric(length_bins)
       )
     return(tibble::tibble(out_new))
   })
@@ -410,11 +411,7 @@ convert_output <- function(
       era = dplyr::case_when(
         era == "Main" ~ "time",
         TRUE ~ tolower(era)
-      ),
-      length_bins = dplyr::case_when(
-        is.na(length_bins) ~ NA_real_,
-        TRUE ~ as.numeric(length_bins)
-      ),
+      )
     ) |>
     suppressWarnings()
 
