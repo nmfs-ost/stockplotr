@@ -61,6 +61,8 @@ Suggests:
     quarto,
     r4ss,
     rmarkdown,
+    ggrepel,
+    ggdist,
     testthat (>= 3.0.0)
 VignetteBuilder: 
     knitr

@@ -142,8 +142,8 @@ plot_retrospective <- function(
     dat = retro_dat,
     group = "peel",
     model = names(end_years), # turn this on to bypass interactive model selection and plot all available models
-    make_rda = FALSE # don't want to overwrite files from non-retro plots
-    # ...
+    make_rda = FALSE, # don't want to overwrite files from non-retro plots
+    ...
   )
 
   plt <- do.call(func_name, func_pars)
@@ -229,4 +229,231 @@ plot_retrospective <- function(
   }
 
   plt
+}
+
+#' Plot retrospective recruitment deviations
+#'
+#' Plot estimate recruitment deviations by cohort across retrospective
+#' model peels.
+#'
+#' @inheritParams plot_spawning_biomass
+#'
+#' @param end_years Integer. vector of what year, relative to the maximum
+#' year present in `dat`, should be treated as the final year for each
+#' model. Should be <= 0.
+#'
+#' Default: 0
+#' 
+#' @param cohort_years Integer. vector of cohort years (year in which recruitment
+#' occurred), to plot. May include forecast years. May be of different length than
+#' `end_years`.
+#' 
+#' Default: NULL (most recent `length(end_years)` cohorts)
+#'
+#' @param relative Logical. Whether to plot traditional squid plot, or to plot
+#' recruitment deviations relative to the value for which the most data is 
+#' available. This create a "funnel" plot.
+#' 
+#' Default: FALSE
+#'
+#' @param group String. Single column that groups the data.
+#'
+#' Default: "model"
+#'
+#' @return A plot showing estimates of recruitment for each cohort.
+#'
+#' @details The input is from an assessment model output file
+#' translated to a standardized output (\link[stockplotr]{convert_output}).
+#' There are options to return a `ggplot2` object or export an .rda object
+#' containing associated caption and alternative text for the figure.
+#'
+#' @note
+#' All plotting functions automatically recognize indexing variables and will
+#' use them in groupings and/or facetting, but will prioritize the defined
+#' group or facet by the function arguments. @seealso [process_data()].
+#'
+#' @seealso [convert_output()], [plot_timeseries()], [calculate_reference_point()], [reference_line()], [filter_data()], [process_data()], [export_kqs()], [insert_kqs()], [create_rda()], [plot_retrospective()]
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'
+#' plot_retrospective_squid(
+#'   dat = ss3_simple,
+#'   end_years = 0:-5
+#' ) 
+#'    
+#' x <- list();
+#' x[[1]] <- r4ss::SS_output(fs::path(getwd(), "model_runs", "base_model"))
+#' for (y in 1:10) { # ten retrospective model runs
+#'   x[[length(x) + 1]] <- r4ss::SS_output(fs::path(getwd(), "model_runs", "base_model_retros", "retro", paste0("retro-", y))
+#' }
+#' names(x) <- paste0("retro-",0:10)
+#' retrospective_dat <- convert_output(x)
+#'
+#' plot_retrospective_squid(
+#'   dat = retrospective_dat,
+#'   end_years = 0:10, # ten years of retrospective peels
+#'   cohort_years = 2010:2024, # plot these 15 cohorts
+#'   relative = FALSE,
+#'   interactive = FALSE,
+#'   module = "recruit"
+#' )
+#' }
+plot_retrospective_squid <- function(
+  dat,
+  end_years = NULL,
+  cohort_years = NULL,
+  relative = FALSE,
+  module=NULL,
+  model=NULL,
+  group = "model",
+  interactive=TRUE,
+  make_rda = FALSE,
+  figures_dir = getwd(),
+  ...
+) {
+
+  n_models <- length(unique(dat$model))
+
+  if (is.null(end_years)) end_years <- rep(0, n_models)
+  if (length(end_years) != n_models && n_models > 1) {
+    cli::cli_alert_info("Different number of end_years and available models.")
+    end_years <- c(end_years, rep(0, n_models - length(end_years)))
+  }
+
+  # Convert end_years to negatives for math
+  if (any(end_years > 0)) {
+    end_years[which(end_years > 0)] <- end_years[which(end_years > 0)] * -1
+  }
+
+
+  if (n_models == 1) {
+    cli::cli_alert_info("Only 1 model detected in `dat`. Function expects multiple models corresponding to unique retrospective peels.")
+  }
+
+  if (is.null(names(end_years))) {
+    cli::cli_alert("`end_years` provided without names. names automatically applied.")
+    names(end_years) <- dat$model |> unique()
+  }
+  
+  check_data(dat)
+
+  prepared_data <- filter_data(
+    dat,
+    label_name="recruitment_deviations",
+    module = module,
+    model = names(end_years),
+    era = NULL,
+    interactive = interactive,
+    geom = "line",
+    group = group,
+    allow_multiple_models = TRUE
+  )
+
+  if(is.null(cohort_years)){
+    cohort_years <- (max(prepared_data$year)-n_models):max(prepared_data$year)
+  }
+
+  squid_dat <- prepared_data |>
+    dplyr::distinct() |>
+    dplyr::filter(year %in% cohort_years) |>
+    # dplyr::select(estimate, year, model, era) |>
+    dplyr::mutate(max_year = max(year)) |>
+    split(~year) |>
+    purrr::imap(function(df, index){
+      df |>
+        dplyr::mutate(cohort_age = max_year - year - dplyr::row_number() + 1) |>
+        dplyr::filter(cohort_age >= 0)
+    }) |>
+    purrr::list_rbind()
+
+  # Convert from squid to funnel plot
+  if(relative){
+    squid_dat <- squid_dat |>
+      dplyr::group_by(year) |>
+      dplyr::mutate(
+        estimate = estimate-estimate[cohort_age==max(cohort_age)],
+        estimate_lower = estimate_lower-estimate_lower[cohort_age==max(cohort_age)],
+        estimate_upper = estimate_upper-estimate_upper[cohort_age==max(cohort_age)]
+      )
+  }
+
+  squid_dat <- squid_dat |>
+    dplyr::ungroup() |>
+    dplyr::group_by(year) |>
+    dplyr::mutate(
+      # if relative=TRUE, place labels at the youngest cohort age; otherwise, place them at the oldest cohort age.
+      cohort_label = ifelse(
+        cohort_age == (if (relative) min(cohort_age) else max(cohort_age)) & !duplicated(cohort_age), 
+        as.character(year), 
+        ""
+      )
+    ) |>
+    dplyr::ungroup() |>
+    dplyr::mutate(
+      cohort_year=factor(year),
+      cohort_age=factor(cohort_age, levels=0:max(squid_dat$cohort_age))
+    )
+
+  plt <- ggplot2::ggplot(squid_dat)+
+    ggdist::geom_lineribbon(
+      ggplot2::aes(
+        x=cohort_age, 
+        y=estimate, ymin=estimate_lower, ymax=estimate_upper, 
+        color=cohort_year, group=cohort_year, fill=cohort_year
+      ), 
+      linewidth=0.75, alpha=0.3
+    )+
+    ggplot2::geom_point(
+      ggplot2::aes(x=cohort_age, y=estimate, color=cohort_year), 
+      size=2
+    )+
+    ggrepel::geom_text_repel(
+      ggplot2::aes(x=cohort_age, y=estimate, label=cohort_label, color=cohort_year),
+      nudge_x=ifelse(squid_dat$cohort_label == "", 0, if (relative) -0.25 else 0.25),
+      direction="y", hjust=if (relative) 1 else 0, point.padding=0.25, box.padding=0.3,
+      max.overlaps=Inf, show.legend=FALSE, seed=1
+    )+
+    ggplot2::geom_hline(yintercept=0.0, linetype="solid", color="gray")+
+    # geom_hline(yintercept=c(-2, 2), linetype="dashed")+
+    ggplot2::scale_x_discrete(expand=ggplot2::expansion(add=if (relative) c(1.5, 0.6) else c(0.6, 1.5)))+
+    ggplot2::scale_y_continuous(
+      limits=c(
+        min(-1,min(squid_dat$estimate*1.5)), 
+        max(1, max(squid_dat$estimate*1.5))
+      )
+    )+
+    ggplot2::guides(
+      color=ggplot2::guide_legend("Cohort Year"),
+      fill=ggplot2::guide_legend("Cohort Year")
+    )+
+    ggplot2::labs(x="Cohort Age", y="Recruitment Deviation")+
+    theme_noaa()
+
+    if (make_rda) {
+      create_rda(
+        object = plt,
+        topic_label = glue::glue("squid_retrospective_{quantity}"),
+        fig_or_table = "figure",
+        dat = NULL,
+        dir = figures_dir,
+        ref_line = ifelse(!is.null(names(ref_line)), names(ref_line), ref_line),
+        scale_amount = scale_amount
+      )
+
+      cli::cli_alert_danger("No captions, alt-text, or key quantities were stored at this time.")
+    }
+
+    if (exists("selected_module")) {
+      rm(selected_module, envir = .GlobalEnv)
+    }
+
+    if (exists("selected_model")) {
+      rm(selected_model, envir = .GlobalEnv)
+    }
+
+    plt
+
 }

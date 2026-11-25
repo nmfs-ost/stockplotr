@@ -85,7 +85,7 @@ test_that("plot_index can use a log scale", {
 
 test_that("plot_index intervals work for FIMS output", {
   est <- readRDS(test_path("fixtures", "fims_output", "fims_estimates.rds"))
-  fims <- suppressMessages(convert_output(est, model = "fims", start_year = 2001))
+  fims <- suppressMessages(convert_output(est, models = "fims", start_year = 2001))
   p <- suppressMessages(plot_index(fims, interval = 0.95, interactive = FALSE))
   ints <- p$layers[[1]]$data
   rows <- est[est$label == "index_expected" & !is.na(est$observed), ]
@@ -131,7 +131,7 @@ test_that("plot_index can plot all indices relative to their means", {
   expect_no_error(ggplot2::ggplot_build(p))
   expect_no_error(ggplot2::ggplot_build(suppressMessages(plot_index(stockplotr::ss3_simple, relative = TRUE, interactive = FALSE))))
   est <- readRDS(test_path("fixtures", "fims_output", "fims_estimates.rds"))
-  fims <- suppressMessages(convert_output(est, model = "fims", start_year = 2001))
+  fims <- suppressMessages(convert_output(est, models = "fims", start_year = 2001))
   p <- suppressMessages(plot_index(fims, relative = TRUE, interactive = FALSE))
   expect_equal(mean(p$layers[[2]]$data$estimate[p$layers[[2]]$data$label == "index_observed"]), 1)
 })
