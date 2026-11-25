@@ -67,6 +67,7 @@
 #' plot_discard(
 #'   dat = stockplotr::vermilion_snapper,
 #'   facet = "fleet",
+#'   module = "t.series",
 #'   interactive = FALSE
 #' )
 #' # Observed discards of each fleet as stacked bars
@@ -74,6 +75,7 @@
 #'   dat = stockplotr::vermilion_snapper,
 #'   geom = "bar",
 #'   position = "stack",
+#'   module = "t.series",
 #'   interactive = FALSE
 #' )
 plot_discard <- function(

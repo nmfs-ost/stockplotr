@@ -23,27 +23,27 @@ test_that("plot_discard plots the fit to the observed discards", {
 
 test_that("plot_discard options change the plot", {
   dat <- stockplotr::vermilion_snapper
-  p <- suppressMessages(plot_discard(dat, interactive = FALSE))
-  expect_length(discard_layers(p, "GeomPoint"), 1)
-  ribbon <- discard_layers(p, "GeomRibbon")[[1]]$data
+  p <- suppressMessages(plot_discard(dat, interactive = FALSE, module = "t.series"))
+  expect_length(discard_layers(p, geom = "GeomPoint"), 1)
+  ribbon <- discard_layers(p, geom = "GeomRibbon")[[1]]$data
   expect_true(all(ribbon$estimate_lower < ribbon$estimate))
 
   # The predicted discards of vermilion_snapper are within 0.2% of the
   # observed discards: only the observed discards, as lines
   expect_message(
-    p <- plot_discard(dat, tolerance = 0.01, interactive = FALSE),
+    p <- plot_discard(dat, tolerance = 0.01, interactive = FALSE, module = "t.series"),
     "differ by less than"
   )
-  expect_length(discard_layers(p, "GeomPoint"), 0)
+  expect_length(discard_layers(p, geom = "GeomPoint"), 0)
 
-  p <- suppressMessages(plot_discard(dat, interval = NULL, interactive = FALSE))
-  expect_equal(nrow(discard_layers(p, "GeomRibbon")[[1]]$data), 0)
+  p <- suppressMessages(plot_discard(dat, interval = NULL, interactive = FALSE, module = "t.series"))
+  expect_equal(nrow(discard_layers(p, geom = "GeomRibbon")[[1]]$data), 0)
 
-  p <- suppressMessages(plot_discard(dat, facet = "fleet", interactive = FALSE))
+  p <- suppressMessages(plot_discard(dat, facet = "fleet", interactive = FALSE, module = "t.series"))
   expect_s3_class(p$facet, "FacetWrap")
 
-  p <- suppressMessages(plot_discard(dat, geom = "bar", interactive = FALSE))
-  expect_length(discard_layers(p, "GeomCol"), 1)
+  p <- suppressMessages(plot_discard(dat, geom = "bar", interactive = FALSE, module = "t.series"))
+  expect_length(discard_layers(p, geom = "GeomCol"), 1)
 
-  expect_error(plot_discard(dat, tolerance = -1, interactive = FALSE), "tolerance")
+  expect_error(plot_discard(dat, tolerance = -1, interactive = FALSE, module = "t.series"), "tolerance")
 })

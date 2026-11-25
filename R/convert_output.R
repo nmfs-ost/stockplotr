@@ -410,7 +410,11 @@ convert_output <- function(
       era = dplyr::case_when(
         era == "Main" ~ "time",
         TRUE ~ tolower(era)
-      )
+      ),
+      length_bins = dplyr::case_when(
+        is.na(length_bins) ~ NA_real_,
+        TRUE ~ as.numeric(length_bins)
+      ),
     ) |>
     suppressWarnings()
 
