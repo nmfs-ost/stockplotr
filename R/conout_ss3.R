@@ -192,7 +192,7 @@ conout_ss3 <- function(
     # ntentionally empty
     std2 <- c()
     cha <- c()
-    info <- c()
+    info <- c("likelihoods_used", "likelihoods_laplace", "likelihoods_by_fleet")
   }
 
   # Loop for all identified parameters to extract for plotting and use
@@ -994,24 +994,43 @@ conout_ss3 <- function(
           #   next
           #### info ####
         } else if (parm_sel %in% info) {
-          # if (parm_sel == "LIKELIHOOD") {
-          #   df1 <- extract[-1, ]
-          #   # make row the header names for first df
-          #   colnames(df1) <- df1[1, ]
-          #   # Remove first row containing column names
-          #   df2 <- df1[-1, ] |>
-          #     dplyr::rename(label = Component) |>
-          #     tidyr::pivot_longer(
-          #       cols = -label,
-          #       names_to = "type",
-          #       values_to = "likelihood"
-          #     )
-          #   # match to out_new
-          #   df2[setdiff(tolower(names(out_new)), tolower(names(df2)))] <- NA
-          #   # Add to out list
-          #   out_list[[parm_sel]] <- df2
-          # } else
-          if (parm_sel == "DEFINITIONS") {
+          if (parm_sel %in% c("likelihoods_used", "likelihoods_laplace")) {
+            df1 <- extract#[-1, ]
+            # make row the header names for first df
+            # colnames(df1) <- df1[1, ]
+            # Remove first row containing column names
+            df2 <- df1 |>
+              tibble::rownames_to_column("Component") |>
+              dplyr::rename(label = Component) |>
+              tidyr::pivot_longer(
+                cols = -label,
+                names_to = "type",
+                values_to = "estimate"
+              ) |>
+              dplyr::mutate(module_name="likelihoods")
+            # match to out_new
+            df2[setdiff(tolower(names(out_new)), tolower(names(df2)))] <- NA
+
+            out_list[[parm_sel]] <- df2
+          } else if(parm_sel == "likelihoods_by_fleet"){
+            df1 <- extract
+            df2 <- df1 |>
+              # dplyr::filter(!grepl("use|skip", Label)) |>
+              dplyr::rename(label=Label) |>
+              dplyr::select(-ALL) |>
+              tidyr::pivot_longer(
+                cols = -label,
+                names_to = "fleet",
+                values_to = "estimate"
+              ) |>
+              tidyr::separate(col=label, into=c("label", "type"), sep="_(?=lambda|like|N)", remove=FALSE, extra="merge") |>
+              dplyr::mutate(module_name="likelihoods")
+
+              df2[setdiff(tolower(names(out_new)), tolower(names(df2)))] <- NA
+              
+              out_list[[parm_sel]] <- df2
+          } #else
+          else if (parm_sel == "DEFINITIONS") {
             # Extract start year and end year for iding era
             start_year <- as.numeric(extract[which(apply(extract, 1, function(row) any(row == "Start_year:"))), 2])
             end_year <- as.numeric(extract[which(apply(extract, 1, function(row) any(row == "End_year:"))), 2])
