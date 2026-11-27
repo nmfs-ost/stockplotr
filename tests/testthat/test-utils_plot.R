@@ -69,6 +69,122 @@ test_that("filter_data handles data frames", {
   expect_setequal(unique(filtered_list$group_var), c("model_one", "model_two"))
 })
 
+test_that("model defaults retain all models in interactive and non-interactive modes", {
+  testthat::local_mocked_bindings(
+    interactive = function() TRUE,
+    .package = "base"
+  )
+  choices_seen <- NULL
+  preselect_seen <- NULL
+  selection <- character(0)
+  testthat::local_mocked_bindings(select.list = function(choices, preselect, ...) {
+    choices_seen <<- choices
+    preselect_seen <<- preselect
+    selection
+  }, .package = "utils")
+
+  dat <- make_utils_plot_multimodel_data()
+  for (interactive in c(TRUE, FALSE)) {
+    filtered <- filter_data(
+      dat = dat,
+      label_name = "^biomass$",
+      geom = "line",
+      interactive = interactive
+    )
+    expect_setequal(unique(filtered$model), c("model_one", "model_two"))
+    expect_setequal(unique(filtered$group_var), c("model_one", "model_two"))
+    expect_setequal(get("selected_model", envir = .GlobalEnv), c("model_one", "model_two"))
+  }
+  expect_equal(choices_seen, c("All", "model_one", "model_two"))
+  expect_equal(preselect_seen, "All")
+
+  selection <- "All"
+  filtered <- filter_data(
+    dat = dat, label_name = "^biomass$", geom = "line", interactive = TRUE
+  )
+  expect_setequal(unique(filtered$model), c("model_one", "model_two"))
+
+  selection <- "model_two"
+  filtered <- filter_data(
+    dat = dat, label_name = "^biomass$", geom = "line", interactive = TRUE
+  )
+  expect_equal(unique(filtered$model), "model_two")
+
+  selection <- c("All", "model_two")
+  filtered <- filter_data(
+    dat = dat, label_name = "^biomass$", geom = "line", interactive = TRUE
+  )
+  expect_equal(unique(filtered$model), "model_two")
+  expect_equal(get("selected_model", envir = .GlobalEnv), "model_two")
+
+  filtered <- filter_data(
+    dat = dat, label_name = "^biomass$", geom = "line",
+    model = "model_two", interactive = TRUE
+  )
+  expect_equal(unique(filtered$model), "model_two")
+})
+
+test_that("specific interactive model selections override All", {
+  testthat::local_mocked_bindings(interactive = function() TRUE, .package = "base")
+  testthat::local_mocked_bindings(
+    select.list = function(...) c("All", "model_two", "model_three"),
+    .package = "utils"
+  )
+  dat <- tibble::tibble(model = c("model_one", "model_two", "model_three", "model_four"))
+  selected <- stockplotr:::filter_interactive(dat, "model", interactive = TRUE)
+  expect_equal(selected$selected, c("model_two", "model_three"))
+  expect_equal(selected$plot_data$model, c("model_two", "model_three"))
+})
+
+test_that("model defaults retain all models when the environment is non-interactive", {
+  testthat::local_mocked_bindings(interactive = function() FALSE, .package = "base")
+  for (interactive in c(TRUE, FALSE)) {
+    selected <- stockplotr:::filter_interactive(
+      make_utils_plot_multimodel_data(), "model", interactive = interactive
+    )
+    expect_setequal(unique(selected$plot_data$model), c("model_one", "model_two"))
+    expect_setequal(selected$selected, c("model_one", "model_two"))
+  }
+})
+
+test_that("All selects every model but remains a literal module name", {
+  dat <- make_utils_plot_multimodel_data()
+  selected <- stockplotr:::filter_interactive(dat, "model", column_value = "All")
+  expect_identical(selected$plot_data, dat)
+  expect_equal(selected$selected, c("model_one", "model_two"))
+
+  modules <- tibble::tibble(module_name = c("All", "OTHER"))
+  selected <- stockplotr:::filter_interactive(modules, "module_name", column_value = "All")
+  expect_equal(selected$plot_data$module_name, "All")
+  expect_equal(selected$selected, "All")
+})
+
+test_that("single-model selection and module selection retain their defaults", {
+  dat <- make_utils_plot_multimodel_data()
+  selected <- stockplotr:::filter_interactive(
+    dat, "model", interactive = FALSE, allow_multiple_selection = FALSE
+  )
+  expect_equal(unique(selected$plot_data$model), "model_one")
+  expect_equal(selected$selected, "model_one")
+
+  testthat::local_mocked_bindings(interactive = function() TRUE, .package = "base")
+  testthat::local_mocked_bindings(
+    select.list = function(...) "model_two",
+    .package = "utils"
+  )
+  selected <- stockplotr:::filter_interactive(
+    dat, "model", interactive = TRUE, allow_multiple_selection = FALSE
+  )
+  expect_equal(unique(selected$plot_data$model), "model_two")
+  expect_equal(selected$selected, "model_two")
+
+  modules <- make_utils_plot_multimodule_data()
+  selected <- stockplotr:::filter_interactive(
+    modules, "module_name", interactive = FALSE, allow_multiple_selection = TRUE
+  )
+  expect_equal(unique(selected$plot_data$module_name), "TIME_SERIES")
+})
+
 test_that("filter_data uses the first module when selection is empty", {
   testthat::local_mocked_bindings(
     interactive = function() TRUE,

@@ -36,13 +36,11 @@ Default: NULL
 If the interactive and >1 module_name is found, user will select the
 module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 
-\item{model}{Character vector. (Optional) Model name found in \code{dat$model}.
-If selecting >1 model, place them in a vector like c("model1", "model2").
+\item{model}{Character vector. Model names to retain, or "All" to retain
+all models when multiple models are allowed. If NULL, selection is interactive
+when possible and otherwise defaults to all models when allowed, or the first.
 
-Default: NULL
-
-If the interactive and >1 model is found, user will select the
-model in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
+Default: NULL}
 
 \item{era}{String. Era of data.
 
@@ -79,6 +77,8 @@ Default: 1}
 Default: \code{FALSE}}
 
 \item{allow_multiple_models}{Logical. Whether to allow multiple models.
+When FALSE and \code{model} is NULL, one model is selected interactively or the
+first is used in non-interactive mode.
 
 Default: TRUE}
 }

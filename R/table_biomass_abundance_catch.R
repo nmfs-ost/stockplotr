@@ -1,6 +1,8 @@
 #' Biomass, abundance, and catch time series table
 #'
 #' @inheritParams plot_recruitment
+#' @param model Character. Model name found in `dat$model`. If NULL, one model
+#' is selected interactively when possible, or the first available model is used.
 #'
 #' @param biomass_label String. Units for biomass
 #'

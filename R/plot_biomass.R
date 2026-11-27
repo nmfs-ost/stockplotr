@@ -50,7 +50,7 @@ plot_biomass <- function(
   era = NULL,
   unit_label = NULL,
   module = NULL,
-  model = NULL,
+  model = "All",
   scale_amount = 1,
   relative = FALSE,
   make_rda = FALSE,

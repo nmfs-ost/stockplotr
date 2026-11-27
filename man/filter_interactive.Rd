@@ -18,8 +18,11 @@ returned from \link[stockplotr]{convert_output}.}
 
 \item{column_name}{String. Name of the column to allow interactive filtering for.}
 
-\item{column_value}{String. Value of the column to filter by. If NULL, interactive
-selection will be enabled.
+\item{column_value}{Character vector. Values of the column to filter by. For
+models, "All" retains all models when multiple selection is allowed. If NULL,
+selection is interactive when possible, defaulting to all models when multiple
+selection is allowed and the first value otherwise. In the interactive model
+menu, selecting specific models overrides the preselected "All" option.
 
 Default: NULL}
 
@@ -29,7 +32,7 @@ Default: TRUE}
 
 \item{allow_multiple_selection}{Logical. Whether to allow the selection of multiple inputs.
 
-Default: FALSE}
+Default: TRUE}
 }
 \value{
 List. filtered data.frame (\code{plot_data}) and selected option(\code{selected}).

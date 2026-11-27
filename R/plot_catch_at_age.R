@@ -74,7 +74,7 @@ plot_catch_at_age <- function(
   proportional = TRUE,
   interactive = TRUE,
   module = NULL,
-  model = NULL,
+  model = "All",
   make_rda = FALSE,
   figures_dir = getwd()
 ) {

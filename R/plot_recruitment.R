@@ -42,7 +42,7 @@ plot_recruitment <- function(
   # relative = FALSE,
   interactive = TRUE,
   module = NULL,
-  model = NULL,
+  model = "All",
   make_rda = FALSE,
   figures_dir = getwd()
 ) {

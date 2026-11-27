@@ -1,6 +1,8 @@
 #' Index of abundance table
 #'
 #' @inheritParams plot_recruitment
+#' @param model Character. Model name found in `dat$model`. If NULL, one model
+#' is selected interactively when possible, or the first available model is used.
 #' @param group String. Single column that groups the data.
 #'
 #' Set group = "none" to summarize data over all indexing values.

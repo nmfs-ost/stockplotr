@@ -36,7 +36,7 @@ plot_fishing_mortality <- function(
   ref_line = "msy",
   era = NULL,
   module = NULL,
-  model = NULL,
+  model = "All",
   make_rda = FALSE,
   figures_dir = getwd(),
   interactive = TRUE,

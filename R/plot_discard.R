@@ -87,7 +87,7 @@ plot_discard <- function(
   scale_amount = 1,
   interactive = TRUE,
   module = NULL,
-  model = NULL,
+  model = "All",
   predicted = TRUE,
   interval = 0.95,
   tolerance = 0.001,

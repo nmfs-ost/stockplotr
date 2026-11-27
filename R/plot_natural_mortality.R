@@ -26,7 +26,7 @@ plot_natural_mortality <- function(
   era = NULL,
   interactive = TRUE,
   module = NULL,
-  model = NULL,
+  model = "All",
   make_rda = FALSE,
   figures_dir = getwd(),
   ...
