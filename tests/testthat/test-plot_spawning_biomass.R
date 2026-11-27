@@ -40,6 +40,47 @@ test_that("plot_spawning_biomass generates plots without errors", {
   )
 })
 
+test_that("plot_spawning_biomass plots all models by default", {
+  testthat::local_mocked_bindings(interactive = function() TRUE, .package = "base")
+  testthat::local_mocked_bindings(
+    select.list = function(...) stop("Unexpected selection prompt"),
+    .package = "utils"
+  )
+  dat <- dplyr::bind_rows(
+    dplyr::mutate(stockplotr::example_data, model = "model1"),
+    dplyr::mutate(stockplotr::example_data, model = "model2", estimate=estimate*1.5)
+  )
+  plot <- plot_spawning_biomass(
+    dat, module = "TIME_SERIES", unit_label = "mt",
+    ref_line = c("msy" = 2000000), interactive = TRUE
+  )
+  expect_setequal(unique(plot$layers[[2]]$data$model), c("model1", "model2"))
+  expect_length(unique(ggplot2::ggplot_build(plot)$data[[2]]$group), 2)
+
+  plot <- plot_spawning_biomass(
+    dat, module = "TIME_SERIES", model = "model2", unit_label = "mt",
+    ref_line = c("msy" = 2000000), interactive = FALSE
+  )
+  expect_equal(unique(plot$layers[[2]]$data$model), "model2")
+})
+
+test_that("interactive model selection limits the plot", {
+  testthat::local_mocked_bindings(interactive = function() TRUE, .package = "base")
+  testthat::local_mocked_bindings(
+    select.list = function(...) c("All", "model2"),
+    .package = "utils"
+  )
+  dat <- dplyr::bind_rows(
+    dplyr::mutate(stockplotr::example_data, model = "model1"),
+    dplyr::mutate(stockplotr::example_data, model = "model2")
+  )
+  plot <- plot_spawning_biomass(
+    dat, module = "TIME_SERIES", model = NULL, interactive = TRUE,
+    unit_label = "mt", ref_line = c("msy" = 2000000)
+  )
+  expect_equal(unique(plot$layers[[2]]$data$model), "model2")
+})
+
 # test_that("rda file made when indicated", {
 #   # export rda
 #   plot_spawning_biomass(

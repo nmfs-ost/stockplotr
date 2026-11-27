@@ -236,6 +236,7 @@ process_data <- function(
   } # close length index_vars > 0
 
   if (!is.null(group) && group != "none") {
+    data <- dplyr::mutate(data, group_var = .data[[group]])
     # check if value varies in ANY year
     # pivot data for 1st indexed data and check if all the same
     if (length(index_variables) > 0) {

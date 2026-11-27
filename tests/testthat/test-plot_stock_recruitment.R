@@ -34,6 +34,19 @@ test_that("plot_stock_recruitment generates plots without errors", {
   )
 })
 
+test_that("stock recruitment uses the selected models for both series", {
+  dat <- dplyr::bind_rows(
+    dplyr::mutate(stockplotr::example_data, model = "model1"),
+    dplyr::mutate(stockplotr::example_data, model = "model2")
+  )
+  plot <- plot_stock_recruitment(
+    dat, model = "model2", interactive = FALSE,
+    spawning_biomass_label = "mt", recruitment_label = "mt"
+  )
+  expect_equal(unique(plot$layers[[1]]$data$model), "model2")
+  expect_true(any(!is.na(plot$layers[[1]]$data$predicted_recruitment)))
+})
+
 # test_that("rda file made when indicated", {
 #   # export rda
 #   plot_stock_recruitment(
