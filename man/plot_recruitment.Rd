@@ -13,7 +13,7 @@ plot_recruitment(
   facet = NULL,
   interactive = TRUE,
   module = NULL,
-  model = NULL,
+  model = "All",
   make_rda = FALSE,
   figures_dir = getwd()
 )
@@ -68,10 +68,7 @@ module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 \item{model}{Character vector. (Optional) Model name found in \code{dat$model}.
 If selecting >1 model, place them in a vector like c("model1", "model2").
 
-Default: NULL
-
-If the interactive and >1 model is found, user will select the
-model in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
+Default: "All" (all models). Set to NULL for interactive selection when available.}
 
 \item{make_rda}{Logical. TRUE/FALSE; indicate whether to save the object and
 make an automated caption and alternative text in the form of an \code{rda} object. If TRUE,

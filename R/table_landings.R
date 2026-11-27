@@ -1,6 +1,8 @@
 #' Landed catch by fleet and year table
 #'
 #' @inheritParams plot_recruitment
+#' @param model Character. Model name found in `dat$model`. If NULL, one model
+#' is selected interactively when possible, or the first available model is used.
 #' @param unit_label String. Abbreviated landings units
 #'
 #' Default: NULL

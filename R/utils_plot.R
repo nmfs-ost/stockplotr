@@ -658,6 +658,11 @@ cap_first_letter <- function(s) {
 #' @inheritParams plot_spawning_biomass
 #' @param label_name String. Name of the label used to filter
 #' the data.
+#' @param model Character vector. Model names to retain, or "All" to retain
+#' all models when multiple models are allowed. If NULL, selection is interactive
+#' when possible and otherwise defaults to all models when allowed, or the first.
+#'
+#' Default: NULL
 #' @param allow_multiple_models Logical. Whether to allow multiple models.
 #' When FALSE and `model` is NULL, one model is selected interactively or the
 #' first is used in non-interactive mode.
@@ -1212,9 +1217,11 @@ add_reference_line <- function(
 #'
 #' @param column_name String. Name of the column to allow interactive filtering for.
 #'
-#' @param column_value Character vector. Values of the column to filter by. If NULL,
-#' selection is interactive when possible. The default is all models when multiple
-#' model selection is allowed, and the first value otherwise.
+#' @param column_value Character vector. Values of the column to filter by. For
+#' models, "All" retains all models when multiple selection is allowed. If NULL,
+#' selection is interactive when possible, defaulting to all models when multiple
+#' selection is allowed and the first value otherwise. In the interactive model
+#' menu, selecting specific models overrides the preselected "All" option.
 #'
 #' Default: NULL
 #'

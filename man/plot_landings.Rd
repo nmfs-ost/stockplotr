@@ -14,7 +14,7 @@ plot_landings(
   era = NULL,
   scale_amount = 1,
   module = NULL,
-  model = NULL,
+  model = "All",
   interactive = TRUE,
   predicted = TRUE,
   interval = 0.95,
@@ -88,10 +88,7 @@ module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 \item{model}{Character vector. (Optional) Model name found in \code{dat$model}.
 If selecting >1 model, place them in a vector like c("model1", "model2").
 
-Default: NULL
-
-If the interactive and >1 model is found, user will select the
-model in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
+Default: "All" (all models). Set to NULL for interactive selection when available.}
 
 \item{interactive}{Logical. TRUE/FALSE; indicate whether the environment is interactive.
 

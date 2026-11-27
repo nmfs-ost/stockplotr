@@ -75,7 +75,7 @@ plot_index <- function(
   facet = NULL,
   interactive = TRUE,
   module = NULL,
-  model = NULL,
+  model = "All",
   focus = NULL,
   interval = 0.95,
   log = FALSE,

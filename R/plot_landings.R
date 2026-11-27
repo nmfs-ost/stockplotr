@@ -97,7 +97,7 @@ plot_landings <- function(
   era = NULL,
   scale_amount = 1,
   module = NULL,
-  model = NULL,
+  model = "All",
   interactive = TRUE,
   predicted = TRUE,
   interval = 0.95,

@@ -11,7 +11,7 @@ plot_biomass_at_age(
   scale_amount = 1,
   proportional = TRUE,
   module = NULL,
-  model = NULL,
+  model = "All",
   interactive = TRUE,
   make_rda = FALSE,
   figures_dir = getwd()
@@ -56,10 +56,7 @@ module_name in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
 \item{model}{Character vector. (Optional) Model name found in \code{dat$model}.
 If selecting >1 model, place them in a vector like c("model1", "model2").
 
-Default: NULL
-
-If the interactive and >1 model is found, user will select the
-model in the console. @seealso \code{\link[=filter_data]{filter_data()}}}
+Default: "All" (all models). Set to NULL for interactive selection when available.}
 
 \item{interactive}{Logical. TRUE/FALSE; indicate whether the environment in which the
 function is operating  is interactive. This bypasses some options for

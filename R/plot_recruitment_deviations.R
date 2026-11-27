@@ -33,7 +33,7 @@
 plot_recruitment_deviations <- function(
   dat,
   module = NULL,
-  model = NULL,
+  model = "All",
   era = NULL,
   interactive = TRUE,
   make_rda = FALSE,

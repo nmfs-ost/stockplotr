@@ -41,7 +41,7 @@ plot_spr <- function(
   ref_line = "target",
   era = NULL,
   module = NULL,
-  model = NULL,
+  model = "All",
   interactive = TRUE,
   make_rda = FALSE,
   figures_dir = getwd(),
