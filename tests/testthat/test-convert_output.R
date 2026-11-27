@@ -71,7 +71,7 @@ test_that("missing arguments trigger warnings or errors", {
       models = "fake_model",
       save_dir = fs::path("fixtures", "ss3_models_converted", "Hake_2018")
     ),
-    "`file` not found."
+    "Output file not compatible."
   )
   
   dir.create(fs::path("fixtures", "ss3_models_converted", "Hake_2018"), recursive = TRUE)
