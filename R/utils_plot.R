@@ -659,6 +659,8 @@ cap_first_letter <- function(s) {
 #' @param label_name String. Name of the label used to filter
 #' the data.
 #' @param allow_multiple_models Logical. Whether to allow multiple models.
+#' When FALSE and `model` is NULL, one model is selected interactively or the
+#' first is used in non-interactive mode.
 #'
 #' Default: TRUE
 #'
@@ -690,7 +692,7 @@ filter_data <- function(
   interactive = TRUE,
   allow_multiple_models = TRUE
 ) {
-  # Check if there are multiple module_names present
+  # Filter by model before selecting a module.
   model_select <- filter_interactive(
     dat,
     column_name = "model",
@@ -1210,8 +1212,9 @@ add_reference_line <- function(
 #'
 #' @param column_name String. Name of the column to allow interactive filtering for.
 #'
-#' @param column_value String. Value of the column to filter by. If NULL, interactive
-#' selection will be enabled.
+#' @param column_value Character vector. Values of the column to filter by. If NULL,
+#' selection is interactive when possible. The default is all models when multiple
+#' model selection is allowed, and the first value otherwise.
 #'
 #' Default: NULL
 #'
@@ -1221,7 +1224,7 @@ add_reference_line <- function(
 #'
 #' @param allow_multiple_selection Logical. Whether to allow the selection of multiple inputs.
 #'
-#' Default: FALSE
+#' Default: TRUE
 #'
 #' @return List. filtered data.frame (`plot_data`) and selected option(`selected`).
 #'
@@ -1243,55 +1246,56 @@ filter_interactive <- function(
 ) {
   pretty_columns <- c("module_name" = "module", "model" = "model")
 
+  default_all <- column_name == "model" && allow_multiple_selection
+
   plot_dat <- dat
   selected <- unique(dat[[column_name]])
-  if (length(unique(dat[[column_name]])) > 1) {
+  if (length(selected) > 1) {
     available_names <- unique(dat[[column_name]])
     if (!is.null(column_value)) {
-      if (length(column_value) > 1 && !allow_multiple_selection) {
+      if ((length(column_value) > 1 || (column_name == "model" && "All" %in% column_value)) && !allow_multiple_selection) {
         cli::cli_alert_danger("Multiple {pretty_columns[column_name]}s provided, but only 1 allowed. Defaulting to first available {pretty_columns[column_name]} name: {available_names[1]}.")
         column_value <- available_names[1]
       }
-      plot_dat <- dat |> dplyr::filter(.data[[column_name]] %in% column_value)
-      selected <- column_value
+      selected <- if (default_all && "All" %in% column_value) available_names else column_value
+      plot_dat <- dat |> dplyr::filter(.data[[column_name]] %in% selected)
     } else {
       cli::cli_alert_warning("Multiple {pretty_columns[column_name]}s found in data. \n")
-      options <- c()
-      for (i in seq_along(available_names)) {
-        # options <- paste0(options, " ", i, ") ", unique(plot_data$module_name)[i], "\n")
-        options[i] <- paste0(available_names[i])
-      }
 
-      if (column_name == "model") {
-        options <- c(options, "All")
-      }
+      options <- as.character(available_names)
+      if (default_all) options <- c("All", options)
 
       if (interactive()) {
         if (interactive) {
           selection <- utils::select.list(
             options,
+            preselect = if (default_all) "All" else NULL,
             multiple = allow_multiple_selection,
             title = glue::glue("Select one of the following {pretty_columns[column_name]} names")
           )
           question1 <- if (length(selection) == 0 || identical(selection, "")) {
             options[1]
-          } else if ("All" %in% selection) {
-            options[-length(options)]
           } else {
             selection
           }
 
-          selected <- intersect(available_names, question1)
+          selected <- if (default_all && identical(question1, "All")) {
+            available_names
+          } else if (default_all) {
+            intersect(available_names, setdiff(question1, "All"))
+          } else {
+            intersect(available_names, question1)
+          }
           if (length(selected) < 1 || (length(selected) > 1 && !allow_multiple_selection)) {
             selected <- available_names[1]
           }
         } else {
-          selected <- available_names[1]
-          cli::cli_alert_info("Selection bypassed. Filtering by {selected}.")
+          selected <- if (default_all) available_names else available_names[1]
+          cli::cli_alert_info("Selection bypassed. Filtering by {paste(selected, collapse = ', ')}.")
         }
       } else {
-        selected <- available_names[1]
-        cli::cli_alert_info(glue::glue("Environment not interactive. Selecting {selected}."))
+        selected <- if (default_all) available_names else available_names[1]
+        cli::cli_alert_info(glue::glue("Environment not interactive. Selecting {paste(selected, collapse = ', ')}."))
       }
       if (length(selected) > 0) {
         plot_dat <- dat |>
